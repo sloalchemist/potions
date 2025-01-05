@@ -2,6 +2,10 @@
 
 The following standards must be met for any pull request (PR) to be accepted into the repository.
 
+## Testing
+- Always thoroughly test your code locally before submitting.
+- Create new unit tests for any new features added.
+
 ## Code Review
 - Every PR must be reviewed and approved by your group before merging.
 - Peer review ensures quality and shared understanding of the changes.
