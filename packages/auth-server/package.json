@@ -1,0 +1,39 @@
+{
+  "name": "@rt-potion/auth-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo 'No testing configured'",
+    "lint": "eslint src/ --ext .ts,.tsx --fix",
+    "format": "prettier --config ../../.prettierrc 'src/**/*.ts' --write",
+    "clean": "rimraf dist",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch src --exec ts-node src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.44.2",
+    "ably": "^1.2.21",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsdom": "^24.1.0"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.2",
+    "concurrently": "^8.2.0",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.0",
+    "rimraf": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.5.0"
+  }
+}

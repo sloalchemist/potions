@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "outDir": "dist",
+      "rootDir": ".",
+      "declaration": true,
+      "declarationMap": true,
+      "strict": true,
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "target": "es2019",
+      "module": "commonjs",
+      "types": ["jest"]
+      },
+    "references": []
+}

@@ -1,0 +1,17 @@
+{
+  "name": "rt-potion",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "format": "prettier --config .prettierrc '**/*.ts' --write",
+    "lint": "eslint . --config eslint.config.mjs",
+    "build": "pnpm -r run build",
+    "test": "pnpm -r run test",
+    "clean": "pnpm -r run clean"
+  },
+  "devDependencies": {
+    "eslint": "^9.17.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.2"
+  }
+}

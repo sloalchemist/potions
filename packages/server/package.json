@@ -1,0 +1,46 @@
+{
+  "name": "@rt-potion/server",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "description": "",
+  "main": "dist/server.js",
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint": "pnpm eslint .",
+    "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
+    "build": "tsc",
+    "start": "node dist/src/server.js",
+    "dev": "pnpm exec ts-node src/server.ts",
+    "test": "jest",
+    "watch": "tsc --watch",
+    "create": "ts-node src/generate/buildWorld.ts",
+    "serve": "nodemon dist/src/server.js",
+    "dev:full": "concurrently \"pnpm watch\" \"pnpm serve\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@rt-potion/common": "workspace:*",
+    "@rt-potion/converse": "workspace:*",
+    "ably": "^1.2.21",
+    "better-sqlite3": "^11.5.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "redis": "^4.7.0",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.14.2",
+    "@types/uuid": "^10.0.0",
+    "cpy-cli": "^5.0.0",
+    "jest": "^29.7.0",
+    "nodemon": "^2.0.15",
+    "rimraf": "^5.0.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.4.5"
+  }
+}

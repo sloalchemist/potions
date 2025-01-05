@@ -1,0 +1,12 @@
+services:
+  - name: server
+    type: worker
+    env: node
+    rootDir: .
+    buildCommand: |
+      npm install -g pnpm
+      pnpm clean
+      pnpm install
+      pnpm build
+    startCommand: |
+      pnpm --filter=@rt-potion/server start world-3

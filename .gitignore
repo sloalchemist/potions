@@ -1,0 +1,11 @@
+/.DS_Store
+**/.DS_Store
+**/.env
+**/node_modules
+.venv/
+packages/server/dist/
+node_modules
+packages/common/dist/
+packages/auth-server/dist/
+packages/world-generator/dist/
+packages/converse/dist/

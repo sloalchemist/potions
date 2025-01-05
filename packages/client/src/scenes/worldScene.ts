@@ -1,0 +1,444 @@
+import * as Phaser from 'phaser';
+import {
+  gameState,
+  fantasyDate,
+  initializePlayer,
+  tick
+} from '../world/controller';
+import { bindAblyToWorldScene } from '../services/ablySetup';
+import { TerrainType } from '@rt-potion/common';
+import { Coord } from '@rt-potion/common';
+import { publicCharacterId } from '../worldMetadata';
+import { PaletteSwapper } from '../sprite/palette_swapper';
+import { SpriteHouse } from '../sprite/sprite_house';
+import { World } from '../world/world';
+import { GRAY } from './pauseScene';
+import { publishPlayerPosition } from '../services/playerToServer';
+import {
+  ItemType,
+  parseWorldFromJson,
+  WorldDescription
+} from '../worldDescription';
+
+export let world: World;
+let needsAnimationsLoaded: boolean = true;
+
+export const TILE_SIZE = 32;
+
+export class WorldScene extends Phaser.Scene {
+  worldLayer!: Phaser.Tilemaps.TilemapLayer;
+  aboveLayer!: Phaser.Tilemaps.TilemapLayer;
+  belowLayer!: Phaser.Tilemaps.TilemapLayer;
+  cameraDolly!: Phaser.Geom.Point;
+  hero!: Phaser.GameObjects.Sprite;
+  itemTypes: Record<string, ItemType> = {};
+  itemSource: Record<string, string> = {};
+  mobSource: Record<string, string> = {};
+  paletteSwapper: PaletteSwapper = PaletteSwapper.getInstance();
+  mobShadows: Phaser.GameObjects.Rectangle[] = [];
+  nightOverlay!: Phaser.GameObjects.Graphics;
+  terrainWidth: number = 0;
+  terrainHeight: number = 0;
+
+  constructor() {
+    super({ key: 'WorldScene' });
+  }
+
+  preload() {
+    this.load.image('background', 'static/background.png');
+
+    this.load.atlas(
+      'global_atlas',
+      'static/global.png',
+      'static/global-atlas.json'
+    );
+
+    this.load.spritesheet('blood', 'static/blood.png', {
+      frameWidth: 100,
+      frameHeight: 100
+    });
+
+    //this.load.json('world_data', currentWorld?.world_tile_map_url);
+    this.load.json('global_data', 'static/global.json');
+  }
+
+  loadAnimations(
+    spriteSheet: string,
+    atlasName: string,
+    metadata: WorldDescription
+  ) {
+    this.anims.create({
+      key: 'blood-splat',
+      frames: this.anims.generateFrameNumbers('blood', { start: 1, end: 17 }),
+      frameRate: 20,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: `foam`,
+      frames: this.anims.generateFrameNames('global_atlas', {
+        start: 1,
+        end: 8,
+        prefix: `foam-`
+        //suffix: '.png'
+      }),
+      frameRate: 6,
+      repeat: -1
+    });
+
+    metadata.item_types.forEach((itemType) => {
+      //console.log('Adding item', itemType.type);
+      this.itemSource[itemType.type] = atlasName;
+      this.itemTypes[itemType.type] = itemType;
+    });
+
+    metadata.mob_types.forEach((mobType) => {
+      //console.log('Adding mob', mobType.type);
+      this.mobSource[mobType.type] = atlasName;
+      this.anims.create({
+        key: `${mobType.type}-walk`,
+        frames: this.anims.generateFrameNames(atlasName, {
+          start: 1,
+          end: 6,
+          prefix: `${mobType.type}-walk-`
+          //suffix: '.png'
+        }),
+        frameRate: 5,
+        repeat: -1
+      });
+
+      this.anims.create({
+        key: `${mobType.type}-idle`,
+        frames: this.anims.generateFrameNames(atlasName, {
+          start: 1,
+          end: 4,
+          prefix: `${mobType.type}-idle-`
+          //suffix: '.png'
+        }),
+        frameRate: 5,
+        repeat: -1
+      });
+    });
+  }
+
+  terrainEquals(a: number, b: number, allEquals: boolean = false) {
+    if (a == b) {
+      return true;
+    }
+
+    if (b === 2 && a === 1) {
+      return true;
+    }
+
+    if (allEquals && a === 2 && b === 1) {
+      return true;
+    }
+
+    return false;
+  }
+
+  drawTerrainLayer(
+    terrainData: number[][],
+    terrainNumber: number[],
+    loose: boolean,
+    callback: (
+      x: number,
+      y: number,
+      type: number,
+      up: number,
+      down: number,
+      left: number,
+      right: number
+    ) => void
+  ) {
+    const terrainWidth = terrainData[0].length;
+    const terrainHeight = terrainData.length;
+
+    // Iterate over each position in the terrain data
+    for (let y = 0; y < terrainHeight; y++) {
+      for (let x = 0; x < terrainWidth; x++) {
+        const type = terrainData[x][y];
+        // Calculate the world position
+        const posX = x * TILE_SIZE;
+        const posY = y * TILE_SIZE;
+
+        // Skip if empty (type 0)
+        if (!terrainNumber.includes(type)) {
+          continue;
+        }
+
+        // Initialize neighbor flags
+        let left = 1;
+        let right = 1;
+        let up = 1;
+        let down = 1;
+
+        // Check left neighbor (x - 1)
+        if (x > 0 && this.terrainEquals(terrainData[x - 1][y], type, loose)) {
+          left = 0;
+        }
+
+        // Check right neighbor (x + 1)
+        if (
+          x < terrainWidth - 1 &&
+          this.terrainEquals(terrainData[x + 1][y], type, loose)
+        ) {
+          right = 0;
+        }
+
+        // Check up neighbor (y - 1)
+        if (y > 0 && this.terrainEquals(terrainData[x][y - 1], type, loose)) {
+          up = 0;
+        }
+
+        // Check down neighbor (y + 1)
+        if (
+          y < terrainHeight - 1 &&
+          this.terrainEquals(terrainData[x][y + 1], type, loose)
+        ) {
+          down = 0;
+        }
+
+        callback(posX, posY, type, up, down, left, right);
+      }
+    }
+  }
+
+  hideWorld() {
+    this.nightOverlay.fillStyle(GRAY, 1); // Dark blue with 50% opacity
+    this.nightOverlay.fillRect(
+      0,
+      0,
+      this.terrainWidth * TILE_SIZE,
+      this.terrainHeight * TILE_SIZE
+    );
+  }
+
+  create() {
+    const globalData = parseWorldFromJson(this.cache.json.get('global_data'));
+    console.log('setting up world', needsAnimationsLoaded);
+    //console.log(this.world_data);
+    world = new World();
+    world.load(globalData);
+
+    // Load globals
+    if (needsAnimationsLoaded) {
+      this.loadAnimations('global_sprites', 'global_atlas', globalData);
+    }
+
+    // Tile mapping as defined earlier
+    const tileMapping = [
+      '2-2', // Configuration 0
+      '2-3', // Configuration 1
+      '2-1', // Configuration 2
+      '2-4', // Configuration 3
+      '3-2', // Configuration 4
+      '3-3', // Configuration 5
+      '3-1', // Configuration 6
+      '3-4', // Configuration 7
+      '1-2', // Configuration 8
+      '1-3', // Configuration 9
+      '1-1', // Configuration 10
+      '1-4', // Configuration 11
+      '4-2', // Configuration 12
+      '4-3', // Configuration 13
+      '4-1', // Configuration 14
+      '4-4' // Configuration 15
+    ];
+
+    const waterTypes = globalData.terrain_types
+      .filter((type) => !type.walkable)
+      .map((type) => type.id);
+    const landTypes = globalData.terrain_types
+      .filter((type) => type.walkable)
+      .map((type) => type.id);
+
+    const terrainMap: Record<number, TerrainType> = {};
+    for (const terrainType of globalData.terrain_types) {
+      terrainMap[terrainType.id] = terrainType;
+    }
+    console.log('waterTypes', waterTypes, 'landTypes', landTypes);
+    // Draw water layer
+    this.drawTerrainLayer(
+      globalData.tiles,
+      waterTypes,
+      true,
+      (posX, posY, type, up, _down, _left, _right) => {
+        this.add
+          .sprite(posX, posY + TILE_SIZE, 'global_atlas', terrainMap[type].name)
+          .setOrigin(0, 0)
+          .setDepth(-0.5);
+        //console.log('water', type, posX, posY);
+        if (up === 1) {
+          const foam = this.add
+            .sprite(posX, posY + 16, 'global_atlas')
+            .setOrigin(0, 0)
+            .setDepth(-0.4);
+          foam.anims.play(`foam`);
+        }
+      }
+    );
+
+    // Draw land layer with stone
+    this.drawTerrainLayer(
+      globalData.tiles,
+      landTypes,
+      true,
+      (posX, posY, type, up, down, left, right) => {
+        // Compute the configuration value
+        const configuration = (up << 3) | (down << 2) | (left << 1) | right;
+
+        // Get the frame index from the mapping
+        const frameIndex = tileMapping[configuration];
+
+        // Create the sprite
+        //this.add.sprite(posY, posX, 'world_atlas', `sand-2-2`).setOrigin(0, 0).setDepth(-0.5);
+        this.add
+          .sprite(posX, posY, 'global_atlas', `stone-${frameIndex}`)
+          .setOrigin(0, 0)
+          .setDepth(-0.3);
+      }
+    );
+
+    this.drawTerrainLayer(
+      globalData.tiles,
+      landTypes,
+      false,
+      (posX, posY, type, up, down, left, right) => {
+        const terrain = terrainMap[type].name;
+        const configuration = (up << 3) | (down << 2) | (left << 1) | right;
+
+        // Get the frame index from the mapping
+        const frameIndex = tileMapping[configuration];
+
+        // Create the sprite
+        //this.add.sprite(posY, posX, 'world_atlas', `sand-2-2`).setOrigin(0, 0).setDepth(-0.5);
+        this.add
+          .sprite(posX, posY, 'global_atlas', `${terrain}-${frameIndex}`)
+          .setOrigin(0, 0)
+          .setDepth(0);
+      }
+    );
+
+    this.cameras.main.setViewport(
+      10,
+      10,
+      this.game.scale.width - 20,
+      this.game.scale.height * 0.5 - 10
+    );
+
+    this.terrainWidth = globalData.tiles[0].length;
+    this.terrainHeight = globalData.tiles.length;
+
+    const background = this.add.image(0, 0, 'background');
+    background.setOrigin(0, 0);
+    background.setScrollFactor(0); // Make it stay static
+    background.setDisplaySize(this.game.scale.width, this.game.scale.width);
+    background.setDepth(-10);
+
+    // Create a night overlay with lower depth
+    this.nightOverlay = this.add.graphics();
+    this.nightOverlay.fillRect(
+      0,
+      0,
+      this.terrainWidth * TILE_SIZE,
+      this.terrainHeight * TILE_SIZE
+    );
+    this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
+    this.hideWorld();
+
+    bindAblyToWorldScene(this);
+    initializePlayer();
+
+    this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+      if (!world.mobs[publicCharacterId]) {
+        return;
+      }
+
+      console.log(
+        'click',
+        pointer.worldX / TILE_SIZE,
+        pointer.worldY / TILE_SIZE
+      );
+
+      publishPlayerPosition({
+        x: pointer.worldX / TILE_SIZE,
+        y: pointer.worldY / TILE_SIZE
+      });
+    });
+
+    needsAnimationsLoaded = false;
+  }
+
+  public convertToTileXY(pos: Coord): [number, number] {
+    return [Math.floor(pos.x / TILE_SIZE), pos.y / TILE_SIZE];
+  }
+
+  public convertToWorldXY(pos: Coord): [number, number] {
+    return [
+      pos.x * TILE_SIZE + TILE_SIZE * 0.5,
+      pos.y * TILE_SIZE + TILE_SIZE * 0.5
+    ];
+  }
+
+  public follow(sprite: Phaser.GameObjects.Sprite) {
+    this.cameraDolly = new Phaser.Geom.Point(sprite.x, sprite.y);
+    this.cameras.main.startFollow(this.cameraDolly);
+    this.hero = sprite;
+  }
+
+  update() {
+    if (gameState !== 'stateInitialized') {
+      this.hideWorld();
+      return;
+    }
+    tick(this);
+    if (this.cameraDolly && this.hero) {
+      this.cameraDolly.x = Math.floor(this.hero.x);
+      this.cameraDolly.y = Math.floor(this.hero.y);
+    }
+    if (this.hero) {
+      const [x, y] = this.convertToTileXY({ x: this.hero.x, y: this.hero.y });
+
+      Object.values(world.houses).forEach((house) => {
+        const spriteHouse = house as SpriteHouse;
+        spriteHouse.animate(Math.floor(x), Math.floor(y));
+      });
+    }
+    //console.log('time', world.fantasyDate.hour, world.fantasyDate.hour/12);
+
+    if (fantasyDate) {
+      let nightOpacity = 0;
+      const currentTime = fantasyDate.time;
+      if (currentTime >= 3 && currentTime <= 10) {
+        nightOpacity = 0;
+      } else if (currentTime >= 11 || currentTime <= 2) {
+        nightOpacity = 0.5;
+      } else if (currentTime > 10 && currentTime < 11) {
+        nightOpacity = (currentTime - 10) * 0.5;
+      } else if (currentTime > 2 && currentTime < 3) {
+        nightOpacity = (3 - currentTime) * 0.5;
+      }
+      //console.log('nightOpacity', nightOpacity, world.fantasyDate.hour, world.fantasyDate.minute, currentTime);
+      this.nightOverlay.clear();
+      this.nightOverlay.fillStyle(0x000033, nightOpacity); // Dark blue with 50% opacity
+      this.nightOverlay.fillRect(
+        0,
+        0,
+        this.terrainWidth * TILE_SIZE,
+        this.terrainHeight * TILE_SIZE
+      );
+    }
+  }
+
+  showGameOver() {
+    const text = this.add.text(75, 140, 'GAME OVER', {
+      color: '#FFFFFF',
+      fontSize: 60,
+      fontStyle: 'bold'
+    });
+    text.setOrigin(0, 0);
+    text.setScrollFactor(0); // Make it stay static
+    text.setDepth(100);
+  }
+}

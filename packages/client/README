@@ -1,0 +1,2 @@
+To start webserver: pnpm start
+To run webpack: pnpm build

@@ -1,0 +1,55 @@
+name: Continuous Integration Checks (Format, Lint, Build, Test)
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-22.04
+
+    strategy:
+      matrix:
+        node-version: [20]
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Install pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # Step 3: Use Node.js and enable caching
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      # Step 4: Install dependencies
+      - name: Install Dependencies
+        run: pnpm install
+
+      # Step 5: Run Lint
+      - name: Run Lint
+        run: pnpm lint
+
+      # Step 6: Check Prettier Formatting
+      - name: Check Prettier Formatting
+        run: pnpm format --check
+
+      # Step 7: Build Project
+      - name: Build Project
+        run: pnpm build
+
+      # Step 8: Run Unit Tests
+      - name: Run Unit Tests
+        run: pnpm test

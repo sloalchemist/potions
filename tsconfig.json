@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@rt-potion/common/*": ["packages/common/src/*"],
+        "@rt-potion/converse/*": ["packages/converse/src/library/*"]
+      }
+    }
+  }
