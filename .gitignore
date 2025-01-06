@@ -4,6 +4,7 @@
 **/node_modules
 .venv/
 packages/server/dist/
+packages/client/dist/
 node_modules
 packages/common/dist/
 packages/auth-server/dist/
