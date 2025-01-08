@@ -11,7 +11,6 @@ export class BuildWall implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
-    console.log("in interact");
     if (!mob.carrying) {
       return false;
     }
@@ -35,7 +34,6 @@ export class BuildWall implements Use {
         position
       });
     }
-   
     return true;
   }
 }
