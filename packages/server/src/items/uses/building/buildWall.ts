@@ -25,7 +25,6 @@ export class BuildWall implements Use {
     const partialWall = Item.getItem(partialWallID)!;
 
     partialWall.changeAttributeBy('complete', 1);
-    console.log("here");
     item.destroy();
 
     if (partialWall.getAttribute<number>('complete') > 0) {
