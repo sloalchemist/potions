@@ -11,6 +11,7 @@ export class BuildWall implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
+    console.log("in interact");
     if (!mob.carrying) {
       return false;
     }
@@ -24,9 +25,10 @@ export class BuildWall implements Use {
     const partialWall = Item.getItem(partialWallID)!;
 
     partialWall.changeAttributeBy('complete', 1);
+    console.log("here");
     item.destroy();
 
-    if (partialWall.getAttribute<number>('complete') <= 0) {
+    if (partialWall.getAttribute<number>('complete') > 0) {
       const position = partialWall.position;
       partialWall.destroy();
       itemGenerator.createItem({
@@ -34,7 +36,7 @@ export class BuildWall implements Use {
         position
       });
     }
-
+   
     return true;
   }
 }
