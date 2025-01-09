@@ -3,7 +3,6 @@ import { commonSetup } from '../../testSetup';
 import { DB } from '../../../src/services/database';
 import { Item } from '../../../src/items/item';
 import { BuildWall } from '../../../src/items/uses/building/buildWall';
-import { MobI } from '@rt-potion/common';
 import { Mob } from '../../../src/mobs/mob';
 
 beforeAll(() => {
@@ -69,7 +68,7 @@ describe('Build wall from partial wall', () => {
       position: logPos
     });
 
-    const wallPos = { x: 3, y: 3};
+    const wallPos = { x: 0, y: 1};
     itemGenerator.createItem({
       type: 'partial-wall',
       position: wallPos
@@ -78,21 +77,26 @@ describe('Build wall from partial wall', () => {
     expect(logId).not.toBeNull();
     const log = Item.getItem(logId!);
 
-    let villager: MobI;
+    let villager: Mob;
     villager = {
-      id: 'villager',
-      position: { x: 5, y: 5 },
-      type: 'villager',
-      subtype: '',
-      path: [],
-      speed: 1,
-      name: 'TestVillager',
-      maxHealth: 10,
-      carrying: undefined, 
-      attributes: {},
-      unlocks: [],
-      doing: ''
+      key: "testmob";
+      name: 'testmob';
+      type: string;
+      position: Coord;
+      speed: number;
+      gold: number;
+      health: number;
+      maxHealth: number;
+      attack: number;
+      community_id: string;
+      subtype: string;
+      currentAction?: string;
+      carrying?: string;
+      path: Coord[];
+      target?: Coord;
+
     };
+    
     villager.carrying = logId;
     const buildWall = new BuildWall();
     const wallInteract = buildWall.interact(villager, log);
