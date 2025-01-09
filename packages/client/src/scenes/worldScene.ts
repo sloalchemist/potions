@@ -410,17 +410,13 @@ export class WorldScene extends Phaser.Scene {
     if (fantasyDate) {
       let nightOpacity = 0;
       const currentTime = fantasyDate.time;
-      if (currentTime >= 3 && currentTime <= 10) {
-        nightOpacity = 0;
-      } else if (currentTime >= 11 || currentTime <= 2) {
-        nightOpacity = 0.5;
-      } else if (currentTime > 10 && currentTime < 11) {
-        nightOpacity = (currentTime - 10) * 0.5;
-      } else if (currentTime > 2 && currentTime < 3) {
-        nightOpacity = (3 - currentTime) * 0.5;
-      }
-      //console.log('nightOpacity', nightOpacity, world.fantasyDate.hour, world.fantasyDate.minute, currentTime);
-      this.nightOverlay.clear();
+
+      // Determines the opacity of the night overlay on the 12 hour clock cycle
+      let sinExp = ((3.14 * 2) / 12) * (currentTime - 9);
+      nightOpacity = .5 * Math.sin(sinExp)+.5;
+
+      console.log('nightOpacity', nightOpacity, fantasyDate.time, currentTime);
+      //this.nightOverlay.clear();
       this.nightOverlay.fillStyle(0x000033, nightOpacity); // Dark blue with 50% opacity
       this.nightOverlay.fillRect(
         0,
