@@ -89,10 +89,10 @@ export class FantasyDate {
     const minute = tick.tick % MINUTES_IN_HOUR;
     const hour = Math.floor(tick.tick / MINUTES_IN_HOUR) % HOURS_IN_DAY;
     const day =
-      Math.floor(tick.tick / (MINUTES_IN_HOUR * HOURS_IN_DAY)) % DAYS_IN_MONTH;
+      (Math.floor(tick.tick / (MINUTES_IN_HOUR * HOURS_IN_DAY)) % DAYS_IN_MONTH) + 1;
     const month =
-      Math.floor(tick.tick / (MINUTES_IN_HOUR * HOURS_IN_DAY * DAYS_IN_MONTH)) %
-      MONTHS_IN_YEAR;
+      (Math.floor(tick.tick / (MINUTES_IN_HOUR * HOURS_IN_DAY * DAYS_IN_MONTH)) %
+      MONTHS_IN_YEAR) + 1;
     const year = Math.floor(
       tick.tick /
         (MINUTES_IN_HOUR * HOURS_IN_DAY * DAYS_IN_MONTH * MONTHS_IN_YEAR)
