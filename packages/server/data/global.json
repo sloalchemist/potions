@@ -501,7 +501,7 @@
             "description": "For mixing potions",
             "type": "cauldron",
             "carryable": false,
-            "walkable": true,
+            "walkable": false,
             "interactions": []
         },
         {
