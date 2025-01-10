@@ -342,7 +342,7 @@
             "type": "potion-stand",
             "carryable": false,
             "smashable": true,
-            "walkable": true,
+            "walkable": false,
             "attributes": [
                 {
                     "name": "items",
