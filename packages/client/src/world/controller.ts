@@ -118,7 +118,7 @@ function prepInteraction(label: string, item: Item): string {
   }
 }
 
-function collisionListener(physicals: Item[]) {
+export function collisionListener(physicals: Item[]) {
   const interactions: Interactions[] = [];
 
   const items: Item[] = [];
@@ -179,14 +179,20 @@ function collisionListener(physicals: Item[]) {
           label: `Smash ${item.itemType.name}`
         });
       }
-
+      
       item.itemType.interactions.forEach((interaction) => {
+        if (player.carrying){
+          console.log(world.items[player.carrying].itemType.name)
+          console.log(item.attributes.templateType);
+        }
         if (!interaction.while_carried && item.conditionMet(interaction)) {
-          interactions.push({
-            action: interaction.action,
-            item: item,
-            label: prepInteraction(interaction.description, item)
-          });
+          if(interaction.action == "add_item" && player.carrying && world.items[player.carrying].itemType.name.localeCompare(item.attributes.templateType.toString()) || interaction.action != "add_item"){
+            interactions.push({
+              action: interaction.action,
+              item: item,
+              label: prepInteraction(interaction.description, item)
+            });
+          }
         }
       });
       items.push(item);
