@@ -91,6 +91,13 @@ describe('Build wall from partial wall', () => {
           extroversion: 50,
           speaker: true
         }
+      ],
+      communities: [
+        {
+          id: "silverclaw",
+          name: "Village of the Silverclaw",
+          description: "none"
+        }      
       ]
     };
 
