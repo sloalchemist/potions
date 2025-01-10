@@ -6,10 +6,10 @@ import { BuildWall } from '../../../src/items/uses/building/buildWall';
 import { Mob } from '../../../src/mobs/mob';
 import { mobFactory } from '../../../src/mobs/mobFactory';
 import { Pickup } from '../../../src/items/uses/pickup';
-import { SpawnMob } from '../../../src/items/on_ticks/spawnMob';
+import { Community } from '../../../src/community/community';
 
 beforeAll(() => {
-  commonSetup();
+  commonSetup('data/building.test.db');
 });
 
 describe('Build wall from partial wall', () => {
@@ -30,11 +30,11 @@ describe('Build wall from partial wall', () => {
           walkable: true,
           interactions: [
             {
-              "description": "Build wall",
-              "action": "build_wall",
-              "while_carried": true,
-              "requires_item": "partial-wall"
-          }
+              description: 'Build wall',
+              action: 'build_wall',
+              while_carried: true,
+              requires_item: 'partial-wall'
+            }
           ],
           attributes: [],
           on_tick: []
@@ -48,31 +48,47 @@ describe('Build wall from partial wall', () => {
           interactions: [],
           attributes: [
             {
-              "name": "complete",
-              "value": 3
+              name: 'complete',
+              value: 3
             }
           ]
         },
         {
           name: 'Wall',
-          description: 'A sturdy structure that blocks movement and provides protection.',
+          description:
+            'A sturdy structure that blocks movement and provides protection.',
           type: 'wall',
           carryable: false,
           walkable: false,
           interactions: [],
           attributes: [
             {
-              "name": "health",
-              "value": 100
-          }
+              name: 'health',
+              value: 100
+            }
           ],
           on_tick: []
         }
       ],
       mob_types: [
         {
-          name: 'Villager',
-          type: 'villager',
+          name: "Villager",
+          name_style: "norse-english",
+          type: "villager",
+          description: "A friendly inhabitant of the silverclaw community.",
+          health: 10,
+          speed: 0.5,
+          attack: 5,
+          gold: 0,
+          community: "silverclaw",
+          stubbornness: 20,
+          bravery: 5,
+          aggression: 5,
+          industriousness: 40,
+          adventurousness: 10,
+          gluttony: 50,
+          sleepy: 80,
+          extroversion: 50,
           speaker: true
         }
       ]
@@ -80,34 +96,34 @@ describe('Build wall from partial wall', () => {
 
     //generate world
     const itemGenerator = new ItemGenerator(worldDescription.item_types);
-    const logPos = { x: 0, y: 0};
+    const logPos = { x: 0, y: 0 };
     itemGenerator.createItem({
       type: 'log',
       position: logPos
     });
 
-    const wallPos = { x: 0, y: 1};
+    const wallPos = { x: 0, y: 1 };
     itemGenerator.createItem({
       type: 'partial-wall',
       position: wallPos
     });
-    
+
     const logId = Item.getItemIDAt(logPos);
     expect(logId).not.toBeNull();
     const log = Item.getItem(logId!);
 
-    //spawnMob testing
-    const spawnMob = new SpawnMob();
+    Community.makeVillage("village1", "silverclaw");
 
-    mobFactory.makeMob("villager", { x: 1, y: 0}, "test-villager")
-   
-    const mob = Mob.getMob("villager");
+    mobFactory.loadTemplates([...worldDescription.mob_types]);
+    mobFactory.makeMob('villager', { x: 1, y: 0 }, 'test-villager', 'bob');
+
+    const mob = Mob.getMob('test-villager');
     expect(mob).toBeInstanceOf(Mob);
 
     //had to do this condition because mob&log could be Mob | undefined,
     // not sure if there's a better fix
-    if (mob && log ) {
-      const pickup = new Pickup;
+    if (mob && log) {
+      const pickup = new Pickup();
 
       //does the pickup still happen if it is in an expect statement?
       expect(pickup.interact(mob, log)).toBeTruthy();
@@ -127,14 +143,7 @@ describe('Build wall from partial wall', () => {
 
       //make sure item is a wall and not partial wall
       expect(itemAtWallPos!.type).toBe('wall');
-
     }
-    
-    //TODO: check coordinates to make sure there is not a partial wall!
-    //expect there to be a wall at our coords
-
-   
-    
   });
 });
 
