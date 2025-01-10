@@ -86,62 +86,56 @@ export const commonSetup = () => {
         interactions: [],
         attributes: [],
         on_tick: []
+      },
+      {
+        name: 'Potion stand',
+        description: 'test',
+        type: 'potion-stand',
+        carryable: false,
+        smashable: true,
+        walkable: true,
+        show_price_at: {
+          x: 7,
+          y: -10
+        },
+
+        // subtype: '255',
+        interactions: [
+          {
+            description: 'Add $item_name',
+            action: 'add_item',
+            while_carried: false
+          }
+        ],
+        attributes: [
+          {
+            name: 'items',
+            value: 0
+          },
+          {
+            name: 'price',
+            value: 10
+          },
+          {
+            name: 'gold',
+            value: 0
+          },
+          {
+            name: 'health',
+            value: 1
+          }
+        ],
+        on_tick: []
       }
     ],
     mob_types: [
       {
-        name: 'Player',
-        description: 'The player',
+        name: 'Villager',
         name_style: 'norse-english',
-        type: 'player',
-        health: 100,
-        speed: 2.5,
-        attack: 5,
-        gold: 0,
-        community: 'alchemists',
-        stubbornness: 20,
-        bravery: 5,
-        aggression: 5,
-        industriousness: 40,
-        adventurousness: 10,
-        gluttony: 50,
-        sleepy: 80,
-        extroversion: 50,
-        speaker: true
-      },
-      {
-      name: 'Blob',
-      description: 'A Mob',
-      name_style: 'norse-english',
-      type: 'blob',
-      health: 100,
-      speed: 2.5,
-      attack: 5,
-      gold: 0,
-      community: 'blobs',
-      stubbornness: 20,
-      bravery: 5,
-      aggression: 5,
-      industriousness: 40,
-      adventurousness: 10,
-      gluttony: 50,
-      sleepy: 80,
-      extroversion: 50,
-      speaker: true
+        type: 'villager'
       }
     ],
-    communities: [
-      { 
-        id: 'alchemists', 
-        name: 'Alchemists guild', 
-        description: "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  
-      },
-      { 
-      id: 'blobs', 
-      name: 'Blobs', 
-      description: "Blobs who run around the map and cause havoc"  
-      }
-    ],
+    communities: [],
     alliances: [],
     houses: [],
     items: [],
