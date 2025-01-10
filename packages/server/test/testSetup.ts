@@ -79,6 +79,17 @@ export const commonSetup = () => {
         interactions: [],
         attributes: [],
         on_tick: []
+      },
+      {
+        name: 'Solid object',
+        description: 'test',
+        type: 'solid object',
+        carryable: false,
+        smashable: false,
+        walkable: false, // This is the important detail
+        interactions: [],
+        attributes: [],
+        on_tick: []
       }
     ],
     mob_types: [],
