@@ -14,6 +14,7 @@ import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
 import { GRAY } from './pauseScene';
 import { publishPlayerPosition } from '../services/playerToServer';
+import { getNightSkyOpacity } from '../utils/nightOverlayHandler';
 import {
   ItemType,
   parseWorldFromJson,
@@ -24,15 +25,6 @@ export let world: World;
 let needsAnimationsLoaded: boolean = true;
 
 export const TILE_SIZE = 32;
-
-enum NightOpacityConstants {
-  TIME_OFFSET = 9,
-  PERIOD = 12,
-  VERTICAL_OFFSET = 0.25,
-  AMPLITUDE = 0.25,
-  INTERPOLATION_PERCENT = 0.01,
-  DEFAULT_OPACITY = 0,
-}
 
 export class WorldScene extends Phaser.Scene {
   worldLayer!: Phaser.Tilemaps.TilemapLayer;
@@ -418,7 +410,7 @@ export class WorldScene extends Phaser.Scene {
 
     if (fantasyDate) {
       // Find new opacity value for the night overlay
-      this.nightOpacity = this.updateNightOverlay(fantasyDate.time, this.nightOpacity);
+      this.nightOpacity = getNightSkyOpacity(fantasyDate.time, this.nightOpacity);
 
       this.nightOverlay.clear();
       // Dark blue with max 50% opacity
@@ -430,24 +422,6 @@ export class WorldScene extends Phaser.Scene {
         this.terrainHeight * TILE_SIZE
       );
     }
-  }
-
-  updateNightOverlay(currentTime: number, NightOpacity: number) {
-    let nextNightOpacity = 0;
-
-    // Determines the opacity of the night overlay on the 12-hour clock cycle
-    // max value of 0.5
-    let sinExp = ((2 * Math.PI) / NightOpacityConstants.PERIOD) * (currentTime - NightOpacityConstants.TIME_OFFSET);
-    nextNightOpacity = NightOpacityConstants.AMPLITUDE * Math.sin(sinExp) + NightOpacityConstants.VERTICAL_OFFSET;
-
-    // Smooth transition by slowly approaching the opacity value
-    const smoothOpacity = Phaser.Math.Interpolation.Linear(
-      [NightOpacity || NightOpacityConstants.DEFAULT_OPACITY, 
-      nextNightOpacity],
-      NightOpacityConstants.INTERPOLATION_PERCENT
-    );
-
-    return smoothOpacity;
   }
 
   showGameOver() {
