@@ -16,7 +16,6 @@ describe('FantasyDate', () => {
     let init_date = FantasyDate.currentDate();
 
     // OUR BUG: this should construct a FantasyDate with day = 1 and month = 1 instead of 0 for better clarity
-    // CURRENT: 0/0/0 0 'oclock
     // EXPECTED: 1/1/0 0'oclock
     // so that, our expected day and month would be 1 instead of 0
     expect(init_date.day).toBe(1);
