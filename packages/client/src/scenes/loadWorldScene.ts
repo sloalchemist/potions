@@ -124,7 +124,7 @@ export class LoadWorldScene extends Phaser.Scene {
 
     characterName.on('pointerdown', () => {
       const userName = window.prompt('Please enter your name:');
-      if (userName && userName.trim() !== '') {
+      if (userName && userName.trim() !== '' && userName.length < 10) {
         changeName(userName);
         characterName.setText(userName);
       }
