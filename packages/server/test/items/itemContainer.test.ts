@@ -1,6 +1,7 @@
 import { commonSetup } from '../testSetup';
 import { DB } from '../../src/services/database';
 import { mobFactory } from '../../src/mobs/mobFactory';
+import { Community } from '../../src/community/community';
 // import { Container } from '../../container';
 import { Item } from '../../src/items/item';
 import { AddItem } from '../../src/items/uses/container/addItem';
@@ -93,15 +94,30 @@ describe('Adds item to a container matching the container item subtype', () => {
           adventurousness: 10,
           gluttony: 50,
           sleepy: 80,
-          extroversion: 50
+          extroversion: 50,
+          speaker: true
         }
+      ],
+      communities: [
+        { "id": "alchemists", "name": "Alchemists guild", "description": "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  }
+      ],
+      regions: [
+        {
+          "id": "elyndra",
+          "name": "elyndra",
+          "description": "the overall world in which everything exists.",
+          "parent": null,
+          "concepts": ["concept_elyndra", "concept_elyndra_as_battleground"]
+        },
       ]
     };
 
     //set up the world
     const standPosition = { x: 0, y: 1 };
     const position = { x: 0, y: 0 };
-
+    mobFactory.loadTemplates(worldDescription.mob_types);
+    Community.makeVillage("alchemists", "Alchemists guild");
+    
     //create a potion stand
     const itemGenerator = new ItemGenerator(worldDescription.item_types);
     itemGenerator.createItem({
@@ -119,13 +135,13 @@ describe('Adds item to a container matching the container item subtype', () => {
       subtype: '255',
       position: { x: 1, y: 0 }
     });
-
+    
+    
     // create a player
-    // mobFactory.makeMob('player', position, '79e0aef2', 'TestPlayer');
+    mobFactory.makeMob('player', position, '79e0aef2', 'TestPlayer');
     // const testMob = Mob.getMob('79e0aef2');
     // expect(testMob).not.toBeNull();
 
-    // const testMob = Mob.getMob('79e0aef2');
     // const testItem = Item.getItem('d39dd773-0200-4b04-909c-68c557cc50b9');
 
     // const testAddItem = new AddItem();
