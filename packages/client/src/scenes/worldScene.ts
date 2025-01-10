@@ -39,6 +39,7 @@ export class WorldScene extends Phaser.Scene {
   nightOverlay!: Phaser.GameObjects.Graphics;
   terrainWidth: number = 0;
   terrainHeight: number = 0;
+  previousOpacity: number = 0;
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -405,19 +406,21 @@ export class WorldScene extends Phaser.Scene {
         spriteHouse.animate(Math.floor(x), Math.floor(y));
       });
     }
-    //console.log('time', world.fantasyDate.hour, world.fantasyDate.hour/12);
 
     if (fantasyDate) {
       let nightOpacity = 0;
       const currentTime = fantasyDate.time;
-
-      // Determines the opacity of the night overlay on the 12 hour clock cycle
-      let sinExp = ((3.14 * 2) / 12) * (currentTime - 9);
-      nightOpacity = .5 * Math.sin(sinExp)+.5;
-
-      console.log('nightOpacity', nightOpacity, fantasyDate.time, currentTime);
-      //this.nightOverlay.clear();
-      this.nightOverlay.fillStyle(0x000033, nightOpacity); // Dark blue with 50% opacity
+  
+      // Determines the opacity of the night overlay on the 12-hour clock cycle
+      let sinExp = ((Math.PI * 2) / 12) * (currentTime - 9);
+      nightOpacity = 0.25 * Math.sin(sinExp) + 0.25;
+  
+      // Smooth transition by slowly approaching the opacity value
+      const smoothOpacity = Phaser.Math.Interpolation.Linear([this.previousOpacity || 0, nightOpacity], 0.01);
+      this.previousOpacity = smoothOpacity;
+  
+      this.nightOverlay.clear();
+      this.nightOverlay.fillStyle(0x000033, smoothOpacity); // Dark blue with max 50% opacity
       this.nightOverlay.fillRect(
         0,
         0,
