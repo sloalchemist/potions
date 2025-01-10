@@ -275,10 +275,15 @@ export class UxScene extends Phaser.Scene {
     });
   }
 
-  setChatCompanions(companions: Mob[]) {
+  clearChatOptions() {
     // Clear previous chat buttons
     this.chatButtons.forEach((button) => button.destroy());
     this.chatButtons = [];
+    console.log("Clearing Chat Options");
+  }
+
+  setChatCompanions(companions: Mob[]) {
+    this.clearChatOptions();
 
     companions.forEach((companion, i) => {
       const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
@@ -292,8 +297,7 @@ export class UxScene extends Phaser.Scene {
   }
 
   sendRequestChat(world: World, companion: Mob) {
-    this.chatButtons.forEach((button) => button.destroy());
-    this.chatButtons = [];
+    this.clearChatOptions();
 
     this.chatRequested = true;
     setChatting(true);
@@ -302,9 +306,7 @@ export class UxScene extends Phaser.Scene {
 
   // New method to set chat options
   setChatOptions(chatOptions: ChatOption[]) {
-    // Clear previous chat buttons
-    this.chatButtons.forEach((button) => button.destroy());
-    this.chatButtons = [];
+    this.clearChatOptions();
 
     chatOptions.forEach((chatOption, i) => {
       const y = 70 + (80 + 10) * i;
