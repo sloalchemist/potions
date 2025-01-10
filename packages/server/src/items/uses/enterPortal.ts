@@ -13,9 +13,6 @@ export class EnterPortal implements Use {
   }
 
   interact(mob: Mob, _item: Item): boolean {
-    console.log('Enter portal', this.key, mob.name);
-    mob.destroy();
-
-    return true;
+    return false;
   }
 }
