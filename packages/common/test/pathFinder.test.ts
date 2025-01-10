@@ -13,7 +13,7 @@ describe('PathFinder', () => {
     { id: 0, name: 'Ground', walkable: true },
     { id: -1, name: 'Wall', walkable: false }
   ];
-
+ 
   beforeEach(() => {
     pathFinder = new PathFinder(tiles, terrain_types);
   });
@@ -81,4 +81,10 @@ describe('PathFinder', () => {
     const path = pathFinder.generatePath([], start, end, false);
     expect(path).toEqual([]);
   });
+
+  test('should not be able to walk through item that is not walkable', () => {
+    // 1. Generate item that you cannot walk through at some position that is walkable
+    // 2. pathfind from start to that position
+    // 3. Ensure the path is empty 
+  })
 });
