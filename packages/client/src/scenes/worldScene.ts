@@ -25,6 +25,15 @@ let needsAnimationsLoaded: boolean = true;
 
 export const TILE_SIZE = 32;
 
+enum NightOpacityConstants {
+  TIME_OFFSET = 9,
+  PERIOD = 12,
+  VERTICAL_OFFSET = 0.25,
+  AMPLITUDE = 0.25,
+  INTERPOLATION_PERCENT = 0.01,
+  DEFAULT_OPACITY = 0,
+}
+
 export class WorldScene extends Phaser.Scene {
   worldLayer!: Phaser.Tilemaps.TilemapLayer;
   aboveLayer!: Phaser.Tilemaps.TilemapLayer;
@@ -427,14 +436,15 @@ export class WorldScene extends Phaser.Scene {
     let nextNightOpacity = 0;
 
     // Determines the opacity of the night overlay on the 12-hour clock cycle
-    let sinExp = ((Math.PI * 2) / 12) * (currentTime - 9);
-    nextNightOpacity = 0.25 * Math.sin(sinExp) + 0.25;
+    // max value of 0.5
+    let sinExp = ((2 * Math.PI) / NightOpacityConstants.PERIOD) * (currentTime - NightOpacityConstants.TIME_OFFSET);
+    nextNightOpacity = NightOpacityConstants.AMPLITUDE * Math.sin(sinExp) + NightOpacityConstants.VERTICAL_OFFSET;
 
     // Smooth transition by slowly approaching the opacity value
     const smoothOpacity = Phaser.Math.Interpolation.Linear(
-      [NightOpacity || 0, 
+      [NightOpacity || NightOpacityConstants.DEFAULT_OPACITY, 
       nextNightOpacity],
-      0.01
+      NightOpacityConstants.INTERPOLATION_PERCENT
     );
 
     return smoothOpacity;
