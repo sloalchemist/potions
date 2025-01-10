@@ -5,6 +5,8 @@ import { DB } from '../../src/services/database';
 beforeAll(() => {
   commonSetup('data/fantasydate.test.db');
 });
+  commonSetup('data/fantasydate.test.db');
+});
 
 describe('FantasyDate', () => {
   test('initial date should be 1/1/0', () => {
@@ -29,5 +31,7 @@ describe('FantasyDate', () => {
 });
 
 afterAll(() => {
+  DB.close();
+});
   DB.close();
 });
