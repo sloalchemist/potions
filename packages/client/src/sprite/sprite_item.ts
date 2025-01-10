@@ -15,6 +15,8 @@ export class SpriteItem extends Item {
   templateSprite: Phaser.GameObjects.Sprite | undefined;
   flat: boolean;
   hasPickedupFrame: boolean = false;
+  healthBar: Phaser.GameObjects.Graphics;
+  maxHealth: number;
 
   constructor(scene: WorldScene, item: ItemI) {
     super(world, item.id, item.position, scene.itemTypes[item.type]);
@@ -25,6 +27,8 @@ export class SpriteItem extends Item {
     this.house = item.house;
     this.carried_by = item.carried_by;
     this.lock = item.lock;
+    this.healthBar = scene.add.graphics();
+    this.maxHealth = 100;
 
     // copy over all attributes
     for (const key in item.attributes) {
@@ -164,6 +168,7 @@ export class SpriteItem extends Item {
   destroy(world: World) {
     super.destroy(world);
     //console.log('Destroying item', this.key);
+    this.healthBar.destroy();
     this.sprite.destroy();
     if (this.priceText) {
       this.priceText.destroy();
@@ -318,8 +323,29 @@ export class SpriteItem extends Item {
     this.animate();
   }
 
+  updateHealthBar() {
+    this.healthBar.clear();
+
+    if (true) {
+      const barWidth = 40;
+      const barHeight = 5;
+
+      const healthPercentage = 0.1;
+
+      const x = this.sprite.x - barWidth / 2;
+      const y = this.sprite.y - 20;
+
+      this.healthBar.fillStyle(0xff0000);
+      this.healthBar.fillRect(x, y, barWidth, barHeight);
+
+      this.healthBar.fillStyle(0x00ff00);
+      this.healthBar.fillRect(x, y, barWidth * healthPercentage, barHeight);
+    }
+  }
+
   tick(world: World, deltaTime: number) {
     super.tick(world, deltaTime);
+    this.updateHealthBar();
     if (this.position) {
       let depth = this.position.y + 0.5;
       if (this.flat) {
