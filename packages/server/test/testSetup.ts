@@ -10,11 +10,11 @@ export let world: ServerWorld;
 export let village: Community;
 export let itemGenerator: ItemGenerator;
 
-export const commonSetup = () => {
+export const commonSetup = (testName: string) => {
   // Any common setup code
   jest.clearAllMocks();
 
-  initializeServerDatabase('data/test.db', true);
+  initializeServerDatabase(testName, true);
   createTables();
   initializePubSub(new StubbedPubSub());
 
