@@ -120,26 +120,26 @@ describe('Build wall from partial wall', () => {
     const log = Item.getItem(logId!);
 
     Community.makeVillage("village1", "silverclaw");
-
+    
     mobFactory.loadTemplates([...worldDescription.mob_types]);
     mobFactory.makeMob('villager', { x: 1, y: 0 }, 'test-villager', 'bob');
 
     const mob = Mob.getMob('test-villager');
     expect(mob).toBeInstanceOf(Mob);
 
-    //had to do this condition because mob&log could be Mob | undefined,
-    // not sure if there's a better fix
+    expect(mob).toBeDefined();
+    expect(log).toBeDefined();
+
     if (mob && log) {
       const pickup = new Pickup();
 
       //does the pickup still happen if it is in an expect statement?
       expect(pickup.interact(mob, log)).toBeTruthy();
-
       //check that the mob is carrying something
-      expect(mob.carrying).not.toBeNull();
+      expect(mob.carrying).toBeDefined();
+      
       const buildWall = new BuildWall();
       const wallInteract = buildWall.interact(mob, log);
-
       expect(wallInteract).toBeTruthy();
 
       //make sure something is at the partial wall location
