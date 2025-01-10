@@ -5,6 +5,7 @@ import { initializeServerDatabase } from '../src/services/database';
 import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
+import { Carryable } from '../src/items/carryable';
 
 export let world: ServerWorld;
 export let village: Community;
@@ -76,6 +77,17 @@ export const commonSetup = () => {
         carryable: true,
         smashable: true,
         walkable: true,
+        interactions: [],
+        attributes: [],
+        on_tick: []
+      },
+      {
+        name: 'Solid Object',
+        description: 'test',
+        type: 'solid object',
+        carryable: false,
+        smashable: false,
+        walkable: false, // This is what matters
         interactions: [],
         attributes: [],
         on_tick: []
