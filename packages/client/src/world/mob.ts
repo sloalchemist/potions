@@ -30,6 +30,7 @@ export class Mob extends Physical {
     this.maxHealth = maxHealth;
 
     if (position) {
+      console.log('Adding mob to grid', this.key, this.position);
       world.addMobToGrid(this);
     }
 
@@ -56,7 +57,7 @@ export class Mob extends Physical {
   }
 
   changePosition(world: World, newPosition: Coord) {
-    //console.log('changePosition', this.position, newPosition);
+    // console.log('changePosition', this.position, newPosition);
     world.moveMob(this, newPosition);
     this.position = newPosition;
   }
@@ -69,6 +70,15 @@ export class Mob extends Physical {
     }
 
     if (this.path.length > 0) {
+      // check if next step is blocked
+      const nextStep = this.path[0];
+      const lastStep = this.path[this.path.length - 1];
+      const nextItem = world.getItemAt(nextStep.x, nextStep.y);
+      if (!!nextItem && !nextItem.isWalkable(this.unlocks)) {
+        console.log(`Next step blocked for ${this.key} by ${nextItem.name}`);
+        this.path = world.generatePath(this.unlocks, this.position, lastStep);
+      }
+
       const [position, angle] = followPath(
         this.position,
         this.path,
