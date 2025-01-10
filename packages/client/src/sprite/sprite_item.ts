@@ -27,6 +27,8 @@ export class SpriteItem extends Item {
     this.house = item.house;
     this.carried_by = item.carried_by;
     this.lock = item.lock;
+    this.healthBar = scene.add.graphics();
+    this.maxHealth = 100;
 
     // copy over all attributes
     for (const key in item.attributes) {
