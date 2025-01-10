@@ -79,9 +79,55 @@ export const commonSetup = () => {
         interactions: [],
         attributes: [],
         on_tick: []
+      },
+      {
+        name: 'Potion stand',
+        description: 'test',
+        type: 'potion-stand',
+        carryable: false,
+        smashable: true,
+        walkable: true,
+        show_price_at: {
+          x: 7,
+          y: -10
+        },
+
+        // subtype: '255',
+        interactions: [
+          {
+            description: 'Add $item_name',
+            action: 'add_item',
+            while_carried: false
+          }
+        ],
+        attributes: [
+          {
+            name: 'items',
+            value: 0
+          },
+          {
+            name: 'price',
+            value: 10
+          },
+          {
+            name: 'gold',
+            value: 0
+          },
+          {
+            name: 'health',
+            value: 1
+          }
+        ],
+        on_tick: []
       }
     ],
-    mob_types: [],
+    mob_types: [
+      {
+        name: 'Villager',
+        name_style: 'norse-english',
+        type: 'villager'
+      }
+    ],
     communities: [],
     alliances: [],
     houses: [],
