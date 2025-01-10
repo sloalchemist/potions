@@ -120,7 +120,9 @@ describe('Build wall from partial wall', () => {
     const log = Item.getItem(logId!);
 
     Community.makeVillage("village1", "silverclaw");
-    
+    const community = Community.getVillage("village1");
+    console.log("community: ", community);
+
     mobFactory.loadTemplates([...worldDescription.mob_types]);
     mobFactory.makeMob('villager', { x: 1, y: 0 }, 'test-villager', 'bob');
 
