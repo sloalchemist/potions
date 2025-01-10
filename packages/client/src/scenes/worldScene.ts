@@ -408,7 +408,18 @@ export class WorldScene extends Phaser.Scene {
     }
 
     if (fantasyDate) {
-      this.updateNightOverlay();
+      // Find new opacity value for the night overlay
+      this.previousNightOpacity = this.updateNightOverlay();
+
+      this.nightOverlay.clear();
+      // Dark blue with max 50% opacity
+      this.nightOverlay.fillStyle(0x000033, this.previousNightOpacity);
+      this.nightOverlay.fillRect(
+        0,
+        0,
+        this.terrainWidth * TILE_SIZE,
+        this.terrainHeight * TILE_SIZE
+      );
     }
   }
 
@@ -421,17 +432,13 @@ export class WorldScene extends Phaser.Scene {
     nightOpacity = 0.25 * Math.sin(sinExp) + 0.25;
 
     // Smooth transition by slowly approaching the opacity value
-    const smoothOpacity = Phaser.Math.Interpolation.Linear([this.previousNightOpacity || 0, nightOpacity], 0.01);
-    this.previousNightOpacity = smoothOpacity;
-
-    this.nightOverlay.clear();
-    this.nightOverlay.fillStyle(0x000033, smoothOpacity); // Dark blue with max 50% opacity
-    this.nightOverlay.fillRect(
-      0,
-      0,
-      this.terrainWidth * TILE_SIZE,
-      this.terrainHeight * TILE_SIZE
+    const smoothOpacity = Phaser.Math.Interpolation.Linear(
+      [this.previousNightOpacity || 0, 
+      nightOpacity],
+      0.01
     );
+
+    return smoothOpacity;
   }
 
   showGameOver() {
