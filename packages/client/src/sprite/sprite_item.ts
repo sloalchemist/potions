@@ -28,7 +28,7 @@ export class SpriteItem extends Item {
     this.carried_by = item.carried_by;
     this.lock = item.lock;
     this.healthBar = scene.add.graphics();
-    this.maxHealth = 100;
+    this.maxHealth = 100; // this.attributes["health"] ? this.attributes["health"] : 100;
 
     // copy over all attributes
     for (const key in item.attributes) {
@@ -325,12 +325,14 @@ export class SpriteItem extends Item {
 
   updateHealthBar() {
     this.healthBar.clear();
+    console.log(this.attributes['health']);
 
-    if (true) {
+    if (Number(this.attributes['health']) < this.maxHealth) {
       const barWidth = 40;
       const barHeight = 5;
 
-      const healthPercentage = 0.1;
+      const healthPercentage =
+        Number(this.attributes['health']) / this.maxHealth;
 
       const x = this.sprite.x - barWidth / 2;
       const y = this.sprite.y - 20;
@@ -345,7 +347,9 @@ export class SpriteItem extends Item {
 
   tick(world: World, deltaTime: number) {
     super.tick(world, deltaTime);
-    this.updateHealthBar();
+    if (this.healthBar) {
+      this.updateHealthBar();
+    }
     if (this.position) {
       let depth = this.position.y + 0.5;
       if (this.flat) {
