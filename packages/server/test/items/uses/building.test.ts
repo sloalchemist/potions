@@ -4,6 +4,8 @@ import { DB } from '../../../src/services/database';
 import { Item } from '../../../src/items/item';
 import { BuildWall } from '../../../src/items/uses/building/buildWall';
 import { Mob } from '../../../src/mobs/mob';
+import { mobFactory } from '../../../src/mobs/mobFactory';
+import { Pickup } from '../../../src/items/uses/pickup';
 
 beforeAll(() => {
   commonSetup();
@@ -73,39 +75,37 @@ describe('Build wall from partial wall', () => {
       type: 'partial-wall',
       position: wallPos
     });
+    
     const logId = Item.getItemIDAt(logPos);
     expect(logId).not.toBeNull();
     const log = Item.getItem(logId!);
 
-    let villager: Mob;
-    villager = {
-      key: "testmob";
-      name: 'testmob';
-      type: string;
-      position: Coord;
-      speed: number;
-      gold: number;
-      health: number;
-      maxHealth: number;
-      attack: number;
-      community_id: string;
-      subtype: string;
-      currentAction?: string;
-      carrying?: string;
-      path: Coord[];
-      target?: Coord;
+    mobFactory.makeMob("villager", { x: 1, y: 0}, "test-villager")
+   
+    const mob = Mob.getMob("villager");
+    expect(mob).toBeInstanceOf(Mob);
 
-    };
+    //had to do this condition because mob&log could be Mob | undefined,
+    // not sure if there's a better fix
+    if (mob && log ) {
+      const pickup = new Pickup;
+
+      //does the pickup still happen if it is in an expect statement?
+      expect(pickup.interact(mob, log)).toBeTruthy();
+
+      //check that the mob is carrying something
+      expect(mob.carrying).not.toBeNull();
+      const buildWall = new BuildWall();
+      const wallInteract = buildWall.interact(mob, log);
+
+      expect(wallInteract).toBeTruthy();
+
+    }
     
-    villager.carrying = logId;
-    const buildWall = new BuildWall();
-    const wallInteract = buildWall.interact(villager, log);
-    //need to trigger "interact" in buildWall.ts
-    //mob.carrying = log?
+    //TODO: check coordinates to make sure there is not a partial wall!
     //expect there to be a wall at our coords
 
-    //without bug fix there is a partial wall so test fails
-    //expect to be wall instead of partial wall 
+   
     
   });
 });
