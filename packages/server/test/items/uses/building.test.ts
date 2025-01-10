@@ -6,6 +6,7 @@ import { BuildWall } from '../../../src/items/uses/building/buildWall';
 import { Mob } from '../../../src/mobs/mob';
 import { mobFactory } from '../../../src/mobs/mobFactory';
 import { Pickup } from '../../../src/items/uses/pickup';
+import { SpawnMob } from '../../../src/items/on_ticks/spawnMob';
 
 beforeAll(() => {
   commonSetup();
@@ -51,6 +52,21 @@ describe('Build wall from partial wall', () => {
               "value": 3
             }
           ]
+        },
+        {
+          name: 'Wall',
+          description: 'A sturdy structure that blocks movement and provides protection.',
+          type: 'wall',
+          carryable: false,
+          walkable: false,
+          interactions: [],
+          attributes: [
+            {
+              "name": "health",
+              "value": 100
+          }
+          ],
+          on_tick: []
         }
       ],
       mob_types: [
@@ -80,6 +96,9 @@ describe('Build wall from partial wall', () => {
     expect(logId).not.toBeNull();
     const log = Item.getItem(logId!);
 
+    //spawnMob testing
+    const spawnMob = new SpawnMob();
+
     mobFactory.makeMob("villager", { x: 1, y: 0}, "test-villager")
    
     const mob = Mob.getMob("villager");
@@ -99,6 +118,15 @@ describe('Build wall from partial wall', () => {
       const wallInteract = buildWall.interact(mob, log);
 
       expect(wallInteract).toBeTruthy();
+
+      //make sure something is at the partial wall location
+      const oldPartialWallID = Item.getItemIDAt(wallPos);
+      expect(oldPartialWallID).not.toBeNull();
+      const itemAtWallPos = Item.getItem(oldPartialWallID!);
+      expect(itemAtWallPos).not.toBeNull();
+
+      //make sure item is a wall and not partial wall
+      expect(itemAtWallPos!.type).toBe('wall');
 
     }
     
