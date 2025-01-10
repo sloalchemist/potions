@@ -5,7 +5,6 @@ import { initializeServerDatabase } from '../src/services/database';
 import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
-import { Carryable } from '../src/items/carryable';
 
 export let world: ServerWorld;
 export let village: Community;
