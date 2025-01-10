@@ -2,18 +2,22 @@
   "compilerOptions": {
     "module": "CommonJS",
     "target": "ESNext",
+    "module": "CommonJS",
+    "target": "ESNext",
     "moduleResolution": "Node",
     "outDir": "dist",
     "rootDir": ".",
+    "rootDir": ".",
     "strict": true,
+    "resolveJsonModule": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "lib": ["dom", "es2019"],
-    "types": ["jest", "node"],
+    "types": ["node"],
     "typeRoots": ["node_modules/@types", "./src/types"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "test/*.test.ts"],
   "exclude": ["node_modules"]
 }
