@@ -4,7 +4,7 @@ import { commonSetup } from '../testSetup';
 import { DB } from '../../src/services/database';
 
 beforeAll(() => {
-    commonSetup();
+    commonSetup("data/walk.db");
 });
 
 test('Check that non walkable items cannot be walked to', () => {
