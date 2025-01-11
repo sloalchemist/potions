@@ -5,7 +5,7 @@
   "description": "Description of the package",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo 'No testing configured'",
+    "test": "jest",
     "lint": "eslint src/ --ext .ts,.tsx --fix",
     "format": "prettier --config ../../.prettierrc 'src/**/*.ts' --write",
     "clean": "rimraf dist",
