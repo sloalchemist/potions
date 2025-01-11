@@ -6,8 +6,6 @@ import { Item } from '../../src/items/item';
 import { AddItem } from '../../src/items/uses/container/addItem';
 import { Mob } from '../../src/mobs/mob';
 import { ItemGenerator } from '../../src/items/itemGenerator';
-import exp from 'constants';
-
 import { initialize } from '@rt-potion/converse';
 import { buildAndSaveGraph, constructGraph } from '@rt-potion/converse';
 
@@ -18,7 +16,7 @@ beforeAll(() => {
   initialize('../converse/data/test.db');
 });
 
-describe('Adds item to a container matching the container item subtype', () => {
+describe('Adds blue potion to blue potion-stand', () => {
   test('Should add the potion', () => {
     const worldDescription = {
       tiles: [
@@ -154,95 +152,21 @@ describe('Adds item to a container matching the container item subtype', () => {
     
     // create a player
     mobFactory.makeMob('player', position, '79e0aef2', 'TestPlayer');
-    // const testMob = Mob.getMob('79e0aef2');
-    // expect(testMob).not.toBeNull();
 
-    // const testItem = Item.getItem('d39dd773-0200-4b04-909c-68c557cc50b9');
+    // test
+    const testMob = Mob.getMob('79e0aef2');
+    expect(testMob).not.toBeNull();
 
-    // const testAddItem = new AddItem();
-
-    // const test = testAddItem.interact(testMob, testItem);
-
-    // expect(test).toBe(true);
+    const testItem = Item.getItem('d39dd773-0200-4b04-909c-68c557cc50b9');
+    expect(testItem).not.toBeNull();
+    
+    if (testMob && testItem) {
+      const testAddItem = new AddItem();
+      const test = testAddItem.interact(testMob, testItem);
+      expect(test).toBe(true);
+    }
   });
 });
-
-// describe('Add potions to stand', () => {
-//   test('should add red potion to red potion stand', () => {
-//     const worldDescription = {
-//       tiles: [
-//         [-1, -1],
-//         [-1, -1]
-//       ],
-//       terrain_types: [],
-//       item_types: [
-//         {
-//           name: 'Potion',
-//           description: 'A magical concoction',
-//           type: 'potion',
-//           subtype: '255',
-//           carryable: true,
-//           walkable: true,
-//           interactions: [],
-//           attributes: [],
-//           on_tick: []
-//         },
-//         {
-//           name: 'Potion Stand',
-//           description: 'A stand that sells potions',
-//           type: 'potion-stand',
-//           carryable: false,
-//           walkable: false,
-//           interactions: [
-//             {
-//               description: 'Add $item_name',
-//               action: 'add_item',
-//               while_carried: false
-//             }
-//           ],
-//           attributes: [],
-//           on_tick: []
-//         }
-//       ],
-//       mob_types: [
-//         {
-//           name: 'TestPlayer',
-//           type: 'player'
-//         }
-//       ]
-//     };
-//     //const world = new ServerWorld(worldDescription);
-
-//     //set up the world
-//     const standPosition = { x: 0, y: 1 };
-//     const position = { x: 0, y: 0 };
-
-//     //create a potion stand
-//     const itemGenerator = new ItemGenerator(worldDescription.item_types);
-//     itemGenerator.createItem({
-//       type: 'potion-stand',
-//       position: standPosition
-//     });
-//     const standID = Item.getItemIDAt(standPosition);
-//     const stand = Item.getItem(standID!);
-//     expect(stand).not.toBeNull();
-
-//     //create a potion
-//     itemGenerator.createItem({
-//       type: 'potion',
-//       subtype: '255',
-//       position: { x: 1, y: 0 }
-//     });
-//     const potionID = Item.getItemIDAt({ x: 1, y: 0 });
-//     const potion = Item.getItem(potionID!);
-//     expect(potion).not.toBeNull();
-
-//     //create a player
-//     mobFactory.makeMob('player', position, '79e0aef2', 'TestPlayer');
-//     const testMob = Mob.getMob('79e0aef2');
-//     expect(testMob).not.toBeNull();
-//   });
-// });
 
 afterAll(() => {
   DB.close();
