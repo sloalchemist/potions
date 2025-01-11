@@ -1,5 +1,7 @@
 import * as Phaser from 'phaser';
 
+import * as Phaser from 'phaser';
+
 enum NightOpacityConstants {
     TIME_OFFSET = 9,
     PERIOD = 12,
