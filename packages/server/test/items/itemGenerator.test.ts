@@ -4,7 +4,7 @@ import { DB } from '../../src/services/database';
 import { Item } from '../../src/items/item';
 
 beforeAll(() => {
-  commonSetup("../server/data/itemGenetator.db");
+  commonSetup('data/itemGenerator.test.db');
 });
 
 describe('Generate heart-beet', () => {
@@ -43,7 +43,6 @@ describe('Generate heart-beet', () => {
     expect(heartBeet!.type).toBe('heart-beet');
   });
 });
-
 afterAll(() => {
   DB.close();
 });
