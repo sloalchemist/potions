@@ -5,5 +5,8 @@ export default {
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
-  testMatch: ['**/tests/**/*.test.ts'], // Adjust this to match your test directory structure
+  testMatch: ['**/test/**/*.test.ts'],
+  moduleNameMapper: {
+    '^phaser$': 'phaser/dist/phaser.js'
+  }
 };
