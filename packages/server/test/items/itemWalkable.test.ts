@@ -2,7 +2,6 @@ import { Item } from '../../src/items/item';
 import { ItemGenerator } from '../../src/items/itemGenerator';
 import { commonSetup } from '../testSetup';
 import { DB } from '../../src/services/database';
-import { mobFactory } from '../../src/mobs/mobFactory';
 
 
 beforeAll(() => {
@@ -24,7 +23,7 @@ describe('Cauldron made not walkable', () => {
                     description: 'For mixing potions',
                     type: 'cauldron',
                     carryable: true,
-                    walkable: false, // This is what matters
+                    walkable: false,
                     interactions: [],
                     attributes: [],
                     on_tick: []
