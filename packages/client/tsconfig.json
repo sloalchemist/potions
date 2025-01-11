@@ -14,8 +14,9 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "lib": ["dom", "es2016", "esnext"],
-    "types": ["node", "jest"]
+    "lib": ["dom", "es2019"],
+    "types": ["node"],
+    "typeRoots": ["node_modules/@types", "./src/types"]
   },
   "include": ["src/**/*.ts", "test/*.test.ts"],
   "exclude": ["node_modules"]
