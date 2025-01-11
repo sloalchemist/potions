@@ -72,15 +72,15 @@ describe('Build wall from partial wall', () => {
       ],
       mob_types: [
         {
-          name: "Villager",
-          name_style: "norse-english",
-          type: "villager",
-          description: "A friendly inhabitant of the silverclaw community.",
-          health: 10,
-          speed: 0.5,
+          name: 'Player',
+          description: 'The player',
+          name_style: 'norse-english',
+          type: 'player',
+          health: 100,
+          speed: 2.5,
           attack: 5,
           gold: 0,
-          community: "silverclaw",
+          community: 'alchemists',
           stubbornness: 20,
           bravery: 5,
           aggression: 5,
@@ -93,11 +93,7 @@ describe('Build wall from partial wall', () => {
         }
       ],
       communities: [
-        {
-          id: "silverclaw",
-          name: "Village of the Silverclaw",
-          description: "none"
-        }      
+        { "id": "alchemists", "name": "Alchemists guild", "description": "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  }
       ]
     };
 
@@ -119,12 +115,13 @@ describe('Build wall from partial wall', () => {
     expect(logId).not.toBeNull();
     const log = Item.getItem(logId!);
 
-    Community.makeVillage("village1", "silverclaw");
-    const community = Community.getVillage("village1");
-    console.log("community: ", community);
+    Community.makeVillage("alchemists", "Alchemists guild");
+    // const community = Community.getVillage("village1");
+    // console.log("community: ", community);
 
-    mobFactory.loadTemplates([...worldDescription.mob_types]);
-    mobFactory.makeMob('villager', { x: 1, y: 0 }, 'test-villager', 'bob');
+    mobFactory.loadTemplates(worldDescription.mob_types);
+    // mobFactory.makeMob('villager', { x: 1, y: 0 }, 'test-villager', 'bob');
+    mobFactory.makeMob('player', { x: 1, y: 0 }, '79e0aef2', 'TestPlayer');
 
     const mob = Mob.getMob('test-villager');
     expect(mob).toBeInstanceOf(Mob);
