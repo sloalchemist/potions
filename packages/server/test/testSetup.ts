@@ -81,8 +81,31 @@ export const commonSetup = (testName: string) => {
         on_tick: []
       }
     ],
-    mob_types: [],
-    communities: [],
+    mob_types: [
+      {
+        name: 'Player',
+        description: 'The player',
+        name_style: 'norse-english',
+        type: 'player',
+        health: 100,
+        speed: 2.5,
+        attack: 5,
+        gold: 0,
+        community: 'alchemists',
+        stubbornness: 20,
+        bravery: 5,
+        aggression: 5,
+        industriousness: 40,
+        adventurousness: 10,
+        gluttony: 50,
+        sleepy: 80,
+        extroversion: 50,
+        speaker: true
+      }
+    ],
+    communities: [
+      { "id": "alchemists", "name": "Alchemists guild", "description": "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  }
+    ],
     alliances: [],
     houses: [],
     items: [],
