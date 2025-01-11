@@ -10,7 +10,7 @@ import {
 } from '@rt-potion/converse';
 
 beforeAll(() => {
-  commonSetup("data/mobNegativeHealth.test.db");
+  commonSetup("data/mobNegativeHealth.test.ts.db");
   buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
   initialize('../converse/data/test.db');
 });
