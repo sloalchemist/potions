@@ -62,6 +62,10 @@ export async function changeName(name: string) {
   currentCharacter!.name = name;
 }
 
+export function validateName(name: string | null): boolean {
+  return !!name && name.trim() !== '' && name.length < 10
+}
+
 export async function retrieveCharacter() {
   characterId = localStorage.getItem('characterId') || uuidv4();
   publicCharacterId = characterId.substr(0, 8);

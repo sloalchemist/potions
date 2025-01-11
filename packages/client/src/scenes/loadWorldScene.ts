@@ -1,5 +1,5 @@
 import { PaletteSwapper } from '../sprite/palette_swapper';
-import { currentCharacter, changeName, saveColors } from '../worldMetadata';
+import { currentCharacter, validateName, changeName, saveColors } from '../worldMetadata';
 import {
   darkenColor,
   hexStringToNumber,
@@ -124,7 +124,7 @@ export class LoadWorldScene extends Phaser.Scene {
 
     characterName.on('pointerdown', () => {
       const userName = window.prompt('Please enter your name:');
-      if (userName && userName.trim() !== '' && userName.length < 10) {
+      if (userName && validateName(userName)) {
         changeName(userName);
         characterName.setText(userName);
       }
