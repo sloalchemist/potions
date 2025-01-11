@@ -1,17 +1,21 @@
-import { commonSetup } from '../testSetup';
+import { commonSetup, graph } from '../testSetup';
 import { DB } from '../../src/services/database';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
-// import { Container } from '../../container';
 import { Item } from '../../src/items/item';
 import { AddItem } from '../../src/items/uses/container/addItem';
 import { Mob } from '../../src/mobs/mob';
 import { ItemGenerator } from '../../src/items/itemGenerator';
 import exp from 'constants';
-// This is what im tryina do
+
+import { initialize } from '@rt-potion/converse';
+import { buildAndSaveGraph, constructGraph } from '@rt-potion/converse';
 
 beforeAll(() => {
   commonSetup();
+
+  buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
+  initialize('../converse/data/test.db');
 });
 
 describe('Adds item to a container matching the container item subtype', () => {
@@ -99,16 +103,27 @@ describe('Adds item to a container matching the container item subtype', () => {
         }
       ],
       communities: [
-        { "id": "alchemists", "name": "Alchemists guild", "description": "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  }
+        { 
+          id: 'alchemists', 
+          name: 'Alchemists guild', 
+          description: "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  
+        }
       ],
       regions: [
         {
-          "id": "elyndra",
-          "name": "elyndra",
-          "description": "the overall world in which everything exists.",
-          "parent": null,
-          "concepts": ["concept_elyndra", "concept_elyndra_as_battleground"]
+          id: "elyndra",
+          name: "elyndra",
+          description: "the overall world in which everything exists.",
+          parent: null,
+          concepts: ["concept_elyndra", "concept_elyndra_as_battleground"]
         },
+        {
+          id: "claw_island",
+          name: "Claw Island",
+          description: "a relatively peaceful island in the Shattered Expanse full of blueberries and heartbeets.",
+          parent: "shattered_expanse",
+          concepts: []
+        }
       ]
     };
 

@@ -6,9 +6,13 @@ import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
 
+import { Graphable } from '@rt-potion/converse';
+import { buildGraphFromWorld } from '../src/generate/socialWorld';
+
 export let world: ServerWorld;
 export let village: Community;
 export let itemGenerator: ItemGenerator;
+export let graph: Graphable[];
 
 export const commonSetup = () => {
   // Any common setup code
@@ -144,7 +148,11 @@ export const commonSetup = () => {
       }
     ],
     communities: [
-      { "id": "alchemists", "name": "Alchemists guild", "description": "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  }
+      { 
+        id: 'alchemists', 
+        name: 'Alchemists guild', 
+        description: "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  
+      }
     ],
     alliances: [],
     houses: [],
@@ -153,14 +161,22 @@ export const commonSetup = () => {
     containers: [],
     regions: [
       {
-        "id": "elyndra",
-        "name": "elyndra",
-        "description": "the overall world in which everything exists.",
-        "parent": null,
-        "concepts": ["concept_elyndra", "concept_elyndra_as_battleground"]
+        id: "elyndra",
+        name: "elyndra",
+        description: "the overall world in which everything exists.",
+        parent: null,
+        concepts: ["concept_elyndra", "concept_elyndra_as_battleground"]
       },
+      {
+          id: "claw_island",
+          name: "Claw Island",
+          description: "a relatively peaceful island in the Shattered Expanse full of blueberries and heartbeets.",
+          parent: "shattered_expanse",
+          concepts: []
+      }
     ]
   };
   itemGenerator = new ItemGenerator(worldDescription.item_types);
   world = new ServerWorld(worldDescription);
+  graph = buildGraphFromWorld(worldDescription);
 };
