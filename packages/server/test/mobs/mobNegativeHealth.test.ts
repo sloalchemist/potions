@@ -6,7 +6,7 @@ import { Community } from '../../src/community/community';
 import { buildAndSaveGraph, constructGraph, initialize } from '@rt-potion/converse';
 
 beforeAll(() => {
-  commonSetup("data/mobNegativeHealth.test.db");
+  commonSetup("mobNegativeHealth.test");
   buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
   initialize('../converse/data/test.db');
 });
