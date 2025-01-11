@@ -27,7 +27,6 @@ export class Carryable {
 
     // Check if the two mobs are not allied before allowing the item transfer
     if (Community.isNotAllied(from.community_id, to.community_id)) {
-        console.log("Return False For Give Item");
         return false;
     }
 
