@@ -10,7 +10,7 @@ import { initialize } from '@rt-potion/converse';
 import { buildAndSaveGraph, constructGraph } from '@rt-potion/converse';
 
 beforeAll(() => {
-  commonSetup();
+  commonSetup("data/itemContainer.test.db");
 
   buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
   initialize('../converse/data/test.db');

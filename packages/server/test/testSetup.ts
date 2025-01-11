@@ -14,11 +14,16 @@ export let village: Community;
 export let itemGenerator: ItemGenerator;
 export let graph: Graphable[];
 
-export const commonSetup = () => {
+/**
+ * Initial common setup for testing.
+ * @param testName The name of the database instance for the test file (i.e. 'data/[TEST_FILENAME].db').
+ */
+export const commonSetup = (testName: string) => {
   // Any common setup code
   jest.clearAllMocks();
 
-  initializeServerDatabase('data/test.db', true);
+  // testName param is required to avoid concurrent access issues since jest runs test files in parallel
+  initializeServerDatabase(testName, true);
   createTables();
   initializePubSub(new StubbedPubSub());
 
