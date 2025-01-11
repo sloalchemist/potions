@@ -14,6 +14,7 @@ beforeAll(() => {
 
   buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
   initialize('../converse/data/test.db');
+  Community.makeVillage("alchemists", "Alchemists guild");
 });
 
 describe('Adds blue potion to blue potion-stand', () => {
@@ -129,43 +130,58 @@ describe('Adds blue potion to blue potion-stand', () => {
     const standPosition = { x: 0, y: 1 };
     const position = { x: 0, y: 0 };
     mobFactory.loadTemplates(worldDescription.mob_types);
-    Community.makeVillage("alchemists", "Alchemists guild");
+    
     
     //create a potion stand
     const itemGenerator = new ItemGenerator(worldDescription.item_types);
     itemGenerator.createItem({
       type: 'potion-stand',
-      position: standPosition
+      subtype: '255',
+      position: standPosition,
+      attributes: {
+        templateType: 'potion'}
     });
     const standID = Item.getItemIDAt(standPosition);
     expect(standID).not.toBeNull();
     const stand = Item.getItem(standID!);
     expect(stand).not.toBeNull();
 
+    // create a player
+    mobFactory.makeMob('player', position, '79e0aef2', 'TestPlayer');
+    const testMob = Mob.getMob('79e0aef2');
+    expect(testMob).not.toBeNull();
+
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
       subtype: '255',
-      position: { x: 1, y: 0 }
+      position: { x: 1, y: 0 },
+      carriedBy: testMob
     });
-    
-    
-    // create a player
-    mobFactory.makeMob('player', position, '79e0aef2', 'TestPlayer');
+    const potion = Item.getItemIDAt({ x: 1, y: 0 });
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
 
-    // test
-    const testMob = Mob.getMob('79e0aef2');
-    expect(testMob).not.toBeNull();
-
-    const testItem = Item.getItem('d39dd773-0200-4b04-909c-68c557cc50b9');
-    expect(testItem).not.toBeNull();
+    // ensure the player is carrying the potion
+    expect(testMob!.carrying).not.toBeNull();
+    expect(testMob!.carrying!.type).toBe('potion');
+    expect(testMob!.carrying!.subtype).toBe('255');
     
-    if (testMob && testItem) {
-      const testAddItem = new AddItem();
-      const test = testAddItem.interact(testMob, testItem);
-      expect(test).toBe(true);
-    }
+    // add the potion to the stand
+    const testAddItem = new AddItem();
+    const test = testAddItem.interact(testMob!, stand!);
+    console.log(stand)
+    expect(test).toBe(true);
+  
+  // check that the potion was added
+    const standAfter = Item.getItem(standID!);
+    expect(standAfter).not.toBeNull();
+    console.log(standAfter!.getAttribute('items'));
+    expect(standAfter!.getAttribute('items')).toBe(1);
+
   });
+
 });
 
 afterAll(() => {
