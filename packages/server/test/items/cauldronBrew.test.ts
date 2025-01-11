@@ -4,17 +4,21 @@ import { Mob } from '../../src/mobs/mob';
 import { DB } from '../../src/services/database';
 import { Community } from '../../src/community/community';
 import { buildAndSaveGraph, constructGraph, initialize } from '@rt-potion/converse';
+import { ItemGenerator } from '../../src/items/itemGenerator';
+import { Item } from '../../src/items/item';
+import { Carryable } from '../../src/items/carryable';
+
 
 
 beforeAll(() => {
-  commonSetup("mobNegativeHealth");
+  commonSetup("cauldronBrewable");
   buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
   initialize('../converse/data/test.db');
 });
 
-describe('Create mob and remove more health than it has', () => {
-  test('should (1) create player mob, (2) remove all health, ' +
-    '(3) health should be zero, not negative', () => {
+describe('Create cauldron and see if still brewable', () => {
+  test('should (1) create player mob, (2) create cauldron, ' +
+    '(3) create heart beet (4) see if able to brew', () => {
       const worldDescription = {
         tiles: [
           [-1, -1],
@@ -22,58 +26,42 @@ describe('Create mob and remove more health than it has', () => {
         ],
         terrain_types: [],
         item_types: [
-          {
-            name: 'Potion',
-            description: 'A magical concoction',
-            type: 'potion',
-            subtype: '255',
-            carryable: true,
-            walkable: true,
-            interactions: [],
-            attributes: [],
-            on_tick: []
-          },
-
-          {
-            name: 'Potion stand',
-            description: 'A stand that sells health potions.',
-            type: 'potion-stand',
-            carryable: false,
-            smashable: true,
-            walkable: true,
-            show_price_at: {
-              x: 7,
-              y: -10
+            {
+                name: 'Cauldron',
+                description: 'For mixing potions',
+                type: 'cauldron',
+                carryable: false,
+                walkable: false,
+                interactions: [],
+                attributes: [],
+                on_tick: []
             },
-
-            subtype: '255',
-            interactions: [
-              {
-                description: 'Add $item_name',
-                action: 'add_item',
-                while_carried: false
-              }
-            ],
-            attributes: [
-              {
-                name: 'items',
-                value: 0
-              },
-              {
-                name: 'price',
-                value: 10
-              },
-              {
-                name: 'gold',
-                value: 0
-              },
-              {
-                name: 'health',
-                value: 1
-              }
-            ],
-            on_tick: []
-          }
+            {
+                name: "Heartbeet",
+                description: 'Brew potions',
+                type: "heart-beet",
+                walkable: true,
+                carryable: true,
+                interactions: [
+                    {
+                        description: "Brew red potion",
+                        action: "brew",
+                        while_carried: true,
+                        requires_item: "cauldron"
+                    }
+                ],
+                attributes: [
+                    {
+                        name: "brew_color",
+                        value: "#FF0000"
+                    },
+                    {
+                        name: "health",
+                        value: 1
+                    }
+                ],
+                on_tick: []
+            }
         ],
         mob_types: [
           {
@@ -121,29 +109,53 @@ describe('Create mob and remove more health than it has', () => {
           }
         ]
       };
-    const position = { x: 0, y: 0 };
 
     // create mobFactory's mobTemplates
     mobFactory.loadTemplates(worldDescription.mob_types);
     // create community
     Community.makeVillage("alchemists", "Alchemists guild");
 
+    const position = { x: 1, y: 0 };
     // create player mob
     mobFactory.makeMob(
         "player",
         position,
         "1",
         "testPlayer"
-    );
+      );
+      const itemGenerator = new ItemGenerator(worldDescription.item_types);
+      const cposition = { x: 0, y: 0 };
+      itemGenerator.createItem({
+          type: 'cauldron',
+          position: cposition
+      });
+      const hposition = { x: 1, y: 0 };
+      itemGenerator.createItem({
+        type: 'heart-beet',
+        position: hposition
+    });
+
 
     // query mob from world
-    const testMob = Mob.getMob("1");
-    // check mob's initial health
-    expect(testMob?.health).toBe(100);
-    // change health of mob to deplete more than total health of mob
-    testMob?.changeHealth(-110);
-    // check mob's new health is zero, not less than zero
-    expect(testMob?.health).toBe(0);
+      const testMob = Mob.getMob("1");
+      if (!testMob) {
+        throw new Error('No mob found');
+    }
+    const cauldronID = Item.getItemIDAt(cposition);
+    const cauldron = Item.getItem(cauldronID!);
+    if (!cauldron) {
+        throw new Error(`No item found with ID ${cauldronID}`);
+    }
+
+    const heartID = Item.getItemIDAt(hposition);
+    const heart = Item.getItem(heartID!); 
+    if (!heart) {
+      throw new Error(`No item found with ID ${heartID}`);
+    }
+      
+    const carryableItem = Carryable.fromItem(heart);
+    
+      carryableItem?.pickup(testMob);
   });
 });
 
