@@ -151,7 +151,11 @@ export const commonSetup = () => {
       }
     ],
     communities: [
-      { "id": "alchemists", "name": "Alchemists guild", "description": "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  }
+      { 
+        id: 'alchemists', 
+        name: 'Alchemists guild', 
+        description: "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  
+      }
     ],
     alliances: [],
     houses: [],
