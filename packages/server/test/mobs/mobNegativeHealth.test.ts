@@ -3,17 +3,23 @@ import { mobFactory } from '../../src/mobs/mobFactory';
 import { Mob } from '../../src/mobs/mob';
 import { DB } from '../../src/services/database';
 import { Community } from '../../src/community/community';
-import { buildAndSaveGraph, constructGraph, initialize } from '@rt-potion/converse';
+import {
+  buildAndSaveGraph,
+  constructGraph,
+  initialize
+} from '@rt-potion/converse';
 
 beforeAll(() => {
-  commonSetup("mobNegativeHealth.test");
+  commonSetup("data/mobNegativeHealth.test.db");
   buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
   initialize('../converse/data/test.db');
 });
 
 describe('Create mob and remove more health than it has', () => {
-  test('should (1) create player mob, (2) remove all health, ' +
-    '(3) health should be zero, not negative', () => {
+  test(
+    'should (1) create player mob, (2) remove all health, ' +
+      '(3) health should be zero, not negative',
+    () => {
       const worldDescription = {
         tiles: [
           [-1, -1],
@@ -32,7 +38,7 @@ describe('Create mob and remove more health than it has', () => {
             attributes: [],
             on_tick: []
           },
-  
+
           {
             name: 'Potion stand',
             description: 'A stand that sells health potions.',
@@ -44,7 +50,7 @@ describe('Create mob and remove more health than it has', () => {
               x: 7,
               y: -10
             },
-  
+
             subtype: '255',
             interactions: [
               {
@@ -97,53 +103,51 @@ describe('Create mob and remove more health than it has', () => {
           }
         ],
         communities: [
-          { 
-            id: 'alchemists', 
-            name: 'Alchemists guild', 
-            description: "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  
+          {
+            id: 'alchemists',
+            name: 'Alchemists guild',
+            description:
+              "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."
           }
         ],
         regions: [
           {
-            id: "elyndra",
-            name: "elyndra",
-            description: "the overall world in which everything exists.",
+            id: 'elyndra',
+            name: 'elyndra',
+            description: 'the overall world in which everything exists.',
             parent: null,
-            concepts: ["concept_elyndra", "concept_elyndra_as_battleground"]
+            concepts: ['concept_elyndra', 'concept_elyndra_as_battleground']
           },
           {
-            id: "claw_island",
-            name: "Claw Island",
-            description: "a relatively peaceful island in the Shattered Expanse full of blueberries and heartbeets.",
-            parent: "shattered_expanse",
+            id: 'claw_island',
+            name: 'Claw Island',
+            description:
+              'a relatively peaceful island in the Shattered Expanse full of blueberries and heartbeets.',
+            parent: 'shattered_expanse',
             concepts: []
           }
         ]
       };
-    const position = { x: 0, y: 0 };
+      const position = { x: 0, y: 0 };
 
-    // create mobFactory's mobTemplates
-    mobFactory.loadTemplates(worldDescription.mob_types);
-    // create community
-    Community.makeVillage("alchemists", "Alchemists guild");
+      // create mobFactory's mobTemplates
+      mobFactory.loadTemplates(worldDescription.mob_types);
+      // create community
+      Community.makeVillage('alchemists', 'Alchemists guild');
 
-    // create player mob
-    mobFactory.makeMob(
-        "player",
-        position,
-        "1",
-        "testPlayer"
-    );
+      // create player mob
+      mobFactory.makeMob('player', position, '1', 'testPlayer');
 
-    // query mob from world
-    const testMob = Mob.getMob("1");
-    // check mob's initial health
-    expect(testMob?.health).toBe(100);
-    // change health of mob to deplete more than total health of mob
-    testMob?.changeHealth(-110);
-    // check mob's new health is zero, not less than zero
-    expect(testMob?.health).toBe(0);
-  });
+      // query mob from world
+      const testMob = Mob.getMob('1');
+      // check mob's initial health
+      expect(testMob?.health).toBe(100);
+      // change health of mob to deplete more than total health of mob
+      testMob?.changeHealth(-110);
+      // check mob's new health is zero, not less than zero
+      expect(testMob?.health).toBe(0);
+    }
+  );
 });
 
 afterAll(() => {
