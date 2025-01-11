@@ -27,8 +27,6 @@ export class SpriteItem extends Item {
     this.house = item.house;
     this.carried_by = item.carried_by;
     this.lock = item.lock;
-    this.healthBar = scene.add.graphics();
-    this.maxHealth = 100; // this.attributes["health"] ? this.attributes["health"] : 100;
 
     // copy over all attributes
     for (const key in item.attributes) {
@@ -331,7 +329,7 @@ export class SpriteItem extends Item {
   updateHealthBar() {
     this.healthBar?.clear();
 
-    if (true) {
+    if (Number(this.attributes['health']) < this.maxHealth!) {
       const barWidth = 40;
       const barHeight = 5;
 
