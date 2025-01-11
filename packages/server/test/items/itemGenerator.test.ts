@@ -4,7 +4,7 @@ import { DB } from '../../src/services/database';
 import { Item } from '../../src/items/item';
 
 beforeAll(() => {
-  commonSetup();
+  commonSetup("../server/data/itemGenetator.db");
 });
 
 describe('Generate heart-beet', () => {
