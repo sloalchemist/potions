@@ -1,6 +1,5 @@
 import { Mob } from '../mobs/mob';
 import { Community } from '../community/community'
-import { Community } from '../community/community'
 import { pubSub } from '../services/clientCommunication/pubsub';
 import { DB } from '../services/database';
 import { Item } from './item';
@@ -22,9 +21,7 @@ export class Carryable {
 
   giveItem(from: Mob, to: Mob): boolean {
     // Check if the recipient mob is already carrying an item
-    // Check if the recipient mob is already carrying an item
     if (to.carrying) {
-        return false;
         return false;
     }
 
@@ -39,11 +36,9 @@ export class Carryable {
     to.carrying = this.item;
 
     // Publish the item transfer event
-    // Publish the item transfer event
     pubSub.giveItem(this.item.id, from.id, to.id);
 
     return true;
-}
 }
 
   pickup(mob: Mob): void {
