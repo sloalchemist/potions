@@ -22,8 +22,13 @@
     "eslint": "^8.57.0",
     "prettier": "^3.0.0",
     "rimraf": "^5.0.0",
+<<<<<<< HEAD
     "ts-jest": "^29.2.5",
+=======
+    "jest": "^29.7.0",
+>>>>>>> 502b055 (Added jest to packages)
     "ts-loader": "^8.0.0",
+    "ts-jest": "^29.2.5",
     "typescript": "^5.4.5",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
