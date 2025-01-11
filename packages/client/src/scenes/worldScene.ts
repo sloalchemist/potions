@@ -410,7 +410,10 @@ export class WorldScene extends Phaser.Scene {
 
     if (fantasyDate) {
       // Find new opacity value for the night overlay
-      this.nightOpacity = getNightSkyOpacity(fantasyDate.time, this.nightOpacity);
+      this.nightOpacity = getNightSkyOpacity(
+        fantasyDate.time,
+        this.nightOpacity
+      );
 
       this.nightOverlay.clear();
       // Dark blue with max 50% opacity
