@@ -21,7 +21,9 @@ export class Carryable {
 
   giveItem(from: Mob, to: Mob): boolean {
     // Check if the recipient mob is already carrying an item
+    // Check if the recipient mob is already carrying an item
     if (to.carrying) {
+        return false;
         return false;
     }
 
@@ -36,9 +38,11 @@ export class Carryable {
     to.carrying = this.item;
 
     // Publish the item transfer event
+    // Publish the item transfer event
     pubSub.giveItem(this.item.id, from.id, to.id);
 
     return true;
+}
 }
 
   pickup(mob: Mob): void {
