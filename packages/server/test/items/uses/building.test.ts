@@ -1,5 +1,5 @@
 import { ItemGenerator } from '../../../src/items/itemGenerator';
-import { commonSetup, graph } from '../../testSetup';
+import { commonSetup} from '../../testSetup';
 import { DB } from '../../../src/services/database';
 import { Item } from '../../../src/items/item';
 import { BuildWall } from '../../../src/items/uses/building/buildWall';
@@ -9,15 +9,11 @@ import { Pickup } from '../../../src/items/uses/pickup';
 import { Community } from '../../../src/community/community';
 import { buildGraphFromWorld } from '../../../src/generate/socialWorld'
 import {
-  buildAndSaveGraph,
-  constructGraph,
-  initialize
+  constructGraph
 } from '@rt-potion/converse';
 
 beforeAll(() => {
-  commonSetup('data/building.test.db');
-  buildAndSaveGraph('../converse/data/building.test.db', constructGraph(graph));
-  initialize('../converse/data/building.test.db');
+  commonSetup();
 });
 
 describe('Build wall from partial wall', () => {
@@ -118,12 +114,14 @@ describe('Build wall from partial wall', () => {
       containers: []
     };
 
-    const socialWorld = buildGraphFromWorld(worldDescription);
-    const graph = constructGraph(socialWorld);
-    buildAndSaveGraph('data/knowledge-graph-build-test.db', graph)
+    // const socialWorld = buildGraphFromWorld(worldDescription);
+    // const graph = constructGraph(socialWorld);
+    // buildAndSaveGraph('data/knowledge-graph-build-test.db', graph)
 
     //generate world
     const itemGenerator = new ItemGenerator(worldDescription.item_types);
+    
+    //create items in desired locations
     const logPos = { x: 0, y: 0 };
     itemGenerator.createItem({
       type: 'log',
@@ -140,15 +138,13 @@ describe('Build wall from partial wall', () => {
     expect(logId).not.toBeNull();
     const log = Item.getItem(logId!);
 
-    Community.makeVillage("alchemists", "Alchemists guild");
-    // const community = Community.getVillage("village1");
-    // console.log("community: ", community);
 
     mobFactory.loadTemplates(worldDescription.mob_types);
-    // mobFactory.makeMob('villager', { x: 1, y: 0 }, 'test-villager', 'bob');
-    mobFactory.makeMob('player', { x: 1, y: 0 }, '79e0aef2', 'TestPlayer');
+    
+    Community.makeVillage("alchemists", "Alchemists guild");
+    mobFactory.makeMob('player', { x: 1, y: 0 }, '1234', 'testPlayer1');
 
-    const mob = Mob.getMob('test-villager');
+    const mob = Mob.getMob('1234');
     expect(mob).toBeInstanceOf(Mob);
 
     expect(mob).toBeDefined();
@@ -156,13 +152,15 @@ describe('Build wall from partial wall', () => {
 
     if (mob && log) {
       const pickup = new Pickup();
-
-      //does the pickup still happen if it is in an expect statement?
       expect(pickup.interact(mob, log)).toBeTruthy();
+      
       //check that the mob is carrying something
       expect(mob.carrying).toBeDefined();
-      
+      console.log("mob.carrying: ", mob.carrying);
+
       const buildWall = new BuildWall();
+
+      console.log("log: ", log);
       const wallInteract = buildWall.interact(mob, log);
       expect(wallInteract).toBeTruthy();
 
