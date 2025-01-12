@@ -437,5 +437,4 @@ export class WorldScene extends Phaser.Scene {
     text.setScrollFactor(0); // Make it stay static
     text.setDepth(100);
   }
-  // remove blur?
 }
