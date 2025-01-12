@@ -303,11 +303,6 @@
             "walkable": true,
             "flat": true,
             "interactions": [
-                {
-                    "description": "Enter portal",
-                    "action": "enter",
-                    "while_carried": false
-                }
             ],
             "on_tick": [
                 {
@@ -335,6 +330,15 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "Closed",
+            "description": "Closed portal indicator",
+            "type": "closed",
+            "carryable": false,
+            "smashable": false,
+            "walkable": true,
+            "interactions": []
         },
         {
             "name": "Potion stand",
@@ -639,7 +643,7 @@
         { "type": "blueberry-bush", "coord": { "x": 17, "y": 29 } },
         { "type": "blueberry-bush", "coord": { "x": 21, "y": 30 } },
         { "type": "blueberry-bush", "coord": { "x": 26, "y": 31 } },
-        { "type": "portal", "coord": { "x": 15, "y": 38 } },
+        { "type": "closed", "coord": { "x": 15, "y": 38 } },
         { "type": "cauldron", "coord": { "x": 20, "y": 15 } }
           ],
           "containers": [
