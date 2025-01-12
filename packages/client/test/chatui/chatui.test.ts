@@ -31,7 +31,7 @@ jest.mock('phaser', () => ({
 }));
 
 describe('Chat UI updates based on chatting state', () => {
-  let world: World;
+  let world: World | null;
   let mockChatCallback: jest.Mock;
 
   beforeAll(() => {
@@ -119,6 +119,6 @@ describe('Chat UI updates based on chatting state', () => {
   });
 
   afterAll(() => {
-    world = null as any;
+    world = null as World | null;
   });
 });
