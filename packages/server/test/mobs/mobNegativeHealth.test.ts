@@ -6,9 +6,7 @@ import { Community } from '../../src/community/community';
 import { buildAndSaveGraph, constructGraph, initialize } from '@rt-potion/converse';
 
 beforeAll(() => {
-  commonSetup("mobNegativeHealth");
-  buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
-  initialize('../converse/data/test.db');
+  commonSetup();
 });
 
 describe('Create mob and remove more health than it has', () => {
