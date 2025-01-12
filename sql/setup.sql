@@ -19,16 +19,12 @@ create table
     constraint characters_current_world_id_fkey foreign key (current_world_id) references worlds (id)
   ) tablespace pg_default;
 
-create view
+create or replace view
   character_worlds as
 select
   characters.character_id,
   worlds.world_id,
-  worlds.world_name,
-  worlds.world_tile_map_url,
-  worlds.ably_api_key,
-  worlds.tileset_url,
-  worlds.atlas_url
+  worlds.ably_api_key
 from
   characters
   join worlds on worlds.id = characters.current_world_id;
