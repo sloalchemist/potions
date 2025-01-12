@@ -1,4 +1,4 @@
-import { commonSetup, graph } from '../testSetup';
+import { commonSetup } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Mob } from '../../src/mobs/mob';
 import { DB } from '../../src/services/database';
