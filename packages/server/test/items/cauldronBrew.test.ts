@@ -6,9 +6,6 @@ import { Community } from '../../src/community/community';
 import { buildAndSaveGraph, constructGraph, initialize } from '@rt-potion/converse';
 import { ItemGenerator } from '../../src/items/itemGenerator';
 import { Item } from '../../src/items/item';
-import { Carryable } from '../../src/items/carryable';
-
-
 
 beforeAll(() => {
   commonSetup("cauldronBrewable");
@@ -21,8 +18,8 @@ describe('Create cauldron and see if still brewable', () => {
     '(3) create heart beet (4) see if able to brew', () => {
       const worldDescription = {
         tiles: [
-          [-1, -1],
-          [-1, -1]
+          [0, 0],
+          [0, 0]
         ],
         terrain_types: [],
         item_types: [
@@ -137,25 +134,29 @@ describe('Create cauldron and see if still brewable', () => {
 
 
     // query mob from world
-      const testMob = Mob.getMob("1");
-      if (!testMob) {
+    const testMob = Mob.getMob("1");
+    if (!testMob) {
         throw new Error('No mob found');
     }
     const cauldronID = Item.getItemIDAt(cposition);
-    const cauldron = Item.getItem(cauldronID!);
+    if (!cauldronID) {
+        throw new Error(`No item found at position ${cposition}`);
+    }
+    const cauldron = Item.getItem(cauldronID);
     if (!cauldron) {
         throw new Error(`No item found with ID ${cauldronID}`);
     }
 
     const heartID = Item.getItemIDAt(hposition);
-    const heart = Item.getItem(heartID!); 
-    if (!heart) {
-      throw new Error(`No item found with ID ${heartID}`);
+    if (!heartID) {
+        throw new Error(`No item found at position ${hposition}`);
     }
-      
-    const carryableItem = Carryable.fromItem(heart);
-    
-      carryableItem?.pickup(testMob);
+    const heart = Item.getItem(heartID); 
+    if (!heart) {
+        throw new Error(`No item found with ID ${heartID}`);
+    }
+    heart.
+    expect(testMob.carrying).toBeDefined();
   });
 });
 

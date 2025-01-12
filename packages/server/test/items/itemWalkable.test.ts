@@ -85,7 +85,7 @@ describe('Cauldron made not walkable', () => {
 
         // Item generation is tested elsewhere
         const itemGenerator = new ItemGenerator(worldDescription.item_types);
-        const cposition = { x: 0, y: 0 };
+        const cposition = { x: 1, y: 1 };
         const hposition = { x: 0, y: 1 };
         itemGenerator.createItem({
             type: 'cauldron',
