@@ -11,8 +11,8 @@ import {
 
 beforeAll(() => {
   commonSetup("data/mobNegativeHealth.test.ts.db");
-  buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
-  initialize('../converse/data/test.db');
+  buildAndSaveGraph('../converse/data/mobNegativeHealthtest.db', constructGraph(graph));
+  initialize('../converse/data/mobNegativeHealthtest.db');
 });
 
 describe('Create mob and remove more health than it has', () => {
