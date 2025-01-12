@@ -362,7 +362,12 @@ export class WorldScene extends Phaser.Scene {
         return;
       }
 
-      if (this.cameras.main.worldView.contains(pointer.worldX, pointer.worldY)) {
+      if (
+        pointer.x >= cameraViewportX &&
+        pointer.x <= cameraViewportX + cameraViewportWidth &&
+        pointer.y >= cameraViewportY &&
+        pointer.y <= cameraViewportY + cameraViewportHeight
+      ) {
           console.log(
             'click',
             pointer.worldX / TILE_SIZE,
