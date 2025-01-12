@@ -3,16 +3,9 @@ import { mobFactory } from '../../src/mobs/mobFactory';
 import { Mob } from '../../src/mobs/mob';
 import { DB } from '../../src/services/database';
 import { Community } from '../../src/community/community';
-import {
-  buildAndSaveGraph,
-  constructGraph,
-  initialize
-} from '@rt-potion/converse';
 
 beforeAll(() => {
-  commonSetup("data/mobNegativeHealth.test.ts.db");
-  buildAndSaveGraph('../converse/data/mobNegativeHealthtest.db', constructGraph(graph));
-  initialize('../converse/data/mobNegativeHealthtest.db');
+  commonSetup("mobNegativeHealth");
 });
 
 describe('Create mob and remove more health than it has', () => {

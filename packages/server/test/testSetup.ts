@@ -6,7 +6,7 @@ import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
 
-import { Graphable } from '@rt-potion/converse';
+import { buildAndSaveGraph, constructGraph, Graphable, initialize } from '@rt-potion/converse';
 import { buildGraphFromWorld } from '../src/generate/socialWorld';
 
 export let world: ServerWorld;
@@ -16,14 +16,14 @@ export let graph: Graphable[];
 
 /**
  * Initial common setup for testing.
- * @param testName The name of the database instance for the test file (i.e. 'data/[TEST_FILENAME].db').
+ * @param testDBPrefix The prefix used for the database instances for the test file (i.e. 'data/[TEST_PREFIX]-server.db').
  */
-export const commonSetup = (testName: string) => {
+export const commonSetup = (testDBPrefix: string) => {
   // Any common setup code
   jest.clearAllMocks();
 
   // testName param is required to avoid concurrent access issues since jest runs test files in parallel
-  initializeServerDatabase(testName, true);
+  initializeServerDatabase(`data/${testDBPrefix}-server.db`, true);
   createTables();
   initializePubSub(new StubbedPubSub());
 
@@ -169,4 +169,9 @@ export const commonSetup = (testName: string) => {
   itemGenerator = new ItemGenerator(worldDescription.item_types);
   world = new ServerWorld(worldDescription);
   graph = buildGraphFromWorld(worldDescription);
+
+  const knowledgeDBFilename = `data/${testDBPrefix}-knowledge.db`;
+
+  buildAndSaveGraph(knowledgeDBFilename, constructGraph(graph));
+  initialize(knowledgeDBFilename);
 };
