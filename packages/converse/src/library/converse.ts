@@ -1,4 +1,5 @@
 import { DB, initializeDatabase, initializeInMemoryDatabase } from './database';
+import { DB, initializeDatabase, initializeInMemoryDatabase } from './database';
 import { addGraph } from './knowledge_graph/buildDB';
 import { Community } from './knowledge_graph/people/community';
 import { constructGraph } from './knowledge_graph/people/graphable';
@@ -22,8 +23,8 @@ export function intializeTestKnowledgeDB(): void {
   initializeInMemoryDatabase();
 }
 
-export function initializeKnowledgeDB(dbPath: string, rebuild: boolean): void {
-  initializeDatabase(dbPath, rebuild);
+export function initializeKnowledgeDB(dbPath: string): void {
+  initializeDatabase(dbPath);
 }
 
 export function findCommunity(name: string): Community | undefined {

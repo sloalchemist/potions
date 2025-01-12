@@ -1,4 +1,5 @@
 import { buildGraph, constructGraph, initializeKnowledgeDB } from '@rt-potion/converse';
+import { buildGraph, constructGraph, initializeKnowledgeDB } from '@rt-potion/converse';
 import { initializeServerDatabase } from '../services/database';
 import { createTables, loadDefaults } from './generateWorld';
 import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
@@ -32,7 +33,7 @@ async function main() {
 
   const socialWorld = buildGraphFromWorld(globalDescription);
   const graph = constructGraph(socialWorld);
-  initializeKnowledgeDB('data/knowledge-graph.db', true);
+  initializeKnowledgeDB('data/knowledge-graph.db');
   await buildGraph(graph);
 
   // Create tables and load defaults
