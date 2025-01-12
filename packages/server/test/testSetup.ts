@@ -6,14 +6,23 @@ import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
 
+import { Graphable } from '@rt-potion/converse';
+import { buildGraphFromWorld } from '../src/generate/socialWorld';
+
 export let world: ServerWorld;
 export let village: Community;
 export let itemGenerator: ItemGenerator;
+export let graph: Graphable[];
 
+/**
+ * Initial common setup for testing.
+ * @param testName The name of the database instance for the test file (i.e. 'data/[TEST_FILENAME].db').
+ */
 export const commonSetup = (testName: string) => {
   // Any common setup code
   jest.clearAllMocks();
 
+  // testName param is required to avoid concurrent access issues since jest runs test files in parallel
   initializeServerDatabase(testName, true);
   createTables();
   initializePubSub(new StubbedPubSub());
@@ -101,18 +110,63 @@ export const commonSetup = (testName: string) => {
         sleepy: 80,
         extroversion: 50,
         speaker: true
+      },
+      {
+      name: 'Blob',
+      description: 'A Mob',
+      name_style: 'norse-english',
+      type: 'blob',
+      health: 100,
+      speed: 2.5,
+      attack: 5,
+      gold: 0,
+      community: 'blobs',
+      stubbornness: 20,
+      bravery: 5,
+      aggression: 5,
+      industriousness: 40,
+      adventurousness: 10,
+      gluttony: 50,
+      sleepy: 80,
+      extroversion: 50,
+      speaker: true
       }
     ],
     communities: [
-      { "id": "alchemists", "name": "Alchemists guild", "description": "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  }
+      { 
+        id: 'alchemists', 
+        name: 'Alchemists guild', 
+        description: "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  
+      },
+      { 
+      id: 'blobs', 
+      name: 'Blobs', 
+      description: "Blobs who run around the map and cause havoc"  
+      }
     ],
     alliances: [],
     houses: [],
     items: [],
     npcs: [],
     containers: [],
-    regions: []
+    regions: [
+      {
+        id: "elyndra",
+        name: "elyndra",
+        description: "the overall world in which everything exists.",
+        parent: null,
+        concepts: ["concept_elyndra", "concept_elyndra_as_battleground"]
+      },
+      {
+          id: "claw_island",
+          name: "Claw Island",
+          description: "a relatively peaceful island in the Shattered Expanse full of blueberries and heartbeets.",
+          parent: "shattered_expanse",
+          concepts: []
+      }
+    ]
   };
   itemGenerator = new ItemGenerator(worldDescription.item_types);
   world = new ServerWorld(worldDescription);
+  graph = buildGraphFromWorld(worldDescription);
 };
