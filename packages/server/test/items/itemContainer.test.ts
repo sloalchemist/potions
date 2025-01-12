@@ -9,16 +9,16 @@ import { ItemGenerator } from '../../src/items/itemGenerator';
 import { initialize } from '@rt-potion/converse';
 import { buildAndSaveGraph, constructGraph } from '@rt-potion/converse';
 
-beforeAll(() => {
-  commonSetup("data/itemContainer.test.db");
+beforeEach(() => {
+  commonSetup('data/itemContainer.test.db');
 
   buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
   initialize('../converse/data/test.db');
-  Community.makeVillage("alchemists", "Alchemists guild");
+  Community.makeVillage('alchemists', 'Alchemists guild');
 });
 
-describe('Adds blue potion to blue potion-stand', () => {
-  test('Should add the potion', () => {
+describe('Try to add various color potions to a blue potion-stand', () => {
+  test('Add a blue potion: Should add the potion', () => {
     const worldDescription = {
       tiles: [
         [-1, -1],
@@ -30,7 +30,6 @@ describe('Adds blue potion to blue potion-stand', () => {
           name: 'Potion',
           description: 'A magical concoction',
           type: 'potion',
-          subtype: '255',
           carryable: true,
           walkable: true,
           interactions: [],
@@ -102,26 +101,11 @@ describe('Adds blue potion to blue potion-stand', () => {
         }
       ],
       communities: [
-        { 
-          id: 'alchemists', 
-          name: 'Alchemists guild', 
-          description: "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  
-        }
-      ],
-      regions: [
         {
-          id: "elyndra",
-          name: "elyndra",
-          description: "the overall world in which everything exists.",
-          parent: null,
-          concepts: ["concept_elyndra", "concept_elyndra_as_battleground"]
-        },
-        {
-          id: "claw_island",
-          name: "Claw Island",
-          description: "a relatively peaceful island in the Shattered Expanse full of blueberries and heartbeets.",
-          parent: "shattered_expanse",
-          concepts: []
+          id: 'alchemists',
+          name: 'Alchemists guild',
+          description:
+            "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."
         }
       ]
     };
@@ -130,25 +114,25 @@ describe('Adds blue potion to blue potion-stand', () => {
     const standPosition = { x: 0, y: 1 };
     const position = { x: 0, y: 0 };
     mobFactory.loadTemplates(worldDescription.mob_types);
-    
-    
-    //create a potion stand
+
+    //create a blue potion stand
     const itemGenerator = new ItemGenerator(worldDescription.item_types);
     itemGenerator.createItem({
       type: 'potion-stand',
       subtype: '255',
       position: standPosition,
       attributes: {
-        templateType: 'potion'}
+        templateType: 'potion'
+      }
     });
     const standID = Item.getItemIDAt(standPosition);
     expect(standID).not.toBeNull();
-    const stand = Item.getItem(standID!);
-    expect(stand).not.toBeNull();
+    const testStand = Item.getItem(standID!);
+    expect(testStand).not.toBeNull();
 
     // create a player
-    mobFactory.makeMob('player', position, '79e0aef2', 'TestPlayer');
-    const testMob = Mob.getMob('79e0aef2');
+    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+    const testMob = Mob.getMob('TestID');
     expect(testMob).not.toBeNull();
 
     // create a potion
@@ -167,23 +151,164 @@ describe('Adds blue potion to blue potion-stand', () => {
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
     expect(testMob!.carrying!.subtype).toBe('255');
-    
+
     // add the potion to the stand
     const testAddItem = new AddItem();
-    const test = testAddItem.interact(testMob!, stand!);
-    console.log(stand)
+    const test = testAddItem.interact(testMob!, testStand!);
     expect(test).toBe(true);
-  
-  // check that the potion was added
+
+    // check that the potion was added
     const standAfter = Item.getItem(standID!);
     expect(standAfter).not.toBeNull();
-    console.log(standAfter!.getAttribute('items'));
     expect(standAfter!.getAttribute('items')).toBe(1);
-
   });
 
+  test('Add a red potion: Should NOT add the potion', () => {
+    const worldDescription = {
+      tiles: [
+        [-1, -1],
+        [-1, -1]
+      ],
+      terrain_types: [],
+      item_types: [
+        {
+          name: 'Potion',
+          description: 'A magical concoction',
+          type: 'potion',
+          carryable: true,
+          walkable: true,
+          interactions: [],
+          attributes: [],
+          on_tick: []
+        },
+
+        {
+          name: 'Potion stand',
+          description: 'A stand that sells health potions.',
+          type: 'potion-stand',
+          carryable: false,
+          smashable: true,
+          walkable: true,
+          show_price_at: {
+            x: 7,
+            y: -10
+          },
+
+          subtype: '255',
+          interactions: [
+            {
+              description: 'Add $item_name',
+              action: 'add_item',
+              while_carried: false
+            }
+          ],
+          attributes: [
+            {
+              name: 'items',
+              value: 0
+            },
+            {
+              name: 'price',
+              value: 10
+            },
+            {
+              name: 'gold',
+              value: 0
+            },
+            {
+              name: 'health',
+              value: 1
+            }
+          ],
+          on_tick: []
+        }
+      ],
+      mob_types: [
+        {
+          name: 'Player',
+          description: 'The player',
+          name_style: 'norse-english',
+          type: 'player',
+          health: 100,
+          speed: 2.5,
+          attack: 5,
+          gold: 0,
+          community: 'alchemists',
+          stubbornness: 20,
+          bravery: 5,
+          aggression: 5,
+          industriousness: 40,
+          adventurousness: 10,
+          gluttony: 50,
+          sleepy: 80,
+          extroversion: 50,
+          speaker: true
+        }
+      ],
+      communities: [
+        {
+          id: 'alchemists',
+          name: 'Alchemists guild',
+          description:
+            "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."
+        }
+      ]
+    };
+
+    //set up the world
+    const standPosition = { x: 0, y: 1 };
+    const position = { x: 0, y: 0 };
+    mobFactory.loadTemplates(worldDescription.mob_types);
+
+    //create a blue potion stand
+    const itemGenerator = new ItemGenerator(worldDescription.item_types);
+    itemGenerator.createItem({
+      type: 'potion-stand',
+      subtype: '255',
+      position: standPosition,
+      attributes: {
+        templateType: 'potion'
+      }
+    });
+    const standID = Item.getItemIDAt(standPosition);
+    expect(standID).not.toBeNull();
+    const testStand = Item.getItem(standID!);
+    expect(testStand).not.toBeNull();
+
+    // create a player
+    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+    const testMob = Mob.getMob('TestID');
+    expect(testMob).not.toBeNull();
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: '16711680',
+      position: { x: 1, y: 0 },
+      carriedBy: testMob
+    });
+    const potion = Item.getItemIDAt({ x: 1, y: 0 });
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
+
+    // ensure the player is carrying the potion
+    expect(testMob!.carrying).not.toBeNull();
+    expect(testMob!.carrying!.type).toBe('potion');
+    expect(testMob!.carrying!.subtype).toBe('16711680');
+
+    // try to add the potion to the stand
+    const testAddItem = new AddItem();
+    const test = testAddItem.interact(testMob!, testStand!);
+    expect(test).toBe(false);
+
+    // check that the potion was not added
+    const standAfter = Item.getItem(standID!);
+    expect(standAfter).not.toBeNull();
+    expect(standAfter!.getAttribute('items')).toBe(0);
+  });
 });
 
-afterAll(() => {
+afterEach(() => {
   DB.close();
 });
