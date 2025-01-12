@@ -2,34 +2,6 @@ import { setChatting, setChatCompanionCallback, mobRangeListener } from "../../s
 import { Mob } from "../../src/world/mob";
 import { World } from "../../src/world/world";
 
-jest.mock('../../src/scenes/pauseScene', () => ({
-  PauseScene: class MockPauseScene {},
-}));
-
-jest.mock('phaser', () => ({
-  Scene: class MockScene {
-    key: string;
-
-    constructor(config: { key: string }) {
-      this.key = config.key;
-    }
-
-    add = {
-      graphics: () => ({
-        fillStyle: jest.fn().mockReturnThis(),
-        fillRect: jest.fn(),
-      }),
-    };
-
-    game = {
-      scale: {
-        width: 800,
-        height: 600,
-      },
-    };
-  },
-}));
-
 describe('Chat UI updates based on chatting state', () => {
   let world: World | null = null;
   let mockChatCallback: jest.Mock;
@@ -50,6 +22,34 @@ describe('Chat UI updates based on chatting state', () => {
   });
 
   beforeEach(() => {
+    jest.mock('../../src/scenes/pauseScene', () => ({
+      PauseScene: class MockPauseScene {},
+    }));
+    
+    jest.mock('phaser', () => ({
+      Scene: class MockScene {
+        key: string;
+    
+        constructor(config: { key: string }) {
+          this.key = config.key;
+        }
+    
+        add = {
+          graphics: () => ({
+            fillStyle: jest.fn(e=>e).mockReturnThis(),
+            fillRect: jest.fn(e=>e),
+          }),
+        };
+    
+        game = {
+          scale: {
+            width: 800,
+            height: 600,
+          },
+        };
+      },
+    }));
+
     mockChatCallback = jest.fn();
     setChatCompanionCallback(mockChatCallback);
   });
