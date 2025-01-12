@@ -110,6 +110,7 @@ export function setupBroadcast(
           checkFocus();
         });
 
+        // one game focused, leave the world and display game over
         waitUntilFocused.then(() => {
           leaveWorld();
           scene.showGameOver();
