@@ -16,13 +16,11 @@ export let graph: Graphable[];
 
 /**
  * Initial common setup for testing.
- * @param testDBPrefix The prefix used for the database instances for the test file (i.e. 'data/[TEST_PREFIX]-server.db').
  */
 export const commonSetup = () => {
   // Any common setup code
   jest.clearAllMocks();
 
-  // testName param is required to avoid concurrent access issues since jest runs test files in parallel
   initializeTestServerDatabase();
   createTables();
   initializePubSub(new StubbedPubSub());
