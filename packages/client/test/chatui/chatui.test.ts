@@ -2,7 +2,7 @@ import { setChatting, setChatCompanionCallback, mobRangeListener } from "../../s
 import { Mob } from "../../src/world/mob";
 import { World } from "../../src/world/world";
 
-jest.mock('../../src/scenes/PauseScene', () => ({
+jest.mock('../../src/scenes/pauseScene', () => ({
   PauseScene: class MockPauseScene {},
 }));
 
