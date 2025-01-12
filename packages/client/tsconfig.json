@@ -4,7 +4,7 @@
     "target": "ESNext",
     "moduleResolution": "Node",
     "outDir": "dist",
-    "rootDir": ".",
+    "rootDir": "..",
     "strict": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,

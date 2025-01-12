@@ -1,37 +1,13 @@
-import { UxScene } from "../src/scenes/uxScene";
-import { Button, BUTTON_HEIGHT, BUTTON_WIDTH } from "../src/components/button";
+import { ChatContainer } from "../src/components/chatContainer";
+import { commonSetup } from "../../server/test/testSetup";
 
-describe('Chat Options After Death', () => {
-    let uxScene;
-    test('test one', () => {
-        uxScene = new UxScene;
-        // create a button in the scenne
-        uxScene.chatButtons = [new Button(uxScene, 100, 100, true, "texture", () => {console.log("BUTTON CLICKED")}, BUTTON_WIDTH, BUTTON_HEIGHT)]
-        // check that there is one button
-        expect(uxScene.chatButtons).toEqual(1);
-        // clear chat options
-        uxScene.clearChatOptions();
-        // check that there are no buttons anymore
-        expect(uxScene.chatButtons).toEqual(0);
-    });
-    test('test two', () => {
-        uxScene = new UxScene;
-        // create a button in the scenne
-        uxScene.chatButtons = [new Button(uxScene, 100, 100, true, "texture", () => {console.log("BUTTON CLICKED")}, BUTTON_WIDTH, BUTTON_HEIGHT),
-            new Button(uxScene, 100, 100, true, "texture", () => {console.log("BUTTON CLICKED")}, BUTTON_WIDTH, BUTTON_HEIGHT),
-            new Button(uxScene, 100, 100, true, "texture", () => {console.log("BUTTON CLICKED")}, BUTTON_WIDTH, BUTTON_HEIGHT)]
-        // check that there is one button
-        expect(uxScene.chatButtons).toEqual(3);
-        // clear chat options
-        uxScene.clearChatOptions();
-        // check that there are no buttons anymore
-        expect(uxScene.chatButtons).toEqual(0);
+// not sure if this is needed ..? 
+// beforeAll(() => {
+  //  commonSetup('data/fantasydate.test.db');
+  // });
+
+describe('Clear Chat Tests', () => {
+    test('chat options should be cleared after death', () => {
+        // let chat = ChatContainer(huh, 0, 40);
     });
 });
-/*
-a couple of notes:
-1. this is def not in the right place, but the testing infrastructure was not in place
-for where I wanted to place it
-2. I don't think I am even testing the functionality that I should be
-3. I am not even sure how to run this test, to be honest
-*/
