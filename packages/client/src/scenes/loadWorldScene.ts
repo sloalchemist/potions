@@ -1,10 +1,5 @@
 import { PaletteSwapper } from '../sprite/palette_swapper';
-import {
-  currentCharacter,
-  changeName,
-  saveColors,
-  parseName
-} from '../worldMetadata';
+import { currentCharacter, changeName, saveColors } from '../worldMetadata';
 import {
   darkenColor,
   hexStringToNumber,
@@ -13,6 +8,7 @@ import {
 import { setupAbly } from '../services/ablySetup';
 import { setGameState } from '../world/controller';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
+import { parseName } from '../utils/validators';
 
 const buttonStyle = {
   fontSize: '24px',
