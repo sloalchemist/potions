@@ -119,6 +119,6 @@ describe('Chat UI updates based on chatting state', () => {
   });
 
   afterAll(() => {
-    world = null as World | null;
+    world = null;
   });
 });
