@@ -357,11 +357,6 @@
         ],
         "interactions": [
             {
-                "description": "Add $item_name",
-                "action": "add_item",
-                "while_carried": false
-            },
-            {
                 "description": "Raise price",
                 "action": "raise_price",
                 "while_carried": false,
@@ -428,6 +423,12 @@
             }
         ],
         "interactions": [
+            {
+                "description": "Add Potion",
+                "action": "add_item",
+                "while_carried": true,
+                "requires_item": "potion-stand"
+            },
             {
                 "description": "Quaff potion",
                 "action": "drink",
