@@ -1,5 +1,10 @@
 import { PaletteSwapper } from '../sprite/palette_swapper';
-import { currentCharacter, validateName, changeName, saveColors } from '../worldMetadata';
+import {
+  currentCharacter,
+  changeName,
+  saveColors,
+  parseName
+} from '../worldMetadata';
 import {
   darkenColor,
   hexStringToNumber,
@@ -123,10 +128,15 @@ export class LoadWorldScene extends Phaser.Scene {
     });
 
     characterName.on('pointerdown', () => {
-      const userName = window.prompt('Please enter your name:');
-      if (userName && validateName(userName)) {
-        changeName(userName);
-        characterName.setText(userName);
+      const userName = window.prompt('Please enter your name:') || '';
+      const parsedName = parseName(userName);
+      if (parsedName) {
+        changeName(parsedName);
+        characterName.setText(parsedName);
+      } else {
+        window.alert(
+          'Name must be between 1 and 10 characters inclusive. Whitespaces are trimmed.'
+        );
       }
     });
 
