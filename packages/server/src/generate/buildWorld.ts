@@ -32,7 +32,7 @@ async function main() {
 
   const socialWorld = buildGraphFromWorld(globalDescription);
   const graph = constructGraph(socialWorld);
-  initializeKnowledgeDB('data/knowledge-graph.db');
+  initializeKnowledgeDB('data/knowledge-graph.db', true);
   await buildGraph(graph);
 
   // Create tables and load defaults
