@@ -30,7 +30,9 @@ export class Smashable {
     
     
     if (this.item.getAttribute<number>('health') <= 0) {
-      
+      if (this.item.type == 'potion-stand') {
+        this.destroyPotionStand();
+      }
       this.item.destroy();
     }
   }
@@ -38,26 +40,23 @@ export class Smashable {
   destroyPotionStand(){
     const gold = this.item.getAttribute<number>('gold');
     const itemsCount = this.item.getAttribute<number>('items');
-    if (this.item.type == 'potion-stand') {
-      if (this.item.getAttribute<number>('gold') > 0){
+    if (this.item.getAttribute<number>('gold') > 0){
+      const position = Item.findEmptyPosition(this.mob.position);
+      itemGenerator.createItem({
+        type: 'gold',
+        position,
+        attributes: { amount: this.item.getAttribute<number>('gold') }
+      });
+    }
+    const itemcount = this.item.getAttribute<number>('items');
+    if (itemcount > 0){
+      for (let i = 0; i < itemcount; i++) {
         const position = Item.findEmptyPosition(this.mob.position);
         itemGenerator.createItem({
-          type: 'gold',
-          position,
-          attributes: { amount: this.item.getAttribute<number>('gold') }
+          type: 'potion',
+          subtype: this.item.subtype,
+          position: position
         });
-      }
-      const itemcount = this.item.getAttribute<number>('items');
-      if (itemcount > 0){
-        console.log('drop potion');
-        for (let i = 0; i < itemcount; i++) {
-          const position = Item.findEmptyPosition(this.mob.position);
-          itemGenerator.createItem({
-            type: 'potion',
-            subtype: this.item.subtype,
-            position: position
-          });
-        }
       }
     }
   }
