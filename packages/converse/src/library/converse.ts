@@ -1,5 +1,4 @@
 import { DB, initializeDatabase, initializeInMemoryDatabase } from './database';
-import { DB, initializeDatabase, initializeInMemoryDatabase } from './database';
 import { addGraph } from './knowledge_graph/buildDB';
 import { Community } from './knowledge_graph/people/community';
 import { constructGraph } from './knowledge_graph/people/graphable';
