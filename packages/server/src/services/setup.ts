@@ -1,12 +1,12 @@
 import { ServerWorld } from './gameWorld/serverWorld';
 import { AblyService } from './clientCommunication/ablyService';
 import 'dotenv/config';
-import { initialize } from '@rt-potion/converse';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
 import globalData from '../../data/global.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
+import { initializeKnowledgeDB } from '@rt-potion/converse';
 
 let lastUpdateTime = Date.now();
 let world: ServerWorld;
@@ -33,7 +33,7 @@ async function initializeAsync() {
   console.log(`loading world ${worldID}`);
 
   try {
-    initialize('data/knowledge-graph.db');
+    initializeKnowledgeDB('data/knowledge-graph.db');
     initializeServerDatabase('data/server-data.db');
 
     const worldDescription = globalData as ServerWorldDescription;

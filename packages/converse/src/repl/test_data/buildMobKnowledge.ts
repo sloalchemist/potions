@@ -1,3 +1,5 @@
+import { buildGraph } from '../../library';
+import { initializeDatabase } from '../../library/database';
 import { KnowledgeGraph } from '../../library/knowledge_graph/knowledgeGraph';
 import { Community } from '../../library/knowledge_graph/people/community';
 import { Eventy } from '../../library/knowledge_graph/people/event';
@@ -8,7 +10,6 @@ import {
 import { Item } from '../../library/knowledge_graph/people/item';
 import { Person } from '../../library/knowledge_graph/people/person';
 import { Region } from '../../library/knowledge_graph/people/region';
-import { buildAndSaveGraph } from '../../library/knowledge_graph/buildDB';
 
 export function buildSilverclawTribe(): KnowledgeGraph {
   const elyndra = new Region(
@@ -378,4 +379,5 @@ export function buildSilverclawTribe(): KnowledgeGraph {
 }
 
 const graph = buildSilverclawTribe();
-buildAndSaveGraph('data/knowledge-graph.db', graph);
+initializeDatabase('data/knowledge-graph.db');
+buildGraph(graph);
