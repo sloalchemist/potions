@@ -322,7 +322,8 @@ export class WorldScene extends Phaser.Scene {
       }
     );
 
-    const cameraViewportX = 17
+    // define viewport dimensions
+    const cameraViewportX = 17 
     const cameraViewportY = 16
     const cameraViewportWidth = this.game.scale.width - 32
     const cameraViewportHeight = this.game.scale.height * 0.5 - 14
@@ -361,6 +362,7 @@ export class WorldScene extends Phaser.Scene {
         return;
       }
 
+      // check if mouseclick is within viewport
       if (
         pointer.x >= cameraViewportX &&
         pointer.x <= cameraViewportX + cameraViewportWidth &&
