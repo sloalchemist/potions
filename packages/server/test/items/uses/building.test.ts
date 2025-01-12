@@ -1,5 +1,5 @@
 import { ItemGenerator } from '../../../src/items/itemGenerator';
-import { commonSetup } from '../../testSetup';
+import { commonSetup, graph } from '../../testSetup';
 import { DB } from '../../../src/services/database';
 import { Item } from '../../../src/items/item';
 import { BuildWall } from '../../../src/items/uses/building/buildWall';
@@ -7,11 +7,17 @@ import { Mob } from '../../../src/mobs/mob';
 import { mobFactory } from '../../../src/mobs/mobFactory';
 import { Pickup } from '../../../src/items/uses/pickup';
 import { Community } from '../../../src/community/community';
-import {buildAndSaveGraph, constructGraph } from '@rt-potion/converse';
 import { buildGraphFromWorld } from '../../../src/generate/socialWorld'
+import {
+  buildAndSaveGraph,
+  constructGraph,
+  initialize
+} from '@rt-potion/converse';
 
 beforeAll(() => {
   commonSetup('data/building.test.db');
+  buildAndSaveGraph('../converse/data/building.test.db', constructGraph(graph));
+  initialize('../converse/data/building.test.db');
 });
 
 describe('Build wall from partial wall', () => {
