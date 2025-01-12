@@ -23,8 +23,13 @@ export class Smashable {
 
   changeHealth(amount: number) {
     this.item.changeAttributeBy('health', amount);
-
+    
     if (this.item.getAttribute<number>('health') <= 0) {
+     if(this.item.type == 'potion-stand') {
+        console.log("This is a potion Stand")
+
+     }
+
       this.item.destroy();
     }
   }
