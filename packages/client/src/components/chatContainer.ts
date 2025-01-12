@@ -11,6 +11,7 @@ export class ChatContainer extends Phaser.GameObjects.Container {
        scene.add.existing(this);
    }
 
+   // but how could we add buttons to test this? not sure how we are going to do that TBH..
    clearChatOptions(chatButtons: Button[]) {
        // Clear previous chat buttons
        chatButtons.forEach((button) => button.destroy());

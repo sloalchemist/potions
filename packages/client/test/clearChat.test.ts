@@ -1,13 +1,29 @@
 import { ChatContainer } from "../src/components/chatContainer";
-import { commonSetup } from "../../server/test/testSetup";
+import { Button, BUTTON_HEIGHT, BUTTON_WIDTH } from "../src/components/button";
+import { Scene } from "phaser";
 
-// not sure if this is needed ..? 
-// beforeAll(() => {
-  //  commonSetup('data/fantasydate.test.db');
-  // });
-
+// TODO: add better description, documentation
 describe('Clear Chat Tests', () => {
-    test('chat options should be cleared after death', () => {
-        // let chat = ChatContainer(huh, 0, 40);
+    test('test 1', () => {
+      let scene = new Scene();
+      let chatContainer = new ChatContainer(scene, 0, 40);
+
+      let button1 = new Button(scene, 0, 20, true, "Player 1", () =>
+        console.log("Button for Player 1"), BUTTON_WIDTH, BUTTON_HEIGHT
+      );
+
+      let button2 = new Button(scene, 0, 20, true, "Player 1", () =>
+        console.log("Button for Player 1"), BUTTON_WIDTH, BUTTON_HEIGHT
+      );
+
+      chatContainer.add(button1);
+      chatContainer.add(button2);
+
+      expect(chatContainer.getAll()).toEqual([button1, button2]);
+      
+      chatContainer.clearChatOptions([button1, button2]);
+
+      expect(chatContainer.getAll()).toEqual([]);
     });
 });
+
