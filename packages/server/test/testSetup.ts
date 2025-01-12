@@ -8,9 +8,6 @@ import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub
 import { Graphable } from '@rt-potion/converse';
 import { buildGraphFromWorld } from '../src/generate/socialWorld';
 
-import { Graphable } from '@rt-potion/converse';
-import { buildGraphFromWorld } from '../src/generate/socialWorld';
-
 export let world: ServerWorld;
 export let village: Community;
 export let itemGenerator: ItemGenerator;
@@ -70,16 +67,41 @@ export const commonSetup = (testName: string) => {
         on_tick: []
       },
       {
-        name: 'Heart Beet',
-        description: 'test',
-        type: 'heart-beet',
-        carryable: true,
-        smashable: true,
-        walkable: true,
+        name: 'Cauldron',
+        description: 'For mixing potions',
+        type: 'cauldron',
+        carryable: false,
+        walkable: false,
         interactions: [],
         attributes: [],
         on_tick: []
-      },
+    },
+    {
+        name: "Heartbeet",
+        description: 'Brew potions',
+        type: "heart-beet",
+        walkable: true,
+        carryable: true,
+        interactions: [
+            {
+                description: "Brew red potion",
+                action: "brew",
+                while_carried: true,
+                requires_item: "cauldron"
+            }
+        ],
+        attributes: [
+            {
+                name: "brew_color",
+                value: "#FF0000"
+            },
+            {
+                name: "health",
+                value: 1
+            }
+        ],
+        on_tick: []
+    },
       {
         name: 'Log',
         description: 'test',
@@ -91,17 +113,6 @@ export const commonSetup = (testName: string) => {
         attributes: [],
         on_tick: []
       },
-      {
-        name: 'Solid Object',
-        description: 'test',
-        type: 'solid object',
-        carryable: false,
-        smashable: false,
-        walkable: false, // This is what matters
-        interactions: [],
-        attributes: [],
-        on_tick: []
-      }
     ],
     mob_types: [
       {
