@@ -99,8 +99,6 @@ export const commonSetup = () => {
           x: 7,
           y: -10
         },
-
-        // subtype: '255',
         interactions: [
           {
             description: 'Add $item_name',
