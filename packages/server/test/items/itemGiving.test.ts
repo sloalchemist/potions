@@ -10,8 +10,8 @@ import { Item } from '../../src/items/item';
 
 beforeAll(() => {
   commonSetup("../server/data/itemGivingtest.db");
-  buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
-  initialize('../converse/data/test.db');
+  buildAndSaveGraph('../converse/data/itemGivingtest.db', constructGraph(graph));
+  initialize('../converse/data/itemGivingtest.db');
 });
 
 describe('Create 2 unallied mobs and try to give item from one to another', () => {
