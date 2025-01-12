@@ -63,7 +63,7 @@ export async function changeName(name: string) {
 }
 
 export function validateName(name: string | null): boolean {
-  return !!name && name.trim() !== '' && name.length < 10
+  return !!name && name.trim() !== '' && name.length < 11
 }
 
 export async function retrieveCharacter() {
