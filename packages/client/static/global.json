@@ -298,7 +298,6 @@
         "walkable": true,
         "flat": true,
         "interactions": [
-    
         ],
         "on_tick": [
             {
@@ -326,6 +325,13 @@
                 }
             }
         ]
+    },
+    {
+        "name": "Closed",
+        "type": "closed",
+        "carryable": false,
+        "walkable": true,
+        "interactions": []
     },
     {
         "name": "Potion stand",
