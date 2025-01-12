@@ -9,10 +9,14 @@ dotenv.config();
 
 let DB: Database;
 
+export function initializeInMemoryDatabase() {
+  DB = new DatabaseConstructor(':memory:');
+}
+
 export function initializeDatabase(
   dbPath: string,
   rebuild: boolean = false
-): Database {
+) {
   const absolutePath = path.resolve(dbPath);
 
   if (rebuild) {
@@ -27,8 +31,6 @@ export function initializeDatabase(
 
   // Close the database on process exit
   process.on('exit', () => DB.close());
-
-  return DB;
 }
 
 // Export the initialized database

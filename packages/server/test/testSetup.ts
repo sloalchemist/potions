@@ -1,12 +1,12 @@
 import { Community } from '../src/community/community';
 import { ServerWorld } from '../src/services/gameWorld/serverWorld';
 import { ItemGenerator } from '../src/items/itemGenerator';
-import { initializeServerDatabase } from '../src/services/database';
+import { initializeTestServerDatabase } from '../src/services/database';
 import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
 
-import { buildAndSaveGraph, constructGraph, Graphable, initialize } from '@rt-potion/converse';
+import { buildGraph, constructGraph, Graphable, intializeTestKnowledgeDB } from '@rt-potion/converse';
 import { buildGraphFromWorld } from '../src/generate/socialWorld';
 
 export let world: ServerWorld;
@@ -18,12 +18,12 @@ export let graph: Graphable[];
  * Initial common setup for testing.
  * @param testDBPrefix The prefix used for the database instances for the test file (i.e. 'data/[TEST_PREFIX]-server.db').
  */
-export const commonSetup = (testDBPrefix: string) => {
+export const commonSetup = () => {
   // Any common setup code
   jest.clearAllMocks();
 
   // testName param is required to avoid concurrent access issues since jest runs test files in parallel
-  initializeServerDatabase(`data/${testDBPrefix}-server.db`, true);
+  initializeTestServerDatabase();
   createTables();
   initializePubSub(new StubbedPubSub());
 
@@ -170,8 +170,6 @@ export const commonSetup = (testDBPrefix: string) => {
   world = new ServerWorld(worldDescription);
   graph = buildGraphFromWorld(worldDescription);
 
-  const knowledgeDBFilename = `data/${testDBPrefix}-knowledge.db`;
-
-  buildAndSaveGraph(knowledgeDBFilename, constructGraph(graph));
-  initialize(knowledgeDBFilename);
+  intializeTestKnowledgeDB();
+  buildGraph(constructGraph(graph));
 };
