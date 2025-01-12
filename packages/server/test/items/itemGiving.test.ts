@@ -9,7 +9,7 @@ import { Carryable } from '../../src/items/carryable';
 import { Item } from '../../src/items/item';
 
 beforeAll(() => {
-  commonSetup();
+  commonSetup('itemGivingtest');
 });
 
 describe('Create 2 unallied mobs and try to give item from one to another', () => {
