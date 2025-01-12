@@ -7,6 +7,8 @@ import { Mob } from '../../../src/mobs/mob';
 import { mobFactory } from '../../../src/mobs/mobFactory';
 import { Pickup } from '../../../src/items/uses/pickup';
 import { Community } from '../../../src/community/community';
+import {buildAndSaveGraph, constructGraph } from '@rt-potion/converse';
+import { buildGraphFromWorld } from '../../../src/generate/socialWorld'
 
 beforeAll(() => {
   commonSetup('data/building.test.db');
@@ -92,10 +94,27 @@ describe('Build wall from partial wall', () => {
           speaker: true
         }
       ],
+      regions: [
+        {
+          id: "claw_island",
+          name: "claw_island",
+          description: "This is claw island",
+          parent: null,
+          concepts: []
+        }
+      ],
       communities: [
         { "id": "alchemists", "name": "Alchemists guild", "description": "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  }
-      ]
+      ],
+      alliances: [],
+      houses: [],
+      items: [],
+      containers: []
     };
+
+    const socialWorld = buildGraphFromWorld(worldDescription);
+    const graph = constructGraph(socialWorld);
+    buildAndSaveGraph('data/knowledge-graph-build-test.db', graph)
 
     //generate world
     const itemGenerator = new ItemGenerator(worldDescription.item_types);
