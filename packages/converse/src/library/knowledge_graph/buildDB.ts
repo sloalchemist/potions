@@ -1,6 +1,6 @@
 import { KnowledgeGraph } from './knowledgeGraph';
 import { v4 as uuidv4 } from 'uuid';
-import { DB, initializeDatabase } from '../database';
+import { DB } from '../database';
 import { Concept, ConceptHierarchy } from './concepts/concept';
 import { Professions } from './concepts/professions';
 import { Feelings } from './concepts/feelings';
@@ -259,10 +259,8 @@ export function addGraph(graph: KnowledgeGraph) {
   }
 }
 
-export function buildAndSaveGraph(dbPath: string, graph: KnowledgeGraph) {
+export function buildGraph(graph: KnowledgeGraph) {
   // Delete the database file if it already exists
-  initializeDatabase(dbPath, true);
   buildSQL();
   addGraph(graph);
-  DB.close();
 }
