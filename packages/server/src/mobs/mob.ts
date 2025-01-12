@@ -80,6 +80,10 @@ export class Mob {
   private _health: number;
   public readonly attack: number;
 
+  // Addition: Tracking when sprite last moved, and how long they've been asleep for
+  private lastMoveTime: number = Date.now();  // Track the last time moved
+  private sleepDuration: number = 15 * 1000;  // 15 seconds 
+
   // subtype: string,
   // currentAction?: string,
   // carrying?: string,
@@ -122,6 +126,9 @@ export class Mob {
     this.personality = Personality.loadPersonality(this);
     this.community_id = community_id;
     this.unlocks.push(community_id);
+
+    // Addition
+    this.lastMoveTime = Date.now();
   }
 
   private setAction(action: string, finished: boolean = false) {
@@ -358,6 +365,23 @@ export class Mob {
     }
   }
 
+  // Addition: These things happen when the character is in sleep state (healing + energy)
+  sleep() {
+    if (gameWorld.currentDate().global_tick % (12 * 4) === 0) {
+      this.needs.changeNeed('max_energy', 25);
+      this.needs.changeNeed('energy', 25);
+      this.changeHealth(10);
+    }
+  }
+
+  // Addition: Implements sleep if it recognizes that mob is asleep
+  checkForSleep() {
+    const currentTime = Date.now();
+    if (currentTime - this.lastMoveTime >= this.sleepDuration) {
+      this.sleep();  // Sleep if 15 seconds of not moving
+    }
+  }
+
   getHouse(): House | undefined {
     const houseData = DB.prepare(
       `
@@ -426,6 +450,10 @@ export class Mob {
     ) {
       this.target = undefined;
     }
+
+    // Addition: Keep track of when it last moved for sleep
+    this.lastMoveTime = Date.now();
+
     DB.prepare(
       `
             UPDATE mobs
