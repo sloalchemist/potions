@@ -22,6 +22,9 @@ import { publicCharacterId } from '../worldMetadata';
 import { SpriteItem } from '../sprite/sprite_item';
 import { Types } from 'ably';
 import { leaveWorld } from './playerToServer';
+import { focused } from '../main';
+
+export let playerDead = false;
 
 export function setupBroadcast(
   broadcast_channel: Types.RealtimeChannelCallbacks,
@@ -91,8 +94,26 @@ export function setupBroadcast(
     if (mob) {
       mob.destroy(world);
       if (data.id === publicCharacterId) {
-        leaveWorld();
-        scene.showGameOver();
+        playerDead = true;
+
+        // wait until the window is focused before moving on
+        const waitUntilFocused = new Promise<void>((resolve) => {
+          const checkFocus = () => {
+            if (focused == true) {
+              // resolve once game is focused
+              resolve();
+            } else {
+              // keep waiting
+              setTimeout(checkFocus, 100);
+            }
+          };
+          checkFocus();
+        });
+
+        waitUntilFocused.then(() => {
+          leaveWorld();
+          scene.showGameOver();
+        });
       }
     }
   }
