@@ -6,14 +6,9 @@ import { Item } from '../../src/items/item';
 import { AddItem } from '../../src/items/uses/container/addItem';
 import { Mob } from '../../src/mobs/mob';
 import { ItemGenerator } from '../../src/items/itemGenerator';
-import { initialize } from '@rt-potion/converse';
-import { buildAndSaveGraph, constructGraph } from '@rt-potion/converse';
 
 beforeEach(() => {
-  commonSetup('data/itemContainer.test.db');
-
-  buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
-  initialize('../converse/data/test.db');
+  commonSetup();
   Community.makeVillage('alchemists', 'Alchemists guild');
 });
 
