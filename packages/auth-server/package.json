@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@rt-potion/auth-server": "file:",
     "@supabase/supabase-js": "^2.44.2",
     "ably": "^1.2.21",
     "cookie-parser": "^1.4.6",

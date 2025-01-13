@@ -1,20 +1,27 @@
 import { Community } from '../src/community/community';
 import { ServerWorld } from '../src/services/gameWorld/serverWorld';
 import { ItemGenerator } from '../src/items/itemGenerator';
-import { initializeServerDatabase } from '../src/services/database';
+import { initializeTestServerDatabase } from '../src/services/database';
 import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
+import { buildGraph, constructGraph, Graphable, intializeTestKnowledgeDB } from '@rt-potion/converse';
+
+import { buildGraphFromWorld } from '../src/generate/socialWorld';
 
 export let world: ServerWorld;
 export let village: Community;
 export let itemGenerator: ItemGenerator;
+export let graph: Graphable[];
 
+/**
+ * Initial common setup for testing.
+ */
 export const commonSetup = () => {
   // Any common setup code
   jest.clearAllMocks();
 
-  initializeServerDatabase('data/test.db', true);
+  initializeTestServerDatabase();
   createTables();
   initializePubSub(new StubbedPubSub());
 
@@ -59,16 +66,41 @@ export const commonSetup = () => {
         on_tick: []
       },
       {
-        name: 'Heart Beet',
-        description: 'test',
-        type: 'heart-beet',
-        carryable: true,
-        smashable: true,
-        walkable: true,
+        name: 'Cauldron',
+        description: 'For mixing potions',
+        type: 'cauldron',
+        carryable: false,
+        walkable: false,
         interactions: [],
         attributes: [],
         on_tick: []
-      },
+    },
+    {
+        name: "Heartbeet",
+        description: 'Brew potions',
+        type: "heart-beet",
+        walkable: true,
+        carryable: true,
+        interactions: [
+            {
+                description: "Brew red potion",
+                action: "brew",
+                while_carried: true,
+                requires_item: "cauldron"
+            }
+        ],
+        attributes: [
+            {
+                name: "brew_color",
+                value: "#FF0000"
+            },
+            {
+                name: "health",
+                value: 1
+            }
+        ],
+        on_tick: []
+    },
       {
         name: 'Log',
         description: 'test',
@@ -79,17 +111,125 @@ export const commonSetup = () => {
         interactions: [],
         attributes: [],
         on_tick: []
+      },
+      {
+        name: 'Potion stand',
+        description: 'test',
+        type: 'potion-stand',
+        carryable: false,
+        smashable: true,
+        walkable: true,
+        show_price_at: {
+          x: 7,
+          y: -10
+        },
+        interactions: [
+          {
+            description: 'Add $item_name',
+            action: 'add_item',
+            while_carried: false
+          }
+        ],
+        attributes: [
+          {
+            name: 'items',
+            value: 0
+          },
+          {
+            name: 'price',
+            value: 10
+          },
+          {
+            name: 'gold',
+            value: 0
+          },
+          {
+            name: 'health',
+            value: 1
+          }
+        ],
+        on_tick: []
       }
     ],
-    mob_types: [],
-    communities: [],
+    mob_types: [
+      {
+        name: 'Player',
+        description: 'The player',
+        name_style: 'norse-english',
+        type: 'player',
+        health: 100,
+        speed: 2.5,
+        attack: 5,
+        gold: 0,
+        community: 'alchemists',
+        stubbornness: 20,
+        bravery: 5,
+        aggression: 5,
+        industriousness: 40,
+        adventurousness: 10,
+        gluttony: 50,
+        sleepy: 80,
+        extroversion: 50,
+        speaker: true
+      },
+      {
+      name: 'Blob',
+      description: 'A Mob',
+      name_style: 'norse-english',
+      type: 'blob',
+      health: 100,
+      speed: 2.5,
+      attack: 5,
+      gold: 0,
+      community: 'blobs',
+      stubbornness: 20,
+      bravery: 5,
+      aggression: 5,
+      industriousness: 40,
+      adventurousness: 10,
+      gluttony: 50,
+      sleepy: 80,
+      extroversion: 50,
+      speaker: true
+      }
+    ],
+    communities: [
+      { 
+        id: 'alchemists', 
+        name: 'Alchemists guild', 
+        description: "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  
+      },
+      { 
+      id: 'blobs', 
+      name: 'Blobs', 
+      description: "Blobs who run around the map and cause havoc"  
+      }
+    ],
     alliances: [],
     houses: [],
     items: [],
     npcs: [],
     containers: [],
-    regions: []
+    regions: [
+      {
+        id: "elyndra",
+        name: "elyndra",
+        description: "the overall world in which everything exists.",
+        parent: null,
+        concepts: ["concept_elyndra", "concept_elyndra_as_battleground"]
+      },
+      {
+          id: "claw_island",
+          name: "Claw Island",
+          description: "a relatively peaceful island in the Shattered Expanse full of blueberries and heartbeets.",
+          parent: "shattered_expanse",
+          concepts: []
+      }
+    ]
   };
   itemGenerator = new ItemGenerator(worldDescription.item_types);
   world = new ServerWorld(worldDescription);
+  graph = buildGraphFromWorld(worldDescription);
+  intializeTestKnowledgeDB();
+  buildGraph(constructGraph(graph));
 };

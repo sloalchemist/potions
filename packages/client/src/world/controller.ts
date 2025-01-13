@@ -45,6 +45,10 @@ export function setGameState(state: GameState) {
 export function setChatting(chat: boolean) {
   console.log('setChatting', chat);
   chatting = chat;
+  // Allows for rechatting with the same NPC
+  if (!chat) {
+    lastChatCompanions = [];
+  }
 }
 
 export function setResponseCallback(callback: (responses: string[]) => void) {
@@ -91,7 +95,7 @@ function areInteractionsEqual(
   return true;
 }
 
-function areListsEqual(list1: Mob[], list2: Mob[]): boolean {
+export function areListsEqual(list1: Mob[], list2: Mob[]): boolean {
   if (list1.length !== list2.length) {
     return false;
   }
@@ -99,11 +103,12 @@ function areListsEqual(list1: Mob[], list2: Mob[]): boolean {
   return list1.every((item, index) => item.key === list2[index].key);
 }
 
-function mobRangeListener(mobs: Mob[]) {
+export function mobRangeListener(mobs: Mob[]) {
   if (chatCompanionCallback && !chatting) {
     const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastChatCompanions)) {
+      console.log("filter: ", filteredMobs, "last:", lastChatCompanions);
       chatCompanionCallback(filteredMobs);
       lastChatCompanions = filteredMobs;
     }
