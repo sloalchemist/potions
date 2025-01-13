@@ -63,17 +63,18 @@ describe('Fence health bar updates with state', () => {
         expect(fullHealthFence.isBelowMaxHealth()).toBe(false);
         expect(fullHealthFence.calculateHealthPercentage()).toBe(1);
 
-
         const halfHealthFence = new SpriteItem(fenceMaxHealth, fenceMaxHealth / 2);
         expect(halfHealthFence.isBelowMaxHealth()).toBe(true);
         expect(halfHealthFence.calculateHealthPercentage()).toBe(0.5);
 
     });
 
-    test('Health bar constructor', () => {
+    test('Test health bar in sprite_item constructor', () => {
         jest.requireActual('../../src/sprite/sprite_item');
 
-        SpriteItem = jest.fn().mockImplementation((maxHealth: number, health: number, scene: any, itemType: { layoutType: string }) => {
+        SpriteItem = jest.fn().mockImplementation((
+            maxHealth: number, health: number, scene: any, itemType: { layoutType: string }
+        ) => {
             const sprite = {
                 attributes: { health },
                 itemType,
@@ -93,14 +94,14 @@ describe('Fence health bar updates with state', () => {
             return sprite;
         });
 
-
         const mockScene = new (jest.requireMock('phaser').Scene)({ key: 'test' });
         const maxHealth = 100;
+
         const halfHealthFence = new SpriteItem(maxHealth, maxHealth / 2, mockScene, {layoutType: 'fence'});
         expect(halfHealthFence.healthBar).toBeDefined();
         halfHealthFence.updateHealthBar();
         expect(halfHealthFence.healthBar).toBeDefined();
-
+    
         const fullHealthGate = new SpriteItem(maxHealth, maxHealth, mockScene, {layoutType: 'gate'});
         expect(fullHealthGate.healthBar).not.toBeDefined();
         fullHealthGate.updateHealthBar();
