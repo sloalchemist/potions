@@ -21,12 +21,15 @@ export class Carryable {
 
   giveItem(from: Mob, to: Mob): boolean {
     // Check if the recipient mob is already carrying an item
+    // Check if the recipient mob is already carrying an item
     if (to.carrying) {
+        return false;
         return false;
     }
 
     // Check if the two mobs are not allied before allowing the item transfer
     if (Community.isNotAllied(from.community_id, to.community_id)) {
+        console.log("Return False For Give Item");
         return false;
     }
 
@@ -35,9 +38,11 @@ export class Carryable {
     to.carrying = this.item;
 
     // Publish the item transfer event
+    // Publish the item transfer event
     pubSub.giveItem(this.item.id, from.id, to.id);
 
     return true;
+}
 }
 
   pickup(mob: Mob): void {

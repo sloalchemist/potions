@@ -7,6 +7,7 @@ import globalData from '../../data/global.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
+import { initializeKnowledgeDB } from '@rt-potion/converse';
 
 let lastUpdateTime = Date.now();
 let world: ServerWorld;

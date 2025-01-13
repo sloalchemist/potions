@@ -124,7 +124,10 @@ export class LoadWorldScene extends Phaser.Scene {
     });
 
     characterName.on('pointerdown', () => {
-      const userName = window.prompt('Please enter your name:') || '';
+      const userName = window.prompt('Please enter your name:');
+      if (userName === null) {
+        return;
+      }
       const parsedName = parseName(userName);
       if (parsedName) {
         changeName(parsedName);
