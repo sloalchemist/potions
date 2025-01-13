@@ -3,7 +3,7 @@ import { mobFactory } from '../../src/mobs/mobFactory';
 import { Mob } from '../../src/mobs/mob';
 import { DB } from '../../src/services/database';
 import { Community } from '../../src/community/community';
-import { ItemGenerator } from '../../src/items/itemGenerator';
+import { itemGenerator, ItemGenerator } from '../../src/items/itemGenerator';
 import { Smashable } from '../../src/items/smashable';
 import { Item } from '../../src/items/item';
 
@@ -21,20 +21,66 @@ describe('Potion Stand Smashable Tests', () => {
       terrain_types: [],
       item_types: [
         {
-          name: 'Potion Stand',
-          description: 'A stand that sells potions.',
-          type: 'potion-stand',
-          carryable: false,
-          smashable: true,
-          walkable: true,
-          attributes: [
-            { name: 'health', value: 0 }, // To simulate destruction
-            { name: 'gold', value: 50 },
-            { name: 'items', value: 3 }
-          ],
-          interactions: [],
-          on_tick: []
-        }
+            name: 'Potion',
+            description: 'A magical concoction',
+            type: 'potion',
+            subtype: '255',
+            carryable: true,
+            walkable: true,
+            interactions: [],
+            attributes: [],
+            on_tick: []
+          },
+          {
+            name: "Gold",
+            description: "money!!!",
+            type: "gold",
+            walkable: true,
+            smashable: false,
+            carryable: true,
+            interactions: []
+            },
+
+          {
+            name: 'Potion stand',
+            description: 'A stand that sells health potions.',
+            type: 'potion-stand',
+            carryable: false,
+            smashable: true,
+            walkable: true,
+            show_price_at: {
+              x: 7,
+              y: -10
+            },
+
+            subtype: '255',
+            interactions: [
+              {
+                description: 'Add $item_name',
+                action: 'add_item',
+                while_carried: false
+              }
+            ],
+            attributes: [
+              {
+                name: 'items',
+                value: 0
+              },
+              {
+                name: 'price',
+                value: 10
+              },
+              {
+                name: 'gold',
+                value: 50
+              },
+              {
+                name: 'health',
+                value: 0
+              }
+            ],
+            on_tick: []
+          }
       ],
       mob_types: [
         {
@@ -85,7 +131,7 @@ describe('Potion Stand Smashable Tests', () => {
     expect(testMob?.health).toBe(100);
 
     // Create ItemGenerator and Potion Stand
-    const itemGenerator = new ItemGenerator(worldDescription.item_types);
+    ItemGenerator.initialize(worldDescription.item_types);
     itemGenerator.createItem({
       type: 'potion-stand',
       position: potionStandPosition
@@ -115,7 +161,9 @@ describe('Potion Stand Smashable Tests', () => {
     expect(droppedGoldID).not.toBeNull();
 
     const droppedGold = Item.getItem(droppedGoldID!);
-    expect(droppedGold?.type).toBe('gold');
+    console.log(droppedGold);
+    console.log("this is my print" + droppedGold?.type);
+    expect(droppedGold?.type).toBe("gold");
     expect(droppedGold?.getAttribute('amount')).toBe(50);
 
     // Assert items drop
