@@ -5,5 +5,5 @@ export default {
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
-  testMatch: ['**/test/**/*.test.ts'], // Adjust this to match your test directory structure
+  testMatch: ['**/tests/**/*.test.ts'], // Adjust this to match your test directory structure
 };

@@ -1,11 +1,26 @@
-// import { ItemGenerator } from '../../src/items/itemGenerator';
+import { SpriteItem } from '../src/sprite/sprite_item';
+import { Item } from '../src/world/item';
+import { ItemI } from '../../common/src/item';
+//import {} from '../src/scenes/loadWorldScene';
+// import { ItemGenerator } from '../../server/src/items/itemGenerator';
 // import { commonSetup } from '../testSetup';
-// import { DB } from '../../src/services/database';
+// import { DB } from '../../server/src/services/database';
 // import { Item } from '../../src/items/item';
 
-// beforeAll(() => {
-//     commonSetup();
-// });
+describe('Generate fence health bar', () => {
+    test('Fence bar loaded into scene', () => {
+        let fenceItem : ItemI;
+        fenceItem = {
+            id: '1',
+            name: 'fence',
+            type: 'fence',
+            subtype: 'barrier',
+            position: { x:1, y:1 },
+            attributes: { 'name': 'health', 'value': 100}
+        }
+        
+    });
+});
 
 // describe('Generate fence health bar', () => {
 //     test('should generate fence', () => {

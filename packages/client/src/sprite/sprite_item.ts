@@ -326,14 +326,22 @@ export class SpriteItem extends Item {
     this.animate();
   }
 
+  calculateHealthPercentage() {
+    return (Number(this.attributes['health']) / this.maxHealth!);
+  }
+
+  isBelowMaxHealth() {
+    return (Number(this.attributes['health']) < this.maxHealth!);
+  }
+
   updateHealthBar() {
     this.healthBar?.clear();
 
-    if (Number(this.attributes['health']) < this.maxHealth!) {
+    if (this.isBelowMaxHealth()) {
       const barWidth = 40;
       const barHeight = 5;
 
-      const healthPercentage = Number(this.attributes['health']) / this.maxHealth!;
+      const healthPercentage = this.calculateHealthPercentage();
 
       const x = this.sprite.x - barWidth / 2;
       const y = this.sprite.y - 20;
