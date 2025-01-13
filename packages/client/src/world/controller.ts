@@ -123,19 +123,20 @@ function prepInteraction(label: string, item: Item): string {
   }
 }
 
+function getOnTopOf(physicals: Item[], player: SpriteMob): Item[] {
+  const playerCoord = floor(player.position!);
+  return physicals.filter((physical) => {
+    return playerCoord.x === physical.position!.x && physical.position!.y === playerCoord.y;
+  });
+}
+
 function collisionListener(physicals: Item[]) {
   const interactions: Interactions[] = [];
 
   const items: Item[] = [];
   const player = world.mobs[publicCharacterId] as SpriteMob;
 
-  const onTopOf = physicals.filter((physical) => {
-    const playerCoord = floor(player.position!);
-    return (
-      playerCoord.x === physical.position!.x &&
-      physical.position!.y === playerCoord.y
-    );
-  });
+  const onTopOf = getOnTopOf(physicals, player);
 
   let distant = physicals.filter((physical) => {
     return !physical.itemType.walkable;
