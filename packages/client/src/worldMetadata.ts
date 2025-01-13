@@ -41,6 +41,13 @@ export class Character {
     return world.mobs[publicCharacterId].attributes['health'];
   }
 
+  get speed(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].attributes['speed'];
+  }
+
   subtype(): string {
     return `${this.eyeColor}-${this.bellyColor}-${this.furColor}`;
   }
