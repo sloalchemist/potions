@@ -64,17 +64,7 @@ class MobFactory {
     const health = mobType.health;
 
     const house_id = House.findLeastPopulatedHouse(community_id);
-    console.log(
-      "id: ", id,
-      "\ntype: ", type,
-      "\nname: ", name,
-      "\nsubtype: ", subtype,
-      "\ngold: ", gold,
-      "\nhealth: ", health,
-      "\nattack: ", attack,
-      "\nspeed: ", speed,
-      "\ncommunity_id:", community_id
-    )
+
     DB.prepare(
       `
             INSERT INTO mobs
