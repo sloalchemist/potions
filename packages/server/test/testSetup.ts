@@ -5,7 +5,6 @@ import { initializeTestServerDatabase } from '../src/services/database';
 import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
-
 import { buildGraph, constructGraph, Graphable, intializeTestKnowledgeDB } from '@rt-potion/converse';
 import { buildGraphFromWorld } from '../src/generate/socialWorld';
 
@@ -66,16 +65,41 @@ export const commonSetup = () => {
         on_tick: []
       },
       {
-        name: 'Heart Beet',
-        description: 'test',
-        type: 'heart-beet',
-        carryable: true,
-        smashable: true,
-        walkable: true,
+        name: 'Cauldron',
+        description: 'For mixing potions',
+        type: 'cauldron',
+        carryable: false,
+        walkable: false,
         interactions: [],
         attributes: [],
         on_tick: []
-      },
+    },
+    {
+        name: "Heartbeet",
+        description: 'Brew potions',
+        type: "heart-beet",
+        walkable: true,
+        carryable: true,
+        interactions: [
+            {
+                description: "Brew red potion",
+                action: "brew",
+                while_carried: true,
+                requires_item: "cauldron"
+            }
+        ],
+        attributes: [
+            {
+                name: "brew_color",
+                value: "#FF0000"
+            },
+            {
+                name: "health",
+                value: 1
+            }
+        ],
+        on_tick: []
+    },
       {
         name: 'Log',
         description: 'test',
@@ -86,7 +110,7 @@ export const commonSetup = () => {
         interactions: [],
         attributes: [],
         on_tick: []
-      }
+      },
     ],
     mob_types: [
       {
@@ -167,7 +191,6 @@ export const commonSetup = () => {
   itemGenerator = new ItemGenerator(worldDescription.item_types);
   world = new ServerWorld(worldDescription);
   graph = buildGraphFromWorld(worldDescription);
-
   intializeTestKnowledgeDB();
   buildGraph(constructGraph(graph));
 };
