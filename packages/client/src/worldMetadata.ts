@@ -5,6 +5,7 @@ import {
   numberToHexString
 } from './utils/color';
 import { world } from './scenes/worldScene';
+import { setupAbly } from './services/ablySetup';
 
 export let characterId: string;
 export let publicCharacterId: string;
@@ -58,6 +59,12 @@ export async function refresh() {
 }
 
 export async function changeName(name: string) {
+  if (localStorage.getItem('name') !== name) {
+    characterId = uuidv4();
+    publicCharacterId = characterId.substr(0, 8);
+    localStorage.setItem('characterId', characterId);
+    setupAbly();
+  }
   localStorage.setItem('name', name);
   currentCharacter!.name = name;
 }
