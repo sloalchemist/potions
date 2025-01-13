@@ -186,10 +186,6 @@ export function collisionListener(physicals: Item[]) {
       }
       
       item.itemType.interactions.forEach((interaction) => {
-        if (player.carrying){
-          console.log(world.items[player.carrying].itemType.name)
-          console.log(item.attributes.templateType);
-        }
         if (!interaction.while_carried && item.conditionMet(interaction)) {
           if(interaction.action == "add_item" && player.carrying && world.items[player.carrying].itemType.name.localeCompare(item.attributes.templateType.toString()) || interaction.action != "add_item"){
             interactions.push({
