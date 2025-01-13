@@ -18,6 +18,9 @@ describe('Potion Stand Smashable Tests', () => {
       tiles: [
         [1, 1, 1],
         [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
         [1, 1, 1]
       ],
       terrain_types: [{
@@ -70,7 +73,7 @@ describe('Potion Stand Smashable Tests', () => {
             attributes: [
               {
                 name: 'items',
-                value: 0
+                value: 1
               },
               {
                 name: 'price',
