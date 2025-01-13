@@ -1,8 +1,6 @@
 import 'jest-canvas-mock';
 import { ChatButtonManager } from "../src/components/chatButtonManager";
 
-// TODO: add better description, documentation
-
 class MockButton {
     scene: any;
     constructor(scene: any) {
