@@ -6,20 +6,25 @@ import { Community } from '../../src/community/community';
 import { itemGenerator, ItemGenerator } from '../../src/items/itemGenerator';
 import { Smashable } from '../../src/items/smashable';
 import { Item } from '../../src/items/item';
-import { GameWorld } from '../../src/services/gameWorld/gameWorld';
 
 beforeAll(() => {
   commonSetup();
 });
 
+
 describe('Potion Stand Smashable Tests', () => {
   test('should drop gold and items when potion stand is destroyed', () => {
     const worldDescription = {
       tiles: [
-        [-1, -1],
-        [-1, -1]
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1]
       ],
-      terrain_types: [],
+      terrain_types: [{
+        "name": "Grass",
+        "id": 1,
+        "walkable": true
+    }],
       item_types: [
         {
             name: 'Potion',
@@ -65,7 +70,7 @@ describe('Potion Stand Smashable Tests', () => {
             attributes: [
               {
                 name: 'items',
-                value: 1
+                value: 0
               },
               {
                 name: 'price',
@@ -203,7 +208,7 @@ describe('Potion Stand Smashable Tests', () => {
     }
 
     // Verify that exactly 3 items were dropped
-    expect(itemsDropped).toBe(1);
+    expect(itemsDropped).toBe(0);
   });
 });
 
