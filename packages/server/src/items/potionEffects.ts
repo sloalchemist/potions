@@ -8,6 +8,6 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
     return true;
   }
 
-  mob.changeSpeed(10);
+  mob.changeSpeed(2);
   return false;
 }
