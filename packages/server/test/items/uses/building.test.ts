@@ -7,17 +7,15 @@ import { Mob } from '../../../src/mobs/mob';
 import { mobFactory } from '../../../src/mobs/mobFactory';
 import { Pickup } from '../../../src/items/uses/pickup';
 import { Community } from '../../../src/community/community';
-import { buildGraphFromWorld } from '../../../src/generate/socialWorld'
-import {
-  constructGraph
-} from '@rt-potion/converse';
 
 beforeAll(() => {
   commonSetup();
 });
 
 describe('Build wall from partial wall', () => {
-  test('should build wall from partial wall', () => {
+  test('should (1) create mob, partial wall, and log ' +
+  '(2) mob interact with partial wall while carrying log ' +
+  '(3) wall should replace partial wall', () => {
     const worldDescription = {
       tiles: [
         [-1, -1],
@@ -96,15 +94,6 @@ describe('Build wall from partial wall', () => {
           speaker: true
         }
       ],
-      regions: [
-        {
-          id: "claw_island",
-          name: "claw_island",
-          description: "This is claw island",
-          parent: null,
-          concepts: []
-        }
-      ],
       communities: [
         { "id": "alchemists", "name": "Alchemists guild", "description": "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  }
       ],
@@ -114,13 +103,6 @@ describe('Build wall from partial wall', () => {
       containers: []
     };
 
-    // const socialWorld = buildGraphFromWorld(worldDescription);
-    // const graph = constructGraph(socialWorld);
-    // buildAndSaveGraph('data/knowledge-graph-build-test.db', graph)
-
-    //generate world
-    //const itemGenerator = new ItemGenerator(worldDescription.item_types);
-
     ItemGenerator.initialize(worldDescription.item_types)
     
     //create items in desired locations
@@ -129,6 +111,10 @@ describe('Build wall from partial wall', () => {
       type: 'log',
       position: logPos
     });
+    const logId = Item.getItemIDAt(logPos);
+    expect(logId).not.toBeNull();
+    const log = Item.getItem(logId!);
+    expect(log).toBeDefined();
 
     const wallPos = { x: 0, y: 1 };
     itemGenerator.createItem({
@@ -136,24 +122,14 @@ describe('Build wall from partial wall', () => {
       position: wallPos
     });
 
-    const logId = Item.getItemIDAt(logPos);
-    expect(logId).not.toBeNull();
-    const log = Item.getItem(logId!);
-
-
     mobFactory.loadTemplates(worldDescription.mob_types);
-    
     Community.makeVillage("alchemists", "Alchemists guild");
-    mobFactory.makeMob('player', { x: 1, y: 0 }, '1234', 'testPlayer1');
 
+    mobFactory.makeMob('player', { x: 1, y: 0 }, '1234', 'testPlayer1');
     const mob = Mob.getMob('1234');
     expect(mob).toBeInstanceOf(Mob);
-
     expect(mob).toBeDefined();
     expect(log).toBeDefined();
-
-    //console.log(mob)
-    //console.log(log)
 
     if (mob && log) {
       const pickup = new Pickup();
@@ -161,11 +137,9 @@ describe('Build wall from partial wall', () => {
       
       //check that the mob is carrying something
       expect(mob.carrying).toBeDefined();
-      //console.log("mob.carrying: ", mob.carrying);
 
+      //interact with partial wall to create wall
       const buildWall = new BuildWall();
-
-      //console.log("log: ", log);
       const wallInteract = buildWall.interact(mob, log);
       expect(wallInteract).toBeTruthy();
 
