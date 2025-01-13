@@ -1,10 +1,17 @@
-import { ChatContainer } from "../src/components/chatContainer";
-import { commonSetup } from "../../server/test/testSetup";
+import 'jest-canvas-mock';
+import { ChatButtonManager } from "../src/components/chatButtonManager";
 
-// not sure if this is needed ..? 
-// beforeAll(() => {
-  //  commonSetup('data/fantasydate.test.db');
-  // });
+class MockButton {
+    scene: any;
+    constructor(scene: any) {
+      this.scene = scene;
+    }
+  
+    destroy() {
+      // Mock the destroy method
+      jest.fn();
+    }
+  }
 
 describe('Clear Chat Tests', () => {
     test('chat options should be cleared after death', () => {

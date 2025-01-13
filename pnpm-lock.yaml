@@ -10,8 +10,12 @@ importers:
     devDependencies:
       eslint:
 <<<<<<< HEAD
+<<<<<<< HEAD
         specifier: ^9.18.0
         version: 9.18.0
+=======
+        specifier: ^9.17.0
+        version: 9.17.0
       jest-environment-jsdom:
         specifier: ^29.7.0
         version: 29.7.0
@@ -131,7 +135,11 @@ importers:
       jest:
         specifier: ^29.7.0
 <<<<<<< HEAD
+<<<<<<< HEAD
         version: 29.7.0(@types/node@22.10.5)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.3))
+=======
+        version: 29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2))
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
 =======
         version: 29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2))
 >>>>>>> f0b1ffc (fix: remove yarn file from root)
@@ -141,7 +149,14 @@ importers:
       jest-environment-jsdom:
         specifier: ^29.7.0
 <<<<<<< HEAD
+<<<<<<< HEAD
         version: 29.7.0(canvas@3.0.1)
+=======
+        version: 29.7.0
+      phaser3spectorjs:
+        specifier: ^0.0.8
+        version: 0.0.8
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
 =======
         version: 29.7.0
       phaser3spectorjs:
@@ -1271,9 +1286,12 @@ packages:
     resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
     deprecated: Use your platform's native atob() and btoa() methods instead
 
+<<<<<<< HEAD
   abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
 
+=======
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
   ably@1.2.50:
     resolution: {integrity: sha512-9uC5lE7wFBR7nOJdltArHU1UDaBu6CTMbMuie+brUuH884fM1mQuFiMzZetxVacygyUG38dp5MFOyOPF9h0RsQ==}
     engines: {node: '>=5.10.x'}
@@ -1766,8 +1784,13 @@ packages:
     resolution: {integrity: sha512-AZL67abkUzIuvcHqk7c09cezpGNcxUxU4Ioi/05xHk4DQeTkWmGYftIE6ctU6AEt+Gn4n1lDStOtj7FKycP71A==}
     engines: {node: '>=8'}
 
+<<<<<<< HEAD
   cssstyle@4.2.1:
     resolution: {integrity: sha512-9+vem03dMXG7gDmZ62uqmRiMRNtinIZ9ZyuF6BdxzfOD+FdN5hretzynkn0ReS2DO2GSw76RWHs0UmJPI2zUjw==}
+=======
+  cssstyle@4.1.0:
+    resolution: {integrity: sha512-h66W1URKpBS5YMI/V8PyXvTMFT8SupJ1IzoIV8IeBC/ji8WVmrO8dGlTi+2dh6whmdk6BiKJLD/ZBkhWbcg6nA==}
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
 =======
   cssstyle@4.1.0:
     resolution: {integrity: sha512-h66W1URKpBS5YMI/V8PyXvTMFT8SupJ1IzoIV8IeBC/ji8WVmrO8dGlTi+2dh6whmdk6BiKJLD/ZBkhWbcg6nA==}
@@ -3076,11 +3099,14 @@ packages:
   mkdirp-classic@0.5.3:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
 
+<<<<<<< HEAD
   mkdirp@1.0.4:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
     engines: {node: '>=10'}
     hasBin: true
 
+=======
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
   moo-color@1.0.3:
     resolution: {integrity: sha512-i/+ZKXMDf6aqYtBhuOcej71YSlbjT3wCO/4H1j8rPvxDJEifdwgg5MaFyu6iYAT8GBZJg2z0dkgK4YMzvURALQ==}
 
@@ -3327,6 +3353,9 @@ packages:
   path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
+
+  phaser3spectorjs@0.0.8:
+    resolution: {integrity: sha512-0dSO7/aMjEUPrp5EcjRvRRsEf+jXDbmzalPeJ6VtTB2Pn1PeaKc+qlL/DmO3l1Dvc5lkzc+Sil1Ta+Hkyi5cbA==}
 
   phaser3spectorjs@0.0.8:
     resolution: {integrity: sha512-0dSO7/aMjEUPrp5EcjRvRRsEf+jXDbmzalPeJ6VtTB2Pn1PeaKc+qlL/DmO3l1Dvc5lkzc+Sil1Ta+Hkyi5cbA==}
@@ -4556,6 +4585,41 @@ snapshots:
       - supports-color
       - ts-node
 
+  '@jest/core@29.7.0(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2))':
+    dependencies:
+      '@jest/console': 29.7.0
+      '@jest/reporters': 29.7.0
+      '@jest/test-result': 29.7.0
+      '@jest/transform': 29.7.0
+      '@jest/types': 29.6.3
+      '@types/node': 20.17.10
+      ansi-escapes: 4.3.2
+      chalk: 4.1.2
+      ci-info: 3.9.0
+      exit: 0.1.2
+      graceful-fs: 4.2.11
+      jest-changed-files: 29.7.0
+      jest-config: 29.7.0(@types/node@20.17.10)(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2))
+      jest-haste-map: 29.7.0
+      jest-message-util: 29.7.0
+      jest-regex-util: 29.6.3
+      jest-resolve: 29.7.0
+      jest-resolve-dependencies: 29.7.0
+      jest-runner: 29.7.0
+      jest-runtime: 29.7.0
+      jest-snapshot: 29.7.0
+      jest-util: 29.7.0
+      jest-validate: 29.7.0
+      jest-watcher: 29.7.0
+      micromatch: 4.0.8
+      pretty-format: 29.7.0
+      slash: 3.0.0
+      strip-ansi: 6.0.1
+    transitivePeerDependencies:
+      - babel-plugin-macros
+      - supports-color
+      - ts-node
+
   '@jest/environment@29.7.0':
     dependencies:
       '@jest/fake-timers': 29.7.0
@@ -5131,7 +5195,11 @@ snapshots:
   /@types/jsdom@20.0.1:
     resolution: {integrity: sha512-d0r18sZPmMQr1eG35u12FZfhIXNrnsPU/g5wvRKCUf/tOGilKKwYMYGqh33BNR6ba+2gkHw1EUiHoN3mn7E5IQ==}
     dependencies:
+<<<<<<< HEAD
       '@types/node': 20.17.12
+=======
+      '@types/node': 20.17.10
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
       '@types/tough-cookie': 4.0.5
       parse5: 7.2.1
     dev: true
@@ -5485,9 +5553,12 @@ snapshots:
 
   abab@2.0.6: {}
 
+<<<<<<< HEAD
   abbrev@1.1.1:
     optional: true
 
+=======
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
   ably@1.2.50:
     dependencies:
       '@ably/msgpack-js': 0.4.0
@@ -6239,6 +6310,21 @@ snapshots:
       chalk: 4.1.2
       exit: 0.1.2
       graceful-fs: 4.2.11
+      jest-config: 29.7.0(@types/node@22.10.5)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.3))
+      jest-util: 29.7.0
+      prompts: 2.4.2
+    transitivePeerDependencies:
+      - '@types/node'
+      - babel-plugin-macros
+      - supports-color
+      - ts-node
+
+  create-jest@29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2)):
+    dependencies:
+      '@jest/types': 29.6.3
+      chalk: 4.1.2
+      exit: 0.1.2
+      graceful-fs: 4.2.11
       jest-config: 29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2))
       jest-util: 29.7.0
       prompts: 2.4.2
@@ -6263,9 +6349,20 @@ snapshots:
   cssom@0.5.0: {}
 
   cssstyle@2.3.0:
+<<<<<<< HEAD
+=======
     dependencies:
-      rrweb-cssom: 0.7.1
-    dev: false
+      cssom: 0.3.8
+
+  cssstyle@4.1.0:
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
+    dependencies:
+      cssom: 0.3.8
+
+  cssstyle@4.2.1:
+    dependencies:
+      '@asamuzakjp/css-color': 2.8.2
+      rrweb-cssom: 0.8.0
 
   data-urls@3.0.2:
     dependencies:
@@ -6273,9 +6370,13 @@ snapshots:
       whatwg-mimetype: 3.0.0
       whatwg-url: 11.0.0
 
-  /data-urls@5.0.0:
-    resolution: {integrity: sha512-ZYP5VBHshaDAiVZxjbRVcFJpc+4xGgT0bK3vzy1HLN8jTO975HEbuYzZJcHoQEY5K1a0z8YayJkyVETa08eNTg==}
-    engines: {node: '>=18'}
+  data-urls@3.0.2:
+    dependencies:
+      abab: 2.0.6
+      whatwg-mimetype: 3.0.0
+      whatwg-url: 11.0.0
+
+  data-urls@5.0.0:
     dependencies:
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.1.0
@@ -7709,6 +7810,18 @@ snapshots:
       import-local: 3.2.0
       jest-config: 29.7.0(@types/node@22.10.5)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.3))
 =======
+<<<<<<< HEAD
+  jest-cli@29.7.0(@types/node@22.10.5)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.3)):
+    dependencies:
+      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2))
+      '@jest/test-result': 29.7.0
+      '@jest/types': 29.6.3
+      chalk: 4.1.2
+      create-jest: 29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2))
+      exit: 0.1.2
+      import-local: 3.2.0
+      jest-config: 29.7.0(@types/node@22.10.5)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.3))
+=======
   jest-cli@29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2)):
     dependencies:
       '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2))
@@ -7720,6 +7833,7 @@ snapshots:
       import-local: 3.2.0
       jest-config: 29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2))
 >>>>>>> f0b1ffc (fix: remove yarn file from root)
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
       jest-util: 29.7.0
       jest-validate: 29.7.0
       yargs: 17.7.2
@@ -7729,6 +7843,9 @@ snapshots:
       - supports-color
       - ts-node
 
+<<<<<<< HEAD
+  jest-config@29.7.0(@types/node@20.17.12)(ts-node@10.9.2(@types/node@20.17.12)(typescript@5.7.3)):
+=======
 <<<<<<< HEAD
   jest-config@29.7.0(@types/node@20.17.12)(ts-node@10.9.2(@types/node@20.17.12)(typescript@5.7.3)):
 =======
@@ -7816,7 +7933,6 @@ snapshots:
       '@babel/core': 7.26.0
       '@jest/test-sequencer': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 22.10.5
       babel-jest: 29.7.0(@babel/core@7.26.0)
       chalk: 4.1.2
       ci-info: 3.9.0
@@ -7836,14 +7952,45 @@ snapshots:
       pretty-format: 29.7.0
       slash: 3.0.0
       strip-json-comments: 3.1.1
+    optionalDependencies:
+      '@types/node': 20.17.10
+      ts-node: 10.9.2(@types/node@22.10.2)(typescript@5.7.2)
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
-    dev: true
 
-  /jest-diff@29.7.0:
-    resolution: {integrity: sha512-LMIgiIrhigmPrs03JHpxUh2yISK3vLFPkAodPeo0+BuF7wA2FoQbkEg1u8gBYBThncu7e1oEDUfIXVuTqLRUjw==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+  jest-config@29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2)):
+    dependencies:
+      '@babel/core': 7.26.0
+      '@jest/test-sequencer': 29.7.0
+      '@jest/types': 29.6.3
+      babel-jest: 29.7.0(@babel/core@7.26.0)
+      chalk: 4.1.2
+      ci-info: 3.9.0
+      deepmerge: 4.3.1
+      glob: 7.2.3
+      graceful-fs: 4.2.11
+      jest-circus: 29.7.0
+      jest-environment-node: 29.7.0
+      jest-get-type: 29.6.3
+      jest-regex-util: 29.6.3
+      jest-resolve: 29.7.0
+      jest-runner: 29.7.0
+      jest-util: 29.7.0
+      jest-validate: 29.7.0
+      micromatch: 4.0.8
+      parse-json: 5.2.0
+      pretty-format: 29.7.0
+      slash: 3.0.0
+      strip-json-comments: 3.1.1
+    optionalDependencies:
+      '@types/node': 22.10.2
+      ts-node: 10.9.2(@types/node@22.10.2)(typescript@5.7.2)
+    transitivePeerDependencies:
+      - babel-plugin-macros
+      - supports-color
+
+  jest-diff@29.7.0:
     dependencies:
       chalk: 4.1.2
       diff-sequences: 29.6.3
@@ -7868,14 +8015,29 @@ snapshots:
       jest-util: 29.7.0
       pretty-format: 29.7.0
 
+<<<<<<< HEAD
   jest-environment-jsdom@29.7.0(canvas@3.0.1):
+=======
+  jest-environment-jsdom@29.7.0:
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
     dependencies:
       '@jest/environment': 29.7.0
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
       '@types/jsdom': 20.0.1
+<<<<<<< HEAD
       '@types/node': 20.17.12
+      jest-mock: 29.7.0
+      jest-util: 29.7.0
+      jsdom: 20.0.3(canvas@3.0.1)
+    optionalDependencies:
       canvas: 3.0.1
+=======
+      '@types/node': 20.17.10
+      jest-mock: 29.7.0
+      jest-util: 29.7.0
+      jsdom: 20.0.3
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -8199,45 +8361,19 @@ snapshots:
 
   jest@29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2)):
     dependencies:
-      '@jest/core': 29.7.0(ts-node@10.9.2)
+      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@22.10.2)(typescript@5.7.2))
       '@jest/types': 29.6.3
       import-local: 3.2.0
-      jest-cli: 29.7.0(@types/node@20.17.12)(ts-node@10.9.2)
+      jest-cli: 29.7.0(@types/node@22.10.5)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.3))
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
       - supports-color
       - ts-node
-    dev: true
 
-  /jest@29.7.0(@types/node@22.10.5):
-    resolution: {integrity: sha512-NIy3oAFp9shda19hy4HK0HRTWKtPJmGdnvywu01nOqNC2vZg+Z+fvJDxpMQA88eb2I9EcafcdjYgsDthnYTvGw==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    hasBin: true
-    peerDependencies:
-      node-notifier: ^8.0.1 || ^9.0.0 || ^10.0.0
-    peerDependenciesMeta:
-      node-notifier:
-        optional: true
-    dependencies:
-      '@jest/core': 29.7.0(ts-node@10.9.2)
-      '@jest/types': 29.6.3
-      import-local: 3.2.0
-      jest-cli: 29.7.0(@types/node@22.10.5)
-    transitivePeerDependencies:
-      - '@types/node'
-      - babel-plugin-macros
-      - supports-color
-      - ts-node
-    dev: true
+  js-tokens@4.0.0: {}
 
-  /js-tokens@4.0.0:
-    resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
-    dev: true
-
-  /js-yaml@3.14.1:
-    resolution: {integrity: sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==}
-    hasBin: true
+  js-yaml@3.14.1:
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
@@ -8249,9 +8385,81 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
+<<<<<<< HEAD
   jsdom@20.0.3(canvas@3.0.1):
+=======
+  jsdom@20.0.3:
     dependencies:
-      cssstyle: 4.1.0
+      abab: 2.0.6
+      acorn: 8.14.0
+      acorn-globals: 7.0.1
+      cssom: 0.5.0
+      cssstyle: 2.3.0
+      data-urls: 3.0.2
+      decimal.js: 10.4.3
+      domexception: 4.0.0
+      escodegen: 2.1.0
+      form-data: 4.0.1
+      html-encoding-sniffer: 3.0.0
+      http-proxy-agent: 5.0.0
+      https-proxy-agent: 5.0.1
+      is-potential-custom-element-name: 1.0.1
+      nwsapi: 2.2.16
+      parse5: 7.2.1
+      saxes: 6.0.0
+      symbol-tree: 3.2.4
+      tough-cookie: 4.1.4
+      w3c-xmlserializer: 4.0.0
+      webidl-conversions: 7.0.0
+      whatwg-encoding: 2.0.0
+      whatwg-mimetype: 3.0.0
+      whatwg-url: 11.0.0
+      ws: 8.18.0
+      xml-name-validator: 4.0.0
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  jsdom@24.1.3:
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
+    dependencies:
+      abab: 2.0.6
+      acorn: 8.14.0
+      acorn-globals: 7.0.1
+      cssom: 0.5.0
+      cssstyle: 2.3.0
+      data-urls: 3.0.2
+      decimal.js: 10.4.3
+      domexception: 4.0.0
+      escodegen: 2.1.0
+      form-data: 4.0.1
+      html-encoding-sniffer: 3.0.0
+      http-proxy-agent: 5.0.0
+      https-proxy-agent: 5.0.1
+      is-potential-custom-element-name: 1.0.1
+      nwsapi: 2.2.16
+      parse5: 7.2.1
+      saxes: 6.0.0
+      symbol-tree: 3.2.4
+      tough-cookie: 4.1.4
+      w3c-xmlserializer: 4.0.0
+      webidl-conversions: 7.0.0
+      whatwg-encoding: 2.0.0
+      whatwg-mimetype: 3.0.0
+      whatwg-url: 11.0.0
+      ws: 8.18.0
+      xml-name-validator: 4.0.0
+    optionalDependencies:
+      canvas: 3.0.1
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  jsdom@24.1.3(canvas@2.11.2):
+    dependencies:
+      cssstyle: 4.2.1
       data-urls: 5.0.0
       decimal.js: 10.4.3
       form-data: 4.0.1
@@ -8583,9 +8791,12 @@ snapshots:
 
   mkdirp-classic@0.5.3: {}
 
+<<<<<<< HEAD
   mkdirp@1.0.4:
     optional: true
 
+=======
+>>>>>>> f0b1ffc (fix: remove yarn file from root)
   moo-color@1.0.3:
     dependencies:
       color-name: 1.1.4
@@ -8908,12 +9119,9 @@ snapshots:
 
   phaser3spectorjs@0.0.8: {}
 
-  /phaser3spectorjs@0.0.8:
-    resolution: {integrity: sha512-0dSO7/aMjEUPrp5EcjRvRRsEf+jXDbmzalPeJ6VtTB2Pn1PeaKc+qlL/DmO3l1Dvc5lkzc+Sil1Ta+Hkyi5cbA==}
-    dev: true
+  phaser3spectorjs@0.0.8: {}
 
-  /phaser@3.87.0:
-    resolution: {integrity: sha512-AyI1b3T5fp05gzf6WUmu2FNqaZL+Y7w88yBRLf7YZXF9bncUSHpnDrupnTGoPqy/RKHRLBcay7zWeqQ2wiMWcw==}
+  phaser@3.87.0:
     dependencies:
       eventemitter3: 5.0.1
     dev: false
