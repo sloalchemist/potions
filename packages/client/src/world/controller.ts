@@ -182,11 +182,22 @@ function collisionListener(physicals: Item[]) {
 
       item.itemType.interactions.forEach((interaction) => {
         if (!interaction.while_carried && item.conditionMet(interaction)) {
-          interactions.push({
-            action: interaction.action,
-            item: item,
-            label: prepInteraction(interaction.description, item)
-          });
+          if (interaction.requires_item) {
+            const carry = player.carrying ? world.items[player.carrying] as SpriteItem : null
+            if (carry && carry.itemType.type === interaction.requires_item) {
+              interactions.push({
+                action: interaction.action,
+                item: item,
+                label: prepInteraction(interaction.description, item)
+              });
+            }
+          } else{
+            interactions.push({
+              action: interaction.action,
+              item: item,
+              label: prepInteraction(interaction.description, item)
+            });
+          }
         }
       });
       items.push(item);
