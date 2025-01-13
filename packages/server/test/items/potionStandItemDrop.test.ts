@@ -15,19 +15,17 @@ beforeAll(() => {
 describe('Potion Stand Smashable Tests', () => {
   test('should drop gold and items when potion stand is destroyed', () => {
     const worldDescription = {
-      tiles: [
-        [1, 1, 1],
-        [1, 1, 1],
-        [1, 1, 1],
-        [1, 1, 1],
-        [1, 1, 1],
-        [1, 1, 1]
-      ],
-      terrain_types: [{
-        "name": "Grass",
-        "id": 1,
-        "walkable": true
-    }],
+        tiles: [
+            [1, 1],
+            [1, 1]
+          ],
+          terrain_types: [
+              {
+                "name": "Grass",
+                "id": 1,
+                "walkable": true
+            }
+          ],
       item_types: [
         {
             name: 'Potion',
