@@ -1,14 +1,14 @@
 import { Button } from './button';
 
 export class ChatButtonManager {
-    chatButtons: any[];
+    chatButtons: Button[]
     constructor(
-        chatButtons: any[]
+        chatButtons: Button[]
    ) {
        this.chatButtons = chatButtons;
    }
 
-   push(object: any) {
+   push(object: Button) {
         this.chatButtons.push(object);
    }
 
