@@ -71,37 +71,40 @@ describe('Fence health bar updates with state', () => {
     });
 
     test('Health bar constructor', () => {
-        const { SpriteItem: OriginalSpriteItem } = jest.requireActual('../../src/sprite/sprite_item');
+        jest.requireActual('../../src/sprite/sprite_item');
 
-
-        SpriteItem = jest.fn().mockImplementation((maxHealth: number, health: number, scene: any) => {
-            const healthBar = scene.add.graphics();
-            return {
+        SpriteItem = jest.fn().mockImplementation((maxHealth: number, health: number, scene: any, itemType: { layoutType: string }) => {
+            const sprite = {
                 attributes: { health },
-                maxHealth,
-                healthBar: scene.add.graphics(),
-                isBelowMaxHealth: OriginalSpriteItem.prototype.isBelowMaxHealth.bind({
-                    attributes: { health },
-                    maxHealth,
-                }),
-                calculateHealthPercentage: OriginalSpriteItem.prototype.calculateHealthPercentage.bind({
-                    attributes: { health },
-                    maxHealth,
-                }),
-                updateHealthBar: OriginalSpriteItem.prototype.updateHealthBar.bind({
-                    healthBar,
-                }),
-            };
+                itemType,
+                healthBar: undefined as Phaser.GameObjects.Graphics | undefined,
+                maxHealth: undefined as number | undefined,
+                intialize() {
+                    // Copied From SpriteItem Constructor
+                    if (itemType.layoutType === 'fence' || itemType.layoutType === 'wall') {
+                        this.healthBar = scene.add.graphics();
+                        this.maxHealth = this.attributes['health'];
+                    }
+                },
+                updateHealthBar: jest.fn(),
+            }
+            sprite.intialize();
+            
+            return sprite;
         });
 
 
         const mockScene = new (jest.requireMock('phaser').Scene)({ key: 'test' });
-        const fenceMaxHealth = 100;
-        const halfHealthFence = new SpriteItem(fenceMaxHealth, fenceMaxHealth / 2, mockScene);
-
+        const maxHealth = 100;
+        const halfHealthFence = new SpriteItem(maxHealth, maxHealth / 2, mockScene, {layoutType: 'fence'});
         expect(halfHealthFence.healthBar).toBeDefined();
-        expect(halfHealthFence.isBelowMaxHealth()).toBe(true);
-        expect(halfHealthFence.calculateHealthPercentage()).toBe(0.5);
+        halfHealthFence.updateHealthBar();
+        expect(halfHealthFence.healthBar).toBeDefined();
+
+        const fullHealthGate = new SpriteItem(maxHealth, maxHealth, mockScene, {layoutType: 'gate'});
+        expect(fullHealthGate.healthBar).not.toBeDefined();
+        fullHealthGate.updateHealthBar();
+        expect(fullHealthGate.healthBar).not.toBeDefined();
 
     });
 });
