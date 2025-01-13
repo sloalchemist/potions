@@ -10,7 +10,7 @@ describe('Fence health bar updates with state', () => {
         jest.resetModules();
         jest.clearAllMocks();
     
-        const { SpriteItem: OriginalSpriteItem } = jest.requireActual('../src/sprite/sprite_item');
+        const { SpriteItem: OriginalSpriteItem } = jest.requireActual('../../src/sprite/sprite_item');
 
         SpriteItem = jest.fn().mockImplementation((maxHealth: number, health: number) => {
             return {
