@@ -28,24 +28,24 @@ describe('Clear Chat Tests', () => {
       };
 
     test('test 1', () => {
-      let chatDeleter = new ChatButtonManager([])
+      let chatManager = new ChatButtonManager([])
       const mockButton1 = new MockButton(mockScene);
       const mockButton2 = new MockButton(mockScene);
 
       jest.spyOn(mockButton1, 'destroy');
       jest.spyOn(mockButton2, 'destroy');
 
-      chatDeleter.push(mockButton1);
-      chatDeleter.push(mockButton2);
+      chatManager.push(mockButton1);
+      chatManager.push(mockButton2);
 
-      expect(chatDeleter.chatButtons.length).toEqual(2);
+      expect(chatManager.chatButtons.length).toEqual(2);
 
-      chatDeleter.clearChatOptions();
+      chatManager.clearChatOptions();
 
       expect(mockButton1.destroy).toHaveBeenCalled();
       expect(mockButton2.destroy).toHaveBeenCalled();
         
-      expect(chatDeleter.chatButtons.length).toEqual(0);
+      expect(chatManager.chatButtons.length).toEqual(0);
     });
 });
 
