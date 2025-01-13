@@ -30,7 +30,6 @@ export class Mob extends Physical {
     this.maxHealth = maxHealth;
 
     if (position) {
-      console.log('Adding mob to grid', this.key, this.position);
       world.addMobToGrid(this);
     }
 
