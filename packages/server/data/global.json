@@ -342,7 +342,7 @@
             "type": "potion-stand",
             "carryable": false,
             "smashable": true,
-            "walkable": true,
+            "walkable": false,
             "attributes": [
                 {
                     "name": "items",
@@ -501,7 +501,7 @@
             "description": "For mixing potions",
             "type": "cauldron",
             "carryable": false,
-            "walkable": true,
+            "walkable": false,
             "interactions": []
         },
         {
