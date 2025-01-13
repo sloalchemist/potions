@@ -361,7 +361,7 @@ export class Mob {
   changeSpeed(amount: number) {
     if (amount === 0) return;
     let newSpeed = this.speed + amount;
-    if (newSpeed < 10) newSpeed = 10;
+    if (newSpeed < 1) newSpeed = 1;
     DB.prepare(
       `
             UPDATE mobs
