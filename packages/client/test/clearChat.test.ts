@@ -1,29 +1,53 @@
-import { ChatContainer } from "../src/components/chatContainer";
-import { Button, BUTTON_HEIGHT, BUTTON_WIDTH } from "../src/components/button";
-import { Scene } from "phaser";
+import 'jest-canvas-mock';
+import { ChatButtonManager } from "../src/components/chatButtonManager";
 
 // TODO: add better description, documentation
+
+class MockButton {
+    scene: any;
+    constructor(scene: any) {
+      this.scene = scene;
+    }
+  
+    destroy() {
+      // Mock the destroy method
+      jest.fn();
+    }
+  }
+
 describe('Clear Chat Tests', () => {
+
+    const mockScene = {
+        add: {
+          sprite: jest.fn(),
+        },
+        input: {
+          keyboard: {
+            createCursorKeys: jest.fn(),
+          },
+        },
+        // Add any other dependencies needed by your Button class
+      };
+
     test('test 1', () => {
-      let scene = new Scene();
-      let chatContainer = new ChatContainer(scene, 0, 40);
+      let chatDeleter = new ChatButtonManager([])
+      const mockButton1 = new MockButton(mockScene);
+      const mockButton2 = new MockButton(mockScene);
 
-      let button1 = new Button(scene, 0, 20, true, "Player 1", () =>
-        console.log("Button for Player 1"), BUTTON_WIDTH, BUTTON_HEIGHT
-      );
+      jest.spyOn(mockButton1, 'destroy');
+      jest.spyOn(mockButton2, 'destroy');
 
-      let button2 = new Button(scene, 0, 20, true, "Player 1", () =>
-        console.log("Button for Player 1"), BUTTON_WIDTH, BUTTON_HEIGHT
-      );
+      chatDeleter.push(mockButton1);
+      chatDeleter.push(mockButton2);
 
-      chatContainer.add(button1);
-      chatContainer.add(button2);
+      expect(chatDeleter.chatButtons.length).toEqual(2);
 
-      expect(chatContainer.getAll()).toEqual([button1, button2]);
-      
-      chatContainer.clearChatOptions([button1, button2]);
+      chatDeleter.clearChatOptions();
 
-      expect(chatContainer.getAll()).toEqual([]);
+      expect(mockButton1.destroy).toHaveBeenCalled();
+      expect(mockButton2.destroy).toHaveBeenCalled();
+        
+      expect(chatDeleter.chatButtons.length).toEqual(0);
     });
 });
 
