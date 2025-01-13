@@ -6,6 +6,8 @@ import { Community } from '../../src/community/community';
 import { buildAndSaveGraph, constructGraph, initialize } from '@rt-potion/converse';
 import { ItemGenerator } from '../../src/items/itemGenerator';
 import { Item } from '../../src/items/item';
+import { Item as ClientItem } from '../../../client/src/world/item';
+import { World } from '../../../client/src/world/world';
 
 beforeAll(() => {
   commonSetup("cauldronBrewable");
@@ -21,7 +23,11 @@ describe('Create cauldron and see if still brewable', () => {
           [0, 0],
           [0, 0]
         ],
-        terrain_types: [],
+        terrain_types: [{
+            name: "dirt",
+            id: 0,
+            walkable: true
+        }],
         item_types: [
             {
                 name: 'Cauldron',
@@ -121,12 +127,12 @@ describe('Create cauldron and see if still brewable', () => {
         "testPlayer"
       );
       const itemGenerator = new ItemGenerator(worldDescription.item_types);
-      const cposition = { x: 0, y: 0 };
-      itemGenerator.createItem({
-          type: 'cauldron',
-          position: cposition
-      });
-      const hposition = { x: 1, y: 0 };
+    //   const cposition = { x: 0, y: 0 };
+    //   itemGenerator.createItem({
+    //       type: 'cauldron',
+    //       position: cposition
+    //   });
+      const hposition = { x: 0, y: 1 };
       itemGenerator.createItem({
         type: 'heart-beet',
         position: hposition
@@ -138,14 +144,14 @@ describe('Create cauldron and see if still brewable', () => {
     if (!testMob) {
         throw new Error('No mob found');
     }
-    const cauldronID = Item.getItemIDAt(cposition);
-    if (!cauldronID) {
-        throw new Error(`No item found at position ${cposition}`);
-    }
-    const cauldron = Item.getItem(cauldronID);
-    if (!cauldron) {
-        throw new Error(`No item found with ID ${cauldronID}`);
-    }
+    // const cauldronID = Item.getItemIDAt(cposition);
+    // if (!cauldronID) {
+    //     throw new Error(`No item found at position ${cposition}`);
+    // }
+    // const cauldron = Item.getItem(cauldronID);
+    // if (!cauldron) {
+    //     throw new Error(`No item found with ID ${cauldronID}`);
+    // }
 
     const heartID = Item.getItemIDAt(hposition);
     if (!heartID) {
@@ -155,8 +161,40 @@ describe('Create cauldron and see if still brewable', () => {
     if (!heart) {
         throw new Error(`No item found with ID ${heartID}`);
     }
-    heart.
-    expect(testMob.carrying).toBeDefined();
+    
+    const itemType = {
+        name: "Heartbeet",
+        description: 'Brew potions',
+        type: "heart-beet",
+        walkable: true,
+        carryable: true,
+        interactions: [
+            {
+                description: "Brew red potion",
+                action: "brew",
+                while_carried: true,
+                requires_item: "cauldron"
+            }
+        ],
+        attributes: [
+            {
+                name: "brew_color",
+                value: "#FF0000"
+            },
+            {
+                name: "health",
+                value: 1
+            }
+        ],
+        on_tick: []
+      }
+    
+    const world = new World();
+    world.load(worldDescription);
+    const newItem = new ClientItem(world, "key", hposition, itemType);
+    console.log(itemType.interactions[0]);
+    testMob.co
+    console.log(condition);
   });
 });
 
