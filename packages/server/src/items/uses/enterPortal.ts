@@ -12,7 +12,7 @@ export class EnterPortal implements Use {
     return 'Enter portal';
   }
 
-  interact(mob: Mob, _item: Item): boolean {
+  interact(_mob: Mob, _item: Item): boolean {
     return false; //originally set to true to allow possible future entry into the portal 
   }
 }
