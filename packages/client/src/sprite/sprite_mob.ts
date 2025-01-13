@@ -128,7 +128,7 @@ export class SpriteMob extends Mob {
         this.sprite.x,
         this.sprite.y + TEXT_PLACEMENT_TO_SPRITE_OFFSET,
         mob.doing!,
-        { fontFamily: 'Arial', fontSize: '10px', color: '#FFFFFF' }
+        { fontFamily: 'Arial', fontSize: '12px', color: '#000000' }
       )
       .setOrigin(0.5);
     this.doingText.setDepth(1);
