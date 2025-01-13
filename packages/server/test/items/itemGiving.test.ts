@@ -1,17 +1,14 @@
-import { commonSetup, graph } from '../testSetup';
+import { commonSetup } from '../testSetup';
 import { ItemGenerator } from '../../src/items/itemGenerator';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Mob } from '../../src/mobs/mob';
 import { DB } from '../../src/services/database';
 import { Community } from '../../src/community/community';
-import { buildAndSaveGraph, constructGraph, initialize } from '@rt-potion/converse';
 import { Carryable } from '../../src/items/carryable';
 import { Item } from '../../src/items/item';
 
 beforeAll(() => {
-  commonSetup("../server/data/itemGivingtest.db");
-  buildAndSaveGraph('../converse/data/test.db', constructGraph(graph));
-  initialize('../converse/data/test.db');
+  commonSetup();
 });
 
 describe('Create 2 unallied mobs and try to give item from one to another', () => {

@@ -8,6 +8,7 @@ import {
 import { setupAbly } from '../services/ablySetup';
 import { setGameState } from '../world/controller';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
+import { parseName } from '../utils/validators';
 
 const buttonStyle = {
   fontSize: '24px',
@@ -124,9 +125,17 @@ export class LoadWorldScene extends Phaser.Scene {
 
     characterName.on('pointerdown', () => {
       const userName = window.prompt('Please enter your name:');
-      if (userName && userName.trim() !== '') {
-        changeName(userName);
-        characterName.setText(userName);
+      if (userName === null) {
+        return;
+      }
+      const parsedName = parseName(userName);
+      if (parsedName) {
+        changeName(parsedName);
+        characterName.setText(parsedName);
+      } else {
+        window.alert(
+          'Name must be between 1 and 10 characters inclusive. Whitespaces are trimmed.'
+        );
       }
     });
 

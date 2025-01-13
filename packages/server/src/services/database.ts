@@ -9,10 +9,14 @@ dotenv.config();
 
 let DB: Database;
 
+export function initializeTestServerDatabase() {
+  DB = new DatabaseConstructor(':memory:');
+}
+
 export function initializeServerDatabase(
   dbPath: string,
   rebuild: boolean = false
-): Database {
+) {
   const absolutePath = path.resolve(dbPath);
 
   if (rebuild) {
@@ -23,7 +27,7 @@ export function initializeServerDatabase(
   }
 
   // Initialize the database
-  DB = new DatabaseConstructor(absolutePath);
+  DB = new DatabaseConstructor(dbPath);
   DB.pragma('journal_mode = WAL');
 
   // Close the database on process exit or termination signals
