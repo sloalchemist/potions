@@ -322,6 +322,9 @@ export class WorldScene extends Phaser.Scene {
       }
     );
 
+    // Dimensions for the viewport of the game world. These numbers were derived
+    // from packages\client\static\frame.png so that the viewport is entirely
+    // within the upper half of the frame. 
     const cameraViewportX = 17
     const cameraViewportY = 16
     const cameraViewportWidth = this.game.scale.width - 32
@@ -361,6 +364,8 @@ export class WorldScene extends Phaser.Scene {
         return;
       }
 
+      // Check if mouse click is within the viewport of the game world for
+      // player movement to occur 
       if (
         pointer.x >= cameraViewportX &&
         pointer.x <= cameraViewportX + cameraViewportWidth &&
