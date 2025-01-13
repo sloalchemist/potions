@@ -28,10 +28,16 @@ export const commonSetup = () => {
 
   const worldDescription = {
     tiles: [
-      [-1, -1],
-      [-1, -1]
+      [1, 1],
+      [1, 1]
     ],
-    terrain_types: [],
+    terrain_types: [
+        {
+          "name": "Grass",
+          "id": 1,
+          "walkable": true
+      }
+    ],
     item_types: [
       {
         name: 'Potion',
