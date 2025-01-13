@@ -33,7 +33,7 @@ async function initializeAsync() {
   console.log(`loading world ${worldID}`);
 
   try {
-    initializeKnowledgeDB('data/knowledge-graph.db');
+    initializeKnowledgeDB('data/knowledge-graph.db', false);
     initializeServerDatabase('data/server-data.db');
 
     const worldDescription = globalData as ServerWorldDescription;

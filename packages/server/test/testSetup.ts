@@ -5,8 +5,8 @@ import { initializeTestServerDatabase } from '../src/services/database';
 import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
-
 import { buildGraph, constructGraph, Graphable, intializeTestKnowledgeDB } from '@rt-potion/converse';
+
 import { buildGraphFromWorld } from '../src/generate/socialWorld';
 
 export let world: ServerWorld;
@@ -66,16 +66,41 @@ export const commonSetup = () => {
         on_tick: []
       },
       {
-        name: 'Heart Beet',
-        description: 'test',
-        type: 'heart-beet',
-        carryable: true,
-        smashable: true,
-        walkable: true,
+        name: 'Cauldron',
+        description: 'For mixing potions',
+        type: 'cauldron',
+        carryable: false,
+        walkable: false,
         interactions: [],
         attributes: [],
         on_tick: []
-      },
+    },
+    {
+        name: "Heartbeet",
+        description: 'Brew potions',
+        type: "heart-beet",
+        walkable: true,
+        carryable: true,
+        interactions: [
+            {
+                description: "Brew red potion",
+                action: "brew",
+                while_carried: true,
+                requires_item: "cauldron"
+            }
+        ],
+        attributes: [
+            {
+                name: "brew_color",
+                value: "#FF0000"
+            },
+            {
+                name: "health",
+                value: 1
+            }
+        ],
+        on_tick: []
+    },
       {
         name: 'Log',
         description: 'test',
@@ -85,6 +110,44 @@ export const commonSetup = () => {
         walkable: true,
         interactions: [],
         attributes: [],
+        on_tick: []
+      },
+      {
+        name: 'Potion stand',
+        description: 'test',
+        type: 'potion-stand',
+        carryable: false,
+        smashable: true,
+        walkable: true,
+        show_price_at: {
+          x: 7,
+          y: -10
+        },
+        interactions: [
+          {
+            description: 'Add $item_name',
+            action: 'add_item',
+            while_carried: false
+          }
+        ],
+        attributes: [
+          {
+            name: 'items',
+            value: 0
+          },
+          {
+            name: 'price',
+            value: 10
+          },
+          {
+            name: 'gold',
+            value: 0
+          },
+          {
+            name: 'health',
+            value: 1
+          }
+        ],
         on_tick: []
       }
     ],
@@ -167,7 +230,6 @@ export const commonSetup = () => {
   itemGenerator = new ItemGenerator(worldDescription.item_types);
   world = new ServerWorld(worldDescription);
   graph = buildGraphFromWorld(worldDescription);
-
   intializeTestKnowledgeDB();
   buildGraph(constructGraph(graph));
 };
