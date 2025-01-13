@@ -327,13 +327,6 @@
         ]
     },
     {
-        "name": "Closed",
-        "type": "closed",
-        "carryable": false,
-        "walkable": true,
-        "interactions": []
-    },
-    {
         "name": "Potion stand",
         "type": "potion-stand",
         "carryable": false,

@@ -332,15 +332,6 @@
             ]
         },
         {
-            "name": "Closed",
-            "description": "Closed portal indicator",
-            "type": "closed",
-            "carryable": false,
-            "smashable": false,
-            "walkable": true,
-            "interactions": []
-        },
-        {
             "name": "Potion stand",
             "description": "A stand that sells health potions.",
             "type": "potion-stand",
@@ -643,7 +634,7 @@
         { "type": "blueberry-bush", "coord": { "x": 17, "y": 29 } },
         { "type": "blueberry-bush", "coord": { "x": 21, "y": 30 } },
         { "type": "blueberry-bush", "coord": { "x": 26, "y": 31 } },
-        { "type": "closed", "coord": { "x": 15, "y": 38 } },
+        { "type": "portal", "coord": { "x": 15, "y": 38 } },
         { "type": "cauldron", "coord": { "x": 20, "y": 15 } }
           ],
           "containers": [
