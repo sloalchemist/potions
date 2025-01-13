@@ -123,7 +123,7 @@ function prepInteraction(label: string, item: Item): string {
   }
 }
 
-function collisionListener(physicals: Item[]) {
+export function collisionListener(physicals: Item[]) {
   const interactions: Interactions[] = [];
 
   const items: Item[] = [];
