@@ -31,3 +31,5 @@ describe('FantasyDate', () => {
 afterAll(() => {
   DB.close();
 });
+  DB.close();
+});

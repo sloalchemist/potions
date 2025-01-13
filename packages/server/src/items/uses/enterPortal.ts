@@ -12,10 +12,7 @@ export class EnterPortal implements Use {
     return 'Enter portal';
   }
 
-  interact(mob: Mob, _item: Item): boolean {
-    console.log('Enter portal', this.key, mob.name);
-    mob.destroy();
-
-    return true;
+  interact(_mob: Mob, _item: Item): boolean {
+    return false; //originally set to true to allow possible future entry into the portal 
   }
 }
