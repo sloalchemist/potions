@@ -336,7 +336,7 @@
         "type": "potion-stand",
         "carryable": false,
         "smashable": true,
-        "walkable": true,
+        "walkable": false,
         "attributes": [
             {
                 "name": "items",
@@ -480,7 +480,7 @@
         "name": "Cauldron",
         "type": "cauldron",
         "carryable": false,
-        "walkable": true,
+        "walkable": false,
         "interactions": []
     },
     {

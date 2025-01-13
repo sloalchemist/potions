@@ -22,8 +22,8 @@ export function intializeTestKnowledgeDB(): void {
   initializeInMemoryDatabase();
 }
 
-export function initializeKnowledgeDB(dbPath: string): void {
-  initializeDatabase(dbPath);
+export function initializeKnowledgeDB(dbPath: string, rebuild: boolean): void {
+  initializeDatabase(dbPath, rebuild);
 }
 
 export function findCommunity(name: string): Community | undefined {
