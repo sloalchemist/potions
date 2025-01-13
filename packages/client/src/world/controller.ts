@@ -125,11 +125,18 @@ function prepInteraction(label: string, item: Item): string {
   }
 }
 
+interface ItemInteraction {
+  while_carried: boolean;
+  requires_item?: string;
+  action: string;
+  description: string;
+}
+
 interface Physical extends Item {
   position: Coord | null;
   itemType: ItemType;
   key: string;
-  conditionMet: (interaction: any) => boolean;
+  conditionMet: (interaction: ItemInteraction) => boolean;
 }
 
 export function getCarriedItemInteractions(
@@ -214,7 +221,7 @@ export function getPhysicalInteractions(physical: Physical): Interactions[] {
   return interactions;
 }
 
-export function getClosestPhysical(physicals: Physical[], playerPos: Coord): Physical {
+export function getClosestPhysical(physicals: Item[], playerPos: Coord): Item {
   return physicals.reduce((closest, current) => {
     if (!closest.position || !current.position) return closest;
     const closestDistance = calculateDistance(closest.position, playerPos);
