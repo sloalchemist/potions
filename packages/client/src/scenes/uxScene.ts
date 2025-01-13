@@ -12,7 +12,7 @@ import {
  setResponseCallback
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
-import { ChatContainer } from "../components/chatContainer";
+import { ChatButtonManager } from "../components/chatButtonManager";
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
 import { interact, requestChat, speak } from '../services/playerToServer';
@@ -24,7 +24,7 @@ export interface ChatOption {
 
 export class UxScene extends Phaser.Scene {
  interactButtons: Button[] = [];
- chatButtons: Button[] = [];
+ chatButtons: ChatButtonManager = new ChatButtonManager([]);
  goldText: Phaser.GameObjects.Text | null = null;
  healthText: Phaser.GameObjects.Text | null = null;
  dateText: Phaser.GameObjects.Text | null = null;
@@ -37,7 +37,7 @@ export class UxScene extends Phaser.Scene {
  mixTabButton: TabButton | null = null;
 
  itemsContainer: Phaser.GameObjects.Container | null = null;
- chatContainer: ChatContainer | null = null;
+ chatContainer: Phaser.GameObjects.Container | null = null;
  statsContainer: Phaser.GameObjects.Container | null = null;
  mixContainer: Phaser.GameObjects.Container | null = null;
 
@@ -58,8 +58,7 @@ export class UxScene extends Phaser.Scene {
    // Create containers for items and chat tabs
    this.statsContainer = this.add.container(0, 40);
    this.itemsContainer = this.add.container(0, 40);
-   this.chatContainer = new ChatContainer(this, 0, 40);
-   // this.chatContainer = this.add.container(0, 40);
+   this.chatContainer = this.add.container(0, 40);
    this.mixContainer = this.add.container(0, 40);
 
    const tabWidth = 100;
@@ -257,7 +256,7 @@ export class UxScene extends Phaser.Scene {
 
  // Method to set item interactions
  setInteractions(interactions: Interactions[]) {
-  this.chatContainer?.clearChatOptions(this.chatButtons);
+  this.chatButtons?.clearChatOptions();
 
    interactions.forEach((interaction, i) => {
      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
@@ -276,7 +275,7 @@ export class UxScene extends Phaser.Scene {
  }
 
  setChatCompanions(companions: Mob[]) {
-   this.chatContainer?.clearChatOptions(this.chatButtons);
+  this.chatButtons?.clearChatOptions();
 
    companions.forEach((companion, i) => {
      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
@@ -290,7 +289,7 @@ export class UxScene extends Phaser.Scene {
  }
 
  sendRequestChat(world: World, companion: Mob) {
-   this.chatContainer?.clearChatOptions(this.chatButtons);
+  this.chatButtons?.clearChatOptions();
 
    this.chatRequested = true;
    setChatting(true);
@@ -299,7 +298,7 @@ export class UxScene extends Phaser.Scene {
 
  // New method to set chat options
  setChatOptions(chatOptions: ChatOption[]) {
-   this.chatContainer?.clearChatOptions(this.chatButtons);
+  this.chatButtons?.clearChatOptions();
 
    chatOptions.forEach((chatOption, i) => {
      const y = 70 + (80 + 10) * i;
