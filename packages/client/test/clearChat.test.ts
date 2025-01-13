@@ -24,7 +24,6 @@ describe('Clear Chat Tests', () => {
             createCursorKeys: jest.fn(),
           },
         },
-        // Add any other dependencies needed by your Button class
       };
 
     test('test 1', () => {
