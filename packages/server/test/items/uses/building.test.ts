@@ -1,4 +1,4 @@
-import { ItemGenerator } from '../../../src/items/itemGenerator';
+import { itemGenerator, ItemGenerator } from '../../../src/items/itemGenerator';
 import { commonSetup} from '../../testSetup';
 import { DB } from '../../../src/services/database';
 import { Item } from '../../../src/items/item';
@@ -119,7 +119,9 @@ describe('Build wall from partial wall', () => {
     // buildAndSaveGraph('data/knowledge-graph-build-test.db', graph)
 
     //generate world
-    const itemGenerator = new ItemGenerator(worldDescription.item_types);
+    //const itemGenerator = new ItemGenerator(worldDescription.item_types);
+
+    ItemGenerator.initialize(worldDescription.item_types)
     
     //create items in desired locations
     const logPos = { x: 0, y: 0 };
@@ -150,17 +152,20 @@ describe('Build wall from partial wall', () => {
     expect(mob).toBeDefined();
     expect(log).toBeDefined();
 
+    //console.log(mob)
+    //console.log(log)
+
     if (mob && log) {
       const pickup = new Pickup();
       expect(pickup.interact(mob, log)).toBeTruthy();
       
       //check that the mob is carrying something
       expect(mob.carrying).toBeDefined();
-      console.log("mob.carrying: ", mob.carrying);
+      //console.log("mob.carrying: ", mob.carrying);
 
       const buildWall = new BuildWall();
 
-      console.log("log: ", log);
+      //console.log("log: ", log);
       const wallInteract = buildWall.interact(mob, log);
       expect(wallInteract).toBeTruthy();
 
