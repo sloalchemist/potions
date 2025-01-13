@@ -232,6 +232,4 @@ export const commonSetup = () => {
   graph = buildGraphFromWorld(worldDescription);
   intializeTestKnowledgeDB();
   buildGraph(constructGraph(graph));
-  Community.makeVillage('alchemists', 'Alchemists guild');
-  mobFactory.loadTemplates(world.mobTypes);
 };
