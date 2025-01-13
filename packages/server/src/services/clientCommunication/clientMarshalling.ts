@@ -49,7 +49,7 @@ function mobDataToMob(mobData: MobData): MobI {
         ? { x: mobData.target_x, y: mobData.target_y }
         : undefined,
     path: mobData.path ? JSON.parse(mobData.path) : [],
-    speed: mobData.speed,
+    // speed: mobData.speed,
     name: mobData.name,
     maxHealth: mobData.maxHealth,
     carrying: mobData.carrying_id,
