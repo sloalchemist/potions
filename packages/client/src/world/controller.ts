@@ -125,13 +125,6 @@ function prepInteraction(label: string, item: Item): string {
   }
 }
 
-function getOnTopOf(physicals: Item[], player: SpriteMob): Item[] {
-  const playerCoord = floor(player.position!);
-  return physicals.filter((physical) => {
-    return playerCoord.x === physical.position!.x && physical.position!.y === playerCoord.y;
-  });
-}
-
 interface Physical extends Item {
   position: Coord | null;
   itemType: ItemType;
@@ -139,7 +132,7 @@ interface Physical extends Item {
   conditionMet: (interaction: any) => boolean;
 }
 
-export function getInteractionsForCarriedItem(
+export function getCarriedItemInteractions(
   item: Physical,
   nearbyItems: Physical[],
   nearbyMobs: Mob[],
@@ -153,7 +146,7 @@ export function getInteractionsForCarriedItem(
     label: `Drop ${item.itemType.name}`
   });
 
-  // Handle give to nearby mobs
+  // give to nearby mobs
   nearbyMobs.forEach((mob) => {
     if (mob.key !== playerId) {
       interactions.push({
@@ -165,7 +158,7 @@ export function getInteractionsForCarriedItem(
     }
   });
 
-  // Handle carried item interactions
+  // unique carried item interactions
   item.itemType.interactions.forEach((interaction) => {
     if (interaction.while_carried) {
       const requiredItem = interaction.requires_item 
@@ -185,10 +178,11 @@ export function getInteractionsForCarriedItem(
   return interactions;
 }
 
-export function getInteractionsForPhysical(physical: Physical): Interactions[] {
+export function getPhysicalInteractions(physical: Physical): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
 
+  // if the item can be picked up
   if (item.itemType.carryable) {
     interactions.push({
       action: 'pickup',
@@ -197,6 +191,7 @@ export function getInteractionsForPhysical(physical: Physical): Interactions[] {
     });
   }
 
+  // if the item can be smashed
   if (item.itemType.smashable) {
     interactions.push({
       action: 'smash',
@@ -205,6 +200,7 @@ export function getInteractionsForPhysical(physical: Physical): Interactions[] {
     });
   }
 
+  // handles unique interactions
   item.itemType.interactions.forEach((interaction) => {
     if (!interaction.while_carried && item.conditionMet(interaction)) {
       interactions.push({
@@ -218,7 +214,7 @@ export function getInteractionsForPhysical(physical: Physical): Interactions[] {
   return interactions;
 }
 
-export function findClosestPhysical(physicals: Physical[], playerPos: Coord): Physical {
+export function getClosestPhysical(physicals: Physical[], playerPos: Coord): Physical {
   return physicals.reduce((closest, current) => {
     if (!closest.position || !current.position) return closest;
     const closestDistance = calculateDistance(closest.position, playerPos);
@@ -227,48 +223,51 @@ export function findClosestPhysical(physicals: Physical[], playerPos: Coord): Ph
   });
 }
 
-function getRelevantPhysicals(physicals: Item[], playerPos: Coord): Item[] {
-  // Get items player is standing on
-  const onTopOf = physicals.filter((physical) => {
-    const pos = physical.position!;
-    return playerPos.x === pos.x && pos.y === playerPos.y;
+function getItemsAtPosition(physicals: Item[], position: Coord): Item[] {
+  return physicals.filter((physical) => {
+    return position.x === physical.position!.x && position.y === physical.position!.y;
   });
+}
 
-  // Get nearby non-walkable items
-  let distant = physicals.filter(p => !p.itemType.walkable);
-  if (distant.length > 1) {
-    distant = [findClosestPhysical(distant, playerPos)];
+function getInteractablePhysicals(physicals: Item[], playerPos: Coord): Item[] {
+  // player is standing on
+  let onTopObjects = getItemsAtPosition(physicals, playerPos);
+
+  // nearby non-walkable items
+  let nearbyObjects = physicals.filter(p => !p.itemType.walkable);
+  if (nearbyObjects.length > 1) {
+    nearbyObjects = [getClosestPhysical(nearbyObjects, playerPos)];
   }
-
-  return [...onTopOf, ...distant];
+  return [...onTopObjects, ...nearbyObjects];
 }
 
 function collisionListener(physicals: Item[]) {
   const player = world.mobs[publicCharacterId] as SpriteMob;
   const playerPos = floor(player.position!);
   
-  const combined = getRelevantPhysicals(physicals, playerPos);
+  // retrieves a list of all of the nearby and on top of objects
+  const interactableObjects = getInteractablePhysicals(physicals, playerPos);
   let interactions: Interactions[] = [];
 
-  // Get interactions for each physical item
-  combined.forEach(physical => {
-    interactions = [...interactions, ...getInteractionsForPhysical(physical)];
+  // retrieves interactions for all relevant objects
+  interactableObjects.forEach(physical => {
+    interactions = [...interactions, ...getPhysicalInteractions(physical)];
   });
 
-  // Handle carried item interactions
+  // if player is carrying object, add its according interactions
   if (player.carrying) {
     const carriedItem = world.items[player.carrying] as SpriteItem;
     const nearbyMobs = world.getMobsAt(playerPos.x, playerPos.y, 2);
-    const carriedInteractions = getInteractionsForCarriedItem(
+    const carriedInteractions = getCarriedItemInteractions(
       carriedItem,
-      combined,
+      interactableObjects,
       nearbyMobs,
       publicCharacterId
     );
     interactions = [...interactions, ...carriedInteractions];
   }
 
-  // Update UI only if interactions changed
+  // updates client only if interactions changes
   if (!areInteractionsEqual(lastInteractions, interactions) && interactionCallback) {
     interactionCallback(interactions);
     lastInteractions = interactions;
