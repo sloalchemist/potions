@@ -6,6 +6,7 @@ import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
 import { buildGraph, constructGraph, Graphable, intializeTestKnowledgeDB } from '@rt-potion/converse';
+
 import { buildGraphFromWorld } from '../src/generate/socialWorld';
 
 export let world: ServerWorld;
@@ -111,6 +112,44 @@ export const commonSetup = () => {
         attributes: [],
         on_tick: []
       },
+      {
+        name: 'Potion stand',
+        description: 'test',
+        type: 'potion-stand',
+        carryable: false,
+        smashable: true,
+        walkable: true,
+        show_price_at: {
+          x: 7,
+          y: -10
+        },
+        interactions: [
+          {
+            description: 'Add $item_name',
+            action: 'add_item',
+            while_carried: false
+          }
+        ],
+        attributes: [
+          {
+            name: 'items',
+            value: 0
+          },
+          {
+            name: 'price',
+            value: 10
+          },
+          {
+            name: 'gold',
+            value: 0
+          },
+          {
+            name: 'health',
+            value: 1
+          }
+        ],
+        on_tick: []
+      }
     ],
     mob_types: [
       {
