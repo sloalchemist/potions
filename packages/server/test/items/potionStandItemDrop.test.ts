@@ -6,6 +6,7 @@ import { Community } from '../../src/community/community';
 import { itemGenerator, ItemGenerator } from '../../src/items/itemGenerator';
 import { Smashable } from '../../src/items/smashable';
 import { Item } from '../../src/items/item';
+import { GameWorld } from '../../src/services/gameWorld/gameWorld';
 
 beforeAll(() => {
   commonSetup();
