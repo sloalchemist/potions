@@ -358,6 +358,21 @@ export class Mob {
     }
   }
 
+  changeSpeed(amount: number) {
+    if (amount === 0) return;
+    let newSpeed = this.speed + amount;
+    if (newSpeed < 10) newSpeed = 10;
+    DB.prepare(
+      `
+            UPDATE mobs
+            SET speed = :speed
+            WHERE id = :id
+        `
+    ).run({ speed: newSpeed, id: this.id });
+    this.speed = newSpeed;
+    pubSub.changeSpeed(this.id, amount, this.speed);
+  }
+
   getHouse(): House | undefined {
     const houseData = DB.prepare(
       `
