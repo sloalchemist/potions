@@ -1,9 +1,10 @@
 import 'jest-canvas-mock';
 import { ChatButtonManager } from "../src/components/chatButtonManager";
+import { Button } from '../src/components/button';
 
 class MockButton {
-    scene: any;
-    constructor(scene: any) {
+    scene
+    constructor(scene: object) {
       this.scene = scene;
     }
   
@@ -28,8 +29,8 @@ describe('Clear Chat Tests', () => {
 
     test('test 1', () => {
       let chatManager = new ChatButtonManager([])
-      const mockButton1 = new MockButton(mockScene);
-      const mockButton2 = new MockButton(mockScene);
+      const mockButton1 = new MockButton(mockScene) as Button;
+      const mockButton2 = new MockButton(mockScene) as Button;
 
       jest.spyOn(mockButton1, 'destroy');
       jest.spyOn(mockButton2, 'destroy');
