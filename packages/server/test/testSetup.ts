@@ -7,7 +7,6 @@ import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
 import { buildGraph, constructGraph, Graphable, intializeTestKnowledgeDB } from '@rt-potion/converse';
 import { buildGraphFromWorld } from '../src/generate/socialWorld';
-import { mobFactory } from '../src/mobs/mobFactory';
 
 export let world: ServerWorld;
 export let village: Community;
