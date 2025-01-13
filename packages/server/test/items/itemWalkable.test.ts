@@ -5,7 +5,7 @@ import { DB } from '../../src/services/database';
 
 
 beforeAll(() => {
-    commonSetup("data/walk.db");
+    commonSetup();
 });
 
 describe('Cauldron made not walkable', () => {
