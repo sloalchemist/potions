@@ -1,8 +1,3 @@
-// import { Item } from '../src/world/item';
-// import { ItemI } from '../../common/src/item';
-// import { SpriteItem } from '../src/sprite/sprite_item';
-// import { WorldScene } from '../src/scenes/worldScene';
-
 describe('Fence health bar updates with state', () => {
     let SpriteItem: jest.Mock;
 
