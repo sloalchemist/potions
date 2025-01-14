@@ -4,7 +4,7 @@ describe('Fence health bar updates with state', () => {
     beforeEach(() => {
         jest.resetModules();
         jest.clearAllMocks();
-        jest.mock('../../src/scenes/worldScene', () => ({
+        jest.mock('../../../src/scenes/worldScene', () => ({
             WorldScene: class MockWorldScene { },
         }));
 
@@ -35,7 +35,7 @@ describe('Fence health bar updates with state', () => {
     });
 
     test('Fence health logic returns correctly', () => {
-        const { SpriteItem: OriginalSpriteItem } = jest.requireActual('../../src/sprite/sprite_item');
+        const { SpriteItem: OriginalSpriteItem } = jest.requireActual('../../../src/sprite/sprite_item');
 
         SpriteItem = jest.fn().mockImplementation((maxHealth: number, health: number) => {
             return {
@@ -65,7 +65,7 @@ describe('Fence health bar updates with state', () => {
     });
 
     test('Test health bar in sprite_item constructor', () => {
-        jest.requireActual('../../src/sprite/sprite_item');
+        jest.requireActual('../../../src/sprite/sprite_item');
 
         SpriteItem = jest.fn().mockImplementation((
             maxHealth: number, health: number, scene: any, itemType: { layoutType: string }
