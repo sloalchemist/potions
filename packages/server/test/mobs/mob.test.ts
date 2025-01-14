@@ -3,15 +3,19 @@ import { Mob } from "../../src/mobs/mob";
 import { mobFactory } from "../../src/mobs/mobFactory";
 import { Coord } from "@rt-potion/common";
 import { Community } from "../../src/community/community";
+import { gameWorld, initializeGameWorld } from "../../src/services/gameWorld/gameWorld";
+
+initializeGameWorld(gameWorld);
 
 beforeAll(() => {
   commonSetup();
   Community.makeVillage('alchemists', 'Alchemists guild');
-  mobFactory.loadTemplates(world.mobTypes)
+  mobFactory.loadTemplates(world.mobTypes);
 });
 
 describe('Mob Tests', () => {
   describe('Mob Initialization', () => {
+
     test('Mob is created with correct attributes', () => {
       const position: Coord = {x: 0, y: 0};
       const mobId = 'testmob';
@@ -125,6 +129,22 @@ describe('Mob Tests', () => {
       //try no change in health 100 - 0 = 0
       testMob?.changeHealth(0);
       expect(testMob?.health).toBe(100);
+    })
+
+    test('Mob heals over time when still for certain number of ticks', () => {
+      const mobId = 'testmob-asleep-heal';
+      mobFactory.makeMob('player', {x: 0, y: 0}, mobId, 'testPlayer')
+      const testMob = Mob.getMob(mobId);
+
+      // reduce mob health
+      testMob?.changeHealth(-30);
+      expect(testMob?.health).toBe(70);
+
+      testMob?.tick(1);
+      testMob?.tick(1);
+      testMob?.tick(1);
+
+      expect(testMob?.health).toBeGreaterThan(80);
     })
     
   });
