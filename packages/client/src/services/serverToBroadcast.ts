@@ -16,7 +16,7 @@ import {
   SpeakData
 } from '@rt-potion/common';
 import { world, WorldScene } from '../scenes/worldScene';
-import { addNewItem, addNewMob, gameState, setDate } from '../world/controller';
+import { addNewItem, addNewMob, gameState, setDate, clearInteractions } from '../world/controller';
 import { SpriteMob } from '../sprite/sprite_mob';
 import { publicCharacterId } from '../worldMetadata';
 import { SpriteItem } from '../sprite/sprite_item';
@@ -95,6 +95,7 @@ export function setupBroadcast(
       mob.destroy(world);
       if (data.id === publicCharacterId) {
         playerDead = true;
+        clearInteractions
 
         // wait until the window is focused before moving on
         const waitUntilFocused = new Promise<void>((resolve) => {
