@@ -5,12 +5,11 @@ import { Coord } from "@rt-potion/common";
 import { Community } from "../../src/community/community";
 import { gameWorld, initializeGameWorld } from "../../src/services/gameWorld/gameWorld";
 
-initializeGameWorld(gameWorld);
-
 beforeAll(() => {
   commonSetup();
   Community.makeVillage('alchemists', 'Alchemists guild');
   mobFactory.loadTemplates(world.mobTypes);
+  initializeGameWorld(gameWorld);
 });
 
 describe('Mob Tests', () => {
@@ -137,8 +136,8 @@ describe('Mob Tests', () => {
       const testMob = Mob.getMob(mobId);
 
       // reduce mob health
-      testMob?.changeHealth(-30);
-      expect(testMob?.health).toBe(70);
+      testMob?.changeHealth(-20);
+      expect(testMob?.health).toBe(80);
 
       testMob?.tick(1);
       testMob?.tick(1);
