@@ -154,7 +154,7 @@ export class UxScene extends Phaser.Scene {
 
       this.dateText = this.add.text(
         15,
-        115,
+        140,
         'Date: reading position of sun and stars'
       );
       this.statsContainer.add(this.dateText);

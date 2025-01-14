@@ -168,7 +168,7 @@ export class Mob {
     return this._health;
   }
 
-  getSpeed(): number {
+  get _speed(): number {
     return this.speed;
 }
 
