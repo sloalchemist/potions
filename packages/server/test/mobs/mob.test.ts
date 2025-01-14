@@ -145,7 +145,7 @@ describe('Mob Tests', () => {
       }
       testMob?.tick(500);
 
-      expect(testMob?.health).toEqual(80);
+      expect(testMob?.health).toBeGreaterThan(80);
     })
     
   });

@@ -82,7 +82,6 @@ export class Mob {
   private _health: number;
   public readonly attack: number;
 
-  // Addition: Tracking when sprite last moved, and how long they've been asleep for
   private lastMoveTick: number;  // Track last move tick
   private sleepDuration: number = 12 * 4; // Asleep if doesnt move for 48 ticks
 
@@ -370,7 +369,6 @@ export class Mob {
 
   // Addition: These things happen when the character is in sleep state (healing + energy)
   sleep() {
-    console.log(`${this.name} is asleep!`);
     this.needs.changeNeed('max_energy', 25);
     this.needs.changeNeed('energy', 25);
     this.changeHealth(10);
@@ -381,7 +379,6 @@ export class Mob {
     const currentTick = gameWorld.currentDate().global_tick; // Use the game world time and not real time
 
     if (currentTick - this.lastMoveTick >= this.sleepDuration) {
-      console.log(`Current tick: ${currentTick}, Last move tick: ${this.lastMoveTick}, sleep duration: ${this.sleepDuration}`);
       this.sleep();  // Sleep if condition is met
       this.lastMoveTick = currentTick; // Reset the last move tick
       DB.prepare(
