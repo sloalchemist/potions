@@ -35,6 +35,7 @@ export type MobData = {
   current_action: string;
   carrying_id: string;
   community_id: string;
+  lastMoveTick: number;
 };
 
 interface MobParams {
@@ -53,6 +54,7 @@ interface MobParams {
   carrying?: string;
   path: Coord[];
   target?: Coord;
+  lastMoveTick: number;
 }
 
 export class Mob {
@@ -81,7 +83,7 @@ export class Mob {
   public readonly attack: number;
 
   // Addition: Tracking when sprite last moved, and how long they've been asleep for
-  private lastMoveTick: number = 0;  // Track last move tick
+  private lastMoveTick: number;  // Track last move tick
   private sleepDuration: number = 12 * 4; // Asleep if doesnt move for 48 ticks
 
   // subtype: string,
@@ -105,7 +107,8 @@ export class Mob {
     currentAction,
     carrying,
     path,
-    target
+    target,
+    lastMoveTick
   }: MobParams) {
     this.id = key;
     this._name = name;
@@ -127,8 +130,7 @@ export class Mob {
     this.community_id = community_id;
     this.unlocks.push(community_id);
 
-    // Addition: Initialize that the mob hasn't moved at the start of the game
-    this.lastMoveTick = 0;
+    this.lastMoveTick = lastMoveTick;
   }
 
   private setAction(action: string, finished: boolean = false) {
@@ -368,6 +370,7 @@ export class Mob {
 
   // Addition: These things happen when the character is in sleep state (healing + energy)
   sleep() {
+    console.log(`${this.name} is asleep!`);
     this.needs.changeNeed('max_energy', 25);
     this.needs.changeNeed('energy', 25);
     this.changeHealth(10);
@@ -376,9 +379,21 @@ export class Mob {
   // Addition: Implements sleep if it recognizes that mob is asleep
   checkForSleep() {
     const currentTick = gameWorld.currentDate().global_tick; // Use the game world time and not real time
+
     if (currentTick - this.lastMoveTick >= this.sleepDuration) {
+      console.log(`Current tick: ${currentTick}, Last move tick: ${this.lastMoveTick}, sleep duration: ${this.sleepDuration}`);
       this.sleep();  // Sleep if condition is met
       this.lastMoveTick = currentTick; // Reset the last move tick
+      DB.prepare(
+        `
+              UPDATE mobs
+              SET  lastMoveTick = :lastMoveTick
+              WHERE id = :id
+          `
+      ).run({
+        id: this.id,
+        lastMoveTick: this.lastMoveTick,
+      });
     }
   }
 
@@ -506,7 +521,7 @@ export class Mob {
   static getMob(key: string): Mob | undefined {
     const mob = DB.prepare(
       `
-            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id
+            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id, lastMoveTick
             FROM mobs
             WHERE id = :id
         `
@@ -532,7 +547,8 @@ export class Mob {
       target:
         mob.target_x && mob.target_y
           ? { x: mob.target_x, y: mob.target_y }
-          : undefined
+          : undefined,
+      lastMoveTick: mob.lastMoveTick
     });
 
     return player;
