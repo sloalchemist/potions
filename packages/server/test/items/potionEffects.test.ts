@@ -106,6 +106,36 @@ describe('Try to consume blue potion in various cases', () => {
     expect(testMob!._speed).toBe(4.5);
     expect(testMob!.health).toBe(100);
     expect(testMob!.gold).toBe(0);
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: '255',
+      position: { x: 1, y: 0 },
+      carriedBy: testMob
+    });
+    const potion2 = Item.getItemIDAt({ x: 1, y: 0 });
+    expect(potion2).not.toBeNull();
+    const potionItem2 = Item.getItem(potion2!);
+    expect(potionItem2).not.toBeNull();
+
+    // ensure the player is carrying the potion
+    expect(testMob!.carrying).not.toBeNull();
+    expect(testMob!.carrying!.type).toBe('potion');
+    expect(testMob!.carrying!.subtype).toBe('255');
+
+    // have the player drink the potion
+    const testDrink2 = new Drink();
+    const test2 = testDrink2.interact(testMob!, potionItem2!);
+    expect(test2).toBe(true);
+
+    // check to make sure potion is not being carried
+    expect(testMob!.carrying).toBeUndefined();
+
+    // check attributes on player
+    expect(testMob!._speed).toBe(6.5);
+    expect(testMob!.health).toBe(100);
+    expect(testMob!.gold).toBe(0);
   });
 
   test('Create player with near max speed, consume blue potion, then check attributes', () => {
