@@ -336,9 +336,31 @@ export class SpriteItem extends Item {
     return (Number(this.attributes['health']) < this.maxHealth!);
   }
 
+  updateHealthBar() {
+    this.healthBar?.clear();
+
+    if (this.isBelowMaxHealth()) {
+      const barWidth = 40;
+      const barHeight = 5;
+
+      const healthPercentage = this.calculateHealthPercentage();
+
+      const x = this.sprite.x - barWidth / 2;
+      const y = this.sprite.y - 20;
+
+      this.healthBar?.fillStyle(0xff0000);
+      this.healthBar?.fillRect(x, y, barWidth, barHeight);
+
+      this.healthBar?.fillStyle(0x00ff00);
+      this.healthBar?.fillRect(x, y, barWidth * healthPercentage, barHeight);
+    }
+  }
+
   tick(world: World, deltaTime: number) {
     super.tick(world, deltaTime);
-    
+    if (this?.healthBar) {
+      this.updateHealthBar();
+    }
     if (this.position) {
       let depth = this.position.y + 0.5;
       if (this.flat) {
