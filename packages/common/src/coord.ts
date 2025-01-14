@@ -28,6 +28,11 @@ export function floor(coord: Coord): Coord {
   return { x: Math.floor(coord.x), y: Math.floor(coord.y) };
 }
 
+// Return the rounded values of the coordinates
+export function round(coord: Coord): Coord {
+  return { x: Math.round(coord.x), y: Math.round(coord.y) };
+}
+
 // Normalized vector subtraction between two coordinates
 export function normalizedSubtraction(coord1: Coord, coord2: Coord): Coord {
   const dx = coord1.x - coord2.x;
