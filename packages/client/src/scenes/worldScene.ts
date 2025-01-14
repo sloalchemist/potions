@@ -41,7 +41,7 @@ export class WorldScene extends Phaser.Scene {
   nightOverlay!: Phaser.GameObjects.Graphics;
   terrainWidth: number = 0;
   terrainHeight: number = 0;
-  previousNightOpacity: number = 0;
+  nightOpacity: number = 0;
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -410,35 +410,27 @@ export class WorldScene extends Phaser.Scene {
     }
 
     if (fantasyDate) {
-      this.updateNightOverlay();
+      // Find new opacity value for the night overlay
+      this.nightOpacity = getNightSkyOpacity(
+        fantasyDate.time,
+        this.nightOpacity
+      );
+
+      this.nightOverlay.clear();
+      // Dark blue with max 50% opacity
+      this.nightOverlay.fillStyle(0x000033, this.nightOpacity);
+      this.nightOverlay.fillRect(
+        0,
+        0,
+        this.terrainWidth * TILE_SIZE,
+        this.terrainHeight * TILE_SIZE
+      );
     }
-  }
-
-  updateNightOverlay() {
-    let nightOpacity = 0;
-    const currentTime = fantasyDate.time;
-
-    // Determines the opacity of the night overlay on the 12-hour clock cycle
-    let sinExp = ((Math.PI * 2) / 12) * (currentTime - 9);
-    nightOpacity = 0.25 * Math.sin(sinExp) + 0.25;
-
-    // Smooth transition by slowly approaching the opacity value
-    const smoothOpacity = Phaser.Math.Interpolation.Linear([this.previousNightOpacity || 0, nightOpacity], 0.01);
-    this.previousNightOpacity = smoothOpacity;
-
-    this.nightOverlay.clear();
-    this.nightOverlay.fillStyle(0x000033, smoothOpacity); // Dark blue with max 50% opacity
-    this.nightOverlay.fillRect(
-      0,
-      0,
-      this.terrainWidth * TILE_SIZE,
-      this.terrainHeight * TILE_SIZE
-    );
   }
 
   showGameOver() {
     let uxscene = this.scene.get("UxScene") as UxScene;
-    uxscene.chatContainer?.clearChatOptions(uxscene.chatButtons);
+    uxscene.chatButtons?.clearChatOptions();
     
     const text = this.add.text(75, 140, 'GAME OVER', {
       color: '#FFFFFF',
@@ -449,5 +441,4 @@ export class WorldScene extends Phaser.Scene {
     text.setScrollFactor(0); // Make it stay static
     text.setDepth(100);
   }
-  // remove blur?
 }

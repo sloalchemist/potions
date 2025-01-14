@@ -2,13 +2,10 @@
   "compilerOptions": {
     "module": "CommonJS",
     "target": "ESNext",
-    "module": "CommonJS",
-    "target": "ESNext",
     "moduleResolution": "Node",
     "outDir": "dist",
     "rootDir": ".",
     "strict": true,
-    "resolveJsonModule": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

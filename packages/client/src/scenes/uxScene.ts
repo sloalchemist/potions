@@ -12,7 +12,7 @@ import {
   setResponseCallback
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
-import { ChatContainer } from "../components/chatContainer";
+import { ChatButtonManager } from "../components/chatButtonManager";
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
 import { interact, requestChat, speak } from '../services/playerToServer';
