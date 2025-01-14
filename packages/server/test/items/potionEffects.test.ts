@@ -3,7 +3,6 @@ import { DB } from '../../src/services/database';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
 import { Item } from '../../src/items/item';
-import { AddItem } from '../../src/items/uses/container/addItem';
 import { Mob } from '../../src/mobs/mob';
 import { ItemGenerator } from '../../src/items/itemGenerator';
 import { Drink } from '../../src/items/uses/drink';
@@ -66,7 +65,6 @@ describe('Try to consume blue potion in various cases', () => {
     };
 
     //set up the world
-    const standPosition = { x: 0, y: 1 };
     const position = { x: 0, y: 0 };
     mobFactory.loadTemplates(worldDescription.mob_types);
 
@@ -190,7 +188,6 @@ describe('Try to consume blue potion in various cases', () => {
     };
 
     //set up the world
-    const standPosition = { x: 0, y: 1 };
     const position = { x: 0, y: 0 };
     mobFactory.loadTemplates(worldDescription.mob_types);
 
