@@ -14,11 +14,13 @@ import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
 import { GRAY } from './pauseScene';
 import { publishPlayerPosition } from '../services/playerToServer';
+import { getNightSkyOpacity } from '../utils/nightOverlayHandler';
 import {
   ItemType,
   parseWorldFromJson,
   WorldDescription
 } from '../worldDescription';
+import { UxScene } from './uxScene';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -39,6 +41,7 @@ export class WorldScene extends Phaser.Scene {
   nightOverlay!: Phaser.GameObjects.Graphics;
   terrainWidth: number = 0;
   terrainHeight: number = 0;
+  nightOpacity: number = 0;
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -405,23 +408,17 @@ export class WorldScene extends Phaser.Scene {
         spriteHouse.animate(Math.floor(x), Math.floor(y));
       });
     }
-    //console.log('time', world.fantasyDate.hour, world.fantasyDate.hour/12);
 
     if (fantasyDate) {
-      let nightOpacity = 0;
-      const currentTime = fantasyDate.time;
-      if (currentTime >= 3 && currentTime <= 10) {
-        nightOpacity = 0;
-      } else if (currentTime >= 11 || currentTime <= 2) {
-        nightOpacity = 0.5;
-      } else if (currentTime > 10 && currentTime < 11) {
-        nightOpacity = (currentTime - 10) * 0.5;
-      } else if (currentTime > 2 && currentTime < 3) {
-        nightOpacity = (3 - currentTime) * 0.5;
-      }
-      //console.log('nightOpacity', nightOpacity, world.fantasyDate.hour, world.fantasyDate.minute, currentTime);
+      // Find new opacity value for the night overlay
+      this.nightOpacity = getNightSkyOpacity(
+        fantasyDate.time,
+        this.nightOpacity
+      );
+
       this.nightOverlay.clear();
-      this.nightOverlay.fillStyle(0x000033, nightOpacity); // Dark blue with 50% opacity
+      // Dark blue with max 50% opacity
+      this.nightOverlay.fillStyle(0x000033, this.nightOpacity);
       this.nightOverlay.fillRect(
         0,
         0,
@@ -432,6 +429,9 @@ export class WorldScene extends Phaser.Scene {
   }
 
   showGameOver() {
+    let uxscene = this.scene.get("UxScene") as UxScene;
+    uxscene.chatButtons?.clearChatOptions();
+    
     const text = this.add.text(75, 140, 'GAME OVER', {
       color: '#FFFFFF',
       fontSize: 60,

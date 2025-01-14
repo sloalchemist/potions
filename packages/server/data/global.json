@@ -303,11 +303,6 @@
             "walkable": true,
             "flat": true,
             "interactions": [
-                {
-                    "description": "Enter portal",
-                    "action": "enter",
-                    "while_carried": false
-                }
             ],
             "on_tick": [
                 {
@@ -342,7 +337,7 @@
             "type": "potion-stand",
             "carryable": false,
             "smashable": true,
-            "walkable": true,
+            "walkable": false,
             "attributes": [
                 {
                     "name": "items",
@@ -501,7 +496,7 @@
             "description": "For mixing potions",
             "type": "cauldron",
             "carryable": false,
-            "walkable": true,
+            "walkable": false,
             "interactions": []
         },
         {

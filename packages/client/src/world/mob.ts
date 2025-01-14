@@ -69,6 +69,14 @@ export class Mob extends Physical {
     }
 
     if (this.path.length > 0) {
+      // check if next step is blocked
+      const nextStep = this.path[0];
+      const lastStep = this.path[this.path.length - 1];
+      const nextItem = world.getItemAt(nextStep.x, nextStep.y);
+      if (!!nextItem && !nextItem.isWalkable(this.unlocks)) {
+        this.path = world.generatePath(this.unlocks, this.position, lastStep);
+      }
+
       const [position, angle] = followPath(
         this.position,
         this.path,
