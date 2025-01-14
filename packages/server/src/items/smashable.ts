@@ -39,8 +39,6 @@ export class Smashable {
 
   destroyPotionStand(){
     const gold = this.item.getAttribute<number>('gold');
-    console.log(gold);
-    //const itemsCount = this.item.getAttribute<number>('items');
     if (this.item.getAttribute<number>('gold') > 0){
       const position = Item.findEmptyPosition(this.mob.position);
       itemGenerator.createItem({
