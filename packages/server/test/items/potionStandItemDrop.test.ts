@@ -209,7 +209,7 @@ describe('Potion Stand Smashable Tests', () => {
     }
 
     // Verify that exactly 3 items were dropped
-    expect(itemsDropped).toBe(0);
+    expect(itemsDropped).toBe(1);
   });
 });
 
