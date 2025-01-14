@@ -66,7 +66,6 @@ export class Mob {
   public readonly id: string;
   private target?: Coord;
   private path: Coord[];
-  private speed: number;
   private _name: string;
   private maxHealth: number;
   private _carrying?: string;
@@ -78,6 +77,7 @@ export class Mob {
 
   private _gold: number;
   private _health: number;
+  private _speed: number;
   public readonly attack: number;
 
   // subtype: string,
@@ -113,7 +113,7 @@ export class Mob {
     this.path = path;
     this.target = target;
     this._position = position;
-    this.speed = speed;
+    this._speed = speed;
     this._gold = gold;
     this._health = health;
     this.maxHealth = maxHealth;
@@ -166,6 +166,10 @@ export class Mob {
 
   get health(): number {
     return this._health;
+  }
+
+  get speed(): number {
+    return this._speed;
   }
 
   get name(): string {
@@ -369,7 +373,7 @@ export class Mob {
             WHERE id = :id
         `
     ).run({ speed: newSpeed, id: this.id });
-    this.speed = newSpeed;
+    this._speed = newSpeed;
     pubSub.changeSpeed(this.id, amount, this.speed);
   }
 
