@@ -281,10 +281,10 @@ export class SpriteMob extends Mob {
     this.healthBar.clear();
 
     if (this.attributes['health'] < this.maxHealth) {
-      const barWidth = 40;
+      const barWidth = 40; 
       const barHeight = 5;
 
-      const healthPercentage = this.attributes['health'] / this.maxHealth;
+      const healthPercentage = this.attributes['health'] / this.maxHealth; // computes health percentage
 
       const x = this.sprite.x - barWidth / 2;
       const y = this.sprite.y - 20;
