@@ -68,7 +68,7 @@ describe('Fence health bar updates with state', () => {
         jest.requireActual('../../../src/sprite/sprite_item');
 
         SpriteItem = jest.fn().mockImplementation((
-            maxHealth: number, health: number, scene: any, itemType: { layoutType: string }
+            maxHealth: number, health: number, scene: Phaser.Scene, itemType: { layoutType: string }
         ) => {
             const sprite = {
                 attributes: { health },
