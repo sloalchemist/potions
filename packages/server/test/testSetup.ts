@@ -6,7 +6,6 @@ import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
 import { buildGraph, constructGraph, Graphable, intializeTestKnowledgeDB } from '@rt-potion/converse';
-
 import { buildGraphFromWorld } from '../src/generate/socialWorld';
 
 export let world: ServerWorld;

@@ -26,7 +26,7 @@ export class BuildWall implements Use {
     partialWall.changeAttributeBy('complete', 1);
     item.destroy();
 
-    if (partialWall.getAttribute<number>('complete') <= 0) {
+    if (partialWall.getAttribute<number>('complete') > 0) {
       const position = partialWall.position;
       partialWall.destroy();
       itemGenerator.createItem({
@@ -34,7 +34,6 @@ export class BuildWall implements Use {
         position
       });
     }
-
     return true;
   }
 }
