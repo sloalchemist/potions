@@ -368,18 +368,17 @@ export class Mob {
 
   // Addition: These things happen when the character is in sleep state (healing + energy)
   sleep() {
-    if (gameWorld.currentDate().global_tick % (12 * 4) === 0) { // Checks for every 48 ticks that elapsed of no movement
-      this.needs.changeNeed('max_energy', 25);
-      this.needs.changeNeed('energy', 25);
-      this.changeHealth(10);
-    }
+    this.needs.changeNeed('max_energy', 25);
+    this.needs.changeNeed('energy', 25);
+    this.changeHealth(10);
   }
 
   // Addition: Implements sleep if it recognizes that mob is asleep
   checkForSleep() {
     const currentTick = gameWorld.currentDate().global_tick; // Use the game world time and not real time
     if (currentTick - this.lastMoveTick >= this.sleepDuration) {
-      this.sleep();  // Sleep if conidtion is met
+      this.sleep();  // Sleep if condition is met
+      this.lastMoveTick = currentTick; // Reset the last move tick
     }
   }
 
