@@ -4,6 +4,7 @@ import { mobFactory } from "../../src/mobs/mobFactory";
 import { Coord } from "@rt-potion/common";
 import { Community } from "../../src/community/community";
 import { gameWorld, initializeGameWorld } from "../../src/services/gameWorld/gameWorld";
+import { FantasyDate } from "../../src/date/fantasyDate";
 
 beforeAll(() => {
   commonSetup();
@@ -139,11 +140,12 @@ describe('Mob Tests', () => {
       testMob?.changeHealth(-20);
       expect(testMob?.health).toBe(80);
 
-      testMob?.tick(1);
-      testMob?.tick(1);
-      testMob?.tick(1);
+      for (let i = 0; i < 48; i++) { // 48 ticks = sleep duration
+        FantasyDate.runTick();
+      }
+      testMob?.tick(500);
 
-      expect(testMob?.health).toBeGreaterThan(80);
+      expect(testMob?.health).toEqual(80);
     })
     
   });
