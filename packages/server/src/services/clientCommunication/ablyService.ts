@@ -217,7 +217,24 @@ export class AblyService implements PubSub {
       }
     });
   }
-
+ 
+  public changeSpeed(key: string, speed: number, newValue: number): void {
+    if (newValue == undefined || key == undefined || speed == undefined) {
+      throw new Error(
+        `Sending invalid changeSpeed message ${key}, ${speed}, ${newValue}`
+      );
+    }
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: 'speed',
+        delta: speed,
+        new_value: newValue
+      }
+    });
+  }
+  
   public changeGold(key: string, gold: number, newValue: number): void {
     if (newValue == undefined || key == undefined || gold == undefined) {
       throw new Error(

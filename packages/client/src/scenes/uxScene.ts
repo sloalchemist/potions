@@ -27,6 +27,7 @@ export class UxScene extends Phaser.Scene {
   chatButtons: ChatButtonManager = new ChatButtonManager([]);
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
+  speedText: Phaser.GameObjects.Text | null = null;
   dateText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
 
@@ -147,6 +148,10 @@ export class UxScene extends Phaser.Scene {
         'Health: ' + currentCharacter.health
       );
       this.statsContainer.add(this.healthText);
+
+      this.speedText = this.add.text(15, 115, 'Speed: ' + currentCharacter.speed);
+      this.statsContainer.add(this.speedText);
+
       this.dateText = this.add.text(
         15,
         115,
@@ -201,6 +206,7 @@ export class UxScene extends Phaser.Scene {
     if (currentCharacter) {
       this.goldText?.setText('Gold: ' + currentCharacter.gold);
       this.healthText?.setText('Health: ' + currentCharacter.health);
+      this.speedText?.setText('Speed: ' + currentCharacter.speed);
     }
   }
 
