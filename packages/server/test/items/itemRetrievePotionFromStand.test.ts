@@ -130,6 +130,7 @@ describe('Try to retrieve a potion from a potion stand', () => {
     mobFactory.makeMob('player', playerPosition, 'TestID', 'TestPlayer');
     const testMob = Mob.getMob('TestID');
     expect(testMob).not.toBeNull();
+    expect(testMob!.carrying).toBeUndefined();
 
     // Give potion to player
     itemGenerator.createItem({
@@ -140,27 +141,25 @@ describe('Try to retrieve a potion from a potion stand', () => {
     });
 
     // Place potion on stand
-    const potion = new AddItem();
-    potion.interact(testMob!, testStand!);
+    const addPotion = new AddItem();
+    addPotion.interact(testMob!, testStand!);
 
     // Ensure potion is on stand
     expect(testStand).not.toBeNull();
     expect(testStand!.getAttribute('items')).toBe(1);
 
     // Check to see that player is not carrying anything before retrieval
-    // expect(testMob!.carrying).not.toBeNull();
-    expect(testMob!.carrying).toBeNull();
+    expect(testMob!.carrying).toBeUndefined();
 
-    // add the potion to the stand
     // Retrieve the potion from the stand
     const testAddItem = new Retrieve();
     const test = testAddItem.interact(testMob!, testStand!);
-    // expect(test).toBe(true);
+    expect(test).toBe(true);
+
+    // Check that the stand is empty
+    expect(testStand!.getAttribute('items')).toBe(0);
 
     // Check that the player has the potion
-    // const standAfter = Item.getItem(standID!);
-    // expect(standAfter).not.toBeNull();
-    // expect(standAfter!.getAttribute('items')).toBe(1);
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
   });
