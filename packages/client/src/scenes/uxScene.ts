@@ -12,6 +12,7 @@ import {
   setResponseCallback
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
+import { ChatButtonManager } from "../components/chatButtonManager";
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
 import { interact, requestChat, speak } from '../services/playerToServer';
@@ -23,7 +24,7 @@ export interface ChatOption {
 
 export class UxScene extends Phaser.Scene {
   interactButtons: Button[] = [];
-  chatButtons: Button[] = [];
+  chatButtons: ChatButtonManager = new ChatButtonManager([]);
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
   dateText: Phaser.GameObjects.Text | null = null;
@@ -255,9 +256,7 @@ export class UxScene extends Phaser.Scene {
 
   // Method to set item interactions
   setInteractions(interactions: Interactions[]) {
-    // Clear previous item buttons
-    this.interactButtons.forEach((button) => button.destroy());
-    this.interactButtons = [];
+    this.chatButtons?.clearChatOptions();
 
     interactions.forEach((interaction, i) => {
       const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
@@ -276,9 +275,7 @@ export class UxScene extends Phaser.Scene {
   }
 
   setChatCompanions(companions: Mob[]) {
-    // Clear previous chat buttons
-    this.chatButtons.forEach((button) => button.destroy());
-    this.chatButtons = [];
+    this.chatButtons?.clearChatOptions();
 
     companions.forEach((companion, i) => {
       const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
@@ -292,8 +289,7 @@ export class UxScene extends Phaser.Scene {
   }
 
   sendRequestChat(world: World, companion: Mob) {
-    this.chatButtons.forEach((button) => button.destroy());
-    this.chatButtons = [];
+    this.chatButtons?.clearChatOptions();
 
     this.chatRequested = true;
     setChatting(true);
@@ -302,9 +298,7 @@ export class UxScene extends Phaser.Scene {
 
   // New method to set chat options
   setChatOptions(chatOptions: ChatOption[]) {
-    // Clear previous chat buttons
-    this.chatButtons.forEach((button) => button.destroy());
-    this.chatButtons = [];
+    this.chatButtons?.clearChatOptions();
 
     chatOptions.forEach((chatOption, i) => {
       const y = 70 + (80 + 10) * i;

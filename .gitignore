@@ -19,3 +19,5 @@ packages/server/data/*.db
 packages/server/data/*.db-shm
 packages/server/data/*.db-wal
 
+# Exclude native npm lock in favor of pnpm lock
+package-lock.json

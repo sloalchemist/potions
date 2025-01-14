@@ -1,5 +1,6 @@
 import { Mob } from '../mobs/mob';
 import { Community } from '../community/community'
+import { Community } from '../community/community'
 import { pubSub } from '../services/clientCommunication/pubsub';
 import { DB } from '../services/database';
 import { Item } from './item';

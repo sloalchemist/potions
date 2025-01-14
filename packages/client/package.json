@@ -24,6 +24,7 @@
     "jest": "^29.7.0",
     "jest-canvas-mock": "^2.5.2",
     "jest-environment-jsdom": "^29.7.0",
+    "phaser3spectorjs": "^0.0.8",
     "prettier": "^3.0.0",
     "rimraf": "^5.0.0",
     "ts-jest": "^29.2.5",

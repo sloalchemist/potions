@@ -15,8 +15,9 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "lib": ["dom", "es2016", "esnext"],
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "typeRoots": ["node_modules/@types", "./src/types"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "test/*.test.ts"],
   "exclude": ["node_modules"]
 }

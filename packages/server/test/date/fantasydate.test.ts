@@ -3,7 +3,7 @@ import { commonSetup } from '../testSetup';
 import { DB } from '../../src/services/database';
 
 beforeAll(() => {
-  commonSetup();
+  commonSetup('data/fantasydate.test.db');
 });
 
 describe('FantasyDate', () => {
@@ -29,7 +29,5 @@ describe('FantasyDate', () => {
 });
 
 afterAll(() => {
-  DB.close();
-});
   DB.close();
 });
