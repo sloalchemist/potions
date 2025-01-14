@@ -16,6 +16,7 @@ import { ChatButtonManager } from "../components/chatButtonManager";
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
 import { interact, requestChat, speak } from '../services/playerToServer';
+import { playerDead } from '../services/serverToBroadcast'
 
 export interface ChatOption {
   label: string;
@@ -174,10 +175,17 @@ export class UxScene extends Phaser.Scene {
           }))
         );
       });
-      // Set interaction callback for item interactions
+      if (playerDead) {
+        setInteractionCallback((interactions: Interactions[]) =>
+          this.setInteractions([])
+        );
+      } else {
+        // Set interaction callback for item interactions
       setInteractionCallback((interactions: Interactions[]) =>
         this.setInteractions(interactions)
       );
+      }
+
       setChatCompanionCallback((companions: Mob[]) =>
         this.setChatCompanions(companions)
       );
@@ -256,7 +264,8 @@ export class UxScene extends Phaser.Scene {
 
   // Method to set item interactions
   setInteractions(interactions: Interactions[]) {
-    this.chatButtons?.clearChatOptions();
+      this.interactButtons.forEach((button: Button) => button.destroy());
+      this.interactButtons = [];
 
     interactions.forEach((interaction, i) => {
       const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
