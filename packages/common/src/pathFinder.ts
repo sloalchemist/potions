@@ -1,4 +1,4 @@
-import { Coord, floor, step } from './coord';
+import { Coord, floor, round, step } from './coord';
 import { TerrainType } from './terrainType';
 
 export class PathFinder {
@@ -214,7 +214,8 @@ export class PathFinder {
     fuzzy: boolean = false
   ): Coord[] {
     end = floor(end);
-    start = floor(start);
+    start = round(start);
+    //start = floor(start);
 
     if (!fuzzy && !this.isWalkable(unlocks, end.x, end.y)) {
       // new Error(`End position (${JSON.stringify(end)}) is not walkable`);
