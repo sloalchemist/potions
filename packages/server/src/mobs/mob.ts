@@ -80,6 +80,10 @@ export class Mob {
   private _health: number;
   public readonly attack: number;
 
+  // Addition: Tracking when sprite last moved, and how long they've been asleep for
+  private lastMoveTick: number = 0;  // Track last move tick
+  private sleepDuration: number = 12 * 4; // Asleep if doesnt move for 48 ticks
+
   // subtype: string,
   // currentAction?: string,
   // carrying?: string,
@@ -122,6 +126,9 @@ export class Mob {
     this.personality = Personality.loadPersonality(this);
     this.community_id = community_id;
     this.unlocks.push(community_id);
+
+    // Addition: Initialize that the mob hasn't moved at the start of the game
+    this.lastMoveTick = 0;
   }
 
   private setAction(action: string, finished: boolean = false) {
@@ -359,6 +366,23 @@ export class Mob {
     }
   }
 
+  // Addition: These things happen when the character is in sleep state (healing + energy)
+  sleep() {
+    if (gameWorld.currentDate().global_tick % (12 * 4) === 0) { // Checks for every 48 ticks that elapsed of no movement
+      this.needs.changeNeed('max_energy', 25);
+      this.needs.changeNeed('energy', 25);
+      this.changeHealth(10);
+    }
+  }
+
+  // Addition: Implements sleep if it recognizes that mob is asleep
+  checkForSleep() {
+    const currentTick = gameWorld.currentDate().global_tick; // Use the game world time and not real time
+    if (currentTick - this.lastMoveTick >= this.sleepDuration) {
+      this.sleep();  // Sleep if conidtion is met
+    }
+  }
+
   getHouse(): House | undefined {
     const houseData = DB.prepare(
       `
@@ -427,10 +451,14 @@ export class Mob {
     ) {
       this.target = undefined;
     }
+
+    // Addition: Keep track of when it last moved for sleep
+    this.lastMoveTick = gameWorld.currentDate().global_tick;
+
     DB.prepare(
       `
             UPDATE mobs
-            SET position_x = :position_x, position_y = :position_y, path = :path, target_x = :target_x, target_y = :target_y
+            SET position_x = :position_x, position_y = :position_y, path = :path, target_x = :target_x, target_y = :target_y, lastMoveTick = :lastMoveTick
             WHERE id = :id
         `
     ).run({
@@ -439,7 +467,9 @@ export class Mob {
       id: this.id,
       path: JSON.stringify(this.path),
       target_x: this.target ? this.target?.x : null,
-      target_y: this.target ? this.target?.y : null
+      target_y: this.target ? this.target?.y : null,
+      // Addition: ALSO UPDATE the lastMoveTick when the mob moves
+      lastMoveTick: this.lastMoveTick,
     });
   }
 
@@ -579,6 +609,9 @@ export class Mob {
       this.setAction(action.type(), finished);
     }
 
+    // Addition: Check if it hasn't moved in a while
+    this.checkForSleep();
+
     this.needs.tick();
   }
 
@@ -606,6 +639,7 @@ export class Mob {
             social INTEGER NOT NULL DEFAULT 100,
             community_id TEXT,
             house_id TEXT,
+            lastMoveTick INTEGER NOT NULL DEFAULT 0,
             FOREIGN KEY (carrying_id) REFERENCES items (id) ON DELETE SET NULL,
             FOREIGN KEY (community_id) REFERENCES community (id) ON DELETE SET NULL,
             FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE SET NULL
