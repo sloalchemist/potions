@@ -458,7 +458,7 @@
         "type": "basket",
         "carryable": false,
         "templated": true,
-        "walkable": true,
+        "walkable": false,
         "show_template_at": {
             "x": 0,
             "y": 7
