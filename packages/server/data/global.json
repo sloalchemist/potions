@@ -192,9 +192,10 @@
                     "action": "spawn_item",
                     "parameters": {
                         "type": "log",
-                        "max": 6,
-                        "rate": 0.1,
-                        "radius": 10
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 3,
+                        "rate": 0.1
                     }
                 }
             ]
@@ -213,9 +214,10 @@
                     "action": "spawn_item",
                     "parameters": {
                         "type": "heart-beet",
-                        "max": 6,
-                        "rate": 0.1,
-                        "radius": 10
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 3,
+                        "rate": 0.1
                     }
                 }
             ]
@@ -264,9 +266,10 @@
                     "action": "spawn_item",
                     "parameters": {
                         "type": "blueberry",
-                        "max": 6,
-                        "rate": 0.1,
-                        "radius": 10
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 3,
+                        "rate": 0.1
                     }
                 }
             ]
