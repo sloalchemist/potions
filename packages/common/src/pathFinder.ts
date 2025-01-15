@@ -207,8 +207,20 @@ export class PathFinder {
     return simplifiedPath;
   }
 
-  // Check if surrounding tiles are walkable in specific cases
-  private checkSurrounding(start: Coord, end: Coord): boolean {
+  
+/**
+ * Determines if the surrounding tiles relative to the starting coordinate are walkable.
+ * 
+ * This function checks two adjacent tiles based on the direction from the start to the end
+ * coordinate, verifying if they are walkable.
+ * 
+ * @param start - The starting coordinate.
+ * @param end - The ending coordinate.
+ * 
+ * @returns True if the surrounding tiles in the direction to the end coordinate are walkable, 
+ * false otherwise.
+ */
+  private isSurroundingWalkable(start: Coord, end: Coord): boolean {
     start = floor(start);
 
     if (end.x <= start.x && end.y <= start.y) {
@@ -239,7 +251,7 @@ export class PathFinder {
   ): Coord[] {
     end = floor(end);
 
-    if (this.checkSurrounding(start, end)) {
+    if (this.isSurroundingWalkable(start, end)) {
       start = ceiling(start);
     }
     else {
