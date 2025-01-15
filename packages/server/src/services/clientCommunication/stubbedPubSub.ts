@@ -26,6 +26,8 @@ export class StubbedPubSub implements PubSub {
 
   changeHealth(_key: string, _health: number, _newValue: number): void {}
 
+  changeSpeed(_key: string, _speed: number, _newValue: number): void {}
+
   changeGold(_key: string, _gold: number, _newValue: number): void {}
 
   changeItemAttribute(

@@ -1,3 +1,4 @@
+
 import { MobI } from '@rt-potion/common';
 import { WorldScene } from '../scenes/worldScene';
 import { SpriteItem } from './sprite_item';
@@ -46,7 +47,6 @@ export class SpriteMob extends Mob {
       mob.type,
       mob.maxHealth,
       mob.position,
-      mob.speed,
       mob.attributes
     );
     this.scene = scene;

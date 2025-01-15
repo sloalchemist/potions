@@ -56,6 +56,22 @@ export class Purchasable {
     return true;
   }
 
+  retrieveItem(mob: Mob): boolean {
+    if (this.items <= 0) {
+      return false;
+    }
+
+    this.changeItems(-1);
+
+    itemGenerator.createItem({
+      type: this.templateType,
+      subtype: this.item.subtype,
+      carriedBy: mob
+    });
+
+    return true;
+  }
+
   collectGold(mob: Mob) {
     mob.changeGold(this.gold);
     this.item.setAttribute<number>('gold', 0);
