@@ -193,7 +193,8 @@
                     "parameters": {
                         "type": "log",
                         "max": 6,
-                        "rate": 0.1
+                        "rate": 0.1,
+                        "radius": 10
                     }
                 }
             ]
@@ -213,7 +214,8 @@
                     "parameters": {
                         "type": "heart-beet",
                         "max": 6,
-                        "rate": 0.1
+                        "rate": 0.1,
+                        "radius": 10
                     }
                 }
             ]
@@ -263,7 +265,8 @@
                     "parameters": {
                         "type": "blueberry",
                         "max": 6,
-                        "rate": 0.1
+                        "rate": 0.1,
+                        "radius": 10
                     }
                 }
             ]
