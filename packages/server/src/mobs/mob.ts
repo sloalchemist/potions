@@ -168,6 +168,10 @@ export class Mob {
     return this._health;
   }
 
+  get _speed(): number {
+    return this.speed;
+}
+
   get name(): string {
     return this._name;
   }
@@ -357,6 +361,21 @@ export class Mob {
       ).run({ id: this.id });
       this.destroy();
     }
+  }
+
+    changeSpeed(amount: number) {
+    if (amount === 0) return;
+    let newSpeed = this.speed + amount;
+    if (newSpeed > 10) newSpeed = 10;
+    DB.prepare(
+      `
+            UPDATE mobs
+            SET speed = :speed
+            WHERE id = :id
+        `
+    ).run({ speed: newSpeed, id: this.id });
+    this.speed = newSpeed;
+    pubSub.changeSpeed(this.id, amount, this.speed);
   }
 
   getHouse(): House | undefined {
