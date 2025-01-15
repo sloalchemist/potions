@@ -21,7 +21,8 @@ export class Smashable {
 
   smashItem(mob: Mob) {
     this.mob = mob; // Store mob in the class property
-    const attackDmg = Math.floor(Math.random() * mob.attack);
+    let attackDmg = Math.floor(Math.random() * mob.attack);
+    attackDmg = attackDmg ? attackDmg : 1;
     this.changeHealth(-attackDmg);
   }
 
