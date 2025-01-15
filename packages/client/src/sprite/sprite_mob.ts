@@ -47,7 +47,6 @@ export class SpriteMob extends Mob {
       mob.type,
       mob.maxHealth,
       mob.position,
-      // mob.speed,
       mob.attributes
     );
     this.scene = scene;
