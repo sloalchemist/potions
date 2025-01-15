@@ -7,7 +7,6 @@ export type MobI = {
   subtype: string;
   target?: Coord;
   path: Coord[];
-  // speed: number;
   name: string;
   maxHealth: number;
   carrying?: string;
