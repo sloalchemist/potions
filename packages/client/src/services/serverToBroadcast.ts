@@ -16,13 +16,20 @@ import {
   SpeakData
 } from '@rt-potion/common';
 import { world, WorldScene } from '../scenes/worldScene';
-import { addNewItem, addNewMob, gameState, setDate, clearInteractions } from '../world/controller';
+import {
+  addNewItem,
+  addNewMob,
+  gameState,
+  setDate,
+  clearInteractions
+} from '../world/controller';
 import { SpriteMob } from '../sprite/sprite_mob';
 import { publicCharacterId } from '../worldMetadata';
 import { SpriteItem } from '../sprite/sprite_item';
 import { Types } from 'ably';
 import { leaveWorld } from './playerToServer';
 import { focused } from '../main';
+import { clear } from 'console';
 
 export let playerDead = false;
 
@@ -94,6 +101,8 @@ export function setupBroadcast(
     if (mob) {
       mob.destroy(world);
       if (data.id === publicCharacterId) {
+        console.log('Player is dead');
+        clearInteractions();
         playerDead = true;
         clearInteractions
 
