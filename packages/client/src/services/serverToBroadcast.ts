@@ -29,7 +29,6 @@ import { SpriteItem } from '../sprite/sprite_item';
 import { Types } from 'ably';
 import { leaveWorld } from './playerToServer';
 import { focused } from '../main';
-import { clear } from 'console';
 
 export let playerDead = false;
 
