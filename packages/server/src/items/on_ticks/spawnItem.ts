@@ -14,11 +14,16 @@ export class SpawnItem implements OnTick {
     }
 
     const itemType = parameters['type'] as string;
-    const count = Item.countTypeOfItem(itemType);
-    const max = parameters['max'] as number;
+    const radius = parameters['radius'] as number;
+    const globalCount = Item.countTypeOfItem(itemType);
+    const localCount = Item.countTypeOfItemInRadius(itemType, item.position, radius);
+    Item.countTypeOfItemInRadius(itemType, item.position, radius);
+    
+    const globalMax = parameters['global_max'] as number;
+    const localMax = parameters['local_max'] as number;
     const rate = parameters['rate'] as number;
 
-    if (count < max && Math.random() < rate) {
+    if (globalCount < globalMax && localCount < localMax && Math.random() < rate) {
       itemGenerator.createItem({
         type: itemType,
         position: item.position
