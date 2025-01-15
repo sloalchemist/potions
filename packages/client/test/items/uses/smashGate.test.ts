@@ -2,11 +2,10 @@ import { getInteractablePhysicals, getPhysicalInteractions } from "../../../src/
 import { Item } from "../../../src/world/item";
 import { World } from "../../../src/world/world";
 import { ItemType } from "../../../src/worldDescription";
-import { Coord, followPath } from '@rt-potion/common';
+import { Coord } from '@rt-potion/common';
 
 describe('Openable, smashable items have prompts to smash', () => {
   let world: World | null = null;
-  let mockChatCallback: jest.Mock;
 
   beforeAll(() => {
     // Initialize world
