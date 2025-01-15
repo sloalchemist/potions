@@ -117,7 +117,7 @@ export class SpriteMob extends Mob {
           fontStyle: 'bold',
           color: '#000000',
           strokeThickness: 2,
-          stroke: '#FFFFFF'
+          stroke: '#FFFFFF',
         }
       )
       .setOrigin(0.5);
@@ -128,7 +128,13 @@ export class SpriteMob extends Mob {
         this.sprite.x,
         this.sprite.y + TEXT_PLACEMENT_TO_SPRITE_OFFSET,
         mob.doing!,
-        { fontFamily: 'Arial', fontSize: '12px', color: '#000000' }
+        { 
+          fontFamily: 'Arial', 
+          fontSize: '12px', 
+          color: '#000000',
+          strokeThickness: 3,
+          stroke: '#FFFFFF', 
+        }
       )
       .setOrigin(0.5);
     this.doingText.setDepth(1);
