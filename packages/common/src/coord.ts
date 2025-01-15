@@ -33,6 +33,11 @@ export function round(coord: Coord): Coord {
   return { x: Math.round(coord.x), y: Math.round(coord.y) };
 }
 
+// Return the ceiling values of the coordinates
+export function ceiling(coord: Coord): Coord {
+  return { x: Math.ceil(coord.x), y: Math.ceil(coord.y) };
+}
+
 // Normalized vector subtraction between two coordinates
 export function normalizedSubtraction(coord1: Coord, coord2: Coord): Coord {
   const dx = coord1.x - coord2.x;

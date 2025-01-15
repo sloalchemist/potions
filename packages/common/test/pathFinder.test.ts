@@ -81,4 +81,59 @@ describe('PathFinder', () => {
     const path = pathFinder.generatePath([], start, end, false);
     expect(path).toEqual([]);
   });
+
+  test('generatePath should not cut over unwalkable corners (#1)', () => {
+    // check not cutting top left corner
+    const start = { x: 0.75, y: 0 };
+    const end = { x: 1, y: 2 };
+    const cornerPoint = { x: 0, y: 0 };
+    const path = pathFinder.generatePath([], start, end, false);
+    expect(path).not.toHaveLength(0);
+    expect(path).toContainEqual(cornerPoint);
+    expect(path).toContainEqual(end);
+  });
+
+  test('generatePath should not cut over unwalkable corners (#2)', () => {
+    // check not cutting the top left corner, but different start point
+    const start = { x: 0.2, y: 0 };
+    const end = { x: 1, y: 2 };
+    const cornerPoint = { x: 0, y: 0 };
+    const path = pathFinder.generatePath([], start, end, false);
+    expect(path).not.toHaveLength(0);
+    expect(path).toContainEqual(cornerPoint);
+    expect(path).toContainEqual(end);
+  });
+
+  test('generatePath should not cut over unwalkable corners (#3)', () => {
+    // check not cutting top right corner
+    const start = { x: 0.4, y: 2 };
+    const end = { x: 1, y: 0 };
+    const cornerPoint = { x: 0, y: 2 };
+    const path = pathFinder.generatePath([], start, end, false);
+    expect(path).not.toHaveLength(0);
+    expect(path).toContainEqual(cornerPoint);
+    expect(path).toContainEqual(end);
+  });
+
+  test('generatePath should not cut over unwalkable corners (#4)', () => {
+    // check not cutting the bottom right corner
+    const start = { x: 2, y: 1.6 };
+    const end = { x: 0, y: 2 };
+    const cornerPoint = { x: 2, y: 2 };
+    const path = pathFinder.generatePath([], start, end, false);
+    expect(path).not.toHaveLength(0);
+    expect(path).toContainEqual(cornerPoint);
+    expect(path).toContainEqual(end);
+  });
+
+  test('generatePath should not cut over unwalkable corners (#5)', () => {
+    // check not cutting the bottom left corner
+    const start = { x: 1.9, y: 0 };
+    const end = { x: 2, y: 2 };
+    const cornerPoint = { x: 2, y: 0 };
+    const path = pathFinder.generatePath([], start, end, false);
+    expect(path).not.toHaveLength(0);
+    expect(path).toContainEqual(cornerPoint);
+    expect(path).toContainEqual(end);
+  });
 });
