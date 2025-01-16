@@ -243,6 +243,56 @@ export class PathFinder {
     return false;
   }
 
+  /**
+   * Finds the nearest walkable tile to the target coordinate.
+   * 
+   * The algorithm does a breadth-first search from the target coordinate, 
+   * checking all adjacent tiles in all 8 possible directions. If a walkable 
+   * tile is found, it is returned. If no walkable tile is found, an error is 
+   * thrown.
+   * 
+   * @param target - The target coordinate.
+   * 
+   * @returns The nearest walkable tile to the target coordinate.
+   * 
+   * @throws If no walkable tile is found.
+   */
+  private findNearestWalkableTile(target: Coord): Coord {
+    const directions = [
+      { x: 1, y: 0 },
+      { x: -1, y: 0 },
+      { x: 0, y: 1 },
+      { x: 0, y: -1 },
+      { x: 1, y: 1 },
+      { x: -1, y: -1 },
+      { x: 1, y: -1 },
+      { x: -1, y: 1 },
+    ];
+  
+    const queue: Coord[] = [target];
+    const visited: Set<string> = new Set();
+    visited.add(`${target.x},${target.y}`);
+  
+    while (queue.length > 0) {
+      const current = queue.shift()!;
+      if (this.isWalkable([], current.x, current.y)) {
+        return current;
+      }
+  
+      for (const direction of directions) {
+        const neighbor = { x: current.x + direction.x, y: current.y + direction.y };
+        const neighborKey = `${neighbor.x},${neighbor.y}`;
+  
+        if (!visited.has(neighborKey)) {
+          visited.add(neighborKey);
+          queue.push(neighbor);
+        }
+      }
+    }
+  
+    throw new Error("No walkable tile found");
+  }
+
   generatePath(
     unlocks: string[],
     start: Coord,
@@ -259,8 +309,7 @@ export class PathFinder {
     }
 
     if (!fuzzy && !this.isWalkable(unlocks, end.x, end.y)) {
-      // new Error(`End position (${JSON.stringify(end)}) is not walkable`);
-      return [];
+      end = this.findNearestWalkableTile(end);
     }
 
     const path = this.aStar(unlocks, start, end, fuzzy);
