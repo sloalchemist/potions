@@ -110,7 +110,7 @@ export function mobRangeListener(mobs: Mob[]) {
     const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastChatCompanions)) {
-      console.log("filter: ", filteredMobs, "last:", lastChatCompanions);
+      console.log('filter: ', filteredMobs, 'last:', lastChatCompanions);
       chatCompanionCallback(filteredMobs);
       lastChatCompanions = filteredMobs;
     }
@@ -168,11 +168,14 @@ export function getCarriedItemInteractions(
   // unique carried item interactions
   item.itemType.interactions.forEach((interaction) => {
     if (interaction.while_carried) {
-      const requiredItem = interaction.requires_item 
+      const requiredItem = interaction.requires_item
         ? nearbyItems.find((i) => i.itemType.type === interaction.requires_item)
         : true;
-      
-      if ((!interaction.requires_item || requiredItem) && item.conditionMet(interaction)) {
+
+      if (
+        (!interaction.requires_item || requiredItem) &&
+        item.conditionMet(interaction)
+      ) {
         interactions.push({
           action: interaction.action,
           item: item as Item,
@@ -232,22 +235,31 @@ export function getClosestPhysical(physicals: Item[], playerPos: Coord): Item {
 
 function getItemsAtPosition(physicals: Item[], position: Coord): Item[] {
   return physicals.filter((physical) => {
-    return position.x === physical.position!.x && position.y === physical.position!.y;
+    return (
+      position.x === physical.position!.x && position.y === physical.position!.y
+    );
   });
 }
 
-export function getInteractablePhysicals(physicals: Item[], playerPos: Coord): Item[] {
+export function getInteractablePhysicals(
+  physicals: Item[],
+  playerPos: Coord
+): Item[] {
   // player is standing on
   let onTopObjects = getItemsAtPosition(physicals, playerPos);
 
   // nearby "openable" items
-  let nearbyOpenableObjects = physicals.filter(p => p.itemType.layout_type === "opens")
+  let nearbyOpenableObjects = physicals.filter(
+    (p) => p.itemType.layout_type === 'opens'
+  );
   if (nearbyOpenableObjects.length > 1) {
-    nearbyOpenableObjects = [getClosestPhysical(nearbyOpenableObjects, playerPos)];
+    nearbyOpenableObjects = [
+      getClosestPhysical(nearbyOpenableObjects, playerPos)
+    ];
   }
-  
+
   // nearby non-walkable items
-  let nearbyObjects = physicals.filter(p => !p.itemType.walkable);
+  let nearbyObjects = physicals.filter((p) => !p.itemType.walkable);
   if (nearbyObjects.length > 1) {
     nearbyObjects = [getClosestPhysical(nearbyObjects, playerPos)];
   }
@@ -257,13 +269,13 @@ export function getInteractablePhysicals(physicals: Item[], playerPos: Coord): I
 function collisionListener(physicals: Item[]) {
   const player = world.mobs[publicCharacterId] as SpriteMob;
   const playerPos = floor(player.position!);
-  
+
   // retrieves a list of all of the nearby and on top of objects
   const interactableObjects = getInteractablePhysicals(physicals, playerPos);
   let interactions: Interactions[] = [];
 
   // retrieves interactions for all relevant objects
-  interactableObjects.forEach(physical => {
+  interactableObjects.forEach((physical) => {
     interactions = [...interactions, ...getPhysicalInteractions(physical)];
   });
 
@@ -281,7 +293,10 @@ function collisionListener(physicals: Item[]) {
   }
 
   // updates client only if interactions changes
-  if (!areInteractionsEqual(lastInteractions, interactions) && interactionCallback) {
+  if (
+    !areInteractionsEqual(lastInteractions, interactions) &&
+    interactionCallback
+  ) {
     interactionCallback(interactions);
     lastInteractions = interactions;
   }

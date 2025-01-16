@@ -280,6 +280,11 @@ export class UxScene extends Phaser.Scene {
     });
   }
 
+  clearInteractions() {
+    this.interactButtons.forEach((button) => button.destroy());
+    this.interactButtons = [];
+  }
+
   setChatCompanions(companions: Mob[]) {
     this.chatButtons?.clearChatOptions();
 

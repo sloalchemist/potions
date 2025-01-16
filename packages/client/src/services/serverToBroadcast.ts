@@ -94,6 +94,7 @@ export function setupBroadcast(
     if (mob) {
       mob.destroy(world);
       if (data.id === publicCharacterId) {
+        console.log('Player died');
         playerDead = true;
 
         // wait until the window is focused before moving on
