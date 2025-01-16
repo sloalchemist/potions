@@ -357,6 +357,18 @@
                 "while_carried": false
             },
             {
+                "description": "Get $item_name",
+                "action": "retrieve_item",
+                "while_carried": false,
+                "conditions": [
+                    {
+                        "attribute_name": "items",
+                        "value": 0,
+                        "comparison": "greater_than"
+                    }
+                ]
+            },
+            {
                 "description": "Raise price",
                 "action": "raise_price",
                 "while_carried": false,

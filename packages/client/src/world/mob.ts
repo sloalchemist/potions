@@ -5,7 +5,6 @@ import { World } from './world';
 export class Mob extends Physical {
   _target?: Coord;
   path: Coord[] = [];
-  speed: number;
   name: string;
   maxHealth: number;
   dead: boolean = false;
@@ -21,11 +20,9 @@ export class Mob extends Physical {
     type: string,
     maxHealth: number,
     position: Coord | null,
-    speed: number,
     attributes: Record<string, number>
   ) {
     super(world, key, type, position);
-    this.speed = speed;
     this.name = name;
     this.maxHealth = maxHealth;
 
@@ -80,7 +77,7 @@ export class Mob extends Physical {
       const [position, angle] = followPath(
         this.position,
         this.path,
-        this.speed,
+        this.attributes['speed'],
         deltaTime
       );
       this.changePosition(world, position);

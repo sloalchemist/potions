@@ -7,8 +7,6 @@ import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
 import { buildGraph, constructGraph, Graphable, intializeTestKnowledgeDB } from '@rt-potion/converse';
 import { buildGraphFromWorld } from '../src/generate/socialWorld';
-import { initializeGameWorld } from '../src/services/gameWorld/gameWorld';
-import { FantasyDate } from '../src/date/fantasyDate';
 
 export let world: ServerWorld;
 export let village: Community;
@@ -28,10 +26,16 @@ export const commonSetup = () => {
 
   const worldDescription = {
     tiles: [
-      [-1, -1],
-      [-1, -1]
+      [1, 1],
+      [1, 1]
     ],
-    terrain_types: [],
+    terrain_types: [
+        {
+          "name": "Grass",
+          "id": 1,
+          "walkable": true
+      }
+    ],
     item_types: [
       {
         name: 'Potion',
@@ -230,8 +234,6 @@ export const commonSetup = () => {
   };
   itemGenerator = new ItemGenerator(worldDescription.item_types);
   world = new ServerWorld(worldDescription);
-  initializeGameWorld(world);
-  FantasyDate.initialDate();
   graph = buildGraphFromWorld(worldDescription);
   intializeTestKnowledgeDB();
   buildGraph(constructGraph(graph));
