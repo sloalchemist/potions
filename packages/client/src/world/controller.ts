@@ -241,16 +241,22 @@ function getItemsAtPosition(physicals: Item[], position: Coord): Item[] {
   });
 }
 
-function getInteractablePhysicals(physicals: Item[], playerPos: Coord): Item[] {
+export function getInteractablePhysicals(physicals: Item[], playerPos: Coord): Item[] {
   // player is standing on
   let onTopObjects = getItemsAtPosition(physicals, playerPos);
 
+  // nearby "openable" items
+  let nearbyOpenableObjects = physicals.filter(p => p.itemType.layout_type === "opens")
+  if (nearbyOpenableObjects.length > 1) {
+    nearbyOpenableObjects = [getClosestPhysical(nearbyOpenableObjects, playerPos)];
+  }
+  
   // nearby non-walkable items
   let nearbyObjects = physicals.filter((p) => !p.itemType.walkable);
   if (nearbyObjects.length > 1) {
     nearbyObjects = [getClosestPhysical(nearbyObjects, playerPos)];
   }
-  return [...onTopObjects, ...nearbyObjects];
+  return [...onTopObjects, ...nearbyObjects, ...nearbyOpenableObjects];
 }
 
 function collisionListener(physicals: Item[]) {

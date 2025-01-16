@@ -323,11 +323,18 @@ export class WorldScene extends Phaser.Scene {
       }
     );
 
+    // Dimensions for the viewport of the game world. These numbers were derived
+    // from packages\client\static\frame.png so that the viewport is entirely
+    // within the upper half of the frame. 
+    const cameraViewportX = 17
+    const cameraViewportY = 16
+    const cameraViewportWidth = this.game.scale.width - 32
+    const cameraViewportHeight = this.game.scale.height * 0.5 - 14
     this.cameras.main.setViewport(
-      10,
-      10,
-      this.game.scale.width - 20,
-      this.game.scale.height * 0.5 - 10
+      cameraViewportX, 
+      cameraViewportY, 
+      cameraViewportWidth, 
+      cameraViewportHeight
     );
 
     this.terrainWidth = globalData.tiles[0].length;
@@ -358,16 +365,25 @@ export class WorldScene extends Phaser.Scene {
         return;
       }
 
-      console.log(
-        'click',
-        pointer.worldX / TILE_SIZE,
-        pointer.worldY / TILE_SIZE
-      );
-
-      publishPlayerPosition({
-        x: pointer.worldX / TILE_SIZE,
-        y: pointer.worldY / TILE_SIZE
-      });
+      // Check if mouse click is within the viewport of the game world for
+      // player movement to occur 
+      if (
+        pointer.x >= cameraViewportX &&
+        pointer.x <= cameraViewportX + cameraViewportWidth &&
+        pointer.y >= cameraViewportY &&
+        pointer.y <= cameraViewportY + cameraViewportHeight
+      ) {
+          console.log(
+            'click',
+            pointer.worldX / TILE_SIZE,
+            pointer.worldY / TILE_SIZE
+          );
+    
+          publishPlayerPosition({
+            x: pointer.worldX / TILE_SIZE,
+            y: pointer.worldY / TILE_SIZE
+          });
+        }
     });
 
     needsAnimationsLoaded = false;
