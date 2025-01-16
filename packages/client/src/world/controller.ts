@@ -241,16 +241,23 @@ function getItemsAtPosition(physicals: Item[], position: Coord): Item[] {
   });
 }
 
-export function getInteractablePhysicals(physicals: Item[], playerPos: Coord): Item[] {
+export function getInteractablePhysicals(
+  physicals: Item[],
+  playerPos: Coord
+): Item[] {
   // player is standing on
   let onTopObjects = getItemsAtPosition(physicals, playerPos);
 
   // nearby "openable" items
-  let nearbyOpenableObjects = physicals.filter(p => p.itemType.layout_type === "opens")
+  let nearbyOpenableObjects = physicals.filter(
+    (p) => p.itemType.layout_type === 'opens'
+  );
   if (nearbyOpenableObjects.length > 1) {
-    nearbyOpenableObjects = [getClosestPhysical(nearbyOpenableObjects, playerPos)];
+    nearbyOpenableObjects = [
+      getClosestPhysical(nearbyOpenableObjects, playerPos)
+    ];
   }
-  
+
   // nearby non-walkable items
   let nearbyObjects = physicals.filter((p) => !p.itemType.walkable);
   if (nearbyObjects.length > 1) {
@@ -305,10 +312,6 @@ export function setInteractionCallback(
   callback: (interactions: Interactions[]) => void
 ) {
   interactionCallback = callback;
-}
-
-export function clearInteractions() {
-  interactionCallback([]);
 }
 
 export function addNewHouse(scene: WorldScene, house: HouseI) {
