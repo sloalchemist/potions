@@ -50,6 +50,8 @@ resource "supabase_project" "potions" {
   }
 }
 
+
+
 # Get pooler connection string
 data "supabase_pooler" "main" {
   project_ref = supabase_project.potions.id
@@ -61,7 +63,7 @@ locals {
 
 # Execute database setup SQL
 resource "null_resource" "database_setup" {
-  depends_on = [supabase_project.potions]
+  # depends_on = [null_resource.wait_for_pooler]
 
   provisioner "local-exec" {
     command = "psql -f ../sql/setup.sql \"${local.db_connection_string}\""
