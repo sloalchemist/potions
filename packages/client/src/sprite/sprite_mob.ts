@@ -164,6 +164,8 @@ export class SpriteMob extends Mob {
         color = delta > 0 ? '#00ff00' : '#ff0000';
       } else if (key === 'gold') {
         color = '#ffd700';
+      } else if (key === 'speed') {
+        color = '#0000ff'
       }
 
       const attributeSprite = scene.add.text(
