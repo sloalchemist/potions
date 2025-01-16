@@ -1,4 +1,4 @@
-import { Coord, floor, step } from './coord';
+import { Coord, floor, ceiling, step } from './coord';
 import { TerrainType } from './terrainType';
 
 export class PathFinder {
@@ -207,6 +207,42 @@ export class PathFinder {
     return simplifiedPath;
   }
 
+  
+/**
+ * Determines if the surrounding tiles relative to the starting coordinate are walkable.
+ * 
+ * This function checks two adjacent tiles based on the direction from the start to the end
+ * coordinate, verifying if they are walkable.
+ * 
+ * @param start - The starting coordinate.
+ * @param end - The ending coordinate.
+ * 
+ * @returns True if the surrounding tiles in the direction to the end coordinate are walkable, 
+ * false otherwise.
+ */
+  private isSurroundingWalkable(start: Coord, end: Coord): boolean {
+    start = floor(start);
+
+    if (end.x <= start.x && end.y <= start.y) {
+      return this.isWalkable([], start.x - 1, start.y) &&
+        this.isWalkable([], start.x, start.y - 1);
+    }
+    else if (end.x > start.x && end.y <= start.y) {
+      return this.isWalkable([], start.x + 1, start.y) &&
+        this.isWalkable([], start.x, start.y - 1);
+    }
+    else if (end.x <= start.x && end.y > start.y) {
+      return this.isWalkable([], start.x - 1, start.y) &&
+        this.isWalkable([], start.x, start.y + 1);
+    }
+    else if (end.x > start.x && end.y > start.y) {
+      return this.isWalkable([], start.x + 1, start.y) &&
+        this.isWalkable([], start.x, start.y + 1);
+    }
+
+    return false;
+  }
+
   generatePath(
     unlocks: string[],
     start: Coord,
@@ -214,7 +250,13 @@ export class PathFinder {
     fuzzy: boolean = false
   ): Coord[] {
     end = floor(end);
-    start = floor(start);
+
+    if (this.isSurroundingWalkable(start, end)) {
+      start = ceiling(start);
+    }
+    else {
+      start = floor(start);
+    }
 
     if (!fuzzy && !this.isWalkable(unlocks, end.x, end.y)) {
       // new Error(`End position (${JSON.stringify(end)}) is not walkable`);
