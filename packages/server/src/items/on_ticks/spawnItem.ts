@@ -17,7 +17,6 @@ export class SpawnItem implements OnTick {
     const radius = parameters['radius'] as number;
     const globalCount = Item.countTypeOfItem(itemType);
     const localCount = Item.countTypeOfItemInRadius(itemType, item.position, radius);
-    Item.countTypeOfItemInRadius(itemType, item.position, radius);
     
     const globalMax = parameters['global_max'] as number;
     const localMax = parameters['local_max'] as number;
