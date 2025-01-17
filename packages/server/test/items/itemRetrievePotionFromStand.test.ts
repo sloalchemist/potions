@@ -76,6 +76,6 @@ describe('Try to retrieve a potion from a potion stand', () => {
   });
 });
 
-afterEach(() => {
+afterAll(() => {
   DB.close();
 });

@@ -230,6 +230,6 @@ describe('Try to consume blue potion in various cases', () => {
   });
 });
 
-afterEach(() => {
+afterAll(() => {
   DB.close();
 });
