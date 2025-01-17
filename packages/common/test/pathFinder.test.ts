@@ -91,15 +91,6 @@ describe('PathFinder', () => {
     expect(path).toContainEqual(end);
   });
 
-  // FIX: This test is no longer needed since we want to walk to the closest walkable tile if the goal is not walkable
-  //
-  // test('generatePath should return an empty path if the goal is not walkable', () => {
-  //   const start = { x: 0, y: 0 };
-  //   const end = { x: 1, y: 1 }; // Blocked
-  //   const path = pathFinder.generatePath([], start, end, false);
-  //   expect(path).toEqual([]);
-  // });
-
   test('generatePath should not cut over unwalkable corners (#1)', () => {
     // check not cutting top left corner
     const start = { x: 0.75, y: 0 };
