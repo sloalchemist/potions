@@ -247,7 +247,7 @@ export class PathFinder {
    * Finds the nearest walkable tile to the target coordinate.
    * 
    * The algorithm does a breadth-first search from the target coordinate, 
-   * checking all adjacent tiles in all 8 possible directions. If a walkable 
+   * checking all adjacent tiles in all 8 possible directions. If an walkable 
    * tile is found, it is returned. If no walkable tile is found, an error is 
    * thrown.
    * 
@@ -309,7 +309,12 @@ export class PathFinder {
     }
 
     if (!fuzzy && !this.isWalkable(unlocks, end.x, end.y)) {
-      end = this.findNearestWalkableTile(end);
+      try {
+        end = this.findNearestWalkableTile(end);
+      } catch {
+        // No walkable tile found
+        return [];
+      }
     }
 
     const path = this.aStar(unlocks, start, end, fuzzy);
