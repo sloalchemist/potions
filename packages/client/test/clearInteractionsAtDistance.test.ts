@@ -29,8 +29,10 @@ describe('Clear Interactions Tests', () => {
     }
   };
 
-  test('test 1', () => {
+  test('Test clearing interactButtons', () => {
+
     let uxscene = new UxScene();
+
 
     const button1 = new MockButton(mockScene) as Button;
     const button2 = new MockButton(mockScene) as Button;
@@ -41,12 +43,34 @@ describe('Clear Interactions Tests', () => {
     const spy1 = jest.spyOn(button1, 'destroy');
     const spy2 = jest.spyOn(button2, 'destroy');
 
-    // expect(uxscene.interactButtons.length).toEqual(2);
-    // uxscene.clearInteractions();
+    expect(uxscene.interactButtons.buttons.length).toEqual(2);
+    uxscene.interactButtons.clearButtonOptions();
 
-    // expect(spy1).toHaveBeenCalled();
-    // expect(spy2).toHaveBeenCalled();
+    expect(spy1).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
 
-    // expect(uxscene.interactButtons.length).toEqual(0);
+    expect(uxscene.interactButtons.buttons.length).toEqual(0);
+  });
+
+  test('Test clearing chatButtons', () => {
+
+    let uxscene = new UxScene();
+
+    const button1 = new MockButton(mockScene) as Button;
+    const button2 = new MockButton(mockScene) as Button;
+
+    uxscene.chatButtons.push(button1);
+    uxscene.chatButtons.push(button2);
+    
+    const spy1 = jest.spyOn(button1, 'destroy');
+    const spy2 = jest.spyOn(button2, 'destroy');
+
+    expect(uxscene.chatButtons.buttons.length).toEqual(2);
+    uxscene.chatButtons.clearButtonOptions();
+
+    expect(spy1).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
+
+    expect(uxscene.chatButtons.buttons.length).toEqual(0);
   });
 });
