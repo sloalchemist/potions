@@ -1,4 +1,4 @@
-import { commonSetup, world, itemGenerator, worldDescription } from '../testSetup';
+import { commonSetup, world, itemGenerator } from '../testSetup';
 import { DB } from '../../src/services/database';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
@@ -24,7 +24,7 @@ describe('Try to retrieve a potion from a potion stand', () => {
 
 
     // Create a potion stand
-    const itemGenerator = new ItemGenerator(worldDescription.item_types);
+
     itemGenerator.createItem({
       type: 'potion-stand',
       subtype: '255',
