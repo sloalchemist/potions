@@ -1,4 +1,4 @@
-import { commonSetup, itemGenerator, world} from '../../testSetup';
+import { commonSetup, itemGenerator, world } from '../../testSetup';
 import { DB } from '../../../src/services/database';
 import { Item } from '../../../src/items/item';
 import { BuildWall } from '../../../src/items/uses/building/buildWall';
@@ -6,6 +6,7 @@ import { Mob } from '../../../src/mobs/mob';
 import { mobFactory } from '../../../src/mobs/mobFactory';
 import { Pickup } from '../../../src/items/uses/pickup';
 import { Community } from '../../../src/community/community';
+import { Coord } from '@rt-potion/common';
 
 beforeAll(() => {
   commonSetup();
@@ -13,55 +14,47 @@ beforeAll(() => {
   mobFactory.loadTemplates(world.mobTypes);
 });
 
-describe('Build wall from partial wall', () => {
-  test('should (1) create mob, partial wall, and log ' +
-  '(2) mob interact with partial wall while carrying log ' +
-  '(3) wall should replace partial wall', () => {    
-    //create items in desired locations
-    const logPos = { x: 0, y: 0 };
-    itemGenerator.createItem({
-      type: 'log',
-      position: logPos
-    });
-    const logId = Item.getItemIDAt(logPos);
-    expect(logId).not.toBeNull();
-    const log = Item.getItem(logId!);
-    expect(log).toBeDefined();
+describe('BuildWall Tests', () => {
 
-    const wallPos = { x: 0, y: 1 };
-    itemGenerator.createItem({
-      type: 'partial-wall',
-      position: wallPos
-    });
+  describe('Building a wall from a partial wall', () => {
+    test('Should replace partial wall with a full wall when mob interacts carrying a log', () => {
+      // Init variables
+      let logPos: Coord = { x: 0, y: 0 };
+      let wallPos: Coord = { x: 0, y: 1 };
 
+      // Create a log at the specified position
+      itemGenerator.createItem({ type: 'log', position: logPos });
+      const logId = Item.getItemIDAt(logPos);
+      const log = Item.getItem(logId!);
+      expect(log).toBeDefined();
 
-    mobFactory.makeMob('player', { x: 1, y: 0 }, '1234', 'testPlayer1');
-    const mob = Mob.getMob('1234');
-    expect(mob).toBeInstanceOf(Mob);
-    expect(mob).toBeDefined();
-    expect(log).toBeDefined();
+      // Create a partial wall at the specified position
+      itemGenerator.createItem({ type: 'partial-wall', position: wallPos });
+      const partialWallId = Item.getItemIDAt(wallPos);
+      const partialWall = Item.getItem(partialWallId!);
+      expect(partialWall).toBeDefined();
+      expect(partialWall?.type).toBe('partial-wall');
 
-    if (mob && log) {
+      // Create a mob
+      mobFactory.makeMob('player', { x: 1, y: 0 }, '1234', 'testPlayer1');
+      const mob = Mob.getMob('1234');
+      expect(mob).toBeDefined();
+
+      // Mob picks up the log
       const pickup = new Pickup();
-      expect(pickup.interact(mob, log)).toBeTruthy();
-      
-      //check that the mob is carrying something
-      expect(mob.carrying).toBeDefined();
+      expect(pickup.interact(mob!, log!)).toBeTruthy();
+      expect(mob!.carrying).toBeDefined();
 
-      //interact with partial wall to create wall
+      // Mob interacts with the partial wall to build a full wall
       const buildWall = new BuildWall();
-      const wallInteract = buildWall.interact(mob, log);
-      expect(wallInteract).toBeTruthy();
+      expect(buildWall.interact(mob!, log!)).toBeTruthy();
 
-      //make sure something is at the partial wall location
-      const oldPartialWallID = Item.getItemIDAt(wallPos);
-      expect(oldPartialWallID).not.toBeNull();
-      const itemAtWallPos = Item.getItem(oldPartialWallID!);
-      expect(itemAtWallPos).not.toBeNull();
-
-      //make sure item is a wall and not partial wall
-      expect(itemAtWallPos!.type).toBe('wall');
-    }
+      // Verify the partial wall is replaced with a full wall
+      const wallId = Item.getItemIDAt(wallPos);
+      const wall = Item.getItem(wallId!);
+      expect(wall).toBeDefined();
+      expect(wall?.type).toBe('wall');
+    });
   });
 });
 
