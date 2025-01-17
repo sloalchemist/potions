@@ -4,7 +4,6 @@ import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
 import { Item } from '../../src/items/item';
 import { Mob } from '../../src/mobs/mob';
-import { ItemGenerator } from '../../src/items/itemGenerator';
 import { Drink } from '../../src/items/uses/drink';
 
 beforeEach(() => {
@@ -118,7 +117,13 @@ describe('Try to consume blue potion in various cases', () => {
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
 
+
+    // 2.5 + 6.5 = 9 speed
+    testMob?.changeSpeed(6.5)
+
+
     // check attributes on player, make sure 10 is cap for speed
+    console.log(testMob!._speed)
     expect(testMob!._speed).toBe(10);
     expect(testMob!.health).toBe(100);
     expect(testMob!.gold).toBe(0);
