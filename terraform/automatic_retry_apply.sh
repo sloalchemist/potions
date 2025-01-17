@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
 
+# Check if terraform is installed
+if ! command -v terraform &> /dev/null; then
+    echo "Error: terraform is not installed or not in PATH. You can download it here: https://developer.hashicorp.com/terraform/install?product_intent=terraform"
+    exit 1
+fi
+
 # Configuration
 MAX_ATTEMPTS=10
-SLEEP_SECONDS=10
+SLEEP_SECONDS=20
 
 # Bail on errors *in this script* except where we explicitly handle them
 set -eo pipefail
+
+echo "This script exists because Supabase likes to take it's sweet time spinning up the database pooler, and terraform seems to have no way to handle this. As a result, this script will run terraform apply in a loop until it succeeds. It typically takes between 1 and 3 minutes"
 
 for i in $(seq 1 $MAX_ATTEMPTS); do
   echo "====== Attempt $i of $MAX_ATTEMPTS ======"
@@ -29,15 +37,20 @@ for i in $(seq 1 $MAX_ATTEMPTS); do
   elif echo "$APPLY_OUTPUT" | grep -q "Error:"; then
     # Optionally, treat *any* "Error:" line as a reason to retry
     echo "Detected an Error in Terraform output. Retrying..."
-  else
-    # No known error found in output => consider it a success
-    echo "Terraform apply output does not show the known error. Assuming success."
+  elif echo "$APPLY_OUTPUT" | grep -q "Apply complete!"; then
+    echo "Terraform apply completed successfully!"
     exit 0
+  else
+    # Unknown situation - output the terraform result and continue retrying
+    echo "Unknown terraform output - neither success nor known error detected. Output follows:"
+    echo "$APPLY_OUTPUT"
+    echo "====Stopping retry loop===="
+    exit 1
   fi
 
   echo "Waiting $SLEEP_SECONDS seconds before next attempt..."
   sleep "$SLEEP_SECONDS"
 done
 
-echo "ERROR: Still seeing 'Invalid index' or missing transaction after $MAX_ATTEMPTS attempts."
+echo "ERROR: Failed to successfully apply terraform after $MAX_ATTEMPTS attempts."
 exit 1
