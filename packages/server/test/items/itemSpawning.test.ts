@@ -2,10 +2,6 @@ import { Item } from '../../src/items/item';
 import { ItemGenerator } from '../../src/items/itemGenerator';
 import { commonSetup } from '../testSetup';
 import { DB } from '../../src/services/database';
-import { spawn } from 'child_process';
-import { error } from 'console';
-import exp from 'constants';
-
 
 beforeAll(() => {
     commonSetup();
