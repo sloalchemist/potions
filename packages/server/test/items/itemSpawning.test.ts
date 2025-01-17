@@ -15,8 +15,9 @@ describe("Items should spawn according to global and local max", () => {
     test("Should not spawn when local max is met", () => {
         const worldDescription = {
             tiles: [
-                [0, 0],
-                [0, 0]
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0]
             ],
             terrain_types: [],
             item_types: [
@@ -35,7 +36,7 @@ describe("Items should spawn according to global and local max", () => {
                                 type: "blueberry",
                                 global_max: 10,
                                 local_max: 1, // This is important for test
-                                radius: 3,
+                                radius: 2,
                                 rate: 2 // Ensures item spawns every tick
                             }
                         }
@@ -57,7 +58,7 @@ describe("Items should spawn according to global and local max", () => {
     
         // Item generation is tested elsewhere
         const itemGenerator = new ItemGenerator(worldDescription.item_types);
-        const pos = { x: 0, y: 0 };
+        const pos = { x: 1, y: 1 };
         itemGenerator.createItem({
             type: 'blueberry-bush',
             position: pos
