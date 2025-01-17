@@ -16,6 +16,7 @@ import { ChatButtonManager } from "../components/chatButtonManager";
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
 import { interact, requestChat, speak } from '../services/playerToServer';
+import { InteractButtonManager } from '../components/interactButtonManager';
 
 export interface ChatOption {
   label: string;
@@ -23,7 +24,7 @@ export interface ChatOption {
 }
 
 export class UxScene extends Phaser.Scene {
-  interactButtons: Button[] = [];
+  interactButtons: InteractButtonManager = new InteractButtonManager([]);
   chatButtons: ChatButtonManager = new ChatButtonManager([]);
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
@@ -256,7 +257,7 @@ export class UxScene extends Phaser.Scene {
 
   // Method to set item interactions
   setInteractions(interactions: Interactions[]) {
-    this.chatButtons?.clearChatOptions();
+    this.interactButtons?.clearChatOptions();
 
     interactions.forEach((interaction, i) => {
       const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
