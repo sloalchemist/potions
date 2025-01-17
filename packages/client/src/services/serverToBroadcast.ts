@@ -114,6 +114,7 @@ export function setupBroadcast(
         waitUntilFocused.then(() => {
           leaveWorld();
           scene.showGameOver();
+          scene.resetToLoadWorldScene()
         });
       }
     }
