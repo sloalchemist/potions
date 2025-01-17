@@ -257,7 +257,7 @@ export class UxScene extends Phaser.Scene {
 
   // Method to set item interactions
   setInteractions(interactions: Interactions[]) {
-    this.interactButtons?.clearChatOptions();
+    this.interactButtons?.clearInteractOptions();
 
     interactions.forEach((interaction, i) => {
       const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);

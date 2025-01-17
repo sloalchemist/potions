@@ -12,7 +12,7 @@ export class InteractButtonManager {
         this.interactButtons.push(object);
    }
 
-   clearChatOptions() {
+   clearInteractOptions() {
        this.interactButtons.forEach((button: Button) => button.destroy());
        this.interactButtons = [];
    }
