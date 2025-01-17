@@ -1,4 +1,4 @@
-import { commonSetup } from '../testSetup';
+import { commonSetup, world, itemGenerator, worldDescription } from '../testSetup';
 import { DB } from '../../src/services/database';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
@@ -10,106 +10,18 @@ import { ItemGenerator } from '../../src/items/itemGenerator';
 
 beforeEach(() => {
   commonSetup();
+  mobFactory.loadTemplates(world.mobTypes);
   Community.makeVillage('alchemists', 'Alchemists guild');
 });
 
 describe('Try to retrieve a potion from a potion stand', () => {
   test('Should create a potion stand with a potion and player should retrieve it', () => {
-    const worldDescription = {
-      tiles: [
-        [-1, -1],
-        [-1, -1]
-      ],
-      terrain_types: [],
-      item_types: [
-        {
-          name: 'Potion',
-          description: 'A potion',
-          type: 'potion',
-          carryable: true,
-          walkable: true,
-          interactions: [],
-          attributes: [],
-          on_tick: []
-        },
-
-        {
-          name: 'Potion stand',
-          description: 'A stand that sells potions',
-          type: 'potion-stand',
-          carryable: false,
-          smashable: true,
-          walkable: true,
-          show_price_at: {
-            x: 7,
-            y: -10
-          },
-
-          subtype: '255',
-          interactions: [
-            {
-              description: 'Get $item_name',
-              action: 'retrieve_item',
-              while_carried: false
-            }
-          ],
-          attributes: [
-            {
-              name: 'items',
-              value: 0
-            },
-            {
-              name: 'price',
-              value: 10
-            },
-            {
-              name: 'gold',
-              value: 0
-            },
-            {
-              name: 'health',
-              value: 1
-            }
-          ],
-          on_tick: []
-        }
-      ],
-      mob_types: [
-        {
-          name: 'Player',
-          description: 'The player',
-          name_style: 'norse-english',
-          type: 'player',
-          health: 100,
-          speed: 2.5,
-          attack: 5,
-          gold: 0,
-          community: 'alchemists',
-          stubbornness: 20,
-          bravery: 5,
-          aggression: 5,
-          industriousness: 40,
-          adventurousness: 10,
-          gluttony: 50,
-          sleepy: 80,
-          extroversion: 50,
-          speaker: true
-        }
-      ],
-      communities: [
-        {
-          id: 'alchemists',
-          name: 'Alchemists guild',
-          description:
-            "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."
-        }
-      ]
-    };
+    
 
     // Generate world
     const standPosition = { x: 0, y: 1 };
     const playerPosition = { x: 0, y: 0 };
-    mobFactory.loadTemplates(worldDescription.mob_types);
+
 
     // Create a potion stand
     const itemGenerator = new ItemGenerator(worldDescription.item_types);
