@@ -312,7 +312,7 @@ export class PathFinder {
       try {
         end = this.findNearestWalkableTile(end);
       } catch {
-        // No walkable tile found
+        // Return an empty path if no walkable tile is found
         return [];
       }
     }
