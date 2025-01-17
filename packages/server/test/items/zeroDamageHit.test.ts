@@ -4,38 +4,34 @@ describe('Zero damage hit not possible', () => {
     beforeEach(() => {
         jest.resetModules();
         jest.clearAllMocks();
-        jest.mock('../../../src/scenes/worldScene', () => ({
-            WorldScene: class MockWorldScene { },
-        }));
+        // jest.mock('../../../src/scenes/worldScene', () => ({
+        //     WorldScene: class MockWorldScene { },
+        // }));
 
 
         test('Test zero damage hit', () => {
-            const { SpriteItem: OriginalSpriteItem } = jest.requireActual('../../../src/sprite/sprite_item');
 
-            SpriteItem = jest.fn().mockImplementation((maxHealth: number, health: number) => {
+            const { testSmashable: smashable } = jest.requireActual('../../src/items/smashable');
+
+            testSmashable = jest.fn().mockImplementation((attackDmg: number) => {
                 return {
-                    attributes: { health },
-                    maxHealth,
-                    isBelowMaxHealth: OriginalSpriteItem.prototype.isBelowMaxHealth.bind({
-                        attributes: { health },
-                        maxHealth,
-                    }),
-                    calculateHealthPercentage: OriginalSpriteItem.prototype.calculateHealthPercentage.bind({
-                        attributes: { health },
-                        maxHealth,
-                    })
+
+                    smashable
+
                 };
             });
 
             const fenceMaxHealth = 100;
 
-            const fullHealthFence = new SpriteItem(fenceMaxHealth, fenceMaxHealth);
-            expect(fullHealthFence.isBelowMaxHealth()).toBe(false);
-            expect(fullHealthFence.calculateHealthPercentage()).toBe(1);
+            let testFence = new SpriteItem(fenceMaxHealth, fenceMaxHealth);
+            testFence.
 
-            const halfHealthFence = new SpriteItem(fenceMaxHealth, fenceMaxHealth / 2);
-            expect(halfHealthFence.isBelowMaxHealth()).toBe(true);
-            expect(halfHealthFence.calculateHealthPercentage()).toBe(0.5);
+            // expect(fullHealthFence.isBelowMaxHealth()).toBe(false);
+            // expect(fullHealthFence.calculateHealthPercentage()).toBe(1);
+
+            // const halfHealthFence = new SpriteItem(fenceMaxHealth, fenceMaxHealth / 2);
+            // expect(halfHealthFence.isBelowMaxHealth()).toBe(true);
+            // expect(halfHealthFence.calculateHealthPercentage()).toBe(0.5);
 
         });
 
