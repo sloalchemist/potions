@@ -6,7 +6,6 @@ import { Item } from '../../src/items/item';
 import { AddItem } from '../../src/items/uses/container/addItem';
 import { Retrieve } from '../../src/items/uses/stand/retrieve';
 import { Mob } from '../../src/mobs/mob';
-import { ItemGenerator } from '../../src/items/itemGenerator';
 
 beforeEach(() => {
   commonSetup();

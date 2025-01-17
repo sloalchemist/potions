@@ -1,6 +1,5 @@
 import { Item } from '../../src/items/item';
-import { ItemGenerator } from '../../src/items/itemGenerator';
-import { commonSetup, world, itemGenerator } from '../testSetup';
+import { commonSetup, itemGenerator } from '../testSetup';
 import { DB } from '../../src/services/database';
 
 
