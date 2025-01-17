@@ -16,6 +16,7 @@ import { pubSub } from '../services/clientCommunication/pubsub';
 import { Carryable } from '../items/carryable';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
+import { getMobsAbly } from '../services/clientCommunication/clientMarshalling';
 
 export type MobData = {
   id: string;
@@ -204,6 +205,15 @@ export class Mob {
             WHERE id = :id
         `
     ).run({ name, subtype, id: this.id });
+  }
+
+  removePlayer() {
+    DB.prepare(
+      `
+              DELETE FROM mobs
+              WHERE id = :id
+          `
+    ).run({ id: this.id });
   }
 
   findNearbyMobIDs(radius: number): string[] {
