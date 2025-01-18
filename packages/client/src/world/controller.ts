@@ -19,7 +19,7 @@ import { Mob } from './mob';
 import { startWorld } from '../services/playerToServer';
 
 export type Interactions = {
-  item: Item;
+  item: Physical;
   action: string;
   label: string;
   give_to?: string;
@@ -117,11 +117,11 @@ export function mobRangeListener(mobs: Mob[]) {
   }
 }
 
-function prepInteraction(label: string, item: Item): string {
-  if (!item.templateType) {
+function prepInteraction(label: string, physical: Physical): string {
+  if (!physical.templateType) {
     return label;
   } else {
-    return label.replace('$item_name', item.templateType || '');
+    return label.replace('$item_name', physical.templateType);
   }
 }
 
@@ -132,15 +132,17 @@ interface ItemInteraction {
   description: string;
 }
 
-interface Physical extends Item {
+interface Physical {
   position: Coord | null;
   itemType: ItemType;
   key: string;
   conditionMet: (interaction: ItemInteraction) => boolean;
+  attributes?: Record<string, any>;
+  templateType?: string;
 }
 
 export function getCarriedItemInteractions(
-  item: Physical,
+  physical: Physical,
   nearbyItems: Physical[],
   nearbyMobs: Mob[],
   playerId: string
@@ -149,8 +151,8 @@ export function getCarriedItemInteractions(
 
   interactions.push({
     action: 'drop',
-    item: item as Item,
-    label: `Drop ${item.itemType.name}`
+    item: physical,
+    label: `Drop ${physical.itemType.name}`
   });
 
   // give to nearby mobs
@@ -158,25 +160,25 @@ export function getCarriedItemInteractions(
     if (mob.key !== playerId) {
       interactions.push({
         action: 'give',
-        item: item as Item,
+        item: physical,
         give_to: mob.key,
-        label: `Give ${item.itemType.name} to ${mob.name}`
+        label: `Give ${physical.itemType.name} to ${mob.name}`
       });
     }
   });
 
   // unique carried item interactions
-  item.itemType.interactions.forEach((interaction) => {
+  physical.itemType.interactions.forEach((interaction) => {
     if (interaction.while_carried) {
       const requiredItem = interaction.requires_item 
         ? nearbyItems.find((i) => i.itemType.type === interaction.requires_item)
         : true;
       
-      if ((!interaction.requires_item || requiredItem) && item.conditionMet(interaction)) {
+      if ((!interaction.requires_item || requiredItem) && physical.conditionMet(interaction)) {
         interactions.push({
           action: interaction.action,
-          item: item as Item,
-          label: prepInteraction(interaction.description, item as Item)
+          item: physical,
+          label: prepInteraction(interaction.description, physical)
         });
       }
     }
@@ -185,36 +187,41 @@ export function getCarriedItemInteractions(
   return interactions;
 }
 
-export function getPhysicalInteractions(physical: Physical, carried?: Item): Interactions[] {
+export function getPhysicalInteractions(physical: Physical, carried?: Physical): Interactions[] {
   const interactions: Interactions[] = [];
-  const item = physical as Item;
 
   // if the item can be picked up
-  if (item.itemType.carryable) {
+  if (physical.itemType.carryable) {
     interactions.push({
       action: 'pickup',
-      item: item,
-      label: `Pick up ${item.itemType.name}`
+      item: physical,
+      label: `Pick up ${physical.itemType.name}`
     });
   }
 
   // if the item can be smashed
-  if (item.itemType.smashable) {
+  if (physical.itemType.smashable) {
     interactions.push({
       action: 'smash',
-      item: item,
-      label: `Smash ${item.itemType.name}`
+      item: physical,
+      label: `Smash ${physical.itemType.name}`
     });
   }
 
   // handles unique interactions
-  item.itemType.interactions.forEach((interaction) => {
-    if (!interaction.while_carried && item.conditionMet(interaction)) {
-      if(interaction.action == "add_item" && carried && carried.itemType.name.localeCompare(item.attributes.templateType.toString()) || interaction.action != "add_item"){
+  physical.itemType.interactions.forEach((interaction) => {
+    if (!interaction.while_carried && physical.conditionMet(interaction)) {
+      if(
+        interaction.action == "add_item" && 
+        carried && 
+        physical.attributes?.templateType &&
+        carried.itemType.name.localeCompare(physical.attributes.templateType.toString()) || 
+        interaction.action != "add_item"
+      ) {
         interactions.push({
           action: interaction.action,
-          item: item,
-          label: prepInteraction(interaction.description, item)
+          item: physical,
+          label: prepInteraction(interaction.description, physical)
         });
       }
     }
@@ -223,7 +230,7 @@ export function getPhysicalInteractions(physical: Physical, carried?: Item): Int
   return interactions;
 }
 
-export function getClosestPhysical(physicals: Item[], playerPos: Coord): Item {
+export function getClosestPhysical(physicals: Physical[], playerPos: Coord): Physical {
   return physicals.reduce((closest, current) => {
     if (!closest.position || !current.position) return closest;
     const closestDistance = calculateDistance(closest.position, playerPos);
@@ -232,18 +239,21 @@ export function getClosestPhysical(physicals: Item[], playerPos: Coord): Item {
   });
 }
 
-function getItemsAtPosition(physicals: Item[], position: Coord): Item[] {
+function getItemsAtPosition(physicals: Physical[], position: Coord): Physical[] {
   return physicals.filter((physical) => {
     return position.x === physical.position!.x && position.y === physical.position!.y;
   });
 }
 
-export function getInteractablePhysicals(physicals: Item[], playerPos: Coord): Item[] {
+export function getInteractablePhysicals(items: Item[], playerPos: Coord): Physical[] {
+  // convert items to physicals
+  const physicals = items.map(item => item as unknown as Physical);
+  
   // player is standing on
   let onTopObjects = getItemsAtPosition(physicals, playerPos);
 
   // nearby "openable" items
-  let nearbyOpenableObjects = physicals.filter(p => p.itemType.layout_type === "opens")
+  let nearbyOpenableObjects = physicals.filter(p => p.itemType.layout_type === "opens");
   if (nearbyOpenableObjects.length > 1) {
     nearbyOpenableObjects = [getClosestPhysical(nearbyOpenableObjects, playerPos)];
   }
@@ -264,11 +274,12 @@ function collisionListener(physicals: Item[]) {
   const interactableObjects = getInteractablePhysicals(physicals, playerPos);
   let interactions: Interactions[] = [];
 
-  
-  let carriedItem = undefined
+  let carriedItem = undefined;
   // if player is carrying object, add its according interactions
   if (player.carrying) {
-    carriedItem = world.items[player.carrying] as SpriteItem;
+    const item = world.items[player.carrying];
+    carriedItem = item as unknown as Physical;
+    
     const nearbyMobs = world.getMobsAt(playerPos.x, playerPos.y, 2);
     const carriedInteractions = getCarriedItemInteractions(
       carriedItem,
@@ -278,10 +289,12 @@ function collisionListener(physicals: Item[]) {
     );
     interactions = [...interactions, ...carriedInteractions];
   }
+
   // retrieves interactions for all relevant items
   interactableObjects.forEach(physical => {
     interactions = [...interactions, ...getPhysicalInteractions(physical, carriedItem)];
   });
+
   // updates client only if interactions changes
   if (!areInteractionsEqual(lastInteractions, interactions) && interactionCallback) {
     interactionCallback(interactions);
