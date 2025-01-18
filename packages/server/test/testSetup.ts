@@ -61,6 +61,15 @@ export const commonSetup = () => {
         on_tick: []
       },
       {
+        name: "Gold",
+        description: "money!!!",
+        type: "gold",
+        walkable: true,
+        smashable: false,
+        carryable: true,
+        interactions: []
+      },
+      {
         name: 'Blueberry',
         description: 'test',
         type: 'blueberry',
