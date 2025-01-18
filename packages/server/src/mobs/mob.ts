@@ -371,8 +371,7 @@ export class Mob {
       // increase the speed by the delta value
       this.speed += speedDelta;
     }
-
-    this.target_speed_tick = this.current_tick + speedDuration;
+    
     this.changeTargetTick(this.current_tick + speedDuration); // either way, update timer
 
     // update the database
