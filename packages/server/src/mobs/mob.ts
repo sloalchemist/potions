@@ -371,7 +371,9 @@ export class Mob {
       // increase the speed by the delta value
       this.speed += speedDelta;
     }
-    this.updateTargetSpeedTick(this.current_tick + speedDuration); // either way, update timer
+
+    this.target_speed_tick = this.current_tick + speedDuration;
+    this.changeTargetTick(this.current_tick + speedDuration); // either way, update timer
 
     // update the database
     DB.prepare(
@@ -383,7 +385,7 @@ export class Mob {
     ).run({ speed: this.speed, target_speed_tick: this.current_tick + speedDuration, id: this.id });
   }
 
-  private updateTargetSpeedTick(targetTick: number | null): void {
+  private changeTargetTick(targetTick: number | null): void {
     this.target_speed_tick = targetTick;
   
     // Update the target speed tick in the database
@@ -404,7 +406,7 @@ export class Mob {
       this.speed -= speedDelta;
   
       // Update the target speed tick to null, indicating that the speed reset has occurred
-      this.updateTargetSpeedTick(null);
+      this.changeTargetTick(null);
   
       // Update the speed in the database as well
       DB.prepare(
