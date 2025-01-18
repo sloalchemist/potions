@@ -10,23 +10,23 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
     mob.changeHealth(50);
     return true;
   }
+
   else if (potionType === String(hexStringToNumber('#0000FF'))) {
-    // get current tick, add x amount of time, check when global tick hits that number, change speed
-    let curr_date = FantasyDate.currentDate();
-    const target_tick = curr_date.global_tick + 10;
-    console.log("target tick:" + target_tick.toString());
 
-    console.log("initial tick:")
-    console.log(curr_date.global_tick);
+    const speedDelta = 2; 
+    const speedDuration = 10;
 
-    mob.changeSpeed(2);
-    // if (curr_date.global_tick === target_tick)
-    // {
-    //   mob.changeSpeed(-2);
-    //   console.log("after tick:")
-    //   console.log(curr_date.global_tick);
-    // }
-    
+    // Change speed by calling mob.changeSpeed with delta and duration
+    mob.changeSpeed(speedDelta, speedDuration);
+
+    // Start checking for speed reset periodically
+    const resetInterval = setInterval(() => {
+      if (mob.checkSpeedReset(speedDelta)) {
+        clearInterval(resetInterval);  // Stop checking once the speed is reset
+        console.log("Speed reset successfully!");
+      }
+    }, 5000);
+
     return true;
   }
 
