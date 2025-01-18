@@ -35,6 +35,7 @@ export type MobData = {
   current_action: string;
   carrying_id: string;
   community_id: string;
+  target_speed_tick: number;
 };
 
 interface MobParams {
@@ -48,6 +49,7 @@ interface MobParams {
   maxHealth: number;
   attack: number;
   community_id: string;
+  target_speed_tick: number;
   subtype: string;
   currentAction?: string;
   carrying?: string;
@@ -67,6 +69,7 @@ export class Mob {
   private target?: Coord;
   private path: Coord[];
   private speed: number;
+  private target_speed_tick: number | null;
   private _name: string;
   private maxHealth: number;
   private _carrying?: string;
@@ -80,18 +83,13 @@ export class Mob {
   private _health: number;
   public readonly attack: number;
 
-  // subtype: string,
-  // currentAction?: string,
-  // carrying?: string,
-  // path: Coord[],
-  // target?: Coord
-
   private constructor({
     key,
     name,
     type,
     position,
     speed,
+    target_speed_tick,
     gold,
     health,
     maxHealth,
@@ -114,6 +112,7 @@ export class Mob {
     this.target = target;
     this._position = position;
     this.speed = speed;
+    this.target_speed_tick = target_speed_tick;
     this._gold = gold;
     this._health = health;
     this.maxHealth = maxHealth;
@@ -170,7 +169,11 @@ export class Mob {
 
   get _speed(): number {
     return this.speed;
-}
+  }
+
+  get current_tick(): number {
+    return gameWorld.currentDate().global_tick;
+  }
 
   get name(): string {
     return this._name;
@@ -363,19 +366,58 @@ export class Mob {
     }
   }
 
-    changeSpeed(amount: number) {
-    if (amount === 0) return;
-    let newSpeed = this.speed + amount;
-    if (newSpeed > 10) newSpeed = 10;
+  changeSpeed(speedDelta: number, sppedDuration: number): void {
+    if (this.target_speed_tick === null) {
+      // increase the speed by the delta value
+      this.speed += speedDelta;
+    }
+    this.updateTargetSpeedTick(this.current_tick + sppedDuration); // either way, update timer
+
+    // update the database
     DB.prepare(
       `
-            UPDATE mobs
-            SET speed = :speed
-            WHERE id = :id
+      UPDATE mobs
+      SET speed = :speed, target_speed_tick = :target_speed_tick
+      WHERE id = :id
+      `
+    ).run({ speed: this.speed, target_speed_tick: this.current_tick + sppedDuration, id: this.id });
+  }
+
+  private updateTargetSpeedTick(targetTick: number | null): void {
+    this.target_speed_tick = targetTick;
+  
+    // Update the target speed tick in the database
+    DB.prepare(
+      `
+      UPDATE mobs
+      SET target_speed_tick = :target_speed_tick
+      WHERE id = :id
+      `
+    ).run({ target_speed_tick: targetTick, id: this.id });
+  }
+
+  checkSpeedReset(speedDelta: number): boolean {
+    // Check if the target tick is set and if the current tick exceeds or equals the target tick
+    if (this.target_speed_tick !== null && this.current_tick >= this.target_speed_tick) {
+
+      // Revert the speed by subtracting the delta (restoring original speed)
+      this.speed -= speedDelta;
+  
+      // Update the target speed tick to null, indicating that the speed reset has occurred
+      this.updateTargetSpeedTick(null);
+  
+      // Update the speed in the database as well
+      DB.prepare(
         `
-    ).run({ speed: newSpeed, id: this.id });
-    this.speed = newSpeed;
-    pubSub.changeSpeed(this.id, amount, this.speed);
+        UPDATE mobs
+        SET speed = :speed, target_speed_tick = :target_speed_tick
+        WHERE id = :id
+        `
+      ).run({ speed: this.speed, target_speed_tick: null, id: this.id });
+
+      return true;
+    }
+    return false;
   }
 
   getHouse(): House | undefined {
@@ -510,6 +552,7 @@ export class Mob {
       type: mob.action_type,
       position: { x: mob.position_x, y: mob.position_y },
       speed: mob.speed,
+      target_speed_tick: mob.target_speed_tick,
       gold: mob.gold,
       health: mob.health,
       maxHealth: mob.maxHealth,
@@ -625,6 +668,7 @@ export class Mob {
             social INTEGER NOT NULL DEFAULT 100,
             community_id TEXT,
             house_id TEXT,
+            target_speed_tick INTEGER
             FOREIGN KEY (carrying_id) REFERENCES items (id) ON DELETE SET NULL,
             FOREIGN KEY (community_id) REFERENCES community (id) ON DELETE SET NULL,
             FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE SET NULL
