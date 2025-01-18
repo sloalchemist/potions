@@ -42,37 +42,27 @@ The world-generator creates random terrain to populate worlds for the server. Yo
 
 To install the game, clone the repository and follow these steps:
 
-### Setup Ably
-1. Register for an Ably account at [ably.com](https://ably.com).
-2. Go to **API Keys** and copy the root key. This will be used as your `ABLY_API_KEY` later.
+Previously you were required to setup Ably, Supabase and several `.env` files manually. Now terraform will do this for you.
 
-### Setup Supabase
-1. Register for a Supabase account at [supabase.com](https://supabase.com) and create a new project.
-2. Run `sql/setup.sql` in the query editor of your project.
-3. Execute:
-   ```sql
-   INSERT INTO worlds (world_id, ably_api_key) VALUES ('test-world', '<ABLY_API_KEY>');
-   ```
-   Replace `<ABLY_API_KEY>` with the API key from the Ably setup.
-4. Go to **Settings -> API** and copy the project URL. This will be your `SUPABASE_URL`.
-5. Copy the service key, which will be your `SUPABASE_SERVICE_KEY`.
+### Steps:
 
-### Configure `.env` Files
-1. In the **auth-server** package, create a `.env` file with the following values:
-   ```
-   ABLY_API_KEY=<your Ably API key>
-   SUPABASE_SERVICE_KEY=<your Supabase service key>
-   SUPABASE_URL=<your Supabase URL>
-   ```
-2. In the **server** package, create a `.env` file with:
-   ```
-   ABLY_API_KEY=<your Ably API key>
-   ```
-3. In the **client** package, create a `.env` file with:
-   ```
-   SERVER_URL=http://localhost:3000/
-   ```
-   This will point to your auth-server.
+**1. Create your `terraform.tfvars` file.** This will hold your account tokens for all providers.
+- Run `cp terraform/terraform.tfvars.example terraform/terraform.tfvars`. This will create your `terraform.tfvars` from the example.
+
+**2. Go grab your supabase credentials.**
+- In the supabase dashboard, go to your organization settings - creating an organization if you don't have one already. Copy the "Organization slug" and paste it into your newly created `terraform.tfvars` file as your `supabase_organization_id`.
+- Again in the supabase dashboard, navigate to "Access tokens". Create an access token and paste it into your newly created `terraform.tfvars` file as your `supabase_access_token`.
+- (optional) Change the default `supabase_db_pass` in your `terraform.tfvars` file.
+
+**3. Go grab your ably account token.**
+- Create an Ably account if you don't have one already. On the dashboard, navigate to Account > My Access Tokens. Create a new token,checking all of the permissions boxes. Copy the token and paste it into your newly created `terraform.tfvars` file as your `ably_account_token`. 
+
+**4. Spin up all your resources with a single command.**
+- Download terraform if it's not already installed. You can download it [here](https://developer.hashicorp.com/terraform/install?product_intent=terraform).
+- Verify that you have access to the CLI by running `terraform --version`.
+- Run the bash script `terraform/automatic_retry_apply.sh`. This will run terraform apply in a loop until it succeeds. This is necessary because Supabase sometimes takes a few minutes to spin up the database pooler and for some reason whoever wrote the terraform provider didn't handle this. 
+> NOTE FOR WINDOWS USERS: You can use [Git Bash](https://sps-lab.org/post/2024_windows_bash/) or WSL to run bash scripts, but make sure you're in an environment where `terraform` is available. If you don't want to figure out how to run bash scripts, you can just keep running `terraform apply` until it succeeds.
+
 
 ### Build
 1. In your root folder, execute:
