@@ -366,12 +366,12 @@ export class Mob {
     }
   }
 
-  changeSpeed(speedDelta: number, sppedDuration: number): void {
+  changeSpeed(speedDelta: number, speedDuration: number): void {
     if (this.target_speed_tick === null) {
       // increase the speed by the delta value
       this.speed += speedDelta;
     }
-    this.updateTargetSpeedTick(this.current_tick + sppedDuration); // either way, update timer
+    this.updateTargetSpeedTick(this.current_tick + speedDuration); // either way, update timer
 
     // update the database
     DB.prepare(
@@ -380,7 +380,7 @@ export class Mob {
       SET speed = :speed, target_speed_tick = :target_speed_tick
       WHERE id = :id
       `
-    ).run({ speed: this.speed, target_speed_tick: this.current_tick + sppedDuration, id: this.id });
+    ).run({ speed: this.speed, target_speed_tick: this.current_tick + speedDuration, id: this.id });
   }
 
   private updateTargetSpeedTick(targetTick: number | null): void {
