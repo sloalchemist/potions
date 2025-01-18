@@ -50,6 +50,40 @@ export const commonSetup = () => {
         on_tick: []
       },
       {
+        "name": "Wall",
+        "type": "wall",
+        "description": "A sturdy structure that blocks movement and provides protection.",
+        "carryable": false,
+        "smashable": true,
+        "attributes": [
+            {
+                "name": "health",
+                "value": 100
+            }
+        ],
+        "interactions": [],
+        "walkable": false
+    },
+    {
+        "name": "Partial Wall",
+        "type": "partial-wall",
+        "description": "An incomplete wall, requiring additional materials to finish.",
+        "carryable": false,
+        "walkable": false,
+        "smashable": true,
+        "attributes": [
+            {
+                "name": "complete",
+                "value": 3
+            },
+            {
+                "name": "health",
+                "value": 1
+            }
+        ],
+        "interactions": []
+      },
+      {
         name: 'Basket',
         description: 'test',
         type: 'basket',
