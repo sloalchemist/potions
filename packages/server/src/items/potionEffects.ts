@@ -23,7 +23,6 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
     const resetInterval = setInterval(() => {
       if (mob.checkSpeedReset(speedDelta)) {
         clearInterval(resetInterval);  // Stop checking once the speed is reset
-        console.log("Speed reset successfully!");
       }
     }, 5000);
 
