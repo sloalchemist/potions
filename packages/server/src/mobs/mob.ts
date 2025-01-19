@@ -49,7 +49,7 @@ interface MobParams {
   maxHealth: number;
   attack: number;
   community_id: string;
-  target_speed_tick: number;
+  target_speed_tick: number | null;
   subtype: string;
   currentAction?: string;
   carrying?: string;
@@ -89,7 +89,7 @@ export class Mob {
     type,
     position,
     speed,
-    target_speed_tick,
+    target_speed_tick = null,
     gold,
     health,
     maxHealth,
