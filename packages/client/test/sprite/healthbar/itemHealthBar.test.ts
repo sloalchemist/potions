@@ -77,7 +77,7 @@ describe('Fence health bar updates with state', () => {
                 maxHealth: undefined as number | undefined,
                 intialize() {
                     // Copied From SpriteItem Constructor
-                    if (itemType.layoutType === 'fence' || itemType.layoutType === 'wall') {
+                    if (itemType.layoutType === 'fence' || itemType.layoutType === 'wall' || itemType.layoutType === 'opens') {
                         this.healthBar = scene.add.graphics();
                         this.maxHealth = this.attributes['health'];
                     }
@@ -101,6 +101,11 @@ describe('Fence health bar updates with state', () => {
         expect(fullHealthGate.healthBar).not.toBeDefined();
         fullHealthGate.updateHealthBar();
         expect(fullHealthGate.healthBar).not.toBeDefined();
+
+        const halfHealthOpenable = new SpriteItem(maxHealth, maxHealth / 2, mockScene, {layoutType: 'opens'});
+        expect(halfHealthOpenable.healthBar).toBeDefined();
+        halfHealthOpenable.updateHealthBar();
+        expect(halfHealthOpenable.healthBar).toBeDefined();
 
     });
 });
