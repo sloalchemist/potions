@@ -49,6 +49,13 @@ export class Character {
     return world.mobs[publicCharacterId].attributes['speed'];
   }
 
+  get target_speed_tick(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].attributes['target_speed_tick'];
+  }
+
   subtype(): string {
     return `${this.eyeColor}-${this.bellyColor}-${this.furColor}`;
   }
