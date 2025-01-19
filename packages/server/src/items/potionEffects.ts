@@ -28,7 +28,6 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
 
     return true;
   }
-
-  console.log("ERROR: Unknown potion type!");
+  
   return false;
 }
