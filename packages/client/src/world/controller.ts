@@ -138,7 +138,10 @@ interface Physical {
   itemType: ItemType;
   key: string;
   conditionMet: (interaction: ItemInteraction) => boolean;
-  attributes?: Record<string, any>;
+  attributes?: {
+    templateType?: string;
+    [key: string]: string | number | boolean | undefined;
+  };
   templateType?: string;
 }
 
