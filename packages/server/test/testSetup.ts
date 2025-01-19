@@ -82,6 +82,27 @@ export const commonSetup = () => {
         on_tick: []
     },
     {
+        type: "blueberry-bush",
+        name: "Blueberry bush",
+        description: "A shrub that produces small, sweet blueberries.",
+        carryable: false,
+        walkable: false,
+        smashable: false,
+        interactions: [],
+        on_tick: [
+            {
+                action: "spawn_item",
+                parameters: {
+                    type: "blueberry",
+                    global_max: 10,
+                    local_max: 1, // This is important for test
+                    radius: 2,
+                    rate: 2 // Ensures item spawns every tick
+                }
+            }
+        ]
+    },
+    {
         name: "Heartbeet",
         description: 'Brew potions',
         type: "heart-beet",
