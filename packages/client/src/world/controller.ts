@@ -132,6 +132,7 @@ interface ItemInteraction {
   description: string;
 }
 
+// cast Item objects to Physical
 interface Physical {
   position: Coord | null;
   itemType: ItemType;
