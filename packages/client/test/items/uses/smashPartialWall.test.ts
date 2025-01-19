@@ -1,4 +1,4 @@
-import { getInteractablePhysicals, getPhysicalInteractions } from "../../../src/world/controller";
+import { getInteractablePhysicals} from "../../../src/world/controller";
 import { Item } from "../../../src/world/item";
 import { World } from "../../../src/world/world";
 import { ItemType } from "../../../src/worldDescription";
