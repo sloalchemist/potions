@@ -367,12 +367,14 @@ export class Mob {
   }
 
   changeSpeed(speedDelta: number, speedDuration: number): void {
+
+    // only change speed if no increase is already in progres
     if (this.target_speed_tick === null) {
-      // increase the speed by the delta value
       this.speed += speedDelta;
     }
     
-    this.changeTargetTick(this.current_tick + speedDuration); // either way, update timer
+    // either way, reset the timer
+    this.changeTargetTick(this.current_tick + speedDuration); 
 
     // update the database
     DB.prepare(
@@ -385,9 +387,8 @@ export class Mob {
   }
 
   private changeTargetTick(targetTick: number | null): void {
+
     this.target_speed_tick = targetTick;
-  
-    // Update the target speed tick in the database
     DB.prepare(
       `
       UPDATE mobs
@@ -398,7 +399,8 @@ export class Mob {
   }
 
   checkSpeedReset(speedDelta: number): boolean {
-    // Check if the target tick is set and if the current tick exceeds or equals the target tick
+
+    // check if target tick has been reached or is already null
     if (this.target_speed_tick !== null && this.current_tick >= this.target_speed_tick) {
 
       // Revert the speed by subtracting the delta (restoring original speed)
@@ -418,6 +420,7 @@ export class Mob {
 
       return true;
     }
+    
     return false;
   }
 
