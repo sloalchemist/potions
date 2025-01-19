@@ -265,7 +265,7 @@ function collisionListener(physicals: Item[]) {
   let interactions: Interactions[] = [];
 
   
-  let carriedItem = undefined
+  let carriedItem: SpriteItem | undefined = undefined;
   // if player is carrying object, add its according interactions
   if (player.carrying) {
     carriedItem = world.items[player.carrying] as SpriteItem;
