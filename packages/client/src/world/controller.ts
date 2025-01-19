@@ -253,7 +253,15 @@ export function getInteractablePhysicals(physicals: Item[], playerPos: Coord): I
   if (nearbyObjects.length > 1) {
     nearbyObjects = [getClosestPhysical(nearbyObjects, playerPos)];
   }
-  return [...onTopObjects, ...nearbyObjects, ...nearbyOpenableObjects];
+
+  // enforce unique items
+  let interactableObjects = [...onTopObjects, ...nearbyObjects, ...nearbyOpenableObjects];
+  interactableObjects = interactableObjects.filter(
+    (item, index, self) =>
+      index === self.findIndex((t) => t.key === item.key && t.position === item.position)
+  );
+
+  return interactableObjects;
 }
 
 function collisionListener(physicals: Item[]) {
@@ -261,10 +269,9 @@ function collisionListener(physicals: Item[]) {
   const playerPos = floor(player.position!);
   
   // retrieves a list of all of the nearby and on top of objects
-  const interactableObjects = getInteractablePhysicals(physicals, playerPos);
+  let interactableObjects = getInteractablePhysicals(physicals, playerPos);
   let interactions: Interactions[] = [];
 
-  
   let carriedItem = undefined
   // if player is carrying object, add its according interactions
   if (player.carrying) {
