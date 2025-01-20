@@ -5,6 +5,7 @@ import { Community } from '../../src/community/community';
 import { Item } from '../../src/items/item';
 import { AddItem } from '../../src/items/uses/container/addItem';
 import { Mob } from '../../src/mobs/mob';
+import { Coord } from '@rt-potion/common';
 
 beforeEach(() => {
   commonSetup();
@@ -16,8 +17,9 @@ describe('Try to add various color potions to a blue potion-stand', () => {
   test('Add a blue potion: Should add the potion', () => {
 
     //set up the world
-    const standPosition = { x: 0, y: 1 };
-    const position = { x: 0, y: 0 };
+    const standPosition: Coord = { x: 0, y: 1 };
+    const position: Coord = { x: 0, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 }
 
     //create a blue potion stand
     itemGenerator.createItem({
@@ -42,10 +44,10 @@ describe('Try to add various color potions to a blue potion-stand', () => {
     itemGenerator.createItem({
       type: 'potion',
       subtype: '255',
-      position: { x: 1, y: 0 },
+      position: potionLocation,
       carriedBy: testMob
     });
-    const potion = Item.getItemIDAt({ x: 1, y: 0 });
+    const potion = Item.getItemIDAt(potionLocation);
     expect(potion).not.toBeNull();
     const potionItem = Item.getItem(potion!);
     expect(potionItem).not.toBeNull();
@@ -69,8 +71,9 @@ describe('Try to add various color potions to a blue potion-stand', () => {
   test('Add a red potion: Should NOT add the potion', () => {
 
     //set up the world
-    const standPosition = { x: 0, y: 1 };
-    const position = { x: 0, y: 0 };
+    const standPosition: Coord = { x: 0, y: 1 };
+    const position: Coord = { x: 0, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 }
 
     
     //create a blue potion stand
@@ -96,10 +99,10 @@ describe('Try to add various color potions to a blue potion-stand', () => {
     itemGenerator.createItem({
       type: 'potion',
       subtype: '16711680',
-      position: { x: 1, y: 0 },
+      position: potionLocation,
       carriedBy: testMob
     });
-    const potion = Item.getItemIDAt({ x: 1, y: 0 });
+    const potion = Item.getItemIDAt(potionLocation);
     expect(potion).not.toBeNull();
     const potionItem = Item.getItem(potion!);
     expect(potionItem).not.toBeNull();

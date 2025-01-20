@@ -5,6 +5,7 @@ import { DB } from '../../src/services/database';
 import { Community } from '../../src/community/community';
 import { Smashable } from '../../src/items/smashable';
 import { Item } from '../../src/items/item';
+import { Coord } from '@rt-potion/common';
 
 beforeEach(() => {
   commonSetup();
@@ -15,8 +16,8 @@ beforeEach(() => {
 
 describe('Potion Stand Smashable Tests', () => {
   test('should drop gold and items when potion stand is destroyed', () => {
-    const potionStandPosition = { x: 0, y: 0 };
-    const mobPosition = { x: 1, y: 1 };
+    const potionStandPosition: Coord = { x: 0, y: 0 };
+    const mobPosition: Coord = { x: 1, y: 1 };
 
     // Create player mob
     mobFactory.makeMob('player', mobPosition, '1', 'testPlayer');

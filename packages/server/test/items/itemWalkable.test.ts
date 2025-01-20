@@ -1,6 +1,7 @@
 import { Item } from '../../src/items/item';
 import { commonSetup, itemGenerator } from '../testSetup';
 import { DB } from '../../src/services/database';
+import { Coord } from '@rt-potion/common';
 
 
 beforeEach(() => {
@@ -12,7 +13,7 @@ describe('Cauldron made not walkable', () => {
 
         // Item generation is tested elsewhere
         
-        const cposition = { x: 0, y: 0 };
+        const cposition: Coord = { x: 0, y: 0 };
         itemGenerator.createItem({
             type: 'cauldron',
             position: cposition

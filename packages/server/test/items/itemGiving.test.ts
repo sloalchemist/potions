@@ -5,6 +5,7 @@ import { DB } from '../../src/services/database';
 import { Community } from '../../src/community/community';
 import { Carryable } from '../../src/items/carryable';
 import { Item } from '../../src/items/item';
+import { Coord } from '@rt-potion/common';
 
 beforeEach(() => {
   commonSetup();
@@ -16,9 +17,9 @@ beforeEach(() => {
 describe('Item Giving Tests', () => {
   describe('Unallied Mobs Item Exchange', () => {
     test('Should not allow item exchange between unallied mobs', () => {
-      const position1 = { x: 0, y: 0 };
-      const position2 = { x: 1, y: 1 };
-      const potionPosition = { x: 2, y: 2 };
+      const position1 : Coord = { x: 0, y: 0 };
+      const position2 : Coord = { x: 1, y: 1 };
+      const potionPosition : Coord = { x: 2, y: 2 };
 
       // Create player mob
       mobFactory.makeMob('player', position1, '1', 'testPlayer');

@@ -5,6 +5,7 @@ import { Community } from '../../src/community/community';
 import { Item } from '../../src/items/item';
 import { Mob } from '../../src/mobs/mob';
 import { Drink } from '../../src/items/uses/drink';
+import { Coord } from '@rt-potion/common';
 
 beforeEach(() => {
   commonSetup();
@@ -15,7 +16,8 @@ beforeEach(() => {
 describe('Try to consume blue potion in various cases', () => {
   test('Create player, consume blue potion, then check attributes', () => {
 
-    const position = { x: 0, y: 0 };
+    const position: Coord = { x: 0, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 }
 
     // create a player
     mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
@@ -26,10 +28,10 @@ describe('Try to consume blue potion in various cases', () => {
     itemGenerator.createItem({
       type: 'potion',
       subtype: '255',
-      position: { x: 1, y: 0 },
+      position: potionLocation,
       carriedBy: testMob
     });
-    const potion = Item.getItemIDAt({ x: 1, y: 0 });
+    const potion = Item.getItemIDAt(potionLocation);
     expect(potion).not.toBeNull();
     const potionItem = Item.getItem(potion!);
     expect(potionItem).not.toBeNull();
@@ -56,10 +58,10 @@ describe('Try to consume blue potion in various cases', () => {
     itemGenerator.createItem({
       type: 'potion',
       subtype: '255',
-      position: { x: 1, y: 0 },
+      position: potionLocation,
       carriedBy: testMob
     });
-    const potion2 = Item.getItemIDAt({ x: 1, y: 0 });
+    const potion2 = Item.getItemIDAt(potionLocation);
     expect(potion2).not.toBeNull();
     const potionItem2 = Item.getItem(potion2!);
     expect(potionItem2).not.toBeNull();
@@ -85,7 +87,8 @@ describe('Try to consume blue potion in various cases', () => {
 
   test('Create player with near max speed, consume blue potion, then check attributes', () => {
 
-    const position = { x: 0, y: 0 };
+    const position: Coord = { x: 0, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 }
 
     // create a player
     mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
@@ -96,10 +99,10 @@ describe('Try to consume blue potion in various cases', () => {
     itemGenerator.createItem({
       type: 'potion',
       subtype: '255',
-      position: { x: 1, y: 0 },
+      position: potionLocation,
       carriedBy: testMob
     });
-    const potion = Item.getItemIDAt({ x: 1, y: 0 });
+    const potion = Item.getItemIDAt(potionLocation);
     expect(potion).not.toBeNull();
     const potionItem = Item.getItem(potion!);
     expect(potionItem).not.toBeNull();

@@ -6,6 +6,7 @@ import { Item } from '../../src/items/item';
 import { AddItem } from '../../src/items/uses/container/addItem';
 import { Retrieve } from '../../src/items/uses/stand/retrieve';
 import { Mob } from '../../src/mobs/mob';
+import { Coord } from '@rt-potion/common';
 
 beforeEach(() => {
   commonSetup();
@@ -16,8 +17,9 @@ beforeEach(() => {
 describe('Potion Stand Retrieval Tests', () => {
   describe('Retrieve Potion from Stand', () => {
     test('Should allow a player to retrieve a potion from the stand', () => {
-      const standPosition = { x: 0, y: 1 };
-      const playerPosition = { x: 0, y: 0 };
+      const standPosition : Coord = { x: 0, y: 1 };
+      const playerPosition : Coord = { x: 0, y: 0 };
+      const potionLocation: Coord = { x: 1, y: 0 }
 
       // Create a potion stand
       itemGenerator.createItem({
@@ -44,7 +46,7 @@ describe('Potion Stand Retrieval Tests', () => {
       itemGenerator.createItem({
         type: 'potion',
         subtype: '255',
-        position: { x: 1, y: 0 },
+        position: potionLocation,
         carriedBy: player,
       });
 

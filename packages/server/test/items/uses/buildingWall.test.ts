@@ -36,7 +36,8 @@ describe('BuildWall Tests', () => {
       expect(partialWall?.type).toBe('partial-wall');
 
       // Create a mob
-      mobFactory.makeMob('player', { x: 1, y: 0 }, '1234', 'testPlayer1');
+      const playerLocation: Coord = { x: 1, y: 0 }
+      mobFactory.makeMob('player', playerLocation, '1234', 'testPlayer1');
       const mob = Mob.getMob('1234');
       expect(mob).toBeDefined();
 
