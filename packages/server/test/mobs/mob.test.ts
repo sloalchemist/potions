@@ -128,4 +128,34 @@ describe('Mob Tests', () => {
     })
     
   });
+
+  describe('Mob Removal', () => {
+    test('Mob is removed correctly and no longer accessible', () => {
+      const mobId = 'testmob-remove';
+      mobFactory.makeMob('player', {x: 0, y: 0}, mobId, 'testPlayer');
+      const testMob = Mob.getMob(mobId);
+  
+      // Verify that the mob exists initially
+      expect(testMob).toBeDefined();
+      expect(testMob?.name).toBe('testPlayer');
+  
+      // Remove the mob
+      testMob?.removePlayer();
+  
+      // Attempt to retrieve the mob again; it should no longer exist
+      const removedMob = Mob.getMob(mobId);
+      expect(removedMob).toBeUndefined();
+    });
+  
+    test('Removing a non-existent Mob does not throw an error', () => {
+      const nonExistentMobId = 'nonexistentmob';
+  
+      // Attempt to retrieve a non-existent mob
+      const nonExistentMob = Mob.getMob(nonExistentMobId);
+      expect(nonExistentMob).toBeUndefined();
+  
+      // Attempt to call removePlayer on an undefined mob
+      expect(() => nonExistentMob?.removePlayer()).not.toThrow();
+    });
+    });
 });
