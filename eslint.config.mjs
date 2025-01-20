@@ -1,5 +1,6 @@
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 export default [
   {
@@ -33,4 +34,5 @@ export default [
       ],
     },
   },
+  eslintPluginPrettierRecommended, // Include recommended Prettier rules
 ];
