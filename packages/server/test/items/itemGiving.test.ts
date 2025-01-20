@@ -19,7 +19,7 @@ describe('Create 2 unallied mobs and try to give item from one to another', () =
       const worldDescription = {
         tiles: [
           [-1, -1],
-          [-1, -1],
+          [-1, -1]
         ],
         terrain_types: [],
         item_types: [
@@ -32,8 +32,8 @@ describe('Create 2 unallied mobs and try to give item from one to another', () =
             walkable: true,
             interactions: [],
             attributes: [],
-            on_tick: [],
-          },
+            on_tick: []
+          }
         ],
         mob_types: [
           {
@@ -54,7 +54,7 @@ describe('Create 2 unallied mobs and try to give item from one to another', () =
             gluttony: 50,
             sleepy: 80,
             extroversion: 50,
-            speaker: true,
+            speaker: true
           },
           {
             name: 'Blob',
@@ -74,11 +74,11 @@ describe('Create 2 unallied mobs and try to give item from one to another', () =
             gluttony: 50,
             sleepy: 80,
             extroversion: 50,
-            speaker: true,
-          },
+            speaker: true
+          }
         ],
         communities: [],
-        regions: [],
+        regions: []
       };
 
       const position = { x: 0, y: 0 };
@@ -113,13 +113,15 @@ describe('Create 2 unallied mobs and try to give item from one to another', () =
 
       itemGenerator.createItem({
         type: 'potion',
-        position: position3,
+        position: position3
       });
 
       const potionID = Item.getItemIDAt(position3);
 
       if (!potionID) {
-        throw new Error(`No item found at position ${JSON.stringify(position3)}`);
+        throw new Error(
+          `No item found at position ${JSON.stringify(position3)}`
+        );
       }
 
       const potion = Item.getItem(potionID);

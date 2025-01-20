@@ -212,7 +212,11 @@ export class Item {
     return count.number;
   }
 
-  static countTypeOfItemInRadius(type: string, position: Coord, radius: number): number {
+  static countTypeOfItemInRadius(
+    type: string,
+    position: Coord,
+    radius: number
+  ): number {
     // Get all items of the specified type
     const itemLocs = DB.prepare(
       `
@@ -221,12 +225,17 @@ export class Item {
     ).all({ type }) as { position_x: number; position_y: number }[];
 
     // Turn x, y data into Coord data
-    const itemLocsAsCoords: Coord[] = itemLocs.map(loc => ({x: loc.position_x, y: loc.position_y}));
+    const itemLocsAsCoords: Coord[] = itemLocs.map((loc) => ({
+      x: loc.position_x,
+      y: loc.position_y
+    }));
 
     // Filter out items that are outside of the radius
-    const itemsLocsInRadius: Coord[] = itemLocsAsCoords.filter(loc => (calculateDistance(position, loc) <= radius));
+    const itemsLocsInRadius: Coord[] = itemLocsAsCoords.filter(
+      (loc) => calculateDistance(position, loc) <= radius
+    );
 
-    return itemsLocsInRadius.length;  
+    return itemsLocsInRadius.length;
   }
 
   static findEmptyPosition(position: Coord, maxRadius: number = 50): Coord {

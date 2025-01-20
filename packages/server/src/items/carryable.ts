@@ -1,5 +1,5 @@
 import { Mob } from '../mobs/mob';
-import { Community } from '../community/community'
+import { Community } from '../community/community';
 import { pubSub } from '../services/clientCommunication/pubsub';
 import { DB } from '../services/database';
 import { Item } from './item';
@@ -22,12 +22,12 @@ export class Carryable {
   giveItem(from: Mob, to: Mob): boolean {
     // Check if the recipient mob is already carrying an item
     if (to.carrying) {
-        return false;
+      return false;
     }
 
     // Check if the two mobs are not allied before allowing the item transfer
     if (Community.isNotAllied(from.community_id, to.community_id)) {
-        return false;
+      return false;
     }
 
     // Transfer the item from the sender to the recipient
@@ -38,7 +38,7 @@ export class Carryable {
     pubSub.giveItem(this.item.id, from.id, to.id);
 
     return true;
-}
+  }
 
   pickup(mob: Mob): void {
     DB.prepare(

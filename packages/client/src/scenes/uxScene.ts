@@ -12,7 +12,7 @@ import {
   setResponseCallback
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
-import { ChatButtonManager } from "../components/chatButtonManager";
+import { ChatButtonManager } from '../components/chatButtonManager';
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
 import { interact, requestChat, speak } from '../services/playerToServer';
@@ -149,7 +149,11 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.healthText);
 
-      this.speedText = this.add.text(15, 115, 'Speed: ' + currentCharacter.speed);
+      this.speedText = this.add.text(
+        15,
+        115,
+        'Speed: ' + currentCharacter.speed
+      );
       this.statsContainer.add(this.speedText);
 
       this.dateText = this.add.text(
