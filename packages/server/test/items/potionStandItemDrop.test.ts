@@ -9,8 +9,8 @@ import { Coord } from '@rt-potion/common';
 
 beforeEach(() => {
   commonSetup();
-      Community.makeVillage('alchemists', 'Alchemists guild');
-      mobFactory.loadTemplates(world.mobTypes);
+  Community.makeVillage('alchemists', 'Alchemists guild');
+  mobFactory.loadTemplates(world.mobTypes);
 });
 
 
