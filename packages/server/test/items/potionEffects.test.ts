@@ -123,7 +123,6 @@ describe('Try to consume blue potion in various cases', () => {
 
 
     // check attributes on player, make sure 10 is cap for speed
-    console.log(testMob!._speed)
     expect(testMob!._speed).toBe(10);
     expect(testMob!.health).toBe(100);
     expect(testMob!.gold).toBe(0);
