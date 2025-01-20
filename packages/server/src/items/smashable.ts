@@ -24,7 +24,7 @@ export class Smashable {
     this.mob = mob; // Store mob in the class property
     let attackDmg = Math.floor(rng() * mob.attack);
     // prevent 0 damage from being inflicted
-    attackDmg = attackDmg < 0 ? attackDmg : 1;
+    attackDmg = attackDmg > 0 ? attackDmg : 1;
     this.changeHealth(-attackDmg);
   }
 
