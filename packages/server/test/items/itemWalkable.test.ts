@@ -3,7 +3,7 @@ import { commonSetup, itemGenerator } from '../testSetup';
 import { DB } from '../../src/services/database';
 
 
-beforeAll(() => {
+beforeEach(() => {
     commonSetup();
 });
 
@@ -24,6 +24,6 @@ describe('Cauldron made not walkable', () => {
 
 });
 
-afterAll(() => {
+afterEach(() => {
     DB.close();
 });

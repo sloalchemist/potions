@@ -6,7 +6,7 @@ import { Community } from '../../src/community/community';
 import { Carryable } from '../../src/items/carryable';
 import { Item } from '../../src/items/item';
 
-beforeAll(() => {
+beforeEach(() => {
   commonSetup();
   Community.makeVillage('alchemists', 'Alchemists guild');
   Community.makeVillage('blobs', 'Blobs');
@@ -56,6 +56,6 @@ describe('Item Giving Tests', () => {
   });
 });
 
-afterAll(() => {
+afterEach(() => {
   DB.close();
 });

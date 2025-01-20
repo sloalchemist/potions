@@ -121,6 +121,6 @@ describe('Try to add various color potions to a blue potion-stand', () => {
   });
 });
 
-afterAll(() => {
+afterEach(() => {
   DB.close();
 });

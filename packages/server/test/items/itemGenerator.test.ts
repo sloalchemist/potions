@@ -2,7 +2,7 @@ import { commonSetup, itemGenerator } from '../testSetup';
 import { DB } from '../../src/services/database';
 import { Item } from '../../src/items/item';
 
-beforeAll(() => {
+beforeEach(() => {
   commonSetup();
 });
 
@@ -25,6 +25,6 @@ describe('Item Generator Tests', () => {
   });
 });
 
-afterAll(() => {
+afterEach(() => {
   DB.close();
 });

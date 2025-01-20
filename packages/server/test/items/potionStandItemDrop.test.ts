@@ -6,7 +6,7 @@ import { Community } from '../../src/community/community';
 import { Smashable } from '../../src/items/smashable';
 import { Item } from '../../src/items/item';
 
-beforeAll(() => {
+beforeEach(() => {
   commonSetup();
       Community.makeVillage('alchemists', 'Alchemists guild');
       mobFactory.loadTemplates(world.mobTypes);
@@ -107,6 +107,6 @@ describe('Potion Stand Smashable Tests', () => {
   });
 });
 
-afterAll(() => {
+afterEach(() => {
   DB.close();
 });

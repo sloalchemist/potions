@@ -73,6 +73,6 @@ describe('Potion Stand Retrieval Tests', () => {
   });
 });
 
-afterAll(() => {
+afterEach(() => {
   DB.close();
 });

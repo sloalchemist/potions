@@ -8,7 +8,7 @@ import { Pickup } from '../../../src/items/uses/pickup';
 import { Community } from '../../../src/community/community';
 import { Coord } from '@rt-potion/common';
 
-beforeAll(() => {
+beforeEach(() => {
   commonSetup();
   Community.makeVillage("alchemists", "Alchemists guild");
   mobFactory.loadTemplates(world.mobTypes);
@@ -58,6 +58,6 @@ describe('BuildWall Tests', () => {
   });
 });
 
-afterAll(() => {
+afterEach(() => {
   DB.close();
 });
