@@ -204,8 +204,10 @@ export class SpriteItem extends Item {
         if (nearbyMobs.some((mob) => mob.unlocks.includes(this.lock!))) {
           //console.log('Gate open');
           this.sprite.setFrame(`${this.type}-open`);
+          this.itemType.open = true;
         } else {
           this.sprite.setFrame(`${this.type}-closed`);
+          this.itemType.open = false;
         }
       }
     } else if (this.itemType.layout_type === 'fence') {
