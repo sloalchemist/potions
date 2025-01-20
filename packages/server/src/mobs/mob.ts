@@ -170,7 +170,7 @@ export class Mob {
 
   get _speed(): number {
     return this.speed;
-  }
+}
 
   get name(): string {
     return this._name;
@@ -363,7 +363,7 @@ export class Mob {
     }
   }
 
-  changeSpeed(amount: number) {
+    changeSpeed(amount: number) {
     if (amount === 0) return;
     let newSpeed = this.speed + amount;
     if (newSpeed > 10) newSpeed = 10;

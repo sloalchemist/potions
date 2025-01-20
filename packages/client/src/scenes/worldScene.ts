@@ -429,9 +429,9 @@ export class WorldScene extends Phaser.Scene {
   }
 
   showGameOver() {
-    let uxscene = this.scene.get('UxScene') as UxScene;
+    let uxscene = this.scene.get("UxScene") as UxScene;
     uxscene.chatButtons?.clearChatOptions();
-
+    
     const text = this.add.text(75, 140, 'GAME OVER', {
       color: '#FFFFFF',
       fontSize: 60,

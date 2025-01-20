@@ -15,8 +15,9 @@ beforeEach(() => {
 
 describe('Try to consume blue potion in various cases', () => {
   test('Create player, consume blue potion, then check attributes', () => {
+
     const position: Coord = { x: 0, y: 0 };
-    const potionLocation: Coord = { x: 1, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 }
 
     // create a player
     mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
@@ -85,8 +86,9 @@ describe('Try to consume blue potion in various cases', () => {
   });
 
   test('Create player with near max speed, consume blue potion, then check attributes', () => {
+
     const position: Coord = { x: 0, y: 0 };
-    const potionLocation: Coord = { x: 1, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 }
 
     // create a player
     mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
@@ -118,8 +120,10 @@ describe('Try to consume blue potion in various cases', () => {
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
 
+
     // 2.5 + 6.5 = 9 speed
-    testMob?.changeSpeed(6.5);
+    testMob?.changeSpeed(6.5)
+
 
     // check attributes on player, make sure 10 is cap for speed
     expect(testMob!._speed).toBe(10);

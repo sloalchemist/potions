@@ -5,12 +5,7 @@ import { initializeTestServerDatabase } from '../src/services/database';
 import { createTables } from '../src/generate/generateWorld';
 import { initializePubSub } from '../src/services/clientCommunication/pubsub';
 import { StubbedPubSub } from '../src/services/clientCommunication/stubbedPubSub';
-import {
-  buildGraph,
-  constructGraph,
-  Graphable,
-  intializeTestKnowledgeDB
-} from '@rt-potion/converse';
+import { buildGraph, constructGraph, Graphable, intializeTestKnowledgeDB } from '@rt-potion/converse';
 import { buildGraphFromWorld } from '../src/generate/socialWorld';
 import { initializeGameWorld } from '../src/services/gameWorld/gameWorld';
 
@@ -36,10 +31,10 @@ export const commonSetup = () => {
       [1, 1]
     ],
     terrain_types: [
-      {
-        name: 'Grass',
-        id: 1,
-        walkable: true
+        {
+          "name": "Grass",
+          "id": 1,
+          "walkable": true
       }
     ],
     item_types: [
@@ -55,40 +50,38 @@ export const commonSetup = () => {
         on_tick: []
       },
       {
-        name: 'Wall',
-        type: 'wall',
-        description:
-          'A sturdy structure that blocks movement and provides protection.',
-        carryable: false,
-        smashable: true,
-        attributes: [
-          {
-            name: 'health',
-            value: 100
-          }
+        "name": "Wall",
+        "type": "wall",
+        "description": "A sturdy structure that blocks movement and provides protection.",
+        "carryable": false,
+        "smashable": true,
+        "attributes": [
+            {
+                "name": "health",
+                "value": 100
+            }
         ],
-        interactions: [],
-        walkable: false
-      },
-      {
-        name: 'Partial Wall',
-        type: 'partial-wall',
-        description:
-          'An incomplete wall, requiring additional materials to finish.',
-        carryable: false,
-        walkable: false,
-        smashable: true,
-        attributes: [
-          {
-            name: 'complete',
-            value: 3
-          },
-          {
-            name: 'health',
-            value: 1
-          }
+        "interactions": [],
+        "walkable": false
+    },
+    {
+        "name": "Partial Wall",
+        "type": "partial-wall",
+        "description": "An incomplete wall, requiring additional materials to finish.",
+        "carryable": false,
+        "walkable": false,
+        "smashable": true,
+        "attributes": [
+            {
+                "name": "complete",
+                "value": 3
+            },
+            {
+                "name": "health",
+                "value": 1
+            }
         ],
-        interactions: []
+        "interactions": []
       },
       {
         name: 'Basket',
@@ -102,9 +95,9 @@ export const commonSetup = () => {
         on_tick: []
       },
       {
-        name: 'Gold',
-        description: 'money!!!',
-        type: 'gold',
+        name: "Gold",
+        description: "money!!!",
+        type: "gold",
         walkable: true,
         smashable: false,
         carryable: true,
@@ -130,33 +123,33 @@ export const commonSetup = () => {
         interactions: [],
         attributes: [],
         on_tick: []
-      },
-      {
-        name: 'Heartbeet',
+    },
+    {
+        name: "Heartbeet",
         description: 'Brew potions',
-        type: 'heart-beet',
+        type: "heart-beet",
         walkable: true,
         carryable: true,
         interactions: [
-          {
-            description: 'Brew red potion',
-            action: 'brew',
-            while_carried: true,
-            requires_item: 'cauldron'
-          }
+            {
+                description: "Brew red potion",
+                action: "brew",
+                while_carried: true,
+                requires_item: "cauldron"
+            }
         ],
         attributes: [
-          {
-            name: 'brew_color',
-            value: '#FF0000'
-          },
-          {
-            name: 'health',
-            value: 1
-          }
+            {
+                name: "brew_color",
+                value: "#FF0000"
+            },
+            {
+                name: "health",
+                value: 1
+            }
         ],
         on_tick: []
-      },
+    },
       {
         name: 'Log',
         description: 'test',
@@ -229,37 +222,36 @@ export const commonSetup = () => {
         speaker: true
       },
       {
-        name: 'Blob',
-        description: 'A Mob',
-        name_style: 'norse-english',
-        type: 'blob',
-        health: 100,
-        speed: 2.5,
-        attack: 5,
-        gold: 0,
-        community: 'blobs',
-        stubbornness: 20,
-        bravery: 5,
-        aggression: 5,
-        industriousness: 40,
-        adventurousness: 10,
-        gluttony: 50,
-        sleepy: 80,
-        extroversion: 50,
-        speaker: true
+      name: 'Blob',
+      description: 'A Mob',
+      name_style: 'norse-english',
+      type: 'blob',
+      health: 100,
+      speed: 2.5,
+      attack: 5,
+      gold: 0,
+      community: 'blobs',
+      stubbornness: 20,
+      bravery: 5,
+      aggression: 5,
+      industriousness: 40,
+      adventurousness: 10,
+      gluttony: 50,
+      sleepy: 80,
+      extroversion: 50,
+      speaker: true
       }
     ],
     communities: [
-      {
-        id: 'alchemists',
-        name: 'Alchemists guild',
-        description:
-          "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."
+      { 
+        id: 'alchemists', 
+        name: 'Alchemists guild', 
+        description: "The Alchemist's guild, a group of alchemists who study the primal colors and their effects."  
       },
-      {
-        id: 'blobs',
-        name: 'Blobs',
-        description: 'Blobs who run around the map and cause havoc'
+      { 
+      id: 'blobs', 
+      name: 'Blobs', 
+      description: "Blobs who run around the map and cause havoc"  
       }
     ],
     alliances: [],
@@ -269,19 +261,18 @@ export const commonSetup = () => {
     containers: [],
     regions: [
       {
-        id: 'elyndra',
-        name: 'elyndra',
-        description: 'the overall world in which everything exists.',
+        id: "elyndra",
+        name: "elyndra",
+        description: "the overall world in which everything exists.",
         parent: null,
-        concepts: ['concept_elyndra', 'concept_elyndra_as_battleground']
+        concepts: ["concept_elyndra", "concept_elyndra_as_battleground"]
       },
       {
-        id: 'claw_island',
-        name: 'Claw Island',
-        description:
-          'a relatively peaceful island in the Shattered Expanse full of blueberries and heartbeets.',
-        parent: 'shattered_expanse',
-        concepts: []
+          id: "claw_island",
+          name: "Claw Island",
+          description: "a relatively peaceful island in the Shattered Expanse full of blueberries and heartbeets.",
+          parent: "shattered_expanse",
+          concepts: []
       }
     ]
   };

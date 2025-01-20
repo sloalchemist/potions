@@ -1,10 +1,6 @@
-import {
-  setChatting,
-  setChatCompanionCallback,
-  mobRangeListener
-} from '../../src/world/controller';
-import { Mob } from '../../src/world/mob';
-import { World } from '../../src/world/world';
+import { setChatting, setChatCompanionCallback, mobRangeListener } from "../../src/world/controller";
+import { Mob } from "../../src/world/mob";
+import { World } from "../../src/world/world";
 
 describe('Chat UI updates based on chatting state', () => {
   let world: World | null = null;
@@ -17,41 +13,41 @@ describe('Chat UI updates based on chatting state', () => {
       tiles: [
         [0, 0, 0],
         [0, 0, 0],
-        [0, 0, 0]
+        [0, 0, 0],
       ],
       terrain_types: [{ id: 0, name: 'Grass', walkable: true }],
       item_types: [],
-      mob_types: []
+      mob_types: [],
     });
   });
 
   beforeEach(() => {
     jest.mock('../../src/scenes/pauseScene', () => ({
-      PauseScene: class MockPauseScene {}
+      PauseScene: class MockPauseScene {},
     }));
-
+    
     jest.mock('phaser', () => ({
       Scene: class MockScene {
         key: string;
-
+    
         constructor(config: { key: string }) {
           this.key = config.key;
         }
-
+    
         add = {
           graphics: () => ({
-            fillStyle: jest.fn((e) => e).mockReturnThis(),
-            fillRect: jest.fn((e) => e)
-          })
+            fillStyle: jest.fn(e=>e).mockReturnThis(),
+            fillRect: jest.fn(e=>e),
+          }),
         };
-
+    
         game = {
           scale: {
             width: 800,
-            height: 600
-          }
+            height: 600,
+          },
         };
-      }
+      },
     }));
 
     mockChatCallback = jest.fn();
@@ -59,24 +55,8 @@ describe('Chat UI updates based on chatting state', () => {
   });
 
   test('triggers callback after chatting', () => {
-    const player1 = new Mob(
-      world!,
-      'mob1',
-      'Player1',
-      'player',
-      100,
-      { x: 1, y: 1 },
-      {}
-    );
-    const npc1 = new Mob(
-      world!,
-      'mob2',
-      'NPC1',
-      'npc',
-      100,
-      { x: 2, y: 2 },
-      {}
-    );
+    const player1 = new Mob(world!, 'mob1', 'Player1', 'player', 100, { x: 1, y: 1 }, {});
+    const npc1 = new Mob(world!, 'mob2', 'NPC1', 'npc', 100, { x: 2, y: 2 }, {});
     const mobs = [player1, npc1];
     const expectedFilteredMobs = [npc1];
 
@@ -99,15 +79,7 @@ describe('Chat UI updates based on chatting state', () => {
   });
 
   test('should not trigger callback if the nearby mobs does not change', () => {
-    const player1 = new Mob(
-      world!,
-      'mob1',
-      'Player1',
-      'player',
-      100,
-      { x: 1, y: 1 },
-      {}
-    );
+    const player1 = new Mob(world!, 'mob1', 'Player1', 'player', 100, { x: 1, y: 1 }, {});
     const npc = new Mob(world!, 'mob2', 'NPC1', 'npc', 100, { x: 2, y: 2 }, {});
     const mobs = [player1, npc];
 
@@ -125,24 +97,8 @@ describe('Chat UI updates based on chatting state', () => {
   });
 
   test('should update chat companions when a second mob enters range', () => {
-    const player1 = new Mob(
-      world!,
-      'mob1',
-      'Player1',
-      'player',
-      100,
-      { x: 1, y: 1 },
-      {}
-    );
-    const npc1 = new Mob(
-      world!,
-      'mob2',
-      'NPC1',
-      'npc',
-      100,
-      { x: 2, y: 2 },
-      {}
-    );
+    const player1 = new Mob(world!, 'mob1', 'Player1', 'player', 100, { x: 1, y: 1 }, {});
+    const npc1 = new Mob(world!, 'mob2', 'NPC1', 'npc', 100, { x: 2, y: 2 }, {});
     let mobs = [player1, npc1];
 
     setChatting(false);
@@ -154,15 +110,7 @@ describe('Chat UI updates based on chatting state', () => {
     mockChatCallback.mockClear();
 
     // Add second mob
-    const npc2 = new Mob(
-      world!,
-      'mob3',
-      'NPC2',
-      'npc',
-      100,
-      { x: 3, y: 3 },
-      {}
-    );
+    const npc2 = new Mob(world!, 'mob3', 'NPC2', 'npc', 100, { x: 3, y: 3 }, {});
     mobs = [player1, npc1, npc2];
     mobRangeListener(mobs);
 

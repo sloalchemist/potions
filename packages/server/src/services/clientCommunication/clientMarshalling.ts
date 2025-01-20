@@ -52,11 +52,7 @@ function mobDataToMob(mobData: MobData): MobI {
     name: mobData.name,
     maxHealth: mobData.maxHealth,
     carrying: mobData.carrying_id,
-    attributes: {
-      health: mobData.health,
-      gold: mobData.gold,
-      speed: mobData.speed
-    },
+    attributes: { health: mobData.health, gold: mobData.gold, speed: mobData.speed },
     unlocks: mobData.community_id ? [mobData.community_id] : [],
     doing: mobData.current_action
   };

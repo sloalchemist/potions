@@ -10,11 +10,12 @@ import { Coord } from '@rt-potion/common';
 
 beforeEach(() => {
   commonSetup();
-  Community.makeVillage('alchemists', 'Alchemists guild');
+  Community.makeVillage("alchemists", "Alchemists guild");
   mobFactory.loadTemplates(world.mobTypes);
 });
 
 describe('BuildWall Tests', () => {
+
   describe('Building a wall from a partial wall', () => {
     test('Should replace partial wall with a full wall when mob interacts carrying a log', () => {
       // Init variables
@@ -35,7 +36,7 @@ describe('BuildWall Tests', () => {
       expect(partialWall?.type).toBe('partial-wall');
 
       // Create a mob
-      const playerLocation: Coord = { x: 1, y: 0 };
+      const playerLocation: Coord = { x: 1, y: 0 }
       mobFactory.makeMob('player', playerLocation, '1234', 'testPlayer1');
       const mob = Mob.getMob('1234');
       expect(mob).toBeDefined();

@@ -13,7 +13,10 @@ export function initializeInMemoryDatabase() {
   DB = new DatabaseConstructor(':memory:');
 }
 
-export function initializeDatabase(dbPath: string, rebuild: boolean = false) {
+export function initializeDatabase(
+  dbPath: string,
+  rebuild: boolean = false
+) {
   const absolutePath = path.resolve(dbPath);
 
   if (rebuild) {

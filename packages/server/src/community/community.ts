@@ -45,43 +45,44 @@ export class Community {
     return new Community(villageData.id, villageData.name);
   }
 
-  /**
-   * Checks whether two communities, identified by their IDs, are not allied.
-   *
-   * This function queries the database for an entry in the `alliances` table
-   * that indicates an alliance between the two specified community IDs. If
-   * no such entry exists, the communities are considered "not allied."
-   *
-   * @param {string} id_1 - The ID of the first community.
-   * @param {string} id_2 - The ID of the second community.
-   * @returns {boolean} - Returns `true` if the communities are not allied,
-   *                      `false` if they are allied.
-   *
-   * Database query explanation:
-   * - The SQL query checks for a record in the `alliances` table where
-   *   `community_1_id` matches `id_1` and `community_2_id` matches `id_2`.
-   * - If a matching record is found, the two communities are allied.
-   * - If no record is found, they are not allied.
-   */
-  static isNotAllied(id_1: string, id_2: string): boolean {
-    // Query the database to check if an alliance exists between the two communities
-    const allianceData = DB.prepare(
+/**
+ * Checks whether two communities, identified by their IDs, are not allied.
+ * 
+ * This function queries the database for an entry in the `alliances` table 
+ * that indicates an alliance between the two specified community IDs. If 
+ * no such entry exists, the communities are considered "not allied."
+ * 
+ * @param {string} id_1 - The ID of the first community.
+ * @param {string} id_2 - The ID of the second community.
+ * @returns {boolean} - Returns `true` if the communities are not allied, 
+ *                      `false` if they are allied.
+ * 
+ * Database query explanation:
+ * - The SQL query checks for a record in the `alliances` table where 
+ *   `community_1_id` matches `id_1` and `community_2_id` matches `id_2`.
+ * - If a matching record is found, the two communities are allied.
+ * - If no record is found, they are not allied.
+ */
+static isNotAllied(id_1: string, id_2: string): boolean {
+  // Query the database to check if an alliance exists between the two communities
+  const allianceData = DB.prepare(
       `
           SELECT 
               community_1_id, community_2_id
           FROM alliances
           WHERE alliances.community_1_id = :id_1 AND alliances.community_2_id = :id_2
       `
-    ).get({ id_1: id_1, id_2: id_2 }) as { id_1: string; id_2: string };
+  ).get({ id_1: id_1, id_2: id_2 }) as { id_1: string; id_2: string };
 
-    // If no record is found, log and return true (not allied)
-    if (!allianceData) {
+  // If no record is found, log and return true (not allied)
+  if (!allianceData) {
       return true;
-    }
-
-    // If a record is found, log and return false (allied)
-    return false;
   }
+
+  // If a record is found, log and return false (allied)
+  return false;
+}
+
 
   static SQL = `
         CREATE TABLE community (
