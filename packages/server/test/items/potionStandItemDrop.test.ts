@@ -13,7 +13,6 @@ beforeEach(() => {
   mobFactory.loadTemplates(world.mobTypes);
 });
 
-
 describe('Potion Stand Smashable Tests', () => {
   test('should drop gold and items when potion stand is destroyed', () => {
     const potionStandPosition: Coord = { x: 0, y: 0 };
@@ -42,13 +41,15 @@ describe('Potion Stand Smashable Tests', () => {
     const potionStandID = Item.getItemIDAt(potionStandPosition);
 
     if (!potionStandID) {
-        throw new Error(`No item found at position ${JSON.stringify(potionStandPosition)}`);
-      }
+      throw new Error(
+        `No item found at position ${JSON.stringify(potionStandPosition)}`
+      );
+    }
 
     const potionStand = Item.getItem(potionStandID);
-    
+
     if (!potionStand) {
-        throw new Error(`No item found with ID ${potionStandID}`);
+      throw new Error(`No item found with ID ${potionStandID}`);
     }
 
     // Create Smashable from Potion Stand
@@ -63,25 +64,28 @@ describe('Potion Stand Smashable Tests', () => {
 
     // Scan positions around the mob for dropped gold
     for (let dx = -1; dx <= 1; dx++) {
-        for (let dy = -1; dy <= 1; dy++) {
-            const potentialPosition = { x: potionStandPosition.x + dx, y: potionStandPosition.y + dy };
-            const potentialGoldID = Item.getItemIDAt(potentialPosition);
+      for (let dy = -1; dy <= 1; dy++) {
+        const potentialPosition = {
+          x: potionStandPosition.x + dx,
+          y: potionStandPosition.y + dy
+        };
+        const potentialGoldID = Item.getItemIDAt(potentialPosition);
 
-            if (potentialGoldID) {
-                const potentialGold = Item.getItem(potentialGoldID);
-                if (potentialGold?.type === 'gold') {
-                    droppedGoldID = potentialGoldID;
-                    break;
-                }
-            }
+        if (potentialGoldID) {
+          const potentialGold = Item.getItem(potentialGoldID);
+          if (potentialGold?.type === 'gold') {
+            droppedGoldID = potentialGoldID;
+            break;
+          }
         }
-        if (droppedGoldID) break; // Exit the loop if gold is found
+      }
+      if (droppedGoldID) break; // Exit the loop if gold is found
     }
 
     const droppedGold = Item.getItem(droppedGoldID!);
     // console.log(droppedGold);
     // console.log("this is my print" + droppedGold?.type);
-    expect(droppedGold?.type).toBe("gold");
+    expect(droppedGold?.type).toBe('gold');
     expect(droppedGold?.getAttribute('amount')).toBe(50);
 
     // Assert items drop
@@ -90,17 +94,20 @@ describe('Potion Stand Smashable Tests', () => {
     // Define a grid range to search around the potion stand
     const searchRadius = 2; // Adjust this based on your game's item placement logic
     for (let dx = -searchRadius; dx <= searchRadius; dx++) {
-        for (let dy = -searchRadius; dy <= searchRadius; dy++) {
-            const potentialPosition = { x: potionStandPosition.x + dx, y: potionStandPosition.y + dy };
-            const potentialItemID = Item.getItemIDAt(potentialPosition);
+      for (let dy = -searchRadius; dy <= searchRadius; dy++) {
+        const potentialPosition = {
+          x: potionStandPosition.x + dx,
+          y: potionStandPosition.y + dy
+        };
+        const potentialItemID = Item.getItemIDAt(potentialPosition);
 
-            if (potentialItemID) {
-                const potentialItem = Item.getItem(potentialItemID);
-                if (potentialItem?.type === 'potion') {
-                    itemsDropped++;
-                }
-            }
+        if (potentialItemID) {
+          const potentialItem = Item.getItem(potentialItemID);
+          if (potentialItem?.type === 'potion') {
+            itemsDropped++;
+          }
         }
+      }
     }
 
     // Verify that exactly 3 items were dropped

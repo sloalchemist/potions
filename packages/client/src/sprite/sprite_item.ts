@@ -35,7 +35,10 @@ export class SpriteItem extends Item {
       this.attributes[key] = item.attributes[key];
     }
 
-    if(this.itemType.layout_type === 'fence' || this.itemType.layout_type === 'wall') {
+    if (
+      this.itemType.layout_type === 'fence' ||
+      this.itemType.layout_type === 'wall'
+    ) {
       this.healthBar = scene.add.graphics();
       this.maxHealth = Number(this.attributes['health']);
     }
@@ -329,11 +332,11 @@ export class SpriteItem extends Item {
   }
 
   calculateHealthPercentage() {
-    return (Number(this.attributes['health']) / this.maxHealth!);
+    return Number(this.attributes['health']) / this.maxHealth!;
   }
 
   isBelowMaxHealth() {
-    return (Number(this.attributes['health']) < this.maxHealth!);
+    return Number(this.attributes['health']) < this.maxHealth!;
   }
 
   updateHealthBar() {

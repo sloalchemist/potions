@@ -1,4 +1,3 @@
-
 import { MobI } from '@rt-potion/common';
 import { WorldScene } from '../scenes/worldScene';
 import { SpriteItem } from './sprite_item';
