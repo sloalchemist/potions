@@ -5,6 +5,7 @@
   "scripts": {
     "format": "prettier --config .prettierrc '**/*.ts' --write",
     "lint": "eslint . --config eslint.config.mjs",
+    "lint:fix": "eslint . --config eslint.config.mjs --fix",
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
     "clean": "pnpm -r run clean"
