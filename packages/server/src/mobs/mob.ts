@@ -35,6 +35,7 @@ export type MobData = {
   current_action: string;
   carrying_id: string;
   community_id: string;
+  lastMoveTick: number;
 };
 
 interface MobParams {
@@ -53,6 +54,7 @@ interface MobParams {
   carrying?: string;
   path: Coord[];
   target?: Coord;
+  lastMoveTick: number;
 }
 
 export class Mob {
@@ -80,6 +82,9 @@ export class Mob {
   private _health: number;
   public readonly attack: number;
 
+  private lastMoveTick: number;  // Track last move tick
+  private sleepDuration: number = 12 * 4; // Asleep if doesnt move for 48 ticks
+
   // subtype: string,
   // currentAction?: string,
   // carrying?: string,
@@ -101,7 +106,8 @@ export class Mob {
     currentAction,
     carrying,
     path,
-    target
+    target,
+    lastMoveTick
   }: MobParams) {
     this.id = key;
     this._name = name;
@@ -122,6 +128,8 @@ export class Mob {
     this.personality = Personality.loadPersonality(this);
     this.community_id = community_id;
     this.unlocks.push(community_id);
+
+    this.lastMoveTick = lastMoveTick;
   }
 
   private setAction(action: string, finished: boolean = false) {
@@ -363,7 +371,34 @@ export class Mob {
     }
   }
 
-    changeSpeed(amount: number) {
+  // Addition: These things happen when the character is in sleep state (healing + energy)
+  sleep() {
+    this.needs.changeNeed('max_energy', 25);
+    this.needs.changeNeed('energy', 25);
+    this.changeHealth(10);
+  }
+
+  // Addition: Implements sleep if it recognizes that mob is asleep
+  checkForSleep() {
+    const currentTick = gameWorld.currentDate().global_tick; // Use the game world time and not real time
+
+    if (currentTick - this.lastMoveTick >= this.sleepDuration) {
+      this.sleep();  // Sleep if condition is met
+      this.lastMoveTick = currentTick; // Reset the last move tick
+      DB.prepare(
+        `
+              UPDATE mobs
+              SET  lastMoveTick = :lastMoveTick
+              WHERE id = :id
+          `
+      ).run({
+        id: this.id,
+        lastMoveTick: this.lastMoveTick,
+      });
+    }
+  }
+  
+  changeSpeed(amount: number) {
     if (amount === 0) return;
     let newSpeed = this.speed + amount;
     if (newSpeed > 10) newSpeed = 10;
@@ -446,10 +481,14 @@ export class Mob {
     ) {
       this.target = undefined;
     }
+
+    // Addition: Keep track of when it last moved for sleep
+    this.lastMoveTick = gameWorld.currentDate().global_tick;
+
     DB.prepare(
       `
             UPDATE mobs
-            SET position_x = :position_x, position_y = :position_y, path = :path, target_x = :target_x, target_y = :target_y
+            SET position_x = :position_x, position_y = :position_y, path = :path, target_x = :target_x, target_y = :target_y, lastMoveTick = :lastMoveTick
             WHERE id = :id
         `
     ).run({
@@ -458,7 +497,9 @@ export class Mob {
       id: this.id,
       path: JSON.stringify(this.path),
       target_x: this.target ? this.target?.x : null,
-      target_y: this.target ? this.target?.y : null
+      target_y: this.target ? this.target?.y : null,
+      // Addition: ALSO UPDATE the lastMoveTick when the mob moves
+      lastMoveTick: this.lastMoveTick
     });
   }
 
@@ -496,7 +537,7 @@ export class Mob {
   static getMob(key: string): Mob | undefined {
     const mob = DB.prepare(
       `
-            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id
+            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id, lastMoveTick
             FROM mobs
             WHERE id = :id
         `
@@ -522,7 +563,8 @@ export class Mob {
       target:
         mob.target_x && mob.target_y
           ? { x: mob.target_x, y: mob.target_y }
-          : undefined
+          : undefined,
+      lastMoveTick: mob.lastMoveTick
     });
 
     return player;
@@ -598,6 +640,9 @@ export class Mob {
       this.setAction(action.type(), finished);
     }
 
+    // Addition: Check if it hasn't moved in a while
+    this.checkForSleep();
+
     this.needs.tick();
   }
 
@@ -625,6 +670,7 @@ export class Mob {
             social INTEGER NOT NULL DEFAULT 100,
             community_id TEXT,
             house_id TEXT,
+            lastMoveTick INTEGER NOT NULL DEFAULT 0,
             FOREIGN KEY (carrying_id) REFERENCES items (id) ON DELETE SET NULL,
             FOREIGN KEY (community_id) REFERENCES community (id) ON DELETE SET NULL,
             FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE SET NULL
