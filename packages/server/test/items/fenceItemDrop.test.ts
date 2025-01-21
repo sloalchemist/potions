@@ -183,7 +183,7 @@ describe('Fence Drop Item', () => {
         //  create fence
         itemGenerator.createItem({
             type: 'fence',
-            position: wallPosition
+            position: fencePosition
         });
 
         //  testing to see if fence spawned
