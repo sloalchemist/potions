@@ -192,7 +192,7 @@ describe('Try to consume blue potion in various cases', () => {
 
     // have the player drink the potion
     const testDrink = new Drink();
-    const target_tick = FantasyDate.currentDate().global_tick + 10;
+    const target_tick = FantasyDate.currentDate().global_tick + 30;
     const test = testDrink.interact(testMob!, potionItem!);
     expect(test).toBe(true);
 
@@ -225,7 +225,7 @@ describe('Try to consume blue potion in various cases', () => {
 
     // have the player drink the potion
     const testDrink2 = new Drink();
-    const target_tick2 = FantasyDate.currentDate().global_tick + 10;
+    const target_tick2 = FantasyDate.currentDate().global_tick + 30;
     const test2 = testDrink2.interact(testMob!, potionItem2!);
     expect(test2).toBe(true);
 
