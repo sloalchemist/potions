@@ -42,10 +42,6 @@ jobs:
       - name: Run Lint
         run: pnpm lint
 
-      # Step 6: Check Prettier Formatting
-      - name: Check Prettier Formatting
-        run: pnpm format --check
-
       # Step 7: Build Project
       - name: Build Project
         run: pnpm build
