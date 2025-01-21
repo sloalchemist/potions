@@ -22,7 +22,7 @@ export class NorseEnglishNames implements NameGenerator {
     'Thorn',
     'White',
     'Wolf'
-  ];
+  ] as const;
 
   private nordicPrefixes: string[] = [
     'Bjorn',
@@ -35,7 +35,7 @@ export class NorseEnglishNames implements NameGenerator {
     'Thor',
     'Ulf',
     'Vidar'
-  ];
+  ] as const;
 
   private englishSuffixes: string[] = [
     'dale',
@@ -53,7 +53,7 @@ export class NorseEnglishNames implements NameGenerator {
     'stone',
     'vale',
     'wood'
-  ];
+  ] as const;
 
   private nordicSuffixes: string[] = [
     'heim',
@@ -66,9 +66,9 @@ export class NorseEnglishNames implements NameGenerator {
     'gaard',
     'berg',
     'dal'
-  ];
+  ] as const;
 
-  private vowels: string[] = ['a', 'e', 'i', 'o', 'u', 'y'];
+  private vowels: string[] = ['a', 'e', 'i', 'o', 'u', 'y'] as const;
 
   private consonants: string[] = [
     'b',
@@ -89,7 +89,7 @@ export class NorseEnglishNames implements NameGenerator {
     'v',
     'w',
     'z'
-  ];
+  ] as const;
 
   // Generate a random name
   public generateName(): string {

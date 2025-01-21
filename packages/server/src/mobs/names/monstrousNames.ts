@@ -14,7 +14,7 @@ export class MonstrousNames implements NameGenerator {
     'Balg',
     'Gnash',
     'Murk'
-  ];
+  ] as const;
 
   private monstrousMiddle: string[] = [
     'arg',
@@ -27,7 +27,7 @@ export class MonstrousNames implements NameGenerator {
     'shak',
     'glub',
     'zor'
-  ];
+  ] as const;
 
   private monstrousSuffixes: string[] = [
     'ash',
@@ -40,9 +40,9 @@ export class MonstrousNames implements NameGenerator {
     'vok',
     'rax',
     'gul'
-  ];
+  ] as const;
 
-  private vowels: string[] = ['a', 'e', 'i', 'o', 'u'];
+  private vowels: string[] = ['a', 'e', 'i', 'o', 'u'] as const;
 
   private consonants: string[] = [
     'b',
@@ -63,7 +63,7 @@ export class MonstrousNames implements NameGenerator {
     'v',
     'w',
     'z'
-  ];
+  ] as const;
 
   // Generate a random monstrous name
   public generateName(): string {

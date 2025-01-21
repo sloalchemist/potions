@@ -13,7 +13,7 @@ export class FrenchRomanNames implements NameGenerator {
     'Riviere',
     'Val',
     'Vigne'
-  ];
+  ] as const;
 
   private romanPrefixes: string[] = [
     'Aurelius',
@@ -26,7 +26,7 @@ export class FrenchRomanNames implements NameGenerator {
     'Quintus',
     'Tiberius',
     'Valerius'
-  ];
+  ] as const;
 
   private frenchSuffixes: string[] = [
     'mont',
@@ -39,7 +39,7 @@ export class FrenchRomanNames implements NameGenerator {
     'plaine',
     'roc',
     'vallee'
-  ];
+  ] as const;
 
   private romanSuffixes: string[] = [
     'us',
@@ -52,9 +52,9 @@ export class FrenchRomanNames implements NameGenerator {
     'ius',
     'ae',
     'a'
-  ];
+  ] as const;
 
-  private vowels: string[] = ['a', 'e', 'i', 'o', 'u', 'y'];
+  private vowels: string[] = ['a', 'e', 'i', 'o', 'u', 'y'] as const;
 
   private consonants: string[] = [
     'b',
@@ -76,7 +76,7 @@ export class FrenchRomanNames implements NameGenerator {
     'v',
     'x',
     'z'
-  ];
+  ] as const;
 
   // Generate a random name
   public generateName(): string {
