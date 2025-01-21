@@ -38,7 +38,9 @@ export class Smashable {
       if (
         this.item.type == 'fence' ||
         this.item.type == 'wall' ||
-        this.item.type == 'partially-wall'
+        this.item.type == 'partial-wall' ||
+        this.item.type == 'gate' ||
+        this.item.type == 'door'
       ) {
         this.dropLog(this.item);
       }
