@@ -11,7 +11,7 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
   else if (potionType === String(hexStringToNumber('#0000FF'))) {
 
     const speedDelta = 2; 
-    const speedDuration = 10;
+    const speedDuration = 30;
 
     // Change speed by calling mob.changeSpeed with delta and duration
     mob.changeSpeed(speedDelta, speedDuration);
