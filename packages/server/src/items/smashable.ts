@@ -30,14 +30,18 @@ export class Smashable {
     
     
     if (this.item.getAttribute<number>('health') <= 0) {
-      if (this.item.type == 'potion-stand') {
-        this.destroyPotionStand();
-      }
+      this.destroySmashable();
+      //if (this.item.type == 'potion-stand') {
+      //  this.destroySmashable();
+      //}
+
+      // why do we need both the destroy smashable AND the item destroy
       this.item.destroy();
     }
   }
 
-  destroyPotionStand(){
+  // Renamed function to capture smashables
+  destroySmashable(){
     const gold = this.item.getAttribute<number>('gold');
     if (gold > 0){
       const position = Item.findEmptyPosition(this.mob.position);
