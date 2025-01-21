@@ -49,7 +49,7 @@ interface MobParams {
   maxHealth: number;
   attack: number;
   community_id: string;
-  target_speed_tick: number | null;
+  target_speed_tick: number;
   subtype: string;
   currentAction?: string;
   carrying?: string;
@@ -69,7 +69,7 @@ export class Mob {
   private target?: Coord;
   private path: Coord[];
   private speed: number;
-  private target_speed_tick: number | null;
+  private target_speed_tick: number;
   private _name: string;
   private maxHealth: number;
   private _carrying?: string;
@@ -89,7 +89,7 @@ export class Mob {
     type,
     position,
     speed,
-    target_speed_tick = null,
+    target_speed_tick,
     gold,
     health,
     maxHealth,
@@ -169,6 +169,10 @@ export class Mob {
 
   get _speed(): number {
     return this.speed;
+  }
+
+  get _target_speed_tick(): number {
+    return this.target_speed_tick;
   }
 
   get current_tick(): number {
@@ -369,12 +373,10 @@ export class Mob {
   changeSpeed(speedDelta: number, speedDuration: number): void {
 
     // only change speed if no increase is already in progres
-    if (this.target_speed_tick === null) {
+    if (this.target_speed_tick === null || this.target_speed_tick === -1) {
       this.speed += speedDelta;
     }
-    
-    // either way, reset the timer
-    this.changeTargetTick(this.current_tick + speedDuration); 
+    this.target_speed_tick = this.current_tick + speedDuration
 
     // update the database
     DB.prepare(
@@ -383,33 +385,16 @@ export class Mob {
       SET speed = :speed, target_speed_tick = :target_speed_tick
       WHERE id = :id
       `
-    ).run({ speed: this.speed, target_speed_tick: this.current_tick + speedDuration, id: this.id });
-  }
+    ).run({ speed: this.speed, target_speed_tick: this.target_speed_tick, id: this.id });
 
-  private changeTargetTick(targetTick: number | null): void {
-
-    this.target_speed_tick = targetTick;
-    DB.prepare(
-      `
-      UPDATE mobs
-      SET target_speed_tick = :target_speed_tick
-      WHERE id = :id
-      `
-    ).run({ target_speed_tick: targetTick, id: this.id });
+    pubSub.changeSpeed(this.id, speedDelta, this.speed);
+    pubSub.changeTargetSpeedTick(this.id, speedDuration, this._target_speed_tick)
   }
 
   checkSpeedReset(speedDelta: number): boolean {
-
     // check if target tick has been reached or is already null
     if (this.target_speed_tick !== null && this.current_tick >= this.target_speed_tick) {
-
-      // Revert the speed by subtracting the delta (restoring original speed)
-      this.speed -= speedDelta;
-  
-      // Update the target speed tick to null, indicating that the speed reset has occurred
-      this.changeTargetTick(null);
-  
-      // Update the speed in the database as well
+      this.speed -= speedDelta;  
       DB.prepare(
         `
         UPDATE mobs
@@ -417,6 +402,7 @@ export class Mob {
         WHERE id = :id
         `
       ).run({ speed: this.speed, target_speed_tick: null, id: this.id });
+      pubSub.changeSpeed(this.id, speedDelta, this.speed);
 
       return true;
     }
@@ -542,7 +528,7 @@ export class Mob {
   static getMob(key: string): Mob | undefined {
     const mob = DB.prepare(
       `
-            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id
+            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id, target_speed_tick
             FROM mobs
             WHERE id = :id
         `
@@ -672,7 +658,7 @@ export class Mob {
             social INTEGER NOT NULL DEFAULT 100,
             community_id TEXT,
             house_id TEXT,
-            target_speed_tick INTEGER
+            target_speed_tick INTEGER,
             FOREIGN KEY (carrying_id) REFERENCES items (id) ON DELETE SET NULL,
             FOREIGN KEY (community_id) REFERENCES community (id) ON DELETE SET NULL,
             FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE SET NULL
