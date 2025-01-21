@@ -42,10 +42,10 @@ jobs:
       - name: Run Lint
         run: pnpm lint
 
-      # Step 7: Build Project
+      # Step 6: Build Project
       - name: Build Project
         run: pnpm build
 
-      # Step 8: Run Unit Tests
+      # Step 7: Run Unit Tests
       - name: Run Unit Tests
         run: pnpm test
