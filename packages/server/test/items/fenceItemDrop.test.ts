@@ -148,7 +148,6 @@ describe('Fence Drop Item', () => {
     const mobPosition = { x: 1, y: 1 };
     const wallPosition = { x: 0, y: 1 };
     const fencePosition = { x: 1, y: 0 };
-    const gatePosition = { x: 0, y: 2 };
 
     // Create player mob
     mobFactory.makeMob('player', mobPosition, '1', 'testPlayer');
