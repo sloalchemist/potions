@@ -21,11 +21,13 @@ import {
   WorldDescription
 } from '../worldDescription';
 import { UxScene } from './uxScene';
+import { setGameState } from '../world/controller';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
 
 export const TILE_SIZE = 32;
+export const RESPAWN_DELAY = 3000;
 
 export class WorldScene extends Phaser.Scene {
   worldLayer!: Phaser.Tilemaps.TilemapLayer;
@@ -373,16 +375,16 @@ export class WorldScene extends Phaser.Scene {
         pointer.y >= cameraViewportY &&
         pointer.y <= cameraViewportY + cameraViewportHeight
       ) {
-          console.log(
-            'click',
-            pointer.worldX / TILE_SIZE,
-            pointer.worldY / TILE_SIZE
-          );
-    
-          publishPlayerPosition({
-            x: pointer.worldX / TILE_SIZE,
-            y: pointer.worldY / TILE_SIZE
-          });
+      console.log(
+        'click',
+        pointer.worldX / TILE_SIZE,
+        pointer.worldY / TILE_SIZE
+      );
+
+      publishPlayerPosition({
+        x: pointer.worldX / TILE_SIZE,
+        y: pointer.worldY / TILE_SIZE
+      });
         }
     });
 
@@ -446,7 +448,7 @@ export class WorldScene extends Phaser.Scene {
 
   showGameOver() {
     let uxscene = this.scene.get("UxScene") as UxScene;
-    uxscene.chatButtons?.clearChatOptions();
+    uxscene.chatButtons?.clearButtonOptions();
     
     const text = this.add.text(75, 140, 'GAME OVER', {
       color: '#FFFFFF',
@@ -457,4 +459,18 @@ export class WorldScene extends Phaser.Scene {
     text.setScrollFactor(0); // Make it stay static
     text.setDepth(100);
   }
+
+  /* Stop all scenes related to game play and go back to the LoadWordScene 
+     for character custmization and game restart.*/
+  resetToLoadWorldScene() {
+    this.time.delayedCall(RESPAWN_DELAY, () => {
+      setGameState('uninitialized');
+      this.scene.stop('PauseScene');
+      this.scene.stop('WorldScene');
+      this.scene.stop('UxScene');
+      this.scene.stop('FrameScene');
+      this.scene.start('LoadWorldScene');
+    });
+  }
+  
 }
