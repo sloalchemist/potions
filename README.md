@@ -61,6 +61,7 @@ Previously you were required to setup Ably, Supabase and several `.env` files ma
 - Download terraform if it's not already installed. You can download it [here](https://developer.hashicorp.com/terraform/install?product_intent=terraform).
 - Verify that you have access to the CLI by running `terraform --version`.
 - Download PostgreSQL if it's not already installed. You can download it [here](https://www.postgresql.org/download/).
+- Verify that you have access to the CLI by running `psql --version`.
 - Run `terraform init`.
 - Run the bash script `terraform/automatic_retry_apply.sh`. This will run terraform apply in a loop until it succeeds. This is necessary because Supabase sometimes takes a few minutes to spin up the database pooler and for some reason whoever wrote the terraform provider didn't handle this. 
 > NOTE FOR WINDOWS USERS: You can use [Git Bash](https://sps-lab.org/post/2024_windows_bash/) or WSL to run bash scripts, but make sure you're in an environment where `terraform` is available. If you don't want to figure out how to run bash scripts, you can just keep running `terraform apply` until it succeeds.
