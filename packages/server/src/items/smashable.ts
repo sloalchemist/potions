@@ -19,7 +19,11 @@ export class Smashable {
 
   private mob!: Mob; // Add mob as a class property
 
-  // default param for testability, only call with one param in normal use
+  /** 
+   * Damage item with mob by random amount within mob attack
+   * @param Mob The mob that is doing the attack
+   * @param rng For random value, only for testing
+   */
   smashItem(mob: Mob, rng: () => number = Math.random) {
     this.mob = mob; // Store mob in the class property
     let attackDmg = Math.floor(rng() * mob.attack);
