@@ -12,10 +12,10 @@ import {
   setResponseCallback
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
-import { ChatButtonManager } from "../components/chatButtonManager";
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
 import { interact, requestChat, speak } from '../services/playerToServer';
+import { ButtonManager } from '../components/buttonManager';
 
 export interface ChatOption {
   label: string;
@@ -23,8 +23,8 @@ export interface ChatOption {
 }
 
 export class UxScene extends Phaser.Scene {
-  interactButtons: Button[] = [];
-  chatButtons: ChatButtonManager = new ChatButtonManager([]);
+  interactButtons: ButtonManager = new ButtonManager([]);
+  chatButtons: ButtonManager = new ButtonManager([]);
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
   speedText: Phaser.GameObjects.Text | null = null;
@@ -262,7 +262,7 @@ export class UxScene extends Phaser.Scene {
 
   // Method to set item interactions
   setInteractions(interactions: Interactions[]) {
-    this.chatButtons?.clearChatOptions();
+    this.interactButtons?.clearButtonOptions();
 
     interactions.forEach((interaction, i) => {
       const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
@@ -281,7 +281,7 @@ export class UxScene extends Phaser.Scene {
   }
 
   setChatCompanions(companions: Mob[]) {
-    this.chatButtons?.clearChatOptions();
+    this.chatButtons?.clearButtonOptions();
 
     companions.forEach((companion, i) => {
       const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
@@ -295,7 +295,7 @@ export class UxScene extends Phaser.Scene {
   }
 
   sendRequestChat(world: World, companion: Mob) {
-    this.chatButtons?.clearChatOptions();
+    this.chatButtons?.clearButtonOptions();
 
     this.chatRequested = true;
     setChatting(true);
@@ -304,7 +304,7 @@ export class UxScene extends Phaser.Scene {
 
   // New method to set chat options
   setChatOptions(chatOptions: ChatOption[]) {
-    this.chatButtons?.clearChatOptions();
+    this.chatButtons?.clearButtonOptions();
 
     chatOptions.forEach((chatOption, i) => {
       const y = 70 + (80 + 10) * i;
