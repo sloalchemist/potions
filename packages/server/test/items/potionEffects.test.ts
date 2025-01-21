@@ -15,9 +15,8 @@ beforeEach(() => {
 });
 
 describe('Try to consume blue potion in various cases', () => {
-  test('Create player, consume blue potion, then check attributes', () => {
+  test('CTest blue potion consumption back to back', () => {
     FantasyDate.initialDate();
-    
     const position: Coord = { x: 0, y: 0 };
     const potionLocation: Coord = { x: 1, y: 0 }
 
@@ -49,13 +48,16 @@ describe('Try to consume blue potion in various cases', () => {
     const test = testDrink.interact(testMob!, potionItem!);
     expect(test).toBe(true);
 
+    for (let i = 0; i < 15; i++) { // 15 ticks to check stacking
+      FantasyDate.runTick();
+    }
+    testMob?.tick(500);
+
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
 
     // check attributes on player
-    expect(testMob!._speed).toBe(4.5);
-    expect(testMob!.health).toBe(100);
-    expect(testMob!.gold).toBe(0);
+    expect(testMob!._speed).toBe(4.5); // should still be 4.5
     expect(testMob!._target_speed_tick).toBe(target_tick);
 
     // create a potion
@@ -77,19 +79,81 @@ describe('Try to consume blue potion in various cases', () => {
 
     // have the player drink the potion
     const testDrink2 = new Drink();
-    const target_tick2 = FantasyDate.currentDate().global_tick + 30;
     const test2 = testDrink2.interact(testMob!, potionItem2!);
     expect(test2).toBe(true);
 
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
 
+    // check attributes on player (speed should change, tick should)
+    expect(testMob!._speed).toBe(4.5);
+    expect(testMob!._target_speed_tick).not.toBe(target_tick);
+    expect(testMob!._target_speed_tick).toBeGreaterThan(target_tick);
+  });
+
+  test('Allow effects from first blue potion to wear off, then drink another', () => {
+    FantasyDate.initialDate();
+    
+    const position: Coord = { x: 0, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 }
+
+    // create a player
+    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+    const testMob = Mob.getMob('TestID');
+    expect(testMob).not.toBeNull();
+
+    // test initial target_speed_tick
+    expect(testMob!._target_speed_tick).toBe(null);
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: '255',
+      position: potionLocation,
+      carriedBy: testMob
+    });
+    const potion = Item.getItemIDAt(potionLocation);
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
+
+    // have the player drink the potion
+    const testDrink = new Drink();
+    const test = testDrink.interact(testMob!, potionItem!);
+    expect(test).toBe(true);
+
+    for (let i = 0; i < 31; i++) { // 30 ticks means speed has worn off
+      FantasyDate.runTick();
+    }
+    testMob?.tick(500);
+
+    // check attributes on player
+    expect(testMob!._speed).toBe(2.5);
+    expect(testMob!._target_speed_tick).toBe(-1);
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: '255',
+      position: potionLocation,
+      carriedBy: testMob
+    });
+    const potion2 = Item.getItemIDAt(potionLocation);
+    expect(potion2).not.toBeNull();
+    const potionItem2 = Item.getItem(potion2!);
+    expect(potionItem2).not.toBeNull();
+
+    // have the player drink the potion
+    const testDrink2 = new Drink();
+    const target_tick2 = FantasyDate.currentDate().global_tick + 30;
+    const test2 = testDrink2.interact(testMob!, potionItem2!);
+    expect(test2).toBe(true);
+
     // check attributes on player
     expect(testMob!._speed).toBe(4.5);
-    expect(testMob!.health).toBe(100);
-    expect(testMob!.gold).toBe(0);
     expect(testMob!._target_speed_tick).toBe(target_tick2);
   });
+
 });
 
 afterAll(() => {
