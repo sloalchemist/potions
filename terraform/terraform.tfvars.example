@@ -2,7 +2,7 @@ project_name = "potions"
 environment = "dev"
 
 # Ably configuration
-ably_account_token = "your-ably-api-key"
+ably_account_token = "your-ably-access-token"
 
 # Supabase configuration
 supabase_access_token = "your-access-token"

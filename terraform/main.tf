@@ -63,10 +63,15 @@ locals {
 
 # Execute database setup SQL
 resource "null_resource" "database_setup" {
-  # depends_on = [null_resource.wait_for_pooler]
+  depends_on = [data.supabase_pooler.main]
 
   provisioner "local-exec" {
-    command = "psql -f ../sql/setup.sql \"${local.db_connection_string}\""
+    # Force Terraform to run under bash
+    interpreter = ["bash", "-c"]
+
+    command = <<-EOT
+      psql -f ../sql/setup.sql "${local.db_connection_string}"
+    EOT
   }
 }
 
@@ -75,15 +80,27 @@ resource "null_resource" "insert_test_world" {
   depends_on = [null_resource.database_setup]
 
   provisioner "local-exec" {
-    command = "psql \"${local.db_connection_string}\" -c \"INSERT INTO worlds (world_id, ably_api_key) VALUES ('test-world', '${ably_api_key.root.key}')\""
+    # Force Terraform to run under bash
+    interpreter = ["bash", "-c"]
+
+    command = <<-EOT
+      psql "${local.db_connection_string}" -c "INSERT INTO worlds (world_id, ably_api_key) VALUES ('test-world', '${ably_api_key.root.key}')"
+    EOT
   }
+}
+
+data "supabase_apikeys" "dev" {
+  project_ref = supabase_project.potions.id
 }
 
 # Create .env files for each package
 resource "local_file" "auth_server_env" {
   filename = "../packages/auth-server/.env"
-  content = "ABLY_API_KEY=${ably_api_key.root.key}"
-  file_permission = "0600"
+  content  = <<-EOT
+    ABLY_API_KEY=${ably_api_key.root.key}
+    SUPABASE_URL=https://${supabase_project.potions.id}.supabase.co
+    SUPABASE_SERVICE_KEY=${data.supabase_apikeys.dev.service_role_key}
+  EOT
 }
 
 resource "local_file" "server_env" {
@@ -91,3 +108,10 @@ resource "local_file" "server_env" {
   content = "ABLY_API_KEY=${ably_api_key.root.key}"
   file_permission = "0600"
 }
+
+resource "local_file" "client_env" {
+  filename = "../packages/client/.env"
+  content = "SERVER_URL=http://localhost:3000/"
+  file_permission = "0600"
+}
+
