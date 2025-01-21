@@ -18,7 +18,7 @@ import {
   getMobAbly,
   getMobsAbly
 } from './clientMarshalling';
-import { Mob } from '../../mobs/mob';
+import { Mob} from '../../mobs/mob';
 import { mobFactory } from '../../mobs/mobFactory';
 import { conversationTracker } from '../../mobs/social/conversationTracker';
 import { gameWorld } from '../gameWorld/gameWorld';
@@ -62,6 +62,9 @@ export class AblyService implements PubSub {
       console.log(
         `Client left: ${presenceMsg.clientId}. Total connected: ${this.hasConnectedClients}`
       );
+
+      const player = Mob.getMob(presenceMsg.clientId);
+      player?.removePlayer();
     });
 
     this.userMembershipChannel.subscribe(

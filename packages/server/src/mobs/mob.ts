@@ -210,6 +210,15 @@ export class Mob {
     ).run({ name, subtype, id: this.id });
   }
 
+  removePlayer() {
+    DB.prepare(
+      `
+              DELETE FROM mobs
+              WHERE id = :id
+          `
+    ).run({ id: this.id });
+  }
+
   findNearbyMobIDs(radius: number): string[] {
     const query = `
               SELECT id
