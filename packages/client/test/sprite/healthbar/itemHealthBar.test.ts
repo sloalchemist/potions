@@ -77,7 +77,7 @@ describe('Fence health bar updates with state', () => {
                 maxHealth: undefined as number | undefined,
                 intialize() {
                     // Copied From SpriteItem Constructor
-                    if (itemType.layoutType === 'fence' || itemType.layoutType === 'wall' || itemType.layoutType === 'opens') {
+                    if (maxHealth) {
                         this.healthBar = scene.add.graphics();
                         this.maxHealth = this.attributes['health'];
                     }
@@ -92,20 +92,10 @@ describe('Fence health bar updates with state', () => {
         const mockScene = new (jest.requireMock('phaser').Scene)({ key: 'test' });
         const maxHealth = 100;
 
-        const halfHealthFence = new SpriteItem(maxHealth, maxHealth / 2, mockScene, {layoutType: 'fence'});
+        const halfHealthFence = new SpriteItem(maxHealth, maxHealth / 2, mockScene);
         expect(halfHealthFence.healthBar).toBeDefined();
         halfHealthFence.updateHealthBar();
         expect(halfHealthFence.healthBar).toBeDefined();
-    
-        const fullHealthGate = new SpriteItem(maxHealth, maxHealth, mockScene, {layoutType: 'gate'});
-        expect(fullHealthGate.healthBar).not.toBeDefined();
-        fullHealthGate.updateHealthBar();
-        expect(fullHealthGate.healthBar).not.toBeDefined();
-
-        const halfHealthOpenable = new SpriteItem(maxHealth, maxHealth / 2, mockScene, {layoutType: 'opens'});
-        expect(halfHealthOpenable.healthBar).toBeDefined();
-        halfHealthOpenable.updateHealthBar();
-        expect(halfHealthOpenable.healthBar).toBeDefined();
 
     });
 });

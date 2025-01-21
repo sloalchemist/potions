@@ -34,7 +34,7 @@ export class SpriteItem extends Item {
       this.attributes[key] = item.attributes[key];
     }
 
-    if(this.itemType.layout_type === 'fence' || this.itemType.layout_type === 'wall' || this.itemType.layout_type === 'opens') {
+    if(this.maxHealth) {
       this.healthBar = scene.add.graphics();
       this.maxHealth = Number(this.attributes['health']);
     }
