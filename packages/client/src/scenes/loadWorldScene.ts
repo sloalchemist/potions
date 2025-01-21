@@ -36,7 +36,6 @@ export class LoadWorldScene extends Phaser.Scene {
 
   preload() {
     this.load.image('frame', 'static/titleFrame.png');
-    // this.load.image('title', 'static/title.png');
     this.load.image('title', 'static/smallerTitle.png');
     this.load.atlas(
       'global-atlas',
