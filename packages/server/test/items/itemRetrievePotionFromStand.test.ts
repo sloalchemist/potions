@@ -4,7 +4,7 @@ import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
 import { Item } from '../../src/items/item';
 import { AddItem } from '../../src/items/uses/container/addItem';
-import { Retrieve } from '../../src/items/uses/stand/retrieve';
+import { GetItem } from '../../src/items/uses/container/getItem';
 import { Mob } from '../../src/mobs/mob';
 import { Coord } from '@rt-potion/common';
 
@@ -61,7 +61,7 @@ describe('Potion Stand Retrieval Tests', () => {
       expect(player!.carrying).toBeUndefined();
 
       // Player retrieves the potion from the stand
-      const retrievePotion = new Retrieve();
+      const retrievePotion = new GetItem();
       const result = retrievePotion.interact(player!, potionStand!);
       expect(result).toBe(true);
 
