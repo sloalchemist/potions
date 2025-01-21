@@ -219,7 +219,22 @@ export const commonSetup = () => {
           }
         ],
         on_tick: []
-      }
+      },
+      {
+        name: "Fence",
+        type: "fence",
+        description: "A simple barrier to mark boundaries or restrict movement.",
+        carryable: false,
+        walkable: false,
+        smashable: true,
+        attributes: [
+            {
+                "name": "health",
+                "value": 100
+            }
+        ],
+        interactions: [],
+    }
     ],
     mob_types: [
       {
