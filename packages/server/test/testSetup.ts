@@ -50,6 +50,40 @@ export const commonSetup = () => {
         on_tick: []
       },
       {
+        "name": "Wall",
+        "type": "wall",
+        "description": "A sturdy structure that blocks movement and provides protection.",
+        "carryable": false,
+        "smashable": true,
+        "attributes": [
+            {
+                "name": "health",
+                "value": 100
+            }
+        ],
+        "interactions": [],
+        "walkable": false
+    },
+    {
+        "name": "Partial Wall",
+        "type": "partial-wall",
+        "description": "An incomplete wall, requiring additional materials to finish.",
+        "carryable": false,
+        "walkable": false,
+        "smashable": true,
+        "attributes": [
+            {
+                "name": "complete",
+                "value": 3
+            },
+            {
+                "name": "health",
+                "value": 1
+            }
+        ],
+        "interactions": []
+      },
+      {
         name: 'Basket',
         description: 'test',
         type: 'basket',
@@ -59,6 +93,15 @@ export const commonSetup = () => {
         interactions: [],
         attributes: [],
         on_tick: []
+      },
+      {
+        name: "Gold",
+        description: "money!!!",
+        type: "gold",
+        walkable: true,
+        smashable: false,
+        carryable: true,
+        interactions: []
       },
       {
         name: 'Blueberry',
@@ -80,6 +123,27 @@ export const commonSetup = () => {
         interactions: [],
         attributes: [],
         on_tick: []
+    },
+    {
+        type: "blueberry-bush",
+        name: "Blueberry bush",
+        description: "A shrub that produces small, sweet blueberries.",
+        carryable: false,
+        walkable: false,
+        smashable: false,
+        interactions: [],
+        on_tick: [
+            {
+                action: "spawn_item",
+                parameters: {
+                    type: "blueberry",
+                    global_max: 10,
+                    local_max: 1, // This is important for test
+                    radius: 2,
+                    rate: 2 // Ensures item spawns every tick
+                }
+            }
+        ]
     },
     {
         name: "Heartbeet",
