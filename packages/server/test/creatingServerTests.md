@@ -1,8 +1,8 @@
 # Server testing with Jest
 ---
-We are using **Jest** to create all our test cases. To run the tests for the server, you can run the command `pnpm test` while in the server package. Running `pnpm test` in the root folder runs all existing tests in every package.
+We are using **Jest** to create all our test cases. To run the tests for the server, you can run the command `pnpm test` while in the server package, `potions/packages/server/`. Running `pnpm test` in the root folder runs all existing tests in every package.
 
-This tutorial will cover **file creation**, **initial setup**, and testing of various in-game elements on the server side, including **Items**, **Mobs**, and **World Interactions**.
+This tutorial will cover **[file creation](#file-creation)**, **[initial setup](#initial-test-setup)**, and testing of various in-game elements on the server side, including **[Items](#items)**, **[Mobs](#mobs)**, and **[World Interaction](#world-interaction)**.
 
 
 
@@ -11,7 +11,7 @@ Create your file with a descriptive name and put it into an appropriate folder.
 
 *Example: Creating a test for an item*
 
-If you want to test an item's functionality, you would create your test in `packages/server/test/items` and name it `miniDescription.test.ts`
+If you want to test an item's functionality, you would create your test in `packages/server/test/items` and name it `<description>.test.ts`, filling in `<description>` with a short description of what the file is testing.
 
 ### Core Imports
 * `commonSetup`
@@ -34,8 +34,7 @@ If you want to test an item's functionality, you would create your test in `pack
 
 
 ### Initial Test Setup
- **Set up a `beforeEach` function**
- to run before each test and initialize variables or objects, set up mock data, and establish our test database.
+ **Set up a `beforeEach` function** to run before each test and initialize variables or objects, set up mock data, and establish our test database.
 
 
 *Example:*
@@ -50,14 +49,12 @@ beforeEach(() => {
 *Explanation:*
 * commonSetup initializes common requirements for our Jest tests. To add to the common setup, as discussed later in this tutorial, you will have to edit the `testSetup.ts` file in the `test` folder.
 
-* Other requirements depend on whether you would like to test Mob functionality or want a variable initialized before any tests are run.
+* Other requirements depend on whether you would like to test Mob functionality or want a variable initialized before any tests are run. For example, to initialize the alchemist village, you could include `Community.makeVillage('alchemists', 'Alchemists guild');`.
 
 **Set up `describe/test` blocks**
 
 * ***Describe***
  blocks should be used to group related tests together. This helps improve the readability and maintainability of our tests.
-
-
 * ***Test*** blocks contain individual test cases. This is where you write the assertions that verify the code's behavior. Each test should focus on a specific aspect of the code, making it clear what is being tested. 
 
 *Example:*
@@ -72,7 +69,6 @@ describe('Try to add various color potions to a blue potion-stand', () => {
   ...
 });
 ```
-
 
 **Set up an `afterEach` function** to close our test database and prepare for sequential tests
 
@@ -194,13 +190,77 @@ expect(testMob).not.toBeNull();
 What to do with a mob will be outlined in [World Interaction](#world-interaction)
 
 ---
+
+
 ## World Interaction
-* `Coord`
-* `AddItem`
-* `Pickup`
-* `BuildWall`
+Interacting with different items and mobs in the world require some extra help. There are various classes and  methods for interacting with items in the virtual world. Depending on your goal, exact code and imports will be different.
+
+We can split this up into three categories, **[Position](#position)**, **[Item Interactions](#interacting-with-items)** and **[Item Features](#item-features)**.
+
+#### Position
+**Using `Coord` for item and mob positions**
+*Example:* Create a mob at position 0,0 with `Coord`:
+```typescript
+const position: Coord = {x: 0, y: 0};
+mobFactory.makeMob('player', position, 'test', 'testPlayer')
+```
+Using `Coord` for positioning isn't always necessary depending on what you are testing.
+
+*Example:* Create a mob at position 0,0 without `Coord`:
+```typescript
+const position = {x: 0, y: 0};
+mobFactory.makeMob('player', position, 'test', 'testPlayer')
+```
+
+#### Interacting with items
+Below includes some examples of common item interactions.
+
+**Use `AddItem` to add some item to a container** 
+This can include adding log to a partial wall or a potion to a potion stand.
+
+*Example:* adds the item `mob` is carrying to `container`
+```typescript
+const testAddItem = new AddItem();
+const test = testAddItem.interact(mob, container);
+```
+
+**Use `Pickup` to have a mob pick up an item**
+*Example:* `mob` picks up `log`
+```typescript
+const pickup = new Pickup();
+pickup.interact(mob, log);
+```
+
+**Use `BuildWall` for completing a partial wall**
+*Example:* `mob` builds a wall with `log`. This will work if there is a partial wall nearby.
+```typescript
+const buildWall = new BuildWall(); 
+const wallInteract = buildWall.interact(mob, log); 
+```
+
+#### Item Subtypes
+Items can be classified into different types, which changes how players and mobs interact with the items. Those types include:
 * `Carryable`
-* `Retrieve`
-* `Drink`
 * `Smashable`
+* `Purchaseable`
+* `Container` 
+* `Brewable`
+
+To find more information on each type, go to `potions/packages/server/src/itmes/`.
+
+*Example:* Creates a `Carryable` potion, then `mob` picks it up.
+```typescript
+const carryablePotion = Carryable.fromItem(potion);
+carryablePotion.pickup(mob);
+```
+
+*Example:* Create a carryable item, a potion, without using `Carryable`.
+```typescript
+itemGenerator.createItem({
+  type: 'potion',
+  subtype: '16711680',
+  position: {x: 1, y: 1},
+  carriedBy: mob
+});
+```
 ---
