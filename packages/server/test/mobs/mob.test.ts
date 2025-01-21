@@ -3,8 +3,9 @@ import { Mob } from "../../src/mobs/mob";
 import { mobFactory } from "../../src/mobs/mobFactory";
 import { Coord } from "@rt-potion/common";
 import { Community } from "../../src/community/community";
+import { DB } from "../../src/services/database";
 
-beforeAll(() => {
+beforeEach(() => {
   commonSetup();
   Community.makeVillage('alchemists', 'Alchemists guild');
   mobFactory.loadTemplates(world.mobTypes)
@@ -13,7 +14,7 @@ beforeAll(() => {
 describe('Mob Tests', () => {
   describe('Mob Initialization', () => {
     test('Mob is created with correct attributes', () => {
-      const position: Coord = {x: 0, y: 0};
+      const position: Coord = { x: 0, y: 0 };
       const mobId = 'testmob';
 
       mobFactory.makeMob('player', position, mobId, 'testPlayer')
@@ -32,9 +33,11 @@ describe('Mob Tests', () => {
     test("Multiple mobs are created with unique attributes", () => {
       const mob1Id = "mob1";
       const mob2Id = "mob2";
+      const player1Position: Coord = { x: 1, y: 1};
+      const player2Position: Coord = { x: 2, y: 2};
 
-      mobFactory.makeMob("player", { x: 1, y: 1 }, mob1Id, "mobOne");
-      mobFactory.makeMob("player", { x: 2, y: 2 }, mob2Id, "mobTwo");
+      mobFactory.makeMob("player", player1Position, mob1Id, "mobOne");
+      mobFactory.makeMob("player", player2Position, mob2Id, "mobTwo");
 
       const mob1 = Mob.getMob(mob1Id);
       const mob2 = Mob.getMob(mob2Id);
@@ -43,10 +46,10 @@ describe('Mob Tests', () => {
       expect(mob2).toBeDefined();
 
       expect(mob1?.name).toBe("mobOne");
-      expect(mob1?.position).toStrictEqual({ x: 1, y: 1 });
+      expect(mob1?.position).toStrictEqual(player1Position);
 
       expect(mob2?.name).toBe("mobTwo");
-      expect(mob2?.position).toStrictEqual({ x: 2, y: 2 });
+      expect(mob2?.position).toStrictEqual(player2Position);
 
       expect(mob1?.id).not.toBe(mob2?.id);
     });
@@ -55,7 +58,9 @@ describe('Mob Tests', () => {
   describe('Mob Health Behavior', () => {
     test("Health decreases correctly and does not drop below zero", () => {
       const mobId = 'testmob-health';
-      mobFactory.makeMob('player', {x: 0, y: 0}, mobId, 'testPlayer');
+      const playerPosition: Coord = { x: 0, y: 0 }
+
+      mobFactory.makeMob('player', playerPosition, mobId, 'testPlayer');
       const testMob = Mob.getMob(mobId);
 
       // health init is 100. -50 should be 50 health.
@@ -71,7 +76,9 @@ describe('Mob Tests', () => {
 
     test('Health increases correctly and respects maximum health', () => {
       const mobId = 'testmob-heal';
-      mobFactory.makeMob('player', {x: 0, y: 0}, mobId, 'testPlayer');
+      const playerLocation: Coord = { x: 0, y: 0}
+
+      mobFactory.makeMob('player', playerLocation, mobId, 'testPlayer');
       const testMob = Mob.getMob(mobId);
 
       //init health 100 - 50 = 50
@@ -89,7 +96,9 @@ describe('Mob Tests', () => {
 
     test('Health behavior handles exact zero correctly', () => {
       const mobId = 'testmob-exact-zero';
-      mobFactory.makeMob('player', {x: 0, y: 0}, mobId, 'testPlayer')
+      const playerPosition: Coord = { x: 0, y: 0 }
+
+      mobFactory.makeMob('player', playerPosition, mobId, 'testPlayer')
       const testMob = Mob.getMob(mobId);
 
 
@@ -104,7 +113,9 @@ describe('Mob Tests', () => {
 
     test('Health should not increase if mob is dead', () => {
       const mobId = 'testmob-death';
-      mobFactory.makeMob('player', {x: 0, y: 0}, mobId, 'testPlayer')
+      const playerPosition: Coord = { x: 0, y: 0 }
+
+      mobFactory.makeMob('player', playerPosition, mobId, 'testPlayer')
       const testMob = Mob.getMob(mobId);
 
       // kill mob
@@ -118,7 +129,9 @@ describe('Mob Tests', () => {
 
     test('Health should remain the same if 0 health is inputted to changeHealth()', () => {
       const mobId = 'testmob-no-change';
-      mobFactory.makeMob('player', {x: 0, y: 0}, mobId, 'testPlayer')
+      const playerPosition: Coord = { x: 0, y: 0 }
+
+      mobFactory.makeMob('player', playerPosition, mobId, 'testPlayer')
       const testMob = Mob.getMob(mobId);
 
 
@@ -128,4 +141,8 @@ describe('Mob Tests', () => {
     })
     
   });
+});
+
+afterEach(() => {
+  DB.close();
 });
