@@ -7,7 +7,6 @@ import { Mob } from '../../src/mobs/mob';
 import { ItemGenerator } from '../../src/items/itemGenerator';
 import { Drink } from '../../src/items/uses/drink';
 import { FantasyDate } from '../../src/date/fantasyDate';
-import { Sleep } from '../../src/mobs/plans/sleep';
 
 beforeEach(() => {
   commonSetup();

@@ -1,7 +1,5 @@
 import { Mob } from '../mobs/mob';
 import { hexStringToNumber } from '../util/colorUtil';
-import { gameWorld } from '../services/gameWorld/gameWorld';
-
 
 export function drinkPotion(mob: Mob, potionType: string): boolean {
   console.log('Drink potion', potionType);
