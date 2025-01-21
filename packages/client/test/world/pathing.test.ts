@@ -1,6 +1,8 @@
 import { Mob } from '../../src/world/mob';
 import { World } from '../../src/world/world';
 import { Item } from '../../src/world/item';
+import { ItemType } from "../../src/worldDescription";
+import { Coord } from "../../../common/src/coord"; 
 
 const TEST_UNWALKABLE_ITEM = { isWalkable: () => false } as unknown as Item;
 const TEST_WALKABLE_ITEM = { isWalkable: () => true } as unknown as Item;
@@ -10,14 +12,39 @@ const TEST_OLD_PATH = [
 ];
 const TEST_NEW_PATH = [
   { x: 2, y: 2 },
-  { x: 3, y: 3 }
+  { x: 4, y: 4 }
 ];
+
+const gateItemType: ItemType = {
+  name: "Gate",
+  type: "gate",
+  item_group: "fence",
+  layout_type: "opens", 
+  carryable: false,     
+  smashable: true,               
+  walkable: true,       
+  interactions: [],
+  attributes: [
+      {
+          "name": "health",
+          "value": 100
+      }
+  ],
+  open: false
+};
 
 const mockWorld = {
   addMobToGrid: jest.fn(),
   getItemAt: jest.fn(),
   generatePath: jest.fn().mockReturnValue(TEST_NEW_PATH),
-  moveMob: jest.fn()
+  moveMob: jest.fn(),
+  items : {} as Record<string, Item>,
+  addItemToGrid: jest.fn(),
+  pathFinder: {
+    clearBlockingItems: jest.fn(),
+    setBlockingItem: jest.fn(),
+    generatePath: jest.fn().mockReturnValue(TEST_NEW_PATH),
+  },
 };
 
 const createTestMob = (): Mob => {
@@ -83,5 +110,51 @@ describe('Mob', () => {
       expect(mockWorld.generatePath).not.toHaveBeenCalled();
       expect(mob.path).toEqual(TEST_OLD_PATH);
     });
+  });
+});
+
+describe("Items and Path Blocking", () => {
+  let world: World;
+
+  beforeAll(() => {
+    world = new World();
+    world.load({
+      tiles: [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+      ],
+      terrain_types: [{ id: 0, name: 'Grass', walkable: true }],
+      item_types: [],
+      mob_types: [],
+    });
+  });
+
+  test('Pathing Correct When Gate is Open/Closed', () => {
+    let c1: Coord = {x: 2, y: 2};
+    let c2: Coord = {x: 4, y: 4};
+
+    const gate = new Item(world, "gate1", { x: 3, y: 3 }, gateItemType);
+    gate.lock = "lock";
+
+    world.addItemToGrid(gate);
+    world.items["gate1"] = gate;
+
+    jest.spyOn(world['pathFinder']!, "setBlockingItem")
+    
+    // create path attempt one -- closed gate
+    world.generatePath([], c1, c2)
+    expect(world['pathFinder']!.setBlockingItem).toHaveBeenCalledTimes(1);
+
+    gate.itemType.open = true;
+
+    // create path attempt two -- open gate
+    world.generatePath([], c1, c2)
+    expect(world['pathFinder']!.setBlockingItem).toHaveBeenCalledTimes(1);
+    gate.itemType.open = false;
+
+    // create path attempt three -- closed gate
+    world.generatePath([], c1, c2)
+    expect(world['pathFinder']!.setBlockingItem).toHaveBeenCalledTimes(2);
   });
 });
