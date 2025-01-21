@@ -14,10 +14,13 @@ import { DB } from '../database';
 
 export class ServerWorld implements GameWorld {
   private pathFinder: PathFinder;
+  // export mobTypes and itemTypes as attributes to use in tests
   public mobTypes: ServerWorldDescription['mob_types'];
+  public itemTypes: ServerWorldDescription['item_types'];
 
   constructor(worldDesc: ServerWorldDescription) {
     this.mobTypes = [...worldDesc.mob_types]
+    this.itemTypes = [...worldDesc.item_types]
     mobFactory.loadTemplates([...worldDesc.mob_types]);
     this.pathFinder = new PathFinder(worldDesc.tiles, worldDesc.terrain_types);
 

@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      rt-potion:
+        specifier: 'file:'
+        version: 'file:'
     devDependencies:
       eslint:
         specifier: ^9.18.0
@@ -2933,6 +2937,9 @@ packages:
   rrweb-cssom@0.8.0:
     resolution: {integrity: sha512-guoltQEx+9aMf2gDZ0s62EcV8lsXR+0w8915TC3ITdn2YueuNjdAYh/levpU9nFaoChh9RUS5ZdQMrKfVEN9tw==}
 
+  'rt-potion@file:':
+    resolution: {directory: '', type: directory}
+
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
@@ -3876,14 +3883,14 @@ snapshots:
       '@jest/test-result': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 22.10.6
+      '@types/node': 20.17.12
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       ci-info: 3.9.0
       exit: 0.1.2
       graceful-fs: 4.2.11
       jest-changed-files: 29.7.0
-      jest-config: 29.7.0(@types/node@22.10.6)(ts-node@10.9.2(@types/node@20.17.12)(typescript@5.7.3))
+      jest-config: 29.7.0(@types/node@20.17.12)(ts-node@10.9.2(@types/node@20.17.12)(typescript@5.7.3))
       jest-haste-map: 29.7.0
       jest-message-util: 29.7.0
       jest-regex-util: 29.6.3
@@ -3911,14 +3918,14 @@ snapshots:
       '@jest/test-result': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 22.10.6
+      '@types/node': 20.17.12
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       ci-info: 3.9.0
       exit: 0.1.2
       graceful-fs: 4.2.11
       jest-changed-files: 29.7.0
-      jest-config: 29.7.0(@types/node@22.10.6)(ts-node@10.9.2(@types/node@22.10.6)(typescript@5.7.3))
+      jest-config: 29.7.0(@types/node@20.17.12)(ts-node@10.9.2(@types/node@22.10.6)(typescript@5.7.3))
       jest-haste-map: 29.7.0
       jest-message-util: 29.7.0
       jest-regex-util: 29.6.3
@@ -5894,7 +5901,7 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
-  jest-config@29.7.0(@types/node@22.10.6)(ts-node@10.9.2(@types/node@20.17.12)(typescript@5.7.3)):
+  jest-config@29.7.0(@types/node@20.17.12)(ts-node@10.9.2(@types/node@22.10.6)(typescript@5.7.3)):
     dependencies:
       '@babel/core': 7.26.0
       '@jest/test-sequencer': 29.7.0
@@ -5919,8 +5926,8 @@ snapshots:
       slash: 3.0.0
       strip-json-comments: 3.1.1
     optionalDependencies:
-      '@types/node': 22.10.6
-      ts-node: 10.9.2(@types/node@20.17.12)(typescript@5.7.3)
+      '@types/node': 20.17.12
+      ts-node: 10.9.2(@types/node@22.10.6)(typescript@5.7.3)
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
@@ -6778,6 +6785,8 @@ snapshots:
   rrweb-cssom@0.7.1: {}
 
   rrweb-cssom@0.8.0: {}
+
+  'rt-potion@file:': {}
 
   run-parallel@1.2.0:
     dependencies:
