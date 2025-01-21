@@ -1,7 +1,5 @@
 import { Mob } from '../mobs/mob';
-import { hexStringToNumber, numberToHexString } from '../util/colorUtil';
-import { FantasyDate } from '../../src/date/fantasyDate';
-import { scheduler } from 'timers/promises';
+import { hexStringToNumber } from '../util/colorUtil';
 
 
 export function drinkPotion(mob: Mob, potionType: string): boolean {
