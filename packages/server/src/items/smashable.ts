@@ -19,9 +19,16 @@ export class Smashable {
 
   private mob!: Mob; // Add mob as a class property
 
-  smashItem(mob: Mob) {
+  /** 
+   * Damage item with mob by random amount within mob attack
+   * @param Mob The mob that is doing the attack
+   * @param rng For random value, only for testing
+   */
+  smashItem(mob: Mob, rng: () => number = Math.random) {
     this.mob = mob; // Store mob in the class property
-    const attackDmg = Math.floor(Math.random() * mob.attack);
+    let attackDmg = Math.floor(rng() * mob.attack);
+    // prevent 0 damage from being inflicted
+    attackDmg = attackDmg > 0 ? attackDmg : 1;
     this.changeHealth(-attackDmg);
   }
 

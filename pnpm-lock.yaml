@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      rt-potion:
+        specifier: 'file:'
+        version: 'file:'
     devDependencies:
       eslint:
         specifier: ^9.18.0
@@ -2932,6 +2936,9 @@ packages:
 
   rrweb-cssom@0.8.0:
     resolution: {integrity: sha512-guoltQEx+9aMf2gDZ0s62EcV8lsXR+0w8915TC3ITdn2YueuNjdAYh/levpU9nFaoChh9RUS5ZdQMrKfVEN9tw==}
+
+  'rt-potion@file:':
+    resolution: {directory: '', type: directory}
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
@@ -6778,6 +6785,8 @@ snapshots:
   rrweb-cssom@0.7.1: {}
 
   rrweb-cssom@0.8.0: {}
+
+  'rt-potion@file:': {}
 
   run-parallel@1.2.0:
     dependencies:
