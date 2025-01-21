@@ -364,7 +364,7 @@
             },
             {
                 "description": "Get $item_name",
-                "action": "retrieve_item",
+                "action": "get_item",
                 "while_carried": false,
                 "conditions": [
                     {
