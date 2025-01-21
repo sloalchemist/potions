@@ -13,6 +13,7 @@ import { Coord } from '@rt-potion/common';
 beforeEach(() => {
   commonSetup();
   Community.makeVillage('alchemists', 'Alchemists guild');
+  // if vscode says the below is bad, ignore it :)
   mobFactory.loadTemplates(world.mobTypes);
 });
 

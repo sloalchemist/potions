@@ -27,16 +27,8 @@ export class Smashable {
 
   changeHealth(amount: number) {
     this.item.changeAttributeBy('health', amount);
-    
-    
     if (this.item.getAttribute<number>('health') <= 0) {
       this.destroySmashable();
-      //if (this.item.type == 'potion-stand') {
-      //  this.destroySmashable();
-      //}
-
-      // why do we need both the destroy smashable AND the item destroy
-      this.item.destroy();
     }
   }
 
@@ -62,5 +54,6 @@ export class Smashable {
         });
       }
     }
+    this.item.destroy();
   }
 }
