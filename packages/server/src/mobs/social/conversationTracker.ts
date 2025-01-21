@@ -39,6 +39,10 @@ export class ConversationTracker implements SpeakerService {
     if (starter.id === responder.id) {
       throw new Error('Cannot start conversation with self');
     }
+    // you shouldn't be able to speak to blobs
+    if (starter.type === 'blob' || responder.type === 'blob') {
+      return;
+    }
     const speaker1 = DatabaseSpeaker.load(starter.id);
     const speaker2 = DatabaseSpeaker.load(responder.id);
     memoryService.observe(speaker1.id, speaker2.id);
