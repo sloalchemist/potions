@@ -1,48 +1,31 @@
-import { ItemGenerator } from '../../src/items/itemGenerator';
-import { commonSetup } from '../testSetup';
+import { commonSetup, itemGenerator } from '../testSetup';
 import { DB } from '../../src/services/database';
 import { Item } from '../../src/items/item';
+import { Coord } from '@rt-potion/common';
 
-beforeAll(() => {
+beforeEach(() => {
   commonSetup();
 });
 
-describe('Generate heart-beet', () => {
-  test('should generate heart-beet', () => {
-    const worldDescription = {
-      tiles: [
-        [-1, -1],
-        [-1, -1]
-      ],
-      terrain_types: [],
-      item_types: [
-        {
-          name: 'Heart Beet',
-          description: 'A heart-shaped beet',
-          type: 'heart-beet',
-          carryable: true,
-          walkable: true,
-          interactions: [],
-          attributes: [],
-          on_tick: []
-        }
-      ],
-      mob_types: []
-    };
-    const itemGenerator = new ItemGenerator(worldDescription.item_types);
-    //const world = new ServerWorld(worldDescription);
-    const position = { x: 0, y: 0 };
-    itemGenerator.createItem({
-      type: 'heart-beet',
-      position
+describe('Item Generator Tests', () => {
+  describe('Heart-Beet Generation', () => {
+    test('Should generate a heart-beet item at the specified position', () => {
+      const position: Coord = { x: 0, y: 0 };
+
+      // Generate a heart-beet item
+      itemGenerator.createItem({ type: 'heart-beet', position });
+
+      // Verify the item exists at the specified position
+      const heartBeetID = Item.getItemIDAt(position);
+      expect(heartBeetID).not.toBeNull();
+
+      const heartBeet = Item.getItem(heartBeetID!);
+      expect(heartBeet).not.toBeNull();
+      expect(heartBeet!.type).toBe('heart-beet');
     });
-    const heartBeetID = Item.getItemIDAt(position);
-    expect(heartBeetID).not.toBeNull();
-    const heartBeet = Item.getItem(heartBeetID!);
-    expect(heartBeet).not.toBeNull();
-    expect(heartBeet!.type).toBe('heart-beet');
   });
 });
-afterAll(() => {
+
+afterEach(() => {
   DB.close();
 });
