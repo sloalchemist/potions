@@ -16,15 +16,6 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
     // Change speed by calling mob.changeSpeed with delta and duration
     mob.changeSpeed(speedDelta, speedDuration);
 
-    // Start checking for speed reset periodically
-    const resetInterval = setInterval(() => {
-      if (mob.checkSpeedReset(speedDelta)) {
-        clearInterval(resetInterval);  // Stop checking once the speed is reset
-      }
-    }, 500);
-
-    resetInterval.unref(); // allows teardown if last active handler
-
     return true;
   }
   

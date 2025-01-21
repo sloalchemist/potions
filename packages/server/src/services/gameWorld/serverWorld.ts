@@ -84,6 +84,8 @@ export class ServerWorld implements GameWorld {
     this.runItemTicks();
     this.runMobTicks(deltaTime);
 
+    
+
     conversationTracker.tick();
     FantasyDate.runTick();
 

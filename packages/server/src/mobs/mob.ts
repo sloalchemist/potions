@@ -395,10 +395,11 @@ export class Mob {
     pubSub.changeTargetSpeedTick(this.id, speedDuration, this._target_speed_tick)
   }
 
-  checkSpeedReset(speedDelta: number): boolean {
+  private checkSpeedReset(speedDelta: number): void {
     // check if target tick has been reached or is already null
-    if (this._target_speed_tick !== null && this.current_tick >= this._target_speed_tick) {
-      this.speed -= speedDelta;  
+    if ((this._target_speed_tick !== null || this._target_speed_tick === -1) && this.current_tick >= this._target_speed_tick) {
+      this.speed -= speedDelta;
+      this.target_speed_tick = -1;
       DB.prepare(
         `
         UPDATE mobs
@@ -407,11 +408,7 @@ export class Mob {
         `
       ).run({ speed: this.speed, target_speed_tick: null, id: this.id });
       pubSub.changeSpeed(this.id, -speedDelta, this.speed);
-
-      return true;
     }
-    
-    return false;
   }
 
   getHouse(): House | undefined {
@@ -633,7 +630,10 @@ export class Mob {
       const finished = action.execute(this);
       //console.log(`${this.name} action: ${action.type()} finished: ${finished}`);
       this.setAction(action.type(), finished);
-    }
+    } 
+
+    // we need to check if the current tick matches the targetspeedtick for the mob (check speed reset)
+    this.checkSpeedReset(2);
 
     this.needs.tick();
   }

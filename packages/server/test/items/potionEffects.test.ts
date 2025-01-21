@@ -205,7 +205,6 @@ describe('Try to consume blue potion in various cases', () => {
     expect(testMob!.gold).toBe(0);
     expect(testMob!._target_speed_tick).toBe(target_tick);
 
-
     // create a potion again, try to drink back to back
     itemGenerator.createItem({
       type: 'potion',
