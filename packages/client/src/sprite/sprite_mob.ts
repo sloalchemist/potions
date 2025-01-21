@@ -151,7 +151,7 @@ export class SpriteMob extends Mob {
     }
 
     this.attributeListeners.push((spriteMob, key, delta) => {
-      if (!spriteMob) {
+      if (!spriteMob || key === 'target_speed_tick') {
         return;
       }
 
@@ -160,12 +160,12 @@ export class SpriteMob extends Mob {
         if (delta < 0) {
           spriteMob.createBloodSplat(0.5);
         }
-
+        
         color = delta > 0 ? '#00ff00' : '#ff0000';
       } else if (key === 'gold') {
         color = '#ffd700';
       } else if (key === 'speed') {
-        color = '#0000ff'
+        color = delta > 0 ? '#00ff00' : '#ff0000';
       }
 
       const attributeSprite = scene.add.text(

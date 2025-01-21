@@ -370,6 +370,10 @@ export class Mob {
     }
   }
 
+  changeTargetSpeedTick(target_tick: number): void {
+    this.target_speed_tick = target_tick;
+  }
+
   changeSpeed(speedDelta: number, speedDuration: number): void {
 
     // only change speed if no increase is already in progres
@@ -385,7 +389,7 @@ export class Mob {
       SET speed = :speed, target_speed_tick = :target_speed_tick
       WHERE id = :id
       `
-    ).run({ speed: this.speed, target_speed_tick: this.target_speed_tick, id: this.id });
+    ).run({ speed: this.speed, target_speed_tick: this._target_speed_tick, id: this.id });
 
     pubSub.changeSpeed(this.id, speedDelta, this.speed);
     pubSub.changeTargetSpeedTick(this.id, speedDuration, this._target_speed_tick)
@@ -393,7 +397,7 @@ export class Mob {
 
   checkSpeedReset(speedDelta: number): boolean {
     // check if target tick has been reached or is already null
-    if (this.target_speed_tick !== null && this.current_tick >= this.target_speed_tick) {
+    if (this._target_speed_tick !== null && this.current_tick >= this._target_speed_tick) {
       this.speed -= speedDelta;  
       DB.prepare(
         `
@@ -402,7 +406,7 @@ export class Mob {
         WHERE id = :id
         `
       ).run({ speed: this.speed, target_speed_tick: null, id: this.id });
-      pubSub.changeSpeed(this.id, speedDelta, this.speed);
+      pubSub.changeSpeed(this.id, -speedDelta, this.speed);
 
       return true;
     }

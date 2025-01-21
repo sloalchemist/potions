@@ -1,5 +1,6 @@
 import { Mob } from '../mobs/mob';
 import { hexStringToNumber } from '../util/colorUtil';
+import { gameWorld } from '../services/gameWorld/gameWorld';
 
 
 export function drinkPotion(mob: Mob, potionType: string): boolean {
@@ -23,6 +24,8 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
         clearInterval(resetInterval);  // Stop checking once the speed is reset
       }
     }, 500);
+
+    resetInterval.unref(); // allows teardown if last active handler
 
     return true;
   }
