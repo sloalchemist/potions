@@ -17,8 +17,7 @@ const mockWorld = {
   addMobToGrid: jest.fn(),
   getItemAt: jest.fn(),
   generatePath: jest.fn().mockReturnValue(TEST_NEW_PATH),
-  moveMob: jest.fn(),
-  addItemToGrid: jest.fn(),
+  moveMob: jest.fn()
 };
 
 const createTestMob = (): Mob => {
