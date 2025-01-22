@@ -7,15 +7,11 @@ import { Smashable } from '../../src/items/smashable';
 import { Item } from '../../src/items/item';
 import { Coord } from '@rt-potion/common';
 
-
-
 beforeEach(() => {
   commonSetup();
-  Community.makeVillage('alchemists', 'Alchemists guild');
-  // if vscode says the below is bad, ignore it :)
+  Community.makeVillage('lumberjacks', 'Lumberjacks guild');
   mobFactory.loadTemplates(world.mobTypes);
 });
-
 
 describe('Log Smashable Tests', () => {
   test('should not drop gold or items when log is smashed', () => {
@@ -39,7 +35,6 @@ describe('Log Smashable Tests', () => {
       }
     });
 
-
     const logID = Item.getItemIDAt(logPosition);
 
     if (!logID) {
@@ -58,7 +53,46 @@ describe('Log Smashable Tests', () => {
 
     // Smash the log
     smashable?.smashItem(testMob!);
-    
+
+    // Assert that no gold is dropped
+    let goldDropped = false;
+
+    // Scan positions around the mob for dropped gold
+    for (let dx = -1; dx <= 1; dx++) {
+      for (let dy = -1; dy <= 1; dy++) {
+        const potentialPosition = { x: logPosition.x + dx, y: logPosition.y + dy };
+        const potentialGoldID = Item.getItemIDAt(potentialPosition);
+
+        if (potentialGoldID) {
+          const potentialGold = Item.getItem(potentialGoldID);
+          if (potentialGold?.type === 'gold') {
+            goldDropped = true;
+          }
+        }
+      }
+    }
+
+    expect(goldDropped).toBe(false);
+
+    // Assert that no items are dropped
+    let itemsDropped = 0;
+
+    const searchRadius = 2;
+    for (let dx = -searchRadius; dx <= searchRadius; dx++) {
+      for (let dy = -searchRadius; dy <= searchRadius; dy++) {
+        const potentialPosition = { x: logPosition.x + dx, y: logPosition.y + dy };
+        const potentialItemID = Item.getItemIDAt(potentialPosition);
+
+        if (potentialItemID) {
+          const potentialItem = Item.getItem(potentialItemID);
+          if (potentialItem?.type === 'potion') {
+            itemsDropped++;
+          }
+        }
+      }
+    }
+
+    expect(itemsDropped).toBe(0);
   });
 });
 
