@@ -2,7 +2,7 @@ import { Compliment } from './compliment';
 import { Insult } from './insult';
 import { Joking } from './joking';
 import { Neutral } from './neutral';
-import { Tone } from './tone'
+import { Tone } from './tone';
 
 export const neutralTone = new Neutral();
 export const jokingTone = new Joking();
