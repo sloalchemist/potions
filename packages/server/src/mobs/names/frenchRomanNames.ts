@@ -3,7 +3,7 @@
 import { NameGenerator } from './nameGenerator';
 
 export class FrenchRomanNames implements NameGenerator {
-  private frenchPrefixes: string[] = [
+  private frenchPrefixes = [
     'Beau',
     'Chateau',
     'Fleur',
@@ -13,9 +13,11 @@ export class FrenchRomanNames implements NameGenerator {
     'Riviere',
     'Val',
     'Vigne'
-  ] as const;
+  ] as const satisfies readonly string[];
 
-  private romanPrefixes: string[] = [
+  private test = this.frenchPrefixes[1];
+
+  private romanPrefixes = [
     'Aurelius',
     'Claudius',
     'Flavius',
@@ -26,9 +28,9 @@ export class FrenchRomanNames implements NameGenerator {
     'Quintus',
     'Tiberius',
     'Valerius'
-  ] as const;
+  ] as const satisfies readonly string[];
 
-  private frenchSuffixes: string[] = [
+  private frenchSuffixes = [
     'mont',
     'ville',
     'fort',
@@ -39,9 +41,9 @@ export class FrenchRomanNames implements NameGenerator {
     'plaine',
     'roc',
     'vallee'
-  ] as const;
+  ] as const satisfies readonly string[];
 
-  private romanSuffixes: string[] = [
+  private romanSuffixes = [
     'us',
     'ium',
     'ianus',
@@ -52,11 +54,18 @@ export class FrenchRomanNames implements NameGenerator {
     'ius',
     'ae',
     'a'
-  ] as const;
+  ] as const satisfies readonly string[];
 
-  private vowels: string[] = ['a', 'e', 'i', 'o', 'u', 'y'] as const;
+  private vowels = [
+    'a',
+    'e',
+    'i',
+    'o',
+    'u',
+    'y'
+  ] as const satisfies readonly string[];
 
-  private consonants: string[] = [
+  private consonants = [
     'b',
     'c',
     'd',
@@ -76,7 +85,7 @@ export class FrenchRomanNames implements NameGenerator {
     'v',
     'x',
     'z'
-  ] as const;
+  ] as const satisfies readonly string[];
 
   // Generate a random name
   public generateName(): string {
@@ -115,7 +124,7 @@ export class FrenchRomanNames implements NameGenerator {
   }
 
   // Utility: Get a random element from an array
-  private randomElement<T>(array: T[]): T {
+  private randomElement<T>(array: readonly T[]): T {
     return array[Math.floor(Math.random() * array.length)];
   }
 

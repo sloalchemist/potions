@@ -3,7 +3,7 @@
 import { NameGenerator } from './nameGenerator';
 
 export class NorseEnglishNames implements NameGenerator {
-  private englishPrefixes: string[] = [
+  private englishPrefixes = [
     'Ash',
     'Black',
     'Bright',
@@ -22,9 +22,9 @@ export class NorseEnglishNames implements NameGenerator {
     'Thorn',
     'White',
     'Wolf'
-  ] as const;
+  ] as const satisfies readonly string[];
 
-  private nordicPrefixes: string[] = [
+  private nordicPrefixes = [
     'Bjorn',
     'Eirik',
     'Hakon',
@@ -35,9 +35,9 @@ export class NorseEnglishNames implements NameGenerator {
     'Thor',
     'Ulf',
     'Vidar'
-  ] as const;
+  ] as const satisfies readonly string[];
 
-  private englishSuffixes: string[] = [
+  private englishSuffixes = [
     'dale',
     'fall',
     'field',
@@ -53,9 +53,9 @@ export class NorseEnglishNames implements NameGenerator {
     'stone',
     'vale',
     'wood'
-  ] as const;
+  ] as const satisfies readonly string[];
 
-  private nordicSuffixes: string[] = [
+  private nordicSuffixes = [
     'heim',
     'fjord',
     'lund',
@@ -66,11 +66,18 @@ export class NorseEnglishNames implements NameGenerator {
     'gaard',
     'berg',
     'dal'
-  ] as const;
+  ] as const satisfies readonly string[];
 
-  private vowels: string[] = ['a', 'e', 'i', 'o', 'u', 'y'] as const;
+  private vowels = [
+    'a',
+    'e',
+    'i',
+    'o',
+    'u',
+    'y'
+  ] as const satisfies readonly string[];
 
-  private consonants: string[] = [
+  private consonants = [
     'b',
     'c',
     'd',
@@ -89,7 +96,7 @@ export class NorseEnglishNames implements NameGenerator {
     'v',
     'w',
     'z'
-  ] as const;
+  ] as const satisfies readonly string[];
 
   // Generate a random name
   public generateName(): string {
@@ -128,7 +135,7 @@ export class NorseEnglishNames implements NameGenerator {
   }
 
   // Utility: Get a random element from an array
-  private randomElement<T>(array: T[]): T {
+  private randomElement<T>(array: readonly T[]): T {
     return array[Math.floor(Math.random() * array.length)];
   }
 

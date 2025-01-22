@@ -370,7 +370,11 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     [vera]
   );
 
-  const events = [silverclawGathering, silverclawRaid, winterFestival] as const;
+  const events = [
+    silverclawGathering,
+    silverclawRaid,
+    winterFestival
+  ] as const satisfies Eventy[];
 
   const knowledgeGraph = constructGraph(world.concat(people, events));
   knowledgeGraph.beliefs.push(...familyTree);

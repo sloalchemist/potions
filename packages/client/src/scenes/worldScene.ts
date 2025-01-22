@@ -1,27 +1,26 @@
+import { Coord, TerrainType } from '@rt-potion/common';
 import * as Phaser from 'phaser';
-import {
-  gameState,
-  fantasyDate,
-  initializePlayer,
-  tick
-} from '../world/controller';
 import { bindAblyToWorldScene } from '../services/ablySetup';
-import { TerrainType } from '@rt-potion/common';
-import { Coord } from '@rt-potion/common';
-import { publicCharacterId } from '../worldMetadata';
+import { publishPlayerPosition } from '../services/playerToServer';
 import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
-import { World } from '../world/world';
-import { GRAY } from './pauseScene';
-import { publishPlayerPosition } from '../services/playerToServer';
 import { getNightSkyOpacity } from '../utils/nightOverlayHandler';
+import {
+  fantasyDate,
+  gameState,
+  initializePlayer,
+  setGameState,
+  tick
+} from '../world/controller';
+import { World } from '../world/world';
 import {
   ItemType,
   parseWorldFromJson,
   WorldDescription
 } from '../worldDescription';
+import { publicCharacterId } from '../worldMetadata';
+import { GRAY } from './pauseScene';
 import { UxScene } from './uxScene';
-import { setGameState } from '../world/controller';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -249,7 +248,7 @@ export class WorldScene extends Phaser.Scene {
       '4-3', // Configuration 13
       '4-1', // Configuration 14
       '4-4' // Configuration 15
-    ] as const;
+    ] as const satisfies readonly string[];
 
     const waterTypes = globalData.terrain_types
       .filter((type) => !type.walkable)

@@ -5,7 +5,7 @@ export const Colors = {
   COLOR_3: 0xf489f6,
   COLOR_3_DARK: 0xd840fb,
   COLOR_3_DARKER: 0x780bf7
-} as const;
+} as const satisfies Record<string, number>;
 
 export type SwappableColors = keyof typeof Colors;
 
