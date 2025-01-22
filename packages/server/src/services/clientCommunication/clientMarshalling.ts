@@ -52,7 +52,12 @@ function mobDataToMob(mobData: MobData): MobI {
     name: mobData.name,
     maxHealth: mobData.maxHealth,
     carrying: mobData.carrying_id,
-    attributes: { health: mobData.health, gold: mobData.gold, speed: mobData.speed },
+    attributes: {
+      health: mobData.health,
+      gold: mobData.gold,
+      speed: mobData.speed,
+      target_speed_tick: mobData.target_speed_tick
+    },
     unlocks: mobData.community_id ? [mobData.community_id] : [],
     doing: mobData.current_action
   };
@@ -80,7 +85,8 @@ export function getMobsAbly(): MobI[] {
             target_y,
             current_action,
             carrying_id,
-            community_id
+            community_id,
+            target_speed_tick
         FROM
         mobs;
         `
@@ -140,7 +146,8 @@ export function getMobAbly(key: string): MobI {
             target_y,
             current_action,
             carrying_id,
-            community_id
+            community_id,
+            target_speed_tick
         FROM
         mobs
         WHERE id = :id;

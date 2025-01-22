@@ -11,7 +11,6 @@ import { CollectGold } from './stand/collectGold';
 import { CreateStand } from './stand/createStand';
 import { RaisePrice } from './stand/raisePrice';
 import { LowerPrice } from './stand/lowerPrice';
-import { Retrieve } from './stand/retrieve';
 import { BuildWall } from './building/buildWall';
 import { StartWall } from './building/startWall';
 import { AddItem } from './container/addItem';
@@ -31,7 +30,6 @@ const uses = [
   CreateStand,
   RaisePrice,
   LowerPrice,
-  Retrieve,
   BuildWall,
   StartWall,
   AddItem,

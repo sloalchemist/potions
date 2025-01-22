@@ -212,12 +212,6 @@ export class Item {
     return count.number;
   }
 
-  public static dropRules: Record<string, string> = {
-    fence: 'log',
-    wall: 'log',
-    'partial-wall': 'log'
-  };
-
   static countTypeOfItemInRadius(
     type: string,
     position: Coord,

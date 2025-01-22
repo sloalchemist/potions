@@ -4,7 +4,7 @@ import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
 import { Item } from '../../src/items/item';
 import { AddItem } from '../../src/items/uses/container/addItem';
-import { Retrieve } from '../../src/items/uses/stand/retrieve';
+import { GetItem } from '../../src/items/uses/container/getItem';
 import { Mob } from '../../src/mobs/mob';
 import { Coord } from '@rt-potion/common';
 
@@ -17,9 +17,9 @@ beforeEach(() => {
 describe('Potion Stand Retrieval Tests', () => {
   describe('Retrieve Potion from Stand', () => {
     test('Should allow a player to retrieve a potion from the stand', () => {
-      const standPosition : Coord = { x: 0, y: 1 };
-      const playerPosition : Coord = { x: 0, y: 0 };
-      const potionLocation: Coord = { x: 1, y: 0 }
+      const standPosition: Coord = { x: 0, y: 1 };
+      const playerPosition: Coord = { x: 0, y: 0 };
+      const potionLocation: Coord = { x: 1, y: 0 };
 
       // Create a potion stand
       itemGenerator.createItem({
@@ -27,8 +27,8 @@ describe('Potion Stand Retrieval Tests', () => {
         subtype: '255',
         position: standPosition,
         attributes: {
-          templateType: 'potion',
-        },
+          templateType: 'potion'
+        }
       });
       const standID = Item.getItemIDAt(standPosition);
       expect(standID).not.toBeNull();
@@ -47,7 +47,7 @@ describe('Potion Stand Retrieval Tests', () => {
         type: 'potion',
         subtype: '255',
         position: potionLocation,
-        carriedBy: player,
+        carriedBy: player
       });
 
       // Place potion on the stand
@@ -61,7 +61,7 @@ describe('Potion Stand Retrieval Tests', () => {
       expect(player!.carrying).toBeUndefined();
 
       // Player retrieves the potion from the stand
-      const retrievePotion = new Retrieve();
+      const retrievePotion = new GetItem();
       const result = retrievePotion.interact(player!, potionStand!);
       expect(result).toBe(true);
 
