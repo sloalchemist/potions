@@ -5,8 +5,7 @@ import { itemGenerator } from './itemGenerator';
 const itemDropConfig = {
   fence: 'log',
   wall: 'log',
-  'partial-wall': 'log',
-  'potion-stand': 'gold'
+  'partial-wall': 'log'
 };
 
 export class Smashable {
