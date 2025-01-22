@@ -1,7 +1,7 @@
-import { Belief } from '../belief';
-import { Desire } from '../desire';
-import { Noun } from '../noun';
 import { Graphable } from './graphable';
+import { Belief } from '../belief';
+import { Noun } from '../noun';
+import { Desire } from '../desire';
 
 export class Region implements Graphable {
   id: string;
