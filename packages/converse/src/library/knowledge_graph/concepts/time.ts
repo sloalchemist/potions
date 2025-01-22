@@ -40,7 +40,7 @@ export class Time implements ConceptHierarchy {
         as_question: 'will <subject> happen a long time from now?',
         parent_concept: topLevelConcept
       }
-    ] as const;
+    ] as const satisfies readonly Concept[];
     concepts.push(...timeConcepts);
     return concepts;
   }

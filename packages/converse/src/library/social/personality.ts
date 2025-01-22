@@ -43,7 +43,7 @@ export class Personality {
       'generous',
       'demanding',
       'negotiator'
-    ] as const;
+    ] as const satisfies PersonalityTraits[];
 
     const traitsSQL = traits
       .map((trait) => `${trait} = ${trait} / (SELECT sum_val FROM total)`)
@@ -113,7 +113,7 @@ export class Personality {
       'generous',
       'demanding',
       'negotiator'
-    ] as const;
+    ] as const satisfies PersonalityTraits[];
     const columns = traits.join(', ');
     const placeholders = traits.map((trait) => `:${trait}`).join(', ');
 

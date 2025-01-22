@@ -45,7 +45,7 @@ export class Region implements Graphable {
         description: this.description,
         trust: 0
       }
-    ] as const;
+    ] as const satisfies Belief[];
 
     if (this.parent_region) {
       beliefs.push({

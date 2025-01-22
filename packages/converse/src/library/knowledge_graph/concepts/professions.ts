@@ -28,7 +28,7 @@ export class Professions implements ConceptHierarchy {
         as_question: 'is <subject> an alchemist?',
         parent_concept: topLevelConcept
       }
-    ] as const;
+    ] as const satisfies readonly Concept[];
     concepts.push(...professionConcepts);
     return concepts;
   }
