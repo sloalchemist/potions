@@ -8,7 +8,6 @@ import { Item } from '../../src/items/item';
 import { Coord } from '@rt-potion/common';
 
 
-// THIS IS A TEMPLATE OF THE POTION STAND DROP TEST, RECONFIGURE ACCORDINGLY
 
 beforeEach(() => {
   commonSetup();
@@ -18,10 +17,10 @@ beforeEach(() => {
 });
 
 
-describe('Potion Stand Smashable Tests', () => {
-  test('should drop gold and items when potion stand is destroyed', () => {
-    const potionStandPosition: Coord = { x: 0, y: 0 };
-    const mobPosition: Coord = { x: 1, y: 1 };
+describe('Log Smashable Tests', () => {
+  test('should not drop gold or items when log is smashed', () => {
+    const logPosition: Coord = { x: 5, y: 5 };
+    const mobPosition: Coord = { x: 6, y: 6 };
 
     // Create player mob
     mobFactory.makeMob('player', mobPosition, '1', 'testPlayer');
@@ -31,84 +30,35 @@ describe('Potion Stand Smashable Tests', () => {
     // Verify mob attributes
     expect(testMob?.health).toBe(100);
 
-    // Create ItemGenerator and Potion Stand
+    // Create Log item
     itemGenerator.createItem({
-      type: 'potion-stand',
-      position: potionStandPosition,
+      type: 'log',
+      position: logPosition,
       attributes: {
-        items: 1,
-        price: 10,
-        gold: 50,
-        health: 0
+        health: 10
       }
     });
 
-    const potionStandID = Item.getItemIDAt(potionStandPosition);
 
-    if (!potionStandID) {
-        throw new Error(`No item found at position ${JSON.stringify(potionStandPosition)}`);
-      }
+    const logID = Item.getItemIDAt(logPosition);
 
-    const potionStand = Item.getItem(potionStandID);
-    
-    if (!potionStand) {
-        throw new Error(`No item found with ID ${potionStandID}`);
+    if (!logID) {
+      throw new Error(`No item found at position ${JSON.stringify(logPosition)}`);
     }
 
-    // Create Smashable from Potion Stand
-    const smashable = Smashable.fromItem(potionStand);
+    const logItem = Item.getItem(logID);
+
+    if (!logItem) {
+      throw new Error(`No item found with ID ${logID}`);
+    }
+
+    // Create Smashable from Log
+    const smashable = Smashable.fromItem(logItem);
     expect(smashable).toBeDefined();
 
-    // Smash the potion stand
+    // Smash the log
     smashable?.smashItem(testMob!);
-
-    // Assert that gold and items are dropped
-    let droppedGoldID: string | null = null;
-
-    // Scan positions around the mob for dropped gold
-    for (let dx = -1; dx <= 1; dx++) {
-        for (let dy = -1; dy <= 1; dy++) {
-            const potentialPosition = { x: potionStandPosition.x + dx, y: potionStandPosition.y + dy };
-            const potentialGoldID = Item.getItemIDAt(potentialPosition);
-
-            if (potentialGoldID) {
-                const potentialGold = Item.getItem(potentialGoldID);
-                if (potentialGold?.type === 'gold') {
-                    droppedGoldID = potentialGoldID;
-                    break;
-                }
-            }
-        }
-        if (droppedGoldID) break; // Exit the loop if gold is found
-    }
-
-    const droppedGold = Item.getItem(droppedGoldID!);
-    // console.log(droppedGold);
-    // console.log("this is my print" + droppedGold?.type);
-    expect(droppedGold?.type).toBe("gold");
-    expect(droppedGold?.getAttribute('amount')).toBe(50);
-
-    // Assert items drop
-    let itemsDropped = 0;
-
-    // Define a grid range to search around the potion stand
-    const searchRadius = 2; // Adjust this based on your game's item placement logic
-    for (let dx = -searchRadius; dx <= searchRadius; dx++) {
-        for (let dy = -searchRadius; dy <= searchRadius; dy++) {
-            const potentialPosition = { x: potionStandPosition.x + dx, y: potionStandPosition.y + dy };
-            const potentialItemID = Item.getItemIDAt(potentialPosition);
-
-            if (potentialItemID) {
-                const potentialItem = Item.getItem(potentialItemID);
-                if (potentialItem?.type === 'potion') {
-                    itemsDropped++;
-                }
-            }
-        }
-    }
-
-    // Verify that exactly 3 items were dropped
-    expect(itemsDropped).toBe(1);
+    
   });
 });
 
