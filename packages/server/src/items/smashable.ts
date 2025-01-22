@@ -34,20 +34,15 @@ export class Smashable {
       }
       this.item.destroy();
 
-      // drop log after fence/wall is destroyed in its previous spot
+      // drop item depending on the item type
       const dropType = Item.dropRules[this.item.type];
       if (dropType) {
-        this.dropLog(this.item);
+        itemGenerator.createItem({
+          type: dropType,
+          position: this.item.position
+        });
       }
     }
-  }
-
-  // destroying a fence or wall should return the log use to build it
-  dropLog(item: Item) {
-    itemGenerator.createItem({
-      type: 'log',
-      position: item.position
-    });
   }
 
   destroyPotionStand() {
