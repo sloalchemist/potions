@@ -34,12 +34,9 @@ export class Smashable {
       }
       this.item.destroy();
 
-      // drog log after fence/wall is destroyed in its previous spot
-      if (
-        this.item.type == 'fence' ||
-        this.item.type == 'wall' ||
-        this.item.type == 'partial-wall'
-      ) {
+      // drop log after fence/wall is destroyed in its previous spot
+      const dropType = Item.dropRules[this.item.type];
+      if (dropType) {
         this.dropLog(this.item);
       }
     }
