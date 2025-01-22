@@ -17,9 +17,9 @@ beforeEach(() => {
 describe('Potion Stand Retrieval Tests', () => {
   describe('Retrieve Potion from Stand', () => {
     test('Should allow a player to retrieve a potion from the stand', () => {
-      const standPosition : Coord = { x: 0, y: 1 };
-      const playerPosition : Coord = { x: 0, y: 0 };
-      const potionLocation: Coord = { x: 1, y: 0 }
+      const standPosition: Coord = { x: 0, y: 1 };
+      const playerPosition: Coord = { x: 0, y: 0 };
+      const potionLocation: Coord = { x: 1, y: 0 };
 
       // Create a potion stand
       itemGenerator.createItem({
@@ -27,8 +27,8 @@ describe('Potion Stand Retrieval Tests', () => {
         subtype: '255',
         position: standPosition,
         attributes: {
-          templateType: 'potion',
-        },
+          templateType: 'potion'
+        }
       });
       const standID = Item.getItemIDAt(standPosition);
       expect(standID).not.toBeNull();
@@ -47,7 +47,7 @@ describe('Potion Stand Retrieval Tests', () => {
         type: 'potion',
         subtype: '255',
         position: potionLocation,
-        carriedBy: player,
+        carriedBy: player
       });
 
       // Place potion on the stand

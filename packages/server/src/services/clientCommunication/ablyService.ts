@@ -18,7 +18,7 @@ import {
   getMobAbly,
   getMobsAbly
 } from './clientMarshalling';
-import { Mob} from '../../mobs/mob';
+import { Mob } from '../../mobs/mob';
 import { mobFactory } from '../../mobs/mobFactory';
 import { conversationTracker } from '../../mobs/social/conversationTracker';
 import { gameWorld } from '../gameWorld/gameWorld';
@@ -220,7 +220,7 @@ export class AblyService implements PubSub {
       }
     });
   }
- 
+
   public changeSpeed(key: string, speed: number, newValue: number): void {
     if (newValue == undefined || key == undefined || speed == undefined) {
       throw new Error(
@@ -238,7 +238,11 @@ export class AblyService implements PubSub {
     });
   }
 
-  public changeTargetSpeedTick(key: string, tick: number, newValue: number): void {
+  public changeTargetSpeedTick(
+    key: string,
+    tick: number,
+    newValue: number
+  ): void {
     if (newValue == undefined || key == undefined || tick == undefined) {
       throw new Error(
         `Sending invalid changeTargetSpeedTick message ${key}, ${tick}, ${newValue}`
@@ -254,7 +258,7 @@ export class AblyService implements PubSub {
       }
     });
   }
-  
+
   public changeGold(key: string, gold: number, newValue: number): void {
     if (newValue == undefined || key == undefined || gold == undefined) {
       throw new Error(

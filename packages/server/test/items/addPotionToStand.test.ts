@@ -15,11 +15,10 @@ beforeEach(() => {
 
 describe('Try to add various color potions to a blue potion-stand', () => {
   test('Add a blue potion: Should add the potion', () => {
-
     //set up the world
     const standPosition: Coord = { x: 0, y: 1 };
     const position: Coord = { x: 0, y: 0 };
-    const potionLocation: Coord = { x: 1, y: 0 }
+    const potionLocation: Coord = { x: 1, y: 0 };
 
     //create a blue potion stand
     itemGenerator.createItem({
@@ -69,13 +68,11 @@ describe('Try to add various color potions to a blue potion-stand', () => {
   });
 
   test('Add a red potion: Should NOT add the potion', () => {
-
     //set up the world
     const standPosition: Coord = { x: 0, y: 1 };
     const position: Coord = { x: 0, y: 0 };
-    const potionLocation: Coord = { x: 1, y: 0 }
+    const potionLocation: Coord = { x: 1, y: 0 };
 
-    
     //create a blue potion stand
     itemGenerator.createItem({
       type: 'potion-stand',
