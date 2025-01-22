@@ -3,11 +3,11 @@ import { Item } from './item';
 import { itemGenerator } from './itemGenerator';
 
 const itemDropConfig = {
-  'fence' : 'log',
-  'wall' : 'log',
-  'partial-wall' : 'log',
-  'potion-stand' : 'gold'
-}
+  fence: 'log',
+  wall: 'log',
+  'partial-wall': 'log',
+  'potion-stand': 'gold'
+};
 
 export class Smashable {
   private item: Item;
@@ -49,20 +49,21 @@ export class Smashable {
       this.item.destroy();
 
       // Check the config to see if this item has a drop item
-      const dropType = itemDropConfig[this.item.type as keyof typeof itemDropConfig];
-      if(dropType){
+      const dropType =
+        itemDropConfig[this.item.type as keyof typeof itemDropConfig];
+      if (dropType) {
         this.dropItem(dropType, this.item);
       }
     }
   }
 
-  dropItem(dropType: string, item: Item){
+  dropItem(dropType: string, item: Item) {
     itemGenerator.createItem({
       type: dropType,
       position: item.position
     });
   }
-  
+
   destroyPotionStand() {
     const gold = this.item.getAttribute<number>('gold');
     if (gold > 0) {
