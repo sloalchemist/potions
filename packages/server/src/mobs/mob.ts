@@ -35,6 +35,7 @@ export type MobData = {
   current_action: string;
   carrying_id: string;
   community_id: string;
+  target_speed_tick: number;
 };
 
 interface MobParams {
@@ -48,6 +49,7 @@ interface MobParams {
   maxHealth: number;
   attack: number;
   community_id: string;
+  target_speed_tick: number;
   subtype: string;
   currentAction?: string;
   carrying?: string;
@@ -67,6 +69,7 @@ export class Mob {
   private target?: Coord;
   private path: Coord[];
   private speed: number;
+  private target_speed_tick: number;
   private _name: string;
   private maxHealth: number;
   private _carrying?: string;
@@ -80,18 +83,13 @@ export class Mob {
   private _health: number;
   public readonly attack: number;
 
-  // subtype: string,
-  // currentAction?: string,
-  // carrying?: string,
-  // path: Coord[],
-  // target?: Coord
-
   private constructor({
     key,
     name,
     type,
     position,
     speed,
+    target_speed_tick,
     gold,
     health,
     maxHealth,
@@ -114,6 +112,7 @@ export class Mob {
     this.target = target;
     this._position = position;
     this.speed = speed;
+    this.target_speed_tick = target_speed_tick;
     this._gold = gold;
     this._health = health;
     this.maxHealth = maxHealth;
@@ -170,7 +169,15 @@ export class Mob {
 
   get _speed(): number {
     return this.speed;
-}
+  }
+
+  get _target_speed_tick(): number {
+    return this.target_speed_tick;
+  }
+
+  get current_tick(): number {
+    return gameWorld.currentDate().global_tick;
+  }
 
   get name(): string {
     return this._name;
@@ -372,19 +379,45 @@ export class Mob {
     }
   }
 
-    changeSpeed(amount: number) {
-    if (amount === 0) return;
-    let newSpeed = this.speed + amount;
-    if (newSpeed > 10) newSpeed = 10;
+  changeTargetSpeedTick(target_tick: number): void {
+    this.target_speed_tick = target_tick;
+  }
+
+  changeSpeed(speedDelta: number, speedDuration: number): void {
+
+    // only change speed if no increase is already in progres
+    if (this.target_speed_tick === null || this.target_speed_tick === -1) {
+      this.speed += speedDelta;
+    }
+    this.target_speed_tick = this.current_tick + speedDuration
+
+    // update the database
     DB.prepare(
       `
-            UPDATE mobs
-            SET speed = :speed
-            WHERE id = :id
+      UPDATE mobs
+      SET speed = :speed, target_speed_tick = :target_speed_tick
+      WHERE id = :id
+      `
+    ).run({ speed: this.speed, target_speed_tick: this._target_speed_tick, id: this.id });
+
+    pubSub.changeSpeed(this.id, speedDelta, this.speed);
+    pubSub.changeTargetSpeedTick(this.id, speedDuration, this._target_speed_tick)
+  }
+
+  private checkSpeedReset(speedDelta: number): void {
+    // check if target tick has been reached or is already null
+    if ((this._target_speed_tick !== null || this._target_speed_tick === -1) && this.current_tick >= this._target_speed_tick) {
+      this.speed -= speedDelta;
+      this.target_speed_tick = -1;
+      DB.prepare(
         `
-    ).run({ speed: newSpeed, id: this.id });
-    this.speed = newSpeed;
-    pubSub.changeSpeed(this.id, amount, this.speed);
+        UPDATE mobs
+        SET speed = :speed, target_speed_tick = :target_speed_tick
+        WHERE id = :id
+        `
+      ).run({ speed: this.speed, target_speed_tick: null, id: this.id });
+      pubSub.changeSpeed(this.id, -speedDelta, this.speed);
+    }
   }
 
   getHouse(): House | undefined {
@@ -505,7 +538,7 @@ export class Mob {
   static getMob(key: string): Mob | undefined {
     const mob = DB.prepare(
       `
-            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id
+            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id, target_speed_tick
             FROM mobs
             WHERE id = :id
         `
@@ -519,6 +552,7 @@ export class Mob {
       type: mob.action_type,
       position: { x: mob.position_x, y: mob.position_y },
       speed: mob.speed,
+      target_speed_tick: mob.target_speed_tick,
       gold: mob.gold,
       health: mob.health,
       maxHealth: mob.maxHealth,
@@ -605,7 +639,10 @@ export class Mob {
       const finished = action.execute(this);
       //console.log(`${this.name} action: ${action.type()} finished: ${finished}`);
       this.setAction(action.type(), finished);
-    }
+    } 
+
+    // we need to check if the current tick matches the targetspeedtick for the mob (check speed reset)
+    this.checkSpeedReset(2);
 
     this.needs.tick();
   }
@@ -634,6 +671,7 @@ export class Mob {
             social INTEGER NOT NULL DEFAULT 100,
             community_id TEXT,
             house_id TEXT,
+            target_speed_tick INTEGER,
             FOREIGN KEY (carrying_id) REFERENCES items (id) ON DELETE SET NULL,
             FOREIGN KEY (community_id) REFERENCES community (id) ON DELETE SET NULL,
             FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE SET NULL
