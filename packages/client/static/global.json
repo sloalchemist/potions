@@ -164,7 +164,8 @@
                 "value": 100
             }
         ],
-        "interactions": []
+        "interactions": [],
+        "open": false
     },
     {
         "name": "Door",
@@ -364,7 +365,7 @@
             },
             {
                 "description": "Get $item_name",
-                "action": "retrieve_item",
+                "action": "get_item",
                 "while_carried": false,
                 "conditions": [
                     {
