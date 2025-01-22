@@ -384,12 +384,11 @@ export class Mob {
   }
 
   changeSpeed(speedDelta: number, speedDuration: number): void {
-
     // only change speed if no increase is already in progres
     if (this.target_speed_tick === null || this.target_speed_tick === -1) {
       this.speed += speedDelta;
     }
-    this.target_speed_tick = this.current_tick + speedDuration
+    this.target_speed_tick = this.current_tick + speedDuration;
 
     // update the database
     DB.prepare(
@@ -398,15 +397,26 @@ export class Mob {
       SET speed = :speed, target_speed_tick = :target_speed_tick
       WHERE id = :id
       `
-    ).run({ speed: this.speed, target_speed_tick: this._target_speed_tick, id: this.id });
+    ).run({
+      speed: this.speed,
+      target_speed_tick: this._target_speed_tick,
+      id: this.id
+    });
 
     pubSub.changeSpeed(this.id, speedDelta, this.speed);
-    pubSub.changeTargetSpeedTick(this.id, speedDuration, this._target_speed_tick)
+    pubSub.changeTargetSpeedTick(
+      this.id,
+      speedDuration,
+      this._target_speed_tick
+    );
   }
 
   private checkSpeedReset(speedDelta: number): void {
     // check if target tick has been reached or is already null
-    if ((this._target_speed_tick !== null || this._target_speed_tick === -1) && this.current_tick >= this._target_speed_tick) {
+    if (
+      (this._target_speed_tick !== null || this._target_speed_tick === -1) &&
+      this.current_tick >= this._target_speed_tick
+    ) {
       this.speed -= speedDelta;
       this.target_speed_tick = -1;
       DB.prepare(
@@ -639,7 +649,7 @@ export class Mob {
       const finished = action.execute(this);
       //console.log(`${this.name} action: ${action.type()} finished: ${finished}`);
       this.setAction(action.type(), finished);
-    } 
+    }
 
     // we need to check if the current tick matches the targetspeedtick for the mob (check speed reset)
     this.checkSpeedReset(2);

@@ -3,7 +3,7 @@ export default {
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['ts', 'js'],
   transform: {
-    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.ts$': 'ts-jest'
   },
   setupFiles: ['jest-canvas-mock'],
   testMatch: ['**/test/**/*.test.ts'],
