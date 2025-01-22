@@ -18,7 +18,7 @@ describe('Try to consume blue potion in various cases', () => {
   test('CTest blue potion consumption back to back', () => {
     FantasyDate.initialDate();
     const position: Coord = { x: 0, y: 0 };
-    const potionLocation: Coord = { x: 1, y: 0 }
+    const potionLocation: Coord = { x: 1, y: 0 };
 
     // create a player
     mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
@@ -48,7 +48,8 @@ describe('Try to consume blue potion in various cases', () => {
     const test = testDrink.interact(testMob!, potionItem!);
     expect(test).toBe(true);
 
-    for (let i = 0; i < 15; i++) { // 15 ticks to check stacking
+    for (let i = 0; i < 15; i++) {
+      // 15 ticks to check stacking
       FantasyDate.runTick();
     }
     testMob?.tick(500);
@@ -93,9 +94,9 @@ describe('Try to consume blue potion in various cases', () => {
 
   test('Allow effects from first blue potion to wear off, then drink another', () => {
     FantasyDate.initialDate();
-    
+
     const position: Coord = { x: 0, y: 0 };
-    const potionLocation: Coord = { x: 1, y: 0 }
+    const potionLocation: Coord = { x: 1, y: 0 };
 
     // create a player
     mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
@@ -122,7 +123,8 @@ describe('Try to consume blue potion in various cases', () => {
     const test = testDrink.interact(testMob!, potionItem!);
     expect(test).toBe(true);
 
-    for (let i = 0; i < 31; i++) { // 30 ticks means speed has worn off
+    for (let i = 0; i < 31; i++) {
+      // 30 ticks means speed has worn off
       FantasyDate.runTick();
     }
     testMob?.tick(500);
@@ -153,7 +155,6 @@ describe('Try to consume blue potion in various cases', () => {
     expect(testMob!._speed).toBe(4.5);
     expect(testMob!._target_speed_tick).toBe(target_tick2);
   });
-
 });
 
 afterAll(() => {

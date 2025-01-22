@@ -210,7 +210,7 @@ export class LoadWorldScene extends Phaser.Scene {
 
     // Remove the animation from the animation manager when the scene is stopped
     // so that on revive there is no warning for creation with a duplicate key.
-    this.events.once("shutdown", () => {
+    this.events.once('shutdown', () => {
       this.anims.remove(`test-idle`);
     });
 
