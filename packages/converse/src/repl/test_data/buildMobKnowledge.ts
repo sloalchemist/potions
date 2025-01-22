@@ -74,7 +74,7 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     blueberry,
     heartbeet,
     eidelweiss
-  ] as const satisfies Graphable[];
+  ];
 
   // Add personality and description
   const ryn = new Person(
@@ -319,7 +319,7 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     [{ item: heartbeet.getNoun(), benefit: 'like' }]
   );
 
-  const people: Person[] = [
+  const people = [
     ryn,
     toran,
     eira,

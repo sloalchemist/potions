@@ -30,7 +30,7 @@ export class Personality {
 
   normalizeTraits() {
     // Get all traits except 'immaturity' for normalization
-    const traits: PersonalityTraits[] = [
+    const traits = [
       'curiosity',
       'chitChatter',
       'openness',
@@ -99,7 +99,7 @@ export class Personality {
     this.me = me;
 
     // Get all traits dynamically from the type union
-    const traits: PersonalityTraits[] = [
+    const traits = [
       'immaturity',
       'curiosity',
       'chitChatter',

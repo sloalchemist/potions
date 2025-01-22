@@ -1,7 +1,7 @@
-import { Graphable } from './graphable';
 import { Belief } from '../belief';
-import { Noun } from '../noun';
 import { Desire } from '../desire';
+import { Noun } from '../noun';
+import { Graphable } from './graphable';
 
 export class Region implements Graphable {
   id: string;
@@ -45,7 +45,7 @@ export class Region implements Graphable {
         description: this.description,
         trust: 0
       }
-    ] as const satisfies Belief[];
+    ];
 
     if (this.parent_region) {
       beliefs.push({
