@@ -40,7 +40,7 @@ export class Communities implements ConceptHierarchy {
         as_question: 'is <subject> a member of a guild?',
         parent_concept: topLevelConcept
       }
-    ];
+    ] as const;
     concepts.push(...communityConcepts);
     return concepts;
   }

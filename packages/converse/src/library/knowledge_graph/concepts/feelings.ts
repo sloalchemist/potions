@@ -58,7 +58,7 @@ export class Feelings implements ConceptHierarchy {
         as_question: 'is <subject> feeling fear?',
         parent_concept: topLevelConcept
       }
-    ];
+    ] as const;
     concepts.push(...feelingConcepts);
     return concepts;
   }

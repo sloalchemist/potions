@@ -46,7 +46,7 @@ export class Events implements ConceptHierarchy {
         as_question: 'was <subject> present at a death?',
         parent_concept: topLevelConcept
       }
-    ];
+    ] as const;
     concepts.push(...eventConcepts);
     return concepts;
   }

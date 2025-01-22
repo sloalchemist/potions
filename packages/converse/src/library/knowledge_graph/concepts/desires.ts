@@ -22,7 +22,7 @@ export class Desires implements ConceptHierarchy {
         as_question: 'what do they dislike?',
         parent_concept: topLevelConcept
       }
-    ];
+    ] as const;
     concepts.push(...desireConcepts);
     return concepts;
   }
