@@ -61,7 +61,11 @@ export class LoadWorldScene extends Phaser.Scene {
     background.setDepth(-10);
 
     // Add frame
-    const overlayImage = this.add.image(SCREEN_WIDTH /2, SCREEN_HEIGHT / 2, 'frame');
+    const overlayImage = this.add.image(
+      SCREEN_WIDTH / 2,
+      SCREEN_HEIGHT / 2,
+      'frame'
+    );
     overlayImage.setScrollFactor(0);
     console.log('FrameScene created');
 
