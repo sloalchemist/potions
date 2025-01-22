@@ -9,7 +9,7 @@ import { Coord } from '@rt-potion/common';
 
 beforeEach(() => {
   commonSetup();
-  Community.makeVillage('potion-brewers', 'Potion Brewers guild');
+  Community.makeVillage('alchemists', 'Alchemists guild');
   mobFactory.loadTemplates(world.mobTypes);
 });
 
@@ -35,14 +35,16 @@ describe('Potion Smashable Tests', () => {
       }
     });
 
+    //get the Potion ID
     const potionID = Item.getItemIDAt(potionPosition);
 
+    //If the potion cannot be found
     if (!potionID) {
       throw new Error(`No item found at position ${JSON.stringify(potionPosition)}`);
     }
-
+    //Get thte actual potion item
     const potionItem = Item.getItem(potionID);
-
+    //If it doesn't exist, throw error
     if (!potionItem) {
       throw new Error(`No item found with ID ${potionID}`);
     }
@@ -57,7 +59,7 @@ describe('Potion Smashable Tests', () => {
     // Assert that no gold is dropped
     let goldDropped = false;
 
-    // Scan positions around the potion for dropped gold
+    //Perform the spiral search in the same way items are droppped.
     for (let dx = -1; dx <= 1; dx++) {
       for (let dy = -1; dy <= 1; dy++) {
         const potentialPosition = { x: potionPosition.x + dx, y: potionPosition.y + dy };
@@ -71,12 +73,12 @@ describe('Potion Smashable Tests', () => {
         }
       }
     }
-
+    //Assert that no gold has beend dropped.
     expect(goldDropped).toBe(false);
 
     // Assert that no additional items are dropped
     let itemsDropped = 0;
-
+    //Perform the spiral search in the same way items are droppped.
     const searchRadius = 2;
     for (let dx = -searchRadius; dx <= searchRadius; dx++) {
       for (let dy = -searchRadius; dy <= searchRadius; dy++) {
@@ -91,7 +93,7 @@ describe('Potion Smashable Tests', () => {
         }
       }
     }
-
+    //Assert that there are no items dropped
     expect(itemsDropped).toBe(0);
   });
 });

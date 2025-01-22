@@ -9,7 +9,7 @@ import { Coord } from '@rt-potion/common';
 
 beforeEach(() => {
   commonSetup();
-  Community.makeVillage('lumberjacks', 'Lumberjacks guild');
+  Community.makeVillage('alchemists', 'Alchemists guild');
   mobFactory.loadTemplates(world.mobTypes);
 });
 
@@ -34,15 +34,15 @@ describe('Log Smashable Tests', () => {
         health: 10
       }
     });
-
+    //Get the item ID
     const logID = Item.getItemIDAt(logPosition);
-
+    //if it doesn't exist, throw error.
     if (!logID) {
       throw new Error(`No item found at position ${JSON.stringify(logPosition)}`);
     }
-
+    //Get actual item
     const logItem = Item.getItem(logID);
-
+    //Throw error if it doesn't exist
     if (!logItem) {
       throw new Error(`No item found with ID ${logID}`);
     }
@@ -62,7 +62,7 @@ describe('Log Smashable Tests', () => {
       for (let dy = -1; dy <= 1; dy++) {
         const potentialPosition = { x: logPosition.x + dx, y: logPosition.y + dy };
         const potentialGoldID = Item.getItemIDAt(potentialPosition);
-
+        //perform the search and look for gold in the pattern
         if (potentialGoldID) {
           const potentialGold = Item.getItem(potentialGoldID);
           if (potentialGold?.type === 'gold') {
@@ -71,7 +71,7 @@ describe('Log Smashable Tests', () => {
         }
       }
     }
-
+    // Check to make sure no gold was dropped
     expect(goldDropped).toBe(false);
 
     // Assert that no items are dropped
@@ -82,7 +82,7 @@ describe('Log Smashable Tests', () => {
       for (let dy = -searchRadius; dy <= searchRadius; dy++) {
         const potentialPosition = { x: logPosition.x + dx, y: logPosition.y + dy };
         const potentialItemID = Item.getItemIDAt(potentialPosition);
-
+        //Ensure there are no items dropped in the search pattern.
         if (potentialItemID) {
           const potentialItem = Item.getItem(potentialItemID);
           if (potentialItem?.type === 'potion') {
@@ -91,7 +91,7 @@ describe('Log Smashable Tests', () => {
         }
       }
     }
-
+    //Test to make sure none were dropped.
     expect(itemsDropped).toBe(0);
   });
 });
