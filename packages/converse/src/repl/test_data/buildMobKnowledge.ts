@@ -74,7 +74,7 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     blueberry,
     heartbeet,
     eidelweiss
-  ];
+  ] as const;
 
   // Add personality and description
   const ryn = new Person(
@@ -341,7 +341,7 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     kael,
     vera,
     lucas
-  ];
+  ] as const;
   const familyTree = Person.buildFamilyTree(people);
 
   // events
@@ -370,7 +370,7 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     [vera]
   );
 
-  const events = [silverclawGathering, silverclawRaid, winterFestival];
+  const events = [silverclawGathering, silverclawRaid, winterFestival] as const;
 
   const knowledgeGraph = constructGraph(world.concat(people, events));
   knowledgeGraph.beliefs.push(...familyTree);

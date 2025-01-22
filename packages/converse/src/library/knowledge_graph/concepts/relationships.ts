@@ -52,7 +52,7 @@ export class Relationships implements ConceptHierarchy {
         as_question: "Who are <subject>'s friends?",
         parent_concept: topLevelConcept
       }
-    ];
+    ] as const;
     concepts.push(...relationshipConcepts);
     return concepts;
   }

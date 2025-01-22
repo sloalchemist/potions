@@ -12,4 +12,4 @@ export const potentialTones = [
   jokingTone,
   complimentingTone,
   insultingTone
-];
+] as const;
