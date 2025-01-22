@@ -74,7 +74,7 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     blueberry,
     heartbeet,
     eidelweiss
-  ] as const;
+  ] as const satisfies Graphable[];
 
   // Add personality and description
   const ryn = new Person(
@@ -341,7 +341,7 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     kael,
     vera,
     lucas
-  ] as const;
+  ] as const satisfies Person[];
   const familyTree = Person.buildFamilyTree(people);
 
   // events

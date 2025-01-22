@@ -2,6 +2,7 @@ import { Compliment } from './compliment';
 import { Insult } from './insult';
 import { Joking } from './joking';
 import { Neutral } from './neutral';
+import { Tone } from './tone'
 
 export const neutralTone = new Neutral();
 export const jokingTone = new Joking();
@@ -12,4 +13,4 @@ export const potentialTones = [
   jokingTone,
   complimentingTone,
   insultingTone
-] as const;
+] as const satisfies readonly Tone[];
