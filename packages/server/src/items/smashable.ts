@@ -2,6 +2,13 @@ import { Mob } from '../mobs/mob';
 import { Item } from './item';
 import { itemGenerator } from './itemGenerator';
 
+const itemDropConfig = {
+  'fence' : 'log',
+  'wall' : 'log',
+  'partial-wall' : 'log',
+  'potion-stand' : 'gold'
+}
+
 export class Smashable {
   private item: Item;
 
@@ -41,25 +48,21 @@ export class Smashable {
       }
       this.item.destroy();
 
-      // drog log after fence/wall is destroyed in its previous spot
-      if (
-        this.item.type == 'fence' ||
-        this.item.type == 'wall' ||
-        this.item.type == 'partial-wall'
-      ) {
-        this.dropLog(this.item);
+      // Check the config to see if this item has a drop item
+      const dropType = itemDropConfig[this.item.type as keyof typeof itemDropConfig];
+      if(dropType){
+        this.dropItem(dropType, this.item);
       }
     }
   }
 
-  // destroying a fence or wall should return the log use to build it
-  dropLog(item: Item) {
+  dropItem(dropType: string, item: Item){
     itemGenerator.createItem({
-      type: 'log',
+      type: dropType,
       position: item.position
     });
   }
-
+  
   destroyPotionStand() {
     const gold = this.item.getAttribute<number>('gold');
     if (gold > 0) {
