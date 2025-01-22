@@ -149,7 +149,11 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.healthText);
 
-      this.speedText = this.add.text(15, 115, 'Speed: ' + currentCharacter.speed);
+      this.speedText = this.add.text(
+        15,
+        115,
+        'Speed: ' + currentCharacter.speed
+      );
       this.statsContainer.add(this.speedText);
 
       this.dateText = this.add.text(

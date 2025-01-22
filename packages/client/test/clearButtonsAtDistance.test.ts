@@ -14,7 +14,6 @@ class MockButton {
     // Mock the destroy method
     jest.fn();
   }
-
 }
 
 describe('Clear Interactions Tests', () => {
@@ -30,16 +29,14 @@ describe('Clear Interactions Tests', () => {
   };
 
   test('Test clearing interactButtons', () => {
-
     let uxscene = new UxScene();
-
 
     const button1 = new MockButton(mockScene) as Button;
     const button2 = new MockButton(mockScene) as Button;
 
     uxscene.interactButtons.push(button1);
     uxscene.interactButtons.push(button2);
-    
+
     const spy1 = jest.spyOn(button1, 'destroy');
     const spy2 = jest.spyOn(button2, 'destroy');
 
@@ -53,7 +50,6 @@ describe('Clear Interactions Tests', () => {
   });
 
   test('Test clearing chatButtons', () => {
-
     let uxscene = new UxScene();
 
     const button1 = new MockButton(mockScene) as Button;
@@ -61,7 +57,7 @@ describe('Clear Interactions Tests', () => {
 
     uxscene.chatButtons.push(button1);
     uxscene.chatButtons.push(button2);
-    
+
     const spy1 = jest.spyOn(button1, 'destroy');
     const spy2 = jest.spyOn(button2, 'destroy');
 

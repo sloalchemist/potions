@@ -19,8 +19,8 @@ export class ServerWorld implements GameWorld {
   public itemTypes: ServerWorldDescription['item_types'];
 
   constructor(worldDesc: ServerWorldDescription) {
-    this.mobTypes = [...worldDesc.mob_types]
-    this.itemTypes = [...worldDesc.item_types]
+    this.mobTypes = [...worldDesc.mob_types];
+    this.itemTypes = [...worldDesc.item_types];
     mobFactory.loadTemplates([...worldDesc.mob_types]);
     this.pathFinder = new PathFinder(worldDesc.tiles, worldDesc.terrain_types);
 
