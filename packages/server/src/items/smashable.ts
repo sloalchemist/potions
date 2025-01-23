@@ -34,16 +34,13 @@ export class Smashable {
 
   changeHealth(amount: number) {
     this.item.changeAttributeBy('health', amount);
-
     if (this.item.getAttribute<number>('health') <= 0) {
-      if (this.item.type == 'potion-stand') {
-        this.destroyPotionStand();
-      }
-      this.item.destroy();
+      this.destroySmashable();
     }
   }
 
-  destroyPotionStand() {
+  // Renamed function to capture smashables
+  destroySmashable() {
     const gold = this.item.getAttribute<number>('gold');
     if (gold > 0) {
       const position = Item.findEmptyPosition(this.mob.position);
@@ -64,5 +61,6 @@ export class Smashable {
         });
       }
     }
+    this.item.destroy();
   }
 }
