@@ -39,9 +39,8 @@ export class Smashable {
     }
   }
 
-
   // Renamed function to capture smashables
-  destroySmashable(){
+  destroySmashable() {
     const gold = this.item.getAttribute<number>('gold');
     if (gold > 0) {
       const position = Item.findEmptyPosition(this.mob.position);

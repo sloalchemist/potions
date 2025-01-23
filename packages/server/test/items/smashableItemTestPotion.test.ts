@@ -40,7 +40,9 @@ describe('Potion Smashable Tests', () => {
 
     //If the potion cannot be found
     if (!potionID) {
-      throw new Error(`No item found at position ${JSON.stringify(potionPosition)}`);
+      throw new Error(
+        `No item found at position ${JSON.stringify(potionPosition)}`
+      );
     }
     //Get thte actual potion item
     const potionItem = Item.getItem(potionID);
@@ -62,7 +64,10 @@ describe('Potion Smashable Tests', () => {
     //Perform the spiral search in the same way items are droppped.
     for (let dx = -1; dx <= 1; dx++) {
       for (let dy = -1; dy <= 1; dy++) {
-        const potentialPosition = { x: potionPosition.x + dx, y: potionPosition.y + dy };
+        const potentialPosition = {
+          x: potionPosition.x + dx,
+          y: potionPosition.y + dy
+        };
         const potentialGoldID = Item.getItemIDAt(potentialPosition);
 
         if (potentialGoldID) {
@@ -82,7 +87,10 @@ describe('Potion Smashable Tests', () => {
     const searchRadius = 2;
     for (let dx = -searchRadius; dx <= searchRadius; dx++) {
       for (let dy = -searchRadius; dy <= searchRadius; dy++) {
-        const potentialPosition = { x: potionPosition.x + dx, y: potionPosition.y + dy };
+        const potentialPosition = {
+          x: potionPosition.x + dx,
+          y: potionPosition.y + dy
+        };
         const potentialItemID = Item.getItemIDAt(potentialPosition);
 
         if (potentialItemID) {

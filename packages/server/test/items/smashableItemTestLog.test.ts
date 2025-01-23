@@ -38,7 +38,9 @@ describe('Log Smashable Tests', () => {
     const logID = Item.getItemIDAt(logPosition);
     //if it doesn't exist, throw error.
     if (!logID) {
-      throw new Error(`No item found at position ${JSON.stringify(logPosition)}`);
+      throw new Error(
+        `No item found at position ${JSON.stringify(logPosition)}`
+      );
     }
     //Get actual item
     const logItem = Item.getItem(logID);
@@ -60,7 +62,10 @@ describe('Log Smashable Tests', () => {
     // Scan positions around the mob for dropped gold
     for (let dx = -1; dx <= 1; dx++) {
       for (let dy = -1; dy <= 1; dy++) {
-        const potentialPosition = { x: logPosition.x + dx, y: logPosition.y + dy };
+        const potentialPosition = {
+          x: logPosition.x + dx,
+          y: logPosition.y + dy
+        };
         const potentialGoldID = Item.getItemIDAt(potentialPosition);
         //perform the search and look for gold in the pattern
         if (potentialGoldID) {
@@ -80,7 +85,10 @@ describe('Log Smashable Tests', () => {
     const searchRadius = 2;
     for (let dx = -searchRadius; dx <= searchRadius; dx++) {
       for (let dy = -searchRadius; dy <= searchRadius; dy++) {
-        const potentialPosition = { x: logPosition.x + dx, y: logPosition.y + dy };
+        const potentialPosition = {
+          x: logPosition.x + dx,
+          y: logPosition.y + dy
+        };
         const potentialItemID = Item.getItemIDAt(potentialPosition);
         //Ensure there are no items dropped in the search pattern.
         if (potentialItemID) {
