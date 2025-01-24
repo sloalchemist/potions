@@ -562,7 +562,7 @@ export class Mob {
           target_y = :y AND
           id != :mobId
       `
-    ).get({community_id, x, y, mobId: this.id }) as {count: number};
+    ).get({ community_id, x, y, mobId: this.id }) as { count: number };
     return count.count;
   }
 

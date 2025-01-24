@@ -32,8 +32,8 @@ export class FindItem implements Means {
     const maxDistance = Infinity;
     const maxNumTargets = Infinity;
     const targetIDs = npc.findNClosestObjectIDs(
-      this.item_type, 
-      maxNumTargets, 
+      this.item_type,
+      maxNumTargets,
       maxDistance
     );
     if (targetIDs) {
@@ -48,7 +48,7 @@ export class FindItem implements Means {
           npc.community_id,
           x,
           y
-          );
+        );
         if (numAlliesTargeting === 0) {
           // The item is not targeted. Go find it!
           this.target = target;
