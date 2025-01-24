@@ -48,7 +48,9 @@ export function startWorld() {
   });
 }
 
+//TODO: estrada - check out function to see if its where we send user data
 export function leaveWorld() {
+  publishPlayerStateToPersist();
   broadcastChannel.presence.leave(publicCharacterId, (err) => {
     if (err) {
       console.error('Error leaving presence:', err);
@@ -71,5 +73,12 @@ export function publishPlayerPosition(target: Coord) {
     player.path = path;
     publishPlayerMessage('move', { target: flooredTarget });
     //console.log(`Publishing move to ${JSON.stringify(target)}`)
+  }
+}
+
+export function publishPlayerStateToPersist() {
+  if (playerChannel) {
+    console.log("Requesting data persistence.")
+    publishPlayerMessage('update_state', { name: publicCharacterId });
   }
 }

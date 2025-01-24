@@ -40,7 +40,10 @@ class MobFactory {
     position: Coord,
     id?: string,
     name?: string,
-    subtype?: string
+    subtype?: string,
+    //Adding fields that can now be from the auth-server  (health gold appearance) 
+    health_from_auth?: number, 
+    gold_from_auth?: number
   ): void {
     if (id == undefined) {
       id = uuidv4();
@@ -53,7 +56,8 @@ class MobFactory {
       subtype = `${eyeColor}-${bellyColor}-${furColor}`;
     }
     const mobType = this.getTemplate(type);
-    const gold = mobType.gold;
+    //if the value wasn't retrieved from the database, use mobType defaults
+    const gold = gold_from_auth ?? mobType.gold; // mobType.gold;
 
     if (name == undefined) {
       name = nameGeneratorFactory.generateName(mobType.name_style);
@@ -61,7 +65,7 @@ class MobFactory {
     const speed = mobType.speed;
     const attack = mobType.attack;
     const community_id = mobType.community;
-    const health = mobType.health;
+    const health = health_from_auth ?? mobType.health; // mobType.health;
 
     const house_id = House.findLeastPopulatedHouse(community_id);
 

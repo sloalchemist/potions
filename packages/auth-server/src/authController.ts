@@ -4,9 +4,9 @@ import { ably } from './ablyService';
 import { createClient } from '@supabase/supabase-js';
 import Ably from 'ably';
 
-const userMembershipChannel = ably.channels.get('membership');
+export const userMembershipChannel = ably.channels.get('membership');
 
-const supabase = initializeSupabase();
+export const supabase = initializeSupabase();
 
 function initializeSupabase() {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
@@ -35,13 +35,24 @@ const authController = async (req: Request, res: Response) => {
     if (data && data.length > 0) {
       const ablyApiKey = data[0].ably_api_key;
       const world = data[0].world_id;
-      console.log('World:', world);
+      const health = data[0].health;
+      const name = data[0].pname;
+      const appearance = data[0].appearance;
+      const gold = data[0].gold;
+
       const publicCharacterId = username.substr(0, 8);
 
       // Notify that the player has joined the world
       userMembershipChannel.publish('join', {
+        //need to retain name key 
         name: publicCharacterId,
-        world: world
+        p_name: name,
+        //TODO: estrada - need to think about the best course of action for getting a health of zero
+        // currently makes user invincible
+        health: health,
+        appearance: appearance,
+        world: world,
+        gold: gold
       });
 
       console.log('Player joined! ', username);
