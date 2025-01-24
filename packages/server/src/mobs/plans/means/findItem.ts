@@ -32,7 +32,16 @@ export class FindItem implements Means {
     const targetID = npc.findClosestObjectID(this.item_type, Infinity);
     if (targetID) {
       this.target = Item.getItem(targetID)!;
-      //console.log(`finding item ${npc.name} targetting ${this.target.type}`);
+
+      // Query mob database to see if there are mobs targeting the same item
+      // Increase cost if so
+      const x = this.target.position!.x;
+      const y = this.target.position!.y;
+      const count = npc.getNumAlliesTargettingPos(npc.community_id, x, y);
+      if (count) {
+        return Infinity;
+      }
+
       return calculateDistance(npc.position, this.target.position!);
     } else {
       return Infinity;
