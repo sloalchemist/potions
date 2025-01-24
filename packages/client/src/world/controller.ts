@@ -278,7 +278,6 @@ export function getInteractablePhysicals(
     (item, index, self) =>
       index === self.findIndex((i) => i.itemType === item.itemType)
   );
-  console.log(unique_nearbyObjects)
 
   // enforce unique items
   let interactableObjects = [
