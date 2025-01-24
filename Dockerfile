@@ -17,5 +17,4 @@ RUN pnpm install
 RUN pnpm build
 
 WORKDIR /usr/src/app/packages/server
-CMD ["pnpm", "run", "create", "test-world"]
-CMD ["pnpm", "dev", "test-world"]
+CMD ["sh", "-c", "pnpm run create test-world && pnpm dev test-world"]
