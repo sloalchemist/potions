@@ -390,6 +390,33 @@ export class WorldScene extends Phaser.Scene {
 
     // Logic for adding WASD movement: 
     // moves one tile per keyboard press
+    const cursors = this.input.keyboard?.addKeys("W, A, S, D");
+    let counter = 0;
+
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (!world.mobs[publicCharacterId]) {
+        return;
+      }
+
+      counter ++;
+
+      if (event.code == 'KeyW') {
+        // add y position
+        console.log(`Up ${counter}`);
+      } 
+      if (event.code == 'KeyS') {
+        // subtract y position
+        console.log(`Down ${counter}`);
+      } 
+      if (event.code == 'KeyA') {
+        // subtract x position
+        console.log(`Left ${counter}`);
+      } 
+      if (event.code == 'KeyD') {
+        // add x position
+        console.log(`Right ${counter}`);
+      }
+    })
 
     needsAnimationsLoaded = false;
   }
