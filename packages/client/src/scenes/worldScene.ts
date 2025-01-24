@@ -388,6 +388,9 @@ export class WorldScene extends Phaser.Scene {
       }
     });
 
+    // Logic for adding WASD movement: 
+    // moves one tile per keyboard press
+
     needsAnimationsLoaded = false;
   }
 
