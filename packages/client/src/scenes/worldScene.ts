@@ -398,22 +398,49 @@ export class WorldScene extends Phaser.Scene {
         return;
       }
 
+      const player = world.mobs[publicCharacterId]
+
       counter ++;
 
       if (event.code == 'KeyW') {
-        // add y position
+        // move up
+        if(player.position !== null){
+          publishPlayerPosition({
+            x: player.position.x,
+            y: player.position.y - 1
+          });
+        }
         console.log(`Up ${counter}`);
+         
       } 
-      if (event.code == 'KeyS') {
-        // subtract y position
+      else if (event.code == 'KeyS') {
+        // move down 
+        if(player.position !== null){
+          publishPlayerPosition({
+            x: player.position.x,
+            y: player.position.y + 1
+          });
+        }
         console.log(`Down ${counter}`);
       } 
-      if (event.code == 'KeyA') {
-        // subtract x position
+      else if (event.code == 'KeyA') {
+        // move left
+        if(player.position !== null){
+          publishPlayerPosition({
+            x: player.position.x - 1,
+            y: player.position.y
+          });
+        }
         console.log(`Left ${counter}`);
       } 
-      if (event.code == 'KeyD') {
-        // add x position
+      else if (event.code == 'KeyD') {
+        // move right
+        if(player.position !== null){
+          publishPlayerPosition({
+            x: player.position.x + 1,
+            y: player.position.y
+          });
+        }
         console.log(`Right ${counter}`);
       }
     })
