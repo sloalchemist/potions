@@ -276,33 +276,10 @@ export class Mob {
     return closestMob ? closestMob.id : undefined;
   }
 
-  findClosestObjectID(
-    types: string[],
-    maxDistance: number = Infinity
-  ): string | undefined {
-    const maxDistanceSquared = maxDistance * maxDistance;
-    const typesList = types.map((type) => `'${type}'`).join(', ');
-    const query = `
-            SELECT 
-                id
-            FROM items
-            WHERE type IN (${typesList})
-            AND ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :maxDistanceSquared
-            ORDER BY ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) ASC
-            LIMIT 1
-        `;
-    const result = DB.prepare(query).get({
-      x: this.position.x,
-      y: this.position.y,
-      maxDistanceSquared
-    }) as { id: string };
-    return result ? result.id : undefined;
-  }
-
   findNClosestObjectIDs(
     types: string[],
-    maxDistance: number = Infinity,
-    maxNum: number
+    maxNum: number,
+    maxDistance: number = Infinity
   ): string[] | undefined {
     const maxDistanceSquared = maxDistance * maxDistance;
     const typesList = types.map((type) => `'${type}'`).join(', ');
