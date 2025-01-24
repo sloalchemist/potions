@@ -29,24 +29,29 @@ export class FindItem implements Means {
     if (!npc.position) {
       throw new Error('NPC has no position');
     }
-    const targetID = npc.findClosestObjectID(this.item_type, Infinity);
-    if (targetID) {
-      this.target = Item.getItem(targetID)!;
+    const targetIDs = npc.findNClosestObjectIDs(this.item_type, Infinity, 10);
+    if (targetIDs) {
 
-      // Query mob database to see if there are mobs targeting the same item
-      // Increase cost if so
-      const x = this.target.position!.x;
-      const y = this.target.position!.y;
-      const numAlliesTargeting = npc.getNumAlliesTargettingPos(npc.community_id, x, y);
-      if (numAlliesTargeting > 0) {
-        // The item you want to find is already being targeted by an ally
-        return Infinity;
+      // Check each target in order of proximity. If not targeted, then go find it
+      for (const targetID of targetIDs) {
+        const target = Item.getItem(targetID)!;
+
+        // Query mob database to see if there are mobs targeting the same item
+        // Increase cost if so
+        const x = target.position!.x;
+        const y = target.position!.y;
+        const numAlliesTargeting = npc.getNumAlliesTargettingPos(npc.community_id, x, y);
+        if (numAlliesTargeting === 0) {
+          // The item is not targeted. Go find it!
+          this.target = target;
+          return calculateDistance(npc.position, target.position!);
+        }
       }
 
-      // The item is not targeted. Go find it!
-      return calculateDistance(npc.position, this.target.position!);
+      // Allies are already going to all potential targets
+      return Infinity;
     } else {
-      // There is no item to find
+      // There is no items to find
       return Infinity;
     }
   }
