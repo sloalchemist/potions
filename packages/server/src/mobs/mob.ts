@@ -299,6 +299,31 @@ export class Mob {
     return result ? result.id : undefined;
   }
 
+  findNClosestObjectIDs(
+    types: string[],
+    maxDistance: number = Infinity,
+    maxNum: number
+  ): string[] | undefined {
+    const maxDistanceSquared = maxDistance * maxDistance;
+    const typesList = types.map((type) => `'${type}'`).join(', ');
+    const query = `
+            SELECT 
+                id
+            FROM items
+            WHERE type IN (${typesList})
+            AND ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :maxDistanceSquared
+            ORDER BY ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) ASC
+            LIMIT :maxNum
+        `;
+    const result = DB.prepare(query).all({
+      x: this.position.x,
+      y: this.position.y,
+      maxDistanceSquared,
+      maxNum
+    }) as { id: string }[];
+    return result ? result.map(res => res.id) : undefined;
+  }
+
   setMoveTarget(target: Coord, fuzzy: boolean = false): boolean {
     const start = floor(this.position);
     const end = floor(target);
