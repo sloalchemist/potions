@@ -298,7 +298,7 @@ export class Mob {
       maxDistanceSquared,
       maxNum: maxNum !== Infinity ? maxNum : 1000 // maxNum cannot be Infinity (SQLite Mismatch error)
     }) as { id: string }[];
-    return result ? result.map(res => res.id) : undefined;
+    return result ? result.map((res) => res.id) : undefined;
   }
 
   setMoveTarget(target: Coord, fuzzy: boolean = false): boolean {
@@ -547,7 +547,11 @@ export class Mob {
     return count.count;
   }
 
-  getNumAlliesTargettingPos(community_id: string, x: number, y: number): number {
+  getNumAlliesTargettingPos(
+    community_id: string,
+    x: number,
+    y: number
+  ): number {
     // Get the number of allied mobs targeting x, y, excluding yourself
     const count = DB.prepare(
       `
@@ -558,7 +562,7 @@ export class Mob {
           target_y = :y AND
           id != :mobId
       `
-    ).get({community_id, x, y, mobId: this.id}) as {count: number};
+    ).get({community_id, x, y, mobId: this.id }) as {count: number};
     return count.count;
   }
 

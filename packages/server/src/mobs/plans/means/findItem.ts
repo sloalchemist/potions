@@ -31,9 +31,12 @@ export class FindItem implements Means {
     }
     const maxDistance = Infinity;
     const maxNumTargets = Infinity;
-    const targetIDs = npc.findNClosestObjectIDs(this.item_type, maxNumTargets, maxDistance);
+    const targetIDs = npc.findNClosestObjectIDs(
+      this.item_type, 
+      maxNumTargets, 
+      maxDistance
+    );
     if (targetIDs) {
-
       // Check each target in order of proximity. If not targeted, then go find it
       for (const targetID of targetIDs) {
         const target = Item.getItem(targetID)!;
@@ -41,7 +44,11 @@ export class FindItem implements Means {
         // Query mob database to see if there are mobs targeting the same item
         const x = target.position!.x;
         const y = target.position!.y;
-        const numAlliesTargeting = npc.getNumAlliesTargettingPos(npc.community_id, x, y);
+        const numAlliesTargeting = npc.getNumAlliesTargettingPos(
+          npc.community_id,
+          x,
+          y
+          );
         if (numAlliesTargeting === 0) {
           // The item is not targeted. Go find it!
           this.target = target;
