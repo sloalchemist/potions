@@ -29,7 +29,9 @@ export class FindItem implements Means {
     if (!npc.position) {
       throw new Error('NPC has no position');
     }
-    const targetIDs = npc.findNClosestObjectIDs(this.item_type, Infinity, 10);
+    const maxDistance = Infinity;
+    const maxNumTargets = Infinity;
+    const targetIDs = npc.findNClosestObjectIDs(this.item_type, maxDistance, maxNumTargets);
     if (targetIDs) {
 
       // Check each target in order of proximity. If not targeted, then go find it
@@ -37,7 +39,6 @@ export class FindItem implements Means {
         const target = Item.getItem(targetID)!;
 
         // Query mob database to see if there are mobs targeting the same item
-        // Increase cost if so
         const x = target.position!.x;
         const y = target.position!.y;
         const numAlliesTargeting = npc.getNumAlliesTargettingPos(npc.community_id, x, y);
@@ -51,7 +52,7 @@ export class FindItem implements Means {
       // Allies are already going to all potential targets
       return Infinity;
     } else {
-      // There is no items to find
+      // There are no items to find
       return Infinity;
     }
   }
