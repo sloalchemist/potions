@@ -48,25 +48,22 @@ describe('When player is next to two non-walkable items, only one interaction is
     var fence_2 = new Item(world!, 'fence', { x: 0, y: 1 }, fencetype);
     var playerPos: Coord = { x: 0, y: 0 };
     var physicals: Item[] = [partialWall_1, fence_1, fence_2];
-    var interactablePhysicals = getInteractablePhysicals(
-      physicals,
-      playerPos
-    );
+    var interactablePhysicals = getInteractablePhysicals(physicals, playerPos);
 
     // player should be able to interact with both wall and one of the fences
     var wallExists = interactablePhysicals.some(
-      (wall) => wall.itemType.type == "partial-wall"
-    )
+      (wall) => wall.itemType.type == 'partial-wall'
+    );
     var fenceExists = interactablePhysicals.some(
-      (fence) => fence.itemType.type == "fence"
-    )
-    expect(wallExists && fenceExists).toBe(true)
+      (fence) => fence.itemType.type == 'fence'
+    );
+    expect(wallExists && fenceExists).toBe(true);
 
     // there should still be unique interactions among non-distinct non-walkable items
     var numFences = interactablePhysicals.filter(
-      (fence) => fence.itemType.type == "fence"
-    )
-    expect(numFences.length).toBe(1)
+      (fence) => fence.itemType.type == 'fence'
+    );
+    expect(numFences.length).toBe(1);
   });
   afterAll(() => {
     world = null;
