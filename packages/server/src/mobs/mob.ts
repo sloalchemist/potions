@@ -319,7 +319,7 @@ export class Mob {
       x: this.position.x,
       y: this.position.y,
       maxDistanceSquared,
-      maxNum
+      maxNum: maxNum !== Infinity ? maxNum : 1000 // maxNum cannot be Infinity (SQLite Mismatch error)
     }) as { id: string }[];
     return result ? result.map(res => res.id) : undefined;
   }
