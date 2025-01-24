@@ -1,7 +1,7 @@
-import { Item } from '../item';
-import { Use } from './use';
-import { Mob } from '../../mobs/mob';
-import { Brewable } from '../brewable';
+import { Item } from '../../item';
+import { Use } from '../use';
+import { Mob } from '../../../mobs/mob';
+import { Brewable } from '../../brewable';
 
 export class Brew implements Use {
   key: string;
