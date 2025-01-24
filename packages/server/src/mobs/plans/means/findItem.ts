@@ -31,7 +31,7 @@ export class FindItem implements Means {
     }
     const maxDistance = Infinity;
     const maxNumTargets = Infinity;
-    const targetIDs = npc.findNClosestObjectIDs(this.item_type, maxDistance, maxNumTargets);
+    const targetIDs = npc.findNClosestObjectIDs(this.item_type, maxNumTargets, maxDistance);
     if (targetIDs) {
 
       // Check each target in order of proximity. If not targeted, then go find it
