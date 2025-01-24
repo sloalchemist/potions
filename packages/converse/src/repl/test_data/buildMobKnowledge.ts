@@ -1,6 +1,7 @@
 import { buildGraph } from '../../library';
-import { initializeDatabase } from '../../library/database';
+import { initializeDatabase, DB } from '../../library/database';
 import { KnowledgeGraph } from '../../library/knowledge_graph/knowledgeGraph';
+import { DatabaseSpeaker } from '../../library/social/speaker/databaseSpeaker';
 import { Community } from '../../library/knowledge_graph/people/community';
 import { Eventy } from '../../library/knowledge_graph/people/event';
 import {
@@ -379,5 +380,12 @@ export function buildSilverclawTribe(): KnowledgeGraph {
 }
 
 const graph = buildSilverclawTribe();
-initializeDatabase('data/knowledge-graph.db');
+initializeDatabase('data/knowledge-graph.db', true);
 buildGraph(graph);
+const lucas = DatabaseSpeaker.loadByName('Lucas');
+DB.prepare(
+  `
+    INSERT OR IGNORE INTO players (noun_id)
+    VALUES (:lucas_id)
+`
+).run( { lucas_id : lucas.id });

@@ -149,6 +149,7 @@ CREATE VIEW noun_knowledge AS
 `;
 
 function buildSQL(): void {
+  console.log('building sql')
   // Execute the schema from the external file
   DB.exec(schema);
 
