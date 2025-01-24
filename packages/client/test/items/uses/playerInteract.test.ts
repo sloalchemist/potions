@@ -10,8 +10,8 @@ describe('When player is next to two non-walkable items, only one interaction is
     world = new World();
     world.load({
       tiles: [
-        [0, 0],
-        [0, 0]
+        [-1, -1],
+        [-1, -1]
       ],
       terrain_types: [{ id: 0, name: 'Grass', walkable: true }],
       item_types: [],
