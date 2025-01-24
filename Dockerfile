@@ -1,10 +1,10 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /usr/src/app/packages
 
-COPY packages/server .
-COPY packages/converse .
-COPY packages/common .
+COPY packages/server ./server
+COPY packages/converse ./converse
+COPY packages/common ./common
 
 WORKDIR /usr/src/app
 
@@ -15,3 +15,7 @@ COPY tsconfig.json .
 RUN npm install -g pnpm
 RUN pnpm install
 RUN pnpm build
+
+WORKDIR /usr/src/app/packages/server
+CMD ["pnpm", "run", "create", "test-world"]
+CMD ["pnpm", "dev", "test-world"]
