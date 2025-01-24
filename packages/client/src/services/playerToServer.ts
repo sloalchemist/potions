@@ -48,6 +48,7 @@ export function startWorld() {
   });
 }
 
+//TODO: check out function to see if its where we send user data
 export function leaveWorld() {
   broadcastChannel.presence.leave(publicCharacterId, (err) => {
     if (err) {

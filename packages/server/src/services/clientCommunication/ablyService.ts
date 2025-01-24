@@ -325,6 +325,7 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(target, 'chat_close', { target: mob_key });
   }
 
+  //TODO: check out kll function to send user data
   public kill(key: string): void {
     this.addToBroadcast({ type: 'destroy_mob', data: { id: key } });
     const playerChannel = this.userChannels[key];
