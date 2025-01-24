@@ -37,13 +37,16 @@ export class FindItem implements Means {
       // Increase cost if so
       const x = this.target.position!.x;
       const y = this.target.position!.y;
-      const count = npc.getNumAlliesTargettingPos(npc.community_id, x, y);
-      if (count) {
+      const numAlliesTargeting = npc.getNumAlliesTargettingPos(npc.community_id, x, y);
+      if (numAlliesTargeting > 0) {
+        // The item you want to find is already being targeted by an ally
         return Infinity;
       }
 
+      // The item is not targeted. Go find it!
       return calculateDistance(npc.position, this.target.position!);
     } else {
+      // There is no item to find
       return Infinity;
     }
   }
