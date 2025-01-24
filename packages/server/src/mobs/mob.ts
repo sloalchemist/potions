@@ -545,6 +545,21 @@ export class Mob {
     return count.count;
   }
 
+  getNumAlliesTargettingPos(community_id: string, x: number, y: number): number {
+    // Get the number of allied mobs targeting x, y, excluding yourself
+    const count = DB.prepare(
+      `
+        SELECT COUNT(*) as count
+        FROM mobs
+        WHERE community_id = :community_id AND
+          target_x = :x AND
+          target_y = :y AND
+          id != :mobId
+      `
+    ).get({community_id, x, y, mobId: this.id}) as {count: number};
+    return count.count;
+  }
+
   static getMob(key: string): Mob | undefined {
     const mob = DB.prepare(
       `
