@@ -8,14 +8,13 @@ import { DB } from '../../src/services/database';
 
 //  does our initialize setup
 beforeAll(() => {
-    commonSetup();
-    Community.makeVillage('alchemists', 'Alchemists guild');
-    mobFactory.loadTemplates(world.mobTypes);
+  commonSetup();
+  Community.makeVillage('alchemists', 'Alchemists guild');
+  mobFactory.loadTemplates(world.mobTypes);
 });
 
 describe('Fence Drop Item', () => {
   test('case: drop log when fence is destroyed', () => {
-
     //  create items at desired location
     const mobPosition = { x: 1, y: 1 };
     const partialWallPosition = { x: 0, y: 1 };
@@ -81,13 +80,13 @@ describe('Fence Drop Item', () => {
 
     // testing wall
     itemGenerator.createItem({
-        type: 'wall',
-        position: wallPosition,
-        attributes: {
-            health: 0
-        }
-      });
-    
+      type: 'wall',
+      position: wallPosition,
+      attributes: {
+        health: 0
+      }
+    });
+
     //  testing to see if wall spawned
     const wallId = Item.getItemIDAt(wallPosition);
     expect(wallId).not.toBeNull();

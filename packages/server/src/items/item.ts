@@ -71,7 +71,7 @@ export class Item {
     lock,
     ownedBy,
     house,
-    attributes = {},
+    attributes = {}
   }: ItemParams) {
     this.id = id;
     this.position = position;

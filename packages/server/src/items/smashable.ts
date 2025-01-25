@@ -37,13 +37,13 @@ export class Smashable {
     if (this.item.getAttribute<number>('health') <= 0) {
       this.destroySmashable();
       this.item.destroy();
-      if(this.item.drops_item){
-        this.dropItem(this.item, this.item.drops_item)
+      if (this.item.drops_item) {
+        this.dropItem(this.item, this.item.drops_item);
       }
     }
   }
 
-  dropItem(item: Item, droppedItem: string){
+  dropItem(item: Item, droppedItem: string) {
     itemGenerator.createItem({
       type: droppedItem,
       position: item.position
