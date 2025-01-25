@@ -114,7 +114,8 @@
             }
         ],
         "interactions": [],
-        "walkable": false
+        "walkable": false,
+        "drops_item": "log"
     },
     {
         "name": "Partial Wall",
@@ -132,7 +133,8 @@
                 "value": 1
             }
         ],
-        "interactions": []
+        "interactions": [],
+        "drops_item": "log"
     },
     {
         "name": "Fence",

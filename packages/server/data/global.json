@@ -114,7 +114,8 @@
                 }
             ],
             "interactions": [],
-            "walkable": false
+            "walkable": false,
+            "drops_item" : "log"
         },
         {
             "name": "Partial Wall",
@@ -133,7 +134,8 @@
                     "value": 1
                 }
             ],
-            "interactions": []
+            "interactions": [],
+            "drops_item": "log"
         },
         {
             "name": "Fence",
@@ -142,14 +144,14 @@
             "carryable": false,
             "walkable": false,
             "smashable": true,
-            "drops_item": "log", 
             "attributes": [
                 {
                     "name": "health",
                     "value": 100
                 }
             ],
-            "interactions": []
+            "interactions": [],
+            "drops_item": "log"
         },
         {
             "name": "Gate",
