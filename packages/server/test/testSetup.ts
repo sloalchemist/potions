@@ -68,7 +68,8 @@ export const commonSetup = () => {
           }
         ],
         interactions: [],
-        walkable: false
+        walkable: false,
+        drops_item: 'log'
       },
       {
         name: 'Partial Wall',
@@ -88,7 +89,8 @@ export const commonSetup = () => {
             value: 1
           }
         ],
-        interactions: []
+        interactions: [],
+        drops_item: 'log'
       },
       {
         name: 'Basket',

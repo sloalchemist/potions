@@ -18,8 +18,9 @@ describe('Fence Drop Item', () => {
 
     //  create items at desired location
     const mobPosition = { x: 1, y: 1 };
-    const wallPosition = { x: 0, y: 1 };
+    const partialWallPosition = { x: 0, y: 1 };
     const fencePosition = { x: 1, y: 0 };
+    const wallPosition = { x: 0, y: 0 };
 
     // Create player mob
     mobFactory.makeMob('player', mobPosition, '1', 'testPlayer');
@@ -29,28 +30,28 @@ describe('Fence Drop Item', () => {
     expect(testMob).toBeInstanceOf(Mob);
     expect(testMob).not.toBeNull();
 
-    // //  create partial-wall
-    // itemGenerator.createItem({
-    //   type: 'partial-wall',
-    //   position: wallPosition
-    // });
+    //  create partial-wall
+    itemGenerator.createItem({
+      type: 'partial-wall',
+      position: partialWallPosition
+    });
 
-    // // testing to see it partialWallId and partialWall were spawned
-    // const partialWallId = Item.getItemIDAt(wallPosition);
-    // expect(partialWallId).not.toBeNull();
-    // const partialWall = Item.getItem(partialWallId!);
-    // expect(partialWall).toBeDefined();
+    // testing to see it partialWallId and partialWall were spawned
+    const partialWallId = Item.getItemIDAt(partialWallPosition);
+    expect(partialWallId).not.toBeNull();
+    const partialWall = Item.getItem(partialWallId!);
+    expect(partialWall).toBeDefined();
 
-    // //  creating a smashable partialWall
-    // const smashablePWall = Smashable.fromItem(partialWall!);
-    // expect(smashablePWall).not.toBeNull();
-    // smashablePWall?.smashItem(testMob!);
+    //  creating a smashable partialWall
+    const smashablePWall = Smashable.fromItem(partialWall!);
+    expect(smashablePWall).not.toBeNull();
+    smashablePWall?.smashItem(testMob!);
 
-    // const logPosition = Item.getItemIDAt(wallPosition);
-    // expect(logPosition).not.toBeNull();
-    // const log = Item.getItem(logPosition!);
-    // expect(log).toBeDefined();
-    // expect(log?.type).toBe('log');
+    const logPosition = Item.getItemIDAt(partialWallPosition);
+    expect(logPosition).not.toBeNull();
+    const log = Item.getItem(logPosition!);
+    expect(log).toBeDefined();
+    expect(log?.type).toBe('log');
 
     //  create fence
     itemGenerator.createItem({
@@ -77,6 +78,32 @@ describe('Fence Drop Item', () => {
     const log2 = Item.getItem(logPosition2!);
     expect(log2).toBeDefined();
     expect(log2?.type).toBe('log');
+
+    // testing wall
+    itemGenerator.createItem({
+        type: 'wall',
+        position: wallPosition,
+        attributes: {
+            health: 0
+        }
+      });
+    
+    //  testing to see if wall spawned
+    const wallId = Item.getItemIDAt(wallPosition);
+    expect(wallId).not.toBeNull();
+    const wall = Item.getItem(wallId!);
+    expect(wall).toBeDefined();
+
+    //  creating a smashable wall
+    const smashableWall = Smashable.fromItem(wall!);
+    expect(smashableWall).not.toBeNull();
+    smashableWall?.smashItem(testMob!);
+
+    const logPosition3 = Item.getItemIDAt(wallPosition);
+    expect(logPosition3).not.toBeNull();
+    const log3 = Item.getItem(logPosition3!);
+    expect(log3).toBeDefined();
+    expect(log3?.type).toBe('log');
   });
 });
 
