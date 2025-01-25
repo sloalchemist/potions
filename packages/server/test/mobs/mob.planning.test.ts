@@ -4,14 +4,17 @@ import { mobFactory } from '../../src/mobs/mobFactory';
 import { Coord } from '@rt-potion/common';
 import { Community } from '../../src/community/community';
 import { DB } from '../../src/services/database';
+import { FantasyDate } from '../../src/date/fantasyDate';
+
 beforeEach(() => {
-  commonSetup();
-  Community.makeVillage('alchemists', 'Alchemists guild');
+  commonSetup(5);
+  Community.makeVillage('silverclaw', 'Village of the Silverclaw');
   mobFactory.loadTemplates(world.mobTypes);
 });
 describe('Mob Tests', () => {
   describe('Mob Plan Behavior', () => {
-    test('Correct Item Planning For Gathering', () => {
+    test('Villagers only find untargeted items', () => {
+      // Spawn two villagers
       const mob1Id = 'testmob-1';
       const mob1Position: Coord = { x: 0, y: 0 };
       mobFactory.makeMob('villager', mob1Position, mob1Id, 'test1Mob');
@@ -20,18 +23,23 @@ describe('Mob Tests', () => {
       const mob2Position: Coord = { x: 1, y: 1 };
       mobFactory.makeMob('villager', mob2Position, mob2Id, 'test2Mob');
       const test2Mob = Mob.getMob(mob2Id);
-      const gold1Position: Coord = { x: 2, y: 2 };
-      // Generate a gold item
+
+      // Spawn a pile of gold
+      const gold1Position: Coord = { x: 3, y: 3 };
       itemGenerator.createItem({ type: 'gold', position: gold1Position});
-      const gold2Position: Coord = { x: 3, y: 3};
-      // Generate a gold item
-      itemGenerator.createItem({ type: 'gold', position: gold2Position});
-      test1Mob!.tick(1)
-      test2Mob!.tick(1)
-      expect((test1Mob as any).target_x).toBe(2);
-      expect((test1Mob as any).target_y).toBe(2);
-      expect((test2Mob as any).target_x).toBe(3);
-      expect((test2Mob as any).target_y).toBe(3);
+
+      // Tick so the mobs find a target
+      FantasyDate.initialDate();
+      FantasyDate.runTick();
+      
+      test1Mob!.tick(1);
+      test2Mob!.tick(1);
+
+      // Ensure the second mob does not target the gold since it is already being targeted
+      expect(test1Mob).toBeDefined();
+      expect(test2Mob).toBeDefined();
+      expect(test1Mob!.action).toBe("get rich");
+      expect(test2Mob!.action).not.toBe("get rich");
     });
   });
 });
