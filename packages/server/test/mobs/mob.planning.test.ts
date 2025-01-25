@@ -26,20 +26,20 @@ describe('Mob Tests', () => {
 
       // Spawn a pile of gold
       const gold1Position: Coord = { x: 3, y: 3 };
-      itemGenerator.createItem({ type: 'gold', position: gold1Position});
+      itemGenerator.createItem({ type: 'gold', position: gold1Position });
 
       // Tick so the mobs find a target
       FantasyDate.initialDate();
       FantasyDate.runTick();
-      
+
       test1Mob!.tick(1);
       test2Mob!.tick(1);
 
       // Ensure the second mob does not target the gold since it is already being targeted
       expect(test1Mob).toBeDefined();
       expect(test2Mob).toBeDefined();
-      expect(test1Mob!.action).toBe("get rich");
-      expect(test2Mob!.action).not.toBe("get rich");
+      expect(test1Mob!.action).toBe('get rich');
+      expect(test2Mob!.action).not.toBe('get rich');
     });
   });
 });
