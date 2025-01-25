@@ -22,7 +22,7 @@ export let graph: Graphable[];
 /**
  * Initial common setup for testing.
  */
-export const commonSetup = () => {
+export const commonSetup = (worldSize: number = 2) => {
   // Any common setup code
   jest.clearAllMocks();
 
@@ -31,10 +31,7 @@ export const commonSetup = () => {
   initializePubSub(new StubbedPubSub());
 
   const worldDescription = {
-    tiles: [
-      [1, 1],
-      [1, 1]
-    ],
+    tiles: Array.from({ length: worldSize }, () => Array(worldSize).fill(1)),
     terrain_types: [
       {
         name: 'Grass',
