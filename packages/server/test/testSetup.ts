@@ -282,9 +282,33 @@ export const commonSetup = (worldSize: number = 2) => {
         sleepy: 80,
         extroversion: 50,
         speaker: true
+      },
+      {
+        "name": "Villager",
+        "name_style": "norse-english",
+        "type": "villager",
+        "description": "A friendly inhabitant of the silverclaw community.",
+        "health": 10,
+        "speed": 0.5,
+        "attack": 5,
+        "gold": 0,
+        "community": "silverclaw",
+        "stubbornness": 20,
+        "bravery": 5,
+        "aggression": 5,
+        "industriousness": 40,
+        "adventurousness": 10,
+        "gluttony": 50,
+        "sleepy": 80,
+        "extroversion": 50
       }
     ],
     communities: [
+      { 
+        id: "silverclaw", 
+        name: "Village of the Silverclaw", 
+        description: "The Silverclaw Tribe, descendants of the silver-souled, known for their resilience and independence."
+      },
       {
         id: 'alchemists',
         name: 'Alchemists guild',
