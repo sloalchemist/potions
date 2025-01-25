@@ -31,6 +31,7 @@ export const commonSetup = (worldSize: number = 2) => {
   initializePubSub(new StubbedPubSub());
 
   const worldDescription = {
+    // Makes a worldSize x worldSize matrix of tiles filled with 1
     tiles: Array.from({ length: worldSize }, () => Array(worldSize).fill(1)),
     terrain_types: [
       {
