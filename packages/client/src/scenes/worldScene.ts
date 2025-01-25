@@ -22,6 +22,7 @@ import {
 } from '../worldDescription';
 import { UxScene } from './uxScene';
 import { setGameState } from '../world/controller';
+import { restoreHealth, speedUpCharacter } from '../utils/developerCheats';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -387,6 +388,15 @@ export class WorldScene extends Phaser.Scene {
         });
       }
     });
+
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {      
+      if (event.ctrlKey && event.code === 'KeyF'){
+        speedUpCharacter();
+      };
+      if (event.ctrlKey && event.code === 'KeyH'){
+        restoreHealth();
+      }
+    })
 
     needsAnimationsLoaded = false;
   }
