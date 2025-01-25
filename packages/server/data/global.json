@@ -142,6 +142,7 @@
             "carryable": false,
             "walkable": false,
             "smashable": true,
+            "drops_item": "log", 
             "attributes": [
                 {
                     "name": "health",

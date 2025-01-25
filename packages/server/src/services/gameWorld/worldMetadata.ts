@@ -78,6 +78,7 @@ export interface ItemType {
   interactions: InteractionType[];
   attributes?: Attribute[];
   on_tick?: TickActions[];
+  drops_item?: string; // i was here :3
 }
 
 export interface MobType {

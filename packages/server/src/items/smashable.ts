@@ -2,13 +2,6 @@ import { Mob } from '../mobs/mob';
 import { Item } from './item';
 import { itemGenerator } from './itemGenerator';
 
-const itemDropConfig = {
-  'fence' : 'log',
-  'wall' : 'log',
-  'partial-wall' : 'log',
-  'potion-stand' : 'gold'
-}
-
 export class Smashable {
   private item: Item;
 
@@ -47,18 +40,16 @@ export class Smashable {
         this.destroyPotionStand();
       }
       this.item.destroy();
-
-      // Check the config to see if this item has a drop item
-      const dropType = itemDropConfig[this.item.type as keyof typeof itemDropConfig];
-      if(dropType){
-        this.dropItem(dropType, this.item);
+      
+      if(this.item.drops_item){
+        this.dropItem(this.item, this.item.drops_item)
       }
     }
   }
 
-  dropItem(dropType: string, item: Item){
+  dropItem(item: Item, droppedItem: string){
     itemGenerator.createItem({
-      type: dropType,
+      type: droppedItem,
       position: item.position
     });
   }
