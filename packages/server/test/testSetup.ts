@@ -241,7 +241,8 @@ export const commonSetup = () => {
             value: 100
           }
         ],
-        interactions: []
+        interactions: [],
+        drops_item: 'log'
       }
     ],
     mob_types: [
