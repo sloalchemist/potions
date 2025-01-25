@@ -44,6 +44,7 @@ export class LoadWorldScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image('frame', 'static/titleFrame.png');
     this.load.image('title', 'static/title.png');
     this.load.atlas(
       'global-atlas',
@@ -59,7 +60,14 @@ export class LoadWorldScene extends Phaser.Scene {
     background.setDisplaySize(SCREEN_WIDTH, SCREEN_HEIGHT);
     background.setDepth(-10);
 
-    //loadWorld().then(() => {
+    // Add frame
+    const overlayImage = this.add.image(
+      SCREEN_WIDTH / 2,
+      SCREEN_HEIGHT / 2,
+      'frame'
+    );
+    overlayImage.setScrollFactor(0);
+    console.log('FrameScene created');
 
     const loadingMessage = this.add.text(
       SCREEN_WIDTH / 2,

@@ -53,7 +53,7 @@ export class Smashable {
       position: item.position
     });
   }
-  
+
   destroyPotionStand() {
     const gold = this.item.getAttribute<number>('gold');
     if (gold > 0) {
