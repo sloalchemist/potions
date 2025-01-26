@@ -3,7 +3,6 @@ import { Use } from '../use';
 import { Mob } from '../../../mobs/mob';
 import { Cauldron } from '../../cauldron';
 
-
 export class DumpCauldron implements Use {
   key: string;
   constructor() {

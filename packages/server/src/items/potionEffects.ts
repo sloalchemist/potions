@@ -2,7 +2,10 @@ import { Mob } from '../mobs/mob';
 import { numberToHexString } from '../util/colorUtil';
 
 export function drinkPotion(mob: Mob, potionType: string): boolean {
-  console.log('Drinking potion of type:', numberToHexString(Number(potionType)))
+  console.log(
+    'Drinking potion of type:',
+    numberToHexString(Number(potionType))
+  );
   if (numberToHexString(Number(potionType)) === '#ff0000') {
     console.log('Drinking red potion');
     mob.changeHealth(50);

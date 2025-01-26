@@ -10,14 +10,14 @@ export function hexStringToNumber(hexString: string): number {
 export function combineHexColors(hex1: string, hex2: string): string {
   // Convert hex to RGB
   const hexToRgb = (hex: string): { r: number; g: number; b: number } => {
-    if (hex.startsWith("#")) {
+    if (hex.startsWith('#')) {
       hex = hex.slice(1);
     }
     const bigint = parseInt(hex, 16);
     return {
       r: (bigint >> 16) & 255,
       g: (bigint >> 8) & 255,
-      b: bigint & 255,
+      b: bigint & 255
     };
   };
 
@@ -36,7 +36,7 @@ export function combineHexColors(hex1: string, hex2: string): string {
   const combinedRgb = {
     r: Math.round((rgb1.r + rgb2.r) / 2),
     g: Math.round((rgb1.g + rgb2.g) / 2),
-    b: Math.round((rgb1.b + rgb2.b) / 2),
+    b: Math.round((rgb1.b + rgb2.b) / 2)
   };
 
   // Convert back to hex
