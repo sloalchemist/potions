@@ -10,17 +10,17 @@ export class Cauldron {
   private constructor(item: Item) {
     this.item = item;
   }
-  // attributes: num_items, current_potion (based of color addition)
+  // attributes: ingredients, current_potion (based of color addition)
 
   static fromItem(item: Item): Cauldron | undefined {
-    if (item.hasAttribute('num_items') && item.hasAttribute('potion_subtype')) {
+    if (item.hasAttribute('ingredients') && item.hasAttribute('potion_subtype')) {
       return new Cauldron(item);
     }
     return undefined;
   }
 
   getNumItems(): number {
-    return this.item.getAttribute('num_items');
+    return this.item.getAttribute('ingredients');
   }
 
   getPotionSubtype(): string {
@@ -28,7 +28,7 @@ export class Cauldron {
   }
 
   DumpCauldron(): boolean {
-    this.item.setAttribute('num_items', 0);
+    this.item.setAttribute('ingredients', 0);
     this.item.setAttribute('potion_subtype', "");
 
     return true
@@ -42,7 +42,7 @@ export class Cauldron {
       // if no items in cauldron, add item
       if (this.getPotionSubtype() == "") {
         this.item.setAttribute('potion_subtype', String(hexStringToNumber(carriedItem.getAttribute('brew_color'))));
-        this.item.changeAttributeBy('num_items', 1);
+        this.item.changeAttributeBy('ingredients', 1);
         carriedItem.destroy();
         return true;
       }
@@ -56,7 +56,7 @@ export class Cauldron {
       // destroy carried item
       carriedItem.destroy();
 
-      this.item.changeAttributeBy('num_items', 1);
+      this.item.changeAttributeBy('ingredients', 1);
       this.item.setAttribute('potion_subtype', String(hexStringToNumber(newColor)));
       return true;
     }
@@ -69,7 +69,7 @@ export class Cauldron {
       return false;
     }
 
-    this.item.setAttribute('num_items', 0);
+    this.item.setAttribute('ingredients', 0);
 
     itemGenerator.createItem({
       type: 'potion',

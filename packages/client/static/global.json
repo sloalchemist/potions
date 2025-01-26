@@ -487,7 +487,7 @@
         "walkable": false,
         "attributes": [
             {
-                "name": "num_items",
+                "name": "ingredients",
                 "value": 0
             },
             {
@@ -502,7 +502,7 @@
                 "while_carried": false,
                 "conditions": [
                     {
-                        "attribute_name": "num_items",
+                        "attribute_name": "ingredients",
                         "value": 3,
                         "comparison": "less_than"
                     }
@@ -514,7 +514,7 @@
                 "while_carried": false,
                 "conditions": [
                     {
-                        "attribute_name": "num_items",
+                        "attribute_name": "ingredients",
                         "value": 0,
                         "comparison": "greater_than"
                     }
@@ -526,7 +526,7 @@
                 "while_carried": false,
                 "conditions": [
                     {
-                        "attribute_name": "num_items",
+                        "attribute_name": "ingredients",
                         "value": 0,
                         "comparison": "greater_than"
                     }

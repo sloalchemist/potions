@@ -146,7 +146,7 @@ export const commonSetup = () => {
         ],
         attributes: [
           {
-            name: 'num_items',
+            name: 'ingredients',
             value: 0
           },
           {
