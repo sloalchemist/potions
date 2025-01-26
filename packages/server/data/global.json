@@ -524,6 +524,18 @@
                             "comparison": "greater_than"
                         }
                     ]
+                },
+                {
+                    "description": "Dump Cauldron",
+                    "action": "dump_cauldron",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "num_items",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ]
                 }
             ]
         },

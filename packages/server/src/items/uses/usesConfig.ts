@@ -17,6 +17,7 @@ import { AddItem } from './container/addItem';
 import { GetItem } from './container/getItem';
 import { Give } from './give';
 import { addIngredient } from './cauldron/addIngredient';
+import { dumpIngredient } from './cauldron/dumpIngredients';
 
 const uses = [
   Pickup,
@@ -36,7 +37,8 @@ const uses = [
   AddItem,
   GetItem,
   Give,
-  addIngredient
+  addIngredient,
+  dumpIngredient
 ];
 
 export default uses;

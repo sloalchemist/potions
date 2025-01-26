@@ -131,12 +131,17 @@ export const commonSetup = () => {
           {
             description: 'Add ingredient',
             action: 'add_ingredient',
-            while_carried: true
+            while_carried: false
           },
           {
             description: 'Bottle potion',
             action: 'bottle_potion',
-            while_carried: true
+            while_carried: false
+          },
+          {
+            description: 'Dump Cauldron',
+            action: 'dump_cauldron',
+            while_carried: false
           }
         ],
         attributes: [

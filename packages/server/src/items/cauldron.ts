@@ -27,7 +27,12 @@ export class Cauldron {
     return this.item.getAttribute('potion_subtype');
   }
 
-  //TODO: add dump method
+  dumpCauldron(): boolean {
+    this.item.setAttribute('num_items', 0);
+    this.item.setAttribute('potion_subtype', "");
+
+    return true
+  }
 
   addIngredient(mob: Mob): boolean {
     const carriedItem = mob.carrying;
