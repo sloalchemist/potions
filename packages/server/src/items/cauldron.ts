@@ -42,12 +42,11 @@ export class Cauldron {
 
   AddIngredient(mob: Mob): boolean {
     const carriedItem = mob.carrying;
-    console.log("Carried item info: ", carriedItem)
 
     if (
       carriedItem &&
       carriedItem.hasAttribute('brew_color') &&
-      this.getNumItems() <= 3
+      this.getNumItems() < 3
     ) {
       // if no items in cauldron, add item
       if (this.getPotionSubtype() == '') {
@@ -79,7 +78,6 @@ export class Cauldron {
       );
       return true;
     }
-    console.log("Test returned false")
     return false;
   }
 

@@ -7,8 +7,6 @@ import { AddIngredient } from '../../src/items/uses/cauldron/addIngredient';
 import { Mob } from '../../src/mobs/mob';
 import { Coord } from '@rt-potion/common';
 
-import { Cauldron } from '../../src/items/cauldron';
-
 beforeEach(() => {
   commonSetup();
   Community.makeVillage('alchemists', 'Alchemists guild');
@@ -27,7 +25,7 @@ describe('Try to add various ingredients to the cauldron', () => {
       position: cauldronPosition,
       attributes: {
         ingredients: 0,
-        potion_subtype: ""
+        potion_subtype: ''
       }
     });
     const cauldronID = Item.getItemIDAt(cauldronPosition);
@@ -46,7 +44,7 @@ describe('Try to add various ingredients to the cauldron', () => {
       carriedBy: testMob
     });
 
-    // ensure the player is carrying the potion
+    // ensure the player is carrying the ingredient
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('heart-beet');
 
@@ -66,14 +64,17 @@ describe('Try to add various ingredients to the cauldron', () => {
       carriedBy: testMob
     });
 
-    // ensure the player is carrying the potion
+    // ensure the player is carrying the ingredient
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('blueberry');
 
     // add the ingredient to the Cauldron
     const testAddSecondIngredient = new AddIngredient();
-    const testSecond = testAddSecondIngredient.interact(testMob!, testCauldron!);
-    
+    const testSecond = testAddSecondIngredient.interact(
+      testMob!,
+      testCauldron!
+    );
+
     expect(testSecond).toBe(true);
 
     // check that the ingredient was added
@@ -81,9 +82,51 @@ describe('Try to add various ingredients to the cauldron', () => {
     expect(standAfterSecond).not.toBeNull();
     expect(standAfterSecond!.getAttribute('ingredients')).toBe(2);
 
-    
-  });
+    // create a blueberry
+    itemGenerator.createItem({
+      type: 'blueberry',
+      carriedBy: testMob
+    });
 
+    // ensure the player is carrying the ingredient
+    expect(testMob!.carrying).not.toBeNull();
+    expect(testMob!.carrying!.type).toBe('blueberry');
+
+    // add the ingredient to the Cauldron
+    const testAddThirdIngredient = new AddIngredient();
+    const testThird = testAddThirdIngredient.interact(testMob!, testCauldron!);
+
+    expect(testThird).toBe(true);
+
+    // check that the ingredient was added
+    const standAfterThird = Item.getItem(cauldronID!);
+    expect(standAfterThird).not.toBeNull();
+    expect(standAfterThird!.getAttribute('ingredients')).toBe(3);
+
+    // create a blueberry
+    itemGenerator.createItem({
+      type: 'blueberry',
+      carriedBy: testMob
+    });
+
+    // ensure the player is carrying the ingredient
+    expect(testMob!.carrying).not.toBeNull();
+    expect(testMob!.carrying!.type).toBe('blueberry');
+
+    // add the ingredient to the Cauldron
+    const testAddFourthIngredient = new AddIngredient();
+    const testFourth = testAddFourthIngredient.interact(
+      testMob!,
+      testCauldron!
+    );
+
+    expect(testFourth).toBe(false);
+
+    // check that the ingredient was NOT added
+    const standAfterFourth = Item.getItem(cauldronID!);
+    expect(standAfterFourth).not.toBeNull();
+    expect(standAfterFourth!.getAttribute('ingredients')).toBe(3);
+  });
 });
 
 afterEach(() => {
