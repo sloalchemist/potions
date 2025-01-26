@@ -127,8 +127,28 @@ export const commonSetup = () => {
         type: 'cauldron',
         carryable: false,
         walkable: false,
-        interactions: [],
-        attributes: [],
+        interactions: [
+          {
+            description: 'Add ingredient',
+            action: 'add_ingredient',
+            while_carried: true
+          },
+          {
+            description: 'Bottle potion',
+            action: 'bottle_potion',
+            while_carried: true
+          }
+        ],
+        attributes: [
+          {
+            name: 'num_items',
+            value: 0
+          },
+          {
+            name: 'potion_subtype',
+            value: ''
+          }
+        ],
         on_tick: []
       },
       {
