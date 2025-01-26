@@ -16,8 +16,8 @@ import { StartWall } from './building/startWall';
 import { AddItem } from './container/addItem';
 import { GetItem } from './container/getItem';
 import { Give } from './give';
-import { addIngredient } from './cauldron/addIngredient';
-import { dumpIngredient } from './cauldron/dumpIngredients';
+import { AddIngredient } from './cauldron/addIngredient';
+import { DumpCauldron } from './cauldron/dumpCauldron';
 
 const uses = [
   Pickup,
@@ -37,8 +37,8 @@ const uses = [
   AddItem,
   GetItem,
   Give,
-  addIngredient,
-  dumpIngredient
+  AddIngredient,
+  DumpCauldron
 ];
 
 export default uses;

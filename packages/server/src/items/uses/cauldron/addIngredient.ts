@@ -3,7 +3,7 @@ import { Use } from '../use';
 import { Mob } from '../../../mobs/mob';
 import { Cauldron } from '../../cauldron';
 
-export class addIngredient implements Use {
+export class AddIngredient implements Use {
   key: string;
   constructor() {
     this.key = 'add_ingredient';
@@ -24,6 +24,6 @@ export class addIngredient implements Use {
       return false;
     }
 
-    return cauldron.addIngredient(mob);
+    return cauldron.AddIngredient(mob);
   }
 }

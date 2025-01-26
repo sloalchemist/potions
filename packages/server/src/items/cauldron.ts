@@ -27,14 +27,14 @@ export class Cauldron {
     return this.item.getAttribute('potion_subtype');
   }
 
-  dumpCauldron(): boolean {
+  DumpCauldron(): boolean {
     this.item.setAttribute('num_items', 0);
     this.item.setAttribute('potion_subtype', "");
 
     return true
   }
 
-  addIngredient(mob: Mob): boolean {
+  AddIngredient(mob: Mob): boolean {
     const carriedItem = mob.carrying;
 
     if (carriedItem && carriedItem.hasAttribute("brew_color") && this.getNumItems() <= 3) {

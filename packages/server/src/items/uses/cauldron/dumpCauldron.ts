@@ -4,7 +4,7 @@ import { Mob } from '../../../mobs/mob';
 import { Cauldron } from '../../cauldron';
 
 
-export class dumpIngredient implements Use {
+export class DumpCauldron implements Use {
   key: string;
   constructor() {
     this.key = 'dump_cauldron';
@@ -25,6 +25,6 @@ export class dumpIngredient implements Use {
       return false;
     }
 
-    return cauldron.dumpCauldron();
+    return cauldron.DumpCauldron();
   }
 }
