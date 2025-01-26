@@ -39,10 +39,6 @@ export class Cauldron {
         this.item.setAttribute('potion_subtype', String(hexStringToNumber(carriedItem.getAttribute('brew_color'))));
         this.item.changeAttributeBy('num_items', 1);
         carriedItem.destroy();
-
-        console.log("Added first ingredient to cauldron");
-        console.log("Cauldron now has " + this.getNumItems() + " items");
-        console.log("Cauldron now has color " + this.getPotionSubtype());
         return true;
       }
 
@@ -50,17 +46,13 @@ export class Cauldron {
       const hexString = numberToHexString(Number(this.getPotionSubtype()));
 
       //combine hex colors
-      const newColor = combineHexColors(this.getPotionSubtype(), hexString);
+      const newColor = combineHexColors(hexString, carriedItem.getAttribute('brew_color'));
 
       // destroy carried item
       carriedItem.destroy();
 
       this.item.changeAttributeBy('num_items', 1);
-      this.item.setAttribute('potion_subtype', newColor);
-
-      console.log("Added ingredient to cauldron");
-      console.log("Cauldron now has " + this.getNumItems() + " items");
-      console.log("Cauldron now has color " + this.getPotionSubtype());
+      this.item.setAttribute('potion_subtype', String(hexStringToNumber(newColor)));
       return true;
     }
 
@@ -72,7 +64,7 @@ export class Cauldron {
       return false;
     }
 
-    this.item.changeAttributeBy('num_items', -1);
+    this.item.setAttribute('num_items', 0);
 
     itemGenerator.createItem({
       type: 'potion',
@@ -80,8 +72,7 @@ export class Cauldron {
       carriedBy: mob
     })
 
-    console.log("Bottled potion of type " + this.getPotionSubtype());
-
+    this.item.setAttribute('potion_subtype', "");
     return true;
   }
 }
