@@ -276,10 +276,11 @@ export class Mob {
     return closestMob ? closestMob.id : undefined;
   }
 
-  findClosestObjectID(
+  findNClosestObjectIDs(
     types: string[],
+    maxNum: number,
     maxDistance: number = Infinity
-  ): string | undefined {
+  ): string[] | undefined {
     const maxDistanceSquared = maxDistance * maxDistance;
     const typesList = types.map((type) => `'${type}'`).join(', ');
     const query = `
@@ -289,14 +290,15 @@ export class Mob {
             WHERE type IN (${typesList})
             AND ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :maxDistanceSquared
             ORDER BY ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) ASC
-            LIMIT 1
+            LIMIT :maxNum
         `;
-    const result = DB.prepare(query).get({
+    const result = DB.prepare(query).all({
       x: this.position.x,
       y: this.position.y,
-      maxDistanceSquared
-    }) as { id: string };
-    return result ? result.id : undefined;
+      maxDistanceSquared,
+      maxNum: maxNum !== Infinity ? maxNum : 1000 // maxNum cannot be Infinity (SQLite Mismatch error)
+    }) as { id: string }[];
+    return result ? result.map((res) => res.id) : undefined;
   }
 
   setMoveTarget(target: Coord, fuzzy: boolean = false): boolean {
@@ -542,6 +544,25 @@ export class Mob {
             WHERE action_type = :type
         `
     ).get({ type }) as { count: number };
+    return count.count;
+  }
+
+  getNumAlliesTargettingPos(
+    community_id: string,
+    x: number,
+    y: number
+  ): number {
+    // Get the number of allied mobs targeting x, y, excluding yourself
+    const count = DB.prepare(
+      `
+        SELECT COUNT(*) as count
+        FROM mobs
+        WHERE community_id = :community_id AND
+          target_x = :x AND
+          target_y = :y AND
+          id != :mobId
+      `
+    ).get({ community_id, x, y, mobId: this.id }) as { count: number };
     return count.count;
   }
 

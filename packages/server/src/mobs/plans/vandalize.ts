@@ -34,12 +34,12 @@ export class Vandalize implements Plan {
     }*/
 
   utility(npc: Mob): number {
-    const smashTargetID = npc.findClosestObjectID(this.target, 5);
+    const smashTargetID = npc.findNClosestObjectIDs(this.target, 1, 5);
 
     if (!smashTargetID) {
       return -Infinity;
     }
-    this.smashTarget = Item.getItem(smashTargetID)!;
+    this.smashTarget = Item.getItem(smashTargetID[0])!;
 
     return evaluateUtility(Boolean(this.smashTarget), 26);
   }
