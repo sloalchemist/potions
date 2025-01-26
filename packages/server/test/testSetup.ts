@@ -118,7 +118,12 @@ export const commonSetup = () => {
         smashable: true,
         walkable: true,
         interactions: [],
-        attributes: [],
+        attributes: [
+          {
+            name: 'brew_color',
+            value: '#0000FF'
+          }
+        ],
         on_tick: []
       },
       {
@@ -183,14 +188,7 @@ export const commonSetup = () => {
         type: 'heart-beet',
         walkable: true,
         carryable: true,
-        interactions: [
-          {
-            description: 'Brew red potion',
-            action: 'brew',
-            while_carried: true,
-            requires_item: 'cauldron'
-          }
-        ],
+        interactions: [],
         attributes: [
           {
             name: 'brew_color',

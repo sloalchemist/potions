@@ -42,6 +42,7 @@ export class Cauldron {
 
   AddIngredient(mob: Mob): boolean {
     const carriedItem = mob.carrying;
+    console.log("Carried item info: ", carriedItem)
 
     if (
       carriedItem &&
@@ -78,7 +79,7 @@ export class Cauldron {
       );
       return true;
     }
-
+    console.log("Test returned false")
     return false;
   }
 
