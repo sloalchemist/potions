@@ -1,11 +1,14 @@
 import { Mob } from '../mobs/mob';
-import { hexStringToNumber } from '../util/colorUtil';
+import { numberToHexString } from '../util/colorUtil';
 
 export function drinkPotion(mob: Mob, potionType: string): boolean {
-  if (potionType === String(hexStringToNumber('#FF0000'))) {
+  console.log('Drinking potion of type:', numberToHexString(Number(potionType)))
+  if (numberToHexString(Number(potionType)) === '#ff0000') {
+    console.log('Drinking red potion');
     mob.changeHealth(50);
     return true;
-  } else if (potionType === String(hexStringToNumber('#0000FF'))) {
+  } else if (numberToHexString(Number(potionType)) === '#0000ff') {
+    console.log('Drinking blue potion');
     const speedDelta = 2;
     const speedDuration = 30;
 
