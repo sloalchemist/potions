@@ -1,16 +1,16 @@
 import { Item } from '../../item';
 import { Use } from '../use';
 import { Mob } from '../../../mobs/mob';
-import { Brewable } from '../../brewable';
+import { Cauldron } from '../../cauldron';
 
 export class Brew implements Use {
   key: string;
   constructor() {
-    this.key = 'brew';
+    this.key = 'bottle_potion';
   }
 
   description(_mob: Mob, _item: Item): string {
-    return 'Brew';
+    return 'Bottle Potion';
   }
 
   interact(mob: Mob, item: Item): boolean {
@@ -18,12 +18,12 @@ export class Brew implements Use {
       return false;
     }
 
-    const brewable = Brewable.fromItem(item);
+    const cauldron = Cauldron.fromItem(item);
 
-    if (!brewable) {
+    if (!cauldron) {
       return false;
     }
 
-    return brewable.brew(mob);
+    return cauldron.bottlePotion(mob);
   }
 }
