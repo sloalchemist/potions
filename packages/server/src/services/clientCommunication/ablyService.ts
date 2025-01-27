@@ -448,15 +448,14 @@ export class AblyService implements PubSub {
       if (!player) {
         throw new Error('no player found ' + username);
       }
-      
+
       // Check string for data
       let cheat_code = data.action;
-      if (cheat_code == "speed") {
+      if (cheat_code == 'speed') {
         player.changeSpeed(2, 30);
-      }
-      else if (cheat_code == "health") {
+      } else if (cheat_code == 'health') {
         player.changeHealth(100);
       }
-    })
+    });
   }
 }
