@@ -249,7 +249,7 @@ export class WorldScene extends Phaser.Scene {
       '4-3', // Configuration 13
       '4-1', // Configuration 14
       '4-4' // Configuration 15
-    ];
+    ] as const satisfies readonly string[];
 
     const waterTypes = globalData.terrain_types
       .filter((type) => !type.walkable)
