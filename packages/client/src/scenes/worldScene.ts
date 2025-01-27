@@ -404,6 +404,7 @@ export class WorldScene extends Phaser.Scene {
             x: player.position.x,
             y: player.position.y - 1
           });
+          console.log('x:', player.position.x, 'y:', player.position.y - 1);
         }
       } else if (event.code == 'KeyS') {
         // move down
@@ -412,6 +413,7 @@ export class WorldScene extends Phaser.Scene {
             x: player.position.x,
             y: player.position.y + 1
           });
+          console.log('x:', player.position.x, 'y:', player.position.y + 1);
         }
       } else if (event.code == 'KeyA') {
         // move left
@@ -420,6 +422,7 @@ export class WorldScene extends Phaser.Scene {
             x: player.position.x - 1,
             y: player.position.y
           });
+          console.log('x:', player.position.x - 1, 'y:', player.position.y);
         }
       } else if (event.code == 'KeyD') {
         // move right
@@ -428,6 +431,7 @@ export class WorldScene extends Phaser.Scene {
             x: player.position.x + 1,
             y: player.position.y
           });
+          console.log('x:', player.position.x + 1, 'y:', player.position.y);
         }
       }
     });
