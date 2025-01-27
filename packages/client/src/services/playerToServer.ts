@@ -5,7 +5,7 @@ import { currentCharacter, publicCharacterId } from '../worldMetadata';
 import { SpriteMob } from '../sprite/sprite_mob';
 import { broadcastChannel, playerChannel } from './ablySetup';
 
-function publishPlayerMessage<T extends keyof PlayerToServerMessageMap>(
+export function publishPlayerMessage<T extends keyof PlayerToServerMessageMap>(
   type: T,
   payload: PlayerToServerMessageMap[T]
 ) {
