@@ -14,6 +14,10 @@ export class GetItem implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
+    if (item.validateOwnership(mob)) {
+      return false;
+    }
+
     const container = Container.fromItem(item);
 
     if (!container) {

@@ -34,9 +34,10 @@ export class Community {
             SELECT 
                 id,
                 name
-            FROM community;
+            FROM community
+            WHERE id = :id;
             `
-    ).get() as { id: string; name: string };
+    ).get({ id }) as { id: string; name: string };
 
     if (!villageData) {
       throw new Error(`No village found with id: ${id}`);

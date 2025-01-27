@@ -18,6 +18,12 @@ export interface InteractionCondition {
   comparison: Comparison;
 }
 
+export interface InteractionPermission {
+  community: boolean;
+  // player: boolean;
+  other: boolean;
+}
+
 export interface InteractionType {
   description: string;
   action: string;
@@ -25,6 +31,7 @@ export interface InteractionType {
   while_carrying?: string;
   requires_item?: string;
   conditions?: InteractionCondition[];
+  permissions?: InteractionPermission;
 }
 
 export interface Attribute {

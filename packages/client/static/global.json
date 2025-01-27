@@ -361,7 +361,11 @@
             {
                 "description": "Add $item_name",
                 "action": "add_item",
-                "while_carried": false
+                "while_carried": false,
+                "permissions": {
+                    "community": true,
+                    "other": false
+                }
             },
             {
                 "description": "Get $item_name",
@@ -373,7 +377,11 @@
                         "value": 0,
                         "comparison": "greater_than"
                     }
-                ]
+                ],
+                "permissions": {
+                    "community": true,
+                    "other": false
+                }
             },
             {
                 "description": "Raise price",
@@ -385,7 +393,11 @@
                         "value": 99,
                         "comparison": "less_than"
                     }
-                ]
+                ],
+                "permissions": {
+                    "community": true,
+                    "other": false
+                }
             },
             {
                 "description": "Lower price",
@@ -397,7 +409,11 @@
                         "value": 1,
                         "comparison": "greater_than"
                     }
-                ]
+                ],
+                "permissions": {
+                    "community": true,
+                    "other": false
+                }
             },
             {
                 "description": "Collect gold",
@@ -409,7 +425,11 @@
                         "value": 0,
                         "comparison": "greater_than"
                     }
-                ]
+                ],
+                "permissions": {
+                    "community": true,
+                    "other": false
+                }
             },
             {
                 "description": "Purchase potion",
@@ -421,7 +441,11 @@
                         "value": 0,
                         "comparison": "greater_than"
                     }
-                ]
+                ],
+                "permissions": {
+                    "community": false,
+                    "other": true
+                }
             }
         ],
         "show_price_at": {
