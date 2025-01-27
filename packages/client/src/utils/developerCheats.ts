@@ -1,11 +1,15 @@
+import { publishPlayerMessage } from "../services/playerToServer";
 import { SpriteMob } from "../sprite/sprite_mob";
 
-export function speedUpCharacter(hero: SpriteMob): void {
-    // Update the speed of the main character by a factor of some value
+export function speedUpCharacter(): void {
     console.log("Speeding up!");
+    // Broadcast PlayerToServer message here
+    publishPlayerMessage('cheat', {action: "speed"});
     
 }
 
-export function restoreHealth(hero: SpriteMob): void {
+export function restoreHealth(): void {
     console.log("Health restored!!");
+    // Broadcast PlayerToServer message here
+    publishPlayerMessage('cheat', {action: "health"});
 }

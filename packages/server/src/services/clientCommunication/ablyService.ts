@@ -442,5 +442,21 @@ export class AblyService implements PubSub {
 
       player.setMoveTarget(target, false);
     });
+
+    subscribeToPlayerChannel('cheat', (data) => {
+      const player = Mob.getMob(username);
+      if (!player) {
+        throw new Error('no player found ' + username);
+      }
+      
+      // Check string for data
+      let cheat_code = data.action;
+      if (cheat_code == "speed") {
+        player.changeSpeed(2, 30);
+      }
+      else if (cheat_code == "health") {
+        player.changeHealth(100);
+      }
+    })
   }
 }
