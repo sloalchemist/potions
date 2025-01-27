@@ -390,7 +390,6 @@ export class WorldScene extends Phaser.Scene {
 
     // Logic for adding WASD movement: 
     // moves one tile per keyboard press
-    const cursors = this.input.keyboard?.addKeys("W, A, S, D");
     let counter = 0;
 
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
@@ -400,17 +399,17 @@ export class WorldScene extends Phaser.Scene {
 
       const player = world.mobs[publicCharacterId]
 
-      counter ++;
 
       if (event.code == 'KeyW') {
         // move up
         if(player.position !== null){
           publishPlayerPosition({
             x: player.position.x,
-            y: player.position.y - 1
+            y: player.position.y - 1    
           });
+        console.log('x:', player.position.x, 'y:', player.position.y - 1);
+
         }
-        console.log(`Up ${counter}`);
          
       } 
       else if (event.code == 'KeyS') {
@@ -420,8 +419,8 @@ export class WorldScene extends Phaser.Scene {
             x: player.position.x,
             y: player.position.y + 1
           });
+          console.log('x:', player.position.x, 'y:', player.position.y + 1);
         }
-        console.log(`Down ${counter}`);
       } 
       else if (event.code == 'KeyA') {
         // move left
@@ -430,8 +429,8 @@ export class WorldScene extends Phaser.Scene {
             x: player.position.x - 1,
             y: player.position.y
           });
+          console.log('x:', player.position.x-1, 'y:', player.position.y);
         }
-        console.log(`Left ${counter}`);
       } 
       else if (event.code == 'KeyD') {
         // move right
@@ -440,8 +439,8 @@ export class WorldScene extends Phaser.Scene {
             x: player.position.x + 1,
             y: player.position.y
           });
+        console.log('x:', player.position.x+1, 'y:', player.position.y);
         }
-        console.log(`Right ${counter}`);
       }
     })
 
