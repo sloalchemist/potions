@@ -100,3 +100,21 @@ Previously you were required to setup Ably, Supabase and several `.env` files ma
    pnpm start
    ```
    This should take you to [http://127.0.0.1:8080/](http://127.0.0.1:8080/), where you can click "Start" to enter your game.
+
+### Quick Build and Run
+Run a script to automatically run all the build/run commands. `./setup.[ext] [options]`
+- For Windows PowerShell:
+  ```
+  ./setup.ps1 --all
+  ```
+- For macOS:
+  ```
+  ./setup.sh --all
+  ```
+- Additional options:
+  - `--build`
+  - `--create-world`
+  - `--auth-server`
+  - `--server`
+  - `--client`
+  - `--all`
