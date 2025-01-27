@@ -388,62 +388,49 @@ export class WorldScene extends Phaser.Scene {
       }
     });
 
-    // Logic for adding WASD movement: 
+    // Logic for adding WASD movement:
     // moves one tile per keyboard press
-    const cursors = this.input.keyboard?.addKeys("W, A, S, D");
-    let counter = 0;
-
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       if (!world.mobs[publicCharacterId]) {
         return;
       }
 
-      const player = world.mobs[publicCharacterId]
-
-      counter ++;
+      const player = world.mobs[publicCharacterId];
 
       if (event.code == 'KeyW') {
         // move up
-        if(player.position !== null){
+        if (player.position !== null) {
           publishPlayerPosition({
             x: player.position.x,
             y: player.position.y - 1
           });
         }
-        console.log(`Up ${counter}`);
-         
-      } 
-      else if (event.code == 'KeyS') {
-        // move down 
-        if(player.position !== null){
+      } else if (event.code == 'KeyS') {
+        // move down
+        if (player.position !== null) {
           publishPlayerPosition({
             x: player.position.x,
             y: player.position.y + 1
           });
         }
-        console.log(`Down ${counter}`);
-      } 
-      else if (event.code == 'KeyA') {
+      } else if (event.code == 'KeyA') {
         // move left
-        if(player.position !== null){
+        if (player.position !== null) {
           publishPlayerPosition({
             x: player.position.x - 1,
             y: player.position.y
           });
         }
-        console.log(`Left ${counter}`);
-      } 
-      else if (event.code == 'KeyD') {
+      } else if (event.code == 'KeyD') {
         // move right
-        if(player.position !== null){
+        if (player.position !== null) {
           publishPlayerPosition({
             x: player.position.x + 1,
             y: player.position.y
           });
         }
-        console.log(`Right ${counter}`);
       }
-    })
+    });
 
     needsAnimationsLoaded = false;
   }
