@@ -14,6 +14,10 @@ create table
     created_at timestamp with time zone not null default now(),
     character_id uuid not null,
     current_world_id bigint null,
+    health smallint not null default 100,
+    pname text not null,
+    gold bigint not null default 0,
+    appearance int[] default '{16734003, 4367253, 1752748}', -- Random default value for now
     constraint characters_pkey primary key (id),
     constraint characters_character_id_key unique (character_id),
     constraint characters_current_world_id_fkey foreign key (current_world_id) references worlds (id)
@@ -30,12 +34,18 @@ from
   join worlds on worlds.id = characters.current_world_id;
 
 CREATE OR REPLACE FUNCTION load_world(
-    p_character_id UUID
+    p_character_id UUID,
+    p_name TEXT,
+    p_appearance TEXT[]
 )
 RETURNS TABLE (
     character_id UUID,
     world_id TEXT,
-    ably_api_key TEXT
+    ably_api_key TEXT,
+    pname NAME,
+    health SMALLINT,
+    gold BIGINT,
+    appearance INT[]
 ) AS $$
 DECLARE
     existing_character RECORD;
@@ -51,8 +61,8 @@ BEGIN
         FROM character_worlds cw
         WHERE cw.character_id = p_character_id;
     ELSE
-        INSERT INTO characters (character_id, current_world_id)
-        VALUES (p_character_id, 1);
+        INSERT INTO characters (character_id, current_world_id, pname, appearance)
+        VALUES (p_character_id, 1, p_name, p_appearance);
 
         RETURN QUERY
         SELECT cw.character_id, cw.world_id, cw.ably_api_key
