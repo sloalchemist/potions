@@ -100,3 +100,13 @@ Previously you were required to setup Ably, Supabase and several `.env` files ma
    pnpm start
    ```
    This should take you to [http://127.0.0.1:8080/](http://127.0.0.1:8080/), where you can click "Start" to enter your game.
+
+### For VS Code Quick Build: 
+Run a script to automatically run build/run commands on VS Code.
+- For macOS:
+```
+chmod +x start_game.sh
+Ctrl+Shift+P (Command Palette) > Tasks: Run Task > Start All (or the specific component you want to run)
+```
+- For Windows Powershell:
+  (use wsl)
