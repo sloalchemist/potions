@@ -1,0 +1,47 @@
+services:
+  client:
+    build:
+    # use current dir as context to access pnpm-lock
+      context: ./
+      dockerfile: packages/client/Dockerfile
+    volumes:
+      - ./packages/client:/app
+      - /app/node_modules
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - auth-server
+      - server
+
+  auth-server:
+    build:
+      context: ./
+      dockerfile: packages/auth-server/Dockerfile
+    volumes:
+      - ./packages/auth-server:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+
+  server:
+    build:
+      context: ./
+      dockerfile: packages/server/Dockerfile
+    volumes:
+      - ./packages/server:/app
+      - /app/node_modules
+      - ./volumes/data:/data
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    depends_on:
+      - auth-server
+
+volumes:
+  data:
+    driver: local

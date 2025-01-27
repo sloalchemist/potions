@@ -1,0 +1,4 @@
+# /potions/packages/client/.dockerignore
+node_modules
+dist
+.env
