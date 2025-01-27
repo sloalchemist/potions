@@ -389,14 +389,14 @@ export class WorldScene extends Phaser.Scene {
       }
     });
 
-    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {      
-      if (event.ctrlKey && event.code === 'KeyF'){
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (event.shiftKey && event.code === 'KeyF') {
         speedUpCharacter();
-      };
-      if (event.ctrlKey && event.code === 'KeyH'){
+      }
+      if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
       }
-    })
+    });
 
     needsAnimationsLoaded = false;
   }
