@@ -22,7 +22,7 @@ export let graph: Graphable[];
 /**
  * Initial common setup for testing.
  */
-export const commonSetup = () => {
+export const commonSetup = (worldSize: number = 2) => {
   // Any common setup code
   jest.clearAllMocks();
 
@@ -31,10 +31,8 @@ export const commonSetup = () => {
   initializePubSub(new StubbedPubSub());
 
   const worldDescription = {
-    tiles: [
-      [1, 1],
-      [1, 1]
-    ],
+    // Makes a worldSize x worldSize matrix of tiles filled with 1
+    tiles: Array.from({ length: worldSize }, () => Array(worldSize).fill(1)),
     terrain_types: [
       {
         name: 'Grass',
@@ -287,9 +285,35 @@ export const commonSetup = () => {
         sleepy: 80,
         extroversion: 50,
         speaker: true
+      },
+      {
+        name: 'Villager',
+        name_style: 'norse-english',
+        type: 'villager',
+        description: 'A friendly inhabitant of the silverclaw community.',
+        health: 10,
+        speed: 0.5,
+        attack: 5,
+        gold: 0,
+        community: 'silverclaw',
+        stubbornness: 20,
+        bravery: 5,
+        aggression: 5,
+        industriousness: 40,
+        adventurousness: 10,
+        gluttony: 50,
+        sleepy: 80,
+        extroversion: 50,
+        speaker: true
       }
     ],
     communities: [
+      {
+        id: 'silverclaw',
+        name: 'Village of the Silverclaw',
+        description:
+          'The Silverclaw Tribe, descendants of the silver-souled, known for their resilience and independence.'
+      },
       {
         id: 'alchemists',
         name: 'Alchemists guild',
