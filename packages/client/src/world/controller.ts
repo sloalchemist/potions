@@ -194,6 +194,7 @@ export function getPhysicalInteractions(
 ): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
+  const isOwner = item.isOwnedBy(currentCharacter?.community_id);
 
   // if the item can be picked up
   if (item.itemType.carryable) {
@@ -215,7 +216,12 @@ export function getPhysicalInteractions(
 
   // handles unique interactions
   item.itemType.interactions.forEach((interaction) => {
-    if (!interaction.while_carried && item.conditionMet(interaction)) {
+    const hasPermission =
+      !interaction.permissions || // Allow interaction if no permissions entry in global.json
+      (isOwner && interaction.permissions?.community) ||
+      (!isOwner && interaction.permissions?.other);
+
+    if (hasPermission && !interaction.while_carried && item.conditionMet(interaction)) {
       if (
         (interaction.action == 'add_item' &&
           carried &&
