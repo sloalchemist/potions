@@ -3,7 +3,7 @@
 import { NameGenerator } from './nameGenerator';
 
 export class MonstrousNames implements NameGenerator {
-  private monstrousPrefixes: string[] = [
+  private monstrousPrefixes = [
     'Grak',
     'Vroth',
     'Skal',
@@ -14,9 +14,9 @@ export class MonstrousNames implements NameGenerator {
     'Balg',
     'Gnash',
     'Murk'
-  ];
+  ] as const satisfies readonly string[];
 
-  private monstrousMiddle: string[] = [
+  private monstrousMiddle = [
     'arg',
     'urz',
     'thok',
@@ -27,9 +27,9 @@ export class MonstrousNames implements NameGenerator {
     'shak',
     'glub',
     'zor'
-  ];
+  ] as const satisfies readonly string[];
 
-  private monstrousSuffixes: string[] = [
+  private monstrousSuffixes = [
     'ash',
     'oth',
     'gath',
@@ -40,11 +40,17 @@ export class MonstrousNames implements NameGenerator {
     'vok',
     'rax',
     'gul'
-  ];
+  ] as const satisfies readonly string[];
 
-  private vowels: string[] = ['a', 'e', 'i', 'o', 'u'];
+  private vowels = [
+    'a',
+    'e',
+    'i',
+    'o',
+    'u'
+  ] as const satisfies readonly string[];
 
-  private consonants: string[] = [
+  private consonants = [
     'b',
     'c',
     'd',
@@ -63,7 +69,7 @@ export class MonstrousNames implements NameGenerator {
     'v',
     'w',
     'z'
-  ];
+  ] as const satisfies readonly string[];
 
   // Generate a random monstrous name
   public generateName(): string {
@@ -96,7 +102,7 @@ export class MonstrousNames implements NameGenerator {
   }
 
   // Utility: Get a random element from an array
-  private randomElement<T>(array: T[]): T {
+  private randomElement<T>(array: readonly T[]): T {
     return array[Math.floor(Math.random() * array.length)];
   }
 

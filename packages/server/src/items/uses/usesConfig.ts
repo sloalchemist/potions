@@ -16,6 +16,7 @@ import { StartWall } from './building/startWall';
 import { AddItem } from './container/addItem';
 import { GetItem } from './container/getItem';
 import { Give } from './give';
+import { Use } from './use';
 
 const uses = [
   Pickup,
@@ -35,6 +36,6 @@ const uses = [
   AddItem,
   GetItem,
   Give
-];
+] as const satisfies readonly (new () => Use)[];
 
 export default uses;

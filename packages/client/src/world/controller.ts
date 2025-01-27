@@ -272,14 +272,17 @@ export function getInteractablePhysicals(
 
   // nearby non-walkable items
   let nearbyObjects = physicals.filter((p) => !p.itemType.walkable);
-  if (nearbyObjects.length > 1) {
-    nearbyObjects = [getClosestPhysical(nearbyObjects, playerPos)];
-  }
+
+  // find distinct non-walkable objects next to player
+  let unique_nearbyObjects = nearbyObjects.filter(
+    (item, index, self) =>
+      index === self.findIndex((i) => i.itemType === item.itemType)
+  );
 
   // enforce unique items
   let interactableObjects = [
     ...onTopObjects,
-    ...nearbyObjects,
+    ...unique_nearbyObjects,
     ...nearbyOpenableObjects
   ];
   interactableObjects = interactableObjects.filter(

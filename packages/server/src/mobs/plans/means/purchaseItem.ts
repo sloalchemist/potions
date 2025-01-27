@@ -28,14 +28,15 @@ export class PurchaseItem implements Means {
       throw new Error('NPC has no position');
     }
     // If no potion is found on the ground, look for a potion stand
-    const potionStandTargetID = npc.findClosestObjectID(
+    const potionStandTargetID = npc.findNClosestObjectIDs(
       ['potion-stand'],
+      1,
       Infinity
     );
-    if (!potionStandTargetID) {
+    if (!potionStandTargetID || !potionStandTargetID[0]) {
       return Infinity;
     }
-    this.potionStandTarget = Item.getItem(potionStandTargetID)!;
+    this.potionStandTarget = Item.getItem(potionStandTargetID[0])!;
     const price = this.potionStandTarget.getAttribute<number>('price');
     const items = this.potionStandTarget.getAttribute<number>('items');
     if (npc.gold >= price && items > 0) {
