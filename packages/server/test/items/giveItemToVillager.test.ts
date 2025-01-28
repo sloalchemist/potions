@@ -11,7 +11,7 @@ beforeEach(() => {
   commonSetup();
   const alchemistVil = Community.makeVillage('alchemists', 'Alchemists guild');
   const silVil = Community.makeVillage('silverclaw', 'Village of Silverclaw');
-  Community.makeAlliance(alchemistVil, silVil)
+  Community.makeAlliance(alchemistVil, silVil);
   mobFactory.loadTemplates(world.mobTypes);
 });
 
