@@ -22,6 +22,7 @@ import {
 } from '../worldDescription';
 import { UxScene } from './uxScene';
 import { setGameState } from '../world/controller';
+import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -446,7 +447,7 @@ export class WorldScene extends Phaser.Scene {
     }
   }
 
-  showGameOver() {
+  showGameOver(scene: WorldScene) {
     let uxscene = this.scene.get('UxScene') as UxScene;
     uxscene.chatButtons?.clearButtonOptions();
 
@@ -458,18 +459,66 @@ export class WorldScene extends Phaser.Scene {
     text.setOrigin(0, 0);
     text.setScrollFactor(0); // Make it stay static
     text.setDepth(100);
+
+    this.time.delayedCall(RESPAWN_DELAY, () => {
+      const respawn = this.add.text(90, 200, 'RESPAWN', buttonStyle);
+        respawn.setOrigin(0, 0);
+        respawn.setScrollFactor(0);
+        respawn.setDepth(100);
+        respawn.setInteractive({ useHandCursor: true });
+
+        // Hover effects
+        respawn.on('pointerover', () => {
+          respawn.setStyle(nameButtonHoverStyle);
+        });
+        respawn.on('pointerout', () => {
+          respawn.setStyle(buttonStyle);
+        });
+
+        respawn.on('pointerdown', () => {
+          scene.resetToRespawn()
+        });
+    });
+    
+    this.time.delayedCall(RESPAWN_DELAY, () => {
+      const menu = this.add.text(290, 200, 'MENU', buttonStyle);
+        menu.setOrigin(0, 0);
+        menu.setScrollFactor(0);
+        menu.setDepth(100);
+        menu.setInteractive({ useHandCursor: true });
+
+        // Hover effects
+        menu.on('pointerover', () => {
+          menu.setStyle(nameButtonHoverStyle);
+        });
+        menu.on('pointerout', () => {
+          menu.setStyle(buttonStyle);
+        });
+
+        menu.on('pointerdown', () => {
+          scene.resetToLoadWorldScene();
+        });
+      });
   }
 
   /* Stop all scenes related to game play and go back to the LoadWordScene 
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
-    this.time.delayedCall(RESPAWN_DELAY, () => {
-      setGameState('uninitialized');
-      this.scene.stop('PauseScene');
-      this.scene.stop('WorldScene');
-      this.scene.stop('UxScene');
-      this.scene.stop('FrameScene');
-      this.scene.start('LoadWorldScene');
-    });
+    setGameState('uninitialized');
+    this.scene.stop('PauseScene');
+    this.scene.stop('WorldScene');
+    this.scene.stop('UxScene');
+    this.scene.stop('FrameScene');
+    this.scene.start('LoadWorldScene');
+  }
+
+  resetToRespawn() {
+    // TODO: respawn
+    setGameState('uninitialized');
+    this.scene.stop('PauseScene');
+    this.scene.stop('WorldScene');
+    this.scene.stop('UxScene');
+    this.scene.stop('FrameScene');
+    this.scene.start('LoadWorldScene');
   }
 }
