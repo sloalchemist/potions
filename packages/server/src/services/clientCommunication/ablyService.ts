@@ -71,6 +71,8 @@ export class AblyService implements PubSub {
       'kill_server',
       this.handleKillServer.bind(this)
     );
+    //TODO: estrada - subscribing to 'join' on the user membership channel
+    console.log("subscribing to \'join\' on the user membership channel")
     this.userMembershipChannel.subscribe(
       'join',
       this.handleUserJoin.bind(this),
@@ -120,9 +122,11 @@ export class AblyService implements PubSub {
     }
   }
 
+  //TODO: estrada - look here for where the message 
   private handleUserJoin(message: Types.Message): void {
     console.log('User joined', message.data);
     if (message.data.world === this.worldID) {
+      console.log('data.name:', message.data.name)
       this.userMembershipChannel.publish('serving', {
         name: message.data.name,
         world: this.worldID,

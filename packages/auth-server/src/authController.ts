@@ -41,12 +41,17 @@ const authController = async (req: Request, res: Response) => {
       const gold = data[0].gold;
 
       console.log('World:', world);
+      console.log('Health:', health);
+      console.log('Name:', name);
+      console.log('Gold:', gold);
       const publicCharacterId = username.substr(0, 8);
+      console.log('publicCharacterId:', publicCharacterId);
 
       // Notify that the player has joined the world
       userMembershipChannel.publish('join', {
-        id: publicCharacterId,
-        name: name,
+        //need to retain name key 
+        name: publicCharacterId,
+        p_name: name,
         health: health,
         appearance: appearance,
         world: world,
