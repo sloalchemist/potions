@@ -64,7 +64,7 @@ export class WorldScene extends Phaser.Scene {
     });
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
-    this.load.json('global_data', 'static/global.json');
+    this.load.json('global_data', 'static/base-world.json');
   }
 
   loadAnimations(

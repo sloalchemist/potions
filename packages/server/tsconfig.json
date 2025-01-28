@@ -13,6 +13,6 @@
     "lib": ["dom", "es2016", "esnext"],
     "types": ["node", "jest"]
   },
-  "include": ["src/**/*.ts", "test/**/*.ts", "data/global.json"],
+  "include": ["src/**/*.ts", "test/**/*.ts", "data/base-world.json"],
   "exclude": ["node_modules"]
 }
