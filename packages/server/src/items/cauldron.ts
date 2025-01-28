@@ -13,7 +13,6 @@ export class Cauldron {
   private constructor(item: Item) {
     this.item = item;
   }
-  // attributes: ingredients, current_potion (based of color addition)
 
   static fromItem(item: Item): Cauldron | undefined {
     if (
