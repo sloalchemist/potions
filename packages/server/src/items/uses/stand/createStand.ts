@@ -2,11 +2,16 @@ import { Use } from '../use';
 import { Item } from '../../item';
 import { Mob } from '../../../mobs/mob';
 import { Purchasable } from '../../purchasable';
+import { Create  } from '../createItem';
+
 
 export class CreateStand implements Use {
   key: string;
+  type: string;
+
   constructor() {
     this.key = 'create_stand';
+    this.type = 'potion-stand';
   }
 
   description(_mob: Mob, _item: Item): string {
@@ -14,6 +19,7 @@ export class CreateStand implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
-    return Purchasable.createStandFromItem(item, mob);
+
+    return Create.createItemFrom(item, mob, this.type);
   }
 }
