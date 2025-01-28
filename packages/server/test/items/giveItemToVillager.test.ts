@@ -10,8 +10,7 @@ import { Coord } from '@rt-potion/common';
 beforeEach(() => {
   commonSetup();
   const alchemistVil = Community.makeVillage('alchemists', 'Alchemists guild');
-  const silVil = Community.makeVillage('silverclaw', 
-                                        'Village of the Silverclaw');
+  const silVil = Community.makeVillage('silverclaw', 'Village of the Silverclaw');
   // One of the four alliances in the game
   Community.makeAlliance(alchemistVil, silVil)
   mobFactory.loadTemplates(world.mobTypes);
