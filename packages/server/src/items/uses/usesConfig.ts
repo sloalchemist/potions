@@ -2,7 +2,7 @@
 import { Pickup } from './pickup';
 import { Drop } from './drop';
 import { Smash } from './smash';
-import { Brew } from './cauldron/brew';
+import { BottlePotion } from './cauldron/bottlePotion';
 import { Drink } from './drink';
 import { Eat } from './eat';
 import { EnterPortal } from './enterPortal';
@@ -23,7 +23,7 @@ const uses = [
   Pickup,
   Drop,
   Smash,
-  Brew,
+  BottlePotion,
   Drink,
   Eat,
   EnterPortal,

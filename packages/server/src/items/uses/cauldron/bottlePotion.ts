@@ -3,7 +3,7 @@ import { Use } from '../use';
 import { Mob } from '../../../mobs/mob';
 import { Cauldron } from '../../cauldron';
 
-export class Brew implements Use {
+export class BottlePotion implements Use {
   key: string;
   constructor() {
     this.key = 'bottle_potion';

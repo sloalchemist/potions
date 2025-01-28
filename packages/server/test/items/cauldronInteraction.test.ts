@@ -5,7 +5,7 @@ import { Community } from '../../src/community/community';
 import { Item } from '../../src/items/item';
 import { AddIngredient } from '../../src/items/uses/cauldron/addIngredient';
 import { DumpCauldron } from '../../src/items/uses/cauldron/dumpCauldron';
-import { Brew } from '../../src/items/uses/cauldron/brew';
+import { BottlePotion } from '../../src/items/uses/cauldron/bottlePotion';
 import { Mob } from '../../src/mobs/mob';
 import { Coord } from '@rt-potion/common';
 import { hexStringToNumber } from '../../src/util/colorUtil';
@@ -195,7 +195,7 @@ describe('Brewing potions in the cauldron', () => {
     expect(testMob).not.toBeNull();
 
     //bottle potion
-    const testBottlePotion = new Brew();
+    const testBottlePotion = new BottlePotion();
     testBottlePotion.interact(testMob!, testCauldron!);
 
     //ensure cauldron is empty
@@ -236,7 +236,7 @@ describe('Brewing potions in the cauldron', () => {
     expect(testMob).not.toBeNull();
 
     //bottle potion
-    const testBottlePotion = new Brew();
+    const testBottlePotion = new BottlePotion();
     testBottlePotion.interact(testMob!, testCauldron!);
 
     //ensure cauldron is empty
@@ -322,7 +322,7 @@ describe('Brew and bottle a purple potion', () => {
     expect(standAfterSecond!.getAttribute('ingredients')).toBe(2);
 
     //bottle potion
-    const testBottlePotion = new Brew();
+    const testBottlePotion = new BottlePotion();
     testBottlePotion.interact(testMob!, testCauldron!);
 
     //ensure cauldron is empty
