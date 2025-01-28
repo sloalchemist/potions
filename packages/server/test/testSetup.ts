@@ -324,10 +324,6 @@ export const commonSetup = (worldSize: number = 2) => {
         id: 'blobs',
         name: 'Blobs',
         description: 'Blobs who run around the map and cause havoc'
-      },
-      { id: "silverclaw", 
-        name: "Village of the Silverclaw", 
-        description: "The Silverclaw Tribe, descendants of the silver-souled, known for their resilience and independence." 
       }
     ],
     alliances: [],
