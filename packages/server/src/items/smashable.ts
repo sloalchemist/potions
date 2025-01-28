@@ -36,7 +36,18 @@ export class Smashable {
     this.item.changeAttributeBy('health', amount);
     if (this.item.getAttribute<number>('health') <= 0) {
       this.destroySmashable();
+      this.item.destroy();
+      if (this.item.drops_item) {
+        this.dropItem(this.item, this.item.drops_item);
+      }
     }
+  }
+
+  dropItem(item: Item, droppedItem: string) {
+    itemGenerator.createItem({
+      type: droppedItem,
+      position: item.position
+    });
   }
 
   // Renamed function to capture smashables
@@ -61,6 +72,5 @@ export class Smashable {
         });
       }
     }
-    this.item.destroy();
   }
 }
