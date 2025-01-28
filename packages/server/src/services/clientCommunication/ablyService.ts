@@ -22,6 +22,7 @@ import { Mob } from '../../mobs/mob';
 import { mobFactory } from '../../mobs/mobFactory';
 import { conversationTracker } from '../../mobs/social/conversationTracker';
 import { gameWorld } from '../gameWorld/gameWorld';
+import { applyCheat } from '../developerCheats';
 
 export class AblyService implements PubSub {
   private ably: Ably.Realtime;
@@ -448,14 +449,7 @@ export class AblyService implements PubSub {
       if (!player) {
         throw new Error('no player found ' + username);
       }
-
-      // Check string for data
-      let cheat_code = data.action;
-      if (cheat_code == 'speed') {
-        player.changeSpeed(2, 30);
-      } else if (cheat_code == 'health') {
-        player.changeHealth(100);
-      }
+      applyCheat(player, data.action);
     });
   }
 }
