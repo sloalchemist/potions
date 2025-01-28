@@ -26,6 +26,7 @@ export interface ItemData {
   position_y: number;
   house_id?: string;
   lock?: string;
+  drops_item?: string; // i was here :3
 }
 
 export interface ItemAttributeData {
@@ -45,6 +46,7 @@ interface ItemParams {
   house?: House;
   attributes: Record<string, string | number>;
   carriedBy?: Mob;
+  drops_item?: string; //i was here :3
 }
 
 export class Item {
@@ -52,6 +54,7 @@ export class Item {
   public position?: Coord;
   public readonly itemType: ItemType;
   public readonly type: string;
+  public readonly drops_item;
   private attributes: ItemAttributes = {};
 
   public readonly owned_by?: string;
@@ -78,6 +81,7 @@ export class Item {
     this.subtype = subtype;
     this.house = house?.id;
     this.owned_by = ownedBy?.id;
+    this.drops_item = itemType.drops_item;
 
     for (const [key, value] of Object.entries(attributes)) {
       this.attributes[key] = value;

@@ -66,7 +66,8 @@ export const commonSetup = (worldSize: number = 2) => {
           }
         ],
         interactions: [],
-        walkable: false
+        walkable: false,
+        drops_item: 'log'
       },
       {
         name: 'Partial Wall',
@@ -86,7 +87,8 @@ export const commonSetup = (worldSize: number = 2) => {
             value: 1
           }
         ],
-        interactions: []
+        interactions: [],
+        drops_item: 'log'
       },
       {
         name: 'Basket',
@@ -239,7 +241,8 @@ export const commonSetup = (worldSize: number = 2) => {
             value: 100
           }
         ],
-        interactions: []
+        interactions: [],
+        drops_item: 'log'
       }
     ],
     mob_types: [
