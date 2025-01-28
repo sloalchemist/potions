@@ -30,7 +30,7 @@ export class Personality {
 
   normalizeTraits() {
     // Get all traits except 'immaturity' for normalization
-    const traits: PersonalityTraits[] = [
+    const traits = [
       'curiosity',
       'chitChatter',
       'openness',
@@ -43,7 +43,7 @@ export class Personality {
       'generous',
       'demanding',
       'negotiator'
-    ];
+    ] as const satisfies PersonalityTraits[];
 
     const traitsSQL = traits
       .map((trait) => `${trait} = ${trait} / (SELECT sum_val FROM total)`)
@@ -99,7 +99,7 @@ export class Personality {
     this.me = me;
 
     // Get all traits dynamically from the type union
-    const traits: PersonalityTraits[] = [
+    const traits = [
       'immaturity',
       'curiosity',
       'chitChatter',
@@ -113,7 +113,7 @@ export class Personality {
       'generous',
       'demanding',
       'negotiator'
-    ];
+    ] as const satisfies PersonalityTraits[];
     const columns = traits.join(', ');
     const placeholders = traits.map((trait) => `:${trait}`).join(', ');
 

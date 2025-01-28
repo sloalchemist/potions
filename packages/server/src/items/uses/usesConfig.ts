@@ -18,6 +18,7 @@ import { GetItem } from './container/getItem';
 import { Give } from './give';
 import { AddIngredient } from './cauldron/addIngredient';
 import { DumpCauldron } from './cauldron/dumpCauldron';
+import { Use } from './use';
 
 const uses = [
   Pickup,
@@ -39,6 +40,6 @@ const uses = [
   Give,
   AddIngredient,
   DumpCauldron
-];
+] as const satisfies readonly (new () => Use)[];
 
 export default uses;

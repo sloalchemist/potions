@@ -66,7 +66,7 @@ export function getRandomColor(): string {
     '#2980b9', // Ocean Blue
     '#8e44ad', // Violet
     '#16a085' // Teal Green
-  ];
+  ] as const satisfies readonly string[];
 
   const randomIndex = Math.floor(Math.random() * colors.length);
   return colors[randomIndex];
