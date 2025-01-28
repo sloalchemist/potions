@@ -6,25 +6,36 @@ import { Community } from '../../src/community/community';
 import { applyCheat } from '../../src/services/developerCheats';
 import { Coord } from '@rt-potion/common';
 
-beforeEach(() => {
-  commonSetup();
-  Community.makeVillage('alchemists', 'Alchemists guild');
-  mobFactory.loadTemplates(world.mobTypes);
-});
+describe('testing various developerCheats', () => {
+  let testMob: Mob;
 
-describe('testing various developerCheats', () => { 
-  test('speed up character', () => {
+  beforeEach(() => {
+    commonSetup();
+    Community.makeVillage('alchemists', 'Alchemists guild');
+    mobFactory.loadTemplates(world.mobTypes);
     const position: Coord = { x: 0, y: 0 };
     const mobId = 'testmob';
 
     mobFactory.makeMob('player', position, mobId, 'testPlayer');
-    const testMob = Mob.getMob(mobId);
-    
-    expect(testMob).toBeDefined();
+    testMob = Mob.getMob(mobId) as Mob;
+    jest.spyOn(testMob!, 'changeSpeed').mockImplementation(() => {});
+    jest.spyOn(testMob!, 'changeHealth').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test('call speed up character', () => {
     applyCheat(testMob!, 'speed');
     expect(testMob!.changeSpeed).toHaveBeenCalled();
   });
+
+  test('call change health', () => {
+    applyCheat(testMob!, 'health');
+    expect(testMob!.changeHealth).toHaveBeenCalled();
   });
+});
 
 afterEach(() => {
   DB.close();
