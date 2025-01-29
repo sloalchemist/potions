@@ -14,6 +14,10 @@ export class RaisePrice implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
+    if (!item.validateOwnership(mob)) {
+      return false;
+    }
+
     const stand = Purchasable.fromItem(item);
 
     if (!stand) {
