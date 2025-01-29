@@ -71,6 +71,6 @@ jobs:
 
       # 7. Terraform Apply (only applies on push to main, not on PR)
       - name: Terraform Apply
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      #if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         working-directory: ./.terraform-prod
         run: terraform apply -auto-approve -no-color
