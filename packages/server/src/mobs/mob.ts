@@ -373,51 +373,79 @@ export class Mob {
   }
 
 
-  changeSpeed(speedDelta: number, speedDuration: number): void {
-    // only change speed if no increase is already in progres
-    if (this.target_speed_tick === null || this.target_speed_tick === -1) {
-      this.speed += speedDelta;
-    }
-    this.target_speed_tick = this.current_tick + speedDuration;
-
-    // update the database
-    DB.prepare(
+  changeEffect(delta: number, duration: number, attribute: string): void {
+    // query db to see if speed is null / -1 yet, if not we add delta to current stat
+    const result = DB.prepare(
       `
-      UPDATE mobs
-      SET speed = :speed, target_speed_tick = :target_speed_tick
+      SELECT :attribute
       WHERE id = :id
       `
     ).run({
-      speed: this.speed,
-      target_speed_tick: this._target_speed_tick,
+      attribute: attribute,
       id: this.id
     });
 
-    pubSub.changeSpeed(this.id, speedDelta, this.speed);
-    pubSub.changeTargetSpeedTick(
-      this.id,
-      speedDuration,
-      this._target_speed_tick
-    );
+    console.log("changeEffect result:")
+    console.log(result)
+
+    // // only change speed if no increase is already in progres
+    // if (this.target_speed_tick === null || this.target_speed_tick === -1) {
+    //   this.speed += speedDelta;
+    // }
+    // this.target_speed_tick = this.current_tick + speedDuration;
+
+    // // update the database
+    // DB.prepare(
+    //   `
+    //   UPDATE mobs
+    //   SET speed = :speed, target_speed_tick = :target_speed_tick
+    //   WHERE id = :id
+    //   `
+    // ).run({
+    //   speed: this.speed,
+    //   target_speed_tick: this._target_speed_tick,
+    //   id: this.id
+    // });
+
+    // pubSub.changeSpeed(this.id, speedDelta, this.speed);
+    // pubSub.changeTargetSpeedTick(
+    //   this.id,
+    //   speedDuration,
+    //   this._target_speed_tick
+    // );
   }
 
-  private checkSpeedReset(speedDelta: number): void {
-    // check if target tick has been reached or is already null
-    if (
-      (this._target_speed_tick !== null || this._target_speed_tick === -1) &&
-      this.current_tick >= this._target_speed_tick
-    ) {
-      this.speed -= speedDelta;
-      this.target_speed_tick = -1;
-      DB.prepare(
-        `
-        UPDATE mobs
-        SET speed = :speed, target_speed_tick = :target_speed_tick
-        WHERE id = :id
-        `
-      ).run({ speed: this.speed, target_speed_tick: null, id: this.id });
-      pubSub.changeSpeed(this.id, -speedDelta, this.speed);
-    }
+  private checkTickReset(): void {
+    // query the db to get all potionTypes where target ticks that are equal to the current tick
+    const result = DB.prepare(
+      `
+      SELECT id, potionType
+      FROM mobEffects
+      WHERE id = :id AND targetTick = :targetTick
+      `
+    ).run({
+      id: this.id,
+      targetTick: this.current_tick
+    });
+
+    console.log("checkTickReset result:")
+    console.log(result)
+
+    // if (
+    //   (this._target_speed_tick !== null || this._target_speed_tick === -1) &&
+    //   this.current_tick >= this._target_speed_tick
+    // ) {
+    //   this.speed -= speedDelta;
+    //   this.target_speed_tick = -1;
+    //   DB.prepare(
+    //     `
+    //     UPDATE mobs
+    //     SET speed = :speed, target_speed_tick = :target_speed_tick
+    //     WHERE id = :id
+    //     `
+    //   ).run({ speed: this.speed, target_speed_tick: null, id: this.id });
+    //   pubSub.changeSpeed(this.id, -speedDelta, this.speed);
+    // }
   }
 
   getHouse(): House | undefined {
@@ -571,7 +599,6 @@ export class Mob {
       type: mob.action_type,
       position: { x: mob.position_x, y: mob.position_y },
       speed: mob.speed,
-      target_speed_tick: mob.target_speed_tick,
       gold: mob.gold,
       health: mob.health,
       maxHealth: mob.maxHealth,
@@ -660,9 +687,7 @@ export class Mob {
       this.setAction(action.type(), finished);
     }
 
-    // we need to check if the current tick matches the targetspeedtick for the mob (check speed reset)
-    this.checkSpeedReset(2);
-
+    this.checkTickReset();
     this.needs.tick();
   }
 
@@ -696,12 +721,12 @@ export class Mob {
         );
     `;
 
-    static effectsSQL = `
+  static effectsSQL = `
         CREATE TABLE mobEffects (
             id TEXT,
             potionType TEXT,
             targetTick INTEGER,
-            FOREIGN KEY (id) REFERENCES mobs(id) ON DELETE SET NULL 
+            FOREIGN KEY (id) REFERENCES mobs (id) ON DELETE SET NULL 
         );
     `;
 }
