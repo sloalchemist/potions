@@ -63,12 +63,14 @@ export class AblyService implements PubSub {
     });
 
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
+      this.sendPersistenceRequest(presenceMsg.clientId);
       this.checkConnectedClients();
       console.log(
         `Client left: ${presenceMsg.clientId}. Total connected: ${this.hasConnectedClients}`
       );
 
       const player = Mob.getMob(presenceMsg.clientId);
+      console.log("player when leaving:", player);
       player?.removePlayer();
     });
 
@@ -381,6 +383,34 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(mob_key, 'player_responses', { responses });
   }
 
+  /* Relay persistance request to the auth-server */
+  public sendPersistenceRequest(username: string) {
+    console.log("Updating state info for", username);
+      const player = Mob.getMob(username);
+      if (!player) {
+        throw new Error('no player found ' + username);
+      }
+      let health_for_update = player.health;
+      let gold_for_update = player.gold;
+      if (player.health <= 0){
+        //get default health to reset
+        health_for_update = mobFactory.getTemplate('player').health; 
+        gold_for_update = 0;  //reset gold to 0
+      }
+      console.log('\t Persist player health:', health_for_update);
+      console.log('\t Persist player gold:', gold_for_update);
+
+      // Update existing character data
+      const playerData: PlayerData = {
+        health: health_for_update,
+        name: player.name,
+        gold: gold_for_update,
+        appearance: ""
+      };
+      
+      this.sendPlayerData(player.id, playerData);
+  }
+
   public setupChannels(username: string, health: number, gold: number) {
     const playerChannelName = `${username}-${this.worldID}`;
     const playerChannel = this.ably.channels.get(playerChannelName);
@@ -472,30 +502,7 @@ export class AblyService implements PubSub {
 
     //TODO: estrada - subscribe to a new topic "update_state" that will call the auth-server update api with player info
     subscribeToPlayerChannel('update_state', (data) => {
-      console.log("Updating state info for", username);
-      const player = Mob.getMob(username);
-      if (!player) {
-        throw new Error('no player found ' + username);
-      }
-      let health_for_update = player.health;
-      let gold_for_update = player.gold;
-      if (player.health <= 0){
-        //get default health to reset
-        health_for_update = mobFactory.getTemplate('player').health; 
-        gold_for_update = 0;  //reset gold to 0
-      }
-      console.log('\t Persist player health:', health_for_update);
-      console.log('\t Persist player gold:', gold_for_update);
-
-      // Update existing character data
-      const playerData: PlayerData = {
-        health: health_for_update,
-        name: player.name,
-        gold: gold_for_update,
-        appearance: ""
-      };
-      
-      this.sendPlayerData(player.id, playerData);
+      this.sendPersistenceRequest(username);
     });
 
     

@@ -368,7 +368,12 @@ export class Mob {
     ).run({ health: newHealth, id: this.id });
     this._health = newHealth;
     pubSub.changeHealth(this.id, amount, this.health);
-    if (this.health <= 0) {
+    // TODO: estrada - need to stop removing mob from server db if it is the player
+    // so that the player info can be saved.
+    if (this.health <= 0 && this.type == 'player') {
+      this.destroy();
+    }
+    else if (this.health <= 0) {
       DB.prepare(
         `
                 DELETE FROM mobs
