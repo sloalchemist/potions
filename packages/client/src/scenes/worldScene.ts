@@ -5,7 +5,7 @@ import {
   initializePlayer,
   tick
 } from '../world/controller';
-import { bindAblyToWorldScene } from '../services/ablySetup';
+import { bindAblyToWorldScene, setupAbly } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
 import { Coord } from '@rt-potion/common';
 import { publicCharacterId } from '../worldMetadata';
@@ -511,12 +511,14 @@ export class WorldScene extends Phaser.Scene {
   }
 
   resetToRespawn() {
-    // TODO: respawn
-    setGameState('uninitialized');
-    this.scene.stop('PauseScene');
-    this.scene.stop('WorldScene');
-    this.scene.stop('UxScene');
-    this.scene.stop('FrameScene');
-    this.scene.start('LoadWorldScene');
+    setupAbly()
+      .then(() => {
+        this.scene.stop('WorldScene');
+        bindAblyToWorldScene(this);
+        this.scene.start('WorldScene');
+      })
+      .catch((_error) => {
+        console.error('Error setting up Ably');
+      });
   }
 }
