@@ -40,18 +40,15 @@ const authController = async (req: Request, res: Response) => {
       const appearance = data[0].appearance;
       const gold = data[0].gold;
 
-      console.log('World:', world);
-      console.log('Health:', health);
-      console.log('Name:', name);
-      console.log('Gold:', gold);
       const publicCharacterId = username.substr(0, 8);
-      console.log('publicCharacterId:', publicCharacterId);
 
       // Notify that the player has joined the world
       userMembershipChannel.publish('join', {
         //need to retain name key 
         name: publicCharacterId,
         p_name: name,
+        //TODO: estrada - need to think about the best course of action for getting a health of zero
+        // currently makes user invincible
         health: health,
         appearance: appearance,
         world: world,

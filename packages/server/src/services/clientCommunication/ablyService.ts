@@ -454,5 +454,26 @@ export class AblyService implements PubSub {
 
       player.setMoveTarget(target, false);
     });
+
+    //TODO: estrada - subscribe to a new topic "update_state" that will call the auth-server update api with player info
+    subscribeToPlayerChannel('update_state', (data) => {
+      console.log("Updating state info for", username);
+      const player = Mob.getMob(username);
+      if (!player) {
+        throw new Error('no player found ' + username);
+      }
+      let health_for_update = player.health;
+      let gold_for_update = player.gold;
+      if (player.health <= 0){
+        //get default health to reset
+        health_for_update = mobFactory.getTemplate('player').health; 
+        gold_for_update = 0;  //reset gold to 0
+      }
+      console.log('\t Persist player health:', health_for_update);
+      console.log('\t Persist player gold:', gold_for_update);
+      //TODO: ethan handelman -  add api call with player info
+    });
+
+    
   }
 }
