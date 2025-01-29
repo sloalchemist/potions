@@ -3,7 +3,6 @@ import { Item } from '../../item';
 import { Mob } from '../../../mobs/mob';
 import { Create  } from '../create';
 
-
 export class CreateStand implements Use {
   key: string;
   type: string;
