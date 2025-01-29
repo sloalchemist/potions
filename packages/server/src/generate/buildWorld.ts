@@ -8,12 +8,14 @@ import { createTables, loadDefaults } from './generateWorld';
 import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
-import globalData from '../../data/base_world.json';
+import { globalData } from '../../data/join_worlds';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
 
 async function main() {
+
+  console.log(globalData)
   // Build and save the knowledge graph
 
   // Initialize the server database

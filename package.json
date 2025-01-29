@@ -18,6 +18,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "json-merger": "^2.0.0",
     "rt-potion": "file:"
   }
 }
