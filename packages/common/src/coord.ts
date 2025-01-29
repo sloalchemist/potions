@@ -4,11 +4,10 @@ export type Coord = {
 };
 
 /**
- * Calculate the Euclidean distance between two coordinates.
- *
- * @param coord1 The first coordinate
- * @param coord2 The second coordinate
- * @returns The Euclidean distance between the two coordinates
+ * Calculates the distance between two coordinates.
+ * @param {Coord} coord1 - The first coordinate.
+ * @param {Coord} coord2 - The second coordinate.
+ * @returns {number} The distance between the two coordinates.
  */
 export function calculateDistance(coord1: Coord, coord2: Coord) {
   const dx = coord2.x - coord1.x;
@@ -34,61 +33,53 @@ function calculateAngle(coord1: Coord, coord2: Coord) {
 }
 
 /**
- * Move the coordinate by x and y step values
- *
- * @param coord The initial coordinate
- * @param x The step value to move in the x direction
- * @param y The step value to move in the y direction
- * @returns The new coordinate after moving
+ * Moves the coordinate by x and y step values.
+ * @param {Coord} coord - The coordinate to move.
+ * @param {number} x - The x step value.
+ * @param {number} y - The y step value.
+ * @returns {Coord} The new coordinate after moving.
  */
+// Move the coordinate by x and y step values
 export function step(coord: Coord, x: number, y: number) {
   return { x: coord.x + x, y: coord.y + y };
 }
 
 /**
- * Return a new coordinate with each component floored to the nearest integer.
- *
- * @param coord The coordinate to floor
- * @returns A new coordinate with floored x and y values
+ * Floors the x and y values of a coordinate.
+ * @param {Coord} coord - The coordinate to floor.
+ * @returns {Coord} The floored coordinate.
  */
-
+// Return the floor values of the coordinates
 export function floor(coord: Coord): Coord {
   return { x: Math.floor(coord.x), y: Math.floor(coord.y) };
 }
 
 /**
- * Return a new coordinate with each component rounded to the nearest integer.
- *
- * @param coord The coordinate to round
- * @returns A new coordinate with rounded x and y values
+ * Rounds the x and y values of a coordinate.
+ * @param {Coord} coord - The coordinate to round.
+ * @returns {Coord} The rounded coordinate.
  */
+// Return the rounded values of the coordinates
 export function round(coord: Coord): Coord {
   return { x: Math.round(coord.x), y: Math.round(coord.y) };
 }
 
 /**
- * Return a new coordinate with each component rounded up to the nearest integer.
- *
- * @param coord The coordinate to ceil
- * @returns A new coordinate with ceiled x and y values
+ * Ceils the x and y values of a coordinate.
+ * @param {Coord} coord - The coordinate to ceil.
+ * @returns {Coord} The ceiled coordinate.
  */
+// Return the ceiling values of the coordinates
 export function ceiling(coord: Coord): Coord {
   return { x: Math.ceil(coord.x), y: Math.ceil(coord.y) };
 }
 
 /**
- * Perform a normalized vector subtraction between two coordinates.
- *
- * This function calculates the difference between two coordinates
- * and normalizes the resulting vector, returning a vector with a
- * magnitude of 1.
- *
- * @param coord1 The first coordinate
- * @param coord2 The second coordinate
- * @returns A new coordinate representing the normalized vector
- *          from coord1 to coord2
+ * Normalized vector subtraction between two coordinates.
+ * @param {Coord} coord1 - The first coordinate.
+ * @param {Coord} coord2 - The second coordinate.
+ * @returns {Coord} The normalized coordinate.
  */
-
 export function normalizedSubtraction(coord1: Coord, coord2: Coord): Coord {
   const dx = coord1.x - coord2.x;
   const dy = coord1.y - coord2.y;
@@ -98,18 +89,11 @@ export function normalizedSubtraction(coord1: Coord, coord2: Coord): Coord {
 }
 
 /**
- * Add a vector scaled by magnitude to a coordinate.
- *
- * This function takes a coordinate, a vector, and a magnitude as inputs.
- * It first calculates the magnitude of the vector and then scales the
- * vector by the magnitude divided by the vector magnitude. Finally,
- * it adds the scaled vector to the origin coordinate and returns the
- * resulting coordinate.
- *
- * @param coord The coordinate to add the vector to
- * @param vector The vector to add
- * @param magnitude The magnitude to scale the vector by
- * @returns The coordinate after adding the scaled vector
+ * Adds a vector and magnitude to a coordinate.
+ * @param {Coord} coord - The coordinate.
+ * @param {Coord} vector - The vector to add.
+ * @param {number} magnitude - The magnitude of the vector.
+ * @returns {Coord} The new coordinate.
  */
 export function addVectorAndMagnitude(
   coord: Coord,
@@ -124,18 +108,11 @@ export function addVectorAndMagnitude(
 }
 
 /**
- * Get all coordinates within a given radius from a central coordinate.
- *
- * This function calculates all integer coordinates that lie within a 
- * specified radius from a given central coordinate. It floors the central 
- * coordinate and includes all points within the circle defined by the 
- * radius around the floored center.
- *
- * @param coord The central coordinate from which to calculate the radius
- * @param radius The radius within which to find coordinates
- * @returns An array of coordinates that are within the specified radius
+ * Gets the coordinates within a given radius.
+ * @param {Coord} coord - The center coordinate.
+ * @param {number} radius - The radius.
+ * @returns {Coord[]} The coordinates within the radius.
  */
-
 export function getCoordinatesWithinRadius(
   coord: Coord,
   radius: number
@@ -159,21 +136,12 @@ export function getCoordinatesWithinRadius(
 }
 
 /**
- * Move along a path and update the position and angle of the entity.
- *
- * This function takes a start position, a path, a speed, and a deltaTime as inputs.
- * It then moves the entity along the path by the specified speed and time, and returns
- * the new position and angle of the entity.
- *
- * The function will follow the path until it has exhausted all points in the path.
- * It will also return the angle of the entity after moving, which can be used to
- * update the entity's sprite.
- *
- * @param start The starting position of the entity
- * @param path The path to follow
- * @param speed The speed at which to move the entity
- * @param deltaTime The amount of time to move the entity
- * @returns The new position and angle of the entity after moving
+ * Follows a path with a given speed and delta time.
+ * @param {Coord} start - The starting coordinate.
+ * @param {Coord[]} path - The path to follow.
+ * @param {number} speed - The speed of movement.
+ * @param {number} deltaTime - The delta time.
+ * @returns {[Coord, number]} The new position and angle.
  */
 export function followPath(
   start: Coord,
@@ -184,7 +152,6 @@ export function followPath(
   let newPosition = { x: start.x, y: start.y };
   let angle = 0;
   while (path.length > 0) {
-    //console.log(`tick path: ${JSON.stringify(this.path)} position: ${JSON.stringify(this.position)} currentTarget: ${JSON.stringify(this.path[0])}`);
     const currentTarget = path[0];
     const distance = calculateDistance(newPosition, currentTarget);
     angle = calculateAngle(newPosition, currentTarget);
@@ -193,7 +160,6 @@ export function followPath(
     const velocityY = Math.sin(angle) * speed;
 
     const distanceToMove = speed * (deltaTime / 1000);
-    //console.log('distanceToMove', distanceToMove, distance, this.speed, deltaTime, velocityX, velocityY);
     if (distanceToMove >= distance) {
       // Move to the current target and remove it from the path
       newPosition = { x: currentTarget.x, y: currentTarget.y };
