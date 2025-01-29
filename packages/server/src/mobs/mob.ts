@@ -708,4 +708,13 @@ export class Mob {
             FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE SET NULL
         );
     `;
+
+    static effectsSQL = `
+        CREATE TABLE mobEffects (
+            id TEXT,
+            start_tick INTEGER,
+            end_tick INTEGER,
+            FOREIGN KEY (id) REFERENCES mobs(id) ON DELETE SET NULL 
+        );
+    `;
 }
