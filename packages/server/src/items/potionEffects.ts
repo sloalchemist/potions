@@ -10,7 +10,9 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
     console.log('Drinking red potion');
     mob.changeHealth(50);
     return true;
-  } else if (numberToHexString(Number(potionType)) === '#0000ff') {
+  } 
+  
+  else if (numberToHexString(Number(potionType)) === '#0000ff') {
     console.log('Drinking blue potion');
     const speedDelta = 2;
     const speedDuration = 30;

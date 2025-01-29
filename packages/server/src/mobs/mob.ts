@@ -35,7 +35,6 @@ export type MobData = {
   current_action: string;
   carrying_id: string;
   community_id: string;
-  target_speed_tick: number;
 };
 
 interface MobParams {
@@ -49,7 +48,6 @@ interface MobParams {
   maxHealth: number;
   attack: number;
   community_id: string;
-  target_speed_tick: number;
   subtype: string;
   currentAction?: string;
   carrying?: string;
@@ -69,7 +67,6 @@ export class Mob {
   private target?: Coord;
   private path: Coord[];
   private speed: number;
-  private target_speed_tick: number;
   private _name: string;
   private maxHealth: number;
   private _carrying?: string;
@@ -89,7 +86,6 @@ export class Mob {
     type,
     position,
     speed,
-    target_speed_tick,
     gold,
     health,
     maxHealth,
@@ -112,7 +108,6 @@ export class Mob {
     this.target = target;
     this._position = position;
     this.speed = speed;
-    this.target_speed_tick = target_speed_tick;
     this._gold = gold;
     this._health = health;
     this.maxHealth = maxHealth;
@@ -169,10 +164,6 @@ export class Mob {
 
   get _speed(): number {
     return this.speed;
-  }
-
-  get _target_speed_tick(): number {
-    return this.target_speed_tick;
   }
 
   get current_tick(): number {
@@ -381,9 +372,6 @@ export class Mob {
     }
   }
 
-  changeTargetSpeedTick(target_tick: number): void {
-    this.target_speed_tick = target_tick;
-  }
 
   changeSpeed(speedDelta: number, speedDuration: number): void {
     // only change speed if no increase is already in progres
@@ -702,7 +690,6 @@ export class Mob {
             social INTEGER NOT NULL DEFAULT 100,
             community_id TEXT,
             house_id TEXT,
-            target_speed_tick INTEGER,
             FOREIGN KEY (carrying_id) REFERENCES items (id) ON DELETE SET NULL,
             FOREIGN KEY (community_id) REFERENCES community (id) ON DELETE SET NULL,
             FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE SET NULL
@@ -712,8 +699,8 @@ export class Mob {
     static effectsSQL = `
         CREATE TABLE mobEffects (
             id TEXT,
-            start_tick INTEGER,
-            end_tick INTEGER,
+            potionType TEXT,
+            targetTick INTEGER,
             FOREIGN KEY (id) REFERENCES mobs(id) ON DELETE SET NULL 
         );
     `;
