@@ -2636,12 +2636,6 @@
             "smashable": true,
             "interactions": [
                 {
-                    "description": "Brew red potion",
-                    "action": "brew",
-                    "while_carried": true,
-                    "requires_item": "cauldron"
-                },
-                {
                     "description": "Eat",
                     "action": "eat",
                     "while_carried": true
