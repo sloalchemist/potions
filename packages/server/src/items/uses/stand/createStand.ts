@@ -18,7 +18,6 @@ export class CreateStand implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
-
     return Create.createItemFrom(item, mob, this.type);
   }
 }
