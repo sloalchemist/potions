@@ -1,14 +1,14 @@
 const API_BASE_URL = 'http://localhost:3000';
 
 
-interface PlayerData {
+export interface PlayerData {
   health: number;
   name: string;
   gold: number;
   appearance: string;
 }
 
-interface ApiResponse {
+export interface ApiResponse {
   message: string;
   data: PlayerData[];
 }

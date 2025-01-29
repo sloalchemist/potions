@@ -22,6 +22,11 @@ import { Mob } from '../../mobs/mob';
 import { mobFactory } from '../../mobs/mobFactory';
 import { conversationTracker } from '../../mobs/social/conversationTracker';
 import { gameWorld } from '../gameWorld/gameWorld';
+import {
+  PlayerData,
+  ApiResponse,
+  updateCharacterData
+} from "../authMarshalling";
 
 export class AblyService implements PubSub {
   private ably: Ably.Realtime;
@@ -111,6 +116,16 @@ export class AblyService implements PubSub {
       }
       this.hasConnectedClients = members!.length > 0;
     });
+  }
+
+  private async sendPlayerData(id: string, data: PlayerData) {
+    try {
+      const result = await updateCharacterData(id, data);
+      console.log(result.message);  // "Player data upserted successfully."
+      console.log(result.data);     // Updated player data array
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   private handleKillServer(message: Types.Message): void {
@@ -471,7 +486,16 @@ export class AblyService implements PubSub {
       }
       console.log('\t Persist player health:', health_for_update);
       console.log('\t Persist player gold:', gold_for_update);
-      //TODO: ethan handelman -  add api call with player info
+
+      // Update existing character data
+      const playerData: PlayerData = {
+        health: health_for_update,
+        name: player.name,
+        gold: gold_for_update,
+        appearance: ""
+      };
+      
+      this.sendPlayerData(player.id, playerData);
     });
 
     
