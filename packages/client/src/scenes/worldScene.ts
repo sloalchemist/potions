@@ -478,9 +478,7 @@ export class WorldScene extends Phaser.Scene {
       respawn.on('pointerdown', () => {
         scene.resetToRespawn();
       });
-    });
 
-    this.time.delayedCall(RESPAWN_DELAY, () => {
       const menu = this.add.text(290, 200, 'MENU', buttonStyle);
       menu.setOrigin(0, 0);
       menu.setScrollFactor(0);
