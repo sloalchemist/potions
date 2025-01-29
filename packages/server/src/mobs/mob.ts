@@ -374,62 +374,79 @@ export class Mob {
 
 
   changeEffect(delta: number, duration: number, attribute: string): void {
-    // query db to see if speed is null / -1 yet, if not we add delta to current stat
+    // query db to see if tick for given attribute is set, if not we add delta to current stat
+    // type QueryResult = Record<string, number>; // Key is a string, value is a number
+    let value = 0;
+
+    // if we are grabbing the target tick but a transaction doesn't already exist past the current tick,
+    // then we know we can increase the value. if a transaction does have a target tick past or equal to
+    // the target tick, then we don't increase the value of that attribute. so we need to check if the
+    // initial query returns a value, or something undefined (ask deepseek)
     const result = DB.prepare(
       `
-      SELECT :attribute
-      WHERE id = :id
+      SELECT ${attribute}, targetTick
+      FROM mobEffects
+      WHERE id = :id AND targetTick >= :targetTick
       `
-    ).run({
-      attribute: attribute,
-      id: this.id
-    });
+    ).get({
+      id: this.id,
+      targetTick: this.current_tick
+    }); // as QueryResult;
 
     console.log("changeEffect result:")
     console.log(result)
 
+    // if (result && typeof result[attribute] === 'number') {
+    //   let tick = result[attribute] as number; // Safely cast to number
+
     // // only change speed if no increase is already in progres
-    // if (this.target_speed_tick === null || this.target_speed_tick === -1) {
-    //   this.speed += speedDelta;
+    // if (tick === null || tick === -1) {
+    //   switch(attribute) {
+    //     case 'speed':
+    //       this.speed += delta;
+    //       value = this.speed;
+    //   }
     // }
-    // this.target_speed_tick = this.current_tick + speedDuration;
 
     // // update the database
     // DB.prepare(
     //   `
     //   UPDATE mobs
-    //   SET speed = :speed, target_speed_tick = :target_speed_tick
+    //   SET ${attribute} = :value,
     //   WHERE id = :id
     //   `
     // ).run({
-    //   speed: this.speed,
-    //   target_speed_tick: this._target_speed_tick,
+    //   value: value,
     //   id: this.id
     // });
 
-    // pubSub.changeSpeed(this.id, speedDelta, this.speed);
-    // pubSub.changeTargetSpeedTick(
+    // pubSub.changeEffect(this.id, attribute, delta, value);
+    // pubSub.changeTargetTick(
     //   this.id,
-    //   speedDuration,
-    //   this._target_speed_tick
+    //   duration,
+    //   tick
     // );
   }
 
   private checkTickReset(): void {
-    // query the db to get all potionTypes where target ticks that are equal to the current tick
+    // query the db to get all potionTypes where target ticks are equal to the current tick
+    // gather data, handle case where nothing is returned. if no ticks are up, we return, otherwise
+    // we adjust the actual value of the attribute back to its base (need logic for this?)
     const result = DB.prepare(
       `
       SELECT id, potionType
       FROM mobEffects
       WHERE id = :id AND targetTick = :targetTick
       `
-    ).run({
+    ).all({
       id: this.id,
       targetTick: this.current_tick
     });
 
-    console.log("checkTickReset result:")
-    console.log(result)
+    if (result.length != 0) {
+      console.log("checkTickReset result:")
+      console.log(result)
+    }
 
     // if (
     //   (this._target_speed_tick !== null || this._target_speed_tick === -1) &&
@@ -585,7 +602,7 @@ export class Mob {
   static getMob(key: string): Mob | undefined {
     const mob = DB.prepare(
       `
-            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id, target_speed_tick
+            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id
             FROM mobs
             WHERE id = :id
         `

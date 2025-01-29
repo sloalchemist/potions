@@ -221,18 +221,18 @@ export class AblyService implements PubSub {
     });
   }
 
-  public changeSpeed(key: string, speed: number, newValue: number): void {
-    if (newValue == undefined || key == undefined || speed == undefined) {
+  public changeEffect(key: string, attribute: string, delta: number, newValue: number): void {
+    if (newValue == undefined || key == undefined || delta == undefined) {
       throw new Error(
-        `Sending invalid changeSpeed message ${key}, ${speed}, ${newValue}`
+        `Sending invalid changeEffect message ${key}, ${attribute}, ${delta}, ${newValue}`
       );
     }
     this.addToBroadcast({
       type: 'mob_change',
       data: {
         id: key,
-        property: 'speed',
-        delta: speed,
+        property: attribute,
+        delta: delta,
         new_value: newValue
       }
     });
