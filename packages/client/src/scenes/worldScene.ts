@@ -511,10 +511,10 @@ export class WorldScene extends Phaser.Scene {
   }
 
   resetToRespawn() {
+    this.scene.stop('WorldScene');
+
     setupAbly()
       .then(() => {
-        this.scene.stop('WorldScene');
-        bindAblyToWorldScene(this);
         this.scene.start('WorldScene');
       })
       .catch((_error) => {
