@@ -8,17 +8,15 @@ import { createTables, loadDefaults } from './generateWorld';
 import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
-// import globalData from '../../data/global.json'
-import { globalData } from '../../data/join_worlds';
+
+import globalData from '../../data/global.json';
+import worldSpecificData from '../../data/world_specific.json';
+
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
 
 async function main() {
-
-  console.log(globalData)
-  // Build and save the knowledge graph
-
   // Initialize the server database
   await initializeServerDatabase('data/server-data.db', true);
 
@@ -33,18 +31,24 @@ async function main() {
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
-  const globalDescription: ServerWorldDescription =
-    globalData as ServerWorldDescription;
-  initializeGameWorld(new ServerWorld(globalDescription));
+  const globalDescription = globalData as ServerWorldDescription;
+  const specificDescription = worldSpecificData as Partial<ServerWorldDescription>;
 
-  const socialWorld = buildGraphFromWorld(globalDescription);
+  const worldDescription: ServerWorldDescription = {
+    ...globalDescription,
+    ...specificDescription
+  }
+
+  initializeGameWorld(new ServerWorld(worldDescription));
+
+  const socialWorld = buildGraphFromWorld(worldDescription);
   const graph = constructGraph(socialWorld);
   initializeKnowledgeDB('data/knowledge-graph.db', true);
   await buildGraph(graph);
 
   // Create tables and load defaults
   await createTables();
-  await loadDefaults(globalDescription);
+  await loadDefaults(worldDescription);
 
   console.log('Script finished successfully');
   process.exit(0);
