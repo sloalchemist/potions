@@ -1,46 +1,44 @@
 import readline from 'readline';
 import { mobFactory } from '../src/mobs/mobFactory';
 import globalData from '../data/global.json';
-// import { itemGenerator } from "../src/items/itemGenerator";
+import { itemGenerator } from '../src/items/itemGenerator';
+import { Coord } from '@rt-potion/common';
 
 const itemTypes: Array<string> = globalData.item_types.map((item) => item.type);
 const mobTypes: Array<string> = globalData.mob_types.map((mob) => mob.type);
 
-// Setup `readline` for interactive CLI
+const HELP_PROMPT = `Available commands:
+- spawn mob [type] x:[x-coord] y:[y-coord]
+- spawn item [type] x:[x-coord] y:[y-coord]
+- exit: Quit CLI`;
+
+// setup `readline` for interactive CLI
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
-  prompt: 'game-server> '
+  prompt: 'potions-server> '
 });
 
+// callback for handling CLI commands
 const handleCliCommand = (input: string) => {
   const [command, entityType, name, ...args] = input.trim().split(' ');
-  console.log(input);
   if (input.trim() === 'exit') {
     rl.close();
     return;
   } else if (input.trim() === 'help') {
-    console.log(`
-Available commands:
-- spawn mob [type] x:[x-coord] y:[y-coord]
-- spawn item [type] count:[number]
-- exit: Quit CLI
-    `);
+    console.log(HELP_PROMPT);
   } else if (command === 'spawn') {
     const attributes: Record<string, string | number> = {};
     args.forEach((arg) => {
       const [key, value] = arg.split(':');
       attributes[key] = isNaN(Number(value)) ? value : Number(value);
     });
-    console.log('args', args);
-    console.log('name', name);
-    console.log('attributes', attributes);
-    console.log('entityType', entityType);
+    const { x, y } = attributes;
 
     switch (entityType) {
       case 'mob':
         if (mobTypes.includes(name)) {
-          const { x, y } = attributes;
+          // spawn the mob at the given position
           mobFactory.makeMob(name, { x: x as number, y: y as number });
 
           console.log(`Spawned mob: ${name} at (${x}, ${y})`);
@@ -50,13 +48,30 @@ Available commands:
         break;
       case 'item':
         if (itemTypes.includes(name)) {
-          const { count } = attributes;
-          // add spawn item logic
-          console.log(`Spawned ${count}x ${entityType}`);
+          const attributes: Record<string, string | number> = {};
+          const item = globalData.item_types.find((item) => item.type === name);
+          if (item) {
+            if (item.attributes) {
+              item.attributes.forEach((attr) => {
+                attributes[attr.name] = attr.value;
+              });
+            }
+
+            // spawn the item
+            itemGenerator.createItem({
+              type: name,
+              position: { x: x as number, y: y as number } as Coord,
+              attributes: attributes
+            });
+          }
+
+          console.log(`Spawned item: ${name} at (${x}, ${y})`);
         } else {
           console.log('Unknown entity type.');
         }
         break;
+      default:
+        console.log("Invalid entity type. Spawn either 'mob' or 'item'.");
     }
   } else {
     console.log("Invalid command. Type 'help' for available commands.");
@@ -66,13 +81,13 @@ Available commands:
 };
 
 rl.on('close', () => {
-  console.log('Exiting CLI. Game server still running.');
+  console.log('Exiting CLI. Potions server still running.');
 });
 
 export const startCli = () => {
-  console.log('Game server running...');
+  console.log('Potions server running...');
 
-  console.log("Game Cheat CLI enabled. Type 'help' for commands.");
+  console.log("Potions Cheat CLI enabled. Type 'help' for commands.");
   rl.prompt();
 
   rl.on('line', handleCliCommand);

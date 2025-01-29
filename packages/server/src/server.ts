@@ -1,5 +1,5 @@
 import { worldTimer } from './services/setup';
-import { startCli } from '../cli/index';
+import { startCli } from '../cli/cheatHandler';
 
 setInterval(worldTimer, 500);
 
