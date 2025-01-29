@@ -70,7 +70,9 @@ export class Community {
           SELECT 
               community_1_id, community_2_id
           FROM alliances
-          WHERE alliances.community_1_id = :id_1 AND alliances.community_2_id = :id_2
+          WHERE 
+            (alliances.community_1_id = :id_1 AND alliances.community_2_id = :id_2) OR
+            (alliances.community_1_id = :id_2 AND alliances.community_2_id = :id_1)
       `
     ).get({ id_1: id_1, id_2: id_2 }) as { id_1: string; id_2: string };
 
