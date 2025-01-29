@@ -181,7 +181,7 @@ resource "render_web_service" "potions_auth" {
         paths         = ["src/**"]
         ignored_paths = ["tests/**"]
       }
-      repo_url = "https://github.com/AlfredMadere/potions-testing"
+      repo_url = "https://github.com/sloalchemist/potions"
       runtime  = "node"
     }
   }
