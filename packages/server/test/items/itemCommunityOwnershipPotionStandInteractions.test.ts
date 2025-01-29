@@ -11,7 +11,7 @@ import { Coord } from '@rt-potion/common';
 beforeEach(() => {
   commonSetup();
   Community.makeVillage('alchemists', 'Alchemists guild');
-  Community.makeVillage('blacksmiths', 'Blacksmith guild');
+  Community.makeVillage('silverclaw', 'Blacksmith guild');
   mobFactory.loadTemplates(world.mobTypes);
 });
 
@@ -30,7 +30,8 @@ describe('Potion Stand Ownership Tests', () => {
         position: standPosition,
         attributes: {
           templateType: 'potion',
-          ownedBy: 'blacksmiths'
+          items: 0,
+          capacity: 20
         },
       });
       const standID = Item.getItemIDAt(standPosition);
@@ -40,18 +41,15 @@ describe('Potion Stand Ownership Tests', () => {
       expect(potionStand).toBeDefined();
 
       // Create a Blacksmith community player
-      mobFactory.makeMob('player', playerPosition, 'BlacksmithID', 'BlacksmithPlayer', 'blacksmiths');
+      mobFactory.makeMob('villager', playerPosition, 'BlacksmithID', 'BlacksmithPlayer');
       const blacksmithPlayer = Mob.getMob('BlacksmithID');
       console.log(`Blacksmith Player Community ID: ${blacksmithPlayer?.community_id}`); // debug
-      //console.log('Alchemist Community:', alchemistPlayer!.community_id);
-
-
       expect(blacksmithPlayer).toBeDefined();
       expect(blacksmithPlayer!.carrying).toBeUndefined();          
-      expect(blacksmithPlayer!.community_id).toBe('blacksmiths');
+      expect(blacksmithPlayer!.community_id).toBe('silverclaw');
 
        // Create an Alchemist community player
-       mobFactory.makeMob('player', playerPosition, 'AlchemistID', 'AlchemistPlayer', 'alchemists');
+      mobFactory.makeMob('player', playerPosition, 'AlchemistID', 'AlchemistPlayer');
       const alchemistPlayer = Mob.getMob('AlchemistID');
       expect(alchemistPlayer).toBeDefined();
       expect(alchemistPlayer!.carrying).toBeUndefined(); 
@@ -75,10 +73,10 @@ describe('Potion Stand Ownership Tests', () => {
       // Verify Blacksmith is not carrying anything
       expect(blacksmithPlayer!.carrying).toBeUndefined();
 
-      // Blacksmith retrieves the potion from the stand
+      // Blacksmith successfully retrieves the potion from the stand
       const retrievePotion = new GetItem();
       const resultBlacksmith = retrievePotion.interact(blacksmithPlayer!, potionStand!);
-      expect(resultBlacksmith).toBe(true); // success since blacksmith owns stand
+      expect(resultBlacksmith).toBe(true);
 
       // Verify the stand is empty
       expect(potionStand!.getAttribute('items')).toBe(0);
@@ -97,10 +95,10 @@ describe('Potion Stand Ownership Tests', () => {
       // Verify Blacksmith is not carrying anything
       expect(blacksmithPlayer!.carrying).toBeUndefined();
 
-      // Alchemist tries to retrieve potion (fail)
+      // Alchemist fails to retrieve potion (since Blacksmith owns stand)
       const retrievePotionAlchemist = new GetItem();
       const resultAlchemist = retrievePotionAlchemist.interact(alchemistPlayer!, potionStand!);
-      expect(resultAlchemist).toBe(false); // fail since blacksmith owns stand
+      expect(resultAlchemist).toBe(false); // fix
     });
   });
 });
