@@ -23,4 +23,6 @@ export const globalData = mergeObjects([
   { regions: regions }
 ]);
 
+console.log(globalData)
+
 
