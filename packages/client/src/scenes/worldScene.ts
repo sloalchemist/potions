@@ -22,6 +22,7 @@ import {
 } from '../worldDescription';
 import { UxScene } from './uxScene';
 import { setGameState } from '../world/controller';
+import { send } from 'process';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -44,6 +45,8 @@ export class WorldScene extends Phaser.Scene {
   terrainWidth: number = 0;
   terrainHeight: number = 0;
   nightOpacity: number = 0;
+  lastWASDMove: Date = new Date();
+  lastWASDKeyPressed: string = '';
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -396,44 +399,52 @@ export class WorldScene extends Phaser.Scene {
       }
 
       const player = world.mobs[publicCharacterId];
+      let newX = player.position?.x;
+      let newY = player.position?.y;
+
+      // const curTime = new Date();
+      // // amount of milliseconds allowed between sending movement
+      // const allowedDuration = 100;
+
+      // console.log(`time diff = ${curTime.getTime() - this.lastWASDMove.getTime()}`);
+      // console.log(`${curTime.getTime() - this.lastWASDMove.getTime() < allowedDuration}`);
+      // check if enough time has passed to send movement to server
+      // if (
+      //   Math.abs(curTime.getTime() - this.lastWASDMove.getTime()) < allowedDuration &&
+      //   this.lastWASDKeyPressed == event.code
+      // ) {
+      //   console.log('too big');
+      //   return;
+      // }
+      // this.lastWASDMove = curTime;
+      // this.lastWASDKeyPressed = event.code;
 
       if (event.code == 'KeyW') {
         // move up
         if (player.position !== null) {
-          publishPlayerPosition({
-            x: player.position.x,
-            y: player.position.y - 1
-          });
-          console.log('x:', player.position.x, 'y:', player.position.y - 1);
-        }
-      } else if (event.code == 'KeyS') {
-        // move down
-        if (player.position !== null) {
-          publishPlayerPosition({
-            x: player.position.x,
-            y: player.position.y + 1
-          });
-          console.log('x:', player.position.x, 'y:', player.position.y + 1);
-        }
-      } else if (event.code == 'KeyA') {
-        // move left
-        if (player.position !== null) {
-          publishPlayerPosition({
-            x: player.position.x - 1,
-            y: player.position.y
-          });
-          console.log('x:', player.position.x - 1, 'y:', player.position.y);
-        }
-      } else if (event.code == 'KeyD') {
-        // move right
-        if (player.position !== null) {
-          publishPlayerPosition({
-            x: player.position.x + 1,
-            y: player.position.y
-          });
-          console.log('x:', player.position.x + 1, 'y:', player.position.y);
+          if (newY) newY = Math.ceil(newY - 1);
         }
       }
+      if (event.code == 'KeyS') {
+        // move down
+        if (player.position !== null) {
+          if (newY) newY = Math.ceil(newY + 1);
+        }
+      }
+      if (event.code == 'KeyA') {
+        // move left
+        if (player.position !== null) {
+          if (newX) newX = Math.ceil(newX - 1);
+        }
+      }
+      if (event.code == 'KeyD') {
+        // move right
+        if (player.position !== null) {
+          if (newX) newX = Math.ceil(newX + 1);
+        }
+      }
+      console.log('x:', newX, 'y:', newY);
+      if (newX && newY) publishPlayerPosition({ x: newX, y: newY });
     });
 
     needsAnimationsLoaded = false;
