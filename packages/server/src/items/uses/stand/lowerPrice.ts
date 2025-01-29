@@ -14,7 +14,7 @@ export class LowerPrice implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
-    if (!item.validateOwnership(mob)) {
+    if (!item.validateOwnership(mob, this.key)) {
       return false;
     }
 

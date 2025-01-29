@@ -381,15 +381,16 @@ export class Item {
    * Checks if the given mob has permission to interact with this item.
    * Logs a warning if the mob is unauthorized.
    * @param mob The mob attempting the interaction.
+   * @param interaction The interaction attempted.
    * @returns True if the mob is authorized, false otherwise.
    */
-  validateOwnership(mob: Mob): boolean {
+  validateOwnership(mob: Mob, interaction: string): boolean {
     // console.log(`${item.type} belongs to ${item.owned_by}`);
     // if no one owns the item or if the mob owns it, return true
-    if (!this.owned_by || mob.community_id === this.owned_by) return true;
+    if (!this.owned_by || mob.community_id != this.owned_by) return true;
     console.warn(
-      `Mob ${mob.id} from community ${mob.community_id} is not authorized
-       to interact with ${this.type} owned by ${this.owned_by}`
+      `Mob ${mob.name} (${mob.id}) from ${mob.community_id} community is not authorized ` +
+      `to ${interaction} from ${this.type} owned by ${this.owned_by}`
     );
     return false;
   }
