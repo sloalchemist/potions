@@ -1,10 +1,10 @@
 terraform {
   cloud {
 
-    organization = "potions-369"
+    organization = "cal-poly-potions-369"
 
     workspaces {
-      name = "potion-infra"
+      name = "potions-369"
     }
   }
   required_providers {
@@ -207,3 +207,4 @@ resource "github_actions_variable" "server_url" {
   variable_name = "SERVER_URL"
   value         = render_web_service.potions_auth.url
 }
+
