@@ -51,26 +51,26 @@ jobs:
   
       # 3. Terraform Init
       - name: Terraform Init
-        working-directory: ./terraform
+        working-directory: ./.terraform-prod
         run: terraform init
 
       # 4. Terraform Format Check (fails CI if formatting is off)
       - name: Terraform Format
-        working-directory: ./terraform
+        working-directory: ./.terraform-prod
         run: terraform fmt -check
 
       # 5. Terraform Validate (checks syntax and basic config)
       - name: Terraform Validate
-        working-directory: ./terraform
+        working-directory: ./.terraform-prod
         run: terraform validate
 
       # 6. Terraform Plan (shows changes)
       - name: Terraform Plan
-        working-directory: ./terraform
+        working-directory: ./.terraform-prod
         run: terraform plan -no-color
 
       # 7. Terraform Apply (only applies on push to main, not on PR)
       - name: Terraform Apply
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        working-directory: ./terraform
+        working-directory: ./.terraform-prod
         run: terraform apply -auto-approve -no-color
