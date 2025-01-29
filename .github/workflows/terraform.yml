@@ -22,6 +22,7 @@ jobs:
   terraform:
     name: Terraform Deploy
     runs-on: ubuntu-latest
+    environment: prod
 
     env:
       TF_VAR_project_name: ${{ vars.SUPABASE_PROJECT_NAME }}  
@@ -50,26 +51,26 @@ jobs:
   
       # 3. Terraform Init
       - name: Terraform Init
-        working-directory: ./prod-terraform
+        working-directory: ./terraform
         run: terraform init
 
       # 4. Terraform Format Check (fails CI if formatting is off)
       - name: Terraform Format
-        working-directory: ./prod-terraform
+        working-directory: ./terraform
         run: terraform fmt -check
 
       # 5. Terraform Validate (checks syntax and basic config)
       - name: Terraform Validate
-        working-directory: ./prod-terraform
+        working-directory: ./terraform
         run: terraform validate
 
       # 6. Terraform Plan (shows changes)
       - name: Terraform Plan
-        working-directory: ./prod-terraform
+        working-directory: ./terraform
         run: terraform plan -no-color
 
       # 7. Terraform Apply (only applies on push to main, not on PR)
       - name: Terraform Apply
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        working-directory: ./prod-terraform
+        working-directory: ./terraform
         run: terraform apply -auto-approve -no-color
