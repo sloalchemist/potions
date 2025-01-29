@@ -6,4 +6,4 @@ export function applyCheat(player: Mob, cheat_code: string) {
   } else if (cheat_code === 'health') {
     player.changeHealth(100);
   }
-};
+}

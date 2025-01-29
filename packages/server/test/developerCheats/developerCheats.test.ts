@@ -6,8 +6,6 @@ import { Community } from '../../src/community/community';
 import { applyCheat } from '../../src/services/developerCheats';
 import { Coord } from '@rt-potion/common';
 
-
-
 describe('testing various developerCheats', () => {
   let testMob: Mob;
 
