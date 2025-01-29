@@ -40,6 +40,10 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
+      # 1.1 Install Dependencies
+      - name: Install PostgreSQL Client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
       # 2. Set up Terraform
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
