@@ -462,43 +462,43 @@ export class WorldScene extends Phaser.Scene {
 
     this.time.delayedCall(RESPAWN_DELAY, () => {
       const respawn = this.add.text(90, 200, 'RESPAWN', buttonStyle);
-        respawn.setOrigin(0, 0);
-        respawn.setScrollFactor(0);
-        respawn.setDepth(100);
-        respawn.setInteractive({ useHandCursor: true });
+      respawn.setOrigin(0, 0);
+      respawn.setScrollFactor(0);
+      respawn.setDepth(100);
+      respawn.setInteractive({ useHandCursor: true });
 
-        // Hover effects
-        respawn.on('pointerover', () => {
-          respawn.setStyle(nameButtonHoverStyle);
-        });
-        respawn.on('pointerout', () => {
-          respawn.setStyle(buttonStyle);
-        });
+      // Hover effects
+      respawn.on('pointerover', () => {
+        respawn.setStyle(nameButtonHoverStyle);
+      });
+      respawn.on('pointerout', () => {
+        respawn.setStyle(buttonStyle);
+      });
 
-        respawn.on('pointerdown', () => {
-          scene.resetToRespawn()
-        });
+      respawn.on('pointerdown', () => {
+        scene.resetToRespawn();
+      });
     });
-    
+
     this.time.delayedCall(RESPAWN_DELAY, () => {
       const menu = this.add.text(290, 200, 'MENU', buttonStyle);
-        menu.setOrigin(0, 0);
-        menu.setScrollFactor(0);
-        menu.setDepth(100);
-        menu.setInteractive({ useHandCursor: true });
+      menu.setOrigin(0, 0);
+      menu.setScrollFactor(0);
+      menu.setDepth(100);
+      menu.setInteractive({ useHandCursor: true });
 
-        // Hover effects
-        menu.on('pointerover', () => {
-          menu.setStyle(nameButtonHoverStyle);
-        });
-        menu.on('pointerout', () => {
-          menu.setStyle(buttonStyle);
-        });
-
-        menu.on('pointerdown', () => {
-          scene.resetToLoadWorldScene();
-        });
+      // Hover effects
+      menu.on('pointerover', () => {
+        menu.setStyle(nameButtonHoverStyle);
       });
+      menu.on('pointerout', () => {
+        menu.setStyle(buttonStyle);
+      });
+
+      menu.on('pointerdown', () => {
+        scene.resetToLoadWorldScene();
+      });
+    });
   }
 
   /* Stop all scenes related to game play and go back to the LoadWordScene 
