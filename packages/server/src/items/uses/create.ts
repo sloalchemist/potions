@@ -3,7 +3,6 @@ import { Item } from '../item';
 import { itemGenerator } from '../itemGenerator';
 
 export class Create {
-
     static createItemFrom(createItem: Item, creator: Mob, type: string): boolean {
         itemGenerator.createItem({
         type: type,

@@ -88,6 +88,23 @@ export class Purchasable {
     }
   }
 
+  // static createStandFromItem(createStandFrom: Item, creator: Mob): boolean {
+  //   itemGenerator.createItem({
+  //     type: 'potion-stand',
+  //     subtype: createStandFrom.subtype,
+  //     position: creator.position,
+  //     attributes: {
+  //       templateType: createStandFrom.type,
+  //       items: 1,
+  //       capacity: 20
+  //     }
+  //   });
+
+  //   createStandFrom.destroy();
+
+  //   return true;
+  // }
+
   changePrice(amount: number) {
     const new_price = Math.min(99, Math.max(1, this.price + amount));
 
