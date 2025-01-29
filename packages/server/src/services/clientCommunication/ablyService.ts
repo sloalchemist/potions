@@ -122,11 +122,13 @@ export class AblyService implements PubSub {
     }
   }
 
-  //TODO: estrada - look here for where the message 
+  //TODO: estrada - this is the function that handles the 'join' event from the auth-server
   private handleUserJoin(message: Types.Message): void {
     console.log('User joined', message.data);
     if (message.data.world === this.worldID) {
       console.log('data.name:', message.data.name)
+      console.log('data.health:', message.data.health)
+      console.log('data.gold:', message.data.gold)
       this.userMembershipChannel.publish('serving', {
         name: message.data.name,
         world: this.worldID,
@@ -134,7 +136,7 @@ export class AblyService implements PubSub {
       });
 
       if (!this.userChannels[message.data.name]) {
-        this.setupChannels(message.data.name);
+        this.setupChannels(message.data.name, message.data.health, message.data.gold);
       }
     }
   }
@@ -329,7 +331,7 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(target, 'chat_close', { target: mob_key });
   }
 
-  //TODO: check out kll function to send user data
+  //TODO: estrada check out kll function to send user data
   public kill(key: string): void {
     this.addToBroadcast({ type: 'destroy_mob', data: { id: key } });
     const playerChannel = this.userChannels[key];
@@ -364,7 +366,7 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(mob_key, 'player_responses', { responses });
   }
 
-  public setupChannels(username: string) {
+  public setupChannels(username: string, health: number, gold: number) {
     const playerChannelName = `${username}-${this.worldID}`;
     const playerChannel = this.ably.channels.get(playerChannelName);
     this.userChannels[username] = playerChannel;
@@ -386,12 +388,17 @@ export class AblyService implements PubSub {
     subscribeToPlayerChannel('join', (data) => {
       const player = Mob.getMob(username);
       if (!player) {
+        console.log(`Making mob for the character that joined: ${username}
+          \t health recieved: ${health}
+          \t gold recieved: ${gold} `)
         mobFactory.makeMob(
           'player',
           gameWorld.getPortalLocation(),
           username,
           data.name,
-          data.subtype
+          data.subtype,
+          health,
+          gold
         );
       } else if (player.subtype !== data.subtype || player.name !== data.name) {
         player.updatePlayer(data.name, data.subtype);
