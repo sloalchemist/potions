@@ -4,6 +4,9 @@ import { Item } from '../../items/item';
 import { gameWorld } from '../../services/gameWorld/gameWorld';
 import { Coord } from '@rt-potion/common';
 import { calculateDistance } from '@rt-potion/common';
+import * as path from 'path';
+import * as fs from 'fs';
+import { FindItem } from './means/findItem';
 
 export class BuildFence implements Plan {
   private buildPosition: Coord | null = null;
@@ -11,7 +14,12 @@ export class BuildFence implements Plan {
 
   //   action done during build plan
   execute(npc: Mob): boolean {
+    // find fence position
+    this.buildPosition = this.findPosition();
     if (!this.buildPosition || !npc.position) return true;
+
+    // pick up the log
+    this.material = npc.findItem('log');
 
     // Move to the target position and build the fence
     const success = npc.moveToOrExecute(this.buildPosition, 1, () => {
@@ -23,7 +31,7 @@ export class BuildFence implements Plan {
       return true;
     });
 
-    return success;
+    return false;
   }
 
   //   returns a number to rep priority of action (higher -> more important)
@@ -31,7 +39,7 @@ export class BuildFence implements Plan {
     if (!npc.position) return -Infinity;
 
     // look for place to build, none if no spot found
-    this.buildPosition = this.findPosition(npc);
+    this.buildPosition = this.findPosition();
     if (!this.buildPosition) return -Infinity;
 
     // cahnge prioity based on distance
@@ -40,9 +48,22 @@ export class BuildFence implements Plan {
   }
 
   //   find a spot to connect a buildable (walls and fences currently)
-  private findPosition(npc: Mob): Coord | null {
-    const position: Coord{0, 0}; //find fence pos here
-    return position;
+  private findPosition(): any {
+    const configPath = path.resolve(__dirname, '../../../../../global.json');
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+    const items = config.items;
+
+    for (const item of items) {
+      if (item.type === 'fence') {
+        const position = item.coord;
+        const itemID = Item.getItemIDAt(position);
+        if (!itemID) {
+          return position;
+        }
+      }
+    }
+
+    return null;
   }
 
   description(): string {
@@ -55,6 +76,6 @@ export class BuildFence implements Plan {
   }
 
   type(): string {
-    return 'build';
+    return 'Build';
   }
 }
