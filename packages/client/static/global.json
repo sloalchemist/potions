@@ -434,11 +434,7 @@
                         "value": 0,
                         "comparison": "greater_than"
                     }
-                ],
-                "permissions": {
-                    "community": false,
-                    "other": true
-                }
+                ]
             }
         ],
         "show_price_at": {
