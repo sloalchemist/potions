@@ -106,7 +106,9 @@ export class Item {
       itemType: itemGenerator.getItemType(itemData.type),
       subtype: itemData.subtype,
       lock: itemData.lock,
-      ownedBy: itemData.owned_by ? Community.getVillage(itemData.owned_by) : undefined,
+      ownedBy: itemData.owned_by
+          ? Community.getVillage(itemData.owned_by)
+          : undefined,
       attributes: attributes
     });
 
@@ -388,9 +390,10 @@ export class Item {
     // console.log(`${item.type} belongs to ${item.owned_by}`);
     // if no one owns the item or if the mob owns it, return true
     if (!this.owned_by || mob.community_id === this.owned_by) return true;
+
     console.warn(
-      `Mob ${mob.name} (${mob.id}) from ${mob.community_id} community is not authorized ` +
-      `to ${interaction} from ${this.type} owned by ${this.owned_by}`
+        `Mob ${mob.name} (${mob.id}) from ${mob.community_id} community ` +
+        `is not authorized to ${interaction} from ${this.type} owned by ${this.owned_by}`
     );
     return false;
   }

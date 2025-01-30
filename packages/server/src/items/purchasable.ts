@@ -74,7 +74,7 @@ export class Purchasable {
   }
 
   static createStandFromItem(createStandFrom: Item, creator: Mob): boolean {
-    const creatorCommunity = Community.getVillage(creator.community_id)
+    const creatorCommunity = Community.getVillage(creator.community_id);
     // console.log(`player belongs to ${creatorCommunity.id}, ${creatorCommunity.name}`);
     itemGenerator.createItem({
       type: 'potion-stand',

@@ -7,10 +7,10 @@ import { AddItem } from '../../src/items/uses/container/addItem';
 import { GetItem } from '../../src/items/uses/container/getItem';
 import { Mob } from '../../src/mobs/mob';
 import { Coord } from '@rt-potion/common';
-import { RaisePrice }  from '../../src/items/uses/stand/raisePrice';
-import { LowerPrice }  from '../../src/items/uses/stand/lowerPrice';
-import { CollectGold }  from '../../src/items/uses/stand/collectGold';
-import { Purchasable } from '../../src/items/purchasable'
+import { RaisePrice } from '../../src/items/uses/stand/raisePrice';
+import { LowerPrice } from '../../src/items/uses/stand/lowerPrice';
+import { CollectGold } from '../../src/items/uses/stand/collectGold';
+import { Purchasable } from '../../src/items/purchasable';
 
 beforeEach(() => {
   commonSetup();
@@ -21,8 +21,7 @@ beforeEach(() => {
 
 describe('Potion Stand Ownership Tests', () => {
   describe('Potion Stand Ownership and Community ID Tests', () => {
-  test('Blacksmith can place potion, retrieve it, but Alchemist can not since wrong community', () => {
-
+    test('Blacksmith can place potion, retrieve it, but Alchemist can not since wrong community', () => {
       const standPosition: Coord = { x: 0, y: 1 };
       const playerPosition: Coord = { x: 0, y: 0 };
       const potionLocation: Coord = { x: 1, y: 0 };
@@ -38,7 +37,7 @@ describe('Potion Stand Ownership Tests', () => {
           items: 0,
           gold: 50,
           capacity: 20
-        },
+        }
       });
       const standID = Item.getItemIDAt(standPosition);
       expect(standID).not.toBeNull();
@@ -46,17 +45,27 @@ describe('Potion Stand Ownership Tests', () => {
       expect(potionStand).toBeDefined();
 
       // create Blacksmith community player
-      mobFactory.makeMob('villager', playerPosition, 'BlacksmithID', 'BlacksmithPlayer');
+      mobFactory.makeMob(
+        'villager',
+        playerPosition,
+        'BlacksmithID',
+        'BlacksmithPlayer'
+      );
       const blacksmithPlayer = Mob.getMob('BlacksmithID');
       expect(blacksmithPlayer).toBeDefined();
-      expect(blacksmithPlayer!.carrying).toBeUndefined();          
+      expect(blacksmithPlayer!.carrying).toBeUndefined();
       expect(blacksmithPlayer!.community_id).toBe('silverclaw');
 
-       // create Alchemist community player
-      mobFactory.makeMob('player', playerPosition, 'AlchemistID', 'AlchemistPlayer');
+      // create Alchemist community player
+      mobFactory.makeMob(
+        'player',
+        playerPosition,
+        'AlchemistID',
+        'AlchemistPlayer'
+      );
       const alchemistPlayer = Mob.getMob('AlchemistID');
       expect(alchemistPlayer).toBeDefined();
-      expect(alchemistPlayer!.carrying).toBeUndefined(); 
+      expect(alchemistPlayer!.carrying).toBeUndefined();
       expect(alchemistPlayer!.community_id).toBe('alchemists');
 
       // create a potion (owned by blacksmiths) and give it to blacksmith
@@ -78,11 +87,14 @@ describe('Potion Stand Ownership Tests', () => {
 
       // Blacksmith retrieves potion from stand
       const retrievePotion = new GetItem();
-      const resultBlacksmith = retrievePotion.interact(blacksmithPlayer!, potionStand!);
+      const resultBlacksmith = retrievePotion.interact(
+        blacksmithPlayer!,
+        potionStand!
+      );
       expect(resultBlacksmith).toBe(true);
       expect(potionStand!.getAttribute('items')).toBe(0); // Verify the stand is empty
       expect(blacksmithPlayer!.carrying).not.toBeNull(); // Verify Blacksmith now has the potion
-      expect(blacksmithPlayer!.carrying!.type).toBe('potion');   
+      expect(blacksmithPlayer!.carrying!.type).toBe('potion');
 
       // Blacksmith replaces potion on stand
       const replacePotion = new AddItem();
@@ -92,51 +104,67 @@ describe('Potion Stand Ownership Tests', () => {
 
       // Alchemist fails to retrieve potion (since blacksmiths own stand)
       const retrievePotionAlchemist = new GetItem();
-      const resultAlchemist = retrievePotionAlchemist.interact(alchemistPlayer!, potionStand!);
+      const resultAlchemist = retrievePotionAlchemist.interact(
+        alchemistPlayer!,
+        potionStand!
+      );
       expect(potionStand!.getAttribute('items')).toBe(1);
-      expect(resultAlchemist).toBe(false); 
-
-
+      expect(resultAlchemist).toBe(false);
 
       // Alchemist can not raise price (start from 10)
       const alchemistRaise = new RaisePrice();
-      const resultAlchemistRaise = alchemistRaise.interact(alchemistPlayer!, potionStand!);
+      const resultAlchemistRaise = alchemistRaise.interact(
+        alchemistPlayer!,
+        potionStand!
+      );
       expect(potionStand!.getAttribute('price')).toBe(10); // price should stay the same
-      expect(resultAlchemistRaise).toBe(false); 
-      
+      expect(resultAlchemistRaise).toBe(false);
+
       // Blacksmith can raise price (start from 10)
       const blacksmithRaise = new RaisePrice();
-      const resultBlacksmithRaise= blacksmithRaise.interact(blacksmithPlayer!, potionStand!);
+      const resultBlacksmithRaise = blacksmithRaise.interact(
+        blacksmithPlayer!,
+        potionStand!
+      );
       expect(potionStand!.getAttribute('price')).toBe(11); // 10 + 1
-      expect(resultBlacksmithRaise).toBe(true); 
+      expect(resultBlacksmithRaise).toBe(true);
 
       // Alchemist can not lowerPrice (start from 11)
       const alchemistLower = new LowerPrice();
-      const resultAlchemistLower = alchemistLower.interact(alchemistPlayer!, potionStand!);
+      const resultAlchemistLower = alchemistLower.interact(
+        alchemistPlayer!,
+        potionStand!
+      );
       expect(potionStand!.getAttribute('price')).toBe(11); // stay the same (11)
       expect(resultAlchemistLower).toBe(false);
 
       // Blacksmith can lower price (start from 11)
       const blacksmithLower = new LowerPrice();
-      const resultBlacksmithLower = blacksmithLower.interact(blacksmithPlayer!, potionStand!);
+      const resultBlacksmithLower = blacksmithLower.interact(
+        blacksmithPlayer!,
+        potionStand!
+      );
       expect(potionStand!.getAttribute('price')).toBe(10); // 11 - 1
       expect(resultBlacksmithLower).toBe(true);
 
-
-
       // create collectGold action
-      const collectGold = new CollectGold(); 
+      const collectGold = new CollectGold();
 
       // Alchemist can not collect gold
-      const resultAlchemistCollect = collectGold.interact(alchemistPlayer!, potionStand!);
-      expect(resultAlchemistCollect).toBe(false)
+      const resultAlchemistCollect = collectGold.interact(
+        alchemistPlayer!,
+        potionStand!
+      );
+      expect(resultAlchemistCollect).toBe(false);
       expect(alchemistPlayer!.gold).toBe(0); // can't collect 50 gold at potion stand
-      
-      // Blacksmith can collect gold
-      const resultBlacksmithCollect = collectGold.interact(blacksmithPlayer!, potionStand!);
-      expect(resultBlacksmithCollect).toBe(true)
-      expect(blacksmithPlayer!.gold).toBe(50); // collects the 50 gold at potion stand
 
+      // Blacksmith can collect gold
+      const resultBlacksmithCollect = collectGold.interact(
+        blacksmithPlayer!,
+        potionStand!
+      );
+      expect(resultBlacksmithCollect).toBe(true);
+      expect(blacksmithPlayer!.gold).toBe(50); // collects the 50 gold at potion stand
     });
   });
 });

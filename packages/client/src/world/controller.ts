@@ -221,7 +221,10 @@ export function getPhysicalInteractions(
       (isOwner && interaction.permissions?.community) ||
       (!isOwner && interaction.permissions?.other);
 
-    if (hasPermission && !interaction.while_carried && item.conditionMet(interaction)) {
+    if (hasPermission &&
+      !interaction.while_carried &&
+      item.conditionMet(interaction)
+    ) {
       if (
         (interaction.action == 'add_item' &&
           carried &&
