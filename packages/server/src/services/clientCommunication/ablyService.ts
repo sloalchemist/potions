@@ -238,8 +238,9 @@ export class AblyService implements PubSub {
     });
   }
 
-  public changeTargetSpeedTick(
+  public changeTargetTick(
     key: string,
+    attribute: string,
     tick: number,
     newValue: number
   ): void {
@@ -248,11 +249,13 @@ export class AblyService implements PubSub {
         `Sending invalid changeTargetSpeedTick message ${key}, ${tick}, ${newValue}`
       );
     }
+
+    const prop = `target_${attribute}_tick`
     this.addToBroadcast({
       type: 'mob_change',
       data: {
         id: key,
-        property: 'target_speed_tick',
+        property: prop,
         delta: tick,
         new_value: newValue
       }

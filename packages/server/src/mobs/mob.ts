@@ -375,94 +375,117 @@ export class Mob {
 
   changeEffect(delta: number, duration: number, attribute: string): void {
     // query db to see if tick for given attribute is set, if not we add delta to current stat
-    // type QueryResult = Record<string, number>; // Key is a string, value is a number
-    let value = 0;
-
     // if we are grabbing the target tick but a transaction doesn't already exist past the current tick,
     // then we know we can increase the value. if a transaction does have a target tick past or equal to
     // the target tick, then we don't increase the value of that attribute. so we need to check if the
     // initial query returns a value, or something undefined (ask deepseek)
-    const result = DB.prepare(
+
+    type QueryResult = {
+      potionType: string;
+      targetTick: number;
+    };    
+    const tick = this.current_tick + duration;
+
+    let value = DB.prepare(
       `
-      SELECT ${attribute}, targetTick
-      FROM mobEffects
-      WHERE id = :id AND targetTick >= :targetTick
+      SELECT ${attribute}
+      FROM mobs
+      WHERE id = :id 
       `
     ).get({
       id: this.id,
-      targetTick: this.current_tick
-    }); // as QueryResult;
+    }) as number;
+
+    const result = DB.prepare(
+      `
+      SELECT potionType, targetTick
+      FROM mobEffects
+      WHERE id = :id AND targetTick >= :currentTick AND potionType = :attribute
+      ` 
+    ).get({
+      id: this.id,
+      currentTick: this.current_tick,
+      attribute: attribute
+    }) as QueryResult | undefined;
 
     console.log("changeEffect result:")
     console.log(result)
 
-    // if (result && typeof result[attribute] === 'number') {
-    //   let tick = result[attribute] as number; // Safely cast to number
+    // if result undefined, update the current attribute value
+    // because the attribute does not have a current effect in place
+    if (!result || duration === -1) {
+      switch (attribute) {
+        case 'speed':
+          this.speed += delta;
+          value = this.speed;
+        // TODO: add other attributes as we add them to the game
+      }
 
-    // // only change speed if no increase is already in progres
-    // if (tick === null || tick === -1) {
-    //   switch(attribute) {
-    //     case 'speed':
-    //       this.speed += delta;
-    //       value = this.speed;
-    //   }
-    // }
+      // update the attribute in mobs
+      DB.prepare(
+        `
+        UPDATE mobs
+        SET ${attribute} = :value
+        WHERE id = :id
+        `
+      ).run({
+        value: value,
+        id: this.id
+      });
+    }
 
-    // // update the database
-    // DB.prepare(
-    //   `
-    //   UPDATE mobs
-    //   SET ${attribute} = :value,
-    //   WHERE id = :id
-    //   `
-    // ).run({
-    //   value: value,
-    //   id: this.id
-    // });
+    // insert transaction into mobEffects to reset timer
+    DB.prepare(
+      `
+      INSERT INTO mobEffects (id, potionType, targetTick)
+      VALUES (:id, :potionType, :targetTick)
+      `
+    ).run({
+      id: this.id,
+      potionType: attribute,
+      targetTick: tick
+    });
+    console.log("TICK:")
+    console.log(tick)
 
-    // pubSub.changeEffect(this.id, attribute, delta, value);
-    // pubSub.changeTargetTick(
-    //   this.id,
-    //   duration,
-    //   tick
-    // );
+    pubSub.changeEffect(this.id, attribute, delta, value);
+    pubSub.changeTargetTick(
+      this.id,
+      attribute,
+      duration,
+      tick
+    );
   }
 
   private checkTickReset(): void {
-    // query the db to get all potionTypes where target ticks are equal to the current tick
+    // query the db to get all potionTypes where target ticks are equal to the current tick.
     // gather data, handle case where nothing is returned. if no ticks are up, we return, otherwise
-    // we adjust the actual value of the attribute back to its base (need logic for this?)
+    // we adjust the actual value of the attribute back to its base (need logic for this?)  
+    type QueryResult = {
+      potionType: string;
+    }; 
+
     const result = DB.prepare(
       `
-      SELECT id, potionType
+      SELECT potionType
       FROM mobEffects
-      WHERE id = :id AND targetTick = :targetTick
+      WHERE id = :id AND targetTick = :currentTick
       `
     ).all({
       id: this.id,
-      targetTick: this.current_tick
-    });
+      currentTick: this.current_tick
+    }) as QueryResult[];
 
-    if (result.length != 0) {
-      console.log("checkTickReset result:")
-      console.log(result)
+    for (const element of result) {
+      switch (element.potionType) {
+        case 'speed':
+        // just call changeEffect(delta, duration, attribute?)
+        // could put -1 for the duration, which would unload the timer
+        // and enter the loop that changes the value
+          console.log("INSIDE SPEED CASE FOR TICK REST");
+          this.changeEffect(-2, -1, element.potionType);
+      }
     }
-
-    // if (
-    //   (this._target_speed_tick !== null || this._target_speed_tick === -1) &&
-    //   this.current_tick >= this._target_speed_tick
-    // ) {
-    //   this.speed -= speedDelta;
-    //   this.target_speed_tick = -1;
-    //   DB.prepare(
-    //     `
-    //     UPDATE mobs
-    //     SET speed = :speed, target_speed_tick = :target_speed_tick
-    //     WHERE id = :id
-    //     `
-    //   ).run({ speed: this.speed, target_speed_tick: null, id: this.id });
-    //   pubSub.changeSpeed(this.id, -speedDelta, this.speed);
-    // }
   }
 
   getHouse(): House | undefined {

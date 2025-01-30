@@ -28,7 +28,7 @@ export class StubbedPubSub implements PubSub {
 
   changeEffect(_key: string, _attribute: string, _speed: number, _newValue: number): void {}
 
-  changeTargetSpeedTick(_key: string, _tick: number, _newValue: number): void {}
+  changeTargetTick(_key: string, _attribute: string, _tick: number, _newValue: number): void {}
 
   changeGold(_key: string, _gold: number, _newValue: number): void {}
 
