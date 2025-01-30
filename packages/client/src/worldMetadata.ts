@@ -16,7 +16,7 @@ export class Character {
   eyeColor: number;
   furColor: number;
   bellyColor: number;
-  community_id?: string;
+  community_id: string | undefined;
   inventory: Item[];
   gold: number;
 
@@ -25,7 +25,7 @@ export class Character {
     eyeColor: number,
     furColor: number,
     bellyColor: number,
-    community_id?: string,
+    community_id: string | undefined,
     inventory: Item[] = [],
     gold: number = 0
   ) {
@@ -69,11 +69,12 @@ export class Character {
 }
 
 function handlePlayerDeath(character: Character) {
-  // Calculate half the gold
+  // When player dies, they drop half their gold
+  // Ticket says inventory + half their gold drops on the ground but idk what that means...
   console.log('Handling player death:', character);
   const halfGold = Math.floor(character.gold / 2);
 
-  // Clear the character's inventory and set their gold to the remaining half
+  // Drop items in inventory??
   character.inventory = [];
   character.gold = halfGold;
 }
