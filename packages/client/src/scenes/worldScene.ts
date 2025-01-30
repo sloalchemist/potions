@@ -442,7 +442,7 @@ export class WorldScene extends Phaser.Scene {
         }
         movementFlag = true;
       }
-      if (newX && newY && movementFlag) 
+      if (newX && newY && movementFlag)
         publishPlayerPosition({ x: newX, y: newY });
     });
 
