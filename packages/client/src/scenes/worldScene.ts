@@ -65,6 +65,7 @@ export class WorldScene extends Phaser.Scene {
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
     this.load.json('global_data', 'static/global.json');
+    this.load.json('world_specific_data', 'static/world_specific.json');
   }
 
   loadAnimations(
@@ -220,7 +221,11 @@ export class WorldScene extends Phaser.Scene {
   }
 
   create() {
-    const globalData = parseWorldFromJson(this.cache.json.get('global_data'));
+    const globalData = parseWorldFromJson(
+      this.cache.json.get('global_data'),
+      this.cache.json.get('world_specific_data')
+    );
+
     console.log('setting up world', needsAnimationsLoaded);
     //console.log(this.world_data);
     world = new World();
