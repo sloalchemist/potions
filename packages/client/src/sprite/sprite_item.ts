@@ -35,7 +35,7 @@ export class SpriteItem extends Item {
     }
 
     if (this.maxHealth) {
-      this.healthBar = scene.add.graphics();
+      this.healthBar = scene.add.graphics().setDepth(101);
       this.maxHealth = Number(this.attributes['health']);
     }
 
