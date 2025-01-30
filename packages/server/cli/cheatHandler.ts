@@ -21,10 +21,6 @@ export const initializeCli = () => {
     prompt: 'potions-server> '
   });
 
-  rl.on('close', () => {
-    console.log('Exiting CLI. Potions server still running.');
-  });
-
   rl.on('line', handleCliCommand);
 
   console.log('Potions server running...');
@@ -35,6 +31,7 @@ export const initializeCli = () => {
 export const closeCli = () => {
   if (rl) {
     rl.close();
+    console.log('Exiting CLI. Potions server still running.');
   }
 };
 
