@@ -305,6 +305,26 @@ export const commonSetup = (worldSize: number = 2) => {
         sleepy: 80,
         extroversion: 50,
         speaker: true
+      },
+      {
+        name: 'Fighter',
+        name_style: 'french-roman',
+        type: 'fighter',
+        description: 'A brave combatant, loyal to the fighters guild.',
+        speaker: true,
+        health: 100,
+        speed: 0.75,
+        attack: 100,
+        gold: 0,
+        community: 'fighters',
+        stubbornness: 20,
+        bravery: 60,
+        aggression: 80,
+        industriousness: 40,
+        adventurousness: 20,
+        gluttony: 10,
+        sleepy: 10,
+        extroversion: 50
       }
     ],
     communities: [
@@ -324,6 +344,11 @@ export const commonSetup = (worldSize: number = 2) => {
         id: 'blobs',
         name: 'Blobs',
         description: 'Blobs who run around the map and cause havoc'
+      },
+      {
+        id: 'fighters',
+        name: 'Fighters guild',
+        description: 'A small village of fighters.'
       }
     ],
     alliances: [],
