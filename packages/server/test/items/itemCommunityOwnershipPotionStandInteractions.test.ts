@@ -96,6 +96,7 @@ describe('Potion Stand Ownership Tests', () => {
       expect(resultAlchemist).toBe(false); 
 
 
+      
       // Alchemist can not raise price (start from 10)
       const alchemistRaise = new RaisePrice();
       const resultAlchemistRaise = alchemistRaise.interact(alchemistPlayer!, potionStand!);
@@ -121,8 +122,17 @@ describe('Potion Stand Ownership Tests', () => {
       expect(resultBlacksmithLower).toBe(true);
 
 
-      // test collectGold 
 
+      // create collectGold action
+      const collectGold = new CollectGold(); 
+      
+      // Blacksmith can collect gold
+      const resultBlacksmithCollect = collectGold.interact(blacksmithPlayer!, potionStand!);
+      expect(resultBlacksmithCollect).toBe(true)
+
+      // Alchemist can not collect gold
+      const resultAlchemistCollect = collectGold.interact(alchemistPlayer!, potionStand!);
+      expect(resultAlchemistCollect).toBe(false)
 
     });
   });
