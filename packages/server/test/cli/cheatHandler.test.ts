@@ -93,35 +93,37 @@ describe('Cheat Handler Tests', () => {
       });
     });
 
-    it('should spawn item with valid item type', () => {
-      const createItemSpy = jest.spyOn(itemGenerator, 'createItem');
-      handleCliCommand('spawn item potion x:0 y:0');
-      expect(createItemSpy).toHaveBeenCalledWith({
-        type: 'potion',
-        position: { x: 0, y: 0 },
-        attributes: {
-          health: 1
-        }
+    describe('Spawn Item Tests', () => {
+      it('should spawn item with valid item type', () => {
+        const createItemSpy = jest.spyOn(itemGenerator, 'createItem');
+        handleCliCommand('spawn item potion x:0 y:0');
+        expect(createItemSpy).toHaveBeenCalledWith({
+          type: 'potion',
+          position: { x: 0, y: 0 },
+          attributes: {
+            health: 1
+          }
+        });
+      });
+
+      it('should spawn item with valid item type and no attributes', () => {
+        const createItemSpy = jest.spyOn(itemGenerator, 'createItem');
+        handleCliCommand('spawn item blueberry-bush x:0 y:0');
+        expect(createItemSpy).toHaveBeenCalledWith({
+          type: 'blueberry-bush',
+          position: { x: 0, y: 0 },
+          attributes: {}
+        });
+      });
+
+      it('should spawn item with invalid item type', () => {
+        const logSpy = jest.spyOn(console, 'log');
+        handleCliCommand('spawn item invalidItem x:0 y:0');
+        expect(logSpy).toHaveBeenCalledWith('Unknown item type: invalidItem');
       });
     });
 
-    it('should spawn item with valid item type and no attributes', () => {
-      const createItemSpy = jest.spyOn(itemGenerator, 'createItem');
-      handleCliCommand('spawn item blueberry-bush x:0 y:0');
-      expect(createItemSpy).toHaveBeenCalledWith({
-        type: 'blueberry-bush',
-        position: { x: 0, y: 0 },
-        attributes: {}
-      });
-    });
-
-    it('should spawn item with invalid item type', () => {
-      const logSpy = jest.spyOn(console, 'log');
-      handleCliCommand('spawn item invalidItem x:0 y:0');
-      expect(logSpy).toHaveBeenCalledWith('Unknown item type: invalidItem');
-    });
-
-    it('should spawn invalid entity type', () => {
+    it('should not spawn invalid entity type', () => {
       const logSpy = jest.spyOn(console, 'log');
       handleCliCommand('spawn invalidType invalid x:0 y:0');
       expect(logSpy).toHaveBeenCalledWith(
@@ -135,6 +137,32 @@ describe('Cheat Handler Tests', () => {
       expect(logSpy).toHaveBeenCalledWith(
         "Invalid command. Type 'help' for available commands."
       );
+    });
+
+    describe('Coordinate Validation Tests', () => {
+      it('invalid coordinate format', () => {
+        const logSpy = jest.spyOn(console, 'log');
+        handleCliCommand('spawn mob blob x:0 y');
+        expect(logSpy).toHaveBeenCalledWith(
+          'Invalid coordinate format: y. Expected format is key:value.'
+        );
+      });
+
+      it('invalid key', () => {
+        const logSpy = jest.spyOn(console, 'log');
+        handleCliCommand('spawn mob blob z:0 y:0');
+        expect(logSpy).toHaveBeenCalledWith(
+          "Invalid key: z. Expected keys are 'x' or 'y'."
+        );
+      });
+
+      it('invalid value', () => {
+        const logSpy = jest.spyOn(console, 'log');
+        handleCliCommand('spawn mob blob x:zero y:0');
+        expect(logSpy).toHaveBeenCalledWith(
+          'Invalid value for x: zero. Expected a number.'
+        );
+      });
     });
   });
 });

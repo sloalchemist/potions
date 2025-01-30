@@ -14,6 +14,7 @@ export const HELP_PROMPT = `Available commands:
 
 export let rl: readline.Interface;
 
+// initialize the CLI on the server
 export const initializeCli = () => {
   rl = readline.createInterface({
     input: process.stdin,
@@ -28,6 +29,7 @@ export const initializeCli = () => {
   rl.prompt();
 };
 
+// close the CLI
 export const closeCli = () => {
   if (rl) {
     rl.close();
@@ -35,15 +37,40 @@ export const closeCli = () => {
   }
 };
 
+// parse the coordinate arguments
+const parseCoordinates = (args: Array<string>) => {
+  const attributes: Record<string, string | number> = {};
+  args.forEach((arg) => {
+    if (!arg.includes(':')) {
+      throw new Error(
+        `Invalid coordinate format: ${arg}. Expected format is key:value.`
+      );
+    }
+    const [key, value] = arg.split(':');
+    if (key !== 'x' && key !== 'y') {
+      throw new Error(`Invalid key: ${key}. Expected keys are 'x' or 'y'.`);
+    }
+    if (isNaN(Number(value))) {
+      throw new Error(`Invalid value for ${key}: ${value}. Expected a number.`);
+    }
+    attributes[key] = Number(value);
+  });
+  return attributes;
+};
+
+// handler for all CLI commands
 export const handleCliCommand = (input: string) => {
   const [command, entityType, name, ...args] = input.trim().split(' ');
 
   if (command === 'spawn') {
-    const attributes: Record<string, string | number> = {};
-    args.forEach((arg) => {
-      const [key, value] = arg.split(':');
-      attributes[key] = isNaN(Number(value)) ? value : Number(value);
-    });
+    let attributes: Record<string, string | number>;
+    try {
+      attributes = parseCoordinates(args);
+    } catch (e: any) {
+      console.log(e.message);
+      rl.prompt();
+      return;
+    }
     const { x, y } = attributes;
 
     switch (entityType) {
