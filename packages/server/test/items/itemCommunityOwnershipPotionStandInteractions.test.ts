@@ -29,6 +29,7 @@ describe('Potion Stand Ownership Tests', () => {
         type: 'potion-stand',
         subtype: '255',
         position: standPosition,
+        // ownedBy: 'silverclaw',
         attributes: {
           templateType: 'potion',
           items: 0,
@@ -61,7 +62,6 @@ describe('Potion Stand Ownership Tests', () => {
         type: 'potion',
         subtype: '255',
         position: potionLocation,
-        // ownedBy: ,
         carriedBy: blacksmithPlayer
       });
       const potion = Item.getItemIDAt(potionLocation);
@@ -107,7 +107,7 @@ describe('Potion Stand Ownership Tests', () => {
       });
 
       // alchemist
-      const addPotionAlchemist = new AddItem();
+      const addPotionAlchemist = new GetItem();
       addPotionAlchemist.interact(alchemistPlayer!, potionStand!);
       expect(potionStand!.getAttribute('items')).toBe(1); // Verify the potion is now on the stand
       expect(blacksmithPlayer!.carrying).toBeUndefined(); // Verify Blacksmith is not carrying anything
