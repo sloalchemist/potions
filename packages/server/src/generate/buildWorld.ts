@@ -32,12 +32,13 @@ async function main() {
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
   const globalDescription = globalData as ServerWorldDescription;
-  const specificDescription = worldSpecificData as Partial<ServerWorldDescription>;
+  const specificDescription =
+    worldSpecificData as Partial<ServerWorldDescription>;
 
   const worldDescription: ServerWorldDescription = {
     ...globalDescription,
     ...specificDescription
-  }
+  };
 
   initializeGameWorld(new ServerWorld(worldDescription));
 
