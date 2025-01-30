@@ -237,6 +237,8 @@ export function getPhysicalInteractions(
 }
 
 export function getClosestPhysical(physicals: Item[], playerPos: Coord): Item {
+  console.log(physicals)
+  
   return physicals.reduce((closest, current) => {
     if (!closest.position || !current.position) return closest;
     const closestDistance = calculateDistance(closest.position, playerPos);
