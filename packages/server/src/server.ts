@@ -1,7 +1,7 @@
 import { worldTimer } from './services/setup';
-import { startCli } from '../cli/cheatHandler';
+import { initializeCli } from '../cli/cheatHandler';
 
 setInterval(worldTimer, 500);
 
 // start listening for CLI commands
-startCli();
+initializeCli();
