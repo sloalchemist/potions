@@ -1,0 +1,53 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Auth Server",
+      "type": "shell",
+      "command": "./start_game.sh",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Server",
+      "type": "shell",
+      "command": "cd packages/server && pnpm dev test-world",
+      "problemMatcher": [],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "dependsOn": "Auth Server"
+    },
+    {
+      "label": "Client",
+      "type": "shell",
+      "command": "cd packages/client && pnpm start",
+      "problemMatcher": [],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "dependsOn": "Auth Server"
+    },
+    {
+      "label": "Start All",
+      "type": "shell",
+      "dependsOn": [
+        "Auth Server",
+        "Server",
+        "Client"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    }
+  ]
+}
