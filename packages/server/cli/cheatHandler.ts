@@ -71,8 +71,10 @@ export const handleCliCommand = (input: string) => {
     let attributes: Record<string, string | number>;
     try {
       attributes = parseCoordinates(args);
-    } catch (e: any) {
-      console.log(e.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        console.log(e.message);
+      }
       rl.prompt();
       return;
     }
