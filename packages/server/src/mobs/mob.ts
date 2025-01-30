@@ -372,12 +372,11 @@ export class Mob {
     }
   }
 
-
   changeEffect(delta: number, duration: number, attribute: string): void {
     type QueryResult = {
       potionType: string;
       targetTick: number;
-    };    
+    };
     const tick = this.current_tick + duration;
 
     let value = DB.prepare(
@@ -387,7 +386,7 @@ export class Mob {
       WHERE id = :id 
       `
     ).get({
-      id: this.id,
+      id: this.id
     }) as number;
 
     const result = DB.prepare(
@@ -404,10 +403,9 @@ export class Mob {
 
     if (!result || duration === -1) {
       switch (attribute) {
-        case 'speed':
+        case 'speed': // TODO: add other attributes as we add them to the game
           this.speed += delta;
           value = this.speed;
-          // TODO: add other attributes as we add them to the game
       }
 
       DB.prepare(
@@ -434,19 +432,13 @@ export class Mob {
     });
 
     pubSub.changeEffect(this.id, attribute, delta, value);
-    pubSub.changeTargetTick(
-      this.id,
-      attribute,
-      duration,
-      tick
-    );
+    pubSub.changeTargetTick(this.id, attribute, duration, tick);
   }
 
   private checkTickReset(): void { 
     type QueryResult = {
       potionType: string;
     }; 
-
     const result = DB.prepare(
       `
       SELECT potionType
@@ -460,9 +452,8 @@ export class Mob {
 
     for (const element of result) {
       switch (element.potionType) {
-        case 'speed':
+        case 'speed': // TODO: add other attributes as we add them to the game
           this.changeEffect(-2, -1, element.potionType);
-          // TODO: add other attributes as we add them to the game
       }
     }
   }
