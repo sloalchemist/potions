@@ -1,7 +1,6 @@
 import { Mob } from '../mobs/mob';
 import { Item } from './item';
 import { itemGenerator } from './itemGenerator';
-import { Community } from '../community/community';
 
 export class Purchasable {
   private item: Item;
