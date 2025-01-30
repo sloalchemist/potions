@@ -374,12 +374,6 @@ export class Mob {
 
 
   changeEffect(delta: number, duration: number, attribute: string): void {
-    // query db to see if tick for given attribute is set, if not we add delta to current stat
-    // if we are grabbing the target tick but a transaction doesn't already exist past the current tick,
-    // then we know we can increase the value. if a transaction does have a target tick past or equal to
-    // the target tick, then we don't increase the value of that attribute. so we need to check if the
-    // initial query returns a value, or something undefined (ask deepseek)
-
     type QueryResult = {
       potionType: string;
       targetTick: number;
@@ -408,20 +402,14 @@ export class Mob {
       attribute: attribute
     }) as QueryResult | undefined;
 
-    console.log("changeEffect result:")
-    console.log(result)
-
-    // if result undefined, update the current attribute value
-    // because the attribute does not have a current effect in place
     if (!result || duration === -1) {
       switch (attribute) {
         case 'speed':
           this.speed += delta;
           value = this.speed;
-        // TODO: add other attributes as we add them to the game
+          // TODO: add other attributes as we add them to the game
       }
 
-      // update the attribute in mobs
       DB.prepare(
         `
         UPDATE mobs
@@ -434,7 +422,6 @@ export class Mob {
       });
     }
 
-    // insert transaction into mobEffects to reset timer
     DB.prepare(
       `
       INSERT INTO mobEffects (id, potionType, targetTick)
@@ -445,8 +432,6 @@ export class Mob {
       potionType: attribute,
       targetTick: tick
     });
-    console.log("TICK:")
-    console.log(tick)
 
     pubSub.changeEffect(this.id, attribute, delta, value);
     pubSub.changeTargetTick(
@@ -457,10 +442,7 @@ export class Mob {
     );
   }
 
-  private checkTickReset(): void {
-    // query the db to get all potionTypes where target ticks are equal to the current tick.
-    // gather data, handle case where nothing is returned. if no ticks are up, we return, otherwise
-    // we adjust the actual value of the attribute back to its base (need logic for this?)  
+  private checkTickReset(): void { 
     type QueryResult = {
       potionType: string;
     }; 
@@ -479,11 +461,8 @@ export class Mob {
     for (const element of result) {
       switch (element.potionType) {
         case 'speed':
-        // just call changeEffect(delta, duration, attribute?)
-        // could put -1 for the duration, which would unload the timer
-        // and enter the loop that changes the value
-          console.log("INSIDE SPEED CASE FOR TICK REST");
           this.changeEffect(-2, -1, element.potionType);
+          // TODO: add other attributes as we add them to the game
       }
     }
   }
