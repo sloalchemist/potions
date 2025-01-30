@@ -1,5 +1,11 @@
-const API_BASE_URL = 'http://localhost:3000';
+import 'dotenv/config';
 
+if (!process.env.AUTH_SERVER_URL) {
+  throw new Error('Cannot run without auth server url configured. Add path to .env');
+}
+
+const authUrl = process.env.AUTH_SERVER_URL;
+console.log('Auth-Server URL:', authUrl);
 
 export interface PlayerData {
   health: number;
@@ -18,7 +24,7 @@ export async function updateCharacterData(
   id: string,
   playerData: PlayerData
 ): Promise<ApiResponse> {
-  const url = `${API_BASE_URL}/character/${id}`;
+  const url = `${authUrl}/character/${id}`;
 
   try {
     const response = await fetch(url, {
