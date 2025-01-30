@@ -1,6 +1,12 @@
 import { Concept, ConceptHierarchy } from './concept';
 
 export class Relationships implements ConceptHierarchy {
+  /**
+   * Retrieves concepts related to relationships.
+   *
+   * @returns An array of relationship-related concepts, including options such as
+   *          sibling, spouse, parent, child, grandparent, grandchild, and friend.
+   */
   getConcepts(): Concept[] {
     const topLevelConcept = {
       id: 'relationship',

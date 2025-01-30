@@ -2,6 +2,9 @@ import { Belief } from '../belief';
 import { ExistingKnowledge } from './existingKnowledge';
 
 export class KnownRegions implements ExistingKnowledge {
+  /**
+   * @returns The concept ID associated with knowledge of regions (e.g. "concept_region").
+   */
   getConcept(): string {
     return 'concept_region';
   }
@@ -15,6 +18,10 @@ export interface Belief {
     trust: number
 }*/
 
+  /**
+   * @returns An array of {@link Belief} objects representing the knowledge this
+   * character has of the world's regions.
+   */  
   getKnowledge(): Belief[] {
     return [];
     /*

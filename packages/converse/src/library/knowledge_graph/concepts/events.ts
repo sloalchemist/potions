@@ -1,6 +1,12 @@
 import { Concept, ConceptHierarchy } from './concept';
 
 export class Events implements ConceptHierarchy {
+  /**
+   * Gets concepts related to the events of a subject.
+   * 
+   * @returns A list of event-related concepts, including options such as
+   *          festival, battle, harvest, hunt, marriage, and death.
+   */
   getConcepts(): Concept[] {
     const topLevelConcept = {
       id: 'event',

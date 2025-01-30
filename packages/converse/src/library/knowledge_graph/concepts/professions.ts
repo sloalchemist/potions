@@ -1,6 +1,12 @@
 import { Concept, ConceptHierarchy } from './concept';
 
 export class Professions implements ConceptHierarchy {
+  /**
+   * Gets concepts related to the professions of a subject.
+   *
+   * @returns A list of profession-related concepts, including options such as
+   *          villager, adventurer, and alchemist.
+   */
   getConcepts(): Concept[] {
     const topLevelConcept = {
       id: 'profession',

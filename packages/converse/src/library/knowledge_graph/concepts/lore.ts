@@ -1,6 +1,11 @@
 import { Concept, ConceptHierarchy } from './concept';
 
 export class Lore implements ConceptHierarchy {
+  /**
+   * Gets concepts related to the lore of a subject.
+   *
+   * @returns A list of concepts.
+   */
   getConcepts(): Concept[] {
     const topLevelConcept = {
       id: 'lore',

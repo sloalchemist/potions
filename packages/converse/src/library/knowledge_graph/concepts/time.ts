@@ -1,6 +1,12 @@
 import { Concept, ConceptHierarchy } from './concept';
 
 export class Time implements ConceptHierarchy {
+  /**
+   * Gets concepts related to the time of a subject.
+   * 
+   * @returns A list of time-related concepts, including options such as
+   *          distant past, past, present, future, and distant future.
+   */
   getConcepts(): Concept[] {
     const topLevelConcept = {
       id: 'time',

@@ -1,6 +1,12 @@
 import { Concept, ConceptHierarchy } from './concept';
 
 export class Communities implements ConceptHierarchy {
+  /**
+   * Retrieves concepts related to communities.
+   *
+   * @returns An array of community-related concepts, including options such as
+   *          village, town, city, tribe, and guild.
+   */
   getConcepts(): Concept[] {
     const topLevelConcept = {
       id: 'community',

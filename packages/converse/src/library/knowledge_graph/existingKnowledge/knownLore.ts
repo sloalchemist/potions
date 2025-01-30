@@ -2,6 +2,9 @@ import { Belief } from '../belief';
 import { ExistingKnowledge } from './existingKnowledge';
 
 export class KnownLore implements ExistingKnowledge {
+  /**
+   * @returns The concept ID associated with knowledge of lore (e.g. "concept_lore").
+   */
   getConcept(): string {
     return 'concept_lore';
   }
@@ -16,6 +19,13 @@ export interface Belief {
     trust: number
 }
     */
+
+  /**
+   * Returns an array of {@link Belief} objects representing the concepts of lore that are present in this world. 
+   * The `fact` property being set to `true` indicates that the lore is known to be true.
+   *
+   * @returns An array of {@link Belief} objects.
+   */
   getKnowledge(): Belief[] {
     return [];
     /*
