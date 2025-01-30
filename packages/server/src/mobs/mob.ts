@@ -469,7 +469,7 @@ export class Mob {
       `
       SELECT potionType
       FROM mobEffects
-      WHERE id = :id AND targetTick = :currentTick
+      WHERE id = :id AND targetTick <= :currentTick
       `
     ).all({
       id: this.id,
