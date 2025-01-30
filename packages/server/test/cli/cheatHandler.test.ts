@@ -37,12 +37,14 @@ afterEach(() => {
 
 describe('Cheat Handler Tests', () => {
   describe('handleCliCommand', () => {
-    it('exit command should close the CLI', () => {
+    it('exit command should close the CLI', async () => {
       const closeSpy = jest.spyOn(rl, 'close');
-      // const logSpy = jest.spyOn(console, 'log');
+      const logSpy = jest.spyOn(console, 'log');
       handleCliCommand('exit');
       expect(closeSpy).toHaveBeenCalled();
-      // expect(logSpy).toHaveBeenCalledWith('Exiting CLI. Potions server still running.');
+      expect(logSpy).toHaveBeenCalledWith(
+        'Exiting CLI. Potions server still running.'
+      );
     });
 
     it('help command should print available commands', () => {
@@ -54,20 +56,26 @@ describe('Cheat Handler Tests', () => {
     describe('Spawn Mob Tests', () => {
       it('should spawn mob with type blob', () => {
         const makeMobSpy = jest.spyOn(mobFactory, 'makeMob');
+        const logSpy = jest.spyOn(console, 'log');
         handleCliCommand('spawn mob blob x:0 y:0');
         expect(makeMobSpy).toHaveBeenCalledWith('blob', { x: 0, y: 0 });
+        expect(logSpy).toHaveBeenCalledWith('Spawned mob: blob at (0, 0)');
       });
 
       it('should spawn mob with type fighter', () => {
         const makeMobSpy = jest.spyOn(mobFactory, 'makeMob');
+        const logSpy = jest.spyOn(console, 'log');
         handleCliCommand('spawn mob fighter x:0 y:0');
         expect(makeMobSpy).toHaveBeenCalledWith('fighter', { x: 0, y: 0 });
+        expect(logSpy).toHaveBeenCalledWith('Spawned mob: fighter at (0, 0)');
       });
 
       it('should spawn mob with type player', () => {
         const makeMobSpy = jest.spyOn(mobFactory, 'makeMob');
+        const logSpy = jest.spyOn(console, 'log');
         handleCliCommand('spawn mob player x:0 y:0');
         expect(makeMobSpy).toHaveBeenCalledWith('player', { x: 0, y: 0 });
+        expect(logSpy).toHaveBeenCalledWith('Spawned mob: player at (0, 0)');
       });
 
       it('should spawn mob with type villager', () => {
