@@ -222,7 +222,12 @@ export class AblyService implements PubSub {
     });
   }
 
-  public changeEffect(key: string, attribute: string, delta: number, newValue: number): void {
+  public changeEffect(
+    key: string,
+    attribute: string,
+    delta: number,
+    newValue: number
+  ): void {
     if (newValue == undefined || key == undefined || delta == undefined) {
       throw new Error(
         `Sending invalid changeEffect message ${key}, ${attribute}, ${delta}, ${newValue}`
@@ -251,7 +256,7 @@ export class AblyService implements PubSub {
       );
     }
 
-    const prop = `target_${attribute}_tick`
+    const prop = `target_${attribute}_tick`;
     this.addToBroadcast({
       type: 'mob_change',
       data: {

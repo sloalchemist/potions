@@ -394,7 +394,7 @@ export class Mob {
       SELECT potionType, targetTick
       FROM mobEffects
       WHERE id = :id AND targetTick >= :currentTick AND potionType = :attribute
-      ` 
+      `
     ).get({
       id: this.id,
       currentTick: this.current_tick,
@@ -435,10 +435,10 @@ export class Mob {
     pubSub.changeTargetTick(this.id, attribute, duration, tick);
   }
 
-  private checkTickReset(): void { 
+  private checkTickReset(): void {
     type QueryResult = {
       potionType: string;
-    }; 
+    };
     const result = DB.prepare(
       `
       SELECT potionType
