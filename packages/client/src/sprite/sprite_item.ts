@@ -354,6 +354,7 @@ export class SpriteItem extends Item {
 
       this.healthBar?.fillStyle(0x00ff00);
       this.healthBar?.fillRect(x, y, barWidth * healthPercentage, barHeight);
+      this.healthBar?.setDepth(1000);
     }
   }
 
