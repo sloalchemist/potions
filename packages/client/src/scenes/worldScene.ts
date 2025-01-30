@@ -22,7 +22,6 @@ import {
 } from '../worldDescription';
 import { UxScene } from './uxScene';
 import { setGameState } from '../world/controller';
-import { send } from 'process';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
