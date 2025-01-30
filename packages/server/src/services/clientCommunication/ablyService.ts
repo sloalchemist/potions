@@ -384,7 +384,32 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(mob_key, 'player_responses', { responses });
   }
 
-  public setupChannels(username: string) {
+  public sendPersistenceRequest(username: string, char_id: number) {
+    console.log("Updating state info for", username);
+      const player = Mob.getMob(username);
+      if (!player) {
+        throw new Error('no player found ' + username);
+      }
+      let health_for_update = player.health;
+      let gold_for_update = player.gold;
+      if (player.health <= 0){
+        //get default health to reset
+        health_for_update = mobFactory.getTemplate('player').health;
+        gold_for_update = 0;  //reset gold to 0
+      }
+      console.log('\t Persist player health:', health_for_update);
+      console.log('\t Persist player gold:', gold_for_update);
+      // Update existing character data
+      const playerData: PlayerData = {
+        health: health_for_update,
+        name: player.name,
+        gold: gold_for_update,
+        appearance: ""
+      };
+      this.sendPlayerData(char_id, playerData);
+  }
+
+  public setupChannels(username: string, char_id: number, health: number, gold:number) {
     const playerChannelName = `${username}-${this.worldID}`;
     const playerChannel = this.ably.channels.get(playerChannelName);
     this.userChannels[username] = playerChannel;
