@@ -252,17 +252,17 @@ export class PathFinder {
     return path;
   }
 
-/**
- * Determines if three coordinates form a straight line.
- *
- * This function checks if the three given coordinates (p1, p2, and p3)
- * are collinear by comparing the slopes between each pair of points.
- *
- * @param p1 The first coordinate.
- * @param p2 The second coordinate.
- * @param p3 The third coordinate.
- * @returns True if the three coordinates form a straight line, false otherwise.
- */
+  /**
+   * Determines if three coordinates form a straight line.
+   *
+   * This function checks if the three given coordinates (p1, p2, and p3)
+   * are collinear by comparing the slopes between each pair of points.
+   *
+   * @param p1 The first coordinate.
+   * @param p2 The second coordinate.
+   * @param p3 The third coordinate.
+   * @returns True if the three coordinates form a straight line, false otherwise.
+   */
   private isStraightLine(p1: Coord, p2: Coord, p3: Coord): boolean {
     return (p2.y - p1.y) * (p3.x - p2.x) === (p3.y - p2.y) * (p2.x - p1.x);
   }
@@ -403,7 +403,7 @@ export class PathFinder {
    * @param unlocks - An array of unlock strings.
    * @param start - The start coordinate.
    * @param end - The end coordinate.
-   * @param fuzzy - Whether the pathfinding algorithm should stop when it is close 
+   * @param fuzzy - Whether the pathfinding algorithm should stop when it is close
    *                to the goal, rather than requiring an exact match to the goal coordinates.
    *                Defaults to false.
    *
