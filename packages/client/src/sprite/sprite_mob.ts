@@ -139,7 +139,7 @@ export class SpriteMob extends Mob {
     this.doingText.setDepth(1);
 
     // Initialize the health bar graphic
-    this.healthBar = scene.add.graphics();
+    this.healthBar = scene.add.graphics().setDepth(101);
     this.maxHealth = mob.maxHealth; // Set the max health to the mob's starting health
     if (!mob || !mob.attributes) {
       throw new Error(`Mob has no attributes ${mob} ${mob.attributes}`);

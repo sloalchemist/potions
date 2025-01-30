@@ -14,15 +14,18 @@ export class Item extends Physical {
   templateType?: string;
   house?: string;
   lock?: string;
+  ownedBy?: string;
 
   constructor(
     world: World,
     key: string,
     position: Coord | null,
-    itemType: ItemType
+    itemType: ItemType,
+    ownedBy?: string
   ) {
     super(world, key, itemType.type, position);
     this.itemType = itemType;
+    this.ownedBy = ownedBy;
 
     if (position) {
       world.addItemToGrid(this);
@@ -38,6 +41,10 @@ export class Item extends Physical {
       return unlocks.includes(this.lock);
     }
     return this.itemType.walkable ? true : false;
+  }
+
+  isOwnedBy(community_id?: string): boolean {
+    return this.ownedBy === community_id;
   }
 
   destroy(world: World) {
