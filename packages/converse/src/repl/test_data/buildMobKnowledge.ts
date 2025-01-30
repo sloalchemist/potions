@@ -319,7 +319,7 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     [{ item: heartbeet.getNoun(), benefit: 'like' }]
   );
 
-  const people: Person[] = [
+  const people = [
     ryn,
     toran,
     eira,
@@ -341,7 +341,7 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     kael,
     vera,
     lucas
-  ];
+  ] as const satisfies Person[];
   const familyTree = Person.buildFamilyTree(people);
 
   // events
@@ -370,7 +370,11 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     [vera]
   );
 
-  const events = [silverclawGathering, silverclawRaid, winterFestival];
+  const events = [
+    silverclawGathering,
+    silverclawRaid,
+    winterFestival
+  ] as const satisfies Eventy[];
 
   const knowledgeGraph = constructGraph(world.concat(people, events));
   knowledgeGraph.beliefs.push(...familyTree);
