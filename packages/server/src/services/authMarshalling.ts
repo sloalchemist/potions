@@ -1,7 +1,9 @@
 import 'dotenv/config';
 
 if (!process.env.AUTH_SERVER_URL) {
-  throw new Error('Cannot run without auth server url configured. Add path to .env');
+  throw new Error(
+    'Cannot run without auth server url configured. Add path to .env'
+  );
 }
 
 const authUrl = process.env.AUTH_SERVER_URL;
@@ -27,11 +29,11 @@ export async function updateCharacterData(
   const url = `${authUrl}/character/${id}`;
   try {
     const response = await fetch(url, {
-      method: 'PUT',  // Using PUT for updating existing resources
+      method: 'PUT', // Using PUT for updating existing resources
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(playerData),
+      body: JSON.stringify(playerData)
     });
 
     if (!response.ok) {

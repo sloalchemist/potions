@@ -374,8 +374,7 @@ export class Mob {
     // so that the player info can be saved.
     if (this.health <= 0 && this.type == 'player') {
       this.destroy();
-    }
-    else if (this.health <= 0) {
+    } else if (this.health <= 0) {
       DB.prepare(
         `
                 DELETE FROM mobs

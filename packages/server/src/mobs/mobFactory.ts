@@ -41,8 +41,8 @@ class MobFactory {
     id?: string,
     name?: string,
     subtype?: string,
-    //Adding fields that can now be from the auth-server  (health gold appearance) 
-    health_from_auth?: number, 
+    //Adding fields that can now be from the auth-server  (health gold appearance)
+    health_from_auth?: number,
     gold_from_auth?: number
   ): void {
     if (id == undefined) {
