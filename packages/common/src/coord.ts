@@ -3,14 +3,29 @@ export type Coord = {
   readonly y: number;
 };
 
-// Calculate the distance between this coordinate and another
+/**
+ * Calculate the Euclidean distance between two coordinates.
+ *
+ * @param coord1 The first coordinate
+ * @param coord2 The second coordinate
+ * @returns The Euclidean distance between the two coordinates
+ */
 export function calculateDistance(coord1: Coord, coord2: Coord) {
   const dx = coord2.x - coord1.x;
   const dy = coord2.y - coord1.y;
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-// Calculate the angle between this coordinate and another
+/**
+ * Calculate the angle in radians between two coordinates.
+ *
+ * The angle is measured with respect to the positive x-axis, in the range [-π, π].
+ *
+ * @param coord1 The first coordinate (origin)
+ * @param coord2 The second coordinate (target)
+ * @returns The angle in radians between the two coordinates
+ */
+
 function calculateAngle(coord1: Coord, coord2: Coord) {
   const dx = coord2.x - coord1.x;
   const dy = coord2.y - coord1.y;
@@ -18,27 +33,62 @@ function calculateAngle(coord1: Coord, coord2: Coord) {
   return Math.atan2(dy, dx);
 }
 
-// Move the coordinate by x and y step values
+/**
+ * Move the coordinate by x and y step values
+ *
+ * @param coord The initial coordinate
+ * @param x The step value to move in the x direction
+ * @param y The step value to move in the y direction
+ * @returns The new coordinate after moving
+ */
 export function step(coord: Coord, x: number, y: number) {
   return { x: coord.x + x, y: coord.y + y };
 }
 
-// Return the floor values of the coordinates
+/**
+ * Return a new coordinate with each component floored to the nearest integer.
+ *
+ * @param coord The coordinate to floor
+ * @returns A new coordinate with floored x and y values
+ */
+
 export function floor(coord: Coord): Coord {
   return { x: Math.floor(coord.x), y: Math.floor(coord.y) };
 }
 
-// Return the rounded values of the coordinates
+/**
+ * Return a new coordinate with each component rounded to the nearest integer.
+ *
+ * @param coord The coordinate to round
+ * @returns A new coordinate with rounded x and y values
+ */
 export function round(coord: Coord): Coord {
   return { x: Math.round(coord.x), y: Math.round(coord.y) };
 }
 
-// Return the ceiling values of the coordinates
+/**
+ * Return a new coordinate with each component rounded up to the nearest integer.
+ *
+ * @param coord The coordinate to ceil
+ * @returns A new coordinate with ceiled x and y values
+ */
 export function ceiling(coord: Coord): Coord {
   return { x: Math.ceil(coord.x), y: Math.ceil(coord.y) };
 }
 
-// Normalized vector subtraction between two coordinates
+/**
+ * Perform a normalized vector subtraction between two coordinates.
+ *
+ * This function calculates the difference between two coordinates
+ * and normalizes the resulting vector, returning a vector with a
+ * magnitude of 1.
+ *
+ * @param coord1 The first coordinate
+ * @param coord2 The second coordinate
+ * @returns A new coordinate representing the normalized vector
+ *          from coord1 to coord2
+ */
+
 export function normalizedSubtraction(coord1: Coord, coord2: Coord): Coord {
   const dx = coord1.x - coord2.x;
   const dy = coord1.y - coord2.y;
@@ -47,7 +97,20 @@ export function normalizedSubtraction(coord1: Coord, coord2: Coord): Coord {
   return { x: dx / magnitude, y: dy / magnitude };
 }
 
-// Convert vector and magnitude into a new coordinate
+/**
+ * Add a vector scaled by magnitude to a coordinate.
+ *
+ * This function takes a coordinate, a vector, and a magnitude as inputs.
+ * It first calculates the magnitude of the vector and then scales the
+ * vector by the magnitude divided by the vector magnitude. Finally,
+ * it adds the scaled vector to the origin coordinate and returns the
+ * resulting coordinate.
+ *
+ * @param coord The coordinate to add the vector to
+ * @param vector The vector to add
+ * @param magnitude The magnitude to scale the vector by
+ * @returns The coordinate after adding the scaled vector
+ */
 export function addVectorAndMagnitude(
   coord: Coord,
   vector: Coord,
@@ -59,6 +122,19 @@ export function addVectorAndMagnitude(
   // Scale the vector and add it to the origin coordinate
   return { x: coord.x + vector.x * scale, y: coord.y + vector.y * scale };
 }
+
+/**
+ * Get all coordinates within a given radius from a central coordinate.
+ *
+ * This function calculates all integer coordinates that lie within a 
+ * specified radius from a given central coordinate. It floors the central 
+ * coordinate and includes all points within the circle defined by the 
+ * radius around the floored center.
+ *
+ * @param coord The central coordinate from which to calculate the radius
+ * @param radius The radius within which to find coordinates
+ * @returns An array of coordinates that are within the specified radius
+ */
 
 export function getCoordinatesWithinRadius(
   coord: Coord,
@@ -82,6 +158,23 @@ export function getCoordinatesWithinRadius(
   return flooredCoords;
 }
 
+/**
+ * Move along a path and update the position and angle of the entity.
+ *
+ * This function takes a start position, a path, a speed, and a deltaTime as inputs.
+ * It then moves the entity along the path by the specified speed and time, and returns
+ * the new position and angle of the entity.
+ *
+ * The function will follow the path until it has exhausted all points in the path.
+ * It will also return the angle of the entity after moving, which can be used to
+ * update the entity's sprite.
+ *
+ * @param start The starting position of the entity
+ * @param path The path to follow
+ * @param speed The speed at which to move the entity
+ * @param deltaTime The amount of time to move the entity
+ * @returns The new position and angle of the entity after moving
+ */
 export function followPath(
   start: Coord,
   path: Coord[],
@@ -121,6 +214,17 @@ export function followPath(
 
   return [newPosition, angle];
 }
+
+/**
+ * Check if two coordinates are equal.
+ *
+ * Compares the x and y values of two coordinates to determine
+ * if they are the same.
+ *
+ * @param coord1 The first coordinate to compare
+ * @param coord2 The second coordinate to compare
+ * @returns True if the coordinates are equal, false otherwise
+ */
 
 export function equals(coord1: Coord, coord2: Coord): boolean {
   return coord1.x === coord2.x && coord1.y === coord2.y;
