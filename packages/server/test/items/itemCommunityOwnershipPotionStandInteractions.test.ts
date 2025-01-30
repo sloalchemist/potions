@@ -36,6 +36,7 @@ describe('Potion Stand Ownership Tests', () => {
         attributes: {
           templateType: 'potion',
           items: 0,
+          gold: 50,
           capacity: 20
         },
       });
@@ -96,7 +97,7 @@ describe('Potion Stand Ownership Tests', () => {
       expect(resultAlchemist).toBe(false); 
 
 
-      
+
       // Alchemist can not raise price (start from 10)
       const alchemistRaise = new RaisePrice();
       const resultAlchemistRaise = alchemistRaise.interact(alchemistPlayer!, potionStand!);
@@ -125,14 +126,16 @@ describe('Potion Stand Ownership Tests', () => {
 
       // create collectGold action
       const collectGold = new CollectGold(); 
-      
-      // Blacksmith can collect gold
-      const resultBlacksmithCollect = collectGold.interact(blacksmithPlayer!, potionStand!);
-      expect(resultBlacksmithCollect).toBe(true)
 
       // Alchemist can not collect gold
       const resultAlchemistCollect = collectGold.interact(alchemistPlayer!, potionStand!);
       expect(resultAlchemistCollect).toBe(false)
+      expect(alchemistPlayer!.gold).toBe(0); // can't collect 50 gold at potion stand
+      
+      // Blacksmith can collect gold
+      const resultBlacksmithCollect = collectGold.interact(blacksmithPlayer!, potionStand!);
+      expect(resultBlacksmithCollect).toBe(true)
+      expect(blacksmithPlayer!.gold).toBe(50); // collects the 50 gold at potion stand
 
     });
   });
