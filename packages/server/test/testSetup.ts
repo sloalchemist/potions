@@ -66,7 +66,8 @@ export const commonSetup = (worldSize: number = 2) => {
           }
         ],
         interactions: [],
-        walkable: false
+        walkable: false,
+        drops_item: 'log'
       },
       {
         name: 'Partial Wall',
@@ -86,7 +87,8 @@ export const commonSetup = (worldSize: number = 2) => {
             value: 1
           }
         ],
-        interactions: []
+        interactions: [],
+        drops_item: 'log'
       },
       {
         name: 'Basket',
@@ -116,7 +118,12 @@ export const commonSetup = (worldSize: number = 2) => {
         smashable: true,
         walkable: true,
         interactions: [],
-        attributes: [],
+        attributes: [
+          {
+            name: 'brew_color',
+            value: '#0000FF'
+          }
+        ],
         on_tick: []
       },
       {
@@ -125,8 +132,33 @@ export const commonSetup = (worldSize: number = 2) => {
         type: 'cauldron',
         carryable: false,
         walkable: false,
-        interactions: [],
-        attributes: [],
+        interactions: [
+          {
+            description: 'Add ingredient',
+            action: 'add_ingredient',
+            while_carried: false
+          },
+          {
+            description: 'Bottle potion',
+            action: 'bottle_potion',
+            while_carried: false
+          },
+          {
+            description: 'Dump Cauldron',
+            action: 'dump_cauldron',
+            while_carried: false
+          }
+        ],
+        attributes: [
+          {
+            name: 'ingredients',
+            value: 0
+          },
+          {
+            name: 'potion_subtype',
+            value: ''
+          }
+        ],
         on_tick: []
       },
       {
@@ -156,14 +188,7 @@ export const commonSetup = (worldSize: number = 2) => {
         type: 'heart-beet',
         walkable: true,
         carryable: true,
-        interactions: [
-          {
-            description: 'Brew red potion',
-            action: 'brew',
-            while_carried: true,
-            requires_item: 'cauldron'
-          }
-        ],
+        interactions: [],
         attributes: [
           {
             name: 'brew_color',
@@ -239,7 +264,8 @@ export const commonSetup = (worldSize: number = 2) => {
             value: 100
           }
         ],
-        interactions: []
+        interactions: [],
+        drops_item: 'log'
       }
     ],
     mob_types: [
