@@ -2,14 +2,15 @@ import { supabase } from "./authController";
 import { Request, Response } from "express";
 
 const characterData = async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const id = req.params.Id;  //get player id from api url
+  console.log("Id:", id);
   const { health, name, gold, appearance } = req.body;
-  if (!id || !health || !name || gold === undefined || !appearance) {
+  if (!id || !health || !name || gold === undefined ) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
   const { data, error } = await supabase
-    .from('players')
-    .upsert({ id: id, health: health, pname: name, gold: gold, appearance: appearance})
+    .from('characters')
+    .upsert({ id: id, health: health, pname: name, gold: gold}) //, appearance: appearance
     .select()
   if (error) {
     console.error(error)

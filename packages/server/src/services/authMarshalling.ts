@@ -21,11 +21,10 @@ export interface ApiResponse {
 
 // Function to update existing character data
 export async function updateCharacterData(
-  id: string,
+  id: number,
   playerData: PlayerData
 ): Promise<ApiResponse> {
   const url = `${authUrl}/character/${id}`;
-
   try {
     const response = await fetch(url, {
       method: 'PUT',  // Using PUT for updating existing resources

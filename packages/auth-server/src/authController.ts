@@ -45,6 +45,7 @@ const authController = async (req: Request, res: Response) => {
       // Notify that the player has joined the world
       userMembershipChannel.publish('join', {
         //need to retain name key 
+        full_char_id: username,
         name: publicCharacterId,
         p_name: name,
         //TODO: estrada - need to think about the best course of action for getting a health of zero

@@ -5,6 +5,9 @@ import characterData from './characterData';
 
 const app = express();
 
+// todo: estrad - Add this to parse JSON bodies
+app.use(express.json()); 
+
 app.use(corsMiddleware);
 
 app.get('/auth', authController);
