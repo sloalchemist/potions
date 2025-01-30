@@ -15,13 +15,13 @@ export class BuildWall implements Use {
       return false;
     }
 
-    const partialWallID = mob.findClosestObjectID(['partial-wall'], 3);
+    const partialWallID = mob.findNClosestObjectIDs(['partial-wall'], 1, 3);
 
     if (!partialWallID) {
       return false;
     }
 
-    const partialWall = Item.getItem(partialWallID)!;
+    const partialWall = Item.getItem(partialWallID[0])!;
 
     partialWall.changeAttributeBy('complete', 1);
     item.destroy();

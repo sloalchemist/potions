@@ -27,16 +27,19 @@ export class SpriteItem extends Item {
     this.house = item.house;
     this.carried_by = item.carried_by;
     this.lock = item.lock;
-    this.maxHealth = 100;
 
     // copy over all attributes
     for (const key in item.attributes) {
       this.attributes[key] = item.attributes[key];
     }
-
-    if(this.itemType.layout_type === 'fence' || this.itemType.layout_type === 'wall') {
+    // Intialize health bar for smashable item types
+    if (this.itemType.layout_type) {
       this.healthBar = scene.add.graphics();
-      this.maxHealth = Number(this.attributes['health']);
+      scene.itemTypes[item.type].attributes?.forEach((attribute) => {
+        if (attribute['name'] == 'health') {
+          this.maxHealth = Number(attribute['value']);
+        }
+      });
     }
 
     let x, y;
@@ -204,8 +207,10 @@ export class SpriteItem extends Item {
         if (nearbyMobs.some((mob) => mob.unlocks.includes(this.lock!))) {
           //console.log('Gate open');
           this.sprite.setFrame(`${this.type}-open`);
+          this.itemType.open = true;
         } else {
           this.sprite.setFrame(`${this.type}-closed`);
+          this.itemType.open = false;
         }
       }
     } else if (this.itemType.layout_type === 'fence') {
@@ -328,11 +333,11 @@ export class SpriteItem extends Item {
   }
 
   calculateHealthPercentage() {
-    return (Number(this.attributes['health']) / this.maxHealth!);
+    return Number(this.attributes['health']) / this.maxHealth!;
   }
 
   isBelowMaxHealth() {
-    return (Number(this.attributes['health']) < this.maxHealth!);
+    return Number(this.attributes['health']) < this.maxHealth!;
   }
 
   updateHealthBar() {

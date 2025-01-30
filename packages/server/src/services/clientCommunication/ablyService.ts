@@ -22,6 +22,7 @@ import { Mob } from '../../mobs/mob';
 import { mobFactory } from '../../mobs/mobFactory';
 import { conversationTracker } from '../../mobs/social/conversationTracker';
 import { gameWorld } from '../gameWorld/gameWorld';
+import { applyCheat } from '../developerCheats';
 
 export class AblyService implements PubSub {
   private ably: Ably.Realtime;
@@ -62,6 +63,9 @@ export class AblyService implements PubSub {
       console.log(
         `Client left: ${presenceMsg.clientId}. Total connected: ${this.hasConnectedClients}`
       );
+
+      const player = Mob.getMob(presenceMsg.clientId);
+      player?.removePlayer();
     });
 
     this.userMembershipChannel.subscribe(
@@ -217,7 +221,7 @@ export class AblyService implements PubSub {
       }
     });
   }
- 
+
   public changeSpeed(key: string, speed: number, newValue: number): void {
     if (newValue == undefined || key == undefined || speed == undefined) {
       throw new Error(
@@ -234,7 +238,28 @@ export class AblyService implements PubSub {
       }
     });
   }
-  
+
+  public changeTargetSpeedTick(
+    key: string,
+    tick: number,
+    newValue: number
+  ): void {
+    if (newValue == undefined || key == undefined || tick == undefined) {
+      throw new Error(
+        `Sending invalid changeTargetSpeedTick message ${key}, ${tick}, ${newValue}`
+      );
+    }
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: 'target_speed_tick',
+        delta: tick,
+        new_value: newValue
+      }
+    });
+  }
+
   public changeGold(key: string, gold: number, newValue: number): void {
     if (newValue == undefined || key == undefined || gold == undefined) {
       throw new Error(
@@ -417,6 +442,14 @@ export class AblyService implements PubSub {
       }
 
       player.setMoveTarget(target, false);
+    });
+
+    subscribeToPlayerChannel('cheat', (data) => {
+      const player = Mob.getMob(username);
+      if (!player) {
+        throw new Error('no player found ' + username);
+      }
+      applyCheat(player, data.action);
     });
   }
 }

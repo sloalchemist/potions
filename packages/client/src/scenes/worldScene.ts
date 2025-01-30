@@ -21,11 +21,14 @@ import {
   WorldDescription
 } from '../worldDescription';
 import { UxScene } from './uxScene';
+import { setGameState } from '../world/controller';
+import { restoreHealth, speedUpCharacter } from '../utils/developerCheats';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
 
 export const TILE_SIZE = 32;
+export const RESPAWN_DELAY = 3000;
 
 export class WorldScene extends Phaser.Scene {
   worldLayer!: Phaser.Tilemaps.TilemapLayer;
@@ -63,6 +66,7 @@ export class WorldScene extends Phaser.Scene {
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
     this.load.json('global_data', 'static/global.json');
+    this.load.json('world_specific_data', 'static/world_specific.json');
   }
 
   loadAnimations(
@@ -218,7 +222,11 @@ export class WorldScene extends Phaser.Scene {
   }
 
   create() {
-    const globalData = parseWorldFromJson(this.cache.json.get('global_data'));
+    const globalData = parseWorldFromJson(
+      this.cache.json.get('global_data'),
+      this.cache.json.get('world_specific_data')
+    );
+
     console.log('setting up world', needsAnimationsLoaded);
     //console.log(this.world_data);
     world = new World();
@@ -247,7 +255,7 @@ export class WorldScene extends Phaser.Scene {
       '4-3', // Configuration 13
       '4-1', // Configuration 14
       '4-4' // Configuration 15
-    ];
+    ] as const satisfies readonly string[];
 
     const waterTypes = globalData.terrain_types
       .filter((type) => !type.walkable)
@@ -325,15 +333,15 @@ export class WorldScene extends Phaser.Scene {
 
     // Dimensions for the viewport of the game world. These numbers were derived
     // from packages\client\static\frame.png so that the viewport is entirely
-    // within the upper half of the frame. 
-    const cameraViewportX = 17
-    const cameraViewportY = 16
-    const cameraViewportWidth = this.game.scale.width - 32
-    const cameraViewportHeight = this.game.scale.height * 0.5 - 14
+    // within the upper half of the frame.
+    const cameraViewportX = 17;
+    const cameraViewportY = 16;
+    const cameraViewportWidth = this.game.scale.width - 32;
+    const cameraViewportHeight = this.game.scale.height * 0.5 - 14;
     this.cameras.main.setViewport(
-      cameraViewportX, 
-      cameraViewportY, 
-      cameraViewportWidth, 
+      cameraViewportX,
+      cameraViewportY,
+      cameraViewportWidth,
       cameraViewportHeight
     );
 
@@ -366,24 +374,33 @@ export class WorldScene extends Phaser.Scene {
       }
 
       // Check if mouse click is within the viewport of the game world for
-      // player movement to occur 
+      // player movement to occur
       if (
         pointer.x >= cameraViewportX &&
         pointer.x <= cameraViewportX + cameraViewportWidth &&
         pointer.y >= cameraViewportY &&
         pointer.y <= cameraViewportY + cameraViewportHeight
       ) {
-          console.log(
-            'click',
-            pointer.worldX / TILE_SIZE,
-            pointer.worldY / TILE_SIZE
-          );
-    
-          publishPlayerPosition({
-            x: pointer.worldX / TILE_SIZE,
-            y: pointer.worldY / TILE_SIZE
-          });
-        }
+        console.log(
+          'click',
+          pointer.worldX / TILE_SIZE,
+          pointer.worldY / TILE_SIZE
+        );
+
+        publishPlayerPosition({
+          x: pointer.worldX / TILE_SIZE,
+          y: pointer.worldY / TILE_SIZE
+        });
+      }
+    });
+
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (event.shiftKey && event.code === 'KeyF') {
+        speedUpCharacter();
+      }
+      if (event.shiftKey && event.code === 'KeyH') {
+        restoreHealth();
+      }
     });
 
     needsAnimationsLoaded = false;
@@ -445,9 +462,9 @@ export class WorldScene extends Phaser.Scene {
   }
 
   showGameOver() {
-    let uxscene = this.scene.get("UxScene") as UxScene;
-    uxscene.chatButtons?.clearChatOptions();
-    
+    let uxscene = this.scene.get('UxScene') as UxScene;
+    uxscene.chatButtons?.clearButtonOptions();
+
     const text = this.add.text(75, 140, 'GAME OVER', {
       color: '#FFFFFF',
       fontSize: 60,
@@ -456,5 +473,18 @@ export class WorldScene extends Phaser.Scene {
     text.setOrigin(0, 0);
     text.setScrollFactor(0); // Make it stay static
     text.setDepth(100);
+  }
+
+  /* Stop all scenes related to game play and go back to the LoadWordScene 
+     for character custmization and game restart.*/
+  resetToLoadWorldScene() {
+    this.time.delayedCall(RESPAWN_DELAY, () => {
+      setGameState('uninitialized');
+      this.scene.stop('PauseScene');
+      this.scene.stop('WorldScene');
+      this.scene.stop('UxScene');
+      this.scene.stop('FrameScene');
+      this.scene.start('LoadWorldScene');
+    });
   }
 }

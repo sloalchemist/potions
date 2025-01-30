@@ -15,17 +15,20 @@ export class Character {
   eyeColor: number;
   furColor: number;
   bellyColor: number;
+  community_id: string | undefined;
 
   constructor(
     name: string,
     eyeColor: number,
     furColor: number,
-    bellyColor: number
+    bellyColor: number,
+    community_id: string | undefined
   ) {
     this.name = name;
     this.eyeColor = eyeColor;
     this.furColor = furColor;
     this.bellyColor = bellyColor;
+    this.community_id = community_id;
   }
 
   get gold(): number {
@@ -47,6 +50,13 @@ export class Character {
       return 0;
     }
     return world.mobs[publicCharacterId].attributes['speed'];
+  }
+
+  get target_speed_tick(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].attributes['target_speed_tick'];
   }
 
   subtype(): string {
@@ -85,7 +95,8 @@ export async function retrieveCharacter() {
     localStorage.getItem('name') || 'Nobody',
     hexStringToNumber(localStorage.getItem('eyeColor') || getRandomColor()),
     hexStringToNumber(localStorage.getItem('furColor') || getRandomColor()),
-    hexStringToNumber(localStorage.getItem('bellyColor') || getRandomColor())
+    hexStringToNumber(localStorage.getItem('bellyColor') || getRandomColor()),
+    localStorage.getItem('community_id') || undefined
   );
 
   saveColors();

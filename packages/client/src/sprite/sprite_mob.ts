@@ -1,4 +1,3 @@
-
 import { MobI } from '@rt-potion/common';
 import { WorldScene } from '../scenes/worldScene';
 import { SpriteItem } from './sprite_item';
@@ -117,7 +116,7 @@ export class SpriteMob extends Mob {
           fontStyle: 'bold',
           color: '#000000',
           strokeThickness: 2,
-          stroke: '#FFFFFF',
+          stroke: '#FFFFFF'
         }
       )
       .setOrigin(0.5);
@@ -128,19 +127,19 @@ export class SpriteMob extends Mob {
         this.sprite.x,
         this.sprite.y + TEXT_PLACEMENT_TO_SPRITE_OFFSET,
         mob.doing!,
-        { 
-          fontFamily: 'Arial', 
-          fontSize: '12px', 
+        {
+          fontFamily: 'Arial',
+          fontSize: '12px',
           color: '#000000',
           strokeThickness: 3,
-          stroke: '#FFFFFF', 
+          stroke: '#FFFFFF'
         }
       )
       .setOrigin(0.5);
     this.doingText.setDepth(1);
 
     // Initialize the health bar graphic
-    this.healthBar = scene.add.graphics();
+    this.healthBar = scene.add.graphics().setDepth(101);
     this.maxHealth = mob.maxHealth; // Set the max health to the mob's starting health
     if (!mob || !mob.attributes) {
       throw new Error(`Mob has no attributes ${mob} ${mob.attributes}`);
@@ -151,7 +150,7 @@ export class SpriteMob extends Mob {
     }
 
     this.attributeListeners.push((spriteMob, key, delta) => {
-      if (!spriteMob) {
+      if (!spriteMob || key === 'target_speed_tick') {
         return;
       }
 
@@ -164,6 +163,8 @@ export class SpriteMob extends Mob {
         color = delta > 0 ? '#00ff00' : '#ff0000';
       } else if (key === 'gold') {
         color = '#ffd700';
+      } else if (key === 'speed') {
+        color = delta > 0 ? '#00ff00' : '#ff0000';
       }
 
       const attributeSprite = scene.add.text(

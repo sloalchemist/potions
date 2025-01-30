@@ -1,6 +1,7 @@
 import { Mob } from '../mobs/mob';
 import { Item } from './item';
 import { itemGenerator } from './itemGenerator';
+import { Community } from '../community/community';
 
 export class Purchasable {
   private item: Item;
@@ -46,22 +47,6 @@ export class Purchasable {
     this.changeItems(-1);
     this.changeGold(this.price);
     mob.changeGold(-this.price);
-
-    itemGenerator.createItem({
-      type: this.templateType,
-      subtype: this.item.subtype,
-      carriedBy: mob
-    });
-
-    return true;
-  }
-
-  retrieveItem(mob: Mob): boolean {
-    if (this.items <= 0) {
-      return false;
-    }
-
-    this.changeItems(-1);
 
     itemGenerator.createItem({
       type: this.templateType,

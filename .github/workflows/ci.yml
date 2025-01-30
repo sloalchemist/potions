@@ -21,6 +21,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       # Step 2: Install pnpm
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -42,13 +45,13 @@ jobs:
       - name: Run Lint
         run: pnpm lint
 
-      # Step 6: Check Prettier Formatting
-      - name: Check Prettier Formatting
-        run: pnpm format --check
-
-      # Step 7: Build Project
+      # Step 6: Build Project
       - name: Build Project
         run: pnpm build
+
+      # Step 7: Build Docker
+      - name: Build Docker
+        run: docker build -t potion-server .
 
       # Step 8: Run Unit Tests
       - name: Run Unit Tests

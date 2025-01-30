@@ -34,7 +34,17 @@ export class LoadWorldScene extends Phaser.Scene {
   paletteSwapper: PaletteSwapper = PaletteSwapper.getInstance();
   lastAnimationKey: string = '';
 
+  /* 
+    Reset lastAnimationKey to the empty string to ensure that in the update function below
+    the "if (this.lastAnimationKey === animationKey)" condition is not met.
+    This ensures this character rerenders on the screen after game over and restart.
+    */
+  init() {
+    this.lastAnimationKey = '';
+  }
+
   preload() {
+    this.load.image('frame', 'static/titleFrame.png');
     this.load.image('title', 'static/title.png');
     this.load.atlas(
       'global-atlas',
@@ -42,6 +52,7 @@ export class LoadWorldScene extends Phaser.Scene {
       'static/global-atlas.json'
     );
   }
+
   create() {
     // Add background image
     const background = this.add.image(0, 0, 'title');
@@ -49,7 +60,14 @@ export class LoadWorldScene extends Phaser.Scene {
     background.setDisplaySize(SCREEN_WIDTH, SCREEN_HEIGHT);
     background.setDepth(-10);
 
-    //loadWorld().then(() => {
+    // Add frame
+    const overlayImage = this.add.image(
+      SCREEN_WIDTH / 2,
+      SCREEN_HEIGHT / 2,
+      'frame'
+    );
+    overlayImage.setScrollFactor(0);
+    console.log('FrameScene created');
 
     const loadingMessage = this.add.text(
       SCREEN_WIDTH / 2,
@@ -196,6 +214,12 @@ export class LoadWorldScene extends Phaser.Scene {
       }),
       frameRate: 5,
       repeat: -1
+    });
+
+    // Remove the animation from the animation manager when the scene is stopped
+    // so that on revive there is no warning for creation with a duplicate key.
+    this.events.once('shutdown', () => {
+      this.anims.remove(`test-idle`);
     });
 
     // Position the character sprite

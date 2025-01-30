@@ -19,36 +19,50 @@ export class Smashable {
 
   private mob!: Mob; // Add mob as a class property
 
-  smashItem(mob: Mob) {
+  /**
+   * Damage item with mob by random amount within mob attack
+   * @param Mob The mob that is doing the attack
+   * @param rng For random value, only for testing
+   */
+  smashItem(mob: Mob, rng: () => number = Math.random) {
     this.mob = mob; // Store mob in the class property
-    const attackDmg = Math.floor(Math.random() * mob.attack);
+    let attackDmg = Math.floor(rng() * mob.attack);
+    // prevent 0 damage from being inflicted
+    attackDmg = attackDmg > 0 ? attackDmg : 1;
     this.changeHealth(-attackDmg);
   }
 
   changeHealth(amount: number) {
     this.item.changeAttributeBy('health', amount);
-    
-    
     if (this.item.getAttribute<number>('health') <= 0) {
-      if (this.item.type == 'potion-stand') {
-        this.destroyPotionStand();
-      }
+      this.destroySmashable();
       this.item.destroy();
+      if (this.item.drops_item) {
+        this.dropItem(this.item, this.item.drops_item);
+      }
     }
   }
 
-  destroyPotionStand(){
+  dropItem(item: Item, droppedItem: string) {
+    itemGenerator.createItem({
+      type: droppedItem,
+      position: item.position
+    });
+  }
+
+  // Renamed function to capture smashables
+  destroySmashable() {
     const gold = this.item.getAttribute<number>('gold');
-    if (gold > 0){
+    if (gold > 0) {
       const position = Item.findEmptyPosition(this.mob.position);
       itemGenerator.createItem({
-        type: "gold",
+        type: 'gold',
         position,
         attributes: { amount: gold }
       });
     }
     const itemcount = this.item.getAttribute<number>('items');
-    if (itemcount > 0){
+    if (itemcount > 0) {
       for (let i = 0; i < itemcount; i++) {
         const position = Item.findEmptyPosition(this.mob.position);
         itemGenerator.createItem({
