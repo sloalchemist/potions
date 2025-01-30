@@ -148,7 +148,7 @@ describe('Cheat Handler Tests', () => {
         );
       });
 
-      it('invalid coordinate format', () => {
+      it('should error on invalid coordinate format', () => {
         const logSpy = jest.spyOn(console, 'log');
         handleCliCommand('spawn mob blob x:0 y');
         expect(logSpy).toHaveBeenCalledWith(
@@ -156,7 +156,7 @@ describe('Cheat Handler Tests', () => {
         );
       });
 
-      it('invalid key', () => {
+      it('should error on invalid key', () => {
         const logSpy = jest.spyOn(console, 'log');
         handleCliCommand('spawn mob blob z:0 y:0');
         expect(logSpy).toHaveBeenCalledWith(
@@ -164,7 +164,7 @@ describe('Cheat Handler Tests', () => {
         );
       });
 
-      it('invalid value', () => {
+      it('should error on invalid value', () => {
         const logSpy = jest.spyOn(console, 'log');
         handleCliCommand('spawn mob blob x:zero y:0');
         expect(logSpy).toHaveBeenCalledWith(
