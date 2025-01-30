@@ -10,7 +10,6 @@ import { Coord } from '@rt-potion/common';
 import { RaisePrice } from '../../src/items/uses/stand/raisePrice';
 import { LowerPrice } from '../../src/items/uses/stand/lowerPrice';
 import { CollectGold } from '../../src/items/uses/stand/collectGold';
-import { Purchasable } from '../../src/items/purchasable';
 
 beforeEach(() => {
   commonSetup();
