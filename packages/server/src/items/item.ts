@@ -26,6 +26,8 @@ export interface ItemData {
   position_y: number;
   house_id?: string;
   lock?: string;
+  drops_item?: string; // i was here :3
+  owned_by?: string;
 }
 
 export interface ItemAttributeData {
@@ -45,6 +47,7 @@ interface ItemParams {
   house?: House;
   attributes: Record<string, string | number>;
   carriedBy?: Mob;
+  drops_item?: string; //i was here :3
 }
 
 export class Item {
@@ -52,6 +55,7 @@ export class Item {
   public position?: Coord;
   public readonly itemType: ItemType;
   public readonly type: string;
+  public readonly drops_item;
   private attributes: ItemAttributes = {};
 
   public readonly owned_by?: string;
@@ -78,6 +82,7 @@ export class Item {
     this.subtype = subtype;
     this.house = house?.id;
     this.owned_by = ownedBy?.id;
+    this.drops_item = itemType.drops_item;
 
     for (const [key, value] of Object.entries(attributes)) {
       this.attributes[key] = value;
@@ -101,6 +106,9 @@ export class Item {
       itemType: itemGenerator.getItemType(itemData.type),
       subtype: itemData.subtype,
       lock: itemData.lock,
+      ownedBy: itemData.owned_by
+        ? Community.getVillage(itemData.owned_by)
+        : undefined,
       attributes: attributes
     });
 
@@ -108,6 +116,7 @@ export class Item {
   }
 
   static insertIntoDB(item: ItemParams) {
+    // console.log(`Inserting ${item.id} into DB with ownership: ${item.ownedBy?.id}`);
     DB.prepare(
       `
             INSERT INTO items (id, type, subtype, position_x, position_y, owned_by, house_id, lock)
@@ -179,7 +188,8 @@ export class Item {
                 items.position_x,
                 items.position_y,
                 mobs.id as carried_by,
-                items.lock
+                items.lock,
+                items.owned_by
             FROM items
             LEFT JOIN mobs ON mobs.carrying_id = items.id
             WHERE items.id = :id;
@@ -367,6 +377,25 @@ export class Item {
   ): void {
     const use = UsesRegistry.instance.getUse(action);
     use.interact(mob, this, giveTo);
+  }
+
+  /**
+   * Checks if the given mob has permission to interact with this item.
+   * Logs a warning if the mob is unauthorized.
+   * @param mob The mob attempting the interaction.
+   * @param interaction The interaction attempted.
+   * @returns True if the mob is authorized, false otherwise.
+   */
+  validateOwnership(mob: Mob, interaction: string): boolean {
+    // console.log(`${item.type} belongs to ${item.owned_by}`);
+    // if no one owns the item or if the mob owns it, return true
+    if (!this.owned_by || mob.community_id === this.owned_by) return true;
+
+    console.warn(
+      `Mob ${mob.name} (${mob.id}) from ${mob.community_id} community ` +
+        `is not authorized to ${interaction} from ${this.type} owned by ${this.owned_by}`
+    );
+    return false;
   }
 
   static SQL = `

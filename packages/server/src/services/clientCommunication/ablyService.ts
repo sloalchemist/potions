@@ -27,6 +27,7 @@ import {
   ApiResponse,
   updateCharacterData
 } from "../authMarshalling";
+import { applyCheat } from '../developerCheats';
 
 export class AblyService implements PubSub {
   private ably: Ably.Realtime;
@@ -497,6 +498,14 @@ export class AblyService implements PubSub {
       }
 
       player.setMoveTarget(target, false);
+    });
+
+    subscribeToPlayerChannel('cheat', (data) => {
+      const player = Mob.getMob(username);
+      if (!player) {
+        throw new Error('no player found ' + username);
+      }
+      applyCheat(player, data.action);
     });
   }
 }

@@ -7,4 +7,5 @@ export type PlayerToServerMessageMap = {
   join: { name: string; subtype: string };
   move: { target: Coord };
   update_state: { name: string};
+  cheat: { action: string };
 };

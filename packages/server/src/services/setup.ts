@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
 import globalData from '../../data/global.json';
+import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
@@ -36,7 +37,14 @@ async function initializeAsync() {
     initializeKnowledgeDB('data/knowledge-graph.db', false);
     initializeServerDatabase('data/server-data.db');
 
-    const worldDescription = globalData as ServerWorldDescription;
+    const globalDescription = globalData as ServerWorldDescription;
+    const specificDescription =
+      worldSpecificData as Partial<ServerWorldDescription>;
+
+    const worldDescription: ServerWorldDescription = {
+      ...globalDescription,
+      ...specificDescription
+    };
 
     world = new ServerWorld(worldDescription);
     initializeGameWorld(world);

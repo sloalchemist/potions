@@ -194,6 +194,7 @@ export function getPhysicalInteractions(
 ): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
+  const isOwner = item.isOwnedBy(currentCharacter?.community_id);
 
   // if the item can be picked up
   if (item.itemType.carryable) {
@@ -215,7 +216,16 @@ export function getPhysicalInteractions(
 
   // handles unique interactions
   item.itemType.interactions.forEach((interaction) => {
-    if (!interaction.while_carried && item.conditionMet(interaction)) {
+    const hasPermission =
+      !interaction.permissions || // Allow interaction if no permissions entry in global.json
+      (isOwner && interaction.permissions?.community) ||
+      (!isOwner && interaction.permissions?.other);
+
+    if (
+      hasPermission &&
+      !interaction.while_carried &&
+      item.conditionMet(interaction)
+    ) {
       if (
         (interaction.action == 'add_item' &&
           carried &&
@@ -272,14 +282,17 @@ export function getInteractablePhysicals(
 
   // nearby non-walkable items
   let nearbyObjects = physicals.filter((p) => !p.itemType.walkable);
-  if (nearbyObjects.length > 1) {
-    nearbyObjects = [getClosestPhysical(nearbyObjects, playerPos)];
-  }
+
+  // find distinct non-walkable objects next to player
+  let unique_nearbyObjects = nearbyObjects.filter(
+    (item, index, self) =>
+      index === self.findIndex((i) => i.itemType === item.itemType)
+  );
 
   // enforce unique items
   let interactableObjects = [
     ...onTopObjects,
-    ...nearbyObjects,
+    ...unique_nearbyObjects,
     ...nearbyOpenableObjects
   ];
   interactableObjects = interactableObjects.filter(

@@ -31,12 +31,13 @@ export class GoToLastSeen implements Means {
       this.target = undefined;
     }
 
-    const closestObjectID = npc.findClosestObjectID(
+    const closestObjectID = npc.findNClosestObjectIDs(
       this.item_type,
+      1,
       npc.visionDistance
     );
-    if (closestObjectID) {
-      this.target = Item.getItem(closestObjectID)!.position;
+    if (closestObjectID && closestObjectID[0]) {
+      this.target = Item.getItem(closestObjectID[0])!.position;
     }
 
     if (this.target) {
