@@ -10,8 +10,8 @@ const characterData = async (req: Request, res: Response) => {
   }
   const { data, error } = await supabase
     .from('characters')
-    .upsert({ id: id, health: health, pname: name, gold: gold}) //, appearance: appearance
-    .select()
+    .update({health: health, pname: name, gold: gold})
+    .eq('character_id', id);
   if (error) {
     console.error(error)
     return res.status(500).json({ error: 'Failed to upsert player data.' });

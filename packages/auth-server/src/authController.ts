@@ -33,7 +33,7 @@ const authController = async (req: Request, res: Response) => {
 
     console.log('result:', data, data[0]);
     if (data && data.length > 0) {
-      const id = data[0].id;
+      // const id = data[0].id;
       const ablyApiKey = data[0].ably_api_key;
       const world = data[0].world_id;
       const health = data[0].health;
@@ -41,12 +41,14 @@ const authController = async (req: Request, res: Response) => {
       const appearance = data[0].appearance;
       const gold = data[0].gold;
 
+      console.log('HEALTH:', health)
+
       const publicCharacterId = username.substr(0, 8);
 
       // Notify that the player has joined the world
       userMembershipChannel.publish('join', {
         //need to retain name key 
-        char_id: id,
+        char_id: username,
         name: publicCharacterId,
         p_name: name,
         health: health,
