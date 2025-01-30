@@ -45,8 +45,6 @@ export class WorldScene extends Phaser.Scene {
   terrainWidth: number = 0;
   terrainHeight: number = 0;
   nightOpacity: number = 0;
-  lastWASDMove: Date = new Date();
-  lastWASDKeyPressed: string = '';
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -402,23 +400,6 @@ export class WorldScene extends Phaser.Scene {
       let newX = player.position?.x;
       let newY = player.position?.y;
 
-      // const curTime = new Date();
-      // // amount of milliseconds allowed between sending movement
-      // const allowedDuration = 100;
-
-      // console.log(`time diff = ${curTime.getTime() - this.lastWASDMove.getTime()}`);
-      // console.log(`${curTime.getTime() - this.lastWASDMove.getTime() < allowedDuration}`);
-      // check if enough time has passed to send movement to server
-      // if (
-      //   Math.abs(curTime.getTime() - this.lastWASDMove.getTime()) < allowedDuration &&
-      //   this.lastWASDKeyPressed == event.code
-      // ) {
-      //   console.log('too big');
-      //   return;
-      // }
-      // this.lastWASDMove = curTime;
-      // this.lastWASDKeyPressed = event.code;
-
       if (event.code == 'KeyW') {
         // move up
         if (player.position !== null) {
@@ -443,7 +424,7 @@ export class WorldScene extends Phaser.Scene {
           if (newX) newX = Math.ceil(newX + 1);
         }
       }
-      console.log('x:', newX, 'y:', newY);
+      console.log(`current target: ${newX}, ${newY}`);
       if (newX && newY) publishPlayerPosition({ x: newX, y: newY });
     });
 
