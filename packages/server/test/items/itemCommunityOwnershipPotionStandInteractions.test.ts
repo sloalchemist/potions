@@ -7,7 +7,10 @@ import { AddItem } from '../../src/items/uses/container/addItem';
 import { GetItem } from '../../src/items/uses/container/getItem';
 import { Mob } from '../../src/mobs/mob';
 import { Coord } from '@rt-potion/common';
-// import { findCommunity } from '../../../converse/src/library/converse';
+import { RaisePrice }  from '../../src/items/uses/stand/raisePrice';
+import { LowerPrice }  from '../../src/items/uses/stand/lowerPrice';
+import { CollectGold }  from '../../src/items/uses/stand/collectGold';
+import { Purchasable } from '../../src/items/purchasable'
 
 beforeEach(() => {
   commonSetup();
@@ -60,12 +63,11 @@ describe('Potion Stand Ownership Tests', () => {
         type: 'potion',
         subtype: '255',
         position: potionLocation,
-        carriedBy: blacksmithPlayer
+        carriedBy: blacksmithPlayer,
+        attributes: {
+          price: 10
+        }
       });
-      const potion = Item.getItemIDAt(potionLocation);
-      expect(potion).not.toBeNull();
-      const potionItem = Item.getItem(potion!);
-      expect(potionItem).not.toBeNull();
 
       // Blacksmith places potion on stand
       const addPotion = new AddItem();
@@ -94,10 +96,29 @@ describe('Potion Stand Ownership Tests', () => {
       expect(resultAlchemist).toBe(false); 
 
 
-      // test raisePrice
+      // Alchemist can not raise price (start from 10)
+      const alchemistRaise = new RaisePrice();
+      const resultAlchemistRaise = alchemistRaise.interact(alchemistPlayer!, potionStand!);
+      expect(potionStand!.getAttribute('price')).toBe(10); // price should stay the same
+      expect(resultAlchemistRaise).toBe(false); 
+      
+      // Blacksmith can raise price (start from 10)
+      const blacksmithRaise = new RaisePrice();
+      const resultBlacksmithRaise= blacksmithRaise.interact(blacksmithPlayer!, potionStand!);
+      expect(potionStand!.getAttribute('price')).toBe(11); // 10 + 1
+      expect(resultBlacksmithRaise).toBe(true); 
 
+      // Alchemist can not lowerPrice (start from 11)
+      const alchemistLower = new LowerPrice();
+      const resultAlchemistLower = alchemistLower.interact(alchemistPlayer!, potionStand!);
+      expect(potionStand!.getAttribute('price')).toBe(11); // stay the same (11)
+      expect(resultAlchemistLower).toBe(false);
 
-      // test lowerPrice
+      // Blacksmith can lower price (start from 11)
+      const blacksmithLower = new LowerPrice();
+      const resultBlacksmithLower = blacksmithLower.interact(blacksmithPlayer!, potionStand!);
+      expect(potionStand!.getAttribute('price')).toBe(10); // 11 - 1
+      expect(resultBlacksmithLower).toBe(true);
 
 
       // test collectGold 
