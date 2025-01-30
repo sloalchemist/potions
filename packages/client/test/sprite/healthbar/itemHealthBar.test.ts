@@ -77,18 +77,19 @@ describe('Fence health bar updates with state', () => {
           maxHealth: number,
           health: number,
           scene: Phaser.Scene,
-          itemType: { layoutType: string }
+          itemType: { layout_type: string }
         ) => {
           const sprite = {
             attributes: { health },
             itemType,
+            scene,
             healthBar: undefined as Phaser.GameObjects.Graphics | undefined,
             maxHealth: undefined as number | undefined,
             intialize() {
               // Copied From SpriteItem Constructor
-              if (maxHealth) {
+              if (itemType.layout_type) {
                 this.healthBar = scene.add.graphics();
-                this.maxHealth = this.attributes['health'];
+                this.maxHealth = maxHealth;
               }
             },
             updateHealthBar: jest.fn()
@@ -102,9 +103,21 @@ describe('Fence health bar updates with state', () => {
     const mockScene = new (jest.requireMock('phaser').Scene)({ key: 'test' });
     const maxHealth = 100;
 
-    const halfHealthFence = new SpriteItem(maxHealth, maxHealth / 2, mockScene);
+    const halfHealthFence = new SpriteItem(
+      maxHealth,
+      maxHealth / 2,
+      mockScene,
+      { layout_type: 'fence' }
+    );
     expect(halfHealthFence.healthBar).toBeDefined();
     halfHealthFence.updateHealthBar();
     expect(halfHealthFence.healthBar).toBeDefined();
+
+    const heartbeat = new SpriteItem(maxHealth, maxHealth, mockScene, {
+      layout_type: undefined
+    });
+    expect(heartbeat.healthBar).not.toBeDefined();
+    heartbeat.updateHealthBar();
+    expect(heartbeat.healthBar).not.toBeDefined();
   });
 });

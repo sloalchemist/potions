@@ -27,16 +27,19 @@ export class SpriteItem extends Item {
     this.house = item.house;
     this.carried_by = item.carried_by;
     this.lock = item.lock;
-    this.maxHealth = 100;
 
     // copy over all attributes
     for (const key in item.attributes) {
       this.attributes[key] = item.attributes[key];
     }
-
-    if (this.maxHealth) {
-      this.healthBar = scene.add.graphics().setDepth(101);
-      this.maxHealth = Number(this.attributes['health']);
+    // Intialize health bar for smashable item types
+    if (this.itemType.layout_type) {
+      this.healthBar = scene.add.graphics();
+      scene.itemTypes[item.type].attributes?.forEach((attribute) => {
+        if (attribute['name'] == 'health') {
+          this.maxHealth = Number(attribute['value']);
+        }
+      });
     }
 
     let x, y;
