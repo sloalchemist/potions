@@ -65,7 +65,10 @@ export class AblyService implements PubSub {
 
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
       // console.log(this.userDict);
-      this.sendPersistenceRequest(presenceMsg.clientId, this.userDict.get(presenceMsg.clientId));
+      this.sendPersistenceRequest(
+        presenceMsg.clientId,
+        this.userDict.get(presenceMsg.clientId)
+      );
       this.checkConnectedClients();
       console.log(
         `Client left: ${presenceMsg.clientId}. Total connected: ${this.hasConnectedClients}`
@@ -393,14 +396,14 @@ export class AblyService implements PubSub {
     console.log('Updating state info for', username);
     const player = Mob.getMob(username);
     if (!player) {
-        throw new Error('no player found ' + username);
+      throw new Error('no player found ' + username);
     }
     let health_for_update = player.health;
     let gold_for_update = player.gold;
-    if (player.health <= 0){
-        //get default health to reset
-        health_for_update = mobFactory.getTemplate('player').health;
-        gold_for_update = 0;  //reset gold to 0
+    if (player.health <= 0) {
+      //get default health to reset
+      health_for_update = mobFactory.getTemplate('player').health;
+      gold_for_update = 0; //reset gold to 0
     }
     console.log('\t Persist player health:', health_for_update);
     console.log('\t Persist player gold:', gold_for_update);
@@ -409,7 +412,7 @@ export class AblyService implements PubSub {
       health: health_for_update,
       name: player.name,
       gold: gold_for_update,
-      appearance: ""
+      appearance: ''
     };
     this.sendPlayerData(char_id, playerData);
   }
@@ -418,7 +421,8 @@ export class AblyService implements PubSub {
     username: string,
     char_id: number,
     health: number,
-    gold: number) {
+    gold: number
+  ) {
     const playerChannelName = `${username}-${this.worldID}`;
     const playerChannel = this.ably.channels.get(playerChannelName);
     this.userChannels[username] = playerChannel;

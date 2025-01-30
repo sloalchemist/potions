@@ -77,7 +77,7 @@ export function publishPlayerPosition(target: Coord) {
 
 export function publishPlayerStateToPersist() {
   if (playerChannel) {
-    console.log('Requesting data persistence.')
+    console.log('Requesting data persistence.');
     publishPlayerMessage('update_state', { name: publicCharacterId });
   }
 }

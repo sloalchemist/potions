@@ -18,6 +18,6 @@ const characterData = async (req: Request, res: Response) => {
   }
 
   res.status(200).json({ message: 'Player data upserted successfully.', data });
-}
+};
 
 export default characterData;
