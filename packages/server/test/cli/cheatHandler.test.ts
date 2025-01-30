@@ -140,6 +140,14 @@ describe('Cheat Handler Tests', () => {
     });
 
     describe('Coordinate Validation Tests', () => {
+      it('should error on more than 2 coordinates', () => {
+        const logSpy = jest.spyOn(console, 'log');
+        handleCliCommand('spawn mob blob x:0 y:0 z:0');
+        expect(logSpy).toHaveBeenCalledWith(
+          'Invalid number of coordinate arguments. Expected 2, got 3.'
+        );
+      });
+
       it('invalid coordinate format', () => {
         const logSpy = jest.spyOn(console, 'log');
         handleCliCommand('spawn mob blob x:0 y');

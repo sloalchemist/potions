@@ -40,6 +40,11 @@ export const closeCli = () => {
 // parse the coordinate arguments
 const parseCoordinates = (args: Array<string>) => {
   const attributes: Record<string, string | number> = {};
+  if (args.length !== 2) {
+    throw new Error(
+      `Invalid number of coordinate arguments. Expected 2, got ${args.length}.`
+    );
+  }
   args.forEach((arg) => {
     if (!arg.includes(':')) {
       throw new Error(
