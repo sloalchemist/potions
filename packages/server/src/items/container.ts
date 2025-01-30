@@ -54,6 +54,7 @@ export class Container {
 
     itemGenerator.createItem({
       type: this.getType(),
+      subtype: this.item.subtype,
       carriedBy: mob
     });
 

@@ -1,5 +1,3 @@
-import { game, focused } from '../../../src/main';
-
 describe('Fence health bar updates with state', () => {
   let SpriteItem: jest.Mock;
 
@@ -79,7 +77,6 @@ describe('Fence health bar updates with state', () => {
           maxHealth: number,
           health: number,
           scene: Phaser.Scene,
-        //   world: { itemTypes: { [key: string]: { attributes: { name: string; value: string }[] } } },
           itemType: { layout_type: string }
         ) => {
           const sprite = {
@@ -116,11 +113,11 @@ describe('Fence health bar updates with state', () => {
     halfHealthFence.updateHealthBar();
     expect(halfHealthFence.healthBar).toBeDefined();
 
-    const fullHealthHeartbeat = new SpriteItem(maxHealth, maxHealth, mockScene, {
+    const heartbeat = new SpriteItem(maxHealth, maxHealth, mockScene, {
       layout_type: undefined
     });
-    expect(fullHealthHeartbeat.healthBar).not.toBeDefined();
+    expect(heartbeat.healthBar).not.toBeDefined();
     fullHealthHeartbeat.updateHealthBar();
-    expect(fullHealthHeartbeat.healthBar).not.toBeDefined();
+    expect(heartbeat.healthBar).not.toBeDefined();
   });
 });

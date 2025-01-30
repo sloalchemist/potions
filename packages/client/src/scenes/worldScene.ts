@@ -21,11 +21,13 @@ import {
   WorldDescription
 } from '../worldDescription';
 import { UxScene } from './uxScene';
+import { setGameState } from '../world/controller';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
 
 export const TILE_SIZE = 32;
+export const RESPAWN_DELAY = 3000;
 
 export class WorldScene extends Phaser.Scene {
   worldLayer!: Phaser.Tilemaps.TilemapLayer;
@@ -247,7 +249,7 @@ export class WorldScene extends Phaser.Scene {
       '4-3', // Configuration 13
       '4-1', // Configuration 14
       '4-4' // Configuration 15
-    ];
+    ] as const satisfies readonly string[];
 
     const waterTypes = globalData.terrain_types
       .filter((type) => !type.walkable)
@@ -323,11 +325,18 @@ export class WorldScene extends Phaser.Scene {
       }
     );
 
+    // Dimensions for the viewport of the game world. These numbers were derived
+    // from packages\client\static\frame.png so that the viewport is entirely
+    // within the upper half of the frame.
+    const cameraViewportX = 17;
+    const cameraViewportY = 16;
+    const cameraViewportWidth = this.game.scale.width - 32;
+    const cameraViewportHeight = this.game.scale.height * 0.5 - 14;
     this.cameras.main.setViewport(
-      10,
-      10,
-      this.game.scale.width - 20,
-      this.game.scale.height * 0.5 - 10
+      cameraViewportX,
+      cameraViewportY,
+      cameraViewportWidth,
+      cameraViewportHeight
     );
 
     this.terrainWidth = globalData.tiles[0].length;
@@ -358,16 +367,25 @@ export class WorldScene extends Phaser.Scene {
         return;
       }
 
-      console.log(
-        'click',
-        pointer.worldX / TILE_SIZE,
-        pointer.worldY / TILE_SIZE
-      );
+      // Check if mouse click is within the viewport of the game world for
+      // player movement to occur
+      if (
+        pointer.x >= cameraViewportX &&
+        pointer.x <= cameraViewportX + cameraViewportWidth &&
+        pointer.y >= cameraViewportY &&
+        pointer.y <= cameraViewportY + cameraViewportHeight
+      ) {
+        console.log(
+          'click',
+          pointer.worldX / TILE_SIZE,
+          pointer.worldY / TILE_SIZE
+        );
 
-      publishPlayerPosition({
-        x: pointer.worldX / TILE_SIZE,
-        y: pointer.worldY / TILE_SIZE
-      });
+        publishPlayerPosition({
+          x: pointer.worldX / TILE_SIZE,
+          y: pointer.worldY / TILE_SIZE
+        });
+      }
     });
 
     needsAnimationsLoaded = false;
@@ -429,9 +447,9 @@ export class WorldScene extends Phaser.Scene {
   }
 
   showGameOver() {
-    let uxscene = this.scene.get("UxScene") as UxScene;
-    uxscene.chatButtons?.clearChatOptions();
-    
+    let uxscene = this.scene.get('UxScene') as UxScene;
+    uxscene.chatButtons?.clearButtonOptions();
+
     const text = this.add.text(75, 140, 'GAME OVER', {
       color: '#FFFFFF',
       fontSize: 60,
@@ -440,5 +458,18 @@ export class WorldScene extends Phaser.Scene {
     text.setOrigin(0, 0);
     text.setScrollFactor(0); // Make it stay static
     text.setDepth(100);
+  }
+
+  /* Stop all scenes related to game play and go back to the LoadWordScene 
+     for character custmization and game restart.*/
+  resetToLoadWorldScene() {
+    this.time.delayedCall(RESPAWN_DELAY, () => {
+      setGameState('uninitialized');
+      this.scene.stop('PauseScene');
+      this.scene.stop('WorldScene');
+      this.scene.stop('UxScene');
+      this.scene.stop('FrameScene');
+      this.scene.start('LoadWorldScene');
+    });
   }
 }

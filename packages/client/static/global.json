@@ -85,12 +85,7 @@
             "walkable": true,
             "smashable": true,
             "interactions": [
-                {
-                    "description": "Brew red potion",
-                    "action": "brew",
-                    "while_carried": true,
-                    "requires_item": "cauldron"
-                },
+                
                 {
                     "description": "Eat",
                     "action": "eat",
@@ -114,7 +109,8 @@
             }
         ],
         "interactions": [],
-        "walkable": false
+        "walkable": false,
+        "drops_item": "log"
     },
     {
         "name": "Partial Wall",
@@ -132,7 +128,8 @@
                 "value": 1
             }
         ],
-        "interactions": []
+        "interactions": [],
+        "drops_item": "log"
     },
     {
         "name": "Fence",
@@ -148,7 +145,8 @@
                 "value": 100
             }
         ],
-        "interactions": []
+        "interactions": [],
+        "drops_item": "log"
     },
     {
         "name": "Gate",
@@ -164,7 +162,8 @@
                 "value": 100
             }
         ],
-        "interactions": []
+        "interactions": [],
+        "open": false
     },
     {
         "name": "Door",
@@ -193,7 +192,9 @@
                 "action": "spawn_item",
                 "parameters": {
                     "type": "log",
-                    "max": 6,
+                    "global_max": 10,
+                    "local_max": 2,
+                    "radius": 3,
                     "rate": 0.1
                 }
             }
@@ -212,7 +213,9 @@
                 "action": "spawn_item",
                 "parameters": {
                     "type": "heart-beet",
-                    "max": 6,
+                    "global_max": 10,
+                    "local_max": 2,
+                    "radius": 3,
                     "rate": 0.1
                 }
             }
@@ -233,12 +236,7 @@
             "value": 1
         }],
         "interactions": [
-            {
-                "description": "Brew blue potion",
-                "action": "brew",
-                "while_carried": true,
-                "requires_item": "cauldron"
-            },
+
             {
                 "description": "Eat",
                 "action": "eat",
@@ -258,7 +256,9 @@
                 "action": "spawn_item",
                 "parameters": {
                     "type": "blueberry",
-                    "max": 6,
+                    "global_max": 10,
+                    "local_max": 2,
+                    "radius": 3,
                     "rate": 0.1
                 }
             }
@@ -358,7 +358,7 @@
             },
             {
                 "description": "Get $item_name",
-                "action": "retrieve_item",
+                "action": "get_item",
                 "while_carried": false,
                 "conditions": [
                     {
@@ -452,7 +452,7 @@
         "type": "basket",
         "carryable": false,
         "templated": true,
-        "walkable": true,
+        "walkable": false,
         "show_template_at": {
             "x": 0,
             "y": 7
@@ -488,7 +488,54 @@
         "type": "cauldron",
         "carryable": false,
         "walkable": false,
-        "interactions": []
+        "attributes": [
+            {
+                "name": "ingredients",
+                "value": 0
+            },
+            {
+                "name": "potion_subtype",
+                "value": ""
+            }
+        ],
+        "interactions": [
+            {
+                "description": "Add Ingredient",
+                "action": "add_ingredient",
+                "while_carried": false,
+                "conditions": [
+                    {
+                        "attribute_name": "ingredients",
+                        "value": 3,
+                        "comparison": "less_than"
+                    }
+                ]
+            },
+            {
+                "description": "Bottle Potion",
+                "action": "bottle_potion",
+                "while_carried": false,
+                "conditions": [
+                    {
+                        "attribute_name": "ingredients",
+                        "value": 0,
+                        "comparison": "greater_than"
+                    }
+                ]
+            },
+            {
+                "description": "Dump Cauldron",
+                "action": "dump_cauldron",
+                "while_carried": false,
+                "conditions": [
+                    {
+                        "attribute_name": "ingredients",
+                        "value": 0,
+                        "comparison": "greater_than"
+                    }
+                ]
+            }
+        ]
     },
     {
         "name": "Gold",

@@ -1,4 +1,4 @@
-import { floor, Coord } from '@rt-potion/common';
+import { floor, Coord, calculateDistance } from '@rt-potion/common';
 import { UsesRegistry } from './uses/usesRegistry';
 import { OnTickRegistry } from './on_ticks/onTickRegistry';
 import { DB } from '../services/database';
@@ -26,6 +26,7 @@ export interface ItemData {
   position_y: number;
   house_id?: string;
   lock?: string;
+  drops_item?: string; // i was here :3
 }
 
 export interface ItemAttributeData {
@@ -45,6 +46,7 @@ interface ItemParams {
   house?: House;
   attributes: Record<string, string | number>;
   carriedBy?: Mob;
+  drops_item?: string; //i was here :3
 }
 
 export class Item {
@@ -52,6 +54,7 @@ export class Item {
   public position?: Coord;
   public readonly itemType: ItemType;
   public readonly type: string;
+  public readonly drops_item;
   private attributes: ItemAttributes = {};
 
   public readonly owned_by?: string;
@@ -78,6 +81,7 @@ export class Item {
     this.subtype = subtype;
     this.house = house?.id;
     this.owned_by = ownedBy?.id;
+    this.drops_item = itemType.drops_item;
 
     for (const [key, value] of Object.entries(attributes)) {
       this.attributes[key] = value;
@@ -210,6 +214,32 @@ export class Item {
             `
     ).get({ type }) as { number: number };
     return count.number;
+  }
+
+  static countTypeOfItemInRadius(
+    type: string,
+    position: Coord,
+    radius: number
+  ): number {
+    // Get all items of the specified type
+    const itemLocs = DB.prepare(
+      `
+        SELECT position_x, position_y FROM items WHERE type = :type AND position_x NOT NULL AND position_y NOT NULL
+      `
+    ).all({ type }) as { position_x: number; position_y: number }[];
+
+    // Turn x, y data into Coord data
+    const itemLocsAsCoords: Coord[] = itemLocs.map((loc) => ({
+      x: loc.position_x,
+      y: loc.position_y
+    }));
+
+    // Filter out items that are outside of the radius
+    const itemsLocsInRadius: Coord[] = itemLocsAsCoords.filter(
+      (loc) => calculateDistance(position, loc) <= radius
+    );
+
+    return itemsLocsInRadius.length;
   }
 
   static findEmptyPosition(position: Coord, maxRadius: number = 50): Coord {

@@ -1,0 +1,10 @@
+project_name = "potions"
+environment = "dev"
+
+# Ably configuration
+ably_account_token = "your-ably-access-token"
+
+# Supabase configuration
+supabase_access_token = "your-access-token"
+supabase_db_pass = "bobbybrowngoesdown"
+supabase_organization_id = "your-organization-id"

@@ -32,7 +32,6 @@ export class SpriteItem extends Item {
     for (const key in item.attributes) {
       this.attributes[key] = item.attributes[key];
     }
-
     // Intialize health bar for smashable item types
     if(this.itemType.layout_type) {
       this.healthBar = scene.add.graphics();
@@ -208,8 +207,10 @@ export class SpriteItem extends Item {
         if (nearbyMobs.some((mob) => mob.unlocks.includes(this.lock!))) {
           //console.log('Gate open');
           this.sprite.setFrame(`${this.type}-open`);
+          this.itemType.open = true;
         } else {
           this.sprite.setFrame(`${this.type}-closed`);
+          this.itemType.open = false;
         }
       }
     } else if (this.itemType.layout_type === 'fence') {
@@ -332,11 +333,11 @@ export class SpriteItem extends Item {
   }
 
   calculateHealthPercentage() {
-    return (Number(this.attributes['health']) / this.maxHealth!);
+    return Number(this.attributes['health']) / this.maxHealth!;
   }
 
   isBelowMaxHealth() {
-    return (Number(this.attributes['health']) < this.maxHealth!);
+    return Number(this.attributes['health']) < this.maxHealth!;
   }
 
   updateHealthBar() {

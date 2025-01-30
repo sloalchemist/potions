@@ -5,6 +5,7 @@ import {
   numberToHexString
 } from './utils/color';
 import { world } from './scenes/worldScene';
+import { setupAbly } from './services/ablySetup';
 
 export let characterId: string;
 export let publicCharacterId: string;
@@ -48,6 +49,13 @@ export class Character {
     return world.mobs[publicCharacterId].attributes['speed'];
   }
 
+  get target_speed_tick(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].attributes['target_speed_tick'];
+  }
+
   subtype(): string {
     return `${this.eyeColor}-${this.bellyColor}-${this.furColor}`;
   }
@@ -65,6 +73,12 @@ export async function refresh() {
 }
 
 export async function changeName(name: string) {
+  if (localStorage.getItem('name') !== name) {
+    characterId = uuidv4();
+    publicCharacterId = characterId.substr(0, 8);
+    localStorage.setItem('characterId', characterId);
+    setupAbly();
+  }
   localStorage.setItem('name', name);
   currentCharacter!.name = name;
 }
