@@ -140,9 +140,13 @@ export class AblyService implements PubSub {
     }
   }
 
+  //TODO: estrada - this is the function that handles the 'join' event from the auth-server
   private handleUserJoin(message: Types.Message): void {
     console.log('User joined', message.data);
     if (message.data.world === this.worldID) {
+      console.log('data.name:', message.data.name)
+      console.log('data.health:', message.data.health)
+      console.log('data.gold:', message.data.gold)
       this.userMembershipChannel.publish('serving', {
         name: message.data.name,
         world: this.worldID,
@@ -345,6 +349,7 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(target, 'chat_close', { target: mob_key });
   }
 
+  //TODO: estrada check out kll function to send user data
   public kill(key: string): void {
     this.addToBroadcast({ type: 'destroy_mob', data: { id: key } });
     const playerChannel = this.userChannels[key];
@@ -379,37 +384,7 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(mob_key, 'player_responses', { responses });
   }
 
-  /* Relay persistance request to the auth-server */
-  public sendPersistenceRequest(username: string, char_id: number) {
-    console.log("Updating state info for", username);
-      const player = Mob.getMob(username);
-      if (!player) {
-        throw new Error('no player found ' + username);
-      }
-      let health_for_update = player.health;
-      let gold_for_update = player.gold;
-      if (player.health <= 0){
-        //get default health to reset
-        health_for_update = mobFactory.getTemplate('player').health; 
-        gold_for_update = 0;  //reset gold to 0
-      }
-      console.log('\t Persist player health:', health_for_update);
-      console.log('\t Persist player gold:', gold_for_update);
-
-      // Update existing character data
-      const playerData: PlayerData = {
-        health: health_for_update,
-        name: player.name,
-        gold: gold_for_update,
-        appearance: ""
-      };
-
-      console.log("JSON of Player data: \n \t", JSON.stringify(playerData));
-      
-      this.sendPlayerData(char_id, playerData);
-  }
-
-  public setupChannels(username: string, char_id: number, health: number, gold: number) {
+  public setupChannels(username: string) {
     const playerChannelName = `${username}-${this.worldID}`;
     const playerChannel = this.ably.channels.get(playerChannelName);
     this.userChannels[username] = playerChannel;
@@ -498,12 +473,5 @@ export class AblyService implements PubSub {
 
       player.setMoveTarget(target, false);
     });
-
-    // subscribe to a new topic "update_state" that will call the auth-server update api with player info
-    subscribeToPlayerChannel('update_state', (data) => {
-      this.sendPersistenceRequest(username, char_id);
-    });
-
-    
   }
 }

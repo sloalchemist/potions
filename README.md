@@ -74,7 +74,7 @@ Previously you were required to setup Ably, Supabase and several `.env` files ma
 ### Supabase Setup
 
 In order to migrate supabase tables we need to use the supabase CLI and connect it to our remote database.
-You can skip these steps by going to the migrations section, copying the SQL there and putting it into the supabase SQL editor.
+You can skip these steps by going to the migratiosn section, copying the SQL there and putting it into the supabase SQL editor.
 However, once you set this up it'll work for all future migrations.
 
 **1. Install the supabase CLI.**
