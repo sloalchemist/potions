@@ -33,11 +33,11 @@ export class SpriteItem extends Item {
       this.attributes[key] = item.attributes[key];
     }
     // Intialize health bar for smashable item types
-    if(this.itemType.layout_type) {
+    if (this.itemType.layout_type) {
       this.healthBar = scene.add.graphics();
       scene.itemTypes[item.type].attributes?.forEach((attribute) => {
-        if (attribute["name"] == "health") {
-          this.maxHealth = Number(attribute["value"]);
+        if (attribute['name'] == 'health') {
+          this.maxHealth = Number(attribute['value']);
         }
       });
     }

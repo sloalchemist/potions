@@ -89,7 +89,7 @@ describe('Fence health bar updates with state', () => {
               // Copied From SpriteItem Constructor
               if (itemType.layout_type) {
                 this.healthBar = scene.add.graphics();
-                this.maxHealth = maxHealth
+                this.maxHealth = maxHealth;
               }
             },
             updateHealthBar: jest.fn()
@@ -117,7 +117,7 @@ describe('Fence health bar updates with state', () => {
       layout_type: undefined
     });
     expect(heartbeat.healthBar).not.toBeDefined();
-    fullHealthHeartbeat.updateHealthBar();
+    heartbeat.updateHealthBar();
     expect(heartbeat.healthBar).not.toBeDefined();
   });
 });
