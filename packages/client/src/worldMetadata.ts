@@ -70,7 +70,6 @@ export class Character {
 
 function handlePlayerDeath(character: Character) {
   // When player dies, they drop half their gold
-  // Ticket says inventory + half their gold drops on the ground but idk what that means...
   console.log('Handling player death:', character);
   const halfGold = Math.floor(character.gold / 2);
 
