@@ -277,12 +277,6 @@
       "smashable": true,
       "interactions": [
         {
-          "description": "Brew red potion",
-          "action": "brew",
-          "while_carried": true,
-          "requires_item": "cauldron"
-        },
-        {
           "description": "Eat",
           "action": "eat",
           "while_carried": true
@@ -433,12 +427,6 @@
         }
       ],
       "interactions": [
-        {
-          "description": "Brew blue potion",
-          "action": "brew",
-          "while_carried": true,
-          "requires_item": "cauldron"
-        },
         {
           "description": "Eat",
           "action": "eat",
@@ -691,11 +679,57 @@
     },
     {
       "name": "Cauldron",
-      "description": "For mixing potions",
       "type": "cauldron",
       "carryable": false,
       "walkable": false,
-      "interactions": []
+      "attributes": [
+        {
+          "name": "ingredients",
+          "value": 0
+        },
+        {
+          "name": "potion_subtype",
+          "value": ""
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Add Ingredient",
+          "action": "add_ingredient",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "ingredients",
+              "value": 3,
+              "comparison": "less_than"
+            }
+          ]
+        },
+        {
+          "description": "Bottle Potion",
+          "action": "bottle_potion",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "ingredients",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
+        },
+        {
+          "description": "Dump Cauldron",
+          "action": "dump_cauldron",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "ingredients",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Gold",
