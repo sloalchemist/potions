@@ -94,21 +94,17 @@ export class Community {
     ).run({name1: id_1, name2: id_2, num: amount })
   }
 
-  static adjustFavor(species_name: string, amount: number) {
+  static adjustFavor(first: Community, second: Community, amount: number) {
+    // This adjusts favorability between two communities
     DB.prepare(
     `   UPDATE favorability
-        
+        SET favorability = favorability + :amount
+        WHERE
+            (community_1_id = :id_1 AND community_2_id = :id_2) OR
+            (community_1_id = :id_2 AND community_2_id = :id_1)
         `
-    ).run({ name: species_name, num: amount })
+    ).run({ id_1: first.id, id_2: second.id, num: amount })
   } 
-
-  static judgeConversation(conversation : string, personality_trait : string, satiety_score: number): number {
-    // feed convo into llm
-    var prompt = `
-    You are a judge and you want to give a score from -5 to 5 how friendly the
-    conversation is. Give a single numerical output.
-    `
-  }
 
   static SQL = `
         CREATE TABLE community (
