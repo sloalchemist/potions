@@ -8,7 +8,7 @@ import {
 import { bindAblyToWorldScene, setupAbly } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
 import { Coord } from '@rt-potion/common';
-import { publicCharacterId, Character, currentCharacter } from '../worldMetadata';
+import { publicCharacterId } from '../worldMetadata';
 import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
@@ -527,9 +527,6 @@ export class WorldScene extends Phaser.Scene {
 
   resetToRespawn() {
     this.scene.stop('WorldScene');
-    if(currentCharacter) {
-      currentCharacter.respawn();
-    }
 
     setupAbly()
       .then(() => {
