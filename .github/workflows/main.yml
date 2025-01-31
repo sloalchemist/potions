@@ -1,0 +1,60 @@
+name: Build and Deploy Client
+
+on:
+  push:
+    branches:
+      - client-prod  # Trigger on pushes to the main branch
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  build:
+    name: Build Client
+    runs-on: ubuntu-latest
+    environment: github-pages
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Use the version your project requires
+
+      # Step 3: Install PNPM
+      - name: Install PNPM
+        run: |
+          npm install -g pnpm
+
+      # Step 4: Install dependencies
+      - name: Install Dependencies
+        run: |
+          pnpm install
+
+      # Step 5 Create Env File
+      - name: Create env file
+        run: |
+          touch packages/client/.env
+          echo SERVER_URL=${{ vars.SERVER_URL }} >> packages/client/.env
+          cat packages/client/.env
+
+      # Step 6: Build the client
+      - name: Build Client
+        run: |
+          pnpm build
+          
+      # Step 7: Copy Static Files for index.html
+      - name: Copy Static Files
+        run: |
+          cp -r ./packages/client/static ./packages/client/dist/static
+          cp -r ./packages/client/githubPages/index.html ./packages/client/dist
+
+      # Step 8: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: ./packages/client/dist
+            
