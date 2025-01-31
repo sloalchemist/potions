@@ -1,0 +1,9 @@
+services:
+  server:
+    image: server
+    pull_policy: never
+    container_name: server
+    build: 
+      context: .
+      dockerfile: ./packages/server/Dockerfile
+    
