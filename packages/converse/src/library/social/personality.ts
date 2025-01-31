@@ -70,7 +70,7 @@ export class Personality {
   }
 
   /**
-   * Gets the value of a specific personality trait.
+   * Gets the value of the specified personality trait for the speaker from the database.
    * @param {PersonalityTraits} trait - The trait to get the value of.
    * @returns {number} The value of the trait.
    */
@@ -124,7 +124,8 @@ export class Personality {
   static traitsEverUsed: PersonalityTraits[] = [];
 
   /**
-   * Reinforces the specified personality traits.
+   * Increases the values of the specified personality traits for the speaker.
+   * The 'immaturity' trait is reduced by 10% in each reinforcement.
    * @param {PersonalityTraits[]} traits - The traits to reinforce.
    */
   reinforceTraits(traits: PersonalityTraits[]): void {
@@ -154,7 +155,7 @@ export class Personality {
   }
 
   /**
-   * Gets the description of the personality.
+   * Gets the description of the speaker's personality.
    * @returns {string} The description of the personality.
    */
   description(): string {

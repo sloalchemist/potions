@@ -302,6 +302,7 @@ export class Conversation {
 
   /**
    * Gets the potential speech acts for the current speaker.
+   * This function generates a list of possible speech acts that the current speaker can perform based on the last speech act, the current speaker, and the topics covered in the conversation.
    * @param {Speaker} currentSpeaker - The current speaker.
    * @returns {SpeechAct[]} The potential speech acts.
    * @private

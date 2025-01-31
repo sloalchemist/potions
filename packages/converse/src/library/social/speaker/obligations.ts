@@ -5,10 +5,21 @@ import { Speaker } from './speaker';
 export class Obligations {
   private mob: Speaker;
 
+  /**
+   * Creates an instance of Obligations.
+   * @param {Speaker} mob - The speaker who has obligations.
+   */
   constructor(mob: Speaker) {
     this.mob = mob;
   }
 
+  /**
+   * Creates an obligation for the speaker to owe another speaker a certain amount of an item by a specific tick.
+   * @param {Speaker} owed - The speaker who is owed.
+   * @param {number} amount - The amount of the item owed.
+   * @param {Item} item - The item that is owed.
+   * @param {number} byTick - The tick by which the obligation must be fulfilled.
+   */
   obligate(owed: Speaker, amount: number, item: Item, byTick: number) {
     DB.prepare(
       `
@@ -26,6 +37,13 @@ export class Obligations {
     });
   }
 
+  /**
+   * Handles the given item and amount, updating the obligation accordingly.
+   * @param {Speaker} givenBy - The speaker who gave the item.
+   * @param {Item} item - The item that was given.
+   * @param {number} amount - The amount of the item that was given.
+   * @returns {number} The amount deducted from the obligation.
+   */
   given(givenBy: Speaker, item: Item, amount: number): number {
     const obligation = DB.prepare(
       `
@@ -66,6 +84,9 @@ export class Obligations {
     return deductedAmount;
   }
 
+  /**
+   * Processes overdue obligations, updating relationships and removing fulfilled obligations.
+   */
   tick() {
     // Fetch overdue obligations
     const overdueObligations = DB.prepare(

@@ -6,7 +6,7 @@ interface FantasyDate {
 }
 
 /**
- * Gets the current fantasy date from the database.
+ * Gets the current in-game fantasy date from the database.
  * @returns {FantasyDate} The current fantasy date.
  */
 export function current_date(): FantasyDate {
