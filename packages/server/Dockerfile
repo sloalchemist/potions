@@ -1,6 +1,5 @@
 FROM node:20-alpine
 
-RUN apk add --no-cache build-base cairo-dev pango-dev jpeg-dev giflib-dev librsvg-dev
 RUN npm install -g pnpm
 
 WORKDIR /usr/src/app/packages
