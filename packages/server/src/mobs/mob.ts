@@ -35,7 +35,6 @@ export type MobData = {
   current_action: string;
   carrying_id: string;
   community_id: string;
-  target_speed_tick: number;
 };
 
 interface MobParams {
@@ -49,7 +48,6 @@ interface MobParams {
   maxHealth: number;
   attack: number;
   community_id: string;
-  target_speed_tick: number;
   subtype: string;
   currentAction?: string;
   carrying?: string;
@@ -69,7 +67,6 @@ export class Mob {
   private target?: Coord;
   private path: Coord[];
   private speed: number;
-  private target_speed_tick: number;
   private _name: string;
   private maxHealth: number;
   private _carrying?: string;
@@ -89,7 +86,6 @@ export class Mob {
     type,
     position,
     speed,
-    target_speed_tick,
     gold,
     health,
     maxHealth,
@@ -112,7 +108,6 @@ export class Mob {
     this.target = target;
     this._position = position;
     this.speed = speed;
-    this.target_speed_tick = target_speed_tick;
     this._gold = gold;
     this._health = health;
     this.maxHealth = maxHealth;
@@ -169,10 +164,6 @@ export class Mob {
 
   get _speed(): number {
     return this.speed;
-  }
-
-  get _target_speed_tick(): number {
-    return this.target_speed_tick;
   }
 
   get current_tick(): number {
@@ -381,54 +372,89 @@ export class Mob {
     }
   }
 
-  changeTargetSpeedTick(target_tick: number): void {
-    this.target_speed_tick = target_tick;
-  }
+  changeEffect(delta: number, duration: number, attribute: string): void {
+    type QueryResult = {
+      potionType: string;
+      targetTick: number;
+    };
+    const tick = this.current_tick + duration;
 
-  changeSpeed(speedDelta: number, speedDuration: number): void {
-    // only change speed if no increase is already in progres
-    if (this.target_speed_tick === null || this.target_speed_tick === -1) {
-      this.speed += speedDelta;
-    }
-    this.target_speed_tick = this.current_tick + speedDuration;
-
-    // update the database
-    DB.prepare(
+    let value = DB.prepare(
       `
-      UPDATE mobs
-      SET speed = :speed, target_speed_tick = :target_speed_tick
-      WHERE id = :id
+      SELECT ${attribute}
+      FROM mobs
+      WHERE id = :id 
       `
-    ).run({
-      speed: this.speed,
-      target_speed_tick: this._target_speed_tick,
+    ).get({
       id: this.id
-    });
+    }) as number;
 
-    pubSub.changeSpeed(this.id, speedDelta, this.speed);
-    pubSub.changeTargetSpeedTick(
-      this.id,
-      speedDuration,
-      this._target_speed_tick
-    );
-  }
+    const result = DB.prepare(
+      `
+      SELECT potionType, targetTick
+      FROM mobEffects
+      WHERE id = :id AND targetTick >= :currentTick AND potionType = :attribute
+      `
+    ).get({
+      id: this.id,
+      currentTick: this.current_tick,
+      attribute: attribute
+    }) as QueryResult | undefined;
 
-  private checkSpeedReset(speedDelta: number): void {
-    // check if target tick has been reached or is already null
-    if (
-      (this._target_speed_tick !== null || this._target_speed_tick === -1) &&
-      this.current_tick >= this._target_speed_tick
-    ) {
-      this.speed -= speedDelta;
-      this.target_speed_tick = -1;
+    if (!result || duration === -1) {
+      switch (attribute) {
+        case 'speed': // TODO: add other attributes as we add them to the game
+          this.speed += delta;
+          value = this.speed;
+      }
+
       DB.prepare(
         `
         UPDATE mobs
-        SET speed = :speed, target_speed_tick = :target_speed_tick
+        SET ${attribute} = :value
         WHERE id = :id
         `
-      ).run({ speed: this.speed, target_speed_tick: null, id: this.id });
-      pubSub.changeSpeed(this.id, -speedDelta, this.speed);
+      ).run({
+        value: value,
+        id: this.id
+      });
+    }
+
+    DB.prepare(
+      `
+      INSERT INTO mobEffects (id, potionType, targetTick)
+      VALUES (:id, :potionType, :targetTick)
+      `
+    ).run({
+      id: this.id,
+      potionType: attribute,
+      targetTick: tick
+    });
+
+    pubSub.changeEffect(this.id, attribute, delta, value);
+    pubSub.changeTargetTick(this.id, attribute, duration, tick);
+  }
+
+  private checkTickReset(): void {
+    type QueryResult = {
+      potionType: string;
+    };
+    const result = DB.prepare(
+      `
+      SELECT potionType
+      FROM mobEffects
+      WHERE id = :id AND targetTick <= :currentTick
+      `
+    ).all({
+      id: this.id,
+      currentTick: this.current_tick
+    }) as QueryResult[];
+
+    for (const element of result) {
+      switch (element.potionType) {
+        case 'speed': // TODO: add other attributes as we add them to the game
+          this.changeEffect(-2, -1, element.potionType);
+      }
     }
   }
 
@@ -569,7 +595,7 @@ export class Mob {
   static getMob(key: string): Mob | undefined {
     const mob = DB.prepare(
       `
-            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id, target_speed_tick
+            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id
             FROM mobs
             WHERE id = :id
         `
@@ -583,7 +609,6 @@ export class Mob {
       type: mob.action_type,
       position: { x: mob.position_x, y: mob.position_y },
       speed: mob.speed,
-      target_speed_tick: mob.target_speed_tick,
       gold: mob.gold,
       health: mob.health,
       maxHealth: mob.maxHealth,
@@ -672,9 +697,7 @@ export class Mob {
       this.setAction(action.type(), finished);
     }
 
-    // we need to check if the current tick matches the targetspeedtick for the mob (check speed reset)
-    this.checkSpeedReset(2);
-
+    this.checkTickReset();
     this.needs.tick();
   }
 
@@ -702,10 +725,18 @@ export class Mob {
             social INTEGER NOT NULL DEFAULT 100,
             community_id TEXT,
             house_id TEXT,
-            target_speed_tick INTEGER,
             FOREIGN KEY (carrying_id) REFERENCES items (id) ON DELETE SET NULL,
             FOREIGN KEY (community_id) REFERENCES community (id) ON DELETE SET NULL,
             FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE SET NULL
+        );
+    `;
+
+  static effectsSQL = `
+        CREATE TABLE mobEffects (
+            id TEXT,
+            potionType TEXT,
+            targetTick INTEGER,
+            FOREIGN KEY (id) REFERENCES mobs (id) ON DELETE SET NULL 
         );
     `;
 }
