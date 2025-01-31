@@ -394,6 +394,12 @@ export class WorldScene extends Phaser.Scene {
       }
     });
 
+    let lastMovementKey: string = '';
+    let lastKeyMovementTarget: {
+      x: number | null,
+      y: number | null
+    } = { x: null, y: null };
+
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       if (!world.mobs[publicCharacterId]) {
         return;
@@ -412,38 +418,57 @@ export class WorldScene extends Phaser.Scene {
       let newX = player.position?.x;
       let newY = player.position?.y;
 
+      // prevent spamming of same key until target reached
+      if (
+        event.code === lastMovementKey && // same direction as before
+        !(
+          newX === lastKeyMovementTarget.x && //not at last target
+          newY === lastKeyMovementTarget.y
+        )
+      ) {
+        return;
+      }
+
+      console.log(`lastKey : ${lastMovementKey}, newKey : ${event.code}`);
+      console.log(`current position : (${newX}, ${newY})\nlast target : (${lastKeyMovementTarget.x}, ${lastKeyMovementTarget.y})
+        `);
+
       let movementFlag = false;
 
       if (event.code == 'KeyW') {
         // move up
         if (player.position !== null) {
-          if (newY) newY = Math.ceil(newY - 1);
+          if (newY) newY--;
         }
         movementFlag = true;
       }
       if (event.code == 'KeyS') {
         // move down
         if (player.position !== null) {
-          if (newY) newY = Math.ceil(newY + 1);
+          if (newY) newY++;
         }
         movementFlag = true;
       }
       if (event.code == 'KeyA') {
         // move left
         if (player.position !== null) {
-          if (newX) newX = Math.ceil(newX - 1);
+          if (newX) newX--;
         }
         movementFlag = true;
       }
       if (event.code == 'KeyD') {
         // move right
         if (player.position !== null) {
-          if (newX) newX = Math.ceil(newX + 1);
+          if (newX) newX++;
         }
         movementFlag = true;
       }
-      if (newX && newY && movementFlag)
-        publishPlayerPosition({ x: newX, y: newY });
+      if (newX && newY && movementFlag) {
+        console.log(`moving to (${Math.ceil(newX)}, ${Math.ceil(newY)})`);
+        lastMovementKey = event.code;
+        lastKeyMovementTarget = { x: Math.ceil(newX), y: Math.ceil(newY) };
+        publishPlayerPosition({ x: Math.ceil(newX), y: Math.ceil(newY) });
+      }
     });
 
     needsAnimationsLoaded = false;
