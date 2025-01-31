@@ -16,14 +16,14 @@ export class favorability {
             `
         ).run({ name: species_name, num: amount })
     }
+    // satiety and personality trait should also be a factory
 
-    static judgeConversation(conversation : string): number {
+    static judgeConversation(conversation : string, personality_trait : string, satiety_score: number): number {
         // feed convo into llm
         var prompt = `
         You are a judge and you want to give a score from -5 to 5 how friendly the
         conversation is. Give a single numerical output.
         `
-        
     }
 
     static SQL = `
