@@ -2,24 +2,24 @@ import { Mob } from '../mobs/mob';
 import { numberToHexString } from '../util/colorUtil';
 
 export function drinkPotion(mob: Mob, potionType: string): boolean {
-  console.log(
-    'Drinking potion of type:',
-    numberToHexString(Number(potionType))
-  );
-  if (numberToHexString(Number(potionType)) === '#ff0000') {
-    console.log('Drinking red potion');
-    mob.changeHealth(50);
-    return true;
-  } else if (numberToHexString(Number(potionType)) === '#0000ff') {
-    console.log('Drinking blue potion');
-    const speedDelta = 2;
-    const speedDuration = 30;
+  const potionStr = numberToHexString(Number(potionType));
 
-    // Change speed by calling mob.changeSpeed with delta and duration
-    mob.changeSpeed(speedDelta, speedDuration);
+  console.log('Drinking potion of type:', potionStr);
 
-    return true;
+  switch (potionStr) {
+    case '#ff0000':
+      console.log('Drinking red potion');
+      mob.changeHealth(50);
+      return true;
+    case '#0000ff':
+      console.log('Drinking blue potion');
+      const speedDelta = 2;
+      const speedDuration = 30;
+      mob.changeEffect(speedDelta, speedDuration, 'speed');
+      return true;
+    default:
+      // Handle cases where potionStr doesn't match any known potion
+      console.log('Unknown potion color');
+      return false;
   }
-
-  return false;
 }

@@ -150,7 +150,7 @@ export class SpriteMob extends Mob {
     }
 
     this.attributeListeners.push((spriteMob, key, delta) => {
-      if (!spriteMob || key === 'target_speed_tick') {
+      if (!spriteMob) {
         return;
       }
 
