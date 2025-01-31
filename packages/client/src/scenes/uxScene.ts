@@ -240,7 +240,7 @@ export class UxScene extends Phaser.Scene {
     this.updateTabStyles('chat');
   }
 
-  // Method to show the Chat tab
+  // Method to show the Mix tab
   showMixTab() {
     this.mixContainer?.setVisible(true);
     this.statsContainer?.setVisible(false);
