@@ -28,24 +28,24 @@ create or replace view
 select
   characters.character_id,
   worlds.world_id,
-  worlds.ably_api_key
+  worlds.ably_api_key,
+  characters.health,
+  characters.gold,
+  characters.pname
 from
   characters
   join worlds on worlds.id = characters.current_world_id;
 
 CREATE OR REPLACE FUNCTION load_world(
-    p_character_id UUID,
-    p_name TEXT,
-    p_appearance TEXT[]
+    p_character_id UUID
 )
 RETURNS TABLE (
     character_id UUID,
     world_id TEXT,
     ably_api_key TEXT,
-    pname NAME,
+    pname TEXT,
     health SMALLINT,
-    gold BIGINT,
-    appearance INT[]
+    gold BIGINT
 ) AS $$
 DECLARE
     existing_character RECORD;
@@ -57,15 +57,15 @@ BEGIN
 
     IF FOUND THEN
         RETURN QUERY
-        SELECT cw.character_id, cw.world_id, cw.ably_api_key
+        SELECT cw.character_id, cw.world_id, cw.ably_api_key, cw.pname,  cw.health, cw.gold
         FROM character_worlds cw
         WHERE cw.character_id = p_character_id;
     ELSE
-        INSERT INTO characters (character_id, current_world_id, pname, appearance)
-        VALUES (p_character_id, 1, p_name, p_appearance);
+        INSERT INTO characters (character_id, current_world_id)
+        VALUES (p_character_id, 1);
 
         RETURN QUERY
-        SELECT cw.character_id, cw.world_id, cw.ably_api_key
+        SELECT cw.character_id, cw.world_id, cw.ably_api_key, cw.pname,  cw.health, cw.gold
         FROM character_worlds cw
         WHERE cw.character_id = p_character_id;
     END IF;
