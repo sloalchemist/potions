@@ -6,14 +6,14 @@ WORKDIR /usr/src/app/packages
 
 RUN mkdir -p ./server ./converse ./common
 
-COPY ./packages/server/*.json ./server
-COPY ./packages/server/*.yaml ./server
-
 COPY ./packages/converse/*.json ./converse
 COPY ./packages/converse/*.yaml ./converse
 
 COPY ./packages/common/*.json ./common
 COPY ./packages/common/*.yaml ./common
+
+COPY ./packages/server/*.json ./server
+COPY ./packages/server/*.yaml ./server
 
 WORKDIR /usr/src/app
 
@@ -22,8 +22,8 @@ COPY *.yaml .
 
 RUN pnpm install 
 
-COPY ./packages/common ./packages/common
 COPY ./packages/converse ./packages/converse
+COPY ./packages/common ./packages/common
 COPY ./packages/server ./packages/server
 
 RUN pnpm build
