@@ -3,7 +3,17 @@ import { Speaker } from '../../speaker/speaker';
 import { SpeechPart } from '../speechPart';
 import { SpeechStart } from './speechStart';
 
+/**
+ * Represents a speech start when talking about a topic.
+ */
 export class TalkAbout implements SpeechStart {
+  /**
+   * Creates potential speech acts for talking about a topic.
+   * @param {Speaker} speaking - The speaker initiating the speech act.
+   * @param {Speaker} listening - The listener of the speech act.
+   * @param {string[]} alreadyTraversed - The list of already traversed topics.
+   * @returns {SpeechPart[]} The potential speech parts for the speech act.
+   */
   createPotentialSpeechAct(
     speaking: Speaker,
     listening: Speaker,

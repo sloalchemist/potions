@@ -26,27 +26,9 @@ export interface Speaker {
 
   personality: Personality;
 
-  /**
-   * Provides a description of the speaker.
-   * @returns {Belief} The belief representing the description.
-   */
   description(): Belief;
 
-  /**
-   * Calculates the benefit of an item to the speaker.
-   * @param {Item} item - The item to evaluate.
-   * @param {number} quantity - The quantity of the item.
-   * @returns {number} The calculated benefit.
-   */
   benefitOf(item: Item, quantity: number): number;
-
-  /**
-   * Finds a random desire of the speaker.
-   * @param {Speaker} knownBy - The speaker who knows the desire.
-   * @param {Speaker} givenBy - The speaker who gives the desire.
-   * @param {number} minimumValue - The minimum value of the desire.
-   * @returns {Desire | undefined} The found desire or undefined.
-   */
   findRandomDesire(
     knownBy: Speaker,
     givenBy: Speaker,

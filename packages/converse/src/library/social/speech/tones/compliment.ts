@@ -1,23 +1,48 @@
 import { PersonalityTraits } from '../../personality';
 import { Tone } from './tone';
 
+/**
+ * Represents a compliment tone.
+ */
 export class Compliment implements Tone {
-  statement() {
+  /**
+   * Returns the statement associated with the compliment tone.
+   * @returns {string} The statement.
+   */
+  statement(): string {
     return 'compliments';
   }
 
-  question() {
-    return 'asks in a complimentry way';
+  /**
+   * Returns the question associated with the compliment tone.
+   * @returns {string} The question.
+   */
+  question(): string {
+    return 'asks in a complimentary way';
   }
 
+  /**
+   * Returns the valence of the compliment tone.
+   * A positive valence indicates a positive tone.
+   * @returns {number} The valence.
+   */
   valence(): number {
     return 1;
   }
 
+  /**
+   * Returns the associated personality trait of the compliment tone.
+   * @returns {PersonalityTraits} The associated personality trait.
+   */
   associatedTrait(): PersonalityTraits {
     return 'complimentary';
   }
 
+  /**
+   * Returns the effect value of the compliment tone.
+   * The effect value indicates the strength of the tone's impact.
+   * @returns {number} The effect value.
+   */
   effect(): number {
     return 10;
   }
