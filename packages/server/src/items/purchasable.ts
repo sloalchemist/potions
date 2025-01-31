@@ -1,7 +1,6 @@
 import { Mob } from '../mobs/mob';
 import { Item } from './item';
 import { itemGenerator } from './itemGenerator';
-import { Community } from '../community/community';
 
 export class Purchasable {
   private item: Item;
@@ -71,26 +70,6 @@ export class Purchasable {
     if (this.items < 0) {
       throw new Error('Items cannot be negative');
     }
-  }
-
-  static createStandFromItem(createStandFrom: Item, creator: Mob): boolean {
-    const creatorCommunity = Community.getVillage(creator.community_id);
-    // console.log(`player belongs to ${creatorCommunity.id}, ${creatorCommunity.name}`);
-    itemGenerator.createItem({
-      type: 'potion-stand',
-      subtype: createStandFrom.subtype,
-      position: creator.position,
-      ownedBy: creatorCommunity,
-      attributes: {
-        templateType: createStandFrom.type,
-        items: 1,
-        capacity: 20
-      }
-    });
-
-    createStandFrom.destroy();
-
-    return true;
   }
 
   changePrice(amount: number) {
