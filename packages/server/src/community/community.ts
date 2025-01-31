@@ -85,12 +85,13 @@ export class Community {
     return false;
   }
 
-  static makeFavor(species_name: string, amount: number) {
+
+  static makeFavor(id_1: string, id_2: string, amount: number) {
     DB.prepare(
-    `   INSERT INTO favorability (species, favorability)
-        VALUES (:name, :num);
+    `   INSERT INTO favorability (community_1_id, community_2_id, favorability)
+        VALUES (:name1, :name2, :num);
         `
-    ).run({ name: species_name, num: amount })
+    ).run({name1: id_1, name2: id_2, num: amount })
   }
 
   static adjustFavor(species_name: string, amount: number) {
@@ -124,8 +125,12 @@ export class Community {
         );
 
         CREATE TABLE favorability (
-        species TEXT PRIMARY KEY,
-        favorability REAL NOT NULL DEFAULT 0
+            community_1_id TEXT NOT NULL,
+            community_2_id TEXT NOT NULL,
+            PRIMARY KEY (community_1_id, community_2_id),
+            favorability REAL NOT NULL DEFAULT 0,
+            FOREIGN KEY (community_1_id) REFERENCES community (id) ON DELETE CASCADE,
+            FOREIGN KEY (community_2_id) REFERENCES community (id) ON DELETE CASCADE
         );
 
     `;
