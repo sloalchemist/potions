@@ -17,6 +17,10 @@ terraform {
     time = {
       source = "hashicorp/time"
     }
+    vercel = {
+      source  = "vercel/vercel"
+      version = "2.0"
+    }
     render = {
       source  = "render-oss/render"
       version = "1.4.0"
@@ -40,6 +44,9 @@ provider "ably" {
 provider "supabase" {
   access_token = var.supabase_access_token
 }
+provider "vercel" {
+  api_token = var.vercel_api_token
+}
 
 provider "render" {
   api_key  = var.render_api_key
@@ -48,6 +55,7 @@ provider "render" {
 
 provider "github" {
   token = var.github_token
+  owner = "sloalchemist"
 }
 
 # Create Ably app
@@ -202,9 +210,19 @@ resource "render_web_service" "potions_auth" {
   ]
 }
 
-# resource "github_actions_variable" "server_url" {
-#   repository    = "potions-testing"
-#   variable_name = "SERVER_URL"
-#   value         = render_web_service.potions_auth.url
-# }
+data "github_repository" "repo" {
+  full_name = "sloalchemist/potions"
+}
+
+resource "github_repository_environment" "repo_environment" {
+  repository       = data.github_repository.repo.name
+  environment      = "prod"
+}
+
+resource "github_actions_environment_variable" "server_url" {
+  repository       = data.github_repository.repo.name
+  environment      = github_repository_environment.repo_environment.environment
+  variable_name = "SERVER_URL"
+  value       = render_web_service.potions_auth.url
+}
 

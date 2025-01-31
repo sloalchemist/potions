@@ -49,3 +49,9 @@ variable "github_token" {
   type        = string
   sensitive   = true
 }
+
+variable "vercel_api_token" {
+    description = "Vercel API Token"
+    type = string
+    sensitive = true
+}
