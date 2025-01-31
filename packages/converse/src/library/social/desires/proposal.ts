@@ -31,7 +31,7 @@ export class Offer {
 
   /**
    * Compares two offers by their item and quantity. Returns true if both items and quantities are equal, false otherwise.
-   * 
+   *
    * @param other - The offer to compare with.
    * @returns True if the offers are equal, false otherwise.
    */

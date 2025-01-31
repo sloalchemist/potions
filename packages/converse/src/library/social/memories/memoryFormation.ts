@@ -9,6 +9,7 @@ class PotentialMemory {
   private connections: string[] = [];
 
   /**
+   * Constructs a new instance of PotentialMemory with the provided key, name, and description.
    * @param key Unique identifier for the potential memory.
    * @param name Display name for the potential memory.
    * @param description Description for the potential memory.

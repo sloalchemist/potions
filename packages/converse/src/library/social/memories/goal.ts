@@ -18,7 +18,7 @@ export class Goal {
    * Prepares a goal by randomly selecting an interest_id from
    * the 'nouns' table and inserting it into the 'goals' table
    * if it does not already exist for the given owner.
-   * 
+   *
    * @param owner - The Speaker who owns this goal.
    */
   constructor(owner: Speaker) {

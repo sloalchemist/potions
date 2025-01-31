@@ -9,6 +9,7 @@ import { SpeechStart } from './speechStart';
 export class TalkAbout implements SpeechStart {
   /**
    * Creates potential speech acts for talking about a topic.
+   *
    * @param speaking - The speaker initiating the speech act.
    * @param listening - The listener of the speech act.
    * @param alreadyTraversed - The list of already traversed topics.

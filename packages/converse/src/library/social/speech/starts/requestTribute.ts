@@ -9,6 +9,7 @@ import { SpeechStart } from './speechStart';
 export class RequestTribute implements SpeechStart {
   /**
    * Creates potential speech acts for requesting a tribute.
+   *
    * @param speaking - The speaker initiating the speech act.
    * @param listening - The listener of the speech act.
    * @param alreadyTraversed - The list of already traversed topics.

@@ -28,9 +28,10 @@ export class DatabaseSpeaker implements Speaker {
 
   /**
    * Creates an instance of DatabaseSpeaker.
-   * @param {string} id - The unique identifier for the speaker.
-   * @param {string} name - The name of the speaker.
-   * @param {string} type - The type/category of the speaker.
+   *
+   * @param id - The unique identifier for the speaker.
+   * @param name - The name of the speaker.
+   * @param type - The type/category of the speaker.
    */
   constructor(id: string, name: string, type: string) {
     this.id = id;
@@ -48,7 +49,8 @@ export class DatabaseSpeaker implements Speaker {
 
   /**
    * Retrieves the description belief about the speaker.
-   * @returns {Belief} The belief about the speaker's description.
+   *
+   * @returns The belief about the speaker's description.
    */
   description(): Belief {
     return memoryService.getBeliefAbout(this.id, 'description');
@@ -56,9 +58,10 @@ export class DatabaseSpeaker implements Speaker {
 
   /**
    * Calculates the benefit of a given item in a specified quantity for the speaker.
-   * @param {Item} item - The item to evaluate.
-   * @param {number} quantity - The quantity of the item.
-   * @returns {number} The calculated benefit of the item.
+   *
+   * @param item - The item to evaluate.
+   * @param quantity - The quantity of the item.
+   * @returns The calculated benefit of the item.
    */
   benefitOf(item: Item, quantity: number): number {
     const benefit = DB.prepare(
@@ -77,10 +80,11 @@ export class DatabaseSpeaker implements Speaker {
 
   /**
    * Finds a random desire for the speaker that meets the minimum value and is not already obligated.
-   * @param {Speaker} knownBy - The speaker who knows about the desire.
-   * @param {Speaker} givenBy - The speaker who would give the desired item.
-   * @param {number} minimumValue - The minimum benefit value for the desire.
-   * @returns {Desire | undefined} The found desire or undefined if no desire meets the criteria.
+   *
+   * @param knownBy - The speaker who knows about the desire.
+   * @param givenBy - The speaker who would give the desired item.
+   * @param minimumValue - The minimum benefit value for the desire.
+   * @returns The found desire or undefined if no desire meets the criteria.
    */
   findRandomDesire(
     knownBy: Speaker,
@@ -120,8 +124,9 @@ export class DatabaseSpeaker implements Speaker {
 
   /**
    * Loads a DatabaseSpeaker instance by name.
-   * @param {string} name - The name of the speaker to load.
-   * @returns {DatabaseSpeaker} The loaded DatabaseSpeaker instance.
+   *
+   * @param name - The name of the speaker to load.
+   * @returns The loaded DatabaseSpeaker instance.
    * @throws Will throw an error if no speaker with the given name is found.
    */
   static loadByName(name: string): DatabaseSpeaker {
@@ -153,9 +158,10 @@ export class DatabaseSpeaker implements Speaker {
 
   /**
    * Loads or creates a DatabaseSpeaker instance by ID.
-   * @param {string} id - The ID of the speaker to load or create.
-   * @param {string} name - The name of the speaker to create if not found.
-   * @returns {DatabaseSpeaker} The loaded or created DatabaseSpeaker instance.
+   *
+   * @param id - The ID of the speaker to load or create.
+   * @param name - The name of the speaker to create if not found.
+   * @returns The loaded or created DatabaseSpeaker instance.
    */
   static loadOrCreate(id: string, name: string): DatabaseSpeaker {
     // Query the database to retrieve the mob
@@ -189,8 +195,9 @@ export class DatabaseSpeaker implements Speaker {
 
   /**
    * Loads a DatabaseSpeaker instance by ID.
-   * @param {string} id - The ID of the speaker to load.
-   * @returns {DatabaseSpeaker} The loaded DatabaseSpeaker instance.
+   *
+   * @param id - The ID of the speaker to load.
+   * @returns The loaded DatabaseSpeaker instance.
    * @throws Will throw an error if no speaker with the given ID is found.
    */
   static load(id: string): DatabaseSpeaker {
