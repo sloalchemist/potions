@@ -85,10 +85,27 @@ export class Community {
     return false;
   }
 
+  static getFavor(id_1: string, id_2: string) {
+    const favorNum = DB.prepare(
+            `
+            SELECT favor
+            FROM favorability
+            WHERE
+              (community_1_id = :id_1 AND community_2_id = :id_2) OR
+              (community_1_id = :id_2 AND community_2_id = :id_1);
+            `
+    ).get({ id_1: id_1, id_2: id_2 }) as { favor: number };
+    if (!favorNum) {
+      throw new Error(`Non-existent communities in favorability database with ${id_1} and ${id_2}`)
+    }
+    return favorNum.favor;
+  }
+
 
   static makeFavor(id_1: string, id_2: string, amount: number) {
+    // Initialize favorability between two communities
     DB.prepare(
-    `   INSERT INTO favorability (community_1_id, community_2_id, favorability)
+    `   INSERT INTO favorability (community_1_id, community_2_id, favor)
         VALUES (:name1, :name2, :num);
         `
     ).run({name1: id_1, name2: id_2, num: amount })
@@ -98,7 +115,7 @@ export class Community {
     // This adjusts favorability between two communities
     DB.prepare(
     `   UPDATE favorability
-        SET favorability = favorability + :amount
+        SET favor = favor + :amount
         WHERE
             (community_1_id = :id_1 AND community_2_id = :id_2) OR
             (community_1_id = :id_2 AND community_2_id = :id_1)
@@ -111,6 +128,15 @@ export class Community {
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL
         );
+
+        CREATE TABLE favorability (
+            community_1_id TEXT NOT NULL,
+            community_2_id TEXT NOT NULL,
+            favor REAL NOT NULL DEFAULT 0,
+            PRIMARY KEY (community_1_id, community_2_id),
+            FOREIGN KEY (community_1_id) REFERENCES community (id) ON DELETE CASCADE,
+            FOREIGN KEY (community_2_id) REFERENCES community (id) ON DELETE CASCADE
+        );
         
         CREATE TABLE alliances (
             community_1_id TEXT NOT NULL,
@@ -120,14 +146,6 @@ export class Community {
             FOREIGN KEY (community_2_id) REFERENCES community (id) ON DELETE CASCADE
         );
 
-        CREATE TABLE favorability (
-            community_1_id TEXT NOT NULL,
-            community_2_id TEXT NOT NULL,
-            PRIMARY KEY (community_1_id, community_2_id),
-            favorability REAL NOT NULL DEFAULT 0,
-            FOREIGN KEY (community_1_id) REFERENCES community (id) ON DELETE CASCADE,
-            FOREIGN KEY (community_2_id) REFERENCES community (id) ON DELETE CASCADE
-        );
 
     `;
 }
