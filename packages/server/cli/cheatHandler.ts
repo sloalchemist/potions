@@ -14,8 +14,12 @@ export const HELP_PROMPT = `Available commands:
 
 export let rl: readline.Interface;
 
-// initialize the CLI on the server
-export const initializeCli = () => {
+/**
+ * Initialize the CLI for the server.
+ *
+ * @returns {void}
+ */
+export function initializeCli() {
   rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -27,18 +31,29 @@ export const initializeCli = () => {
   console.log('Potions server running...');
   console.log("Potions Cheat CLI enabled. Type 'help' for commands.");
   rl.prompt();
-};
+}
 
-// close the CLI
-export const closeCli = () => {
+/**
+ * Close the CLI.
+ *
+ * @returns {void}
+ */
+export function closeCli() {
   if (rl) {
     rl.close();
     console.log('Exiting CLI. Potions server still running.');
   }
-};
+}
 
-// parse the coordinate arguments
-const parseCoordinates = (args: Array<string>) => {
+/**
+ * Parse the coordinates for the spawn command.
+ *
+ * @param {Array<string>} args - The arguments for the spawn command.
+ * @returns {Record<string, string | number>} - The parsed coordinates.
+ */
+function parseCoordinates(
+  args: Array<string>
+): Record<string, string | number> {
   const attributes: Record<string, string | number> = {};
   if (args.length !== 2) {
     throw new Error(
@@ -61,10 +76,15 @@ const parseCoordinates = (args: Array<string>) => {
     attributes[key] = Number(value);
   });
   return attributes;
-};
+}
 
-// handler for all CLI commands
-export const handleCliCommand = (input: string) => {
+/**
+ * Handle the CLI commands
+ *
+ * @param input
+ * @returns {void}
+ */
+export function handleCliCommand(input: string) {
   const [command, entityType, name, ...args] = input.trim().split(' ');
 
   if (command === 'spawn') {
@@ -127,4 +147,4 @@ export const handleCliCommand = (input: string) => {
   }
 
   rl.prompt();
-};
+}
