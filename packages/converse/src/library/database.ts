@@ -18,8 +18,9 @@ export function initializeInMemoryDatabase() {
 
 /**
  * Initializes an SQLite database from a file.
- * @param {string} dbPath - The path to the database file.
- * @param {boolean} [rebuild=false] - Whether to rebuild the database if it already exists.
+ *
+ * @param dbPath - The path to the database file.
+ * @param rebuild - Whether to rebuild the database if it already exists.
  */
 export function initializeDatabase(dbPath: string, rebuild: boolean = false) {
   const absolutePath = path.resolve(dbPath);

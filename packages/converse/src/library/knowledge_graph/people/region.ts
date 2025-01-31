@@ -3,6 +3,9 @@ import { Belief } from '../belief';
 import { Noun } from '../noun';
 import { Desire } from '../desire';
 
+/**
+ * Represents a region in the knowledge graph.
+ */
 export class Region implements Graphable {
   id: string;
   name: string;
@@ -53,7 +56,7 @@ export class Region implements Graphable {
   getNoun(): Noun {
     return this.noun;
   }
-  
+
   /**
    * Retrieves an array of beliefs associated with the region.
    *

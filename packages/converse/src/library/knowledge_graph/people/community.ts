@@ -4,6 +4,9 @@ import { Noun } from '../noun';
 import { Graphable } from './graphable';
 import { Region } from './region';
 
+/**
+ * Represents a community in the knowledge graph.
+ */
 export class Community implements Graphable {
   id: string;
   name: string;

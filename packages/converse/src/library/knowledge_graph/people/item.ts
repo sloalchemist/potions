@@ -4,6 +4,9 @@ import { Noun } from '../noun';
 import { Graphable } from './graphable';
 import { Region } from './region';
 
+/**
+ * Represents an item in the knowledge graph.
+ */
 export class Item implements Graphable {
   private readonly noun: Noun;
 

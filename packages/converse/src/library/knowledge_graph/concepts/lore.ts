@@ -1,5 +1,8 @@
 import { Concept, ConceptHierarchy } from './concept';
 
+/**
+ * Represents a hierarchy of lore-related concepts.
+ */
 export class Lore implements ConceptHierarchy {
   /**
    * Gets concepts related to the lore of a subject.

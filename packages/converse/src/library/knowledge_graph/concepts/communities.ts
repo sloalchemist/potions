@@ -1,5 +1,8 @@
 import { Concept, ConceptHierarchy } from './concept';
 
+/**
+ * Represents a hierarchy of community-related concepts.
+ */
 export class Communities implements ConceptHierarchy {
   /**
    * Retrieves concepts related to communities.

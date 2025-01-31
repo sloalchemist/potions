@@ -5,6 +5,9 @@ import { Community } from './community';
 import { Graphable } from './graphable';
 import { Person } from './person';
 
+/**
+ * Represents an Eventy in the knowledge graph.
+ */
 export class Eventy implements Graphable {
   public readonly name: string;
   public readonly type: string;
@@ -58,7 +61,7 @@ export class Eventy implements Graphable {
   getNoun(): Noun {
     return this.noun;
   }
-  
+
   /**
    * Retrieves an array of beliefs associated with the event.
    *

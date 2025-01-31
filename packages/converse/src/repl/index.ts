@@ -21,7 +21,7 @@ const rl = readline.createInterface({
  * from the database. This function executes an SQL query to select two random
  * villagers whose beliefs indicate a relationship to the 'Silverclaw' community.
  *
- * @returns {string[]} An array containing the IDs of the selected villagers.
+ * @returns An array containing the IDs of the selected villagers.
  */
 function twoRandomSilverClaws(): string[] {
   // Define the type for the rows returned by the query
@@ -53,22 +53,22 @@ set_current_date({
 });
 
 const speakerService: SpeakerService = {
-/**
- * Closes the chat between two entities identified by their keys.
- *
- * @param mobKey - The identifier for the first entity involved in the chat.
- * @param target - The identifier for the second entity involved in the chat.
- */
+  /**
+   * Closes the chat between two entities identified by their keys.
+   *
+   * @param mobKey - The identifier for the first entity involved in the chat.
+   * @param target - The identifier for the second entity involved in the chat.
+   */
   closeChat: function (mobKey: string, target: string): void {
     console.log(`Chat closed between ${mobKey} and ${target}.`);
   },
-/**
- * Displays a list of possible responses for a speaker and prompts the user
- * to select one by entering its corresponding number.
- *
- * @param speaker - The speaker for whom the responses are being shown.
- * @param responses - An array of possible responses to display.
- */
+  /**
+   * Displays a list of possible responses for a speaker and prompts the user
+   * to select one by entering its corresponding number.
+   *
+   * @param speaker - The speaker for whom the responses are being shown.
+   * @param responses - An array of possible responses to display.
+   */
   possibleResponses: function (speaker: Speaker, responses: string[]): void {
     responses.forEach((response, index) => {
       console.log(`${index}: ${response}`);
@@ -93,7 +93,7 @@ const speakerService: SpeakerService = {
  * all members of the tribe. This is useful for testing the conversation code.
  *
  * @remarks
- * This function is intended to be used in the REPL (Read-Eval-Print Loop). It is 
+ * This function is intended to be used in the REPL (Read-Eval-Print Loop). It is
  * not intended to be called from other code.
  */
 async function main() {
@@ -158,8 +158,6 @@ const conversation = new Conversation(
   speakerService
 );
 
-//console.log('random concept', memoryService.getRandomConcept());
-
 /**
  * Prompts the user to enter a number, and will recursively call itself until
  * the user enters a valid number in the range of 0 to numOptions - 1.
@@ -184,7 +182,6 @@ function promptForNumber(numOptions: number) {
 }
 
 rl.on('line', () => {
-  //console.log(`blah blah`);
   conversation.prepareNextResponse();
 
   if (conversation.isFinished()) {

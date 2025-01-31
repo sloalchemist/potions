@@ -1,5 +1,8 @@
 import { Concept, ConceptHierarchy } from './concept';
 
+/**
+ * Represents a hierarchy of desire-related concepts.
+ */
 export class Desires implements ConceptHierarchy {
   /**
    * Retrieves concepts related to the desires of a subject.

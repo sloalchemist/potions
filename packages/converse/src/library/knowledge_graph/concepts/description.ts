@@ -1,5 +1,8 @@
 import { Concept, ConceptHierarchy } from './concept';
 
+/**
+ * Represents a hierarchy of description-related concepts.
+ */
 export class Description implements ConceptHierarchy {
   /**
    * Gets concepts related to the description of a subject.

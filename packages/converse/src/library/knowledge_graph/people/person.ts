@@ -4,6 +4,9 @@ import { Noun } from '../noun';
 import { Community } from './community';
 import { Graphable } from './graphable';
 
+/**
+ * Represents a person's feelings about another person or thing.
+ */
 class FeelingsAbout {
   /**
    * Construct a new instance of the FeelingsAbout class.
@@ -17,6 +20,9 @@ class FeelingsAbout {
   ) {}
 }
 
+/**
+ * Represents a person in the knowledge graph.
+ */
 export class Person implements Graphable {
   public spouse: Person | null = null;
   public feelingsAbout: FeelingsAbout[] = [];

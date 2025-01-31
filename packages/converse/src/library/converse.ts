@@ -7,7 +7,8 @@ import { Region } from './knowledge_graph/people/region';
 
 /**
  * Adds a person to the knowledge graph.
- * @param {Person} person - The person to add.
+ *
+ * @param person - The person to add.
  */
 export function addPerson(person: Person): void {
   addGraph(constructGraph([person]));
@@ -15,7 +16,8 @@ export function addPerson(person: Person): void {
 
 /**
  * Adds a player to the database.
- * @param {string} id - The ID of the player.
+ *
+ * @param id - The ID of the player.
  */
 export function addPlayer(id: string): void {
   DB.prepare(
@@ -35,8 +37,9 @@ export function intializeTestKnowledgeDB(): void {
 
 /**
  * Initializes the knowledge database from a file.
- * @param {string} dbPath - The path to the database file.
- * @param {boolean} rebuild - Whether to rebuild the database if it already exists.
+ *
+ * @param dbPath - The path to the database file.
+ * @param rebuild - Whether to rebuild the database if it already exists.
  */
 export function initializeKnowledgeDB(dbPath: string, rebuild: boolean): void {
   initializeDatabase(dbPath, rebuild);
@@ -44,8 +47,9 @@ export function initializeKnowledgeDB(dbPath: string, rebuild: boolean): void {
 
 /**
  * Finds a community by name.
- * @param {string} name - The name of the community.
- * @returns {Community | undefined} The community if found, otherwise undefined.
+ *
+ * @param name - The name of the community.
+ * @returns The community if found, otherwise undefined.
  */
 export function findCommunity(name: string): Community | undefined {
   const communityData = DB.prepare(

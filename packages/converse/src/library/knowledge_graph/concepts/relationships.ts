@@ -1,5 +1,8 @@
 import { Concept, ConceptHierarchy } from './concept';
 
+/**
+ * Represents a hierarchy of relationship-related concepts.
+ */
 export class Relationships implements ConceptHierarchy {
   /**
    * Retrieves concepts related to relationships.
