@@ -222,25 +222,31 @@ export class AblyService implements PubSub {
     });
   }
 
-  public changeSpeed(key: string, speed: number, newValue: number): void {
-    if (newValue == undefined || key == undefined || speed == undefined) {
+  public changeEffect(
+    key: string,
+    attribute: string,
+    delta: number,
+    newValue: number
+  ): void {
+    if (newValue == undefined || key == undefined || delta == undefined) {
       throw new Error(
-        `Sending invalid changeSpeed message ${key}, ${speed}, ${newValue}`
+        `Sending invalid changeEffect message ${key}, ${attribute}, ${delta}, ${newValue}`
       );
     }
     this.addToBroadcast({
       type: 'mob_change',
       data: {
         id: key,
-        property: 'speed',
-        delta: speed,
+        property: attribute,
+        delta: delta,
         new_value: newValue
       }
     });
   }
 
-  public changeTargetSpeedTick(
+  public changeTargetTick(
     key: string,
+    attribute: string,
     tick: number,
     newValue: number
   ): void {
@@ -249,11 +255,13 @@ export class AblyService implements PubSub {
         `Sending invalid changeTargetSpeedTick message ${key}, ${tick}, ${newValue}`
       );
     }
+
+    const prop = `target_${attribute}_tick`;
     this.addToBroadcast({
       type: 'mob_change',
       data: {
         id: key,
-        property: 'target_speed_tick',
+        property: prop,
         delta: tick,
         new_value: newValue
       }

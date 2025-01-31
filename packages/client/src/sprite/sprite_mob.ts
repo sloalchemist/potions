@@ -150,7 +150,7 @@ export class SpriteMob extends Mob {
     }
 
     this.attributeListeners.push((spriteMob, key, delta) => {
-      if (!spriteMob || key === 'target_speed_tick') {
+      if (!spriteMob) {
         return;
       }
 
@@ -301,6 +301,7 @@ export class SpriteMob extends Mob {
 
       this.healthBar.fillStyle(0x00ff00);
       this.healthBar.fillRect(x, y, barWidth * healthPercentage, barHeight);
+      this.healthBar.setDepth(1000);
     }
   }
 
