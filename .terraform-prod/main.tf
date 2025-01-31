@@ -202,9 +202,9 @@ resource "render_web_service" "potions_auth" {
   ]
 }
 
-resource "github_actions_variable" "server_url" {
-  repository    = "potions-testing"
-  variable_name = "SERVER_URL"
-  value         = render_web_service.potions_auth.url
-}
+# resource "github_actions_variable" "server_url" {
+#   repository    = "potions-testing"
+#   variable_name = "SERVER_URL"
+#   value         = render_web_service.potions_auth.url
+# }
 

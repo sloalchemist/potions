@@ -4,6 +4,7 @@
 **/node_modules
 .venv/
 node_modules
+.tfvars
 
 # Ignore build artifacts
 packages/common/dist/
@@ -23,3 +24,5 @@ package-lock.json
 
 # ignore sensitive files
 **/*.sensitive
+
+*.tfvars
