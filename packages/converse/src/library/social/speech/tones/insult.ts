@@ -7,7 +7,8 @@ import { Tone } from './tone';
 export class Insult implements Tone {
   /**
    * Returns the statement associated with the insult tone.
-   * @returns {string} The statement.
+   *
+   * @returns The statement.
    */
   statement(): string {
     return 'insults';
@@ -15,7 +16,8 @@ export class Insult implements Tone {
 
   /**
    * Returns the question associated with the insult tone.
-   * @returns {string} The question.
+   *
+   * @returns The question.
    */
   question(): string {
     return 'insultingly asks';
@@ -24,7 +26,8 @@ export class Insult implements Tone {
   /**
    * Returns the valence of the insult tone.
    * A negative valence indicates a negative tone.
-   * @returns {number} The valence.
+   *
+   * @returns The valence.
    */
   valence(): number {
     return -1;
@@ -32,7 +35,8 @@ export class Insult implements Tone {
 
   /**
    * Returns the associated personality trait of the insult tone.
-   * @returns {PersonalityTraits} The associated personality trait.
+   *
+   * @returns The associated personality trait.
    */
   associatedTrait(): PersonalityTraits {
     return 'insulting';

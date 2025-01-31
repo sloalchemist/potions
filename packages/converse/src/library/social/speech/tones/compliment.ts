@@ -7,7 +7,8 @@ import { Tone } from './tone';
 export class Compliment implements Tone {
   /**
    * Returns the statement associated with the compliment tone.
-   * @returns {string} The statement.
+   *
+   * @returns The statement.
    */
   statement(): string {
     return 'compliments';
@@ -15,7 +16,8 @@ export class Compliment implements Tone {
 
   /**
    * Returns the question associated with the compliment tone.
-   * @returns {string} The question.
+   *
+   * @returns The question.
    */
   question(): string {
     return 'asks in a complimentary way';
@@ -24,7 +26,8 @@ export class Compliment implements Tone {
   /**
    * Returns the valence of the compliment tone.
    * A positive valence indicates a positive tone.
-   * @returns {number} The valence.
+   *
+   * @returns The valence.
    */
   valence(): number {
     return 1;
@@ -32,7 +35,8 @@ export class Compliment implements Tone {
 
   /**
    * Returns the associated personality trait of the compliment tone.
-   * @returns {PersonalityTraits} The associated personality trait.
+   *
+   * @returns The associated personality trait.
    */
   associatedTrait(): PersonalityTraits {
     return 'complimentary';
@@ -41,7 +45,8 @@ export class Compliment implements Tone {
   /**
    * Returns the effect value of the compliment tone.
    * The effect value indicates the strength of the tone's impact.
-   * @returns {number} The effect value.
+   *
+   * @returns The effect value.
    */
   effect(): number {
     return 10;

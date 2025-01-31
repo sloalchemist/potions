@@ -7,7 +7,8 @@ import { Tone } from './tone';
 export class Joking implements Tone {
   /**
    * Returns the statement associated with the joking tone.
-   * @returns {string} The statement.
+   *
+   * @returns The statement.
    */
   statement() {
     return 'jokes about';
@@ -15,7 +16,8 @@ export class Joking implements Tone {
 
   /**
    * Returns the question associated with the joking tone.
-   * @returns {string} The question.
+   *
+   * @returns The question.
    */
   question() {
     return 'jokingly asks';
@@ -24,7 +26,8 @@ export class Joking implements Tone {
   /**
    * Returns the valence of the joking tone.
    * The valence is randomly determined to be positive or negative.
-   * @returns {number} The valence.
+   *
+   * @returns The valence.
    */
   valence(): number {
     return Math.random() - 0.5;
@@ -32,7 +35,8 @@ export class Joking implements Tone {
 
   /**
    * Returns the associated personality trait of the joking tone.
-   * @returns {PersonalityTraits} The associated personality trait.
+   *
+   * @returns The associated personality trait.
    */
   associatedTrait(): PersonalityTraits {
     return 'funny';

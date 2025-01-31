@@ -7,7 +7,8 @@ interface FantasyDate {
 
 /**
  * Gets the current in-game fantasy date from the database.
- * @returns {FantasyDate} The current fantasy date.
+ *
+ * @returns The current fantasy date.
  */
 export function current_date(): FantasyDate {
   return DB.prepare(
@@ -22,7 +23,8 @@ export function current_date(): FantasyDate {
 
 /**
  * Sets the current fantasy date in the database.
- * @param {FantasyDate} date - The fantasy date to set.
+ *
+ * @param date - The fantasy date to set.
  */
 export function set_current_date(date: FantasyDate): void {
   DB.prepare(

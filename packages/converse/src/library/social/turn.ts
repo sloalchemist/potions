@@ -10,8 +10,9 @@ export class Turn {
 
   /**
    * Creates a new Turn instance.
-   * @param {Speaker} mob - The speaker taking the turn.
-   * @param {SpeechAct} speechAct - The speech act performed during the turn.
+   *
+   * @param mob - The speaker taking the turn.
+   * @param speechAct - The speech act performed during the turn.
    */
   constructor(mob: Speaker, speechAct: SpeechAct) {
     this.mob = mob;
@@ -20,7 +21,8 @@ export class Turn {
 
   /**
    * Gets the message of the turn.
-   * @returns {string} The message of the turn.
+   *
+   * @returns The message of the turn.
    */
   getMessage(): string {
     return `${this.mob.name}: ${this.speechAct.getText()}`;
@@ -28,7 +30,8 @@ export class Turn {
 
   /**
    * Gets the speaker of the turn.
-   * @returns {Speaker} The speaker of the turn.
+   *
+   * @returns The speaker of the turn.
    */
   getMob(): Speaker {
     return this.mob;

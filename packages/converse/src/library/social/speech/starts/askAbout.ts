@@ -5,9 +5,10 @@ import { SpeechStart } from './speechStart';
 
 /**
  * Replaces all occurrences of "<subject>" in the input string with the replacement string.
- * @param {string} input - The input string containing "<subject>" placeholders.
- * @param {string} replacement - The string to replace "<subject>" with.
- * @returns {string} The modified string.
+ *
+ * @param input - The input string containing "<subject>" placeholders.
+ * @param replacement - The string to replace "<subject>" with.
+ * @returns The modified string.
  */
 function replaceSubject(input: string, replacement: string): string {
   return input.replace(/<subject>/g, replacement);
@@ -19,10 +20,11 @@ function replaceSubject(input: string, replacement: string): string {
 export class AskAbout implements SpeechStart {
   /**
    * Creates potential speech acts for asking about a topic.
-   * @param {Speaker} speaking - The speaker initiating the speech act.
-   * @param {Speaker} listening - The listener of the speech act.
-   * @param {string[]} alreadyTraversed - The list of already traversed topics.
-   * @returns {SpeechPart[]} The potential speech parts for the speech act.
+   *
+   * @param speaking - The speaker initiating the speech act.
+   * @param listening - The listener of the speech act.
+   * @param alreadyTraversed - The list of already traversed topics.
+   * @returns The potential speech parts for the speech act.
    */
   createPotentialSpeechAct(
     speaking: Speaker,

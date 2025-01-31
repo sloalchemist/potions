@@ -7,7 +7,8 @@ import { Tone } from './tone';
 export class Neutral implements Tone {
   /**
    * Returns the statement associated with the neutral tone.
-   * @returns {string} The statement.
+   *
+   * @returns The statement.
    */
   statement() {
     return 'tells';
@@ -15,7 +16,8 @@ export class Neutral implements Tone {
 
   /**
    * Returns the question associated with the neutral tone.
-   * @returns {string} The question.
+   *
+   * @returns The question.
    */
   question() {
     return 'asks';
@@ -24,7 +26,8 @@ export class Neutral implements Tone {
   /**
    * Returns the valence of the neutral tone.
    * A valence of 0 indicates a neutral tone.
-   * @returns {number} The valence.
+   *
+   * @returns The valence.
    */
   valence(): number {
     return 0;
@@ -32,7 +35,8 @@ export class Neutral implements Tone {
 
   /**
    * Returns the associated personality trait of the neutral tone.
-   * @returns {PersonalityTraits} The associated personality trait.
+   *
+   * @returns The associated personality trait.
    */
   associatedTrait(): PersonalityTraits {
     return 'neutral';
