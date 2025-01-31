@@ -396,8 +396,8 @@ export class WorldScene extends Phaser.Scene {
 
     let lastMovementKey: string = '';
     let lastKeyMovementTarget: {
-      x: number | null,
-      y: number | null
+      x: number | null;
+      y: number | null;
     } = { x: null, y: null };
 
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
