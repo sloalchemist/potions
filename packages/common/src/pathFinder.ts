@@ -40,6 +40,11 @@ export class PathFinder {
     this.worldHeight = walkable[0].length;
   }
 
+  /**
+   * Finds a random walkable coordinate on the map.
+   *
+   * @returns a random walkable coordinate
+   */
   spawnCoord(): Coord {
     let x: number;
     let y: number;
@@ -52,14 +57,40 @@ export class PathFinder {
     return { x, y };
   }
 
+  /**
+   * Clears all blocking items from the pathfinder's record.
+   *
+   * This function resets the `blockingItems` map, removing any existing
+   * entries that indicate blocked coordinates. It is typically called
+   * before setting new blocking items to ensure no stale data is present.
+   */
   clearBlockingItems() {
     this.blockingItems = {};
   }
 
+  /**
+   * Sets a blocking item at a given coordinate.
+   *
+   * @param x the x coordinate of the blocking item
+   * @param y the y coordinate of the blocking item
+   * @param value the value of the blocking item, which is
+   *              checked against the unlocks array in the
+   *              `isWalkable` method
+   */
   setBlockingItem(x: number, y: number, value: string) {
     this.blockingItems[`${x},${y}`] = value;
   }
 
+  /**
+   * Determines if a given coordinate is walkable.
+   *
+   * @param unlocks array of strings that can be used to unlock blocked
+   *                coordinates
+   * @param x the x coordinate of the point to check
+   * @param y the y coordinate of the point to check
+   *
+   * @returns true if the point is walkable, false otherwise
+   */
   isWalkable(unlocks: string[], x: number, y: number): boolean {
     if (x < 0 || y < 0 || x >= this.worldWidth || y >= this.worldHeight) {
       return false;
@@ -74,10 +105,29 @@ export class PathFinder {
     return walkable;
   }
 
+  /**
+   * Calculates the Euclidean distance between two coordinates.
+   *
+   * @param a - The first coordinate
+   * @param b - The second coordinate
+   * @returns The Euclidean distance between the two coordinates
+   */
   private heuristic(a: Coord, b: Coord): number {
     return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
   }
 
+  /**
+   * The A* pathfinding algorithm.
+   *
+   * @param unlocks - Array of strings that can be used to unlock blocked
+   *                  coordinates
+   * @param start - The starting coordinate
+   * @param goal - The goal coordinate
+   * @param fuzzy - If true, the algorithm will stop when it is two tiles away
+   *                from the goal
+   * @returns A path of coordinates from the start to the goal, or null if no
+   *          path is found
+   */
   private aStar(
     unlocks: string[],
     start: Coord,
@@ -169,6 +219,22 @@ export class PathFinder {
     return null; // No path found
   }
 
+  /**
+   * Reconstructs the path from the given current position to the start position using the
+   * cameFrom map.
+   *
+   * The cameFrom map is expected to have the following structure:
+   * {
+   *   [key]: Coord,
+   *   ...
+   * }
+   * where each key is a string representation of a Coord (x,y) and the value is the
+   * Coord that came before it in the path.
+   *
+   * @param cameFrom The cameFrom map
+   * @param current The current position
+   * @returns The reconstructed path
+   */
   private reconstructPath(
     cameFrom: Map<string, Coord>,
     current: Coord
@@ -186,10 +252,32 @@ export class PathFinder {
     return path;
   }
 
+  /**
+   * Determines if three coordinates form a straight line.
+   *
+   * This function checks if the three given coordinates (p1, p2, and p3)
+   * are collinear by comparing the slopes between each pair of points.
+   *
+   * @param p1 The first coordinate.
+   * @param p2 The second coordinate.
+   * @param p3 The third coordinate.
+   * @returns True if the three coordinates form a straight line, false otherwise.
+   */
   private isStraightLine(p1: Coord, p2: Coord, p3: Coord): boolean {
     return (p2.y - p1.y) * (p3.x - p2.x) === (p3.y - p2.y) * (p2.x - p1.x);
   }
 
+  /**
+   * Simplifies a path by removing all points that are collinear.
+   *
+   * Given a path, this function iterates through each point and checks if it is
+   * collinear with the previous and next points. If it is not, the point is added
+   * to the simplified path. The first and last points in the path are always included
+   * in the simplified path.
+   *
+   * @param path The path to simplify
+   * @returns The simplified path
+   */
   private simplifyPath(path: Coord[]): Coord[] {
     if (path.length <= 2) {
       return path;
@@ -300,6 +388,27 @@ export class PathFinder {
     throw new Error('No walkable tile found');
   }
 
+  /**
+   * Finds the shortest path from a start coordinate to an end coordinate.
+   *
+   * This method uses the A* search algorithm to find the shortest path from the
+   * start coordinate to the end coordinate. If the end coordinate is not
+   * walkable, it will find the nearest walkable tile to the end coordinate and
+   * use that as the end coordinate instead. If the start coordinate is not
+   * walkable, it will be rounded down to the nearest walkable tile.
+   *
+   * The path is then simplified by removing any redundant points (i.e. points
+   * that are not necessary to reach the end coordinate).
+   *
+   * @param unlocks - An array of unlock strings.
+   * @param start - The start coordinate.
+   * @param end - The end coordinate.
+   * @param fuzzy - Whether the pathfinding algorithm should stop when it is close
+   *                to the goal, rather than requiring an exact match to the goal coordinates.
+   *                Defaults to false.
+   *
+   * @returns The shortest path from the start coordinate to the end coordinate.
+   */
   generatePath(
     unlocks: string[],
     start: Coord,
