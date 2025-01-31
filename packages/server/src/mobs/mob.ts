@@ -465,12 +465,12 @@ export class Mob {
   }
 
   destroy() {
-    if (this.gold > 0 && this.position) {
+    if (this.gold > 0) {
       const position = Item.findEmptyPosition(this.position);
       itemGenerator.createItem({
         type: 'gold',
         position,
-        attributes: { amount: this.gold }
+        attributes: { amount: Math.floor(this.gold / 2) }
       });
     }
 
