@@ -5,7 +5,7 @@ import { currentCharacter, publicCharacterId } from '../worldMetadata';
 import { SpriteMob } from '../sprite/sprite_mob';
 import { broadcastChannel, playerChannel } from './ablySetup';
 
-function publishPlayerMessage<T extends keyof PlayerToServerMessageMap>(
+export function publishPlayerMessage<T extends keyof PlayerToServerMessageMap>(
   type: T,
   payload: PlayerToServerMessageMap[T]
 ) {
@@ -49,6 +49,7 @@ export function startWorld() {
 }
 
 export function leaveWorld() {
+  publishPlayerStateToPersist();
   broadcastChannel.presence.leave(publicCharacterId, (err) => {
     if (err) {
       console.error('Error leaving presence:', err);
@@ -71,5 +72,12 @@ export function publishPlayerPosition(target: Coord) {
     player.path = path;
     publishPlayerMessage('move', { target: flooredTarget });
     //console.log(`Publishing move to ${JSON.stringify(target)}`)
+  }
+}
+
+export function publishPlayerStateToPersist() {
+  if (playerChannel) {
+    console.log('Requesting data persistence.');
+    publishPlayerMessage('update_state', { name: publicCharacterId });
   }
 }

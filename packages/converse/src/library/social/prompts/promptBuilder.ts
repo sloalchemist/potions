@@ -84,17 +84,17 @@ export function summarizeConversation(
   const gameState = buildGameState(subject, other, []);
 
   const prompt = `Conversation:
-${subject.conversation.getChats()}
+  ${subject.conversation.getChats()}
 
-Task:
-* Summarize the conversation in 3-4 sentences.
-* The summary should be from the potentially biased perspective of ${subject.name}.
-* Focus on the key ideas and emotional undertones.
-* Ensure the summary is clear and retains context for potential use in future interactions.
+  Task:
+  * Summarize the conversation in 3-4 sentences.
+  * The summary should be from the potentially biased perspective of ${subject.name}.
+  * Focus on the key ideas and emotional undertones.
+  * Ensure the summary is clear and retains context for potential use in future interactions.
 
-${gameState}
+  ${gameState}
 
-${subject.name}'s Summary:`;
+  ${subject.name}'s Summary:`;
 
   return prompt;
 }

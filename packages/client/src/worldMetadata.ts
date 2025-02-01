@@ -15,17 +15,20 @@ export class Character {
   eyeColor: number;
   furColor: number;
   bellyColor: number;
+  community_id: string | undefined;
 
   constructor(
     name: string,
     eyeColor: number,
     furColor: number,
-    bellyColor: number
+    bellyColor: number,
+    community_id: string | undefined
   ) {
     this.name = name;
     this.eyeColor = eyeColor;
     this.furColor = furColor;
     this.bellyColor = bellyColor;
+    this.community_id = community_id;
   }
 
   get gold(): number {
@@ -92,7 +95,8 @@ export async function retrieveCharacter() {
     localStorage.getItem('name') || 'Nobody',
     hexStringToNumber(localStorage.getItem('eyeColor') || getRandomColor()),
     hexStringToNumber(localStorage.getItem('furColor') || getRandomColor()),
-    hexStringToNumber(localStorage.getItem('bellyColor') || getRandomColor())
+    hexStringToNumber(localStorage.getItem('bellyColor') || getRandomColor()),
+    localStorage.getItem('community_id') || undefined
   );
 
   saveColors();

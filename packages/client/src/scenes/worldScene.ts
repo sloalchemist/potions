@@ -22,6 +22,7 @@ import {
 } from '../worldDescription';
 import { UxScene } from './uxScene';
 import { setGameState } from '../world/controller';
+import { restoreHealth, speedUpCharacter } from '../utils/developerCheats';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -65,6 +66,7 @@ export class WorldScene extends Phaser.Scene {
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
     this.load.json('global_data', 'static/global.json');
+    this.load.json('world_specific_data', 'static/world_specific.json');
   }
 
   loadAnimations(
@@ -220,7 +222,11 @@ export class WorldScene extends Phaser.Scene {
   }
 
   create() {
-    const globalData = parseWorldFromJson(this.cache.json.get('global_data'));
+    const globalData = parseWorldFromJson(
+      this.cache.json.get('global_data'),
+      this.cache.json.get('world_specific_data')
+    );
+
     console.log('setting up world', needsAnimationsLoaded);
     //console.log(this.world_data);
     world = new World();
@@ -249,7 +255,7 @@ export class WorldScene extends Phaser.Scene {
       '4-3', // Configuration 13
       '4-1', // Configuration 14
       '4-4' // Configuration 15
-    ];
+    ] as const satisfies readonly string[];
 
     const waterTypes = globalData.terrain_types
       .filter((type) => !type.walkable)
@@ -385,6 +391,15 @@ export class WorldScene extends Phaser.Scene {
           x: pointer.worldX / TILE_SIZE,
           y: pointer.worldY / TILE_SIZE
         });
+      }
+    });
+
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (event.shiftKey && event.code === 'KeyF') {
+        speedUpCharacter();
+      }
+      if (event.shiftKey && event.code === 'KeyH') {
+        restoreHealth();
       }
     });
 
