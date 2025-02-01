@@ -15,9 +15,9 @@ create table
     character_id uuid not null,
     current_world_id bigint null,
     health smallint not null default 100,
-    pname text not null,
+    pname text not null default 'Kyle',
     gold bigint not null default 0,
-    appearance int[] default '{16734003, 4367253, 1752748}', -- Random default value for now
+    appearance int[] default not null '{16734003, 4367253, 1752748}', -- Random default value for now
     constraint characters_pkey primary key (id),
     constraint characters_character_id_key unique (character_id),
     constraint characters_current_world_id_fkey foreign key (current_world_id) references worlds (id)
