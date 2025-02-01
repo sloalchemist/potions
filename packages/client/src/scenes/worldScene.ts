@@ -52,6 +52,7 @@ export class WorldScene extends Phaser.Scene {
     s: false,
     d: false
   };
+  lastKeyUp = '';
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -408,8 +409,10 @@ export class WorldScene extends Phaser.Scene {
         return;
       }
 
-      if (movementKeys.includes(event.key.toLowerCase())) {
-        this.keys[event.key.toLowerCase()] = true;
+      const curKey = event.key.toLowerCase();
+      if (movementKeys.includes(curKey)) {
+        this.keys[curKey] = true;
+        this.lastKeyUp = curKey;
       }
 
       if (event.shiftKey && event.code === 'KeyF') {
@@ -421,8 +424,10 @@ export class WorldScene extends Phaser.Scene {
     });
 
     this.input.keyboard?.on('keyup', (event: KeyboardEvent) => {
-      if (movementKeys.includes(event.key.toLowerCase())) {
-        this.keys[event.key.toLowerCase()] = false;
+      const curKey = event.key.toLowerCase();
+      if (movementKeys.includes(curKey)) {
+        this.keys[curKey] = false;
+        this.lastKeyUp = curKey;
       }
     });
 
@@ -508,7 +513,7 @@ export class WorldScene extends Phaser.Scene {
     console.log("handling movment");
 
     const player = world.mobs[publicCharacterId];
-    if (!player.position) {
+    if (!(player && player.position)) {
       return;
     }
 
@@ -516,21 +521,20 @@ export class WorldScene extends Phaser.Scene {
     let moveY = player.position.y;
 
     let moved = false;
-
     if (this.keys['w']) {
-      moveY = Math.floor(moveY - 1);
+      moveY--;
       moved = true;
     }
     if (this.keys['s']) {
-      moveY = Math.ceil(moveY + 1);
+      moveY++;
       moved = true;
     }
     if (this.keys['a']) {
-      moveX = Math.floor(moveX - 1);
+      moveX--;
       moved = true;
     }
     if (this.keys['d']) {
-      moveX = Math.ceil(moveX + 1);
+      moveX++;
       moved = true;
     }
 
@@ -538,7 +542,18 @@ export class WorldScene extends Phaser.Scene {
 
     if (!moved) return;
 
-    const target = { x: moveX, y: moveY };
+    let roundedX;
+    let roundedY;
+    const negKeys = ['w', 'a'];
+    if (negKeys.includes(this.lastKeyUp)) {
+      roundedX = Math.floor(moveX);
+      roundedY = Math.floor(moveY);
+    } else {
+      roundedX = Math.ceil(moveX);
+      roundedY = Math.ceil(moveY);
+    }
+
+    const target = { x: roundedX, y: roundedY };
 
     if (publish) {
       this.prevKeys = { ...this.keys };
