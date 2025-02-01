@@ -32,7 +32,7 @@ jobs:
       TF_VAR_supabase_db_pass: ${{ secrets.SUPABASE_DB_PASS }}
       TF_VAR_supabase_organization_id: ${{ secrets.SUPABASE_ORGANIZATION_ID }}
       TF_VAR_render_api_key: ${{ secrets.RENDER_API_KEY }}
-      TF_VAR_render_owner_id: ${{ vars.RENDER_OWNER_ID }}
+      TF_VAR_render_owner_id: ${{ secrets.RENDER_OWNER_ID }}
       TF_VAR_github_token: ${{ secrets.WRITE_GITHUB_ENV_VARS_TOKEN}}
 
     steps:
