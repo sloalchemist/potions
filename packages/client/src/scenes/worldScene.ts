@@ -412,15 +412,31 @@ export class WorldScene extends Phaser.Scene {
         restoreHealth();
       }
 
+      function areOppositeKeys(lastKey: string, curKey: string) {
+        const ups = ['KeyW'];
+        const downs = ['KeyS'];
+        const lefts = ['KeyA'];
+        const rights = ['KeyD'];
+
+        if (ups.includes(curKey) && downs.includes(lastKey)) return true;
+        else if (downs.includes(curKey) && ups.includes(lastKey)) return true;
+        else if (lefts.includes(curKey) && rights.includes(lastKey))
+          return true;
+        else if (rights.includes(curKey) && lefts.includes(lastKey))
+          return true;
+        return false;
+      }
+
       // Logic for adding WASD movement:
       // moves one tile per keyboard press
       const player = world.mobs[publicCharacterId];
       let newX = player.position?.x;
       let newY = player.position?.y;
 
-      // prevent spamming of same key until target reached
+      // prevent spamming of same key or changing opposite direction ntil target reached
       if (
-        event.code === lastMovementKey && // same direction as before
+        (event.code === lastMovementKey ||
+          areOppositeKeys(event.code, lastMovementKey)) && // same direction as before
         !(
           newX === lastKeyMovementTarget.x && //not at last target
           newY === lastKeyMovementTarget.y
@@ -434,7 +450,6 @@ export class WorldScene extends Phaser.Scene {
         `);
 
       let movementFlag = false;
-
       if (event.code == 'KeyW') {
         // move up
         if (player.position !== null) {
@@ -464,10 +479,23 @@ export class WorldScene extends Phaser.Scene {
         movementFlag = true;
       }
       if (newX && newY && movementFlag) {
-        console.log(`moving to (${Math.ceil(newX)}, ${Math.ceil(newY)})`);
+        // rounding for target-handling
+        let negKeys = ['KeyW', 'KeyA'];
+
+        let roundedX: number;
+        let roundedY: number;
+        if (negKeys.includes(lastMovementKey)) {
+          roundedX = Math.floor(newX);
+          roundedY = Math.floor(newY);
+        } else {
+          roundedX = Math.ceil(newX);
+          roundedY = Math.ceil(newY);
+        }
+
+        console.log(`moving to (${roundedX}, ${roundedY})`);
         lastMovementKey = event.code;
-        lastKeyMovementTarget = { x: Math.ceil(newX), y: Math.ceil(newY) };
-        publishPlayerPosition({ x: Math.ceil(newX), y: Math.ceil(newY) });
+        lastKeyMovementTarget = { x: roundedX, y: roundedY };
+        publishPlayerPosition({ x: roundedX, y: roundedY });
       }
     });
 
