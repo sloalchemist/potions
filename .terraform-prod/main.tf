@@ -17,10 +17,6 @@ terraform {
     time = {
       source = "hashicorp/time"
     }
-    vercel = {
-      source  = "vercel/vercel"
-      version = "2.0"
-    }
     render = {
       source  = "render-oss/render"
       version = "1.4.0"
@@ -43,9 +39,6 @@ provider "ably" {
 # Configure Supabase provider
 provider "supabase" {
   access_token = var.supabase_access_token
-}
-provider "vercel" {
-  api_token = var.vercel_api_token
 }
 
 provider "render" {
