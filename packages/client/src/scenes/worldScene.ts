@@ -7,7 +7,7 @@ import {
 } from '../world/controller';
 import { bindAblyToWorldScene } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
-import { Coord } from '@rt-potion/common';
+import { Coord, floor } from '@rt-potion/common';
 import { publicCharacterId } from '../worldMetadata';
 import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
@@ -45,6 +45,13 @@ export class WorldScene extends Phaser.Scene {
   terrainWidth: number = 0;
   terrainHeight: number = 0;
   nightOpacity: number = 0;
+  keys: { [key: string]: boolean } = { w: false, a: false, s: false, d: false };
+  prevKeys: { [key: string]: boolean } = {
+    w: false,
+    a: false,
+    s: false,
+    d: false
+  };
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -394,9 +401,15 @@ export class WorldScene extends Phaser.Scene {
       }
     });
 
+    const movementKeys = ['w', 'a', 's', 'd'];
+
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       if (!world.mobs[publicCharacterId]) {
         return;
+      }
+
+      if (movementKeys.includes(event.key.toLowerCase())) {
+        this.keys[event.key.toLowerCase()] = true;
       }
 
       if (event.shiftKey && event.code === 'KeyF') {
@@ -404,6 +417,12 @@ export class WorldScene extends Phaser.Scene {
       }
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
+      }
+    });
+
+    this.input.keyboard?.on('keyup', (event: KeyboardEvent) => {
+      if (movementKeys.includes(event.key.toLowerCase())) {
+        this.keys[event.key.toLowerCase()] = false;
       }
     });
 
@@ -427,6 +446,7 @@ export class WorldScene extends Phaser.Scene {
     this.hero = sprite;
   }
 
+  count = 0;
   update() {
     if (gameState !== 'stateInitialized') {
       this.hideWorld();
@@ -462,6 +482,75 @@ export class WorldScene extends Phaser.Scene {
         this.terrainWidth * TILE_SIZE,
         this.terrainHeight * TILE_SIZE
       );
+    }
+
+    if (this.count > 50) {
+      this.count = 0;
+      this.handlePlayerMovement(true);
+    } else {
+      this.count++;
+      this.handlePlayerMovement(false);
+    }
+  }
+
+  keyChange() {
+    let different = false;
+    for (const key in this.keys) {
+      if (this.keys[key] !== this.prevKeys[key]) {
+        different = true;
+        break;
+      }
+    }
+    return different;
+  }
+
+  handlePlayerMovement(publish: boolean) {
+    console.log("handling movment");
+
+    const player = world.mobs[publicCharacterId];
+    if (!player.position) {
+      return;
+    }
+
+    let moveX = player.position.x;
+    let moveY = player.position.y;
+
+    let moved = false;
+
+    if (this.keys['w']) {
+      moveY = Math.floor(moveY - 1);
+      moved = true;
+    }
+    if (this.keys['s']) {
+      moveY = Math.ceil(moveY + 1);
+      moved = true;
+    }
+    if (this.keys['a']) {
+      moveX = Math.floor(moveX - 1);
+      moved = true;
+    }
+    if (this.keys['d']) {
+      moveX = Math.ceil(moveX + 1);
+      moved = true;
+    }
+
+    console.log(this.keys['w'], this.keys['a'], this.keys['s'], this.keys['d']);
+
+    if (!moved) return;
+
+    const target = { x: moveX, y: moveY };
+
+    if (publish) {
+      this.prevKeys = { ...this.keys };
+      publishPlayerPosition(target);
+    } else {
+      player.target = target;
+      const path = world.generatePath(
+        player.unlocks,
+        player.position!,
+        target
+      );
+      player.path = path;
     }
   }
 
