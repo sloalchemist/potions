@@ -208,14 +208,14 @@ data "github_repository" "repo" {
 }
 
 resource "github_repository_environment" "repo_environment" {
-  repository       = data.github_repository.repo.name
-  environment      = "github-pages"
+  repository  = data.github_repository.repo.name
+  environment = "github-pages"
 }
 
 resource "github_actions_environment_variable" "server_url" {
-  repository       = data.github_repository.repo.name
-  environment      = github_repository_environment.repo_environment.environment
+  repository    = data.github_repository.repo.name
+  environment   = github_repository_environment.repo_environment.environment
   variable_name = "SERVER_URL"
-  value       = render_web_service.potions_auth.url
+  value         = render_web_service.potions_auth.url
 }
 
