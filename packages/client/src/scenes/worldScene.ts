@@ -394,12 +394,6 @@ export class WorldScene extends Phaser.Scene {
       }
     });
 
-    let lastMovementKey: string = '';
-    let lastKeyMovementTarget: {
-      x: number | null;
-      y: number | null;
-    } = { x: null, y: null };
-
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       if (!world.mobs[publicCharacterId]) {
         return;
@@ -410,92 +404,6 @@ export class WorldScene extends Phaser.Scene {
       }
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
-      }
-
-      function areOppositeKeys(lastKey: string, curKey: string) {
-        const ups = ['KeyW'];
-        const downs = ['KeyS'];
-        const lefts = ['KeyA'];
-        const rights = ['KeyD'];
-
-        if (ups.includes(curKey) && downs.includes(lastKey)) return true;
-        else if (downs.includes(curKey) && ups.includes(lastKey)) return true;
-        else if (lefts.includes(curKey) && rights.includes(lastKey))
-          return true;
-        else if (rights.includes(curKey) && lefts.includes(lastKey))
-          return true;
-        return false;
-      }
-
-      // Logic for adding WASD movement:
-      // moves one tile per keyboard press
-      const player = world.mobs[publicCharacterId];
-      let newX = player.position?.x;
-      let newY = player.position?.y;
-
-      // prevent spamming of same key or changing opposite direction ntil target reached
-      if (
-        (event.code === lastMovementKey ||
-          areOppositeKeys(event.code, lastMovementKey)) && // same direction as before
-        !(
-          newX === lastKeyMovementTarget.x && //not at last target
-          newY === lastKeyMovementTarget.y
-        )
-      ) {
-        return;
-      }
-
-      console.log(`lastKey : ${lastMovementKey}, newKey : ${event.code}`);
-      console.log(`current position : (${newX}, ${newY})\nlast target : (${lastKeyMovementTarget.x}, ${lastKeyMovementTarget.y})
-        `);
-
-      let movementFlag = false;
-      if (event.code == 'KeyW') {
-        // move up
-        if (player.position !== null) {
-          if (newY) newY--;
-        }
-        movementFlag = true;
-      }
-      if (event.code == 'KeyS') {
-        // move down
-        if (player.position !== null) {
-          if (newY) newY++;
-        }
-        movementFlag = true;
-      }
-      if (event.code == 'KeyA') {
-        // move left
-        if (player.position !== null) {
-          if (newX) newX--;
-        }
-        movementFlag = true;
-      }
-      if (event.code == 'KeyD') {
-        // move right
-        if (player.position !== null) {
-          if (newX) newX++;
-        }
-        movementFlag = true;
-      }
-      if (newX && newY && movementFlag) {
-        // rounding for target-handling
-        let negKeys = ['KeyW', 'KeyA'];
-
-        let roundedX: number;
-        let roundedY: number;
-        if (negKeys.includes(lastMovementKey)) {
-          roundedX = Math.floor(newX);
-          roundedY = Math.floor(newY);
-        } else {
-          roundedX = Math.ceil(newX);
-          roundedY = Math.ceil(newY);
-        }
-
-        console.log(`moving to (${roundedX}, ${roundedY})`);
-        lastMovementKey = event.code;
-        lastKeyMovementTarget = { x: roundedX, y: roundedY };
-        publishPlayerPosition({ x: roundedX, y: roundedY });
       }
     });
 
