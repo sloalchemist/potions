@@ -35,7 +35,6 @@ export type MobData = {
   current_action: string;
   carrying_id: string;
   community_id: string;
-  target_speed_tick: number;
 };
 
 interface MobParams {
@@ -49,7 +48,6 @@ interface MobParams {
   maxHealth: number;
   attack: number;
   community_id: string;
-  target_speed_tick: number;
   subtype: string;
   currentAction?: string;
   carrying?: string;
@@ -69,7 +67,6 @@ export class Mob {
   private target?: Coord;
   private path: Coord[];
   private speed: number;
-  private target_speed_tick: number;
   private _name: string;
   private maxHealth: number;
   private _carrying?: string;
@@ -89,7 +86,6 @@ export class Mob {
     type,
     position,
     speed,
-    target_speed_tick,
     gold,
     health,
     maxHealth,
@@ -112,7 +108,6 @@ export class Mob {
     this.target = target;
     this._position = position;
     this.speed = speed;
-    this.target_speed_tick = target_speed_tick;
     this._gold = gold;
     this._health = health;
     this.maxHealth = maxHealth;
@@ -169,10 +164,6 @@ export class Mob {
 
   get _speed(): number {
     return this.speed;
-  }
-
-  get _target_speed_tick(): number {
-    return this.target_speed_tick;
   }
 
   get current_tick(): number {
@@ -276,10 +267,11 @@ export class Mob {
     return closestMob ? closestMob.id : undefined;
   }
 
-  findClosestObjectID(
+  findNClosestObjectIDs(
     types: string[],
+    maxNum: number,
     maxDistance: number = Infinity
-  ): string | undefined {
+  ): string[] | undefined {
     const maxDistanceSquared = maxDistance * maxDistance;
     const typesList = types.map((type) => `'${type}'`).join(', ');
     const query = `
@@ -289,14 +281,15 @@ export class Mob {
             WHERE type IN (${typesList})
             AND ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :maxDistanceSquared
             ORDER BY ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) ASC
-            LIMIT 1
+            LIMIT :maxNum
         `;
-    const result = DB.prepare(query).get({
+    const result = DB.prepare(query).all({
       x: this.position.x,
       y: this.position.y,
-      maxDistanceSquared
-    }) as { id: string };
-    return result ? result.id : undefined;
+      maxDistanceSquared,
+      maxNum: maxNum !== Infinity ? maxNum : 1000 // maxNum cannot be Infinity (SQLite Mismatch error)
+    }) as { id: string }[];
+    return result ? result.map((res) => res.id) : undefined;
   }
 
   setMoveTarget(target: Coord, fuzzy: boolean = false): boolean {
@@ -368,7 +361,11 @@ export class Mob {
     ).run({ health: newHealth, id: this.id });
     this._health = newHealth;
     pubSub.changeHealth(this.id, amount, this.health);
-    if (this.health <= 0) {
+    // don't remove mob from server db if it is the player
+    // so that the player info can be saved.
+    if (this.health <= 0 && this.type == 'player') {
+      this.destroy();
+    } else if (this.health <= 0) {
       DB.prepare(
         `
                 DELETE FROM mobs
@@ -379,54 +376,89 @@ export class Mob {
     }
   }
 
-  changeTargetSpeedTick(target_tick: number): void {
-    this.target_speed_tick = target_tick;
-  }
+  changeEffect(delta: number, duration: number, attribute: string): void {
+    type QueryResult = {
+      potionType: string;
+      targetTick: number;
+    };
+    const tick = this.current_tick + duration;
 
-  changeSpeed(speedDelta: number, speedDuration: number): void {
-    // only change speed if no increase is already in progres
-    if (this.target_speed_tick === null || this.target_speed_tick === -1) {
-      this.speed += speedDelta;
-    }
-    this.target_speed_tick = this.current_tick + speedDuration;
-
-    // update the database
-    DB.prepare(
+    let value = DB.prepare(
       `
-      UPDATE mobs
-      SET speed = :speed, target_speed_tick = :target_speed_tick
-      WHERE id = :id
+      SELECT ${attribute}
+      FROM mobs
+      WHERE id = :id 
       `
-    ).run({
-      speed: this.speed,
-      target_speed_tick: this._target_speed_tick,
+    ).get({
       id: this.id
-    });
+    }) as number;
 
-    pubSub.changeSpeed(this.id, speedDelta, this.speed);
-    pubSub.changeTargetSpeedTick(
-      this.id,
-      speedDuration,
-      this._target_speed_tick
-    );
-  }
+    const result = DB.prepare(
+      `
+      SELECT potionType, targetTick
+      FROM mobEffects
+      WHERE id = :id AND targetTick >= :currentTick AND potionType = :attribute
+      `
+    ).get({
+      id: this.id,
+      currentTick: this.current_tick,
+      attribute: attribute
+    }) as QueryResult | undefined;
 
-  private checkSpeedReset(speedDelta: number): void {
-    // check if target tick has been reached or is already null
-    if (
-      (this._target_speed_tick !== null || this._target_speed_tick === -1) &&
-      this.current_tick >= this._target_speed_tick
-    ) {
-      this.speed -= speedDelta;
-      this.target_speed_tick = -1;
+    if (!result || duration === -1) {
+      switch (attribute) {
+        case 'speed': // TODO: add other attributes as we add them to the game
+          this.speed += delta;
+          value = this.speed;
+      }
+
       DB.prepare(
         `
         UPDATE mobs
-        SET speed = :speed, target_speed_tick = :target_speed_tick
+        SET ${attribute} = :value
         WHERE id = :id
         `
-      ).run({ speed: this.speed, target_speed_tick: null, id: this.id });
-      pubSub.changeSpeed(this.id, -speedDelta, this.speed);
+      ).run({
+        value: value,
+        id: this.id
+      });
+    }
+
+    DB.prepare(
+      `
+      INSERT INTO mobEffects (id, potionType, targetTick)
+      VALUES (:id, :potionType, :targetTick)
+      `
+    ).run({
+      id: this.id,
+      potionType: attribute,
+      targetTick: tick
+    });
+
+    pubSub.changeEffect(this.id, attribute, delta, value);
+    pubSub.changeTargetTick(this.id, attribute, duration, tick);
+  }
+
+  private checkTickReset(): void {
+    type QueryResult = {
+      potionType: string;
+    };
+    const result = DB.prepare(
+      `
+      SELECT potionType
+      FROM mobEffects
+      WHERE id = :id AND targetTick <= :currentTick
+      `
+    ).all({
+      id: this.id,
+      currentTick: this.current_tick
+    }) as QueryResult[];
+
+    for (const element of result) {
+      switch (element.potionType) {
+        case 'speed': // TODO: add other attributes as we add them to the game
+          this.changeEffect(-2, -1, element.potionType);
+      }
     }
   }
 
@@ -545,10 +577,29 @@ export class Mob {
     return count.count;
   }
 
+  getNumAlliesTargettingPos(
+    community_id: string,
+    x: number,
+    y: number
+  ): number {
+    // Get the number of allied mobs targeting x, y, excluding yourself
+    const count = DB.prepare(
+      `
+        SELECT COUNT(*) as count
+        FROM mobs
+        WHERE community_id = :community_id AND
+          target_x = :x AND
+          target_y = :y AND
+          id != :mobId
+      `
+    ).get({ community_id, x, y, mobId: this.id }) as { count: number };
+    return count.count;
+  }
+
   static getMob(key: string): Mob | undefined {
     const mob = DB.prepare(
       `
-            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id, target_speed_tick
+            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id
             FROM mobs
             WHERE id = :id
         `
@@ -562,7 +613,6 @@ export class Mob {
       type: mob.action_type,
       position: { x: mob.position_x, y: mob.position_y },
       speed: mob.speed,
-      target_speed_tick: mob.target_speed_tick,
       gold: mob.gold,
       health: mob.health,
       maxHealth: mob.maxHealth,
@@ -651,9 +701,7 @@ export class Mob {
       this.setAction(action.type(), finished);
     }
 
-    // we need to check if the current tick matches the targetspeedtick for the mob (check speed reset)
-    this.checkSpeedReset(2);
-
+    this.checkTickReset();
     this.needs.tick();
   }
 
@@ -681,10 +729,18 @@ export class Mob {
             social INTEGER NOT NULL DEFAULT 100,
             community_id TEXT,
             house_id TEXT,
-            target_speed_tick INTEGER,
             FOREIGN KEY (carrying_id) REFERENCES items (id) ON DELETE SET NULL,
             FOREIGN KEY (community_id) REFERENCES community (id) ON DELETE SET NULL,
             FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE SET NULL
+        );
+    `;
+
+  static effectsSQL = `
+        CREATE TABLE mobEffects (
+            id TEXT,
+            potionType TEXT,
+            targetTick INTEGER,
+            FOREIGN KEY (id) REFERENCES mobs (id) ON DELETE SET NULL 
         );
     `;
 }

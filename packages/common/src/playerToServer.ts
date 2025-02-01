@@ -6,4 +6,6 @@ export type PlayerToServerMessageMap = {
   interact: { item_key: string; action: string; give_to: string | null };
   join: { name: string; subtype: string };
   move: { target: Coord };
+  update_state: { name: string };
+  cheat: { action: string };
 };
