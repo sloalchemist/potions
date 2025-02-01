@@ -121,7 +121,7 @@ export class Community {
             (community_1_id = :id_2 AND community_2_id = :id_1)
         `
     ).run({ id_1: first.id, id_2: second.id, num: amount })
-  } 
+  }
 
   static SQL = `
         CREATE TABLE community (

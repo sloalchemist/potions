@@ -14,7 +14,10 @@ beforeEach(() => {
 
 describe('Favorability Tests', () => {
     test('Make favorability between two communities', () => {
+        // initialize favor between alchemists and blobs to be 369
         Community.makeFavor('alchemists', 'blobs', 369)
+
+        // Test favorability getFavor is accurate
         const favorTest1 = Community.getFavor('alchemists', 'blobs')
         const favorTest2 = Community.getFavor('blobs', 'alchemists')
         expect(favorTest1).toBe(369);
