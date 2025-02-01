@@ -22,6 +22,8 @@ describe('Favorability Tests', () => {
         const favorTest2 = Community.getFavor('blobs', 'alchemists')
         expect(favorTest1).toBe(369);
         expect(favorTest2).toBe(369);
+
+        
     });
 });
 

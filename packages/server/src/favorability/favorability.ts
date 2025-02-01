@@ -2,7 +2,7 @@ import { Mob } from "../mobs/mob"
 
 export class favorability {
 
-    static judgeConversation(conversation : string, target_mob: Mob): number | void {
+    static makeConversation(conversation : string, target_mob: Mob): number | void {
         // feed convo into llm
         var personality = target_mob.personality
         var needs = target_mob.needs

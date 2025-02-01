@@ -46,6 +46,23 @@ export function loadDefaults(global: ServerWorldDescription) {
       communityMap[alliance[1]]
     );
   }
+  // First find unique pairs of communities
+    // Super inefficient code but gets the job done. If anyone wants to improve
+    // the code, please do so.
+  var result: any[] = [];
+  for (var one in communities) {
+    for (var two in communities) {
+      if (!(one === two)) {
+        if (!(result.some((pair) => (pair[0] === result[two] && pair[1] === result[one])))) {
+          result.push([communities[one].id, communities[two].id])
+        }
+      }
+    }
+  }
+  // Create favorabilities
+  result.forEach((pair) => {
+    Community.makeFavor(pair[0], pair[1], 0)
+  });
 
   // Create houses
   houses.forEach(
