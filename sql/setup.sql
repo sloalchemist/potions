@@ -14,6 +14,10 @@ create table
     created_at timestamp with time zone not null default now(),
     character_id uuid not null,
     current_world_id bigint null,
+    health smallint not null default 100,
+    pname text not null default 'Kyle',
+    gold bigint not null default 0,
+    appearance int[] default not null '{16734003, 4367253, 1752748}', -- Random default value for now
     constraint characters_pkey primary key (id),
     constraint characters_character_id_key unique (character_id),
     constraint characters_current_world_id_fkey foreign key (current_world_id) references worlds (id)
@@ -24,7 +28,10 @@ create or replace view
 select
   characters.character_id,
   worlds.world_id,
-  worlds.ably_api_key
+  worlds.ably_api_key,
+  characters.health,
+  characters.gold,
+  characters.pname
 from
   characters
   join worlds on worlds.id = characters.current_world_id;
@@ -35,7 +42,10 @@ CREATE OR REPLACE FUNCTION load_world(
 RETURNS TABLE (
     character_id UUID,
     world_id TEXT,
-    ably_api_key TEXT
+    ably_api_key TEXT,
+    pname TEXT,
+    health SMALLINT,
+    gold BIGINT
 ) AS $$
 DECLARE
     existing_character RECORD;
@@ -47,7 +57,7 @@ BEGIN
 
     IF FOUND THEN
         RETURN QUERY
-        SELECT cw.character_id, cw.world_id, cw.ably_api_key
+        SELECT cw.character_id, cw.world_id, cw.ably_api_key, cw.pname,  cw.health, cw.gold
         FROM character_worlds cw
         WHERE cw.character_id = p_character_id;
     ELSE
@@ -55,7 +65,7 @@ BEGIN
         VALUES (p_character_id, 1);
 
         RETURN QUERY
-        SELECT cw.character_id, cw.world_id, cw.ably_api_key
+        SELECT cw.character_id, cw.world_id, cw.ably_api_key, cw.pname,  cw.health, cw.gold
         FROM character_worlds cw
         WHERE cw.character_id = p_character_id;
     END IF;

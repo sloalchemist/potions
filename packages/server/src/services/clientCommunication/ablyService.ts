@@ -22,6 +22,10 @@ import { Mob } from '../../mobs/mob';
 import { mobFactory } from '../../mobs/mobFactory';
 import { conversationTracker } from '../../mobs/social/conversationTracker';
 import { gameWorld } from '../gameWorld/gameWorld';
+import {
+  PlayerData, // ApiResponse,
+  updateCharacterData
+} from '../authMarshalling';
 import { applyCheat } from '../developerCheats';
 
 export class AblyService implements PubSub {
@@ -35,6 +39,7 @@ export class AblyService implements PubSub {
   private hasConnectedClients = false;
   private startTime = Date.now();
   private worldID: string;
+  private userDict = new Map();
 
   constructor(apiKey: string, worldID = 'default-world') {
     if (!apiKey || apiKey.indexOf('INSERT') === 0) {
@@ -59,12 +64,18 @@ export class AblyService implements PubSub {
     });
 
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
+      // console.log(this.userDict);
+      this.sendPersistenceRequest(
+        presenceMsg.clientId,
+        this.userDict.get(presenceMsg.clientId)
+      );
       this.checkConnectedClients();
       console.log(
         `Client left: ${presenceMsg.clientId}. Total connected: ${this.hasConnectedClients}`
       );
 
       const player = Mob.getMob(presenceMsg.clientId);
+      // console.log("player when leaving:", player);
       player?.removePlayer();
     });
 
@@ -72,6 +83,7 @@ export class AblyService implements PubSub {
       'kill_server',
       this.handleKillServer.bind(this)
     );
+
     this.userMembershipChannel.subscribe(
       'join',
       this.handleUserJoin.bind(this),
@@ -112,6 +124,16 @@ export class AblyService implements PubSub {
     });
   }
 
+  private async sendPlayerData(id: number, data: PlayerData) {
+    try {
+      const result = await updateCharacterData(id, data);
+      console.log(result.message); // "Player data upserted successfully."
+      console.log(result.data); // Updated player data array
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   private handleKillServer(message: Types.Message): void {
     if (
       message.data.world === this.worldID &&
@@ -121,9 +143,13 @@ export class AblyService implements PubSub {
     }
   }
 
+  //TODO: estrada - this is the function that handles the 'join' event from the auth-server
   private handleUserJoin(message: Types.Message): void {
     console.log('User joined', message.data);
     if (message.data.world === this.worldID) {
+      console.log('data.name:', message.data.name);
+      console.log('data.health:', message.data.health);
+      console.log('data.gold:', message.data.gold);
       this.userMembershipChannel.publish('serving', {
         name: message.data.name,
         world: this.worldID,
@@ -131,7 +157,12 @@ export class AblyService implements PubSub {
       });
 
       if (!this.userChannels[message.data.name]) {
-        this.setupChannels(message.data.name);
+        this.setupChannels(
+          message.data.name,
+          message.data.char_id,
+          message.data.health,
+          message.data.gold
+        );
       }
     }
   }
@@ -334,6 +365,7 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(target, 'chat_close', { target: mob_key });
   }
 
+  //TODO: estrada check out kll function to send user data
   public kill(key: string): void {
     this.addToBroadcast({ type: 'destroy_mob', data: { id: key } });
     const playerChannel = this.userChannels[key];
@@ -368,7 +400,37 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(mob_key, 'player_responses', { responses });
   }
 
-  public setupChannels(username: string) {
+  public sendPersistenceRequest(username: string, char_id: number) {
+    console.log('Updating state info for', username);
+    const player = Mob.getMob(username);
+    if (!player) {
+      throw new Error('no player found ' + username);
+    }
+    let health_for_update = player.health;
+    let gold_for_update = player.gold;
+    if (player.health <= 0) {
+      //get default health to reset
+      health_for_update = mobFactory.getTemplate('player').health;
+      gold_for_update = 0; //reset gold to 0
+    }
+    console.log('\t Persist player health:', health_for_update);
+    console.log('\t Persist player gold:', gold_for_update);
+    // Update existing character data
+    const playerData: PlayerData = {
+      health: health_for_update,
+      name: player.name,
+      gold: gold_for_update,
+      appearance: ''
+    };
+    this.sendPlayerData(char_id, playerData);
+  }
+
+  public setupChannels(
+    username: string,
+    char_id: number,
+    health: number,
+    gold: number
+  ) {
     const playerChannelName = `${username}-${this.worldID}`;
     const playerChannel = this.ably.channels.get(playerChannelName);
     this.userChannels[username] = playerChannel;
@@ -388,14 +450,20 @@ export class AblyService implements PubSub {
 
     console.log('Setting up channel for', username);
     subscribeToPlayerChannel('join', (data) => {
+      this.userDict.set(username, char_id);
       const player = Mob.getMob(username);
       if (!player) {
+        console.log(`Making mob for the character that joined: ${username}
+          \t health recieved: ${health}
+          \t gold recieved: ${gold} `);
         mobFactory.makeMob(
           'player',
           gameWorld.getPortalLocation(),
           username,
           data.name,
-          data.subtype
+          data.subtype,
+          health,
+          gold
         );
       } else if (player.subtype !== data.subtype || player.name !== data.name) {
         player.updatePlayer(data.name, data.subtype);
