@@ -15,14 +15,14 @@ export class Character {
   eyeColor: number;
   furColor: number;
   bellyColor: number;
-  community_id: string | undefined;
+  community_id: string;
 
   constructor(
     name: string,
     eyeColor: number,
     furColor: number,
     bellyColor: number,
-    community_id: string | undefined
+    community_id: string
   ) {
     this.name = name;
     this.eyeColor = eyeColor;
@@ -43,6 +43,13 @@ export class Character {
       return 0;
     }
     return world.mobs[publicCharacterId].attributes['health'];
+  }
+
+  get attack(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].attributes['attack'];
   }
 
   get speed(): number {
@@ -96,7 +103,7 @@ export async function retrieveCharacter() {
     hexStringToNumber(localStorage.getItem('eyeColor') || getRandomColor()),
     hexStringToNumber(localStorage.getItem('furColor') || getRandomColor()),
     hexStringToNumber(localStorage.getItem('bellyColor') || getRandomColor()),
-    localStorage.getItem('community_id') || undefined
+    "alchemists"
   );
 
   saveColors();

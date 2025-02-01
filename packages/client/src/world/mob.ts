@@ -25,7 +25,6 @@ export class Mob extends Physical {
     super(world, key, type, position);
     this.name = name;
     this.maxHealth = maxHealth;
-
     if (position) {
       world.addMobToGrid(this);
     }

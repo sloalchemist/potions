@@ -27,7 +27,9 @@ export class UxScene extends Phaser.Scene {
   chatButtons: ButtonManager = new ButtonManager([]);
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
+  attackText: Phaser.GameObjects.Text | null = null;
   speedText: Phaser.GameObjects.Text | null = null;
+  affiliationText: Phaser.GameObjects.Text | null = null;
   dateText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
 
@@ -149,16 +151,30 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.healthText);
 
-      this.speedText = this.add.text(
+      this.attackText = this.add.text(
         15,
         115,
+        'Attack: ' + currentCharacter.attack
+      );
+      this.statsContainer.add(this.attackText);
+
+      this.speedText = this.add.text(
+        15,
+        140,
         'Speed: ' + currentCharacter.speed
       );
       this.statsContainer.add(this.speedText);
 
+      this.affiliationText = this.add.text(
+        15,
+        165,
+        'Affiliation: ' + currentCharacter.community_id
+      );
+      this.statsContainer.add(this.affiliationText);
+
       this.dateText = this.add.text(
         15,
-        140,
+        190,
         'Date: reading position of sun and stars'
       );
       this.statsContainer.add(this.dateText);
@@ -210,7 +226,9 @@ export class UxScene extends Phaser.Scene {
     if (currentCharacter) {
       this.goldText?.setText('Gold: ' + currentCharacter.gold);
       this.healthText?.setText('Health: ' + currentCharacter.health);
+      this.attackText?.setText('Attack: ' + currentCharacter.attack);
       this.speedText?.setText('Speed: ' + currentCharacter.speed);
+      this.affiliationText?.setText('Affiliation: ' + currentCharacter.community_id);
     }
   }
 

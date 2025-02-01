@@ -40,6 +40,8 @@ export class StubbedPubSub implements PubSub {
     _newValue: number
   ): void {}
 
+  changeAttack(_key: string, _attack: number, _newValue: number): void {}
+
   changeGold(_key: string, _gold: number, _newValue: number): void {}
 
   changeItemAttribute(

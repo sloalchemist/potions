@@ -43,7 +43,8 @@ class MobFactory {
     subtype?: string,
     //Adding fields that can now be from the auth-server  (health gold appearance)
     health_from_auth?: number,
-    gold_from_auth?: number
+    gold_from_auth?: number,
+    attack_from_auth?: number
   ): void {
     if (id == undefined) {
       id = uuidv4();
@@ -63,7 +64,7 @@ class MobFactory {
       name = nameGeneratorFactory.generateName(mobType.name_style);
     }
     const speed = mobType.speed;
-    const attack = mobType.attack;
+    const attack = attack_from_auth ?? mobType.attack;
     const community_id = mobType.community;
     const health = health_from_auth ?? mobType.health; // mobType.health;
 
