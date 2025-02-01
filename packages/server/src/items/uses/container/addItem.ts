@@ -14,6 +14,10 @@ export class AddItem implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
+    if (!item.validateOwnership(mob, this.key)) {
+      return false;
+    }
+
     if (!mob.carrying) {
       return false;
     }

@@ -14,6 +14,7 @@ import {
 
 const schema = `
     ${Mob.SQL}
+    ${Mob.effectsSQL}
     ${Personality.SQL}
     ${Community.SQL}
     ${Item.SQL}
