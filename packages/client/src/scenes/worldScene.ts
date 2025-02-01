@@ -396,8 +396,8 @@ export class WorldScene extends Phaser.Scene {
 
     let lastMovementKey: string = '';
     let lastKeyMovementTarget: {
-      x: number | null;
-      y: number | null;
+      x: number | null,
+      y: number | null
     } = { x: null, y: null };
 
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
@@ -433,16 +433,18 @@ export class WorldScene extends Phaser.Scene {
       let newX = player.position?.x;
       let newY = player.position?.y;
 
-      // prevent spamming of same key or changing opposite direction ntil target reached
+      let passKeyCheck = true;
+      // prevent spamming of same key or changing opposite direction until target reached
       if (
         (event.code === lastMovementKey ||
           areOppositeKeys(event.code, lastMovementKey)) && // same direction as before
+        // event.code === lastMovementKey &&
         !(
-          newX === lastKeyMovementTarget.x && //not at last target
+          newX === lastKeyMovementTarget.x && // not at last target
           newY === lastKeyMovementTarget.y
         )
       ) {
-        return;
+        passKeyCheck = false;
       }
 
       console.log(`lastKey : ${lastMovementKey}, newKey : ${event.code}`);
@@ -478,7 +480,7 @@ export class WorldScene extends Phaser.Scene {
         }
         movementFlag = true;
       }
-      if (newX && newY && movementFlag) {
+      if (newX && newY && movementFlag && passKeyCheck) {
         // rounding for target-handling
         let negKeys = ['KeyW', 'KeyA'];
 
