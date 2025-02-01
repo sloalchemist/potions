@@ -112,8 +112,9 @@ export function setupBroadcast(
 
         // one game focused, leave the world and display game over
         waitUntilFocused.then(() => {
+          scene.showGameOver();
           leaveWorld();
-          scene.showGameOver(scene);
+          scene.resetToLoadWorldScene();
         });
       }
     }
