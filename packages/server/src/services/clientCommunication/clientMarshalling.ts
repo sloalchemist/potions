@@ -40,13 +40,15 @@ export function dateToFantasyDate(date: FantasyDate): FantasyDateI {
 }
 
 function mobDataToMob(mobData: MobData): MobI {
-  console.log("Raw mobData.personalities:", mobData.personalities); 
   const mob: MobI = {
-    personalities: mobData.personalities
-      ? Object.fromEntries(
-          Object.entries(mobData.personalities).map(([key, value]) => [key, Number(value)])
-        )
-      : {},
+    personalities: mobData.personalities && mobData.personalities.traits
+    ? Object.fromEntries(
+        Object.entries(mobData.personalities.traits).map(([key, value]) => {
+          const numericValue = Number(value);
+          return [key, isNaN(numericValue) ? 0 : numericValue];
+        })
+      )
+    : {},
     id: mobData.id,
     position: { x: mobData.position_x, y: mobData.position_y },
     type: mobData.action_type,
@@ -69,43 +71,76 @@ function mobDataToMob(mobData: MobData): MobI {
     unlocks: mobData.community_id ? [mobData.community_id] : [],
     doing: mobData.current_action
   };
-  console.log("Transformed personalities:", mob.personalities); 
   return mob;
 }
 
 export function getMobsAbly(): MobI[] {
   const mobDatas = DB.prepare(
     `
-        SELECT 
-            id,
-            action_type,
-            subtype,
-            name,
-            gold,
-            health,
-            maxHealth,
-            attack,
-            speed,
-            position_x,
-            position_y,
-            path,
-            target_x,
-            target_y,
-            current_action,
-            carrying_id,
-            community_id
-        FROM
-        mobs;
-        `
+    SELECT 
+        id,
+        action_type,
+        subtype,
+        name,
+        gold,
+        health,
+        maxHealth,
+        attack,
+        speed,
+        position_x,
+        position_y,
+        path,
+        target_x,
+        target_y,
+        current_action,
+        carrying_id,
+        community_id
+    FROM mobs;
+    `
   ).all() as MobData[];
 
-  const mobs: MobI[] = [];
-  for (const mobData of mobDatas) {
-    mobs.push(mobDataToMob(mobData));
+  const personalityDatas = DB.prepare(
+    `
+    SELECT 
+        mob_id,
+        stubbornness,
+        bravery,
+        aggression,
+        industriousness,
+        adventurousness,
+        gluttony,
+        sleepy,
+        extroversion
+    FROM personalities;
+    `
+  ).all() as Personalities[];
+
+  const personalityMap = new Map<string, Personalities>();
+  for (const personality of personalityDatas) {
+    personalityMap.set(personality.mob_id, personality);
   }
+
+  const mobs: MobI[] = mobDatas.map((mobData) => {
+    const personalityData = personalityMap.get(mobData.id);
+
+    mobData.personalities = new Personality({
+      mob_id: mobData.id,
+      stubbornness: personalityData?.stubbornness ?? 0,
+      bravery: personalityData?.bravery ?? 0,
+      aggression: personalityData?.aggression ?? 0,
+      industriousness: personalityData?.industriousness ?? 0,
+      adventurousness: personalityData?.adventurousness ?? 0,
+      gluttony: personalityData?.gluttony ?? 0,
+      sleepy: personalityData?.sleepy ?? 0,
+      extroversion: personalityData?.extroversion ?? 0
+    });
+
+    return mobDataToMob(mobData);
+  });
 
   return mobs;
 }
+
 
 function itemDataToItem(
   itemData: ItemData,
