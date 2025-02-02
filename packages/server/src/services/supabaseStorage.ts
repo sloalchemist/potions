@@ -1,6 +1,19 @@
 import fs from 'fs';
-import { supabase } from "../../../auth-server/src/authController.ts"
+import { createClient } from '@supabase/supabase-js';
 
+export const supabase = initializeSupabase();
+
+function initializeSupabase() {
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+      throw new Error('Cannot run without supabase credentials in env.');
+    }
+  
+    return createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_KEY
+    );
+}
+  
 async function downloadFile(file: string) {
     if (!process.env.SUPABASE_BUCKET) {
         throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
