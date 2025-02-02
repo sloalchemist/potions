@@ -82,7 +82,7 @@ export async function worldTimer() {
       
     const fileBufferKnowledge = await fs.promises.readFile("../../data/knowledge-graph.db", 'utf-8')
     const blobKnowledge = new Blob([fileBufferKnowledge], { type: "applciation/octet-stream" });
-    const fileKnowledge = new File([blobKnowledge], "knowledge-graph.db" {
+    const fileKnowledge = new File([blobKnowledge], "knowledge-graph.db", {
         type: blobServer.type,
         lastModified: new Date().getTime()
     });
