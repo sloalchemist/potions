@@ -21,6 +21,7 @@ import {
   WorldDescription
 } from '../worldDescription';
 import { UxScene } from './uxScene';
+import { chatOverlay } from './chatOverlay'
 import { setGameState } from '../world/controller';
 import { restoreHealth, speedUpCharacter } from '../utils/developerCheats';
 
@@ -400,6 +401,14 @@ export class WorldScene extends Phaser.Scene {
       }
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
+      }
+      // Brings up chat box for user
+      if (event.code === 'Slash') {
+        if (this.scene.isActive('chatOverlay')) {
+          this.scene.stop('chatOverlay');
+        } else {
+          this.scene.launch('chatOverlay');
+        }
       }
     });
 
