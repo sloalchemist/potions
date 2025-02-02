@@ -8,6 +8,8 @@ import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
+import { downloadFile, uploadFile } from './supabaseStorage';
+import * as fs from 'fs'
 
 let lastUpdateTime = Date.now();
 let world: ServerWorld;
@@ -59,13 +61,28 @@ async function initializeAsync() {
 
 initializeAsync();
 
-export function worldTimer() {
+export async function worldTimer() {
   const now = Date.now();
   const deltaTime = now - lastUpdateTime;
 
   if (world) {
     world.tick(deltaTime);
     pubSub.sendBroadcast();
+  }
+
+  // Is true every ten minutes (< 1000 for precision errors)
+  if (now % 600000 < 1000) {
+    // Persist data in supabase
+    const fileBufferServer = await fs.promises.readFile("../../data/server-data.db", 'utf-8')
+    const blobServer = new Blob([fileBufferServer], { type: "applciation/octet-stream" });
+    const fileServer = new File([blobServer], "server-data.db")
+
+    const fileBufferKnowledge = await fs.promises.readFile("../../data/knowledge-graph.db", 'utf-8')
+    const blobKnowledge = new Blob([fileBufferKnowledge], { type: "applciation/octet-stream" });
+    const fileKnowledge = new File([blobKnowledge], "knowledge-graph.db")
+
+    uploadFile(fileServer, ".")
+    uploadFile(fileKnowledge, ".")
   }
 
   lastUpdateTime = now;
