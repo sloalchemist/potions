@@ -73,6 +73,56 @@ export class Character {
     return world.mobs[publicCharacterId].personalities['stubbornness'];
   }
 
+  get bravery(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['bravery'];
+  }
+
+  get aggression(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['aggression'];
+  }
+
+  get industriousness(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['industriousness'];
+  }
+
+  get adventurousness(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['adventurousness'];
+  }
+
+  get gluttony(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['gluttony'];
+  }
+
+  get sleepy(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['sleepy'];
+  }
+
+  get extroversion(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['extroversion'];
+  }
+
+
   subtype(): string {
     return `${this.eyeColor}-${this.bellyColor}-${this.furColor}`;
   }

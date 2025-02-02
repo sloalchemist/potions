@@ -31,6 +31,13 @@ export class UxScene extends Phaser.Scene {
   speedText: Phaser.GameObjects.Text | null = null;
   affiliationText: Phaser.GameObjects.Text | null = null;
   stubbornnessText: Phaser.GameObjects.Text | null = null;
+  braveryText: Phaser.GameObjects.Text | null = null;
+  aggressionText: Phaser.GameObjects.Text | null = null;
+  industriousnessText: Phaser.GameObjects.Text | null = null;
+  adventurousnessText: Phaser.GameObjects.Text | null = null;
+  gluttonyText: Phaser.GameObjects.Text | null = null;
+  sleepyText: Phaser.GameObjects.Text | null = null;
+  extroversionText: Phaser.GameObjects.Text | null = null;
   dateText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
 
@@ -181,11 +188,60 @@ export class UxScene extends Phaser.Scene {
       this.statsContainer.add(this.dateText);
 
       this.stubbornnessText = this.add.text(
-        15,
-        215,
+        240,
+        40,
         'Stubborness: ' + currentCharacter.stubbornness
       );
       this.statsContainer.add(this.stubbornnessText);
+
+      this.braveryText = this.add.text(
+        240,
+        65,
+        'Bravery: ' + currentCharacter.bravery
+      );
+      this.statsContainer.add(this.braveryText);
+
+      this.aggressionText = this.add.text(
+        240,
+        90,
+        'Aggression: ' + currentCharacter.aggression
+      );
+      this.statsContainer.add(this.aggressionText);
+
+      this.industriousnessText = this.add.text(
+        240,
+        115,
+        'Industriousness: ' + currentCharacter.industriousness
+      );
+      this.statsContainer.add(this.industriousnessText);
+
+      this.adventurousnessText = this.add.text(
+        240,
+        140,
+        'Adventurousness: ' + currentCharacter.adventurousness
+      );
+      this.statsContainer.add(this.adventurousnessText);
+
+      this.gluttonyText = this.add.text(
+        240,
+        165,
+        'Gluttony: ' + currentCharacter.gluttony
+      );
+      this.statsContainer.add(this.gluttonyText);
+
+      this.sleepyText = this.add.text(
+        240,
+        190,
+        'Sleepy: ' + currentCharacter.sleepy
+      );
+      this.statsContainer.add(this.sleepyText);
+
+      this.extroversionText = this.add.text(
+        240,
+        215,
+        'Extroversion: ' + currentCharacter.extroversion
+      );
+      this.statsContainer.add(this.extroversionText);
       
 
       this.time.addEvent({
@@ -239,6 +295,13 @@ export class UxScene extends Phaser.Scene {
       this.speedText?.setText('Speed: ' + currentCharacter.speed);
       this.affiliationText?.setText('Affiliation: ' + currentCharacter.community_id);
       this.stubbornnessText?.setText('Stubbornness: ' + currentCharacter.stubbornness);
+      this.braveryText?.setText('Bravery: ' + currentCharacter.bravery);
+      this.aggressionText?.setText('Aggression: ' + currentCharacter.aggression);
+      this.industriousnessText?.setText('Industriousness: ' + currentCharacter.industriousness);
+      this.adventurousnessText?.setText('Adventurousness: ' + currentCharacter.adventurousness);
+      this.gluttonyText?.setText('Gluttony: ' + currentCharacter.gluttony);
+      this.sleepyText?.setText('Sleepy: ' + currentCharacter.sleepy);
+      this.extroversionText?.setText('Extroversion: ' + currentCharacter.extroversion);
     }
   }
 
