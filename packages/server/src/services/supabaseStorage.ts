@@ -2,14 +2,14 @@ import fs from 'fs';
 import { supabase } from "../../../auth-server/src/authController"
 
 async function downloadFile(file: string) {
-    if (!process.env.supabase_bucket) {
+    if (!process.env.SUPABASE_BUCKET) {
         throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
     }
 
     // File stored in data as Blob object
     const { data, error } = await supabase
         .storage
-        .from(process.env.supabase_bucket)
+        .from(process.env.SUPABASE_BUCKET)
         .download(file);
     
     if (error) {
@@ -38,13 +38,13 @@ async function downloadFile(file: string) {
 
 
 async function uploadFile(file: File, filePath: string) {
-    if (!process.env.supabase_bucket) {
+    if (!process.env.SUPABASE_BUCKET) {
         throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
     }
     
     const { data, error } = await supabase
         .storage
-        .from(process.env.supabase_bucket)
+        .from(process.env.SUPABASE_BUCKET)
         .upload(filePath, file, {
             cacheControl: '3600',
             upsert: false
