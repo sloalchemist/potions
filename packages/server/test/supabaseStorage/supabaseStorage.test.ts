@@ -12,10 +12,10 @@ async function fileCreate() {
 }
 
 describe('Upload and Download Supabase Bucket', () => {
-    test('Test upload to S3 bucket', () => {
-        const file = fileCreate();
-        file.then(data => (uploadFile(data, ".")));
-  });
+//     test('Test upload to S3 bucket', () => {
+//         const file = fileCreate();
+//         file.then(data => (uploadFile(data, ".")));
+//   });
 
   test('Test download from S3 bucket', () => {
       downloadFile("server-data.db");

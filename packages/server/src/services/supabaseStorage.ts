@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { supabase } from "../../../auth-server/src/authController"
+import { supabase } from "../../../auth-server/src/authController.ts"
 
 async function downloadFile(file: string) {
     if (!process.env.SUPABASE_BUCKET) {
