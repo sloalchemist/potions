@@ -274,7 +274,9 @@ export class AblyService implements PubSub {
 
   public changePersonality(key: string, trait: string, newValue: number): void {
     if (key === undefined || newValue === undefined || trait === undefined) {
-      throw new Error(`Sending invalid changePersonality message: ${key}, ${trait}, ${newValue}`);
+      throw new Error(
+        `Sending invalid changePersonality message: ${key}, ${trait}, ${newValue}`
+      );
     }
     this.addToBroadcast({
       type: 'mob_change',
@@ -332,7 +334,6 @@ export class AblyService implements PubSub {
       }
     });
   }
-
 
   public changeGold(key: string, gold: number, newValue: number): void {
     if (newValue == undefined || key == undefined || gold == undefined) {

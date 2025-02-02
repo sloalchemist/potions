@@ -41,14 +41,15 @@ export function dateToFantasyDate(date: FantasyDate): FantasyDateI {
 
 function mobDataToMob(mobData: MobData): MobI {
   const mob: MobI = {
-    personalities: mobData.personalities && mobData.personalities.traits
-    ? Object.fromEntries(
-        Object.entries(mobData.personalities.traits).map(([key, value]) => {
-          const numericValue = Number(value);
-          return [key, isNaN(numericValue) ? 0 : numericValue];
-        })
-      )
-    : {},
+    personalities:
+      mobData.personalities && mobData.personalities.traits
+        ? Object.fromEntries(
+            Object.entries(mobData.personalities.traits).map(([key, value]) => {
+              const numericValue = Number(value);
+              return [key, isNaN(numericValue) ? 0 : numericValue];
+            })
+          )
+        : {},
     id: mobData.id,
     position: { x: mobData.position_x, y: mobData.position_y },
     type: mobData.action_type,
@@ -140,7 +141,6 @@ export function getMobsAbly(): MobI[] {
 
   return mobs;
 }
-
 
 function itemDataToItem(
   itemData: ItemData,

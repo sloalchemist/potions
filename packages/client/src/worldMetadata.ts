@@ -122,7 +122,6 @@ export class Character {
     return world.mobs[publicCharacterId].personalities['extroversion'];
   }
 
-
   subtype(): string {
     return `${this.eyeColor}-${this.bellyColor}-${this.furColor}`;
   }
@@ -160,7 +159,7 @@ export async function retrieveCharacter() {
     hexStringToNumber(localStorage.getItem('eyeColor') || getRandomColor()),
     hexStringToNumber(localStorage.getItem('furColor') || getRandomColor()),
     hexStringToNumber(localStorage.getItem('bellyColor') || getRandomColor()),
-    "alchemists"
+    'alchemists'
   );
 
   saveColors();

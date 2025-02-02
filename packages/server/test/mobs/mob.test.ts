@@ -149,7 +149,7 @@ describe('Mob Tests', () => {
       expect(testMob?.attack).toBe(5);
       testMob?.changeAttack(-2);
       expect(testMob?.attack).toBe(3);
-    })
+    });
 
     test('Mob personality values can be changed', () => {
       const mobId = 'testmob-personality';
@@ -159,10 +159,10 @@ describe('Mob Tests', () => {
       const testMob = Mob.getMob(mobId);
 
       // personality bravery init is 5. 5 should be 10 bravery.
-      expect(testMob?.personality.traits["bravery"]).toBe(5);
-      testMob?.changePersonality("bravery", 5);
-      expect(testMob?.personality.traits["bravery"]).toBe(10);
-    })
+      expect(testMob?.personality.traits['bravery']).toBe(5);
+      testMob?.changePersonality('bravery', 5);
+      expect(testMob?.personality.traits['bravery']).toBe(10);
+    });
   });
 
   describe('Mob Removal', () => {

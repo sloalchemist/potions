@@ -111,7 +111,16 @@ describe('Chat UI updates based on chatting state', () => {
       {},
       {}
     );
-    const npc = new Mob(world!, 'mob2', 'NPC1', 'npc', 100, { x: 2, y: 2 }, {}, {});
+    const npc = new Mob(
+      world!,
+      'mob2',
+      'NPC1',
+      'npc',
+      100,
+      { x: 2, y: 2 },
+      {},
+      {}
+    );
     const mobs = [player1, npc];
 
     setChatting(false);

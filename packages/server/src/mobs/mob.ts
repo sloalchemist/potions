@@ -380,7 +380,7 @@ export class Mob {
   changeAttack(amount: number) {
     if (amount === 0) return;
     let newAttack = this.attack + amount;
-    if (newAttack <= 0 ) {
+    if (newAttack <= 0) {
       newAttack = 0;
     }
     DB.prepare(

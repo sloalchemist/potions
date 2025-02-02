@@ -242,7 +242,6 @@ export class UxScene extends Phaser.Scene {
         'Extroversion: ' + currentCharacter.extroversion
       );
       this.statsContainer.add(this.extroversionText);
-      
 
       this.time.addEvent({
         delay: 1000,
@@ -293,15 +292,27 @@ export class UxScene extends Phaser.Scene {
       this.healthText?.setText('Health: ' + currentCharacter.health);
       this.attackText?.setText('Attack: ' + currentCharacter.attack);
       this.speedText?.setText('Speed: ' + currentCharacter.speed);
-      this.affiliationText?.setText('Affiliation: ' + currentCharacter.community_id);
-      this.stubbornnessText?.setText('Stubbornness: ' + currentCharacter.stubbornness);
+      this.affiliationText?.setText(
+        'Affiliation: ' + currentCharacter.community_id
+      );
+      this.stubbornnessText?.setText(
+        'Stubbornness: ' + currentCharacter.stubbornness
+      );
       this.braveryText?.setText('Bravery: ' + currentCharacter.bravery);
-      this.aggressionText?.setText('Aggression: ' + currentCharacter.aggression);
-      this.industriousnessText?.setText('Industriousness: ' + currentCharacter.industriousness);
-      this.adventurousnessText?.setText('Adventurousness: ' + currentCharacter.adventurousness);
+      this.aggressionText?.setText(
+        'Aggression: ' + currentCharacter.aggression
+      );
+      this.industriousnessText?.setText(
+        'Industriousness: ' + currentCharacter.industriousness
+      );
+      this.adventurousnessText?.setText(
+        'Adventurousness: ' + currentCharacter.adventurousness
+      );
       this.gluttonyText?.setText('Gluttony: ' + currentCharacter.gluttony);
       this.sleepyText?.setText('Sleepy: ' + currentCharacter.sleepy);
-      this.extroversionText?.setText('Extroversion: ' + currentCharacter.extroversion);
+      this.extroversionText?.setText(
+        'Extroversion: ' + currentCharacter.extroversion
+      );
     }
   }
 
