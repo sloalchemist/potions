@@ -401,6 +401,18 @@ export class WorldScene extends Phaser.Scene {
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
       }
+      // Brings up chat box for user
+      if (event.code === 'Slash') {
+        if (!this.scene.isActive('ChatOverlayScene')) {
+          this.scene.launch('ChatOverlayScene');
+        }
+      }
+      // Ends chat box for user
+      if (event.code === 'Escape') {
+        if (this.scene.isActive('ChatOverlayScene')) {
+          this.scene.stop('ChatOverlayScene');
+        }
+      }
     });
 
     needsAnimationsLoaded = false;
@@ -484,6 +496,7 @@ export class WorldScene extends Phaser.Scene {
       this.scene.stop('WorldScene');
       this.scene.stop('UxScene');
       this.scene.stop('FrameScene');
+      this.scene.stop('ChatOverlayScene');
       this.scene.start('LoadWorldScene');
     });
   }
