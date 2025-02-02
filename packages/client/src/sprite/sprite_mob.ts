@@ -46,7 +46,8 @@ export class SpriteMob extends Mob {
       mob.type,
       mob.maxHealth,
       mob.position,
-      mob.attributes
+      mob.attributes,
+      mob.personalities
     );
     this.scene = scene;
     this.path = mob.path;
