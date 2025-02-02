@@ -35,14 +35,7 @@ export interface PubSub {
   ): void;
   changeGold(key: string, gold: number, newValue: number): void;
   changeAttack(key: string, attack: number, newValue: number): void;
-  changeStubbornness(key: string, stubbornness: number, newValue: number): void;
-  changeBravery(key: string, bravery: number, newValue: number): void;
-  changeAggression(key: string, aggression: number, newValue: number): void;
-  changeIndustriousness(key: string, industriousness: number, newValue: number): void;
-  changeAdventurousness(key: string, adventurousness: number, newValue: number): void;
-  changeGluttony(key: string, gluttony: number, newValue: number): void;
-  changeSleepy(key: string, sleepy: number, newValue: number): void;
-  changeExtroversion(key: string, extroversion: number, newValue: number): void;
+  changePersonality(key: string, trait: string, newValue: number): void;
   changeItemAttribute(itemKey: string, property: string, value: number): void;
   speak(key: string, message: string): void;
   setDateTime(fantasyDate: FantasyDate): void;
