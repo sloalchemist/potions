@@ -30,6 +30,7 @@ export class UxScene extends Phaser.Scene {
   attackText: Phaser.GameObjects.Text | null = null;
   speedText: Phaser.GameObjects.Text | null = null;
   affiliationText: Phaser.GameObjects.Text | null = null;
+  stubbornnessText: Phaser.GameObjects.Text | null = null;
   dateText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
 
@@ -179,6 +180,14 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.dateText);
 
+      this.stubbornnessText = this.add.text(
+        15,
+        215,
+        'Stubborness: ' + currentCharacter.stubbornness
+      );
+      this.statsContainer.add(this.stubbornnessText);
+      
+
       this.time.addEvent({
         delay: 1000,
         callback: () => {
@@ -229,6 +238,7 @@ export class UxScene extends Phaser.Scene {
       this.attackText?.setText('Attack: ' + currentCharacter.attack);
       this.speedText?.setText('Speed: ' + currentCharacter.speed);
       this.affiliationText?.setText('Affiliation: ' + currentCharacter.community_id);
+      this.stubbornnessText?.setText('Stubbornness: ' + currentCharacter.stubbornness);
     }
   }
 

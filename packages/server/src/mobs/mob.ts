@@ -18,6 +18,7 @@ import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 
 export type MobData = {
+  personalities: Personality;
   id: string;
   action_type: string;
   subtype: string;

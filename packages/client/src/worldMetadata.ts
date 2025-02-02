@@ -66,6 +66,13 @@ export class Character {
     return world.mobs[publicCharacterId].attributes['target_speed_tick'];
   }
 
+  get stubbornness(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['stubbornness'];
+  }
+
   subtype(): string {
     return `${this.eyeColor}-${this.bellyColor}-${this.furColor}`;
   }

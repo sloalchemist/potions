@@ -40,6 +40,22 @@ export class StubbedPubSub implements PubSub {
     _newValue: number
   ): void {}
 
+  changeStubbornness(_key: string, _stubbornness: number, _newValue: number): void {}
+
+  changeBravery(_key: string, _bravery: number, _newValue: number): void {}
+
+  changeAggression(_key: string, _aggression: number, _newValue: number): void {}
+
+  changeIndustriousness(_key: string, _industriousness: number, _newValue: number): void {}
+
+  changeAdventurousness(_key: string, _adventurousness: number, _newValue: number): void {}
+
+  changeGluttony(_key: string, _gluttony: number, _newValue: number): void {}
+
+  changeSleepy(_key: string, _sleepy: number, _newValue: number): void {}
+
+  changeExtroversion(_key: string, _extroversion: number, _newValue: number): void {}
+
   changeAttack(_key: string, _attack: number, _newValue: number): void {}
 
   changeGold(_key: string, _gold: number, _newValue: number): void {}

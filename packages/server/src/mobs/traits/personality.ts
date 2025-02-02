@@ -24,6 +24,18 @@ export interface PersonalityData {
   extroversion: number;
 }
 
+export type Personalities = {
+  mob_id: string;
+  stubbornness: number;
+  bravery: number;
+  aggression: number;
+  industriousness: number;
+  adventurousness: number;
+  gluttony: number;
+  sleepy: number;
+  extroversion: number;
+};
+
 export class Personality {
   traits: Record<PersonalityTraits, number>;
 

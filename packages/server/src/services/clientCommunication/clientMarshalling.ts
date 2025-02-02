@@ -4,6 +4,7 @@ import { HouseData } from '../../community/house';
 import { ItemAttributeData, ItemData } from '../../items/item';
 import { Mob, MobData } from '../../mobs/mob';
 import { FantasyDate } from '../../date/fantasyDate';
+import { Personality, Personalities } from '../../mobs/traits/personality';
 
 export function getHousesAbly(): HouseI[] {
   const houseDatas = DB.prepare(
@@ -39,7 +40,13 @@ export function dateToFantasyDate(date: FantasyDate): FantasyDateI {
 }
 
 function mobDataToMob(mobData: MobData): MobI {
+  console.log("Raw mobData.personalities:", mobData.personalities); 
   const mob: MobI = {
+    personalities: mobData.personalities
+      ? Object.fromEntries(
+          Object.entries(mobData.personalities).map(([key, value]) => [key, Number(value)])
+        )
+      : {},
     id: mobData.id,
     position: { x: mobData.position_x, y: mobData.position_y },
     type: mobData.action_type,
@@ -52,6 +59,7 @@ function mobDataToMob(mobData: MobData): MobI {
     name: mobData.name,
     maxHealth: mobData.maxHealth,
     carrying: mobData.carrying_id,
+    community_id: mobData.community_id,
     attributes: {
       health: mobData.health,
       gold: mobData.gold,
@@ -61,7 +69,7 @@ function mobDataToMob(mobData: MobData): MobI {
     unlocks: mobData.community_id ? [mobData.community_id] : [],
     doing: mobData.current_action
   };
-
+  console.log("Transformed personalities:", mob.personalities); 
   return mob;
 }
 
@@ -129,28 +137,55 @@ function itemDataToItem(
 export function getMobAbly(key: string): MobI {
   const mobData = DB.prepare(
     `
-        SELECT 
-            id,
-            action_type,
-            subtype,
-            name,
-            gold,
-            health,
-            attack,
-            speed,
-            position_x,
-            position_y,
-            path,
-            target_x,
-            target_y,
-            current_action,
-            carrying_id,
-            community_id
-        FROM
-        mobs
-        WHERE id = :id;
-        `
+    SELECT 
+        id,
+        action_type,
+        subtype,
+        name,
+        gold,
+        health,
+        attack,
+        speed,
+        position_x,
+        position_y,
+        path,
+        target_x,
+        target_y,
+        current_action,
+        carrying_id,
+        community_id
+    FROM mobs
+    WHERE id = :id;
+    `
   ).get({ id: key }) as MobData;
+
+  const personalityData = DB.prepare(
+    `
+    SELECT 
+        stubbornness,
+        bravery,
+        aggression,
+        industriousness,
+        adventurousness,
+        gluttony,
+        sleepy,
+        extroversion
+    FROM personalities
+    WHERE mob_id = :id;
+    `
+  ).get({ id: key }) as Personalities;
+
+  mobData.personalities = new Personality({
+    mob_id: mobData.id,
+    stubbornness: personalityData.stubbornness ?? 0,
+    bravery: personalityData.bravery ?? 0,
+    aggression: personalityData.aggression ?? 0,
+    industriousness: personalityData.industriousness ?? 0,
+    adventurousness: personalityData.adventurousness ?? 0,
+    gluttony: personalityData.gluttony ?? 0,
+    sleepy: personalityData.sleepy ?? 0,
+    extroversion: personalityData.extroversion ?? 0
+  });
 
   return mobDataToMob(mobData);
 }

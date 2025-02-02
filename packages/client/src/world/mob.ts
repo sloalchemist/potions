@@ -10,6 +10,7 @@ export class Mob extends Physical {
   dead: boolean = false;
   carrying?: string;
   attributes: Record<string, number> = {};
+  personalities: Record<string, number> = {};
   unlocks: string[] = [];
   doing: string = '';
 
@@ -20,7 +21,8 @@ export class Mob extends Physical {
     type: string,
     maxHealth: number,
     position: Coord | null,
-    attributes: Record<string, number>
+    attributes: Record<string, number>,
+    personalities: Record<string, number>
   ) {
     super(world, key, type, position);
     this.name = name;
@@ -31,6 +33,9 @@ export class Mob extends Physical {
 
     for (const [key, value] of Object.entries(attributes)) {
       this.attributes[key] = value;
+    }
+    for (const [key, value] of Object.entries(personalities)) {
+      this.personalities[key] = value;
     }
   }
 

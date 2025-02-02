@@ -272,6 +272,53 @@ export class AblyService implements PubSub {
     });
   }
 
+  private changeTrait(key: string, traitName: string, newValue: number): void {
+    if (key === undefined || newValue === undefined) {
+      throw new Error(`Sending invalid changeTrait message: ${key}, ${traitName}, ${newValue}`);
+    }
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: traitName,
+        delta: newValue,
+        new_value: newValue
+      }
+    });
+  }
+
+  public changeStubbornness(key: string, oldValue: number, newValue: number): void {
+    this.changeTrait(key, 'stubbornness', newValue);
+  }
+
+  public changeBravery(key: string, oldValue: number, newValue: number): void {
+    this.changeTrait(key, 'bravery', newValue);
+  }
+
+  public changeAggression(key: string, oldValue: number, newValue: number): void {
+    this.changeTrait(key, 'aggression', newValue);
+  }
+
+  public changeIndustriousness(key: string, oldValue: number, newValue: number): void {
+    this.changeTrait(key, 'industriousness', newValue);
+  }
+
+  public changeAdventurousness(key: string, oldValue: number, newValue: number): void {
+    this.changeTrait(key, 'adventurousness', newValue);
+  }
+
+  public changeGluttony(key: string, oldValue: number, newValue: number): void {
+    this.changeTrait(key, 'gluttony', newValue);
+  }
+
+  public changeSleepy(key: string, oldValue: number, newValue: number): void {
+    this.changeTrait(key, 'sleepy', newValue);
+  }
+
+  public changeExtroversion(key: string, oldValue: number, newValue: number): void {
+    this.changeTrait(key, 'extroversion', newValue);
+  }
+
   public changeEffect(
     key: string,
     attribute: string,
