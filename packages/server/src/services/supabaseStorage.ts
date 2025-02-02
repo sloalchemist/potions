@@ -36,7 +36,6 @@ async function downloadFile(file: string) {
     });
 }
 
-
 async function uploadFile(file: File, filePath: string) {
     if (!process.env.SUPABASE_BUCKET) {
         throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
