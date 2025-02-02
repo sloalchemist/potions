@@ -75,11 +75,17 @@ export async function worldTimer() {
     // Persist data in supabase
     const fileBufferServer = await fs.promises.readFile("../../data/server-data.db", 'utf-8')
     const blobServer = new Blob([fileBufferServer], { type: "applciation/octet-stream" });
-    const fileServer = new File([blobServer], "server-data.db")
-
+    const fileServer = new File([blobServer], "server-data.db", {
+        type: blobServer.type,
+        lastModified: new Date().getTime()
+    });
+      
     const fileBufferKnowledge = await fs.promises.readFile("../../data/knowledge-graph.db", 'utf-8')
     const blobKnowledge = new Blob([fileBufferKnowledge], { type: "applciation/octet-stream" });
-    const fileKnowledge = new File([blobKnowledge], "knowledge-graph.db")
+    const fileKnowledge = new File([blobKnowledge], "knowledge-graph.db" {
+        type: blobServer.type,
+        lastModified: new Date().getTime()
+    });
 
     uploadFile(fileServer, ".")
     uploadFile(fileKnowledge, ".")
