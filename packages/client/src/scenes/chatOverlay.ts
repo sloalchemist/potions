@@ -23,6 +23,11 @@ export class chatOverlay extends Phaser.Scene {
                 outline: none;
             `
         ).setOrigin(0.5, 0.5);
+
+        // focus on the input field
+        setTimeout(() => {
+            (inputElement.node as HTMLInputElement).focus();
+        }, 100);
         
         inputElement.addListener('keydown');
         inputElement.on('keydown', (event: KeyboardEvent) => {
