@@ -5,7 +5,7 @@ import { LoadWorldScene } from './scenes/loadWorldScene';
 import { LoadCharacterScene } from './scenes/loadCharacterScene';
 import { FrameScene } from './scenes/frameScene';
 import { PauseScene } from './scenes/pauseScene';
-import { chatOverlay } from './scenes/chatOverlay'
+import { ChatOverlayScene } from './scenes/chatOverlayScene';
 
 export const SCREEN_WIDTH = 480;
 export const SCREEN_HEIGHT = 720;
@@ -31,7 +31,7 @@ const config: Phaser.Types.Core.GameConfig = {
     WorldScene,
     UxScene,
     FrameScene,
-    chatOverlay,
+    ChatOverlayScene
   ]
 };
 

@@ -21,7 +21,6 @@ import {
   WorldDescription
 } from '../worldDescription';
 import { UxScene } from './uxScene';
-import { chatOverlay } from './chatOverlay'
 import { setGameState } from '../world/controller';
 import { restoreHealth, speedUpCharacter } from '../utils/developerCheats';
 
@@ -404,10 +403,14 @@ export class WorldScene extends Phaser.Scene {
       }
       // Brings up chat box for user
       if (event.code === 'Slash') {
-        if (this.scene.isActive('chatOverlay')) {
-          this.scene.stop('chatOverlay');
-        } else {
-          this.scene.launch('chatOverlay');
+        if (!this.scene.isActive('ChatOverlayScene')) {
+          this.scene.launch('ChatOverlayScene');
+        }
+      }
+      // Ends chat box for user
+      if (event.code === 'Escape') {
+        if (this.scene.isActive('ChatOverlayScene')) {
+          this.scene.stop('ChatOverlayScene');
         }
       }
     });
@@ -493,6 +496,7 @@ export class WorldScene extends Phaser.Scene {
       this.scene.stop('WorldScene');
       this.scene.stop('UxScene');
       this.scene.stop('FrameScene');
+      this.scene.stop('ChatOverlayScene');
       this.scene.start('LoadWorldScene');
     });
   }
