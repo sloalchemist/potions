@@ -88,7 +88,7 @@ export class Community {
 
   static getFavor(id_1: string, id_2: string) {
     const favorNum = DB.prepare(
-            `
+      `
             SELECT favor
             FROM favorability
             WHERE
@@ -97,31 +97,32 @@ export class Community {
             `
     ).get({ id_1: id_1, id_2: id_2 }) as { favor: number };
     if (!favorNum) {
-      throw new Error(`Non-existent communities in favorability database with ${id_1} and ${id_2}`)
+      throw new Error(
+        `Non-existent communities in favorability database with ${id_1} and ${id_2}`
+      );
     }
     return favorNum.favor;
   }
 
-
   static makeFavor(id_1: string, id_2: string, amount: number) {
     // Initialize favorability between two communities
     DB.prepare(
-    `   INSERT INTO favorability (community_1_id, community_2_id, favor)
+      `   INSERT INTO favorability (community_1_id, community_2_id, favor)
         VALUES (:name1, :name2, :num);
         `
-    ).run({name1: id_1, name2: id_2, num: amount })
+    ).run({ name1: id_1, name2: id_2, num: amount });
   }
 
   static adjustFavor(first: Community, second: Community, amount: number) {
     // This adjusts favorability between two communities
     DB.prepare(
-    `   UPDATE favorability
+      `   UPDATE favorability
         SET favor = favor + :amount
         WHERE
             (community_1_id = :id_1 AND community_2_id = :id_2) OR
             (community_1_id = :id_2 AND community_2_id = :id_1)
         `
-    ).run({ id_1: first.id, id_2: second.id, num: amount })
+    ).run({ id_1: first.id, id_2: second.id, num: amount });
   }
 
   static SQL = `
