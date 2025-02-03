@@ -56,13 +56,13 @@ async function initializeAsync() {
 
   try{
 
-    downloadFile("knowledge-graph.db");
-    downloadFile("server-data.db");
+    await downloadFile("knowledge-graph.db");
+    await downloadFile("server-data.db");
     console.log("Files successfully downloaded from Supabase")
   } catch (error) {
 
     console.log("No files found in Supabase bucket, uploading files");
-    localServerDBUpload();
+    await localServerDBUpload();
   }
 
   try {

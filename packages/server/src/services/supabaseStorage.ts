@@ -32,7 +32,7 @@ async function downloadFile(file: string) {
     
     if (error) {
         console.error('Error downloading db file:', error.message);
-        return;
+        throw error;
     }
 
     var path = require('path');
