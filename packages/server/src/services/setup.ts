@@ -16,14 +16,14 @@ let world: ServerWorld;
 
 async function localServerDBUpload() {
   const fileBufferServer = await fs.promises.readFile("data/server-data.db", 'utf-8')
-  const blobServer = new Blob([fileBufferServer], { type: "applciation/octet-stream" });
+  const blobServer = new Blob([fileBufferServer], { type: "application/octet-stream" });
   const fileServer = new File([blobServer], "server-data.db", {
       type: blobServer.type,
       lastModified: new Date().getTime()
   });
     
   const fileBufferKnowledge = await fs.promises.readFile("data/knowledge-graph.db", 'utf-8')
-  const blobKnowledge = new Blob([fileBufferKnowledge], { type: "applciation/octet-stream" });
+  const blobKnowledge = new Blob([fileBufferKnowledge], { type: "application/octet-stream" });
   const fileKnowledge = new File([blobKnowledge], "knowledge-graph.db", {
       type: blobServer.type,
       lastModified: new Date().getTime()

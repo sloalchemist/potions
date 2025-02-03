@@ -4,7 +4,7 @@ import { uploadFile, downloadFile } from "../../src/services/supabaseStorage";
 
 async function fileCreate() {
   const fileBufferServer = await fs.promises.readFile("data/server-data.db", 'utf-8')
-  const blobServer = new Blob([fileBufferServer], { type: "applciation/octet-stream" });
+  const blobServer = new Blob([fileBufferServer], { type: "application/octet-stream" });
   const fileServer = new File([blobServer], "server-data.db", {
       type: blobServer.type,
       lastModified: new Date().getTime()
