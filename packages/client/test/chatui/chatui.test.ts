@@ -66,6 +66,7 @@ describe('Chat UI updates based on chatting state', () => {
       'player',
       100,
       { x: 1, y: 1 },
+      {},
       {}
     );
     const npc1 = new Mob(
@@ -75,6 +76,7 @@ describe('Chat UI updates based on chatting state', () => {
       'npc',
       100,
       { x: 2, y: 2 },
+      {},
       {}
     );
     const mobs = [player1, npc1];
@@ -106,9 +108,19 @@ describe('Chat UI updates based on chatting state', () => {
       'player',
       100,
       { x: 1, y: 1 },
+      {},
       {}
     );
-    const npc = new Mob(world!, 'mob2', 'NPC1', 'npc', 100, { x: 2, y: 2 }, {});
+    const npc = new Mob(
+      world!,
+      'mob2',
+      'NPC1',
+      'npc',
+      100,
+      { x: 2, y: 2 },
+      {},
+      {}
+    );
     const mobs = [player1, npc];
 
     setChatting(false);
@@ -132,6 +144,7 @@ describe('Chat UI updates based on chatting state', () => {
       'player',
       100,
       { x: 1, y: 1 },
+      {},
       {}
     );
     const npc1 = new Mob(
@@ -141,6 +154,7 @@ describe('Chat UI updates based on chatting state', () => {
       'npc',
       100,
       { x: 2, y: 2 },
+      {},
       {}
     );
     let mobs = [player1, npc1];
@@ -161,6 +175,7 @@ describe('Chat UI updates based on chatting state', () => {
       'npc',
       100,
       { x: 3, y: 3 },
+      {},
       {}
     );
     mobs = [player1, npc1, npc2];
