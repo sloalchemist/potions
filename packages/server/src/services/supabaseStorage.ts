@@ -24,11 +24,13 @@ async function downloadFile(file: string) {
         throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
     }
 
-    // File stored in data as Blob object
+
     const { data, error } = await supabase
         .storage
         .from(process.env.SUPABASE_BUCKET)
         .download(file);
+    
+    console.log(data)
     
     if (error) {
         console.error('Error downloading db file:', error.message);
@@ -49,11 +51,9 @@ async function downloadFile(file: string) {
     var newPath = path.join('..', 'server', 'data');
     const destPath = path.join(newPath, file); // Target file path
 
-    await fs.writeFile(destPath, buffer, (err) => {
+    fs.writeFile(destPath, buffer, (err) => {
         if (err) {
             console.error("Error writing file:", err);
-        } else {
-            console.log(`File saved to ${destPath}`);
         }
     });
 }
