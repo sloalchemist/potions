@@ -490,7 +490,8 @@ export class Mob {
     for (const element of result) {
       switch (element.potionType) {
         case 'speed': // TODO: add other attributes as we add them to the game
-          this.changeEffect(-2, -1, element.potionType);
+          const delta = this.speed - (this.speed / 1.5)
+          this.changeEffect(-delta, -1, element.potionType);
       }
     }
   }

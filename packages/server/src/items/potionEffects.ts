@@ -13,8 +13,8 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
       return true;
     case '#0000ff':
       console.log('Drinking blue potion');
-      const speedDelta = 2;
-      const speedDuration = 30;
+      const speedDelta = mob._speed * 0.5;
+      const speedDuration = 600;
       mob.changeEffect(speedDelta, speedDuration, 'speed');
       return true;
     default:

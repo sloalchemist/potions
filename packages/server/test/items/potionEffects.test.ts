@@ -42,6 +42,9 @@ describe('Try to consume blue potion in various cases', () => {
     expect(testMob!.carrying!.type).toBe('potion');
     expect(testMob!.carrying!.subtype).toBe('255');
 
+    // set initial speed
+    const startSpeed = testMob!._speed;
+
     // have the player drink the potion
     const testDrink = new Drink();
     const test = testDrink.interact(testMob!, potionItem!);
@@ -57,7 +60,7 @@ describe('Try to consume blue potion in various cases', () => {
     expect(testMob!.carrying).toBeUndefined();
 
     // check attributes on player
-    expect(testMob!._speed).toBe(4.5); // should still be 4.5
+    expect(testMob!._speed).toBe(startSpeed + startSpeed*0.5); // should still be 4.5
 
     // create a potion
     itemGenerator.createItem({
@@ -85,7 +88,7 @@ describe('Try to consume blue potion in various cases', () => {
     expect(testMob!.carrying).toBeUndefined();
 
     // check attributes on player (speed should change, tick should)
-    expect(testMob!._speed).toBe(4.5);
+    expect(testMob!._speed).toBe(startSpeed + startSpeed*0.5);
   });
 
   test('Allow effects from first blue potion to wear off, then drink another', () => {
@@ -111,19 +114,22 @@ describe('Try to consume blue potion in various cases', () => {
     const potionItem = Item.getItem(potion!);
     expect(potionItem).not.toBeNull();
 
+    // set initial speed
+    const startSpeed = testMob!._speed;
+
     // have the player drink the potion
     const testDrink = new Drink();
     const test = testDrink.interact(testMob!, potionItem!);
     expect(test).toBe(true);
 
-    for (let i = 0; i < 31; i++) {
-      // 30 ticks means speed has worn off
+    for (let i = 0; i < 601; i++) {
+      // 600 ticks means speed has worn off
       FantasyDate.runTick();
     }
     testMob?.tick(500);
 
     // check attributes on player
-    expect(testMob!._speed).toBe(2.5);
+    expect(testMob!._speed).toBe(startSpeed);
 
     // create a potion
     itemGenerator.createItem({
@@ -143,7 +149,7 @@ describe('Try to consume blue potion in various cases', () => {
     expect(test2).toBe(true);
 
     // check attributes on player
-    expect(testMob!._speed).toBe(4.5);
+    expect(testMob!._speed).toBe(startSpeed + startSpeed*0.5);
   });
 });
 
