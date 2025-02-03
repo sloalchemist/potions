@@ -13,6 +13,7 @@ export interface PlayerData {
   health: number;
   name: string;
   gold: number;
+  attack: number;
   appearance: string;
 }
 
