@@ -1,7 +1,7 @@
 import { MessageStack } from '../components/messageStack';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 
-export class FrameScene extends Phaser.Scene {
+export class BrewScene extends Phaser.Scene {
   private messageStack!: MessageStack;
 
   constructor() {
