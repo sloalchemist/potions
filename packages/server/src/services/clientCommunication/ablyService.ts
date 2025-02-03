@@ -64,12 +64,15 @@ export class AblyService implements PubSub {
     });
 
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
-      // console.log(this.userDict);
-      // this.sendPersistenceRequest(
-      //   presenceMsg.clientId,
-      //   this.userDict.get(presenceMsg.clientId),
-      //   presenceMsg.data.target_world_id
-      // );
+      console.log('Target World Id in server:', presenceMsg.data.target_world_id);
+      const target_world_id = (presenceMsg.data.target_world_id === -1) ? this.worldID : presenceMsg.data.target_world_id;
+      console.log('Target World Recieved:', presenceMsg.data.target_world_id);
+      console.log('Target World Being Sent:', target_world_id);
+      this.sendPersistenceRequest(
+        presenceMsg.clientId,
+        this.userDict.get(presenceMsg.clientId),
+        target_world_id
+      );
       this.checkConnectedClients();
       console.log(
         `Client left: ${presenceMsg.clientId}. Total connected: ${this.hasConnectedClients}`

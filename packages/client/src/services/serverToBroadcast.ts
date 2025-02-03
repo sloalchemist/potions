@@ -26,6 +26,8 @@ import { focused } from '../main';
 
 export let playerDead = false;
 
+const STAY_AT_CURRENT_WORLD = -1;
+
 export function setupBroadcast(
   broadcast_channel: Types.RealtimeChannelCallbacks,
   scene: WorldScene
@@ -113,7 +115,7 @@ export function setupBroadcast(
         // one game focused, leave the world and display game over
         waitUntilFocused.then(() => {
           scene.showGameOver();
-          leaveWorld();
+          leaveWorld(STAY_AT_CURRENT_WORLD);
           scene.resetToLoadWorldScene();
         });
       }

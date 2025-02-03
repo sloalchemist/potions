@@ -48,13 +48,12 @@ export function startWorld() {
   });
 }
 
-export function leaveWorld() {
-  // publishPlayerStateToPersist();
+export function leaveWorld(target_world_id: number) {
   const leaveData = {
     publicCharacterId: publicCharacterId,
-    target_world_id: 1 //TODO: Replace with the actual value
+    target_world_id: target_world_id //TODO: Replace with the actual value
   };
-  broadcastChannel.presence.leave(publicCharacterId, (err) => {
+  broadcastChannel.presence.leave(leaveData, (err) => {
     if (err) {
       console.error('Error leaving presence:', err);
     } else {
