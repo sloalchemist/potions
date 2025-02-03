@@ -13,7 +13,7 @@ import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
 import { GRAY } from './pauseScene';
-import { publishPlayerPosition } from '../services/playerToServer';
+import { leaveWorld, publishPlayerPosition } from '../services/playerToServer';
 import { getNightSkyOpacity } from '../utils/nightOverlayHandler';
 import {
   ItemType,
@@ -23,6 +23,7 @@ import {
 import { UxScene } from './uxScene';
 import { setGameState } from '../world/controller';
 import { restoreHealth, speedUpCharacter } from '../utils/developerCheats';
+import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -473,6 +474,45 @@ export class WorldScene extends Phaser.Scene {
     text.setOrigin(0, 0);
     text.setScrollFactor(0); // Make it stay static
     text.setDepth(100);
+
+    this.time.delayedCall(RESPAWN_DELAY, () => {
+      const respawn = this.add.text(90, 200, 'RESPAWN', buttonStyle);
+      respawn.setOrigin(0, 0);
+      respawn.setScrollFactor(0);
+      respawn.setDepth(100);
+      respawn.setInteractive({ useHandCursor: true });
+
+      // Hover effects
+      respawn.on('pointerover', () => {
+        respawn.setStyle(nameButtonHoverStyle);
+      });
+      respawn.on('pointerout', () => {
+        respawn.setStyle(buttonStyle);
+      });
+
+      respawn.on('pointerdown', () => {
+        this.resetToRespawn();
+      });
+
+      const menu = this.add.text(290, 200, 'MENU', buttonStyle);
+      menu.setOrigin(0, 0);
+      menu.setScrollFactor(0);
+      menu.setDepth(100);
+      menu.setInteractive({ useHandCursor: true });
+
+      // Hover effects
+      menu.on('pointerover', () => {
+        menu.setStyle(nameButtonHoverStyle);
+      });
+      menu.on('pointerout', () => {
+        menu.setStyle(buttonStyle);
+      });
+
+      menu.on('pointerdown', () => {
+        leaveWorld();
+        this.resetToLoadWorldScene();
+      });
+    });
   }
 
   /* Stop all scenes related to game play and go back to the LoadWordScene 
@@ -486,5 +526,9 @@ export class WorldScene extends Phaser.Scene {
       this.scene.stop('FrameScene');
       this.scene.start('LoadWorldScene');
     });
+  }
+
+  resetToRespawn() {
+    console.log('respawning');
   }
 }
