@@ -14,6 +14,25 @@ import * as fs from 'fs'
 let lastUpdateTime = Date.now();
 let world: ServerWorld;
 
+async function localServerDBUpload() {
+  const fileBufferServer = await fs.promises.readFile("../../server/data/server-data.db", 'utf-8')
+  const blobServer = new Blob([fileBufferServer], { type: "applciation/octet-stream" });
+  const fileServer = new File([blobServer], "server-data.db", {
+      type: blobServer.type,
+      lastModified: new Date().getTime()
+  });
+    
+  const fileBufferKnowledge = await fs.promises.readFile("../../server/data/knowledge-graph.db", 'utf-8')
+  const blobKnowledge = new Blob([fileBufferKnowledge], { type: "applciation/octet-stream" });
+  const fileKnowledge = new File([blobKnowledge], "knowledge-graph.db", {
+      type: blobServer.type,
+      lastModified: new Date().getTime()
+  });
+
+  uploadFile(fileServer, ".")
+  uploadFile(fileKnowledge, ".")
+}
+
 function initializeAbly(worldId: string): AblyService {
   if (
     !process.env.ABLY_API_KEY ||
@@ -35,9 +54,18 @@ async function initializeAsync() {
 
   console.log(`loading world ${worldID}`);
 
+  try{
+
+    downloadFile("knowledge-graph.db");
+    downloadFile("server-data.db");
+    console.log("Files successfully downloaded from Supabase")
+  } catch (error) {
+
+    console.log("No files found in Supabase bucket, uploading files");
+    localServerDBUpload();
+  }
+
   try {
-    downloadFile("knowledge-graph.db")
-    downloadFile("server-data.db")
 
     initializeKnowledgeDB('data/knowledge-graph.db', false);
     initializeServerDatabase('data/server-data.db');
@@ -74,24 +102,9 @@ export async function worldTimer() {
   }
 
   // Is true every ten minutes (< 1000 for precision errors)
-  if (now % 600000 < 1000) {
-    // Persist data in supabase
-    const fileBufferServer = await fs.promises.readFile("../../data/server-data.db", 'utf-8')
-    const blobServer = new Blob([fileBufferServer], { type: "applciation/octet-stream" });
-    const fileServer = new File([blobServer], "server-data.db", {
-        type: blobServer.type,
-        lastModified: new Date().getTime()
-    });
-      
-    const fileBufferKnowledge = await fs.promises.readFile("../../data/knowledge-graph.db", 'utf-8')
-    const blobKnowledge = new Blob([fileBufferKnowledge], { type: "applciation/octet-stream" });
-    const fileKnowledge = new File([blobKnowledge], "knowledge-graph.db", {
-        type: blobServer.type,
-        lastModified: new Date().getTime()
-    });
-
-    uploadFile(fileServer, ".")
-    uploadFile(fileKnowledge, ".")
+  if (now % 60000 < 1000) {
+    localServerDBUpload();
+    console.log("Persisteed Local DBs to Supabase Bucket")
   }
 
   lastUpdateTime = now;
