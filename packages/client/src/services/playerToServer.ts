@@ -49,7 +49,11 @@ export function startWorld() {
 }
 
 export function leaveWorld() {
-  publishPlayerStateToPersist();
+  // publishPlayerStateToPersist();
+  const leaveData = {
+    publicCharacterId: publicCharacterId,
+    target_world_id: 1 //TODO: Replace with the actual value
+  };
   broadcastChannel.presence.leave(publicCharacterId, (err) => {
     if (err) {
       console.error('Error leaving presence:', err);
@@ -75,6 +79,8 @@ export function publishPlayerPosition(target: Coord) {
   }
 }
 
+// TODO: perhaps use this function in the case that we want to update player state on more than just leave
+// topic 'update_state' is not currently subscribed to on server side
 export function publishPlayerStateToPersist() {
   if (playerChannel) {
     console.log('Requesting data persistence.');
