@@ -6,6 +6,7 @@ import { currentCharacter, addRefreshCallback } from '../worldMetadata';
 import {
   fantasyDate,
   Interactions,
+  setBrewCallback,
   setChatCompanionCallback,
   setChatting,
   setInteractionCallback,
@@ -25,6 +26,7 @@ export interface ChatOption {
 export class UxScene extends Phaser.Scene {
   interactButtons: ButtonManager = new ButtonManager([]);
   chatButtons: ButtonManager = new ButtonManager([]);
+  mixButtons: ButtonManager = new ButtonManager([]);
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
   speedText: Phaser.GameObjects.Text | null = null;
@@ -183,9 +185,14 @@ export class UxScene extends Phaser.Scene {
           }))
         );
       });
+
       // Set interaction callback for item interactions
       setInteractionCallback((interactions: Interactions[]) =>
         this.setInteractions(interactions)
+      );
+      // Set interaction callback for mix interactions
+      setBrewCallback((interactions: Interactions[]) =>
+        this.setBrewOptions(interactions)
       );
       setChatCompanionCallback((companions: Mob[]) =>
         this.setChatCompanions(companions)
@@ -326,5 +333,25 @@ export class UxScene extends Phaser.Scene {
       this.chatButtons.push(button);
       this.chatContainer?.add(button);
     });
+  }
+
+  setBrewOptions(brew: Interactions[]) {
+    this.mixButtons?.clearButtonOptions();
+
+    brew.forEach((brew, i) => {
+      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+      const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+
+      const button = new Button(this, x, y, true, `${brew.label}`, () =>
+        interact(
+          brew.item.key,
+          brew.action,
+          brew.give_to ? brew.give_to : null
+        )
+      );
+      this.mixButtons.push(button);
+      this.mixContainer?.add(button);
+    });
+
   }
 }

@@ -27,6 +27,7 @@ export type Interactions = {
 
 let interactionCallback: (interactions: Interactions[]) => void;
 let chatCompanionCallback: (companions: Mob[]) => void;
+let brewCallback: (interactions: Interactions[]) => void;
 let lastInteractions: Interactions[] = [];
 let lastChatCompanions: Mob[] = [];
 let chatting: boolean = false;
@@ -334,10 +335,11 @@ function collisionListener(physicals: Item[]) {
   });
   // updates client only if interactions changes
   if (
-    !areInteractionsEqual(lastInteractions, interactions) &&
-    interactionCallback
+    !areInteractionsEqual(lastInteractions, interactions) && 
+    interactionCallback && brewCallback
   ) {
     interactionCallback(interactions);
+    brewCallback(interactions);
     lastInteractions = interactions;
   }
 }
@@ -352,6 +354,12 @@ export function setInteractionCallback(
   callback: (interactions: Interactions[]) => void
 ) {
   interactionCallback = callback;
+}
+
+export function setBrewCallback(
+  callback: (interactions: Interactions[]) => void
+) {
+  brewCallback = callback;
 }
 
 export function addNewHouse(scene: WorldScene, house: HouseI) {
