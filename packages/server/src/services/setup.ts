@@ -36,6 +36,9 @@ async function initializeAsync() {
   console.log(`loading world ${worldID}`);
 
   try {
+    downloadFile("knowledge-graph.db")
+    downloadFile("server-data.db")
+
     initializeKnowledgeDB('data/knowledge-graph.db', false);
     initializeServerDatabase('data/server-data.db');
 

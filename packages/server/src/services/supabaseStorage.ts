@@ -35,9 +35,9 @@ async function downloadFile(file: string) {
         return;
     }
 
-    // Convert Blob to file
-    const filePath = path.resolve(__dirname, "server-test.db");
+    var path = require('path');
 
+    // Convert Blob to file
     const myfile = new File([data], file, {
         type: data.type,
         lastModified: new Date().getTime()
@@ -46,8 +46,7 @@ async function downloadFile(file: string) {
     const arrayBuffer = await myfile.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    var path = require('path');
-    var newPath = path.join('..', 'data');
+    var newPath = path.join('..', 'server', 'data');
     const destPath = path.join(newPath, file); // Target file path
 
     await fs.writeFile(destPath, buffer, (err) => {
