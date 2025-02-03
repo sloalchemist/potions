@@ -3,7 +3,19 @@ import { Speaker } from '../../speaker/speaker';
 import { SpeechPart } from '../speechPart';
 import { SpeechResponse } from './speechResponse';
 
+/**
+ * Represents a response to answer a question in a conversation.
+ */
 export class Answer implements SpeechResponse {
+  /**
+   * Creates potential speech responses for answering a question.
+   *
+   * @param inResponseTo - The speech part being responded to.
+   * @param speaking - The speaker answering the question.
+   * @param listening - The listener of the answer.
+   * @param _alreadyTraversed - The list of already traversed topics.
+   * @returns The potential speech parts for the answer response.
+   */
   createPotentialSpeechResponse(
     inResponseTo: SpeechPart,
     speaking: Speaker,

@@ -1,14 +1,25 @@
 import { DB } from '../../database';
 
+/**
+ * Represents a belief in the system.
+ */
 export type Belief = {
   id: string;
   description: string;
   name: string;
   trust: number;
 };
+
+/**
+ * Represents a row containing distance information.
+ */
 export interface DistanceRow {
   distance: number;
 }
+
+/**
+ * Represents a question in the system.
+ */
 export interface Question {
   concept_id: string;
   as_question: string;
@@ -16,7 +27,16 @@ export interface Question {
   name: string;
 }
 
+/**
+ * Represents a service for managing memories.
+ */
 export class MemoryService {
+  /**
+   * Creates a knowledge link from observer to observed for the description concept if it doesn't exist.
+   *
+   * @param observer_id The id of the observer.
+   * @param observed_id The id of the observed.
+   */
   observe(observer_id: string, observed_id: string) {
     const observeSQL = DB.prepare(`
             INSERT OR IGNORE INTO 
@@ -28,6 +48,12 @@ export class MemoryService {
     observeSQL.run({ observer_id: observer_id, observed_id: observed_id });
   }
 
+  /**
+   * Add multiple beliefs to a mob's knowledge.
+   *
+   * @param noun_id The id of the mob to have the beliefs.
+   * @param belief_ids The ids of the beliefs to add.
+   */
   addKnowledge(noun_id: string, belief_ids: string[]) {
     const stmt = DB.prepare(`
             INSERT OR IGNORE INTO knowledge (noun_id, belief_id) VALUES (:noun_id, :belief_id)
@@ -38,6 +64,14 @@ export class MemoryService {
     })();
   }
 
+  /**
+   * Find the most recently learned fact about a mob.
+   *
+   * @param known_by_mob_key The id of the mob that knows the fact.
+   * @param about_mob_key The id of the mob that the fact is about.
+   *
+   * @returns The most recently learned fact about the mob.
+   */
   findFactAbout(known_by_mob_key: string, about_mob_key: string): Belief {
     const stmt = DB.prepare(`
             SELECT id, name, description, trust
@@ -49,6 +83,13 @@ export class MemoryService {
     return stmt.get({ known_by_mob_key, about_mob_key }) as Belief;
   }
 
+  /**
+   * Get the most recently learned fact by the mob with the given id.
+   *
+   * @param knower_id The id of the mob that learned the fact.
+   *
+   * @returns The most recently learned fact by the mob.
+   */
   getLastLearned(knower_id: string): Belief {
     const stmt = DB.prepare(`
             SELECT beliefs.id, beliefs.name, beliefs.description, beliefs.trust
@@ -59,6 +100,16 @@ export class MemoryService {
     return stmt.get({ knower_id }) as Belief;
   }
 
+  /**
+   * Gets a random fact that is not known by the mob with the given id,
+   * but is related to the given noun id, and is known by the mob with the given asked_of_id.
+   *
+   * @param knower_id The id of the mob that doesn't know the fact.
+   * @param asked_of_id The id of the mob that knows the fact.
+   * @param noun_id The id of the noun that the fact is related to.
+   *
+   * @returns The id of the fact, or undefined if no such fact exists.
+   */
   getRandomUnknownFactRelatedTo(
     knower_id: string,
     asked_of_id: string,
@@ -85,6 +136,17 @@ export class MemoryService {
     return result.id;
   }
 
+  /**
+   * Gets a question about a fact that the mob with id `not_known_by_mob_id` does not know, but that is related to the mob with id `related_to_id`,
+   * and that is asked of the mob with id `asked_of_id`. If the mob with id `asked_of_id` also knows some fact about the mob with id
+   * `related_to_id`, then it should be preferred.
+   *
+   * @param not_known_by_mob_id The id of the mob that does not know the fact.
+   * @param asked_of_id The id of the mob that the fact is being asked of.
+   * @param related_to_id The id of the mob that the fact is about.
+   *
+   * @returns A question about the fact, or undefined if none could be found.
+   */
   getQuestionAbout(
     not_known_by_mob_id: string,
     asked_of_id: string,
@@ -115,6 +177,15 @@ export class MemoryService {
     return question;
   }
 
+  /**
+   * Get a random fact known by the mob with id `known_by_mob_id` under the concept with id `concept_id` that is not known by the mob with id `not_known_by_mob_id`.
+   *
+   * @param known_by_mob_id The id of the mob that knows the fact.
+   * @param not_known_by_mob_id The id of the mob that does not know the fact.
+   * @param concept_id The id of the concept that the fact is under.
+   *
+   * @returns A random fact that is known by `known_by_mob_id` under the concept with id `concept_id` that is not known by `not_known_by_mob_id`, or undefined if no such fact exists.
+   */
   getRandomMemoryGap(
     known_by_mob_id: string,
     not_known_by_mob_id: string,
@@ -139,6 +210,16 @@ export class MemoryService {
     }) as Belief;
   }
 
+  /**
+   * Gets the most recently learned fact known by the mob with id `known_by_mob_id` under the concept
+   * with id `concept_id` that is about the mob with id `known_by_mob_id`.
+   *
+   * @param known_by_mob_id The id of the mob that knows the fact.
+   * @param concept_id The id of the concept that the fact is under.
+   *
+   * @returns The most recently learned fact that is known by `known_by_mob_id` under the concept with id `concept_id`
+   * that is about `known_by_mob_id`, or undefined if no such fact exists.
+   */
   getBeliefAbout(known_by_mob_id: string, concept_id: string): Belief {
     const stmt = DB.prepare(`
             SELECT beliefs.id, beliefs.name, beliefs.description, beliefs.trust
@@ -151,6 +232,17 @@ export class MemoryService {
     return stmt.get({ known_by_mob_id, concept_id }) as Belief;
   }
 
+  /**
+   * Gets the most recently learned fact known by the mob with id `known_by_mob_id` under the concept with id `concept_id` that
+   * is about the mob with id `known_by_mob_id` and is related to the mob with id `related_to_id`.
+   *
+   * @param known_by_mob_id The id of the mob that knows the fact.
+   * @param related_to_id The id of the mob that the fact is related to.
+   * @param concept_id The id of the concept that the fact is under.
+   *
+   * @returns The most recently learned fact that is known by `known_by_mob_id` under the concept with id `concept_id` that is about
+   * `known_by_mob_id` and is related to `related_to_id`, or undefined if no such fact exists.
+   */
   getBeliefRelatedTo(
     known_by_mob_id: string,
     related_to_id: string,
@@ -168,6 +260,15 @@ export class MemoryService {
     return stmt.get({ known_by_mob_id, related_to_id, concept_id }) as Belief;
   }
 
+  /**
+   * Finds an answer to a question that is known by the mob with id `known_by_mob_id` but not known by the mob with id `not_known_by_mob_id`.
+   *
+   * @param known_by_mob_id The id of the mob that knows the fact.
+   * @param not_known_by_mob_id The id of the mob that does not know the fact.
+   * @param question The question that we want to find an answer to.
+   *
+   * @returns The answer to the question, or undefined if no such fact exists.
+   */
   findAnswer(
     known_by_mob_id: string,
     not_known_by_mob_id: string,
@@ -192,6 +293,14 @@ export class MemoryService {
     }) as Belief;
   }
 
+  /**
+   * Finds a fact that is known by the mob with id `subject_id` that is related to the mob with id `related_to_id`.
+   *
+   * @param subject_id The id of the mob that knows the fact.
+   * @param related_to_id The id of the mob that the fact is related to.
+   *
+   * @returns The fact that is known by `subject_id` that is related to `related_to_id`, or undefined if no such fact exists.
+   */
   findConnectionBetweenNouns(
     subject_id: string,
     related_to_id: string
@@ -205,6 +314,13 @@ export class MemoryService {
     return stmt.get({ subject_id, related_to_id }) as Belief;
   }
 
+  /**
+   * Finds a random noun that is related to the given fact.
+   *
+   * @param fact The id of the fact that we want to find a related noun to.
+   *
+   * @returns A random noun that is related to the given fact, or undefined if no such noun exists.
+   */
   findRelatedNoun(fact: string): Belief {
     const stmt = DB.prepare(`
         SELECT key, name, description, fact, concept, noun

@@ -3,7 +3,18 @@ import { Speaker } from '../../speaker/speaker';
 import { SpeechPart } from '../speechPart';
 import { SpeechStart } from './speechStart';
 
+/**
+ * Represents a speech start when offering a gift.
+ */
 export class Gift implements SpeechStart {
+  /**
+   * Creates potential speech acts for offering a gift.
+   *
+   * @param speaking - The speaker initiating the speech act.
+   * @param listening - The listener of the speech act.
+   * @param alreadyTraversed - The list of already traversed topics.
+   * @returns The potential speech parts for the speech act.
+   */
   createPotentialSpeechAct(
     speaking: Speaker,
     listening: Speaker,
@@ -15,7 +26,6 @@ export class Gift implements SpeechStart {
       if (alreadyTraversed.includes(initialGift.hash())) {
         return [];
       }
-      //const askForSomething = new SpeechAct(this.initiator, `Hello ${this.respondent.name}, ${initialProposal.prompt()}`, 'offer', initialProposal);
       const offerGift = SpeechPart.buildOffer(
         'generous',
         speaking,
@@ -24,7 +34,6 @@ export class Gift implements SpeechStart {
         initialGift
       );
       return [offerGift];
-      // const justChat = new SpeechAct(this.initiator, `Hello ${this.respondent.name}, tell me about yourself.`, 'chat');
     }
 
     return [];
