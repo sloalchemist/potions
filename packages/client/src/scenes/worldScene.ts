@@ -480,6 +480,7 @@ export class WorldScene extends Phaser.Scene {
   resetToLoadWorldScene() {
     this.time.delayedCall(RESPAWN_DELAY, () => {
       setGameState('uninitialized');
+      this.scene.stop('BrewScene');
       this.scene.stop('PauseScene');
       this.scene.stop('WorldScene');
       this.scene.stop('UxScene');
