@@ -15,22 +15,22 @@ let lastUpdateTime = Date.now();
 let world: ServerWorld;
 
 async function localServerDBUpload() {
-  const fileBufferServer = await fs.promises.readFile("../../server/data/server-data.db", 'utf-8')
+  const fileBufferServer = await fs.promises.readFile("data/server-data.db", 'utf-8')
   const blobServer = new Blob([fileBufferServer], { type: "applciation/octet-stream" });
   const fileServer = new File([blobServer], "server-data.db", {
       type: blobServer.type,
       lastModified: new Date().getTime()
   });
     
-  const fileBufferKnowledge = await fs.promises.readFile("../../server/data/knowledge-graph.db", 'utf-8')
+  const fileBufferKnowledge = await fs.promises.readFile("data/knowledge-graph.db", 'utf-8')
   const blobKnowledge = new Blob([fileBufferKnowledge], { type: "applciation/octet-stream" });
   const fileKnowledge = new File([blobKnowledge], "knowledge-graph.db", {
       type: blobServer.type,
       lastModified: new Date().getTime()
   });
 
-  uploadFile(fileServer, ".")
-  uploadFile(fileKnowledge, ".")
+  uploadFile(fileServer, fileServer.name)
+  uploadFile(fileKnowledge, fileKnowledge.name)
 }
 
 function initializeAbly(worldId: string): AblyService {
@@ -104,7 +104,7 @@ export async function worldTimer() {
   // Is true every ten minutes (< 1000 for precision errors)
   if (now % 60000 < 1000) {
     localServerDBUpload();
-    console.log("Persisteed Local DBs to Supabase Bucket")
+    console.log("Persisted Local DBs to Supabase Bucket")
   }
 
   lastUpdateTime = now;

@@ -68,8 +68,13 @@ async function uploadFile(file: File, filePath: string) {
         .from(process.env.SUPABASE_BUCKET)
         .upload(filePath, file, {
             cacheControl: '3600',
-            upsert: false
+            upsert: true
         });
+
+    if (error) {
+        console.log("Error uploading to Supabase: ", error);
+        throw error;
+    }
 }
 
 export { uploadFile, downloadFile };
