@@ -23,3 +23,5 @@ package-lock.json
 
 # ignore sensitive files
 **/*.sensitive
+
+*.tfvars
