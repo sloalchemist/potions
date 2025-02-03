@@ -17,7 +17,8 @@ function initializeSupabase() {
       process.env.SUPABASE_SERVICE_KEY
     );
 }
-  
+
+
 async function downloadFile(file: string) {
     if (!process.env.SUPABASE_BUCKET) {
         throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
@@ -35,20 +36,25 @@ async function downloadFile(file: string) {
     }
 
     // Convert Blob to file
-    const myFile = new File([data], file, {
+    const filePath = path.resolve(__dirname, "server-test.db");
+
+    const myfile = new File([data], file, {
         type: data.type,
         lastModified: new Date().getTime()
     });
 
-    // Rename file, moving to to data location
+    const arrayBuffer = await myfile.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
     var path = require('path');
-    var newPath = path.join('..', 'data', file);
-    var oldPath = path.join('.', file);
-    fs.rename(oldPath, newPath, (err) => {
+    var newPath = path.join('..', 'data');
+    const destPath = path.join(newPath, file); // Target file path
+
+    await fs.writeFile(destPath, buffer, (err) => {
         if (err) {
-            console.error('Error moving file:', err);
+            console.error("Error writing file:", err);
         } else {
-            console.log('File moved successfully!');
+            console.log(`File saved to ${destPath}`);
         }
     });
 }
