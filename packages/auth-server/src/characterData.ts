@@ -4,13 +4,13 @@ import { Request, Response } from 'express';
 const characterData = async (req: Request, res: Response) => {
   const id = req.params.Id;
   console.log('Id:', id);
-  const { health, name, gold } = req.body;
-  if (!id || !health || !name || gold === undefined) {
+  const { current_world_id, health, name, gold } = req.body;
+  if (!id || !current_world_id || !health || !name || gold === undefined) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
   const { data, error } = await supabase
     .from('characters')
-    .update({ health: health, pname: name, gold: gold })
+    .update({ current_world_id: current_world_id, health: health, pname: name, gold: gold })
     .eq('character_id', id);
   if (error) {
     console.error(error);
