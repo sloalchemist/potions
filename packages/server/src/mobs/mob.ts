@@ -530,11 +530,24 @@ export class Mob {
   destroy() {
     if (this.gold > 0 && this.position) {
       const position = Item.findEmptyPosition(this.position);
-      itemGenerator.createItem({
-        type: 'gold',
-        position,
-        attributes: { amount: Math.floor(this.gold / 2) }
-      });
+      //if player drop gold by half
+      if (this.type === 'player') {
+        const halfGold = Math.floor(this.gold / 2);
+        itemGenerator.createItem({
+          type: 'gold',
+          position,
+          attributes: { amount: halfGold }
+        });
+        this.changeGold(-halfGold);
+      }
+      // if player.type === 'npc' then keep all gold
+      else {
+        itemGenerator.createItem({
+          type: 'gold',
+          position,
+          attributes: { amount: this.gold }
+        });
+      }
     }
 
     const carriedItem = this.carrying;
