@@ -68,6 +68,7 @@ export class Mob {
   private target?: Coord;
   private path: Coord[];
   private speed: number;
+  private attack: number;
   private _name: string;
   private maxHealth: number;
   private _carrying?: string;
@@ -79,7 +80,6 @@ export class Mob {
 
   private _gold: number;
   private _health: number;
-  public attack: number;
 
   private constructor({
     key,
@@ -165,6 +165,10 @@ export class Mob {
 
   get _speed(): number {
     return this.speed;
+  }
+
+  get _attack(): number {
+    return this.attack;
   }
 
   get current_tick(): number {
@@ -443,6 +447,9 @@ export class Mob {
         case 'speed': // TODO: add other attributes as we add them to the game
           this.speed += delta;
           value = this.speed;
+        case 'attack':
+          this.attack += delta;
+          value = this.attack;
       }
 
       DB.prepare(
@@ -489,9 +496,16 @@ export class Mob {
 
     for (const element of result) {
       switch (element.potionType) {
-        case 'speed': // TODO: add other attributes as we add them to the game
+        case 'speed': {
           const delta = this.speed - (this.speed / 1.5)
           this.changeEffect(-delta, -1, element.potionType);
+          break;
+        }
+        case 'attack': {
+          const delta = this._attack - (this._attack / 1.5)
+          this.changeEffect(-delta, -1, element.potionType);
+          break;
+        }
       }
     }
   }

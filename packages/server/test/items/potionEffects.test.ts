@@ -14,6 +14,8 @@ beforeEach(() => {
   mobFactory.loadTemplates(world.mobTypes);
 });
 
+// BLUE POTION TESTS
+
 describe('Try to consume blue potion in various cases', () => {
   test('CTest blue potion consumption back to back', () => {
     FantasyDate.initialDate();
@@ -150,6 +152,148 @@ describe('Try to consume blue potion in various cases', () => {
 
     // check attributes on player
     expect(testMob!._speed).toBe(startSpeed + startSpeed*0.5);
+  });
+});
+
+
+// ORANGE POTION TESTS
+
+describe('Try to consume orange potion in various cases', () => {
+  test('Test orange potion consumption back to back', () => {
+    FantasyDate.initialDate();
+    const position: Coord = { x: 0, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 };
+
+    // create a player
+    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+    const testMob = Mob.getMob('TestID');
+    expect(testMob).not.toBeNull();
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: '16753920',
+      position: potionLocation,
+      carriedBy: testMob
+    });
+    const potion = Item.getItemIDAt(potionLocation);
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
+
+    // ensure the player is carrying the potion
+    expect(testMob!.carrying).not.toBeNull();
+    expect(testMob!.carrying!.type).toBe('potion');
+    expect(testMob!.carrying!.subtype).toBe('16753920');
+
+    // set initial attack
+    const startAttack = testMob!._attack; // should be 5 at default
+
+    // have the player drink the potion
+    const testDrink = new Drink();
+    const test = testDrink.interact(testMob!, potionItem!);
+    expect(test).toBe(true);
+
+    for (let i = 0; i < 15; i++) {
+      // 15 ticks to check stacking
+      FantasyDate.runTick();
+    }
+    testMob?.tick(500);
+
+    // check to make sure potion is not being carried
+    expect(testMob!.carrying).toBeUndefined();
+
+    // check attributes on player
+    expect(testMob!._attack).toBe(startAttack + startAttack*0.5); // should still be 7.5
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: '16753920',
+      position: potionLocation,
+      carriedBy: testMob
+    });
+    const potion2 = Item.getItemIDAt(potionLocation);
+    expect(potion2).not.toBeNull();
+    const potionItem2 = Item.getItem(potion2!);
+    expect(potionItem2).not.toBeNull();
+
+    // ensure the player is carrying the potion
+    expect(testMob!.carrying).not.toBeNull();
+    expect(testMob!.carrying!.type).toBe('potion');
+    expect(testMob!.carrying!.subtype).toBe('16753920');
+
+    // have the player drink the potion
+    const testDrink2 = new Drink();
+    const test2 = testDrink2.interact(testMob!, potionItem2!);
+    expect(test2).toBe(true);
+
+    // check to make sure potion is not being carried
+    expect(testMob!.carrying).toBeUndefined();
+
+    // check attributes on player (attack should change, tick should)
+    expect(testMob!._attack).toBe(startAttack + startAttack*0.5);
+  });
+
+  test('Allow effects from first orange potion to wear off, then drink another', () => {
+    FantasyDate.initialDate();
+
+    const position: Coord = { x: 0, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 };
+
+    // create a player
+    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+    const testMob = Mob.getMob('TestID');
+    expect(testMob).not.toBeNull();
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: '16753920',
+      position: potionLocation,
+      carriedBy: testMob
+    });
+    const potion = Item.getItemIDAt(potionLocation);
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
+
+    // set initial attack
+    const startAttack = testMob!._attack;
+
+    // have the player drink the potion
+    const testDrink = new Drink();
+    const test = testDrink.interact(testMob!, potionItem!);
+    expect(test).toBe(true);
+
+    for (let i = 0; i < 241; i++) {
+      // 240 ticks means attack has worn off
+      FantasyDate.runTick();
+    }
+    testMob?.tick(500);
+
+    // check attributes on player
+    expect(testMob!._attack).toBe(startAttack);
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: '16753920',
+      position: potionLocation,
+      carriedBy: testMob
+    });
+    const potion2 = Item.getItemIDAt(potionLocation);
+    expect(potion2).not.toBeNull();
+    const potionItem2 = Item.getItem(potion2!);
+    expect(potionItem2).not.toBeNull();
+
+    // have the player drink the potion
+    const testDrink2 = new Drink();
+    const test2 = testDrink2.interact(testMob!, potionItem2!);
+    expect(test2).toBe(true);
+
+    // check attributes on player
+    expect(testMob!._attack).toBe(startAttack + startAttack*0.5);
   });
 });
 
