@@ -1,10 +1,10 @@
 terraform {
   cloud {
 
-    organization = "cal-poly-potions-369"
+    organization = "potions-369" #FIXME: CHANGE TO OFFICIAL ORGANIZATION NAME
 
     workspaces {
-      name = "potions-369"
+      name = "potion-infra" #FIXME: CHANGE TO OFFICIAL WORKSPACE NAME
     }
   }
   required_providers {
@@ -48,7 +48,7 @@ provider "render" {
 
 provider "github" {
   token = var.github_token
-  owner = "sloalchemist"
+  owner = "AlfredMadere"
 }
 
 # Create Ably app
@@ -124,10 +124,16 @@ locals {
   db_connection_string = replace(data.supabase_pooler.main.url["transaction"], "[YOUR-PASSWORD]", var.supabase_db_pass)
 }
 
+# Add delay before believing that supabase is actually setup
+resource "time_sleep" "wait_for_supabase" {
+  depends_on      = [data.supabase_pooler.main]
+  create_duration = "30s"
+}
+
 
 # Execute database setup SQL
 resource "null_resource" "database_setup" {
-  depends_on = [data.supabase_pooler.main]
+  depends_on = [time_sleep.wait_for_supabase]
 
   provisioner "local-exec" {
     # Force Terraform to run under bash
@@ -135,6 +141,29 @@ resource "null_resource" "database_setup" {
 
     command = <<-EOT
       psql -f ../sql/setup.sql "${local.db_connection_string}"
+    EOT
+  }
+}
+
+# Run Supabase migrations
+resource "null_resource" "supabase_migrations" {
+  depends_on = [supabase_project.potions, null_resource.database_setup]
+
+  provisioner "local-exec" {
+    working_dir = "${path.module}/../"
+    interpreter = ["/bin/bash", "-c"]
+    command     = <<-EOT
+      # Set supabase db password environment variable
+      export SUPABASE_DB_PASSWORD="${var.supabase_db_pass}"
+      
+      # Login using access token (non-interactive)
+      supabase login --token "${var.supabase_access_token}"
+      
+      # Link project (non-interactive)
+      supabase link --project-ref "${supabase_project.potions.id}"
+      
+      # Run migrations
+      supabase db push -p "${var.supabase_db_pass}"
     EOT
   }
 }
@@ -153,14 +182,9 @@ resource "null_resource" "insert_test_world" {
   }
 }
 
-# Add delay before fetching API keys
-resource "time_sleep" "wait_30_seconds" {
-  depends_on      = [null_resource.poll_project_status]
-  create_duration = "30s"
-}
 
 data "supabase_apikeys" "dev" {
-  depends_on  = [time_sleep.wait_30_seconds]
+    depends_on  = [time_sleep.wait_for_supabase]
   project_ref = supabase_project.potions.id
 }
 
@@ -168,10 +192,10 @@ data "supabase_apikeys" "dev" {
 resource "render_web_service" "potions_auth" {
   name               = "${var.project_name}-${var.environment}-auth"
   plan               = "starter"
-  region             = "oregon" # or "us-east", "frankfurt", etc.
-  start_command      = "pnpm start"
+  region             = "oregon"
+  start_command      = "cd packages/auth-server && pnpm start"
   pre_deploy_command = "echo 'hello world'"
-  root_directory     = "packages/auth-server"
+  root_directory     = "."  # Changed to root directory
 
   runtime_source = {
     native_runtime = {
@@ -182,7 +206,7 @@ resource "render_web_service" "potions_auth" {
         paths         = ["src/**"]
         ignored_paths = ["tests/**"]
       }
-      repo_url = "https://github.com/sloalchemist/potions"
+      repo_url = "https://github.com/AlfredMadere/potions-testing" #FIXME: CHANGE TO OFFICIAL REPO URL
       runtime  = "node"
     }
   }
@@ -204,7 +228,7 @@ resource "render_web_service" "potions_auth" {
 }
 
 data "github_repository" "repo" {
-  full_name = "sloalchemist/potions"
+  full_name = "AlfredMadere/potions-testing" #FIXME: CHANGE TO OFFICIAL REPO NAME
 }
 
 resource "github_repository_environment" "repo_environment" {
@@ -219,3 +243,31 @@ resource "github_actions_environment_variable" "server_url" {
   value         = render_web_service.potions_auth.url
 }
 
+
+resource "render_background_worker" "potions_test_world" {
+  name               = "${var.project_name}-${var.environment}-test-world"
+  plan               = "starter"
+  region             = "oregon" # or "us-east", "frankfurt", etc.
+   start_command      = "cd packages/server && pnpm serve test-world"
+  pre_deploy_command = "echo 'hello world'"
+  root_directory     = "."
+
+  runtime_source = {
+    native_runtime = {
+      auto_deploy   = true
+      branch        = "main"
+      build_command = "pnpm install && pnpm build && cd packages/server && pnpm run create test-world"
+      build_filter = {
+        paths         = ["src/**"]
+        ignored_paths = ["tests/**"]
+      }
+      repo_url = "https://github.com/AlfredMadere/potions-testing" #FIXME: CHANGE TO OFFICIAL REPO URL
+      runtime  = "node"
+    }
+  }
+
+  env_vars = {
+    "ABLY_API_KEY"         = { value : "${ably_api_key.root.key}" },
+    "AUTH_SERVER_URL"         = { value : "${render_web_service.potions_auth.url}" },
+  }
+}
