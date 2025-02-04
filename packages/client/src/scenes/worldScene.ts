@@ -51,12 +51,12 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', 'static/background.png');
+    this.load.image('background', 'static/water_world_background.png');
 
     this.load.atlas(
       'global_atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      'static/global_water_world.png',
+      'static/water_world-atlas.json'
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
