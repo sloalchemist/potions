@@ -138,7 +138,7 @@ You can skip these steps by going to the migrations section, copying the SQL the
 However, once you set this up it'll work for all future migrations.
 
 **1. Install the supabase CLI.**
-- Run `npm install -g supabase-cli` to install the supabase CLI globally or use a different package manager of your choice.
+- Follow the instructions [here](https://supabase.com/docs/guides/local-development/cli/getting-started). 
 
 **2. Connect the CLI to your supabase database.**
 - Run `supabase login` and follow the prompts to log in.
