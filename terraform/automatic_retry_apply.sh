@@ -22,7 +22,7 @@ for i in $(seq 1 $MAX_ATTEMPTS); do
   APPLY_OUTPUT="$(terraform apply -auto-approve 2>&1 || true)"
 
   # Print the entire output so we can see if there's any error
-  #echo "$APPLY_OUTPUT"
+  # echo "$APPLY_OUTPUT"
 
   # If Terraform truly succeeded, typically exit code is 0, but we can't rely on that
   # alone because we know the provider might be returning code 0 while printing an error.
