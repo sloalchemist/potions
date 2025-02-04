@@ -533,7 +533,7 @@ export class Mob {
       itemGenerator.createItem({
         type: 'gold',
         position,
-        attributes: { amount: this.gold }
+        attributes: { amount: Math.floor(this.gold / 2) }
       });
     }
 

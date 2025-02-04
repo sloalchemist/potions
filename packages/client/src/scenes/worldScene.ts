@@ -5,7 +5,7 @@ import {
   initializePlayer,
   tick
 } from '../world/controller';
-import { bindAblyToWorldScene } from '../services/ablySetup';
+import { bindAblyToWorldScene, setupAbly } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
 import { Coord } from '@rt-potion/common';
 import { publicCharacterId } from '../worldMetadata';
@@ -463,6 +463,8 @@ export class WorldScene extends Phaser.Scene {
   }
 
   showGameOver() {
+    leaveWorld();
+
     let uxscene = this.scene.get('UxScene') as UxScene;
     uxscene.chatButtons?.clearButtonOptions();
 
@@ -509,7 +511,6 @@ export class WorldScene extends Phaser.Scene {
       });
 
       menu.on('pointerdown', () => {
-        leaveWorld();
         this.resetToLoadWorldScene();
       });
     });
@@ -518,17 +519,23 @@ export class WorldScene extends Phaser.Scene {
   /* Stop all scenes related to game play and go back to the LoadWordScene 
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
-    this.time.delayedCall(RESPAWN_DELAY, () => {
-      setGameState('uninitialized');
-      this.scene.stop('PauseScene');
-      this.scene.stop('WorldScene');
-      this.scene.stop('UxScene');
-      this.scene.stop('FrameScene');
-      this.scene.start('LoadWorldScene');
-    });
+    setGameState('uninitialized');
+    this.scene.stop('PauseScene');
+    this.scene.stop('WorldScene');
+    this.scene.stop('UxScene');
+    this.scene.stop('FrameScene');
+    this.scene.start('LoadWorldScene');
   }
 
   resetToRespawn() {
-    console.log('respawning');
+    this.scene.stop('WorldScene');
+
+    setupAbly()
+      .then(() => {
+        this.scene.start('WorldScene');
+      })
+      .catch((_error) => {
+        console.error('Error setting up Ably');
+      });
   }
 }
