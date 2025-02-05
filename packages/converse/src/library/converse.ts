@@ -5,10 +5,20 @@ import { constructGraph } from './knowledge_graph/people/graphable';
 import { Person } from './knowledge_graph/people/person';
 import { Region } from './knowledge_graph/people/region';
 
+/**
+ * Adds a person to the knowledge graph.
+ *
+ * @param person - The person to add.
+ */
 export function addPerson(person: Person): void {
   addGraph(constructGraph([person]));
 }
 
+/**
+ * Adds a player to the database.
+ *
+ * @param id - The ID of the player.
+ */
 export function addPlayer(id: string): void {
   DB.prepare(
     `
@@ -18,14 +28,29 @@ export function addPlayer(id: string): void {
   ).run({ id });
 }
 
+/**
+ * Initializes an in-memory test knowledge database.
+ */
 export function intializeTestKnowledgeDB(): void {
   initializeInMemoryDatabase();
 }
 
+/**
+ * Initializes the knowledge database from a file.
+ *
+ * @param dbPath - The path to the database file.
+ * @param rebuild - Whether to rebuild the database if it already exists.
+ */
 export function initializeKnowledgeDB(dbPath: string, rebuild: boolean): void {
   initializeDatabase(dbPath, rebuild);
 }
 
+/**
+ * Finds a community by name.
+ *
+ * @param name - The name of the community.
+ * @returns The community if found, otherwise undefined.
+ */
 export function findCommunity(name: string): Community | undefined {
   const communityData = DB.prepare(
     `

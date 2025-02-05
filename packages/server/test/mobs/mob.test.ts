@@ -137,6 +137,34 @@ describe('Mob Tests', () => {
     });
   });
 
+  describe('Mob attribute changes', () => {
+    test('Mob attack can be changed', () => {
+      const mobId = 'testmob-attack';
+      const playerPosition: Coord = { x: 0, y: 0 };
+
+      mobFactory.makeMob('player', playerPosition, mobId, 'testPlayer');
+      const testMob = Mob.getMob(mobId);
+
+      // attack init is 5. -2 should be 3 attack.
+      expect(testMob?.attack).toBe(5);
+      testMob?.changeAttack(-2);
+      expect(testMob?.attack).toBe(3);
+    });
+
+    test('Mob personality values can be changed', () => {
+      const mobId = 'testmob-personality';
+      const playerPosition: Coord = { x: 0, y: 0 };
+
+      mobFactory.makeMob('player', playerPosition, mobId, 'testPlayer');
+      const testMob = Mob.getMob(mobId);
+
+      // personality bravery init is 5. 5 should be 10 bravery.
+      expect(testMob?.personality.traits['bravery']).toBe(5);
+      testMob?.changePersonality('bravery', 5);
+      expect(testMob?.personality.traits['bravery']).toBe(10);
+    });
+  });
+
   describe('Mob Removal', () => {
     test('Mob is removed correctly and no longer accessible', () => {
       const mobId = 'testmob-remove';

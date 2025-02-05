@@ -15,14 +15,14 @@ export class Character {
   eyeColor: number;
   furColor: number;
   bellyColor: number;
-  community_id: string | undefined;
+  community_id: string;
 
   constructor(
     name: string,
     eyeColor: number,
     furColor: number,
     bellyColor: number,
-    community_id: string | undefined
+    community_id: string
   ) {
     this.name = name;
     this.eyeColor = eyeColor;
@@ -45,6 +45,13 @@ export class Character {
     return world.mobs[publicCharacterId].attributes['health'];
   }
 
+  get attack(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].attributes['attack'];
+  }
+
   get speed(): number {
     if (!world || !world.mobs[publicCharacterId]) {
       return 0;
@@ -57,6 +64,62 @@ export class Character {
       return 0;
     }
     return world.mobs[publicCharacterId].attributes['target_speed_tick'];
+  }
+
+  get stubbornness(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['stubbornness'];
+  }
+
+  get bravery(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['bravery'];
+  }
+
+  get aggression(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['aggression'];
+  }
+
+  get industriousness(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['industriousness'];
+  }
+
+  get adventurousness(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['adventurousness'];
+  }
+
+  get gluttony(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['gluttony'];
+  }
+
+  get sleepy(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['sleepy'];
+  }
+
+  get extroversion(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].personalities['extroversion'];
   }
 
   subtype(): string {
@@ -96,7 +159,7 @@ export async function retrieveCharacter() {
     hexStringToNumber(localStorage.getItem('eyeColor') || getRandomColor()),
     hexStringToNumber(localStorage.getItem('furColor') || getRandomColor()),
     hexStringToNumber(localStorage.getItem('bellyColor') || getRandomColor()),
-    localStorage.getItem('community_id') || undefined
+    'alchemists'
   );
 
   saveColors();
