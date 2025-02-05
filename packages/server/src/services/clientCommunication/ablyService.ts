@@ -573,9 +573,9 @@ export class AblyService implements PubSub {
     subscribeToPlayerChannel('fight', (data) => {
       const player = Mob.getMob(username);
       if (player) {
-        // TODO: replace when FightTracker class is implemented
-        console.log('fight', data);
-        this.closeFight(username, '');
+        // TODO: replace following two lines when FightTracker class is implemented
+        console.log('test fight', data);
+        this.closeFight(player.id, player.id);
         // fightTracker.addTurnFromOptions(player, data.attack);
       }
     });
