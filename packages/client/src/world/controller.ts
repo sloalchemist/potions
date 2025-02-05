@@ -195,6 +195,7 @@ export function getPhysicalInteractions(
   const interactions: Interactions[] = [];
   const item = physical as Item;
   const isOwner = item.isOwnedBy(currentCharacter?.community_id);
+  // console.log("Mob community:", currentCharacter?.community_id, "item ownedby:", item.ownedBy, "Is Owner:", isOwner);
 
   // if the item can be picked up
   if (item.itemType.carryable) {
@@ -215,7 +216,7 @@ export function getPhysicalInteractions(
   }
 
   // handles unique interactions
-  item.itemType.interactions.forEach((interaction) => {
+  item.itemType.interactions.forEach((interaction) => {    
     const hasPermission =
       !interaction.permissions || // Allow interaction if no permissions entry in global.json
       (isOwner && interaction.permissions?.community) ||
@@ -403,6 +404,7 @@ export function setDate(date: FantasyDateI) {
 }
 
 export function addNewItem(scene: WorldScene, item: ItemI) {
+  // console.log("Adding new item from client side:", item);
   const newItem = new SpriteItem(scene, item);
   world.items[newItem.key] = newItem;
   if (item.carried_by) {
