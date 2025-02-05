@@ -6,8 +6,7 @@ import {
   tick
 } from '../world/controller';
 import { bindAblyToWorldScene } from '../services/ablySetup';
-import { TerrainType } from '@rt-potion/common';
-import { Coord, floor } from '@rt-potion/common';
+import { Coord, floor, TerrainType } from '@rt-potion/common';
 import { publicCharacterId } from '../worldMetadata';
 import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
@@ -510,8 +509,6 @@ export class WorldScene extends Phaser.Scene {
   }
 
   handlePlayerMovement(publish: boolean) {
-    console.log("handling movment");
-
     const player = world.mobs[publicCharacterId];
     if (!(player && player.position)) {
       return;
@@ -538,33 +535,18 @@ export class WorldScene extends Phaser.Scene {
       moved = true;
     }
 
-    console.log(this.keys['w'], this.keys['a'], this.keys['s'], this.keys['d']);
-
     if (!moved) return;
 
-    let roundedX;
-    let roundedY;
-    const negKeys = ['w', 'a'];
-    if (negKeys.includes(this.lastKeyUp)) {
-      roundedX = Math.floor(moveX);
-      roundedY = Math.floor(moveY);
-    } else {
-      roundedX = Math.ceil(moveX);
-      roundedY = Math.ceil(moveY);
-    }
+    console.log(this.keys['w'], this.keys['a'], this.keys['s'], this.keys['d']);
 
-    const target = { x: roundedX, y: roundedY };
+    const target = floor({ x: moveX, y: moveY});
 
     if (publish) {
       this.prevKeys = { ...this.keys };
       publishPlayerPosition(target);
     } else {
       player.target = target;
-      const path = world.generatePath(
-        player.unlocks,
-        player.position!,
-        target
-      );
+      const path = world.generatePath(player.unlocks, player.position!, target);
       player.path = path;
     }
   }
