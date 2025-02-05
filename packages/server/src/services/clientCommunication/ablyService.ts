@@ -128,7 +128,6 @@ export class AblyService implements PubSub {
     try {
       const result = await updateCharacterData(id, data);
       console.log(result.message); // "Player data upserted successfully."
-      console.log(result.data); // Updated player data array
     } catch (error) {
       console.error(error);
     }
