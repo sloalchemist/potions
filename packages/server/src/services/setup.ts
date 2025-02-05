@@ -87,6 +87,7 @@ async function initializeAsync() {
     pubSub.startBroadcasting();
   } catch (error) {
     console.error('Failed to initialize world:', error);
+    throw error;
   }
 }
 
