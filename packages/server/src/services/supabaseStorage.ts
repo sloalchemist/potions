@@ -6,6 +6,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export const supabase = initializeSupabase();
+export var lastUpdated = Date.now();
 
 function initializeSupabase() {
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
@@ -94,7 +95,13 @@ async function uploadLocalFile(path: string) {
         console.log("Error uploading ", file.name);
         throw error;
     }
+
+    lastUpdated = Date.now();
 }
+
+function shouldUploadDB(time: number) {
+    return time - lastUpdated >= 600000;
+};
 
 async function uploadLocalData() {
     uploadLocalFile("server-data.db");
