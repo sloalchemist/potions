@@ -83,6 +83,59 @@ export class Carryable {
     pubSub.dropItem(this.item.id, mob.id, this.item.position);
   }
 
+// stash carried item into inventory
+  stash(mob: Mob) : boolean {
+    const carriedItem = mob.carrying;
+
+    // carriedItem must exist and === item.id
+    if (!carriedItem || carriedItem.id !== this.item.id){
+      return false
+    }
+
+    DB.prepare(`
+      UPDATE items 
+      SET stored_by = :mobId,
+          position_x = NULL,
+          position_y = NULL
+      WHERE id = :itemId
+    `).run({
+      mobId: mob.id,
+      itemId: this.item.id
+    });
+  
+    mob.carrying = undefined;
+    pubSub.destroy(this.item);
+
+    return true
+  }
+
+  // unstash stored items, swtiches carried item with stored item if carried exists
+  unstash(mob: Mob): void {
+    const carriedItem = mob.carrying;
+
+    // carriedItem must exist and === item.id
+    if (carriedItem){
+      DB.prepare(`
+        UPDATE items 
+        SET stored_by = :mobId,
+            position_x = NULL,
+            position_y = NULL
+        WHERE id = :itemId
+      `).run({
+        mobId: mob.id,
+        itemId: carriedItem.id
+      });
+
+      mob.carrying = undefined;
+    }
+    
+    mob.carrying = this.item;
+      
+    pubSub.pickupItem(this.item.id, mob.id);
+  }
+
+  
+
   static validateNoOrphanedItems(): void {
     const result = DB.prepare(
       `
