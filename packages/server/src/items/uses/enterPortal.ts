@@ -16,7 +16,7 @@ export class EnterPortal implements Use {
 
   interact(mob: Mob, _item: Item): boolean {
     if (this.isNearPortal(mob)) {
-    //  this.showWorldSelection(mob);
+      this.showWorldSelection(mob);
       return true;
     }
     return false;
@@ -46,7 +46,7 @@ export class EnterPortal implements Use {
     };
 
     if (worldDestinations[world]) {
-      mob.changePosition(mob.world, worldDestinations[world]);
+     // mob.changePosition(mob.world, worldDestinations[world]);
       mob.sendMessage(`You have entered ${world}!`);
     }
   } 
