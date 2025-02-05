@@ -40,6 +40,7 @@ export class UxScene extends Phaser.Scene {
   extroversionText: Phaser.GameObjects.Text | null = null;
   dateText: Phaser.GameObjects.Text | null = null;
   recipeText: Phaser.GameObjects.Text | null = null;
+  effectText: Phaser.GameObjects.Text | null = null;
   sideEffectsText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
 
@@ -49,12 +50,15 @@ export class UxScene extends Phaser.Scene {
   statsTabButton: TabButton | null = null;
   mixTabButton: TabButton | null = null;
   potionTabButton: TabButton | null = null;
+  nextButton: TabButton | null = null;
+  backButton: TabButton | null = null;
 
   itemsContainer: Phaser.GameObjects.Container | null = null;
   chatContainer: Phaser.GameObjects.Container | null = null;
   statsContainer: Phaser.GameObjects.Container | null = null;
   mixContainer: Phaser.GameObjects.Container | null = null;
   potionContainer: Phaser.GameObjects.Container | null = null;
+  effectsContainer: Phaser.GameObjects.Container | null = null;
 
   constructor() {
     super({
@@ -76,6 +80,7 @@ export class UxScene extends Phaser.Scene {
     this.chatContainer = this.add.container(0, 40);
     this.mixContainer = this.add.container(0, 40);
     this.potionContainer = this.add.container(0, 40);
+    this.effectsContainer = this.add.container(0, 40);
 
     const tabWidth = 83;
     const tabHeight = 40;
@@ -145,6 +150,24 @@ export class UxScene extends Phaser.Scene {
       () => this.showPotionsTab(),
       tabWidth,
       tabHeight
+    );
+    this.nextButton = new TabButton(
+      this,
+      400,
+      310,
+      '==>',
+      () => this.showNextTab(),
+      50,
+      30
+    );
+    this.backButton = new TabButton(
+      this,
+      60,
+      310,
+      '<==',
+      () => this.showBackTab(),
+      50,
+      30
     );
 
     const backgroundTabs = this.add.graphics();
@@ -257,12 +280,11 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.extroversionText);
 
-      this.recipeText = this.add.text(
-        15,
-        90,
-        'Name:'
-      );
+      this.recipeText = this.add.text(160, 35, 'POTION RECIPES');
       this.potionContainer.add(this.recipeText);
+
+      this.effectText = this.add.text(140, 35, 'POTION SIDE EFFECTS');
+      this.effectsContainer.add(this.effectText);
 
       this.time.addEvent({
         delay: 1000,
@@ -343,6 +365,9 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
     this.potionContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
     this.updateTabStyles('stats');
   }
 
@@ -353,6 +378,9 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
     this.potionContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
     this.updateTabStyles('items');
   }
 
@@ -363,26 +391,59 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
     this.potionContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
     this.updateTabStyles('chat');
   }
 
-  // Method to show the Chat tab
+  // Method to show the Mix tab
   showMixTab() {
     this.mixContainer?.setVisible(true);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
     this.potionContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
     this.updateTabStyles('mix');
   }
 
+  // Method to show the Potions tab
   showPotionsTab() {
     this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
     this.potionContainer?.setVisible(true);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(true);
+    this.backButton?.setVisible(true);
     this.updateTabStyles('handbook');
+  }
+
+  // Method to show the Page Flips
+  showBackTab() {
+    this.mixContainer?.setVisible(false);
+    this.statsContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.potionContainer?.setVisible(true);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(true);
+    this.backButton?.setVisible(true);
+  }
+
+  showNextTab() {
+    this.mixContainer?.setVisible(false);
+    this.statsContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.potionContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(true);
+    this.nextButton?.setVisible(true);
+    this.backButton?.setVisible(true);
   }
 
   // Update the styles of the tab buttons based on the active tab
