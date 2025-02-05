@@ -21,7 +21,7 @@ const characterData = async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Invalid world ID.' });
   }
 
-  // Step 2: Use the retrieved world ID to update the player's data
+  // Use the retrieved world ID to update the player's data
   const { data, error } = await supabase
     .from('characters')
     .update({ current_world_id: worldData.id, health: health, pname: name, gold: gold })

@@ -48,6 +48,8 @@ export function startWorld() {
   });
 }
 
+/*target_world_id should be a text world_id from the worlds table in supabase
+  or 'STAY_AT_WORLD' as defined in serverToBroadcast to indicate staying in the same world */
 export function leaveWorld(target_world_id: string) {
   const leaveData = {
     publicCharacterId: publicCharacterId,
