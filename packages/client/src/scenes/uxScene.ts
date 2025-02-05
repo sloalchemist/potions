@@ -46,11 +46,14 @@ export class UxScene extends Phaser.Scene {
   chatTabButton: TabButton | null = null;
   statsTabButton: TabButton | null = null;
   mixTabButton: TabButton | null = null;
+  inventoryTabButton: TabButton | null = null;
 
   itemsContainer: Phaser.GameObjects.Container | null = null;
   chatContainer: Phaser.GameObjects.Container | null = null;
   statsContainer: Phaser.GameObjects.Container | null = null;
   mixContainer: Phaser.GameObjects.Container | null = null;
+  inventoryContainer: Phaser.GameObjects.Container | null = null;
+
 
   constructor() {
     super({
@@ -71,10 +74,12 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer = this.add.container(0, 40);
     this.chatContainer = this.add.container(0, 40);
     this.mixContainer = this.add.container(0, 40);
+    this.inventoryContainer = this.add.container(0, 40);
 
-    const tabWidth = 100;
+
+    const tabWidth = 80;
     const tabHeight = 40;
-    const tabSpacing = 10;
+    const tabSpacing = 8;
 
     const tabY = 40;
     const tabX = 14;
@@ -129,6 +134,15 @@ export class UxScene extends Phaser.Scene {
       tabY,
       'Mix',
       () => this.showMixTab(),
+      tabWidth,
+      tabHeight
+    );
+    this.inventoryTabButton = new TabButton(
+      this,
+      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
+      tabY,
+      'Pack',
+      () => this.showInventoryTab(),
       tabWidth,
       tabHeight
     );
@@ -321,6 +335,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.inventoryContainer?.setVisible(true);
     this.updateTabStyles('stats');
   }
 
@@ -330,6 +345,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
+    this.inventoryContainer?.setVisible(true);
     this.updateTabStyles('items');
   }
 
@@ -339,6 +355,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
+    this.inventoryContainer?.setVisible(true);
     this.updateTabStyles('chat');
   }
 
@@ -348,21 +365,33 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.inventoryContainer?.setVisible(true);
     this.updateTabStyles('mix');
   }
 
+  showInventoryTab() {
+    this.inventoryContainer?.setVisible(true);
+    this.mixContainer?.setVisible(false);
+    this.statsContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.updateTabStyles('pack');
+  }
+
   // Update the styles of the tab buttons based on the active tab
-  updateTabStyles(activeTab: 'items' | 'chat' | 'stats' | 'mix') {
+  updateTabStyles(activeTab: 'items' | 'chat' | 'stats' | 'mix' | 'pack') {
     if (
       this.itemsTabButton &&
       this.chatTabButton &&
       this.statsTabButton &&
-      this.mixTabButton
+      this.mixTabButton &&
+      this.inventoryTabButton
     ) {
       this.itemsTabButton.setTabActive(activeTab === 'items');
       this.chatTabButton.setTabActive(activeTab === 'chat');
       this.statsTabButton.setTabActive(activeTab === 'stats');
       this.mixTabButton.setTabActive(activeTab === 'mix');
+      this.inventoryTabButton.setTabActive(activeTab === 'pack');
     }
   }
 
