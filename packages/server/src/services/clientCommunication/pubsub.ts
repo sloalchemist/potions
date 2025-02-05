@@ -34,6 +34,8 @@ export interface PubSub {
     newValue: number
   ): void;
   changeGold(key: string, gold: number, newValue: number): void;
+  changeAttack(key: string, attack: number, newValue: number): void;
+  changePersonality(key: string, trait: string, newValue: number): void;
   changeItemAttribute(itemKey: string, property: string, value: number): void;
   speak(key: string, message: string): void;
   setDateTime(fantasyDate: FantasyDate): void;
