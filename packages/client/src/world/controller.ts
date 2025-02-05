@@ -216,7 +216,7 @@ export function getPhysicalInteractions(
   }
 
   // handles unique interactions
-  item.itemType.interactions.forEach((interaction) => {    
+  item.itemType.interactions.forEach((interaction) => {
     const hasPermission =
       !interaction.permissions || // Allow interaction if no permissions entry in global.json
       (isOwner && interaction.permissions?.community) ||
