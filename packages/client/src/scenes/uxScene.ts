@@ -165,7 +165,7 @@ export class UxScene extends Phaser.Scene {
       60,
       310,
       '<==',
-      () => this.showBackTab(),
+      () => this.showPotionsTab(),
       50,
       30
     );
@@ -424,17 +424,6 @@ export class UxScene extends Phaser.Scene {
   }
 
   // Method to show the Page Flips
-  showBackTab() {
-    this.mixContainer?.setVisible(false);
-    this.statsContainer?.setVisible(false);
-    this.itemsContainer?.setVisible(false);
-    this.chatContainer?.setVisible(false);
-    this.potionContainer?.setVisible(true);
-    this.effectsContainer?.setVisible(false);
-    this.nextButton?.setVisible(true);
-    this.backButton?.setVisible(false);
-  }
-
   showNextTab() {
     this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
