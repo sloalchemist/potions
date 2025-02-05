@@ -58,6 +58,10 @@ async function downloadFile(file: string) {
     });
 }
 
+function shouldUploadDB(time: number) {
+    return time % 600000 < 1000;
+};
+
 async function uploadFile(file: File, filePath: string) {
     if (!process.env.SUPABASE_BUCKET) {
         throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
@@ -77,4 +81,4 @@ async function uploadFile(file: File, filePath: string) {
     }
 }
 
-export { uploadFile, downloadFile };
+export { uploadFile, downloadFile, shouldUploadDB};

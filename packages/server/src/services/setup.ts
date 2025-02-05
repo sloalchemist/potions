@@ -8,7 +8,7 @@ import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
-import { downloadFile, uploadFile } from './supabaseStorage';
+import { downloadFile, uploadFile, shouldUploadDB } from './supabaseStorage';
 import * as fs from 'fs'
 
 let lastUpdateTime = Date.now();
@@ -134,13 +134,13 @@ export async function worldTimer() {
   if (world) {
     world.tick(deltaTime);
     pubSub.sendBroadcast();
-  }
-
-  // Is true every ten minutes (< 1000 for precision errors)
-  if (now % 60000 < 1000) {
-    localServerDBUpload();
-    console.log("Persisted Local DBs to Supabase Bucket")
-  }
+    }
+    
+    // Uploads db files every 10 minutes
+    if (shouldUploadDB(now)) {
+        localServerDBUpload();
+    }
 
   lastUpdateTime = now;
 }
+
