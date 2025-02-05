@@ -6,7 +6,7 @@
     "lint": "eslint . --config eslint.config.mjs",
     "lint:fix": "eslint . --config eslint.config.mjs --fix",
     "build": "pnpm -r run build",
-    "test": "pnpm -r run test",
+    "test": "pnpm -r run test --coverage",
     "clean": "pnpm -r run clean"
   },
   "devDependencies": {

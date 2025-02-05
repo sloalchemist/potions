@@ -55,4 +55,11 @@ jobs:
 
       # Step 8: Run Unit Tests
       - name: Run Unit Tests
-        run: pnpm test
+        run: pnpm test -- --coverage
+
+      # Step 8: Upload Coverage Report as an Artifact
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-coverage
+          path: packages/**/coverage/
