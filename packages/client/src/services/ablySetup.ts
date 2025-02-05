@@ -13,8 +13,7 @@ let authorizer = SERVER_URL.slice(-1) == "/" ? 'auth?username=' : '/auth?usernam
 export function setupAbly(): Promise<void> {
   let worldID: string;
   return new Promise((resolve, _reject) => {
-    const authUrl = 
-      SERVER_URL + 'auth?username=' + characterId;
+    const authUrl = SERVER_URL + authorizer + characterId;
 
     const ably = new Realtime({
       authCallback: (tokenParams, callback) => {
