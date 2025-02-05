@@ -39,6 +39,8 @@ export class UxScene extends Phaser.Scene {
   sleepyText: Phaser.GameObjects.Text | null = null;
   extroversionText: Phaser.GameObjects.Text | null = null;
   dateText: Phaser.GameObjects.Text | null = null;
+  recipeText: Phaser.GameObjects.Text | null = null;
+  sideEffectsText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
 
   // Variables for tab buttons and containers
@@ -46,11 +48,13 @@ export class UxScene extends Phaser.Scene {
   chatTabButton: TabButton | null = null;
   statsTabButton: TabButton | null = null;
   mixTabButton: TabButton | null = null;
+  potionTabButton: TabButton | null = null;
 
   itemsContainer: Phaser.GameObjects.Container | null = null;
   chatContainer: Phaser.GameObjects.Container | null = null;
   statsContainer: Phaser.GameObjects.Container | null = null;
   mixContainer: Phaser.GameObjects.Container | null = null;
+  potionContainer: Phaser.GameObjects.Container | null = null;
 
   constructor() {
     super({
@@ -71,10 +75,11 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer = this.add.container(0, 40);
     this.chatContainer = this.add.container(0, 40);
     this.mixContainer = this.add.container(0, 40);
+    this.potionContainer = this.add.container(0, 40);
 
-    const tabWidth = 100;
+    const tabWidth = 70;
     const tabHeight = 40;
-    const tabSpacing = 10;
+    const tabSpacing = 5;
 
     const tabY = 40;
     const tabX = 14;
@@ -129,6 +134,15 @@ export class UxScene extends Phaser.Scene {
       tabY,
       'Mix',
       () => this.showMixTab(),
+      tabWidth,
+      tabHeight
+    );
+    this.potionTabButton = new TabButton(
+      this,
+      tabX + 4 * (tabWidth + tabSpacing + 10) + tabWidth / 2,
+      tabY,
+      'Potion Book',
+      () => this.showPotionsTab(),
       tabWidth,
       tabHeight
     );
@@ -243,6 +257,13 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.extroversionText);
 
+      this.recipeText = this.add.text(
+        15,
+        90,
+        'The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog'
+      );
+      this.potionContainer.add(this.recipeText);
+
       this.time.addEvent({
         delay: 1000,
         callback: () => {
@@ -321,6 +342,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.potionContainer?.setVisible(false);
     this.updateTabStyles('stats');
   }
 
@@ -330,6 +352,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
+    this.potionContainer?.setVisible(false);
     this.updateTabStyles('items');
   }
 
@@ -339,6 +362,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
+    this.potionContainer?.setVisible(false);
     this.updateTabStyles('chat');
   }
 
@@ -348,21 +372,33 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.potionContainer?.setVisible(false);
     this.updateTabStyles('mix');
   }
 
+  showPotionsTab() {
+    this.mixContainer?.setVisible(false);
+    this.statsContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.potionContainer?.setVisible(true);
+    this.updateTabStyles('handbook');
+  }
+
   // Update the styles of the tab buttons based on the active tab
-  updateTabStyles(activeTab: 'items' | 'chat' | 'stats' | 'mix') {
+  updateTabStyles(activeTab: 'items' | 'chat' | 'stats' | 'mix' | 'handbook') {
     if (
       this.itemsTabButton &&
       this.chatTabButton &&
       this.statsTabButton &&
-      this.mixTabButton
+      this.mixTabButton &&
+      this.potionTabButton
     ) {
       this.itemsTabButton.setTabActive(activeTab === 'items');
       this.chatTabButton.setTabActive(activeTab === 'chat');
       this.statsTabButton.setTabActive(activeTab === 'stats');
       this.mixTabButton.setTabActive(activeTab === 'mix');
+      this.potionTabButton.setTabActive(activeTab == 'handbook');
     }
   }
 
