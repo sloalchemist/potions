@@ -1,0 +1,523 @@
+{
+  "item_types": [
+    {
+        "name": "Heartbeet",
+        "type": "heart-beet",
+        "attributes": [
+            {
+                "name": "brew_color",
+                "value": "#FF0000"
+            },
+            {
+                "name": "health",
+                "value": 1
+            }
+        ],
+        "walkable": true,
+        "smashable": true,
+        "interactions": [
+            
+            {
+                "description": "Eat",
+                "action": "eat",
+                "while_carried": true
+            }
+        ],
+        "carryable": true,
+        "on_tick": []
+    },
+{
+    "name": "Wall",
+    "type": "wall",
+    "item_group": "wall",
+    "layout_type": "wall",
+    "carryable": false,
+    "smashable": true,
+    "attributes": [
+        {
+            "name": "health",
+            "value": 100
+        }
+    ],
+    "interactions": [],
+    "walkable": false,
+    "drops_item": "log"
+},
+{
+    "name": "Partial Wall",
+    "type": "partial-wall",
+    "carryable": false,
+    "walkable": false,
+    "smashable": true,
+    "attributes": [
+        {
+            "name": "complete",
+            "value": 3
+        },
+        {
+            "name": "health",
+            "value": 1
+        }
+    ],
+    "interactions": [],
+    "drops_item": "log"
+},
+{
+    "name": "Fence",
+    "type": "fence",
+    "item_group": "fence",
+    "layout_type": "fence",
+    "carryable": false,
+    "walkable": false,
+    "smashable": true,
+    "attributes": [
+        {
+            "name": "health",
+            "value": 100
+        }
+    ],
+    "interactions": [],
+    "drops_item": "log"
+},
+{
+    "name": "Gate",
+    "type": "gate",
+    "item_group": "fence",
+    "layout_type": "opens",
+    "carryable": false,
+    "walkable": true,
+    "smashable": true,
+    "attributes": [
+        {
+            "name": "health",
+            "value": 100
+        }
+    ],
+    "interactions": [],
+    "open": false
+},
+{
+    "name": "Door",
+    "type": "door",
+    "item_group": "wall",
+    "layout_type": "opens",
+    "carryable": false,
+    "smashable": true,
+    "walkable": true,
+    "attributes": [
+        {
+            "name": "health",
+            "value": 100
+        }
+    ],
+    "interactions": []
+},
+{
+    "name": "Tree",
+    "type": "tree",
+    "carryable": false,
+    "walkable": false,
+    "interactions": [],
+    "on_tick": [
+        {
+            "action": "spawn_item",
+            "parameters": {
+                "type": "log",
+                "global_max": 10,
+                "local_max": 2,
+                "radius": 3,
+                "rate": 0.1
+            }
+        }
+    ]
+},
+{
+    "type": "heart-beet-plant",
+    "name": "Heartbeet plant",
+    "carryable": false,
+    "walkable": true,
+    "smashable": false,
+    "flat": true,
+    "interactions": [],
+    "on_tick": [
+        {
+            "action": "spawn_item",
+            "parameters": {
+                "type": "heart-beet",
+                "global_max": 10,
+                "local_max": 2,
+                "radius": 3,
+                "rate": 0.1
+            }
+        }
+    ]
+},
+{
+    "type": "blueberry",
+    "name": "Blueberry",
+    "carryable": true,
+    "walkable": true,
+    "smashable": true,
+    "attributes": [{
+        "name": "brew_color",
+        "value": "#0000FF"
+    },
+    {
+        "name": "health",
+        "value": 1
+    }],
+    "interactions": [
+
+        {
+            "description": "Eat",
+            "action": "eat",
+            "while_carried": true
+        }
+    ]
+},
+{
+    "type": "blueberry-bush",
+    "name": "Blueberry bush",
+    "carryable": false,
+    "walkable": false,
+    "smashable": false,
+    "interactions": [],
+    "on_tick": [
+        {
+            "action": "spawn_item",
+            "parameters": {
+                "type": "blueberry",
+                "global_max": 10,
+                "local_max": 2,
+                "radius": 3,
+                "rate": 0.1
+            }
+        }
+    ]
+},
+{
+    "name": "Log",
+    "type": "log",
+    "carryable": true,
+    "smashable": true,
+    "walkable": true,
+    "flat": true,
+    "attributes":[
+        {
+            "name": "health",
+            "value": 1
+        }
+    ],
+    "interactions": [
+        {
+            "description": "Start wall",
+            "action": "start_wall",
+            "while_carried": true
+        },
+        {
+            "description": "Build wall",
+            "action": "build_wall",
+            "while_carried": true,
+            "requires_item": "partial-wall"
+        }
+    ]
+},
+{
+    "name": "Portal",
+    "type": "portal",
+    "carryable": false,
+    "walkable": true,
+    "flat": true,
+    "interactions": [
+    ],
+    "on_tick": [
+        {
+            "action": "spawn_mob",
+            "parameters": {
+                "type": "blob",
+                "max": 1,
+                "rate": 0.1
+            }
+        },
+        {
+            "action": "spawn_mob",
+            "parameters": {
+                "type": "fighter",
+                "max": 1,
+                "rate": 0.1
+            }
+        },
+        {
+            "action": "spawn_mob",
+            "parameters": {
+                "type": "villager",
+                "max": 15,
+                "rate": 0.1
+            }
+        }
+    ]
+},
+{
+    "name": "Potion stand",
+    "type": "potion-stand",
+    "carryable": false,
+    "smashable": true,
+    "walkable": false,
+    "attributes": [
+        {
+            "name": "items",
+            "value": 0
+        },
+        {
+            "name": "price",
+            "value": 10
+        },
+        {
+            "name": "gold",
+            "value": 0
+        },
+        {
+            "name": "health",
+            "value": 1
+        }
+    ],
+    "interactions": [
+        {
+            "description": "Add $item_name",
+            "action": "add_item",
+            "while_carried": false,
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Get $item_name",
+            "action": "get_item",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "items",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Raise price",
+            "action": "raise_price",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "price",
+                    "value": 99,
+                    "comparison": "less_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Lower price",
+            "action": "lower_price",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "price",
+                    "value": 1,
+                    "comparison": "greater_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Collect gold",
+            "action": "collect_gold",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "gold",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Purchase potion",
+            "action": "purchase",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "items",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ]
+        }
+    ],
+    "show_price_at": {
+        "x": 7,
+        "y": -10
+    }
+},
+{
+    "name": "Potion",
+    "type": "potion",
+    "carryable": true,
+    "smashable": true,
+    "walkable": true,
+    "attributes": [
+        {
+            "name": "health",
+            "value": 1
+        }
+    ],
+    "interactions": [
+        {
+            "description": "Quaff potion",
+            "action": "drink",
+            "while_carried": true
+        },
+        {
+            "description": "Create stand",
+            "action": "create_stand",
+            "while_carried": true
+        }
+    ]
+},
+{
+    "name": "Basket",
+    "type": "basket",
+    "carryable": false,
+    "templated": true,
+    "walkable": false,
+    "show_template_at": {
+        "x": 0,
+        "y": 7
+    },
+    "attributes": [
+        {
+            "name": "items",
+            "value": 0
+        }
+    ],
+    "interactions": [
+        {
+            "description": "Get $item_name",
+            "action": "get_item",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "items",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ]
+        },
+        {
+            "description": "Add $item_name",
+            "action": "add_item",
+            "while_carried": false
+        }
+    ]
+},
+{
+    "name": "Cauldron",
+    "type": "cauldron",
+    "carryable": false,
+    "walkable": false,
+    "attributes": [
+        {
+            "name": "ingredients",
+            "value": 0
+        },
+        {
+            "name": "potion_subtype",
+            "value": ""
+        }
+    ],
+    "interactions": [
+        {
+            "description": "Add Ingredient",
+            "action": "add_ingredient",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "ingredients",
+                    "value": 3,
+                    "comparison": "less_than"
+                }
+            ]
+        },
+        {
+            "description": "Bottle Potion",
+            "action": "bottle_potion",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "ingredients",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ]
+        },
+        {
+            "description": "Dump Cauldron",
+            "action": "dump_cauldron",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "ingredients",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ]
+        }
+    ]
+},
+{
+    "name": "Gold",
+    "type": "gold",
+    "walkable": true,
+    "smashable": false,
+    "carryable": true,
+    "interactions": []
+}
+],
+"mob_types": [
+{
+    "name": "Blob",
+    "type": "blob",
+    "speaker": false
+},
+{
+    "name": "Villager",
+    "type": "villager",
+    "speaker": true
+},
+{
+    "name": "Player",
+    "type": "player",
+    "speaker": true
+},
+{
+    "name": "Fighter",
+    "type": "fighter",
+    "speaker": true
+}
+],
+"portals": []
+}
