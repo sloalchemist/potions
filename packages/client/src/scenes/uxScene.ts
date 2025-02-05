@@ -378,8 +378,10 @@ export class UxScene extends Phaser.Scene {
 
         const attributesRecord: Record<string, string | number> =
           item.attributes;
-        console.log('HELP: ', attributesRecord);
-        // Convert the record to an array:
+        let menuOpen = this.scene.isActive('BrewScene');
+        if (menuOpen) {
+          this.scene.launch('BrewScene');
+        }
         const attributesArray = Object.entries(attributesRecord).map(
           ([key, value]) => ({ name: key, value })
         );
@@ -388,7 +390,6 @@ export class UxScene extends Phaser.Scene {
         const potionSubtypeAttr = attributesArray.find(
           (attr) => attr.name === 'potion_subtype'
         );
-        console.log(potionSubtypeAttr);
 
         scene.setBrewColor(
           parseInt(potionSubtypeAttr!.value.toString()) || 0xffffff
