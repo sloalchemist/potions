@@ -34,7 +34,7 @@ export class Cauldron {
 
   DumpCauldron(): boolean {
     this.item.setAttribute('ingredients', 0);
-    this.item.setAttribute('potion_subtype', '');
+    this.item.setAttribute<number>('potion_subtype', 0);
 
     return true;
   }
@@ -49,11 +49,12 @@ export class Cauldron {
     ) {
       // if no items in cauldron, add item
       if (this.getPotionSubtype() == '') {
-        this.item.setAttribute(
+        this.item.setAttribute<number>(
           'potion_subtype',
-          String(hexStringToNumber(carriedItem.getAttribute('brew_color')))
+          hexStringToNumber(carriedItem.getAttribute('brew_color'))
         );
         this.item.changeAttributeBy('ingredients', 1);
+        console.log('Cauldron Info1234:', this);
         carriedItem.destroy();
         return true;
       }
@@ -71,10 +72,11 @@ export class Cauldron {
       carriedItem.destroy();
 
       this.item.changeAttributeBy('ingredients', 1);
-      this.item.setAttribute(
+      this.item.setAttribute<number>(
         'potion_subtype',
-        String(hexStringToNumber(newColor))
+        hexStringToNumber(newColor)
       );
+      console.log('Cauldron Info:', this);
       return true;
     }
     return false;
@@ -93,7 +95,7 @@ export class Cauldron {
       carriedBy: mob
     });
 
-    this.item.setAttribute('potion_subtype', '');
+    this.item.setAttribute<number>('potion_subtype', 0);
     return true;
   }
 }

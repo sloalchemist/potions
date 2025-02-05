@@ -5,7 +5,7 @@ import { LoadWorldScene } from './scenes/loadWorldScene';
 import { LoadCharacterScene } from './scenes/loadCharacterScene';
 import { FrameScene } from './scenes/frameScene';
 import { PauseScene } from './scenes/pauseScene';
-import {BrewScene} from './scenes/brewScene';
+import { BrewScene } from './scenes/brewScene';
 
 export const SCREEN_WIDTH = 480;
 export const SCREEN_HEIGHT = 720;

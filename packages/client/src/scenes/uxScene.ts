@@ -17,7 +17,7 @@ import { Mob } from '../world/mob';
 import { World } from '../world/world';
 import { interact, requestChat, speak } from '../services/playerToServer';
 import { ButtonManager } from '../components/buttonManager';
-
+import { BrewScene } from './brewScene';
 export interface ChatOption {
   label: string;
   callback: () => void;
@@ -226,6 +226,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.scene.stop('BrewScene');
     this.updateTabStyles('stats');
   }
 
@@ -235,6 +236,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
+    this.scene.stop('BrewScene');
     this.updateTabStyles('items');
   }
 
@@ -244,12 +246,14 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
+    this.scene.stop('BrewScene');
     this.updateTabStyles('chat');
   }
 
   // Method to show the Mix tab
   showMixTab() {
     this.mixContainer?.setVisible(true);
+    // this.scene.launch('BrewScene');
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
@@ -276,18 +280,26 @@ export class UxScene extends Phaser.Scene {
     this.interactButtons?.clearButtonOptions();
 
     interactions.forEach((interaction, i) => {
-      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
-      const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+      if (interaction.item.type != 'cauldron') {
+        const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+        const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
 
-      const button = new Button(this, x, y, true, `${interaction.label}`, () =>
-        interact(
-          interaction.item.key,
-          interaction.action,
-          interaction.give_to ? interaction.give_to : null
-        )
-      );
-      this.interactButtons.push(button);
-      this.itemsContainer?.add(button);
+        const button = new Button(
+          this,
+          x,
+          y,
+          true,
+          `${interaction.label}`,
+          () =>
+            interact(
+              interaction.item.key,
+              interaction.action,
+              interaction.give_to ? interaction.give_to : null
+            )
+        );
+        this.interactButtons.push(button);
+        this.itemsContainer?.add(button);
+      }
     });
   }
 
@@ -337,21 +349,65 @@ export class UxScene extends Phaser.Scene {
 
   setBrewOptions(brew: Interactions[]) {
     this.mixButtons?.clearButtonOptions();
+    const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(0 / 3);
+    const x = 85 + (0 % 3) * (BUTTON_WIDTH + 10);
+    var i = 1;
+    const scene = this.scene.get('BrewScene') as BrewScene;
 
-    brew.forEach((brew, i) => {
-      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
-      const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+    brew.forEach((interaction) => {
+      if (interaction.item.type == 'cauldron') {
+        const item = interaction.item;
+        const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+        const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+        const button = new Button(
+          this,
+          x,
+          y,
+          true,
+          `${interaction.label}`,
+          () =>
+            interact(
+              interaction.item.key,
+              interaction.action,
+              interaction.give_to ? interaction.give_to : null
+            )
+        );
+        this.mixButtons.push(button);
+        this.mixContainer?.add(button);
+        i = i + 1;
 
-      const button = new Button(this, x, y, true, `${brew.label}`, () =>
-        interact(
-          brew.item.key,
-          brew.action,
-          brew.give_to ? brew.give_to : null
-        )
-      );
-      this.mixButtons.push(button);
-      this.mixContainer?.add(button);
+        const attributesRecord: Record<string, string | number> =
+          item.attributes;
+        console.log('HELP: ', attributesRecord);
+        // Convert the record to an array:
+        const attributesArray = Object.entries(attributesRecord).map(
+          ([key, value]) => ({ name: key, value })
+        );
+
+        // Now you can search the array:
+        const potionSubtypeAttr = attributesArray.find(
+          (attr) => attr.name === 'potion_subtype'
+        );
+        console.log(potionSubtypeAttr);
+
+        scene.setBrewColor(
+          parseInt(potionSubtypeAttr!.value.toString()) || 0xffffff
+        );
+      }
     });
 
+    let menuOpen = this.scene.isActive('BrewScene');
+    const toggleButton = new Button(this, x, y, true, `Toggle Menu`, () => {
+      menuOpen = !menuOpen;
+
+      if (menuOpen) {
+        this.scene.launch('BrewScene');
+      } else {
+        this.scene.stop('BrewScene');
+      }
+    });
+
+    this.mixButtons.push(toggleButton);
+    this.mixContainer?.add(toggleButton);
   }
 }
