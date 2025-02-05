@@ -68,7 +68,7 @@ export class AblyService implements PubSub {
 
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
       const target_world_id = (presenceMsg.data.target_world_id === STAY_AT_CURRENT_WORLD) ? this.worldID : presenceMsg.data.target_world_id;
-      console.log('Target World Recieved:', presenceMsg.data.target_world_id);
+      console.log('Target World Received:', presenceMsg.data.target_world_id);
       console.log('Target World Being Sent:', target_world_id);
       this.sendPersistenceRequest(
         presenceMsg.clientId,
