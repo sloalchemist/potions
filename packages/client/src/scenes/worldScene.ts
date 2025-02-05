@@ -478,6 +478,7 @@ export class WorldScene extends Phaser.Scene {
     text.setDepth(100);
 
     this.time.delayedCall(RESPAWN_DELAY, () => {
+      // Add respawn button
       const respawn = this.add.text(90, 200, 'RESPAWN', buttonStyle);
       respawn.setOrigin(0, 0);
       respawn.setScrollFactor(0);
@@ -492,10 +493,12 @@ export class WorldScene extends Phaser.Scene {
         respawn.setStyle(buttonStyle);
       });
 
+      // Respawn button action
       respawn.on('pointerdown', () => {
         this.resetToRespawn();
       });
 
+      // Add menu button
       const menu = this.add.text(290, 200, 'MENU', buttonStyle);
       menu.setOrigin(0, 0);
       menu.setScrollFactor(0);
@@ -510,6 +513,7 @@ export class WorldScene extends Phaser.Scene {
         menu.setStyle(buttonStyle);
       });
 
+      // Main menu button
       menu.on('pointerdown', () => {
         this.resetToLoadWorldScene();
       });
@@ -527,6 +531,10 @@ export class WorldScene extends Phaser.Scene {
     this.scene.start('LoadWorldScene');
   }
 
+  /**
+   * Stop the world scene, re-connect to Ably after being disconnected by
+   * the server, then restart the world scene
+   */
   resetToRespawn() {
     this.scene.stop('WorldScene');
 
