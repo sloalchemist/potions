@@ -121,10 +121,20 @@
         { "type": "coral", "coord": { "x": 41, "y": 41 } },
         { "type": "coral", "coord": { "x": 43, "y": 39 } },
 
-        { "type": "clam", "coord": { "x": 8, "y": 42 } },
-        { "type": "anemone", "coord": { "x": 6, "y": 40 } },
+        { "type": "clam", "coord": { "x": 43, "y": 42 } },
+        { "type": "anemone", "coord": { "x": 21, "y": 42 } },
         { "type": "starfish", "coord": { "x": 4, "y": 40 } },
-        { "type": "message-in-bottle", "coord": { "x": 7, "y": 40 } }
+        
+        { "type": "starfish", "coord": { "x": 11, "y": 4 } },
+        { "type": "starfish", "coord": { "x": 13, "y": 5 } },
+        { "type": "message-in-bottle", "coord": { "x": 7, "y": 40 } },
+        { "type": "tree", "coord": { "x": 18, "y": 26 } },
+        { "type": "tree", "coord": { "x": 20, "y": 27 } },
+        { "type": "tree", "coord": { "x": 17, "y": 28 } },
+
+        { "type": "starfish", "coord": { "x": 27, "y": 21 } },
+        { "type": "starfish", "coord": { "x": 21, "y": 4 } }
+
           ],
           "containers": [
         { "type": "basket", "coord": { "x": 14, "y": 38 }, "community": "alchemists", "itemType": "log", "count": 0, "capacity": 10 },
