@@ -6,9 +6,12 @@ import { currentCharacter, addRefreshCallback } from '../worldMetadata';
 import {
   fantasyDate,
   Interactions,
+  setAttackCallback,
   setBrewCallback,
   setChatCompanionCallback,
   setChatting,
+  setFighting,
+  setFightOpponentCallback,
   setInteractionCallback,
   setResponseCallback
 } from '../world/controller';
@@ -16,10 +19,21 @@ import { TabButton } from '../components/tabButton';
 import { SlideButton } from '../components/slideButton';
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
-import { interact, requestChat, speak } from '../services/playerToServer';
+import {
+  fight,
+  interact,
+  requestChat,
+  requestFight,
+  speak
+} from '../services/playerToServer';
 import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
 export interface ChatOption {
+  label: string;
+  callback: () => void;
+}
+
+export interface FightOption {
   label: string;
   callback: () => void;
 }
@@ -46,12 +60,15 @@ export class UxScene extends Phaser.Scene {
   effectText: Phaser.GameObjects.Text | null = null;
   sideEffectsText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
+  fightButtons: ButtonManager = new ButtonManager([]);
+  fightRequested: boolean = false;
 
   // Variables for tab buttons and containers
   itemsTabButton: TabButton | null = null;
   chatTabButton: TabButton | null = null;
   statsTabButton: TabButton | null = null;
   mixTabButton: TabButton | null = null;
+  fightTabButton: TabButton | null = null;
   potionTabButton: TabButton | null = null;
   nextButton: SlideButton | null = null;
   backButton: SlideButton | null = null;
@@ -60,6 +77,7 @@ export class UxScene extends Phaser.Scene {
   chatContainer: Phaser.GameObjects.Container | null = null;
   statsContainer: Phaser.GameObjects.Container | null = null;
   mixContainer: Phaser.GameObjects.Container | null = null;
+  fightContainer: Phaser.GameObjects.Container | null = null;
   recipeContainer: Phaser.GameObjects.Container | null = null;
   effectsContainer: Phaser.GameObjects.Container | null = null;
 
@@ -82,10 +100,11 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer = this.add.container(0, 40);
     this.chatContainer = this.add.container(0, 40);
     this.mixContainer = this.add.container(0, 40);
+    this.fightContainer = this.add.container(0, 40);
     this.recipeContainer = this.add.container(0, 40);
     this.effectsContainer = this.add.container(0, 40);
 
-    const tabWidth = 83;
+    const tabWidth = 78;
     const tabHeight = 40;
     const tabSpacing = 5;
 
@@ -142,6 +161,15 @@ export class UxScene extends Phaser.Scene {
       tabY,
       'Mix',
       () => this.showMixTab(),
+      tabWidth,
+      tabHeight
+    );
+    this.fightTabButton = new TabButton(
+      this,
+      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
+      tabY,
+      'Fight',
+      () => this.showFightTab(),
       tabWidth,
       tabHeight
     );
@@ -509,7 +537,15 @@ export class UxScene extends Phaser.Scene {
           }))
         );
       });
-
+      setAttackCallback((attacks: string[]) => {
+        console.log('attack setting', attacks);
+        this.setFightOptions(
+          attacks.map((attack, i) => ({
+            label: attack,
+            callback: () => this.callFight(attack, i)
+          }))
+        );
+      });
       // Set interaction callback for item interactions
       setInteractionCallback((interactions: Interactions[]) =>
         this.setInteractions(interactions)
@@ -520,6 +556,9 @@ export class UxScene extends Phaser.Scene {
       );
       setChatCompanionCallback((companions: Mob[]) =>
         this.setChatCompanions(companions)
+      );
+      setFightOpponentCallback((opponents: Mob[]) =>
+        this.setFightOpponents(opponents)
       );
       /*this.setChatOptions([
                 { label: 'Hello there chief, I am the lord of the world.', callback: () => speak('Hello there chief, I am the lord of the world.') },
@@ -535,6 +574,11 @@ export class UxScene extends Phaser.Scene {
   callSpeak(response: string, i: number) {
     speak(response, i);
     this.setChatOptions([]);
+  }
+
+  callFight(attack: string, i: number) {
+    fight(attack, i);
+    this.setFightOptions([]);
   }
 
   refreshCharacterStats() {
@@ -572,6 +616,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
@@ -587,6 +632,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
@@ -602,6 +648,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
+    this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
@@ -617,11 +664,22 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
     this.updateTabStyles('mix');
+  }
+
+  // Method to show the Fight tab
+  showFightTab() {
+    this.mixContainer?.setVisible(false);
+    this.statsContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(true);
+    this.updateTabStyles('fight');
   }
 
   // Method to show the Potions tab
@@ -652,18 +710,20 @@ export class UxScene extends Phaser.Scene {
   }
 
   // Update the styles of the tab buttons based on the active tab
-  updateTabStyles(activeTab: 'items' | 'chat' | 'stats' | 'mix' | 'handbook') {
+  updateTabStyles(activeTab: 'items' | 'chat' | 'stats' | 'mix' | 'fight' | 'handbook') {
     if (
       this.itemsTabButton &&
       this.chatTabButton &&
       this.statsTabButton &&
       this.mixTabButton &&
+      this.fightTabButton &&
       this.potionTabButton
     ) {
       this.itemsTabButton.setTabActive(activeTab === 'items');
       this.chatTabButton.setTabActive(activeTab === 'chat');
       this.statsTabButton.setTabActive(activeTab === 'stats');
       this.mixTabButton.setTabActive(activeTab === 'mix');
+      this.fightTabButton.setTabActive(activeTab === 'fight');
       this.potionTabButton.setTabActive(activeTab == 'handbook');
     }
   }
@@ -737,6 +797,49 @@ export class UxScene extends Phaser.Scene {
       );
       this.chatButtons.push(button);
       this.chatContainer?.add(button);
+    });
+  }
+
+  setFightOpponents(opponents: Mob[]) {
+    this.fightButtons?.clearButtonOptions();
+
+    opponents.forEach((opponent, i) => {
+      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+      const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+      const button = new Button(this, x, y, true, `${opponent.name}`, () =>
+        this.sendRequestFight(world, opponent)
+      );
+      this.fightButtons.push(button);
+      this.fightContainer!.add(button);
+    });
+  }
+
+  sendRequestFight(world: World, opponent: Mob) {
+    this.fightButtons?.clearButtonOptions();
+
+    this.fightRequested = true;
+    setFighting(true);
+    requestFight(opponent);
+  }
+
+  setFightOptions(fightOptions: FightOption[]) {
+    this.fightButtons?.clearButtonOptions();
+
+    fightOptions.forEach((fightOption, i) => {
+      const y = 70 + (80 + 10) * i;
+      const x = 220;
+      const button = new Button(
+        this,
+        x,
+        y,
+        true,
+        `${fightOption.label}`,
+        fightOption.callback,
+        400,
+        80
+      );
+      this.fightButtons.push(button);
+      this.fightContainer?.add(button);
     });
   }
 
