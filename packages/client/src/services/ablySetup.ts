@@ -14,7 +14,8 @@ let channelsBoundToWorld: boolean = false;
 export function setupAbly(): Promise<void> {
   let worldID: string;
   return new Promise((resolve, _reject) => {
-    const authUrl = SERVER_URL + 'auth?username=' + characterId;
+    const authUrl = 
+      SERVER_URL + 'auth?username=' + characterId;
 
     const ably = new Realtime({
       authCallback: (tokenParams, callback) => {
