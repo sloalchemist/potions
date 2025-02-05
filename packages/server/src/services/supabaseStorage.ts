@@ -108,43 +108,6 @@ async function uploadLocalData() {
     uploadLocalFile("knowledge-graph.db-shm");
   }
 
-// Checks to see if files are present in supabase
-async function checkFilesExistSP() {
-    if (!process.env.SUPABASE_BUCKET) {
-        throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
-    }
-
-    const { data, error } = await supabase
-        .storage
-        .from(process.env.SUPABASE_BUCKET)
-        .list('', {
-            limit: 8,
-            offset: 0,
-            sortBy: { column: 'name', order: 'asc' },
-        });
-    
-    if (error) {
-        console.log("Error uploading to Supabase: ", error);
-        throw error;
-    }
-
-    let files: string[] = ["server-data.db", "server-data.db-shm", "server-data.db-wal",
-                            "knowledge-graph.db", "knowledge-graph.db-shm", "knowledge-graph.db-wal"]
-    
-    for (const filename in files) {
-        for (const file in data) {
-            if (file.name == filename) {
-                break;
-            }
-        }
-        console.log("Missing db files in supabase");
-        return false;
-    }
-
-    return true;
-};
-
-
 function shouldUploadDB(time: number) {
     const interval = 600000;
     return time - lastUpdated >= interval;
