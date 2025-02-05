@@ -17,6 +17,9 @@ export interface PubSub {
   closeChat(mobKey: string, target: string): void;
   playerResponses(mobKey: string, responses: string[]): void;
 
+  // Fight methods
+  playerAttacks(mobKey: string, attacks: string[]): void;
+
   // Messaging and state update methods
   move(key: string, target: Coord | undefined, path: Coord[]): void;
   destroy(item: Item): void;
