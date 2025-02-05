@@ -1,4 +1,4 @@
-import { chatPlayer } from "../services/playerToServer";
+import { chatPlayer } from '../services/playerToServer';
 
 export class ChatOverlayScene extends Phaser.Scene {
   constructor() {
@@ -54,7 +54,7 @@ export class ChatOverlayScene extends Phaser.Scene {
         // Validate each word
         const words = message.split(' ');
         let isValid = true;
-        
+
         // No word should exceed 10 in length
         for (const word of words) {
           if (word.length > 10) {
@@ -69,7 +69,6 @@ export class ChatOverlayScene extends Phaser.Scene {
           input.style.color = 'red';
           input.style.fontWeight = 'bold';
           input.disabled = true;
-
 
           // Clear the error message after 2 seconds
           setTimeout(() => {
