@@ -19,12 +19,10 @@ function initializeSupabase() {
     );
 }
 
-
 async function downloadFile(file: string) {
     if (!process.env.SUPABASE_BUCKET) {
         throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
     }
-
 
     const { data, error } = await supabase
         .storage
@@ -59,67 +57,59 @@ async function downloadFile(file: string) {
     });
 }
 
+async function downloadData() {
+    await Promise.all([
+        downloadFile("knowledge-graph.db"),
+        downloadFile("knowledge-graph.db-wal"),
+        downloadFile("knowledge-graph.db-shm"),
+        downloadFile("server-data.db"),
+        downloadFile("server-data.db-wal"),
+        downloadFile("server-data.db-shm"),
+      ]);      
+}
 
-async function uploadFile(file: File, filePath: string) {
-    if (!process.env.SUPABASE_BUCKET) {
-        throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
-    }
+async function uploadLocalFile(path: string) {
+    const buffer = await fs.promises.readFile("data/" + path);
+    const file = new File([buffer], path, {
+        type: "application/octet-stream",
+        lastModified: new Date().getTime()
+    });
+
+    try {
+        if (!process.env.SUPABASE_BUCKET) {
+            throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
+        }
+        const { data, error } = await supabase
+            .storage
+            .from(process.env.SUPABASE_BUCKET)
+            .upload(file.name, file, {
+                cacheControl: '3600',
+                upsert: true
+            });
     
-    const { data, error } = await supabase
-        .storage
-        .from(process.env.SUPABASE_BUCKET)
-        .upload(filePath, file, {
-            cacheControl: '3600',
-            upsert: true
-        });
-
-    if (error) {
-        console.log("Error uploading to Supabase: ", error);
+        if (error) {
+            console.log("Error uploading to Supabase: ", error);
+            throw error;
+        }
+    } catch (error) {
+        console.log("Error uploading ", file.name);
         throw error;
     }
 
     lastUpdated = Date.now();
 }
 
-
-// Checks to see if files are present in supabase
-async function checkFilesExistSP() {
-    if (!process.env.SUPABASE_BUCKET) {
-        throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
-    }
-
-    const { data, error } = await supabase
-        .storage
-        .from(process.env.SUPABASE_BUCKET)
-        .list('', {
-            limit: 8,
-            offset: 0,
-            sortBy: { column: 'name', order: 'asc' },
-        });
-    
-    if (error) {
-        console.log("Error uploading to Supabase: ", error);
-        throw error;
-    }
-
-    let files: string[] = ["server-data.db", "server-data.db-shm", "server-data.db-wal",
-                            "knowledge-graph.db", "knowledge-graph.db-shm", "knowledge-graph.db-wal"]
-    
-    for (const filename in files) {
-        for (const file in data) {
-            if (file.name == filename) {
-                break;
-            }
-        }
-        return false;
-    }
-
-    return true;
-};
-
+async function uploadLocalData() {
+    uploadLocalFile("server-data.db");
+    uploadLocalFile("server-data.db-wal");
+    uploadLocalFile("server-data.db-shm");
+    uploadLocalFile("knowledge-graph.db");
+    uploadLocalFile("knowledge-graph.db-wal");
+    uploadLocalFile("knowledge-graph.db-shm");
+  }
 
 function shouldUploadDB(time: number) {
     return time - lastUpdated >= 600000;
 };
 
-export { uploadFile, downloadFile, shouldUploadDB};
+export { downloadData, uploadLocalData, shouldUploadDB };
