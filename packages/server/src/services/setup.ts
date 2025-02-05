@@ -15,22 +15,52 @@ let lastUpdateTime = Date.now();
 let world: ServerWorld;
 
 async function localServerDBUpload() {
-  const fileBufferServer = await fs.promises.readFile("data/server-data.db", 'utf-8')
-  const blobServer = new Blob([fileBufferServer], { type: "binary/octet-stream" });
-  const fileServer = new File([blobServer], "server-data.db", {
-      type: blobServer.type,
-      lastModified: new Date().getTime()
-  });
-    
-  const fileBufferKnowledge = await fs.promises.readFile("data/knowledge-graph.db", 'utf-8')
-  const blobKnowledge = new Blob([fileBufferKnowledge], { type: "binary/octet-stream" });
-  const fileKnowledge = new File([blobKnowledge], "knowledge-graph.db", {
-      type: blobServer.type,
+  const fileBufferServer = await fs.promises.readFile("data/server-data.db")
+  const fileServer = new File([fileBufferServer], "server-data.db", {
+      type: "application/octet-stream",
       lastModified: new Date().getTime()
   });
 
+  const fileBufferServerWal = await fs.promises.readFile("data/server-data.db-wal")
+  const fileServerWal = new File([fileBufferServerWal], "server-data.db-wal", {
+    type: "application/octet-stream",
+    lastModified: new Date().getTime()
+});
+
+  const fileBufferServerShm = await fs.promises.readFile("data/server-data.db-shm")
+  const fileServerShm = new File([fileBufferServerShm], "server-data.db-shm", {
+    type: "application/octet-stream",
+    lastModified: new Date().getTime()
+});
+    
+  const fileBufferKnowledge = await fs.promises.readFile("data/knowledge-graph.db")
+  const fileKnowledge = new File([fileBufferKnowledge], "knowledge-graph.db", {
+    type: "application/octet-stream",
+    lastModified: new Date().getTime()
+});
+
+  const fileBufferKnowledgeWal = await fs.promises.readFile("data/knowledge-graph.db-wal")
+  const fileKnowledgeWal = new File([fileBufferKnowledgeWal], "knowledge-graph.db-wal", {
+    type: "application/octet-stream",
+    lastModified: new Date().getTime()
+});
+
+  const fileBufferKnowledgeShm = await fs.promises.readFile("data/knowledge-graph.db-shm")
+  const fileKnowledgeShm = new File([fileBufferKnowledgeShm], "knowledge-graph.db-shm", {
+    type: "application/octet-stream",
+    lastModified: new Date().getTime()
+});
+
+try {
   uploadFile(fileServer, fileServer.name)
+  uploadFile(fileServerWal, fileServerWal.name)
+  uploadFile(fileServerShm, fileServerShm.name)
   uploadFile(fileKnowledge, fileKnowledge.name)
+  uploadFile(fileKnowledgeWal, fileKnowledgeWal.name)
+  uploadFile(fileKnowledgeShm, fileKnowledgeShm.name)
+} catch (error) {
+  throw error;
+}
 }
 
 function initializeAbly(worldId: string): AblyService {
@@ -57,7 +87,11 @@ async function initializeAsync() {
   try{
 
     await downloadFile("knowledge-graph.db");
+    await downloadFile("knowledge-graph.db-wal");
+    await downloadFile("knowledge-graph.db-shm");
     await downloadFile("server-data.db");
+    await downloadFile("server-data.db-wal");
+    await downloadFile("server-data.db-shm");
     console.log("Files successfully downloaded from Supabase")
   } catch (error) {
 
