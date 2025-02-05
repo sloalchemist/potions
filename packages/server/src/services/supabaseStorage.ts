@@ -112,7 +112,7 @@ async function uploadLocalData() {
   }
 
 function shouldUploadDB(now: number, lastUpdated: number) {
-    const interval = 600000;
+    const interval = 600000; // ten minutes
     return now - lastUpdated >= interval;
 };
 

@@ -44,7 +44,7 @@ async function initializeAsync() {
       console.log("Download failed, uploading local files instead");
       initializeKnowledgeDB('data/knowledge-graph.db', false);
       initializeServerDatabase('data/server-data.db');
-      uploadLocalData()
+      await uploadLocalData()
       downloaded = false;
     } catch (error) {
       console.log("Could not download data or upload data, cannot play the game");
