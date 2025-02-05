@@ -6,18 +6,32 @@ import { currentCharacter, addRefreshCallback } from '../worldMetadata';
 import {
   fantasyDate,
   Interactions,
+  setAttackCallback,
   setChatCompanionCallback,
   setChatting,
+  setFighting,
+  setFightOpponentCallback,
   setInteractionCallback,
   setResponseCallback
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
-import { interact, requestChat, speak } from '../services/playerToServer';
+import {
+  fight,
+  interact,
+  requestChat,
+  requestFight,
+  speak
+} from '../services/playerToServer';
 import { ButtonManager } from '../components/buttonManager';
 
 export interface ChatOption {
+  label: string;
+  callback: () => void;
+}
+
+export interface FightOption {
   label: string;
   callback: () => void;
 }
@@ -40,17 +54,21 @@ export class UxScene extends Phaser.Scene {
   extroversionText: Phaser.GameObjects.Text | null = null;
   dateText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
+  fightButtons: ButtonManager = new ButtonManager([]);
+  fightRequested: boolean = false;
 
   // Variables for tab buttons and containers
   itemsTabButton: TabButton | null = null;
   chatTabButton: TabButton | null = null;
   statsTabButton: TabButton | null = null;
   mixTabButton: TabButton | null = null;
+  fightTabButton: TabButton | null = null;
 
   itemsContainer: Phaser.GameObjects.Container | null = null;
   chatContainer: Phaser.GameObjects.Container | null = null;
   statsContainer: Phaser.GameObjects.Container | null = null;
   mixContainer: Phaser.GameObjects.Container | null = null;
+  fightContainer: Phaser.GameObjects.Container | null = null;
 
   constructor() {
     super({
@@ -71,8 +89,9 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer = this.add.container(0, 40);
     this.chatContainer = this.add.container(0, 40);
     this.mixContainer = this.add.container(0, 40);
+    this.fightContainer = this.add.container(0, 40);
 
-    const tabWidth = 100;
+    const tabWidth = 78;
     const tabHeight = 40;
     const tabSpacing = 10;
 
@@ -129,6 +148,15 @@ export class UxScene extends Phaser.Scene {
       tabY,
       'Mix',
       () => this.showMixTab(),
+      tabWidth,
+      tabHeight
+    );
+    this.fightTabButton = new TabButton(
+      this,
+      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
+      tabY,
+      'Fight',
+      () => this.showFightTab(),
       tabWidth,
       tabHeight
     );
@@ -263,12 +291,24 @@ export class UxScene extends Phaser.Scene {
           }))
         );
       });
+      setAttackCallback((attacks: string[]) => {
+        console.log('attack setting', attacks);
+        this.setFightOptions(
+          attacks.map((attack, i) => ({
+            label: attack,
+            callback: () => this.callFight(attack, i)
+          }))
+        );
+      });
       // Set interaction callback for item interactions
       setInteractionCallback((interactions: Interactions[]) =>
         this.setInteractions(interactions)
       );
       setChatCompanionCallback((companions: Mob[]) =>
         this.setChatCompanions(companions)
+      );
+      setFightOpponentCallback((opponents: Mob[]) =>
+        this.setFightOpponents(opponents)
       );
       /*this.setChatOptions([
                 { label: 'Hello there chief, I am the lord of the world.', callback: () => speak('Hello there chief, I am the lord of the world.') },
@@ -284,6 +324,11 @@ export class UxScene extends Phaser.Scene {
   callSpeak(response: string, i: number) {
     speak(response, i);
     this.setChatOptions([]);
+  }
+
+  callFight(attack: string, i: number) {
+    fight(attack, i);
+    this.setFightOptions([]);
   }
 
   refreshCharacterStats() {
@@ -321,6 +366,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
     this.updateTabStyles('stats');
   }
 
@@ -330,6 +376,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
     this.updateTabStyles('items');
   }
 
@@ -339,30 +386,44 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
+    this.fightContainer?.setVisible(false);
     this.updateTabStyles('chat');
   }
 
-  // Method to show the Chat tab
+  // Method to show the Mix tab
   showMixTab() {
     this.mixContainer?.setVisible(true);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
     this.updateTabStyles('mix');
   }
 
+  // Method to show the Fight tab
+  showFightTab() {
+    this.mixContainer?.setVisible(false);
+    this.statsContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(true);
+    this.updateTabStyles('fight');
+  }
+
   // Update the styles of the tab buttons based on the active tab
-  updateTabStyles(activeTab: 'items' | 'chat' | 'stats' | 'mix') {
+  updateTabStyles(activeTab: 'items' | 'chat' | 'stats' | 'mix' | 'fight') {
     if (
       this.itemsTabButton &&
       this.chatTabButton &&
       this.statsTabButton &&
-      this.mixTabButton
+      this.mixTabButton &&
+      this.fightTabButton
     ) {
       this.itemsTabButton.setTabActive(activeTab === 'items');
       this.chatTabButton.setTabActive(activeTab === 'chat');
       this.statsTabButton.setTabActive(activeTab === 'stats');
       this.mixTabButton.setTabActive(activeTab === 'mix');
+      this.fightTabButton.setTabActive(activeTab === 'fight');
     }
   }
 
@@ -427,6 +488,49 @@ export class UxScene extends Phaser.Scene {
       );
       this.chatButtons.push(button);
       this.chatContainer?.add(button);
+    });
+  }
+
+  setFightOpponents(opponents: Mob[]) {
+    this.fightButtons?.clearButtonOptions();
+
+    opponents.forEach((opponent, i) => {
+      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+      const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+      const button = new Button(this, x, y, true, `${opponent.name}`, () =>
+        this.sendRequestFight(world, opponent)
+      );
+      this.fightButtons.push(button);
+      this.fightContainer!.add(button);
+    });
+  }
+
+  sendRequestFight(world: World, opponent: Mob) {
+    this.fightButtons?.clearButtonOptions();
+
+    this.fightRequested = true;
+    setFighting(true);
+    requestFight(opponent);
+  }
+
+  setFightOptions(fightOptions: FightOption[]) {
+    this.fightButtons?.clearButtonOptions();
+
+    fightOptions.forEach((fightOption, i) => {
+      const y = 70 + (80 + 10) * i;
+      const x = 220;
+      const button = new Button(
+        this,
+        x,
+        y,
+        true,
+        `${fightOption.label}`,
+        fightOption.callback,
+        400,
+        80
+      );
+      this.fightButtons.push(button);
+      this.fightContainer?.add(button);
     });
   }
 }
