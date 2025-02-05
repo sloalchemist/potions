@@ -158,8 +158,8 @@ export class WorldScene extends Phaser.Scene {
       right: number
     ) => void
   ) {
-    const terrainWidth = terrainData[0].length;
-    const terrainHeight = terrainData.length;
+    const terrainHeight = terrainData[0].length;
+    const terrainWidth = terrainData.length;
 
     // Iterate over each position in the terrain data
     for (let y = 0; y < terrainHeight; y++) {

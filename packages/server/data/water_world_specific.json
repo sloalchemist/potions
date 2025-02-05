@@ -26,14 +26,19 @@
     ],
     "terrain_types": [
         {
-          "name": "dirt",
-          "id": 2,
-          "walkable": true
+            "name": "sand",
+            "id": 2,
+            "walkable": true
         },
         {
-          "name": "water",
-          "id": 1,
-          "walkable": false
+            "name": "grass",
+            "id": 1,
+            "walkable": true
+        },
+        {
+            "name": "water",
+            "id": 51,
+            "walkable": false
         }
       ]
   }
