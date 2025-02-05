@@ -18,12 +18,10 @@ function initializeSupabase() {
     );
 }
 
-
 async function downloadFile(file: string) {
     if (!process.env.SUPABASE_BUCKET) {
         throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
     }
-
 
     const { data, error } = await supabase
         .storage
@@ -62,7 +60,6 @@ async function uploadFile(file: File, filePath: string) {
     if (!process.env.SUPABASE_BUCKET) {
         throw Error("Your server env needs the SUPABASE_BUCKET var. Check README for info")
     }
-    
     const { data, error } = await supabase
         .storage
         .from(process.env.SUPABASE_BUCKET)
@@ -77,4 +74,28 @@ async function uploadFile(file: File, filePath: string) {
     }
 }
 
-export { uploadFile, downloadFile };
+async function uploadLocalFile(path: string) {
+    const buffer = await fs.promises.readFile("data/" + path);
+    const file = new File([buffer], path, {
+        type: "application/octet-stream",
+        lastModified: new Date().getTime()
+    });
+
+    try {
+        uploadFile(file, file.name);
+    } catch (error) {
+        console.log("Error uploading ", file.name);
+        throw error;
+    }
+}
+
+async function uploadLocalData() {
+    uploadLocalFile("server-data.db");
+    uploadLocalFile("server-data.db-wal");
+    uploadLocalFile("server-data.db-shm");
+    uploadLocalFile("knowledge-graph.db");
+    uploadLocalFile("knowledge-graph.db-wal");
+    uploadLocalFile("knowledge-graph.db-shm");
+  }
+
+export { uploadFile, downloadFile, uploadLocalData };

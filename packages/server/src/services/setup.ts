@@ -8,60 +8,11 @@ import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
-import { downloadFile, uploadFile } from './supabaseStorage';
+import { downloadFile, uploadLocalData } from './supabaseStorage';
 import * as fs from 'fs'
 
 let lastUpdateTime = Date.now();
 let world: ServerWorld;
-
-async function localServerDBUpload() {
-  const fileBufferServer = await fs.promises.readFile("data/server-data.db")
-  const fileServer = new File([fileBufferServer], "server-data.db", {
-      type: "application/octet-stream",
-      lastModified: new Date().getTime()
-  });
-
-  const fileBufferServerWal = await fs.promises.readFile("data/server-data.db-wal")
-  const fileServerWal = new File([fileBufferServerWal], "server-data.db-wal", {
-    type: "application/octet-stream",
-    lastModified: new Date().getTime()
-});
-
-  const fileBufferServerShm = await fs.promises.readFile("data/server-data.db-shm")
-  const fileServerShm = new File([fileBufferServerShm], "server-data.db-shm", {
-    type: "application/octet-stream",
-    lastModified: new Date().getTime()
-});
-    
-  const fileBufferKnowledge = await fs.promises.readFile("data/knowledge-graph.db")
-  const fileKnowledge = new File([fileBufferKnowledge], "knowledge-graph.db", {
-    type: "application/octet-stream",
-    lastModified: new Date().getTime()
-});
-
-  const fileBufferKnowledgeWal = await fs.promises.readFile("data/knowledge-graph.db-wal")
-  const fileKnowledgeWal = new File([fileBufferKnowledgeWal], "knowledge-graph.db-wal", {
-    type: "application/octet-stream",
-    lastModified: new Date().getTime()
-});
-
-  const fileBufferKnowledgeShm = await fs.promises.readFile("data/knowledge-graph.db-shm")
-  const fileKnowledgeShm = new File([fileBufferKnowledgeShm], "knowledge-graph.db-shm", {
-    type: "application/octet-stream",
-    lastModified: new Date().getTime()
-});
-
-try {
-  uploadFile(fileServer, fileServer.name)
-  uploadFile(fileServerWal, fileServerWal.name)
-  uploadFile(fileServerShm, fileServerShm.name)
-  uploadFile(fileKnowledge, fileKnowledge.name)
-  uploadFile(fileKnowledgeWal, fileKnowledgeWal.name)
-  uploadFile(fileKnowledgeShm, fileKnowledgeShm.name)
-} catch (error) {
-  throw error;
-}
-}
 
 function initializeAbly(worldId: string): AblyService {
   if (
@@ -96,7 +47,7 @@ async function initializeAsync() {
   } catch (error) {
 
     console.log("No files found in Supabase bucket, uploading files");
-    await localServerDBUpload();
+    await uploadLocalData();
   }
 
   try {
@@ -138,7 +89,7 @@ export async function worldTimer() {
 
   // Is true every ten minutes (< 1000 for precision errors)
   if (now % 60000 < 1000) {
-    localServerDBUpload();
+    uploadLocalData();
     console.log("Persisted Local DBs to Supabase Bucket")
   }
 
