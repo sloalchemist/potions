@@ -66,7 +66,7 @@ export class WorldScene extends Phaser.Scene {
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
     this.load.json('global_data', 'static/global.json');
-    this.load.json('world_specific_data', 'static/world_specific.json');
+    this.load.json('world_specific_data', 'static/water_world_specific.json');
   }
 
   loadAnimations(
@@ -359,8 +359,8 @@ export class WorldScene extends Phaser.Scene {
     this.nightOverlay.fillRect(
       0,
       0,
-      this.terrainWidth * TILE_SIZE,
-      this.terrainHeight * TILE_SIZE
+      this.terrainHeight * TILE_SIZE,
+      this.terrainWidth * TILE_SIZE
     );
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
     this.hideWorld();

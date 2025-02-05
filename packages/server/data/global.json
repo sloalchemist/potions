@@ -131,6 +131,26 @@
       ]
     },
     {
+      "name": "Coral",
+      "type": "coral",
+      "description": "A small pink plan on the ocean floor",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "log",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
       "type": "heart-beet-plant",
       "name": "Heartbeet plant",
       "description": "A red root vegetable known for its restorative properties.",
