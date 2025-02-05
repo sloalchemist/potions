@@ -26,7 +26,7 @@ import { focused } from '../main';
 
 export let playerDead = false;
 
-const STAY_AT_CURRENT_WORLD = -1;
+const STAY_AT_CURRENT_WORLD = 'STAY_AT_WORLD';
 
 export function setupBroadcast(
   broadcast_channel: Types.RealtimeChannelCallbacks,
@@ -112,9 +112,10 @@ export function setupBroadcast(
           checkFocus();
         });
 
-        // one game focused, leave the world and display game over
+        // once game focused, leave the world and display game over
         waitUntilFocused.then(() => {
           scene.showGameOver();
+          // if the players die, they default to staying in the same world
           leaveWorld(STAY_AT_CURRENT_WORLD);
           scene.resetToLoadWorldScene();
         });

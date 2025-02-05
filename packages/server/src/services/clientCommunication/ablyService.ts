@@ -28,6 +28,9 @@ import {
 } from '../authMarshalling';
 import { applyCheat } from '../developerCheats';
 
+//must match STAY_AT_CURRENT_WORLD in client serverToBroadcast.ts
+const STAY_AT_CURRENT_WORLD = 'STAY_AT_WORLD';
+
 export class AblyService implements PubSub {
   private ably: Ably.Realtime;
   private userMembershipChannel: Types.RealtimeChannelCallbacks;
@@ -64,8 +67,7 @@ export class AblyService implements PubSub {
     });
 
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
-      console.log('Target World Id in server:', presenceMsg.data.target_world_id);
-      const target_world_id = (presenceMsg.data.target_world_id === -1) ? this.worldID : presenceMsg.data.target_world_id;
+      const target_world_id = (presenceMsg.data.target_world_id === STAY_AT_CURRENT_WORLD) ? this.worldID : presenceMsg.data.target_world_id;
       console.log('Target World Recieved:', presenceMsg.data.target_world_id);
       console.log('Target World Being Sent:', target_world_id);
       this.sendPersistenceRequest(
