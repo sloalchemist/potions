@@ -77,7 +77,7 @@ export class UxScene extends Phaser.Scene {
     this.mixContainer = this.add.container(0, 40);
     this.potionContainer = this.add.container(0, 40);
 
-    const tabWidth = 70;
+    const tabWidth = 83;
     const tabHeight = 40;
     const tabSpacing = 5;
 
@@ -139,9 +139,9 @@ export class UxScene extends Phaser.Scene {
     );
     this.potionTabButton = new TabButton(
       this,
-      tabX + 4 * (tabWidth + tabSpacing + 10) + tabWidth / 2,
+      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
       tabY,
-      'Potion Book',
+      'HandBook',
       () => this.showPotionsTab(),
       tabWidth,
       tabHeight
@@ -260,7 +260,7 @@ export class UxScene extends Phaser.Scene {
       this.recipeText = this.add.text(
         15,
         90,
-        'The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog'
+        'Name:'
       );
       this.potionContainer.add(this.recipeText);
 
