@@ -142,9 +142,89 @@
       {
         "action": "spawn_item",
         "parameters": {
-          "type": "log",
+          "type": "coral",
           "global_max": 10,
-          "local_max": 2,
+          "local_max": 1,
+          "radius": 3,
+          "rate": 0.1
+        }
+      }
+    ]
+  },
+  {
+    "name": "Clam",
+    "type": "clam",
+    "description": "A pink clam with a pearl",
+    "carryable": false,
+    "walkable": false,
+    "interactions": [],
+    "on_tick": [
+      {
+        "action": "spawn_item",
+        "parameters": {
+          "type": "clam",
+          "global_max": 10,
+          "local_max": 1,
+          "radius": 3,
+          "rate": 0.1
+        }
+      }
+    ]
+  },
+  {
+    "name": "Message-In-Bottle",
+    "type": "message-in-bottle",
+    "description": "A bottle that contains a message... wonder what could be inside",
+    "carryable": false,
+    "walkable": false,
+    "interactions": [],
+    "on_tick": [
+      {
+        "action": "spawn_item",
+        "parameters": {
+          "type": "message-in-bottle",
+          "global_max": 10,
+          "local_max": 1,
+          "radius": 3,
+          "rate": 0.1
+        }
+      }
+    ]
+  },
+  {
+    "name": "Starfish",
+    "type": "starfish",
+    "description": "A starfish",
+    "carryable": false,
+    "walkable": false,
+    "interactions": [],
+    "on_tick": [
+      {
+        "action": "spawn_item",
+        "parameters": {
+          "type": "starfish",
+          "global_max": 10,
+          "local_max": 1,
+          "radius": 3,
+          "rate": 0.1
+        }
+      }
+    ]
+  },
+  {
+    "name": "Anemone",
+    "type": "anemone",
+    "description": "An anemone",
+    "carryable": false,
+    "walkable": false,
+    "interactions": [],
+    "on_tick": [
+      {
+        "action": "spawn_item",
+        "parameters": {
+          "type": "anemone",
+          "global_max": 10,
+          "local_max": 1,
           "radius": 3,
           "rate": 0.1
         }
