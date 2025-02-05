@@ -400,6 +400,10 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(target, 'chat_close', { target: mob_key });
   }
 
+  public closeFight(mob_key: string, target: string): void {
+    this.publishMessageToPlayer(target, 'fight_close', { target: mob_key });
+  }
+
   //TODO: estrada check out kll function to send user data
   public kill(key: string): void {
     this.addToBroadcast({ type: 'destroy_mob', data: { id: key } });
@@ -569,8 +573,9 @@ export class AblyService implements PubSub {
     subscribeToPlayerChannel('fight', (data) => {
       const player = Mob.getMob(username);
       if (player) {
+        // TODO: replace when FightTracker class is implemented
         console.log('fight', data);
-        // TODO: uncomment when FightTracker class is implemented
+        this.closeFight(username, '');
         // fightTracker.addTurnFromOptions(player, data.attack);
       }
     });

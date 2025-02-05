@@ -57,6 +57,10 @@ export function setupPlayerSubscriptions(
     setChatting(false);
   });
 
+  subscribeToPlayerChannel('fight_close', () => {
+    setFighting(false);
+  });
+
   subscribeToPlayerChannel('state', (data) => {
     console.log('Received state message', data);
     const mob_data = data.mobs;
