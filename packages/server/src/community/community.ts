@@ -103,7 +103,13 @@ export class Community {
     }
     return favorNum.favor;
   }
-
+  /**
+   * Creates a favorability relation between two communities, and initializes it by an amount
+   *
+   * @param id_1 The ID of the first community
+   * @param id_2 The ID of the second community
+   * @param amount The amount you want to initialize the favor between the two communities
+   */
   static makeFavor(id_1: string, id_2: string, amount: number) {
     // Initialize favorability between two communities
     DB.prepare(
@@ -112,7 +118,13 @@ export class Community {
         `
     ).run({ name1: id_1, name2: id_2, num: amount });
   }
-
+  /**
+   * Adjusts the favorability relation between two communities, and changes it by a certain amount
+   *
+   * @param first The ID of the first community
+   * @param second The ID of the second community
+   * @param amount The amount you want to adjust the favor by
+   */
   static adjustFavor(first: Community, second: Community, amount: number) {
     // This adjusts favorability between two communities
     DB.prepare(

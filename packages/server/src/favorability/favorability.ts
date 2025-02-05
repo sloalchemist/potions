@@ -1,6 +1,13 @@
 import { Mob } from '../mobs/mob';
 
-export class favorability {
+export class Favorability {
+  /**
+   * Constructs the conversation between a player and the mob they are speaking to.
+   *
+   * @param conversation The player's conversation
+   * @param target_mob The mob the player is speaking to
+   * @returns Returns a string that is a prompt for a LLM to give input on
+   */
   static makeConversation(conversation: string, target_mob: Mob): string {
     // feed convo into llm
     var personality = target_mob.personality;
