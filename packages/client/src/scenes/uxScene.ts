@@ -419,7 +419,7 @@ export class UxScene extends Phaser.Scene {
     this.potionContainer?.setVisible(true);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(true);
-    this.backButton?.setVisible(true);
+    this.backButton?.setVisible(false);
     this.updateTabStyles('handbook');
   }
 
@@ -432,7 +432,7 @@ export class UxScene extends Phaser.Scene {
     this.potionContainer?.setVisible(true);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(true);
-    this.backButton?.setVisible(true);
+    this.backButton?.setVisible(false);
   }
 
   showNextTab() {
@@ -442,7 +442,7 @@ export class UxScene extends Phaser.Scene {
     this.chatContainer?.setVisible(false);
     this.potionContainer?.setVisible(false);
     this.effectsContainer?.setVisible(true);
-    this.nextButton?.setVisible(true);
+    this.nextButton?.setVisible(false);
     this.backButton?.setVisible(true);
   }
 
