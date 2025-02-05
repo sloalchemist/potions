@@ -18,6 +18,7 @@ export interface PubSub {
   playerResponses(mobKey: string, responses: string[]): void;
 
   // Fight methods
+  closeFight(mobKey: string, target: string): void;
   playerAttacks(mobKey: string, attacks: string[]): void;
 
   // Messaging and state update methods

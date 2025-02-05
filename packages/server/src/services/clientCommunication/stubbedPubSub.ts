@@ -20,6 +20,8 @@ export class StubbedPubSub implements PubSub {
 
   closeChat(_mobKey: string, _target: string): void {}
 
+  closeFight(_mobKey: string, _target: string): void {}
+
   move(_key: string, _target: Coord, _path: Coord[]): void {}
 
   destroy(_item: Item): void {}
