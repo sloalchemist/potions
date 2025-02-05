@@ -56,12 +56,12 @@ export class Mob extends Physical {
     delete world.mobs[this.key];
   }
 
- changePosition(world: World, newPosition: Coord) {
+ /* changePosition(world: World, newPosition: Coord) {
     //console.log('changePosition', this.position, newPosition);
     world.moveMob(this, newPosition);
     this.position = newPosition;
   } 
-
+ */
  changePosition(world: World, newPosition: Coord) {
     if (this.position) {
       world.removeMobFromGrid(this);
