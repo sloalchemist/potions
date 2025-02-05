@@ -148,6 +148,10 @@ CREATE VIEW noun_knowledge AS
 
 `;
 
+/**
+ * Creates the database schema, and inserts all the concept hierarchies from
+ * the code into the database.
+ */
 function buildSQL(): void {
   // Execute the schema from the external file
   DB.exec(schema);
@@ -188,6 +192,55 @@ function buildSQL(): void {
   }
 }
 
+/**
+ * Add a knowledge graph to the database
+ *
+ * @param graph - the knowledge graph to add
+ *
+ * This function adds a knowledge graph to the database. It is a low-level
+ * function that simply inserts into the database without any additional
+ * processing. It does not perform any validation or error checking.
+ *
+ * @example
+ * addGraph({
+ *   concepts: [],
+ *   nouns: [
+ *     { id: '1', name: 'Alice', type: 'person' },
+ *     { id: '2', name: 'Bob', type: 'person' },
+ *     { id: '3', name: 'Carrot', type: 'item' }
+ *   ],
+ *   beliefs: [
+ *     {
+ *       subject: { id: '1' },
+ *       related_to: { id: '2' },
+ *       concept: { id: 'Likes' },
+ *       name: 'Alice likes Bob',
+ *       description: 'Alice likes Bob',
+ *       trust: 0.5
+ *     },
+ *     {
+ *       subject: { id: '2' },
+ *       related_to: { id: '3' },
+ *       concept: { id: 'Desires' },
+ *       name: 'Bob desires Carrot',
+ *       description: 'Bob desires Carrot',
+ *       trust: 0.5
+ *     }
+ *   ],
+ *   desires: [
+ *     {
+ *       person: { id: '1' },
+ *       item: { id: '3' },
+ *       benefit: 'like'
+ *     },
+ *     {
+ *       person: { id: '2' },
+ *       item: { id: '3' },
+ *       benefit: 'like'
+ *     }
+ *   ]
+ * });
+ */
 export function addGraph(graph: KnowledgeGraph) {
   const insertNoun = DB.prepare(`
     INSERT OR IGNORE INTO nouns (id, name, type)
@@ -259,6 +312,16 @@ export function addGraph(graph: KnowledgeGraph) {
   }
 }
 
+/**
+ * @description
+ * Build a knowledge graph database from the given graph and create a
+ * database file at the default location.
+ *
+ * @param {KnowledgeGraph} graph The knowledge graph to build into the database.
+ *
+ * @see {@link module:converse/library/knowledge_graph/buildDB~addGraph|addGraph}
+ * @see {@link module:converse/library/knowledge_graph/buildDB~buildSQL|buildSQL}
+ */
 export function buildGraph(graph: KnowledgeGraph) {
   // Delete the database file if it already exists
   buildSQL();
