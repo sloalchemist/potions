@@ -111,7 +111,6 @@ export class Community {
    * @param amount The amount you want to initialize the favor between the two communities
    */
   static makeFavor(id_1: string, id_2: string, amount: number) {
-    // Initialize favorability between two communities
     DB.prepare(
       `   INSERT INTO favorability (community_1_id, community_2_id, favor)
         VALUES (:name1, :name2, :num);
@@ -126,7 +125,6 @@ export class Community {
    * @param amount The amount you want to adjust the favor by
    */
   static adjustFavor(first: Community, second: Community, amount: number) {
-    // This adjusts favorability between two communities
     DB.prepare(
       `   UPDATE favorability
         SET favor = favor + :amount
