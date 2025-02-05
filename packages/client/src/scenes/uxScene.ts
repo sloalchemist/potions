@@ -281,10 +281,14 @@ export class UxScene extends Phaser.Scene {
       this.statsContainer.add(this.extroversionText);
 
       this.recipeText = this.add.text(160, 35, 'POTION RECIPES');
-      this.potionContainer.add(this.recipeText);
+      this.potionContainer.add(this.recipeText); ///// recipe text additions
 
       this.effectText = this.add.text(140, 35, 'POTION SIDE EFFECTS');
-      this.effectsContainer.add(this.effectText);
+      this.effectsContainer.add(this.effectText); ///// side effects text 
+
+      this.effectText = this.add.text(15, 90, 'the quick fox jumped over the lazy dog the qu');
+      //TEXT WIDTH MAX: the quick fox jumped over the lazy dog the qu
+      this.effectsContainer.add(this.effectText); ///// side effects text 
 
       this.time.addEvent({
         delay: 1000,
