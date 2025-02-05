@@ -6,7 +6,7 @@ import {
   tick
 } from '../world/controller';
 import { bindAblyToWorldScene } from '../services/ablySetup';
-import { Coord, floor, TerrainType } from '@rt-potion/common';
+import { Coord, TerrainType } from '@rt-potion/common';
 import { publicCharacterId } from '../worldMetadata';
 import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
@@ -539,7 +539,18 @@ export class WorldScene extends Phaser.Scene {
 
     console.log(this.keys['w'], this.keys['a'], this.keys['s'], this.keys['d']);
 
-    const target = floor({ x: moveX, y: moveY});
+    let roundedX;
+    let roundedY;
+    const negKeys = ['w', 'a'];
+    if (negKeys.includes(this.lastKeyUp)) {
+      roundedX = Math.floor(moveX);
+      roundedY = Math.floor(moveY);
+    } else {
+      roundedX = Math.ceil(moveX);
+      roundedY = Math.ceil(moveY);
+    }
+
+    const target = { x: roundedX, y: roundedY };
 
     if (publish) {
       this.prevKeys = { ...this.keys };
