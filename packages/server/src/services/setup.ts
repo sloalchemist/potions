@@ -34,20 +34,30 @@ async function initializeAsync() {
 
   console.log(`loading world ${worldID}`);
 
+  let downloaded = true;
+
   try {
     await downloadData();
     console.log("Data successfully downloaded from Supabase")
   } catch (error) {
-    // WE NEED TO CONFIRM THAT THERE ARE LOCAL FILES, OR THAT THE DOWNLOAD FAILED DUE TO NO FILES EXISTING
-    console.log("Download failed, uploading local files instead");
-    uploadLocalData();
+    try {  
+      console.log("Download failed, uploading local files instead");
+      initializeKnowledgeDB('data/knowledge-graph.db', false);
+      initializeServerDatabase('data/server-data.db');
+      uploadLocalData()
+      downloaded = false;
+    } catch (error) {
+      console.log("Could not download data or upload data, cannot play the game");
+      throw error;
+    }
   }
 
   try {
-
-    initializeKnowledgeDB('data/knowledge-graph.db', false);
-    initializeServerDatabase('data/server-data.db');
-
+    if (downloaded) {
+      initializeKnowledgeDB('data/knowledge-graph.db', false);
+      initializeServerDatabase('data/server-data.db');
+    }
+  
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
       worldSpecificData as Partial<ServerWorldDescription>;
@@ -80,10 +90,8 @@ export async function worldTimer() {
     pubSub.sendBroadcast();
   }
 
-  // Is true every ten minutes (< 1000 for precision errors)
-  if (shouldUploadDB(now)) {
+  if (shouldUploadDB(now, lastUpdateTime)) {
     uploadLocalData();
-    console.log("Persisted Local DBs to Supabase Bucket")
-    lastUpdateTime = now
+    lastUpdateTime = now;
   }
 }

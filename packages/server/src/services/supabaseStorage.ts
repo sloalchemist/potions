@@ -6,7 +6,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export const supabase = initializeSupabase();
-export var lastUpdated = Date.now();
 
 function initializeSupabase() {
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
@@ -32,7 +31,6 @@ async function downloadFile(file: string) {
     console.log(data)
     
     if (error) {
-        console.error('Error downloading db file:', error.message);
         throw error;
     }
 
@@ -95,22 +93,27 @@ async function uploadLocalFile(path: string) {
         console.log("Error uploading ", file.name);
         throw error;
     }
-
-    lastUpdated = Date.now();
 }
 
 async function uploadLocalData() {
-    uploadLocalFile("server-data.db");
-    uploadLocalFile("server-data.db-wal");
-    uploadLocalFile("server-data.db-shm");
-    uploadLocalFile("knowledge-graph.db");
-    uploadLocalFile("knowledge-graph.db-wal");
-    uploadLocalFile("knowledge-graph.db-shm");
+    try {
+        await Promise.all([
+            uploadLocalFile("server-data.db"),
+            uploadLocalFile("server-data.db-wal"),
+            uploadLocalFile("server-data.db-shm"),
+            uploadLocalFile("knowledge-graph.db"),
+            uploadLocalFile("knowledge-graph.db-wal"),
+            uploadLocalFile("knowledge-graph.db-shm"),
+        ]);
+        console.log("Successfully uploaded local data to Supabase");
+    } catch (error) {
+        throw error;
+    };
   }
 
-function shouldUploadDB(time: number) {
-    const interval = 600000;
-    return time - lastUpdated >= interval;
+function shouldUploadDB(now: number, lastUpdated: number) {
+    const interval = 60000;
+    return now - lastUpdated >= interval;
 };
 
 export { downloadData, uploadLocalData, shouldUploadDB };
