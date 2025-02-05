@@ -1,8 +1,7 @@
 import { shouldUploadDB } from "../../src/services/supabaseStorage";
 
 describe('Upload and Download Supabase Bucket', () => {
-
-    test('Test upload to S3 bucket', () => {
+    test('Test upload frequency to Supabase', () => {
         const now = Date.now();
         const aMinBefore = now - 60000;
         const tenMinBefore = now - 600001
