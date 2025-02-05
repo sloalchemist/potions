@@ -67,4 +67,6 @@ export class StubbedPubSub implements PubSub {
   playerResponses(_mobKey: string, _responses: string[]): void {}
 
   doing(_key: string, _action: string): void {}
+
+  playerAttacks(_mobKey: string, _attacks: string[]): void {}
 }

@@ -435,6 +435,11 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(mob_key, 'player_responses', { responses });
   }
 
+  public playerAttacks(mob_key: string, attacks: string[]) {
+    console.log('player attacks', mob_key, attacks);
+    this.publishMessageToPlayer(mob_key, 'player_attacks', { attacks });
+  }
+
   public sendPersistenceRequest(username: string, char_id: number) {
     console.log('Updating state info for', username);
     const player = Mob.getMob(username);
@@ -545,10 +550,28 @@ export class AblyService implements PubSub {
       }
     });
 
+    subscribeToPlayerChannel('fight_request', (data) => {
+      console.log('fight request', data);
+      const player = Mob.getMob(username);
+      const fightTarget = Mob.getMob(data.mob_key);
+      if (player && fightTarget) {
+        fightTarget.fightRequest(player);
+      }
+    });
+
     subscribeToPlayerChannel('speak', (data) => {
       const player = Mob.getMob(username);
       if (player) {
         conversationTracker.addTurnFromOptions(player, data.response);
+      }
+    });
+
+    subscribeToPlayerChannel('fight', (data) => {
+      const player = Mob.getMob(username);
+      if (player) {
+        console.log('fight', data);
+        // TODO: uncomment when FightTracker class is implemented
+        // fightTracker.addTurnFromOptions(player, data.attack);
       }
     });
 
