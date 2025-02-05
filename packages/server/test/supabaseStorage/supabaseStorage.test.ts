@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { uploadFile, downloadFile } from "../../src/services/supabaseStorage";
+import { lastUpdated, shouldUploadDB } from "../../src/services/supabaseStorage";
 
 
 async function fileCreate() {
@@ -13,13 +13,19 @@ async function fileCreate() {
 }
 
 describe('Upload and Download Supabase Bucket', () => {
-  test('Test download from S3 bucket', async () => {
-      await downloadFile("test.db");
-  });
 
     test('Test upload to S3 bucket', () => {
-        const file = fileCreate();
-        file.then(data => (uploadFile(data, data.name)));
-  });
+        const currentTime = Date.now();
+        const uploadTime = Date.now() + 600001;
+        expect(shouldUploadDB(currentTime)).toBeFalsy();
+        expect(shouldUploadDB(uploadTime)).toBeTruthy();
+    });
+    
+    test('Test upload to S3 bucket', () => {
+        const currentTime = Date.now();
+        const uploadTime = Date.now() + 600001;
+        expect(shouldUploadDB(currentTime)).toBeFalsy();
+        expect(shouldUploadDB(uploadTime)).toBeTruthy();
+    });
 });
 
