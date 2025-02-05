@@ -11,6 +11,7 @@ jest.mock('../../src/scenes/pauseScene', () => ({
 }));
 
 jest.mock('phaser', () => ({
+  ...jest.requireActual('phaser'),
   Scene: class MockScene {
     key: string;
 
