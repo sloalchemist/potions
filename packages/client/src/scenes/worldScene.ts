@@ -537,8 +537,6 @@ export class WorldScene extends Phaser.Scene {
 
     if (!moved) return;
 
-    console.log(this.keys['w'], this.keys['a'], this.keys['s'], this.keys['d']);
-
     let roundedX;
     let roundedY;
     const negKeys = ['w', 'a'];
@@ -552,6 +550,9 @@ export class WorldScene extends Phaser.Scene {
 
     const target = { x: roundedX, y: roundedY };
 
+    // NOTE: the code in the 'else' block moves the player on the client side
+    //       publishPlayerPosition() calls that code itself, so player will
+    //       move on the client side for whichever case
     if (publish) {
       this.prevKeys = { ...this.keys };
       publishPlayerPosition(target);
