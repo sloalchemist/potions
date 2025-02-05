@@ -99,10 +99,6 @@ async function uploadLocalFile(path: string) {
     lastUpdated = Date.now();
 }
 
-function shouldUploadDB(time: number) {
-    return time - lastUpdated >= 600000;
-};
-
 async function uploadLocalData() {
     uploadLocalFile("server-data.db");
     uploadLocalFile("server-data.db-wal");
@@ -112,4 +108,8 @@ async function uploadLocalData() {
     uploadLocalFile("knowledge-graph.db-shm");
   }
 
-export { downloadData, uploadLocalData };
+function shouldUploadDB(time: number) {
+    return time - lastUpdated >= 600000;
+};
+
+export { downloadData, uploadLocalData, shouldUploadDB };
