@@ -28,6 +28,7 @@ const createTestMob = (): Mob => {
     'test',
     1,
     { x: 0, y: 0 },
+    {},
     {}
   );
   mob.path = TEST_OLD_PATH;
