@@ -6,6 +6,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export const supabase = initializeSupabase();
+export var lastUpdated = Date.now();
 
 function initializeSupabase() {
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
@@ -58,9 +59,6 @@ async function downloadFile(file: string) {
     });
 }
 
-function shouldUploadDB(time: number) {
-    return time % 600000 < 1000;
-};
 
 async function uploadFile(file: File, filePath: string) {
     if (!process.env.SUPABASE_BUCKET) {
@@ -79,6 +77,12 @@ async function uploadFile(file: File, filePath: string) {
         console.log("Error uploading to Supabase: ", error);
         throw error;
     }
+
+    lastUpdated = Date.now();
 }
+
+function shouldUploadDB(time: number) {
+    return time - lastUpdated >= 600000;
+};
 
 export { uploadFile, downloadFile, shouldUploadDB};
