@@ -236,7 +236,7 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.sleepyText);
 
-      this.extroversionText = this.add.text(
+      this.extroversionText = this.add.text( 
         240,
         215,
         'Extroversion: ' + currentCharacter.extroversion
