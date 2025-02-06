@@ -128,7 +128,6 @@ export class AblyService implements PubSub {
     try {
       const result = await updateCharacterData(id, data);
       console.log(result.message); // "Player data upserted successfully."
-      console.log(result.data); // Updated player data array
     } catch (error) {
       console.error(error);
     }
@@ -150,6 +149,7 @@ export class AblyService implements PubSub {
       console.log('data.name:', message.data.name);
       console.log('data.health:', message.data.health);
       console.log('data.gold:', message.data.gold);
+      console.log('data.attack:', message.data.attack);
       this.userMembershipChannel.publish('serving', {
         name: message.data.name,
         world: this.worldID,
@@ -161,7 +161,8 @@ export class AblyService implements PubSub {
           message.data.name,
           message.data.char_id,
           message.data.health,
-          message.data.gold
+          message.data.gold,
+          message.data.attack
         );
       }
     }
@@ -248,6 +249,40 @@ export class AblyService implements PubSub {
         id: key,
         property: 'health',
         delta: health,
+        new_value: newValue
+      }
+    });
+  }
+
+  public changeAttack(key: string, attack: number, newValue: number): void {
+    if (newValue == undefined || key == undefined || attack == undefined) {
+      throw new Error(
+        `Sending invalid changeAttack message ${key}, ${attack}, ${newValue}`
+      );
+    }
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: 'attack',
+        delta: attack,
+        new_value: newValue
+      }
+    });
+  }
+
+  public changePersonality(key: string, trait: string, newValue: number): void {
+    if (key === undefined || newValue === undefined || trait === undefined) {
+      throw new Error(
+        `Sending invalid changePersonality message: ${key}, ${trait}, ${newValue}`
+      );
+    }
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: trait,
+        delta: newValue,
         new_value: newValue
       }
     });
@@ -408,18 +443,22 @@ export class AblyService implements PubSub {
     }
     let health_for_update = player.health;
     let gold_for_update = player.gold;
+    let attack_for_update = player.attack;
     if (player.health <= 0) {
       //get default health to reset
       health_for_update = mobFactory.getTemplate('player').health;
       gold_for_update = 0; //reset gold to 0
+      health_for_update = mobFactory.getTemplate('player').attack;
     }
     console.log('\t Persist player health:', health_for_update);
     console.log('\t Persist player gold:', gold_for_update);
+    console.log('\t Persist player attack:', attack_for_update);
     // Update existing character data
     const playerData: PlayerData = {
       health: health_for_update,
       name: player.name,
       gold: gold_for_update,
+      attack: attack_for_update,
       appearance: ''
     };
     this.sendPlayerData(char_id, playerData);
@@ -429,7 +468,8 @@ export class AblyService implements PubSub {
     username: string,
     char_id: number,
     health: number,
-    gold: number
+    gold: number,
+    attack: number
   ) {
     const playerChannelName = `${username}-${this.worldID}`;
     const playerChannel = this.ably.channels.get(playerChannelName);
@@ -455,6 +495,7 @@ export class AblyService implements PubSub {
       if (!player) {
         console.log(`Making mob for the character that joined: ${username}
           \t health recieved: ${health}
+          \t attack recieved: ${attack}
           \t gold recieved: ${gold} `);
         mobFactory.makeMob(
           'player',
@@ -463,7 +504,8 @@ export class AblyService implements PubSub {
           data.name,
           data.subtype,
           health,
-          gold
+          gold,
+          attack
         );
       } else if (player.subtype !== data.subtype || player.name !== data.name) {
         player.updatePlayer(data.name, data.subtype);

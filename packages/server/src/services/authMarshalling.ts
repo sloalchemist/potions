@@ -13,6 +13,7 @@ export interface PlayerData {
   health: number;
   name: string;
   gold: number;
+  attack: number;
   appearance: string;
 }
 
@@ -26,7 +27,7 @@ export async function updateCharacterData(
   id: number,
   playerData: PlayerData
 ): Promise<ApiResponse> {
-  const url = `${authUrl}/character/${id}`;
+  const url = new URL(`/character/${id}`, authUrl);
   try {
     const response = await fetch(url, {
       method: 'PUT', // Using PUT for updating existing resources

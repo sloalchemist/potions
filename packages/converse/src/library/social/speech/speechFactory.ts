@@ -17,6 +17,9 @@ import { SpeechResponse } from './responses/speechResponse';
 import { ExpressFeelings } from './starts/expressFeelings';
 import { SpeechAct } from './speechAct';
 
+/**
+ * Factory for creating speech acts, starts, and responses.
+ */
 export class SpeechFactory {
   potentialSpeechStarts: SpeechStart[] = [];
   potentialSpeechResponses: SpeechResponse[] = [];
@@ -39,6 +42,14 @@ export class SpeechFactory {
     this.potentialSpeechResponses.push(new RejectOffer());
   }
 
+  /**
+   * Creates potential speech starts.
+   *
+   * @param speaking - The speaker initiating the speech act.
+   * @param listening - The listener of the speech act.
+   * @param alreadyTraversed - The list of already traversed topics.
+   * @returns The potential speech parts for the speech act.
+   */
   static createPotentialSpeechStarts(
     speaking: Speaker,
     listening: Speaker,
@@ -54,6 +65,15 @@ export class SpeechFactory {
     return speechActs;
   }
 
+  /**
+   * Creates potential speech responses.
+   *
+   * @param inResponseTo - The speech part being responded to.
+   * @param speaking - The speaker making the response.
+   * @param listening - The listener of the response.
+   * @param alreadyTraversed - The list of already traversed topics.
+   * @returns The potential speech parts for the response.
+   */
   static createPotentialSpeechResponses(
     inResponseTo: SpeechPart,
     speaking: Speaker,
@@ -75,6 +95,15 @@ export class SpeechFactory {
     return speechActs;
   }
 
+  /**
+   * Creates potential speech acts.
+   *
+   * @param inResponseTo - The speech part being responded to, or null if initiating.
+   * @param speaking - The speaker initiating or responding.
+   * @param listening - The listener of the speech act.
+   * @param alreadyTraversed - The list of already traversed topics.
+   * @returns The potential speech acts.
+   */
   static createPotentialSpeechActs(
     inResponseTo: SpeechPart | null,
     speaking: Speaker,

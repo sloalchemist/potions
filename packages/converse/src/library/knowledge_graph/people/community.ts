@@ -4,6 +4,9 @@ import { Noun } from '../noun';
 import { Graphable } from './graphable';
 import { Region } from './region';
 
+/**
+ * Represents a community in the knowledge graph.
+ */
 export class Community implements Graphable {
   id: string;
   name: string;
@@ -12,6 +15,16 @@ export class Community implements Graphable {
   lore?: string[];
   noun: Noun;
 
+  /**
+   * Constructs a new community object.
+   *
+   * @param id - the unique identifier of the community
+   * @param name - the name of the community
+   * @param description - a description of the community
+   * @param region - the region in which the community is located
+   * @param lore - a list of interesting stories or facts about the community.
+   * @throws Error if the region is not provided.
+   */
   constructor(
     id: string,
     name: string,
@@ -31,14 +44,35 @@ export class Community implements Graphable {
     }
   }
 
+  /**
+   * Gets the desires of this community.
+   *
+   * Returns an empty array, because a community does not have desires.
+   * @returns An empty array.
+   */
   getDesires(): Desire[] {
     return [];
   }
 
+  /**
+   * Returns the noun representing the community.
+   *
+   * @returns The noun representing the community.
+   */
   getNoun(): Noun {
     return this.noun;
   }
 
+  /**
+   * Retrieves an array of beliefs associated with the community.
+   *
+   * This function returns beliefs that describe the community's description and
+   * its association with a region. Throws an error if the lore is not provided.
+   *
+   * @throws Error if the community does not have lore.
+   * @returns An array of Belief objects representing the community's attributes,
+   *          including its description and regional association.
+   */
   getBeliefs(): Belief[] {
     if (!this.lore) {
       throw new Error('Community must have a description and region');
