@@ -329,7 +329,7 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
     this.scene.stop('BrewScene');
-    this.mixButtons?.clearUnmatchedButtons('Toggle Menu')
+    this.mixButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('stats');
   }
 
@@ -340,7 +340,7 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
     this.scene.stop('BrewScene');
-    this.mixButtons?.clearUnmatchedButtons('Toggle Menu')
+    this.mixButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('items');
   }
 
@@ -351,7 +351,7 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
     this.scene.stop('BrewScene');
-    this.mixButtons?.clearUnmatchedButtons('Toggle Menu')
+    this.mixButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('chat');
   }
 
@@ -454,14 +454,14 @@ export class UxScene extends Phaser.Scene {
   setBrewOptions(brew: Interactions[]) {
     // Clear any existing buttons
     this.mixButtons?.clearButtonOptions();
-  
+
     // Fixed start position for the buttons
     const toggleX = 85;
     const toggleY = 60;
-  
+
     // check if the Brew menu is currently open
     //const menuOpen = this.scene.isActive('BrewScene');
-  
+
     // if the menu is open, add the cauldron interaction buttons
     if (this.scene.isActive('BrewScene')) {
       let i = 1; // start counter at 1 to skip the toggle button
@@ -469,24 +469,17 @@ export class UxScene extends Phaser.Scene {
         if (interaction.item.type === 'cauldron') {
           const x = toggleX + (i % 3) * (BUTTON_WIDTH + 10);
           const y = toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + 10);
-  
-          const button = new Button(
-            this,
-            x,
-            y,
-            true,
-            interaction.label,
-            () => {
-              interact(
-                interaction.item.key,
-                interaction.action,
-                interaction.give_to ? interaction.give_to : null
-              );
-              // Refresh the buttons in case the interaction state has changed
-              this.setBrewOptions(brew);
-            }
-          );
-  
+
+          const button = new Button(this, x, y, true, interaction.label, () => {
+            interact(
+              interaction.item.key,
+              interaction.action,
+              interaction.give_to ? interaction.give_to : null
+            );
+            // Refresh the buttons in case the interaction state has changed
+            this.setBrewOptions(brew);
+          });
+
           this.mixButtons.push(button);
           this.mixContainer?.add(button);
 
@@ -509,12 +502,12 @@ export class UxScene extends Phaser.Scene {
           brewScene.setBrewColor(
             parseInt(potionSubtypeAttr?.value.toString() || '0') || 0xffffff
           );
-  
+
           i++;
         }
       });
     }
-    if (brew.some(interaction => interaction.item.type === 'cauldron')) {
+    if (brew.some((interaction) => interaction.item.type === 'cauldron')) {
       // Create the toggle button at a fixed position
       const toggleButton = new Button(
         this,
@@ -535,14 +528,11 @@ export class UxScene extends Phaser.Scene {
           }, 30);
         }
       );
-    
+
       this.mixButtons.push(toggleButton);
       this.mixContainer?.add(toggleButton);
-    }
-    else{
+    } else {
       this.scene.stop('BrewScene');
     }
-    
-
   }
 }

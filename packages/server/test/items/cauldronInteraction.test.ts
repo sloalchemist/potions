@@ -8,7 +8,6 @@ import { DumpCauldron } from '../../src/items/uses/cauldron/dumpCauldron';
 import { BottlePotion } from '../../src/items/uses/cauldron/bottlePotion';
 import { Mob } from '../../src/mobs/mob';
 import { Coord } from '@rt-potion/common';
-import { hexStringToNumber } from '../../src/util/colorUtil';
 
 beforeEach(() => {
   commonSetup();

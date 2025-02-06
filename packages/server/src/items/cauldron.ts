@@ -71,10 +71,7 @@ export class Cauldron {
       carriedItem.destroy();
 
       this.item.changeAttributeBy('ingredients', 1);
-      this.item.setAttribute(
-        'potion_subtype',
-        hexStringToNumber(newColor)
-      );
+      this.item.setAttribute('potion_subtype', hexStringToNumber(newColor));
       return true;
     }
     return false;
