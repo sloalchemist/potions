@@ -47,7 +47,6 @@ export function initializeServerDatabase(
     } catch (error) {
       console.error('Error uploading database:', error);
     } finally {
-      closeDatabase();
       process.exit(0);
     }
   };
