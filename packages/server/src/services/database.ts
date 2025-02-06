@@ -3,7 +3,6 @@ import DatabaseConstructor from 'better-sqlite3';
 import * as dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
-import { uploadLocalData } from './supabaseStorage';
 
 // Load environment variables from .env file
 dotenv.config();

@@ -22,7 +22,11 @@ import {
 } from '../worldDescription';
 import { UxScene } from './uxScene';
 import { setGameState } from '../world/controller';
-import { restoreHealth, persistWorldData, speedUpCharacter } from '../utils/developerCheats';
+import {
+  restoreHealth,
+  persistWorldData,
+  speedUpCharacter
+} from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 
 export let world: World;

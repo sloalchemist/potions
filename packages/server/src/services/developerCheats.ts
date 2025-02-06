@@ -1,5 +1,6 @@
 import { Mob } from '../mobs/mob';
 import { uploadLocalData } from './supabaseStorage';
+import { setLastUploadTime } from './setup';
 
 export function applyCheat(player: Mob, cheat_code: string) {
   if (cheat_code === 'speed') {
@@ -8,5 +9,6 @@ export function applyCheat(player: Mob, cheat_code: string) {
     player.changeHealth(100);
   } else if (cheat_code === 'save') {
     uploadLocalData();
+    setLastUploadTime(Date.now());
   }
 }

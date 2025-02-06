@@ -85,6 +85,11 @@ async function initializeAsync() {
 
 initializeAsync();
 
+// Used for update on developer cheat
+export function setLastUploadTime(time: number) {
+  lastUploadTime = time;
+}
+
 export function worldTimer() {
   const now = Date.now();
   const deltaTime = now - lastUpdateTime;
