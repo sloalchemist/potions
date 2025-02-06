@@ -12,6 +12,7 @@ import {
   setResponseCallback
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
+import { SlideButton } from '../components/slideButton';
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
 import { interact, requestChat, speak } from '../services/playerToServer';
@@ -39,6 +40,9 @@ export class UxScene extends Phaser.Scene {
   sleepyText: Phaser.GameObjects.Text | null = null;
   extroversionText: Phaser.GameObjects.Text | null = null;
   dateText: Phaser.GameObjects.Text | null = null;
+  recipeText: Phaser.GameObjects.Text | null = null;
+  effectText: Phaser.GameObjects.Text | null = null;
+  sideEffectsText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
 
   // Variables for tab buttons and containers
@@ -46,11 +50,16 @@ export class UxScene extends Phaser.Scene {
   chatTabButton: TabButton | null = null;
   statsTabButton: TabButton | null = null;
   mixTabButton: TabButton | null = null;
+  potionTabButton: TabButton | null = null;
+  nextButton: SlideButton | null = null;
+  backButton: SlideButton | null = null;
 
   itemsContainer: Phaser.GameObjects.Container | null = null;
   chatContainer: Phaser.GameObjects.Container | null = null;
   statsContainer: Phaser.GameObjects.Container | null = null;
   mixContainer: Phaser.GameObjects.Container | null = null;
+  recipeContainer: Phaser.GameObjects.Container | null = null;
+  effectsContainer: Phaser.GameObjects.Container | null = null;
 
   constructor() {
     super({
@@ -71,10 +80,12 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer = this.add.container(0, 40);
     this.chatContainer = this.add.container(0, 40);
     this.mixContainer = this.add.container(0, 40);
+    this.recipeContainer = this.add.container(0, 40);
+    this.effectsContainer = this.add.container(0, 40);
 
-    const tabWidth = 100;
+    const tabWidth = 83;
     const tabHeight = 40;
-    const tabSpacing = 10;
+    const tabSpacing = 5;
 
     const tabY = 40;
     const tabX = 14;
@@ -131,6 +142,35 @@ export class UxScene extends Phaser.Scene {
       () => this.showMixTab(),
       tabWidth,
       tabHeight
+    );
+    this.potionTabButton = new TabButton(
+      this,
+      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
+      tabY,
+      'HandBook',
+      () => this.showPotionsTab(),
+      tabWidth,
+      tabHeight
+    );
+    this.nextButton = new SlideButton(
+      this,
+      400,
+      83,
+      '',
+      () => this.showNextTab(),
+      50,
+      30,
+      'right'
+    );
+    this.backButton = new SlideButton(
+      this,
+      60,
+      83,
+      '',
+      () => this.showPotionsTab(),
+      50,
+      30,
+      'left'
     );
 
     const backgroundTabs = this.add.graphics();
@@ -243,6 +283,210 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.extroversionText);
 
+      // recipe text
+      this.recipeText = this.add.text(160, 35, 'POTION RECIPES');
+      this.recipeContainer.add(this.recipeText);
+
+      this.recipeContainer.add(
+        this.add.text(15, 70, 'RED:', { color: '#E60000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(60, 70, 'Heartbeet', { color: '#FFFFFF' })
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 95, 'BLUE:', { color: '#0000FF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(70, 95, 'Slime Blob', { color: '#FFFFFF' })
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 120, 'GREEN:', { color: '#008000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(80, 120, 'Bones', { color: '#FFFFFF' })
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 145, 'ORANGE:', { color: '#FFA500' })
+      );
+      this.recipeContainer.add(
+        this.add.text(90, 145, 'RED', { color: '#E60000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(125, 145, '+', { color: '#FFFFFF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(140, 145, 'GREEN', { color: '#008000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(195, 145, '+ Sunflower', { color: '#FFFFFF' })
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 170, 'PURPLE:', { color: '#800080' })
+      );
+      this.recipeContainer.add(
+        this.add.text(90, 170, 'RED', { color: '#E60000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(125, 170, '+', { color: '#FFFFFF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(140, 170, 'BLUE', { color: '#0000FF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(185, 170, '+ Lightning Bloom', { color: '#FFFFFF' })
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 195, 'BLACK:', { color: '#000000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(80, 195, 'GREEN', { color: '#008000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(135, 195, '+', { color: '#FFFFFF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(150, 195, 'BLUE', { color: '#0000FF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(195, 195, '+ Tar', { color: '#FFFFFF' })
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 220, 'GOLD:', { color: '#FFD700' })
+      );
+      this.recipeContainer.add(
+        this.add.text(70, 220, 'ORANGE', { color: '#FFA500' })
+      );
+      this.recipeContainer.add(
+        this.add.text(135, 220, '+', { color: '#FFFFFF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(150, 220, 'PURPLE', { color: '#800080' })
+      );
+      this.recipeContainer.add(
+        this.add.text(215, 220, '+ Sun Drop', { color: '#FFFFFF' })
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 245, 'GREY:', { color: '#606060' })
+      );
+      this.recipeContainer.add(
+        this.add.text(70, 245, 'ORANGE', { color: '#FFA500' })
+      );
+      this.recipeContainer.add(
+        this.add.text(135, 245, '+', { color: '#FFFFFF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(150, 245, 'BLACK', { color: '#000000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(205, 245, '+ Sands of Time', { color: '#FFFFFF' })
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 270, 'BOMB!:', { color: '#C73904' })
+      );
+      this.recipeContainer.add(
+        this.add.text(80, 270, 'BLACK', { color: '#000000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(135, 270, '+', { color: '#FFFFFF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(150, 270, 'PURPLE', { color: '#800080' })
+      );
+      this.recipeContainer.add(
+        this.add.text(215, 270, '+ Gun Powder', { color: '#FFFFFF' })
+      );
+
+      // side effects text
+      this.effectText = this.add.text(140, 35, 'POTION SIDE EFFECTS');
+      this.effectsContainer.add(this.effectText);
+
+      this.effectsContainer.add(
+        this.add.text(15, 70, 'RED:', { color: '#E60000' })
+      );
+      this.effectsContainer.add(
+        this.add.text(60, 70, 'Recovers 50 HP', { color: '#FFFFFF' })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 95, 'BLUE:', { color: '#0000FF' })
+      );
+      this.effectsContainer.add(
+        this.add.text(70, 95, '50% speed boost for 5 min', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 120, 'GREEN:', { color: '#008000' })
+      );
+      this.effectsContainer.add(
+        this.add.text(80, 120, 'Attack damage over time for 3 min', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 145, 'ORANGE:', { color: '#FFA500' })
+      );
+      this.effectsContainer.add(
+        this.add.text(90, 145, 'Increases damage dealt for 2 min', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 170, 'PURPLE:', { color: '#800080' })
+      );
+      this.effectsContainer.add(
+        this.add.text(90, 170, 'Decreases damage taken for 2 min', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 195, 'BLACK:', { color: '#000000' })
+      );
+      this.effectsContainer.add(
+        this.add.text(80, 195, 'Summons attacking monster', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 220, 'GOLD:', { color: '#FFD700' })
+      );
+      this.effectsContainer.add(
+        this.add.text(70, 220, 'Permanently increases max health by 20', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 245, 'GREY:', { color: '#606060' })
+      );
+      this.effectsContainer.add(
+        this.add.text(70, 245, 'Slows first enemy hit by 50% for 1 min', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 270, 'BOMB!:', { color: '#C73904' })
+      );
+      this.effectsContainer.add(
+        this.add.text(80, 270, 'Destroys storage units & market stands', {
+          color: '#FFFFFF'
+        })
+      );
+
       this.time.addEvent({
         delay: 1000,
         callback: () => {
@@ -321,6 +565,10 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
     this.updateTabStyles('stats');
   }
 
@@ -330,6 +578,10 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
     this.updateTabStyles('items');
   }
 
@@ -339,30 +591,65 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
     this.updateTabStyles('chat');
   }
 
-  // Method to show the Chat tab
+  // Method to show the Mix tab
   showMixTab() {
     this.mixContainer?.setVisible(true);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
     this.updateTabStyles('mix');
   }
 
+  // Method to show the Potions tab
+  showPotionsTab() {
+    this.mixContainer?.setVisible(false);
+    this.statsContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(true);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(true);
+    this.backButton?.setVisible(false);
+    this.updateTabStyles('handbook');
+  }
+
+  // Method to show the Page Flips
+  showNextTab() {
+    this.mixContainer?.setVisible(false);
+    this.statsContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(true);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(true);
+  }
+
   // Update the styles of the tab buttons based on the active tab
-  updateTabStyles(activeTab: 'items' | 'chat' | 'stats' | 'mix') {
+  updateTabStyles(activeTab: 'items' | 'chat' | 'stats' | 'mix' | 'handbook') {
     if (
       this.itemsTabButton &&
       this.chatTabButton &&
       this.statsTabButton &&
-      this.mixTabButton
+      this.mixTabButton &&
+      this.potionTabButton
     ) {
       this.itemsTabButton.setTabActive(activeTab === 'items');
       this.chatTabButton.setTabActive(activeTab === 'chat');
       this.statsTabButton.setTabActive(activeTab === 'stats');
       this.mixTabButton.setTabActive(activeTab === 'mix');
+      this.potionTabButton.setTabActive(activeTab == 'handbook');
     }
   }
 
