@@ -16,6 +16,13 @@ const rl = readline.createInterface({
   prompt: 'next turn> '
 });
 
+/**
+ * Retrieves the IDs of two random villagers associated with the 'Silverclaw' region
+ * from the database. This function executes an SQL query to select two random
+ * villagers whose beliefs indicate a relationship to the 'Silverclaw' community.
+ *
+ * @returns An array containing the IDs of the selected villagers.
+ */
 function twoRandomSilverClaws(): string[] {
   // Define the type for the rows returned by the query
   interface Mob {
@@ -46,9 +53,22 @@ set_current_date({
 });
 
 const speakerService: SpeakerService = {
+  /**
+   * Closes the chat between two entities identified by their keys.
+   *
+   * @param mobKey - The identifier for the first entity involved in the chat.
+   * @param target - The identifier for the second entity involved in the chat.
+   */
   closeChat: function (mobKey: string, target: string): void {
     console.log(`Chat closed between ${mobKey} and ${target}.`);
   },
+  /**
+   * Displays a list of possible responses for a speaker and prompts the user
+   * to select one by entering its corresponding number.
+   *
+   * @param speaker - The speaker for whom the responses are being shown.
+   * @param responses - An array of possible responses to display.
+   */
   possibleResponses: function (speaker: Speaker, responses: string[]): void {
     responses.forEach((response, index) => {
       console.log(`${index}: ${response}`);
@@ -56,11 +76,26 @@ const speakerService: SpeakerService = {
 
     promptForNumber(responses.length);
   },
+  /**
+   * Simulates a speaker saying a given response in the chat conversation.
+   *
+   * @param speaker - The speaker who is saying the response.
+   * @param response - The text of the response.
+   */
   speak: function (speaker: Speaker, response: string): void {
     console.log(`${speaker.name} says: ${response}`);
   }
 };
 
+/**
+ * Simulates a series of conversations between randomly selected members of the
+ * Silver Claw tribe. After every 10 conversations, it refreshes the memories of
+ * all members of the tribe. This is useful for testing the conversation code.
+ *
+ * @remarks
+ * This function is intended to be used in the REPL (Read-Eval-Print Loop). It is
+ * not intended to be called from other code.
+ */
 async function main() {
   for (let i = 0; i < 100; i++) {
     if (i % 10 === 9) {
@@ -123,8 +158,11 @@ const conversation = new Conversation(
   speakerService
 );
 
-//console.log('random concept', memoryService.getRandomConcept());
-
+/**
+ * Prompts the user to enter a number, and will recursively call itself until
+ * the user enters a valid number in the range of 0 to numOptions - 1.
+ * @param {number} numOptions The number of possible options to choose from.
+ */
 function promptForNumber(numOptions: number) {
   rl.question('What do you say? ', (response) => {
     const responseNumber = parseInt(response, 10);
@@ -144,7 +182,6 @@ function promptForNumber(numOptions: number) {
 }
 
 rl.on('line', () => {
-  //console.log(`blah blah`);
   conversation.prepareNextResponse();
 
   if (conversation.isFinished()) {

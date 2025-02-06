@@ -21,8 +21,8 @@ provider "supabase" {
 
 # Create Ably app
 resource "ably_app" "potions" {
-  name = "${var.project_name}-${var.environment}"
-  status = "enabled"
+  name     = "${var.project_name}-${var.environment}"
+  status   = "enabled"
   tls_only = false
 }
 
@@ -38,9 +38,9 @@ resource "ably_api_key" "root" {
 # Create Supabase project
 resource "supabase_project" "potions" {
   organization_id   = var.supabase_organization_id
-  name             = "${var.project_name}-${var.environment}"
+  name              = "${var.project_name}-${var.environment}"
   database_password = var.supabase_db_pass
-  region           = "us-west-1"
+  region            = "us-west-1"
 
   lifecycle {
     ignore_changes = [
@@ -104,8 +104,8 @@ resource "local_file" "auth_server_env" {
 }
 
 resource "local_file" "server_env" {
-  filename = "../packages/server/.env"
-  content = <<-EOT
+  filename        = "../packages/server/.env"
+  content         = <<-EOT
     ABLY_API_KEY=${ably_api_key.root.key}
     AUTH_SERVER_URL=http://localhost:3000
   EOT
@@ -113,8 +113,8 @@ resource "local_file" "server_env" {
 }
 
 resource "local_file" "client_env" {
-  filename = "../packages/client/.env"
-  content = "SERVER_URL=http://localhost:3000/"
+  filename        = "../packages/client/.env"
+  content         = "SERVER_URL=http://localhost:3000/"
   file_permission = "0600"
 }
 

@@ -3,6 +3,13 @@ import { Belief } from '../memories/memoryService';
 import { SpeechAct } from '../speech/speechAct';
 import { current_date } from '../fantasyDate';
 
+/**
+ * Cleans the response by removing unnecessary text and formatting.
+ *
+ * @param response - The response text to clean.
+ * @param name - The name to extract content after.
+ * @returns The cleaned response.
+ */
 export function cleanResponse(response: string, name: string): string {
   return stripTextBetweenParentheses(
     trimQuotes(
@@ -14,65 +21,95 @@ export function cleanResponse(response: string, name: string): string {
   );
 }
 
+/**
+ * Removes text after the first newline character in the input string.
+ *
+ * @param input - The input string.
+ * @returns The trimmed string with text after the first newline removed.
+ */
 export function removeTextAfterNewline(input: string): string {
-  // Find the index of the first newline character
   const newlineIndex = input.indexOf('\n');
 
   if (newlineIndex !== -1) {
-    // Extract everything before the newline character
     return input.slice(0, newlineIndex).trim();
   }
 
-  // If no newline is found, return the input trimmed
   return input.trim();
 }
 
+/**
+ * Strips text between parentheses, including the parentheses, from the input string.
+ *
+ * @param input - The input string.
+ * @returns The string with text between parentheses removed.
+ */
 export function stripTextBetweenParentheses(input: string): string {
-  // Regular expression to match any text between parentheses, including the parentheses
   return input.replace(/\s*\([^)]*\)/g, '').trim();
 }
 
+/**
+ * Collapses all whitespace characters (spaces, tabs, newlines, etc.) into a single space.
+ *
+ * @param input - The input string.
+ * @returns The string with collapsed whitespace.
+ */
 export function collapseWhitespace(input: string): string {
-  // Replace all whitespace characters (spaces, tabs, newlines, etc.) with a single space
   return input.replace(/\s+/g, ' ').trim();
 }
 
+/**
+ * Trims quotes from the input string.
+ *
+ * If the input contains content between double quotes, it returns the content inside the quotes.
+ * Otherwise, it removes any lone quotes and trims the input.
+ *
+ * @param input - The input string.
+ * @returns The string with quotes trimmed.
+ */
 export function trimQuotes(input: string): string {
-  // Regular expression to match content between double quotes
   const regex = /"([^"]*)"/;
   const match = input.match(regex);
 
   if (match && match[1]) {
-    // If content inside quotes is found, return it after trimming spaces
     return match[1].trim();
   }
 
-  // If no content inside quotes is found, remove any lone quotes and trim the input
   return input.replace(/"/g, '').trim();
 }
 
+/**
+ * Extracts content after the first colon if the text before the colon matches the provided name.
+ *
+ * If no colon is found, returns the input trimmed.
+ *
+ * @param input - The input string.
+ * @param name - The name to match before the colon.
+ * @returns The extracted content after the colon or the trimmed input.
+ */
 export function extractContentAfterColon(input: string, name: string): string {
-  // Find the index of the first colon
   const colonIndex = input.indexOf(':');
 
   if (colonIndex !== -1) {
-    // Extract everything before the colon
     const beforeColon = input.slice(0, colonIndex).trim();
 
-    // If the text before the colon matches the provided name, remove it and return the rest
     if (beforeColon === name) {
-      // Extract everything after the first colon, trim leading/trailing spaces
       return input.slice(colonIndex + 1).trim();
     } else {
-      // Keep the colon as part of the text
       return input.trim();
     }
   }
 
-  // If no colon is found, return the input trimmed
   return input.trim();
 }
 
+/**
+ * Summarizes the conversation between two speakers.
+ *
+ * @param subject - The subject speaker.
+ * @param other - The other speaker.
+ * @returns The prompt for summarizing the conversation.
+ * @throws Will throw an error if the subject does not have a conversation.
+ */
 export function summarizeConversation(
   subject: Speaker,
   other: Speaker
@@ -99,6 +136,15 @@ export function summarizeConversation(
   return prompt;
 }
 
+/**
+ * Builds the game state for the conversation context.
+ *
+ * @param subject - The subject speaker.
+ * @param otherPlayer - The other player in the conversation.
+ * @param context - The context of the conversation, including related memories and relationships.
+ * @returns The game state as a string.
+ * @throws Will throw an error if the subject does not have a conversation.
+ */
 function buildGameState(
   subject: Speaker,
   otherPlayer: Speaker,
@@ -108,9 +154,7 @@ function buildGameState(
     throw new Error('Mob does not have a conversation');
   }
 
-  let gameState =
-    //buildGameState(world, subject) +
-    `Context:
+  let gameState = `Context:
       - This is a game in the style of 90s Super Nintendo RPGs, such as The Legend of Zelda or Final Fantasy.
       - Setting: We are in the land of Elyndra near the Silverclaw tribe. ${current_date().date_description}
       `;
@@ -146,6 +190,14 @@ Related Memories:
   return gameState;
 }
 
+/**
+ * Builds a prompt for generating speech for an NPC.
+ *
+ * @param subject - The NPC speaker.
+ * @param otherPlayer - The other player involved in the conversation.
+ * @param speechAct - The speech act to be generated.
+ * @returns The generated prompt.
+ */
 export function buildPromptForSpeech(
   subject: Speaker,
   otherPlayer: Speaker,
@@ -180,6 +232,15 @@ export function buildPromptForSpeech(
   return prompt;
 }
 
+/**
+ * Builds prompts for multiple responses in a conversation.
+ *
+ * @param subject - The subject speaker.
+ * @param otherPlayer - The other player in the conversation.
+ * @param responses - The array of speech acts to generate prompts for.
+ * @returns An array of generated prompts.
+ * @throws Will throw an error if the subject does not have a conversation or if no responses are provided.
+ */
 export function buildPromptsForResponses(
   subject: Speaker,
   otherPlayer: Speaker,
@@ -201,10 +262,24 @@ export function buildPromptsForResponses(
   return prompts;
 }
 
+/**
+ * Parses a single response by cleaning it.
+ *
+ * @param data - The response data to be cleaned.
+ * @param name - The name to be used in the cleaning process.
+ * @returns The cleaned response.
+ */
 export function parseResponse(data: string, name: string): string {
   return cleanResponse(data, name);
 }
 
+/**
+ * Parses multiple responses by cleaning each one.
+ *
+ * @param response - The array of response data to be cleaned.
+ * @param name - The name to be used in the cleaning process.
+ * @returns An array of cleaned responses.
+ */
 export function parseMultiResponse(response: string[], name: string): string[] {
   return response.map((res) => cleanResponse(res, name));
 }

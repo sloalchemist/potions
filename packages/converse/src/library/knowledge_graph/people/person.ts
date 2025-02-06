@@ -4,18 +4,42 @@ import { Noun } from '../noun';
 import { Community } from './community';
 import { Graphable } from './graphable';
 
+/**
+ * Represents a person's feelings about another person or thing.
+ */
 class FeelingsAbout {
+  /**
+   * Construct a new instance of the FeelingsAbout class.
+   *
+   * @param feeling The feeling that the person has (e.g., 'love', 'hate', etc.).
+   * @param about The person or thing about which the feeling is felt.
+   */
   constructor(
     public feeling: string,
     public about: string
   ) {}
 }
 
+/**
+ * Represents a person in the knowledge graph.
+ */
 export class Person implements Graphable {
   public spouse: Person | null = null;
   public feelingsAbout: FeelingsAbout[] = [];
   public noun: Noun;
 
+  /**
+   * Constructs a new instance of the Person class.
+   *
+   * @param id - The unique identifier for the person, which can be undefined.
+   * @param name - The name of the person.
+   * @param profession - The profession of the person.
+   * @param description - A textual description of the person.
+   * @param personality - A description of the person's personality.
+   * @param community - The community to which the person belongs.
+   * @param children - An array of the person's children, each being a Person instance.
+   * @param desire - An array of Desires that the person has.
+   */
   constructor(
     public readonly id: string | undefined,
     public readonly name: string,
@@ -37,14 +61,34 @@ export class Person implements Graphable {
     this.noun = { id: id, name: this.name, type: 'person' };
   }
 
+  /**
+   * Retrieves the desires of the person.
+   *
+   * The desires are copied and include the person as the desiree.
+   *
+   * @returns An array of desires associated with the person.
+   */
   getDesires(): Desire[] {
     return this.desire.map((d) => ({ ...d, person: this.noun }));
   }
 
+  /**
+   * Retrieves the noun representation of the person.
+   *
+   * @returns {Noun} The noun associated with this person.
+   */
   getNoun(): Noun {
     return this.noun;
   }
 
+  /**
+   * Retrieves an array of beliefs associated with the person.
+   *
+   * The method returns the person's description, profession, community, region,
+   * personality, desires, and feelings as beliefs.
+   *
+   * @returns An array of Belief objects representing the person's attributes.
+   */
   getBeliefs(): Belief[] {
     const beliefs: Belief[] = [];
 
@@ -131,10 +175,24 @@ export class Person implements Graphable {
     return beliefs;
   }
 
+  /**
+   * Records a feeling about a person, place, or thing.
+   *
+   * @param feeling The feeling verb (e.g. "likes", "hates", "admires")
+   * @param about The thing being felt about. Can be a person, place, or thing.
+   */
   addFeeling(feeling: string, about: string) {
     this.feelingsAbout.push(new FeelingsAbout(feeling, about));
   }
 
+  /**
+   * Build a set of beliefs that represent the family tree of a given set of
+   * people. This method will generate beliefs for each person's relationships
+   * with their spouse, children, siblings, grandparents, and uncles/aunts.
+   *
+   * @param people The people for which to generate the family tree.
+   * @returns A set of beliefs that represent the family tree.
+   */
   static buildFamilyTree(people: Person[]): Belief[] {
     const beliefs: Belief[] = [];
 

@@ -4,7 +4,19 @@ import { SpeechResponse } from './speechResponse';
 
 const PROPOSALS_TO_EVALUATE = 5;
 
+/**
+ * Represents a response to make a counter offer in a conversation.
+ */
 export class CounterOffer implements SpeechResponse {
+  /**
+   * Creates potential speech responses for making a counter offer.
+   *
+   * @param inResponseTo - The speech part being responded to.
+   * @param speaking - The speaker making the counter offer.
+   * @param listening - The listener of the counter offer.
+   * @param alreadyTraversed - The list of already traversed topics.
+   * @returns The potential speech parts for the counter offer response.
+   */
   createPotentialSpeechResponse(
     inResponseTo: SpeechPart,
     speaking: Speaker,

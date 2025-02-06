@@ -8,6 +8,9 @@ import { Personality } from '../personality';
 import { Relationships } from './relationships';
 import { Item } from './item';
 
+/**
+ * Interface representing a speaker in the system.
+ */
 export interface Speaker {
   id: string;
   name: string;

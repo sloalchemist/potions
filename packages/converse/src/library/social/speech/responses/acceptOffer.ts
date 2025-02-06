@@ -2,7 +2,19 @@ import { Speaker } from '../../speaker/speaker';
 import { SpeechPart } from '../speechPart';
 import { SpeechResponse } from './speechResponse';
 
+/**
+ * Represents a response to accept an offer in a conversation.
+ */
 export class AcceptOffer implements SpeechResponse {
+  /**
+   * Creates potential speech responses for accepting an offer.
+   *
+   * @param inResponseTo - The speech part being responded to.
+   * @param speaking - The speaker accepting the offer.
+   * @param listening - The listener of the acceptance.
+   * @param _alreadyTraversed - The list of already traversed topics.
+   * @returns The potential speech parts for the acceptance response.
+   */
   createPotentialSpeechResponse(
     inResponseTo: SpeechPart,
     speaking: Speaker,

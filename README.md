@@ -131,14 +131,14 @@ Run a script to automatically run all the build/run commands. `./setup.[ext] [op
   - `--all`
 
 ## Migrations
-### Supabase Setup
+### Supabase CLI Setup
 
 In order to migrate supabase tables we need to use the supabase CLI and connect it to our remote database.
 You can skip these steps by going to the migrations section, copying the SQL there and putting it into the supabase SQL editor.
 However, once you set this up it'll work for all future migrations.
 
 **1. Install the supabase CLI.**
-- Run `npm install -g supabase-cli` to install the supabase CLI globally or use a different package manager of your choice.
+- Follow the instructions [here](https://supabase.com/docs/guides/local-development/cli/getting-started). 
 
 **2. Connect the CLI to your supabase database.**
 - Run `supabase login` and follow the prompts to log in.
@@ -146,3 +146,6 @@ However, once you set this up it'll work for all future migrations.
 
 **3. Run the migrations.**
 - Run `supabase db push` to run the migrations in the `/migrations` directory.
+
+### Terraform Migration
+- Run `terraform apply` in the `/terraform` directory to apply the migrations.
