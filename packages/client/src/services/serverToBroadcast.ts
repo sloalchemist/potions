@@ -15,14 +15,13 @@ import {
   SetDatetimeData,
   SpeakData
 } from '@rt-potion/common';
-import { world, WorldScene } from '../scenes/worldScene';
-import { addNewItem, addNewMob, gameState, setDate } from '../world/controller';
-import { SpriteMob } from '../sprite/sprite_mob';
-import { publicCharacterId } from '../worldMetadata';
-import { SpriteItem } from '../sprite/sprite_item';
 import { Types } from 'ably';
-import { leaveWorld } from './playerToServer';
 import { focused } from '../main';
+import { world, WorldScene } from '../scenes/worldScene';
+import { SpriteItem } from '../sprite/sprite_item';
+import { SpriteMob } from '../sprite/sprite_mob';
+import { addNewItem, addNewMob, gameState, setDate } from '../world/controller';
+import { publicCharacterId } from '../worldMetadata';
 
 export let playerDead = false;
 
