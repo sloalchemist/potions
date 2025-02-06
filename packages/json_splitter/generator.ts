@@ -1,7 +1,7 @@
-// * run 
+// * run
 // * tsc generator.ts --lib es2015,esnext,dom
 // * mv generator.js generator.cjs
-// * node generator.cjs   
+// * node generator.cjs
 
 import { writeFileSync, readFileSync } from 'fs';
 
