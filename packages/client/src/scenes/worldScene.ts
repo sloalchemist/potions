@@ -13,7 +13,7 @@ import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
 import { GRAY } from './pauseScene';
-import { publishPlayerPosition } from '../services/playerToServer';
+import { leaveWorld, publishPlayerPosition } from '../services/playerToServer';
 import { getNightSkyOpacity } from '../utils/nightOverlayHandler';
 import {
   ItemType,
@@ -463,6 +463,8 @@ export class WorldScene extends Phaser.Scene {
   }
 
   showGameOver() {
+    leaveWorld();
+
     let uxscene = this.scene.get('UxScene') as UxScene;
     uxscene.chatButtons?.clearButtonOptions();
 
