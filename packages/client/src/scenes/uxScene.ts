@@ -227,6 +227,7 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
     this.scene.stop('BrewScene');
+    this.mixButtons?.clearUnmatchedButtons('Toggle Menu')
     this.updateTabStyles('stats');
   }
 
@@ -237,6 +238,7 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
     this.scene.stop('BrewScene');
+    this.mixButtons?.clearUnmatchedButtons('Toggle Menu')
     this.updateTabStyles('items');
   }
 
@@ -247,13 +249,13 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
     this.scene.stop('BrewScene');
+    this.mixButtons?.clearUnmatchedButtons('Toggle Menu')
     this.updateTabStyles('chat');
   }
 
   // Method to show the Mix tab
   showMixTab() {
     this.mixContainer?.setVisible(true);
-    // this.scene.launch('BrewScene');
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
@@ -356,10 +358,10 @@ export class UxScene extends Phaser.Scene {
     const toggleY = 60;
   
     // check if the Brew menu is currently open
-    const menuOpen = this.scene.isActive('BrewScene');
+    //const menuOpen = this.scene.isActive('BrewScene');
   
     // if the menu is open, add the cauldron interaction buttons
-    if (menuOpen) {
+    if (this.scene.isActive('BrewScene')) {
       let i = 1; // start counter at 1 to skip the toggle button
       brew.forEach((interaction) => {
         if (interaction.item.type === 'cauldron') {
@@ -391,8 +393,8 @@ export class UxScene extends Phaser.Scene {
             interaction.item.attributes;
 
           // Relaunch BrewScene to update the color
-          let menuOpen = this.scene.isActive('BrewScene');
-          if (menuOpen) {
+          //let menuOpen = this.scene.isActive('BrewScene');
+          if (this.scene.isActive('BrewScene')) {
             this.scene.launch('BrewScene');
           }
           const attributesArray = Object.entries(attributesRecord).map(
