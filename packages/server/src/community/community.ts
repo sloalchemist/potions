@@ -86,68 +86,10 @@ export class Community {
     return false;
   }
 
-  static getFavor(id_1: string, id_2: string) {
-    const favorNum = DB.prepare(
-      `
-            SELECT favor
-            FROM favorability
-            WHERE
-              (community_1_id = :id_1 AND community_2_id = :id_2) OR
-              (community_1_id = :id_2 AND community_2_id = :id_1);
-            `
-    ).get({ id_1: id_1, id_2: id_2 }) as { favor: number };
-    if (!favorNum) {
-      throw new Error(
-        `Non-existent communities in favorability database with ${id_1} and ${id_2}`
-      );
-    }
-    return favorNum.favor;
-  }
-  /**
-   * Creates a favorability relation between two communities, and initializes it by an amount
-   *
-   * @param id_1 The ID of the first community
-   * @param id_2 The ID of the second community
-   * @param amount The amount you want to initialize the favor between the two communities
-   */
-  static makeFavor(id_1: string, id_2: string, amount: number) {
-    DB.prepare(
-      `   INSERT INTO favorability (community_1_id, community_2_id, favor)
-        VALUES (:name1, :name2, :num);
-        `
-    ).run({ name1: id_1, name2: id_2, num: amount });
-  }
-  /**
-   * Adjusts the favorability relation between two communities, and changes it by a certain amount
-   *
-   * @param first The ID of the first community
-   * @param second The ID of the second community
-   * @param amount The amount you want to adjust the favor by
-   */
-  static adjustFavor(first: Community, second: Community, amount: number) {
-    DB.prepare(
-      `   UPDATE favorability
-        SET favor = favor + :amount
-        WHERE
-            (community_1_id = :id_1 AND community_2_id = :id_2) OR
-            (community_1_id = :id_2 AND community_2_id = :id_1)
-        `
-    ).run({ id_1: first.id, id_2: second.id, num: amount });
-  }
-
   static SQL = `
         CREATE TABLE community (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL
-        );
-
-        CREATE TABLE favorability (
-            community_1_id TEXT NOT NULL,
-            community_2_id TEXT NOT NULL,
-            favor REAL NOT NULL DEFAULT 0,
-            PRIMARY KEY (community_1_id, community_2_id),
-            FOREIGN KEY (community_1_id) REFERENCES community (id) ON DELETE CASCADE,
-            FOREIGN KEY (community_2_id) REFERENCES community (id) ON DELETE CASCADE
         );
         
         CREATE TABLE alliances (
@@ -157,7 +99,5 @@ export class Community {
             FOREIGN KEY (community_1_id) REFERENCES community (id) ON DELETE CASCADE,
             FOREIGN KEY (community_2_id) REFERENCES community (id) ON DELETE CASCADE
         );
-
-
     `;
 }
