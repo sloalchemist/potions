@@ -21,9 +21,21 @@ export interface PubSub {
   move(key: string, target: Coord | undefined, path: Coord[]): void;
   destroy(item: Item): void;
   changeHealth(key: string, health: number, newValue: number): void;
-  changeSpeed(key: string, speed: number, newValue: number): void;
-  changeTargetSpeedTick(key: string, tick: number, newValue: number): void;
+  changeEffect(
+    key: string,
+    attribute: string,
+    delta: number,
+    newValue: number
+  ): void;
+  changeTargetTick(
+    key: string,
+    attribute: string,
+    tick: number,
+    newValue: number
+  ): void;
   changeGold(key: string, gold: number, newValue: number): void;
+  changeAttack(key: string, attack: number, newValue: number): void;
+  changePersonality(key: string, trait: string, newValue: number): void;
   changeItemAttribute(itemKey: string, property: string, value: number): void;
   speak(key: string, message: string): void;
   setDateTime(fantasyDate: FantasyDate): void;

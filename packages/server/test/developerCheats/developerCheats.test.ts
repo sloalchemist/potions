@@ -18,7 +18,7 @@ describe('testing various developerCheats', () => {
 
     mobFactory.makeMob('player', position, mobId, 'testPlayer');
     testMob = Mob.getMob(mobId) as Mob;
-    jest.spyOn(testMob, 'changeSpeed').mockImplementation(() => {});
+    jest.spyOn(testMob, 'changeEffect').mockImplementation(() => {});
     jest.spyOn(testMob, 'changeHealth').mockImplementation(() => {});
   });
 
@@ -29,7 +29,7 @@ describe('testing various developerCheats', () => {
 
   test('Call speed up character', () => {
     applyCheat(testMob, 'speed');
-    expect(testMob.changeSpeed).toHaveBeenCalled();
+    expect(testMob.changeEffect).toHaveBeenCalled();
   });
 
   test('Call change health', () => {
