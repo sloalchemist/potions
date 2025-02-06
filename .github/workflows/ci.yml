@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     env:
-      AUTH_SERVER_URL: ${{ secrets.AUTH_SERVER_URL }}
+      AUTH_SERVER_URL: ${{ vars.AUTH_SERVER_URL }}
 
     strategy:
       matrix:
