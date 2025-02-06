@@ -14,6 +14,7 @@ import {
 import { TabButton } from '../components/tabButton';
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
+import { Item } from '../world/item';
 import { interact, requestChat, speak } from '../services/playerToServer';
 import { ButtonManager } from '../components/buttonManager';
 
@@ -25,6 +26,7 @@ export interface ChatOption {
 export class UxScene extends Phaser.Scene {
   interactButtons: ButtonManager = new ButtonManager([]);
   chatButtons: ButtonManager = new ButtonManager([]);
+  inventoryButtons: ButtonManager = new ButtonManager([]);
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
   attackText: Phaser.GameObjects.Text | null = null;
@@ -456,6 +458,26 @@ export class UxScene extends Phaser.Scene {
       );
       this.chatButtons.push(button);
       this.chatContainer?.add(button);
+    });
+  }
+
+   // Method to set inventory
+   setInventory(inventory: Item[]) {
+    this.inventoryButtons?.clearButtonOptions();
+
+    inventory.forEach((item, i) => {
+      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+      const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+
+      const button = new Button(this, x, y, true, `${item.itemType.name})`, () =>
+        interact(
+          item.key,
+          'unstash',
+          null
+        )
+      );
+      this.inventoryButtons.push(button);
+      this.inventoryContainer?.add(button);
     });
   }
 }
