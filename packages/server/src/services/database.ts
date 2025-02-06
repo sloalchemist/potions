@@ -39,25 +39,12 @@ export function initializeServerDatabase(
     }
   };
 
-  // Function to handle graceful shutdown and upload database
-  const handleExit = async () => {
-    console.log('Process exiting, uploading database...');
-    try {
-      await uploadLocalData();
-    } catch (error) {
-      console.error('Error uploading database:', error);
-    } finally {
-      process.exit(0);
-    }
-  };
-
   process.on('exit', closeDatabase);
-  process.on('beforeExit', handleExit);
   process.on('SIGINT', async () => {
-    await handleExit();
+    process.exit(0);
   });
   process.on('SIGTERM', async () => {
-    await handleExit();
+    process.exit(0);
   });
 
   return DB;

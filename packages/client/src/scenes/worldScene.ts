@@ -22,7 +22,7 @@ import {
 } from '../worldDescription';
 import { UxScene } from './uxScene';
 import { setGameState } from '../world/controller';
-import { restoreHealth, speedUpCharacter } from '../utils/developerCheats';
+import { restoreHealth, persistWorldData, speedUpCharacter } from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 
 export let world: World;
@@ -401,6 +401,9 @@ export class WorldScene extends Phaser.Scene {
       }
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
+      }
+      if (event.shiftKey && event.code === 'KeyS') {
+        persistWorldData();
       }
     });
 
