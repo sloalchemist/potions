@@ -1,6 +1,15 @@
 import { Concept, ConceptHierarchy } from './concept';
 
+/**
+ * Represents a hierarchy of desire-related concepts.
+ */
 export class Desires implements ConceptHierarchy {
+  /**
+   * Retrieves concepts related to the desires of a subject.
+   *
+   * @returns An array of desire-related concepts, including options such as
+   *          like and dislike.
+   */
   getConcepts(): Concept[] {
     const topLevelConcept = {
       id: 'desire',
