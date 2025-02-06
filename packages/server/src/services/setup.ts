@@ -82,13 +82,12 @@ async function initializeAsync() {
     pubSub.startBroadcasting();
   } catch (error) {
     console.error('Failed to initialize world:', error);
-    // throw error;
+    throw error;
   }
 }
 
 initializeAsync();
 
-// export async function worldTimer() {
 export function worldTimer() {
   const now = Date.now();
   const deltaTime = now - lastUpdateTime;

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
+import path from "path";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -34,8 +35,6 @@ async function downloadFile(file: string) {
   if (error) {
     throw error;
   }
-
-  var path = require('path');
 
   // Convert Blob to file
   const myfile = new File([data], file, {
@@ -80,7 +79,7 @@ async function uploadLocalFile(path: string) {
         'Your server env needs the SUPABASE_BUCKET var. Check README for info'
       );
     }
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from(process.env.SUPABASE_BUCKET)
       .upload(file.name, file, {
         cacheControl: '3600',
@@ -114,8 +113,8 @@ async function uploadLocalData() {
 }
 
 function shouldUploadDB(now: number, lastUpdated: number) {
-  const interval = 600000; // ten minutes
-  return now - lastUpdated >= interval;
+  const tenMinutes = 600000; 
+  return now - lastUpdated >= tenMinutes;
 }
 
 export { downloadData, uploadLocalData, shouldUploadDB };
