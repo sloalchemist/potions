@@ -153,9 +153,8 @@ resource "null_resource" "supabase_migrations" {
     working_dir = "${path.module}/../"
     interpreter = ["/bin/bash", "-c"]
     command     = <<-EOT
-      # Set supabase db password environment variable
       echo "${var.supabase_db_pass}"
-
+      # Set supabase db password environment variable
       export SUPABASE_DB_PASSWORD="${var.supabase_db_pass}"
       
       # Login using access token (non-interactive)
@@ -164,6 +163,7 @@ resource "null_resource" "supabase_migrations" {
       # Link project (non-interactive)
       supabase link --project-ref "${supabase_project.potions.id}"
       
+      echo "${var.supabase_db_pass}"
       # Run migrations
       supabase db push -p "${var.supabase_db_pass}"
     EOT
