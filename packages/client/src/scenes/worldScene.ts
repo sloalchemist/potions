@@ -158,8 +158,8 @@ export class WorldScene extends Phaser.Scene {
       right: number
     ) => void
   ) {
-    const terrainWidth = terrainData[0].length;
-    const terrainHeight = terrainData.length;
+    const terrainHeight = terrainData[0].length;
+    const terrainWidth = terrainData.length;
 
     // Iterate over each position in the terrain data
     for (let y = 0; y < terrainHeight; y++) {
@@ -359,8 +359,8 @@ export class WorldScene extends Phaser.Scene {
     this.nightOverlay.fillRect(
       0,
       0,
-      this.terrainWidth * TILE_SIZE,
-      this.terrainHeight * TILE_SIZE
+      this.terrainHeight * TILE_SIZE,
+      this.terrainWidth * TILE_SIZE
     );
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
     this.hideWorld();
