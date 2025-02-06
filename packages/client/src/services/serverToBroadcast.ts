@@ -22,6 +22,7 @@ import { SpriteItem } from '../sprite/sprite_item';
 import { SpriteMob } from '../sprite/sprite_mob';
 import { addNewItem, addNewMob, gameState, setDate } from '../world/controller';
 import { publicCharacterId } from '../worldMetadata';
+import { leaveWorld } from './playerToServer';
 
 export let playerDead = false;
 
