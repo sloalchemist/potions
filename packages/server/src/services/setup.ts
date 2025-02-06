@@ -44,7 +44,7 @@ async function initializeAsync() {
   try {
     await downloadData();
     console.log('Data successfully downloaded from Supabase');
-  } catch (error) {
+  } catch {
     try {
       console.log('Download failed, uploading local files instead');
       initializeKnowledgeDB('data/knowledge-graph.db', false);
