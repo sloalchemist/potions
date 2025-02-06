@@ -194,7 +194,7 @@ resource "render_web_service" "potions_auth" {
   region             = "oregon" # or "us-east", "frankfurt", etc.
   start_command      = "cd packages/auth-server && pnpm start"
   pre_deploy_command = "echo 'hello world'"
-  root_directory = "." # Changed to root directory
+  root_directory     = "." # Changed to root directory
 
   runtime_source = {
     native_runtime = {
