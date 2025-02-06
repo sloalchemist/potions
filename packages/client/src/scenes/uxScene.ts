@@ -58,7 +58,7 @@ export class UxScene extends Phaser.Scene {
   chatContainer: Phaser.GameObjects.Container | null = null;
   statsContainer: Phaser.GameObjects.Container | null = null;
   mixContainer: Phaser.GameObjects.Container | null = null;
-  potionContainer: Phaser.GameObjects.Container | null = null;
+  recipeContainer: Phaser.GameObjects.Container | null = null;
   effectsContainer: Phaser.GameObjects.Container | null = null;
 
   constructor() {
@@ -80,7 +80,7 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer = this.add.container(0, 40);
     this.chatContainer = this.add.container(0, 40);
     this.mixContainer = this.add.container(0, 40);
-    this.potionContainer = this.add.container(0, 40);
+    this.recipeContainer = this.add.container(0, 40);
     this.effectsContainer = this.add.container(0, 40);
 
     const tabWidth = 83;
@@ -283,24 +283,143 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.extroversionText);
 
+      // recipe text 
       this.recipeText = this.add.text(160, 35, 'POTION RECIPES');
-      this.potionContainer.add(this.recipeText); ///// recipe text additions
+      this.recipeContainer.add(this.recipeText);
 
+      this.recipeContainer.add(
+        this.add.text(15, 70, 'RED:', { color: '#E60000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(60, 70, 'Heartbeet', { color: '#FFFFFF' })
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 95, 'BLUE:', { color: '#0000FF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(70, 95, 'Slime Blob', { color: '#FFFFFF'})
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 120, 'GREEN:', { color: '#008000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(80, 120, 'Bones', {color: '#FFFFFF'})
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 145, 'ORANGE:', { color: '#FFA500' })
+      );
+      this.recipeContainer.add(
+        this.add.text(90, 145, 'RED', { color: '#E60000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(125, 145, '+', {color: '#FFFFFF'})
+      );
+      this.recipeContainer.add(
+        this.add.text(140, 145, 'GREEN', { color: '#008000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(195, 145, '+ Sunflower', { color: '#FFFFFF'} )
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 170, 'PURPLE:', { color: '#800080' })
+      );
+      this.recipeContainer.add(
+        this.add.text(90, 170, 'RED', { color: '#E60000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(125, 170, '+', {color: '#FFFFFF'})
+      );
+      this.recipeContainer.add(
+        this.add.text(140, 170, 'BLUE', { color: '#0000FF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(185, 170, '+ Lightning Bloom', { color: '#FFFFFF'} )
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 195, 'BLACK:', { color: '#000000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(80, 195, 'GREEN', { color: '#008000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(135, 195, '+', {color: '#FFFFFF'})
+      );
+      this.recipeContainer.add(
+        this.add.text(150, 195, 'BLUE', { color: '#0000FF' })
+      );
+      this.recipeContainer.add(
+        this.add.text(195, 195, '+ Tar', { color: '#FFFFFF'} )
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 220, 'GOLD:', { color: '#FFD700' })
+      );
+      this.recipeContainer.add(
+        this.add.text(70, 220, 'ORANGE', { color: '#FFA500' })
+      );
+      this.recipeContainer.add(
+        this.add.text(135, 220, '+', {color: '#FFFFFF'})
+      );
+      this.recipeContainer.add(
+        this.add.text(150, 220, 'PURPLE', { color: '#800080' })
+      );
+      this.recipeContainer.add(
+        this.add.text(215, 220, '+ Sun Drop', {color: '#FFFFFF'})
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 245, 'GREY:', { color: '#606060' })
+      );
+      this.recipeContainer.add(
+        this.add.text(70, 245, 'ORANGE', { color: '#FFA500' })
+      );
+      this.recipeContainer.add(
+        this.add.text(135, 245, '+', {color: '#FFFFFF'})
+      );
+      this.recipeContainer.add(
+        this.add.text(150, 245, 'BLACK', { color: '#000000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(205, 245, '+ Sands of Time', { color: '#FFFFFF' })
+      );
+
+      this.recipeContainer.add(
+        this.add.text(15, 270, 'BOMB!:', { color: '#C73904' })
+      );
+      this.recipeContainer.add(
+        this.add.text(80, 270, 'BLACK', { color: '#000000' })
+      );
+      this.recipeContainer.add(
+        this.add.text(135, 270, '+', {color: '#FFFFFF'})
+      );
+      this.recipeContainer.add(
+        this.add.text(150, 270, 'PURPLE', { color: '#800080' })
+      );
+      this.recipeContainer.add(
+        this.add.text(215, 270, '+ Gun Powder', {color: '#FFFFFF'})
+      );
+    
+      // side effects text
       this.effectText = this.add.text(140, 35, 'POTION SIDE EFFECTS');
-      this.effectsContainer.add(this.effectText); ///// side effects text
+      this.effectsContainer.add(this.effectText); 
 
       this.effectsContainer.add(
-        this.add.text(15, 70, 'RED:', { color: '#FF0000' })
+        this.add.text(15, 70, 'RED:', { color: '#E60000' })
       );
       this.effectsContainer.add(
         this.add.text(60, 70, 'Recovers 50 HP', { color: '#FFFFFF' })
-      ); // Default white
+      ); 
 
       this.effectsContainer.add(
         this.add.text(15, 95, 'BLUE:', { color: '#0000FF' })
       );
       this.effectsContainer.add(
-        this.add.text(65, 95, '50% speed boost for 5 min', {
+        this.add.text(70, 95, '50% speed boost for 5 min', {
           color: '#FFFFFF'
         })
       );
@@ -309,7 +428,7 @@ export class UxScene extends Phaser.Scene {
         this.add.text(15, 120, 'GREEN:', { color: '#008000' })
       );
       this.effectsContainer.add(
-        this.add.text(75, 120, 'Grants attack damage for 3 min', {
+        this.add.text(80, 120, 'Attack damage over time for 3 min', {
           color: '#FFFFFF'
         })
       );
@@ -318,7 +437,7 @@ export class UxScene extends Phaser.Scene {
         this.add.text(15, 145, 'ORANGE:', { color: '#FFA500' })
       );
       this.effectsContainer.add(
-        this.add.text(85, 145, 'Increases damage dealt for 2 min', {
+        this.add.text(90, 145, 'Increases damage dealt for 2 min', {
           color: '#FFFFFF'
         })
       );
@@ -327,7 +446,7 @@ export class UxScene extends Phaser.Scene {
         this.add.text(15, 170, 'PURPLE:', { color: '#800080' })
       );
       this.effectsContainer.add(
-        this.add.text(85, 170, 'Decreases damage taken for 2 min', {
+        this.add.text(90, 170, 'Decreases damage taken for 2 min', {
           color: '#FFFFFF'
         })
       );
@@ -336,7 +455,7 @@ export class UxScene extends Phaser.Scene {
         this.add.text(15, 195, 'BLACK:', { color: '#000000' })
       );
       this.effectsContainer.add(
-        this.add.text(75, 195, 'Summons attacking monster', {
+        this.add.text(80, 195, 'Summons attacking monster', {
           color: '#FFFFFF'
         })
       );
@@ -345,7 +464,7 @@ export class UxScene extends Phaser.Scene {
         this.add.text(15, 220, 'GOLD:', { color: '#FFD700' })
       );
       this.effectsContainer.add(
-        this.add.text(65, 220, 'Permanently increases max health by 20', {
+        this.add.text(70, 220, 'Permanently increases max health by 20', {
           color: '#FFFFFF'
         })
       );
@@ -354,22 +473,19 @@ export class UxScene extends Phaser.Scene {
         this.add.text(15, 245, 'GREY:', { color: '#606060' })
       );
       this.effectsContainer.add(
-        this.add.text(65, 245, 'Slows first enemy hit by 50% for 1 min', {
+        this.add.text(70, 245, 'Slows first enemy hit by 50% for 1 min', {
           color: '#FFFFFF'
         })
       );
 
       this.effectsContainer.add(
-        this.add.text(15, 270, 'BOMB:', { color: '#FF4500' })
+        this.add.text(15, 270, 'BOMB!:', { color: '#C73904' })
       );
       this.effectsContainer.add(
-        this.add.text(70, 270, 'Destroys storage units & market stands', {
+        this.add.text(80, 270, 'Destroys storage units & market stands', {
           color: '#FFFFFF'
         })
       );
-
-      //TEXT WIDTH MAX: the quick fox jumped over the lazy dog the qu
-      // this.effectsContainer.add(this.effectText); ///// side effects text
 
       this.time.addEvent({
         delay: 1000,
@@ -449,7 +565,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
-    this.potionContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
@@ -462,7 +578,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
-    this.potionContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
@@ -475,7 +591,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
-    this.potionContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
@@ -488,7 +604,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
-    this.potionContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
@@ -501,7 +617,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
-    this.potionContainer?.setVisible(true);
+    this.recipeContainer?.setVisible(true);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(true);
     this.backButton?.setVisible(false);
@@ -514,7 +630,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
-    this.potionContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(true);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(true);
