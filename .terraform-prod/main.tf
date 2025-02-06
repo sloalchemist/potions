@@ -154,6 +154,8 @@ resource "null_resource" "supabase_migrations" {
     interpreter = ["/bin/bash", "-c"]
     command     = <<-EOT
       # Set supabase db password environment variable
+      echo "${var.supabase_db_pass}"
+
       export SUPABASE_DB_PASSWORD="${var.supabase_db_pass}"
       
       # Login using access token (non-interactive)

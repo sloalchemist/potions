@@ -48,7 +48,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
       # 1.2 Install Supabase CLI
-      - uses: supabase/setup-cli@v1
+      - name: Install SupabaseCLI
+        uses: supabase/setup-cli@v1
         with:
           version: latest
 

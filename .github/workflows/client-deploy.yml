@@ -53,7 +53,9 @@ jobs:
           cp -r ./packages/client/githubPages/index.html ./packages/client/dist
 
       # Step 8: Deploy to GitHub Pages
+        
       - name: Deploy to GitHub Pages
+        if: ${{ github.event_name == 'push'}}
         uses: peaceiris/actions-gh-pages@v3
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
