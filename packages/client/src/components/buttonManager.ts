@@ -10,6 +10,10 @@ export class ButtonManager {
     this.buttons.push(object);
   }
 
+  getButtons() {
+    return this.buttons;
+  }
+  
   clearButtonOptions() {
     this.buttons.forEach((button: Button) => button.destroy());
     this.buttons = [];
