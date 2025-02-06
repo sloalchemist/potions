@@ -1,10 +1,10 @@
 name: Build and Deploy Client
 
 on:
-  workflow_dispatch: # Allow manual triggering
   push:
     branches:
-      - main
+      - main # Trigger on pushes to the main branch
+  workflow_dispatch: # Allow manual triggering
 
 jobs:
   build:
@@ -52,7 +52,6 @@ jobs:
           cp -r ./packages/client/githubPages/index.html ./packages/client/dist
 
       # Step 8: Deploy to GitHub Pages
-        
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
