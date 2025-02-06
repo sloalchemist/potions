@@ -26,7 +26,9 @@ import { focused } from '../main';
 
 export let playerDead = false;
 
-const STAY_AT_CURRENT_WORLD = 'STAY_AT_WORLD';
+//constant to indicate to server to have player remain in the current world
+//must match MAINTAIN_WORLD_OPTION in server/src/services/clientCommunication/ablyService.ts
+const MAINTAIN_WORLD_OPTION = 'NO_CHANGE';
 
 export function setupBroadcast(
   broadcast_channel: Types.RealtimeChannelCallbacks,
@@ -115,8 +117,8 @@ export function setupBroadcast(
         // once game focused, leave the world and display game over
         waitUntilFocused.then(() => {
           scene.showGameOver();
-          // if the players die, they default to staying in the same world
-          leaveWorld(STAY_AT_CURRENT_WORLD);
+          // in cases where player should stay in the same world, pass MAINTAIN_WORLD_OPTION
+          leaveWorld(MAINTAIN_WORLD_OPTION);
           scene.resetToLoadWorldScene();
         });
       }
