@@ -3,7 +3,7 @@ name: Build and Deploy Client
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the main branch
+      - main # Trigger on pushes to the main branch
   workflow_dispatch: # Allow manual triggering
 
 jobs:
