@@ -12,6 +12,7 @@ import {
   setResponseCallback
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
+import { SlideButton } from '../components/slideButton';
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
 import { interact, requestChat, speak } from '../services/playerToServer';
@@ -50,8 +51,8 @@ export class UxScene extends Phaser.Scene {
   statsTabButton: TabButton | null = null;
   mixTabButton: TabButton | null = null;
   potionTabButton: TabButton | null = null;
-  nextButton: TabButton | null = null;
-  backButton: TabButton | null = null;
+  nextButton: SlideButton | null = null;
+  backButton: SlideButton | null = null;
 
   itemsContainer: Phaser.GameObjects.Container | null = null;
   chatContainer: Phaser.GameObjects.Container | null = null;
@@ -151,23 +152,25 @@ export class UxScene extends Phaser.Scene {
       tabWidth,
       tabHeight
     );
-    this.nextButton = new TabButton(
+    this.nextButton = new SlideButton(
       this,
       400,
-      310,
-      '==>',
+      83,
+      '',
       () => this.showNextTab(),
       50,
-      30
+      30,
+      'right'
     );
-    this.backButton = new TabButton(
+    this.backButton = new SlideButton(
       this,
       60,
-      310,
-      '<==',
+      83,
+      '',
       () => this.showPotionsTab(),
       50,
-      30
+      30,
+      'left'
     );
 
     const backgroundTabs = this.add.graphics();
@@ -284,11 +287,89 @@ export class UxScene extends Phaser.Scene {
       this.potionContainer.add(this.recipeText); ///// recipe text additions
 
       this.effectText = this.add.text(140, 35, 'POTION SIDE EFFECTS');
-      this.effectsContainer.add(this.effectText); ///// side effects text 
+      this.effectsContainer.add(this.effectText); ///// side effects text
 
-      this.effectText = this.add.text(15, 90, 'the quick fox jumped over the lazy dog the qu');
+      this.effectsContainer.add(
+        this.add.text(15, 70, 'RED:', { color: '#FF0000' })
+      );
+      this.effectsContainer.add(
+        this.add.text(60, 70, 'Recovers 50 HP', { color: '#FFFFFF' })
+      ); // Default white
+
+      this.effectsContainer.add(
+        this.add.text(15, 95, 'BLUE:', { color: '#0000FF' })
+      );
+      this.effectsContainer.add(
+        this.add.text(65, 95, '50% speed boost for 5 min', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 120, 'GREEN:', { color: '#008000' })
+      );
+      this.effectsContainer.add(
+        this.add.text(75, 120, 'Grants attack damage for 3 min', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 145, 'ORANGE:', { color: '#FFA500' })
+      );
+      this.effectsContainer.add(
+        this.add.text(85, 145, 'Increases damage dealt for 2 min', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 170, 'PURPLE:', { color: '#800080' })
+      );
+      this.effectsContainer.add(
+        this.add.text(85, 170, 'Decreases damage taken for 2 min', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 195, 'BLACK:', { color: '#000000' })
+      );
+      this.effectsContainer.add(
+        this.add.text(75, 195, 'Summons attacking monster', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 220, 'GOLD:', { color: '#FFD700' })
+      );
+      this.effectsContainer.add(
+        this.add.text(65, 220, 'Permanently increases max health by 20', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 245, 'GREY:', { color: '#606060' })
+      );
+      this.effectsContainer.add(
+        this.add.text(65, 245, 'Slows first enemy hit by 50% for 1 min', {
+          color: '#FFFFFF'
+        })
+      );
+
+      this.effectsContainer.add(
+        this.add.text(15, 270, 'BOMB:', { color: '#FF4500' })
+      );
+      this.effectsContainer.add(
+        this.add.text(70, 270, 'Destroys storage units & market stands', {
+          color: '#FFFFFF'
+        })
+      );
+
       //TEXT WIDTH MAX: the quick fox jumped over the lazy dog the qu
-      this.effectsContainer.add(this.effectText); ///// side effects text 
+      // this.effectsContainer.add(this.effectText); ///// side effects text
 
       this.time.addEvent({
         delay: 1000,
