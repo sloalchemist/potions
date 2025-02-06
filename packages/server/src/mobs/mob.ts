@@ -418,13 +418,14 @@ export class Mob {
       potionType: string;
       targetTick: number;
     };
-    const tick = this.current_tick + duration;
+    
+    const tick = this.current_tick + duration
 
     console.log("CHANGE EFFECT ARGS:")
     console.log(delta);
     console.log(duration);
     console.log(attribute);
-    console.log()
+    console.log();
 
     let value = DB.prepare(
       `
@@ -448,7 +449,7 @@ export class Mob {
       attribute: attribute
     }) as QueryResult | undefined;
 
-    console.log(result)
+    console.log(result);
 
     if (!result || duration === -1) {
       switch (attribute) {
@@ -478,8 +479,6 @@ export class Mob {
       pubSub.changeEffect(this.id, attribute, delta, value);
     }
 
-    console.log(this.speed);
-
     DB.prepare(
       `
       INSERT INTO mobEffects (id, potionType, targetTick)
@@ -502,7 +501,7 @@ export class Mob {
       `
       SELECT potionType
       FROM mobEffects
-      WHERE id = :id AND targetTick < :currentTick
+      WHERE id = :id AND targetTick = :currentTick
       `
     ).all({
       id: this.id,
@@ -512,13 +511,13 @@ export class Mob {
     for (const element of result) {
       switch (element.potionType) {
         case 'speed': {
-          const delta = this.speed - (this.speed / 1.5)
+          // const delta = this.speed - (this.speed / 1.5)
           console.log("RESET DELTA:");
           console.log(this.speed);
           console.log(this.speed / 1.5);
-          console.log(delta);
+          // console.log(delta);
           console.log();
-          this.changeEffect(delta, -1, element.potionType);
+          this.changeEffect(-1, -1, element.potionType);
           break;
         }
         case 'attack': {
@@ -759,6 +758,28 @@ export class Mob {
     return result.map((row) => row.id);
   }
 
+  validateAttributes(): void {
+    const result = DB.prepare(
+      `
+        SELECT speed
+        FROM mobs
+        WHERE id = :id
+        `
+    ).get({
+      id: this.id
+    }) as { speed: number };
+
+    if (!result) {
+      return;
+    }
+
+    const speed = result.speed;
+
+    if (speed < 0 || speed >= 5) {
+      throw new Error(`impossible speed detected: ${speed}`);
+    }
+  }
+
   tick(deltaTime: number) {
     this.updatePosition(deltaTime);
 
@@ -769,6 +790,7 @@ export class Mob {
       this.setAction(action.type(), finished);
     }
 
+    this.validateAttributes();
     this.checkTickReset();
     this.needs.tick();
   }
