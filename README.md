@@ -171,3 +171,7 @@ Developers/players will now be able to save their world data to Supabase. This m
  - The next time you start your server, the data will be downloaded from Supabase.
  - Data will also be saved every 10 minutes the server is running and when you close the server. 
  - If you want to reset your world, stop the server, delete all the files in your bucket on the Supabase website, then start your server. 
+
+ **DB Errors**
+ If you encounter erros such as "CORRUPT DATA" or "ORPHAN", delete files from your bucket and rebuild world.
+ Likely the result of forceful exit of the function that uploads your db files once you terminate your server. Please do not terminate this process.
