@@ -1,10 +1,11 @@
 name: Build and Deploy Client
 
 on:
-  push:
-    branches:
-      - main  # Trigger on pushes to the main branch
   workflow_dispatch: # Allow manual triggering
+  workflow_run:
+    workflows: ["Terraform Server Deploy"]
+    types:
+      - completed
 
 jobs:
   build:
@@ -55,6 +56,6 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-            github_token: ${{ secrets.ACCESS_GITHUB_TOKEN }}
+            github_token: ${{ secrets.GITHUB_TOKEN }}
             publish_dir: ./packages/client/dist
             
