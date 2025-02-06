@@ -3,7 +3,7 @@ name: Build and Deploy Client
 on:
   workflow_dispatch: # Allow manual triggering
   workflow_run:
-    workflows: ["Terraform Server Deploy"]
+    workflows: ["Terraform Server Depoly"]
     types:
       - completed
 
