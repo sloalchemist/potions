@@ -8,7 +8,6 @@ import { DumpCauldron } from '../../src/items/uses/cauldron/dumpCauldron';
 import { BottlePotion } from '../../src/items/uses/cauldron/bottlePotion';
 import { Mob } from '../../src/mobs/mob';
 import { Coord } from '@rt-potion/common';
-import { hexStringToNumber } from '../../src/util/colorUtil';
 
 beforeEach(() => {
   commonSetup();
@@ -165,7 +164,7 @@ describe('Removing unwanted potions from the cauldron', () => {
     const cauldronAfter = Item.getItem(cauldronID!);
     expect(cauldronAfter).not.toBeNull();
     expect(cauldronAfter!.getAttribute('ingredients')).toBe(0);
-    expect(cauldronAfter!.getAttribute('potion_subtype')).toBe('');
+    expect(cauldronAfter!.getAttribute('potion_subtype')).toBe(0);
   });
 });
 
@@ -181,7 +180,7 @@ describe('Brewing potions in the cauldron', () => {
       position: cauldronPosition,
       attributes: {
         ingredients: 1,
-        potion_subtype: '#0000ff'
+        potion_subtype: 255
       }
     });
     const cauldronID = Item.getItemIDAt(cauldronPosition);
@@ -201,14 +200,14 @@ describe('Brewing potions in the cauldron', () => {
     //ensure cauldron is empty
     expect(testCauldron).not.toBeNull();
     expect(testCauldron!.getAttribute('ingredients')).toBe(0);
-    expect(testCauldron!.getAttribute('potion_subtype')).toBe('');
+    expect(testCauldron!.getAttribute('potion_subtype')).toBe(0);
 
     //ensure mob is carrying the correct potion
     expect(testMob).not.toBeNull();
     const testPotion = testMob!.carrying;
     expect(testPotion).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testPotion!.subtype).toBe('#0000ff');
+    expect(testPotion!.subtype).toBe('255');
   });
 
   test('Brew a red potion', () => {
@@ -222,7 +221,7 @@ describe('Brewing potions in the cauldron', () => {
       position: cauldronPosition,
       attributes: {
         ingredients: 1,
-        potion_subtype: '#ff0000'
+        potion_subtype: 16711680
       }
     });
     const cauldronID = Item.getItemIDAt(cauldronPosition);
@@ -242,14 +241,14 @@ describe('Brewing potions in the cauldron', () => {
     //ensure cauldron is empty
     expect(testCauldron).not.toBeNull();
     expect(testCauldron!.getAttribute('ingredients')).toBe(0);
-    expect(testCauldron!.getAttribute('potion_subtype')).toBe('');
+    expect(testCauldron!.getAttribute('potion_subtype')).toBe(0);
 
     //ensure mob is carrying the correct potion
     expect(testMob).not.toBeNull();
     const testPotion = testMob!.carrying;
     expect(testPotion).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testPotion!.subtype).toBe('#ff0000');
+    expect(testPotion!.subtype).toBe('16711680');
   });
 });
 
@@ -328,14 +327,14 @@ describe('Brew and bottle a purple potion', () => {
     //ensure cauldron is empty
     expect(testCauldron).not.toBeNull();
     expect(testCauldron!.getAttribute('ingredients')).toBe(0);
-    expect(testCauldron!.getAttribute('potion_subtype')).toBe('');
+    expect(testCauldron!.getAttribute('potion_subtype')).toBe(0);
 
     //ensure mob is carrying the correct potion
     expect(testMob).not.toBeNull();
     const testPotion = testMob!.carrying;
     expect(testPotion).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testPotion!.subtype).toBe(String(hexStringToNumber('#800080')));
+    expect(testPotion!.subtype).toBe('8388736');
   });
 });
 

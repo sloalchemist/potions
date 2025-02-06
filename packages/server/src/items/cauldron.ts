@@ -28,13 +28,13 @@ export class Cauldron {
     return this.item.getAttribute('ingredients');
   }
 
-  getPotionSubtype(): string {
+  getPotionSubtype(): number {
     return this.item.getAttribute('potion_subtype');
   }
 
   DumpCauldron(): boolean {
     this.item.setAttribute('ingredients', 0);
-    this.item.setAttribute('potion_subtype', '');
+    this.item.setAttribute('potion_subtype', 0);
 
     return true;
   }
@@ -48,10 +48,10 @@ export class Cauldron {
       this.getNumItems() < 3
     ) {
       // if no items in cauldron, add item
-      if (this.getPotionSubtype() == '') {
+      if (Number(this.getPotionSubtype()) == 0) {
         this.item.setAttribute(
           'potion_subtype',
-          String(hexStringToNumber(carriedItem.getAttribute('brew_color')))
+          hexStringToNumber(carriedItem.getAttribute('brew_color'))
         );
         this.item.changeAttributeBy('ingredients', 1);
         carriedItem.destroy();
@@ -71,10 +71,7 @@ export class Cauldron {
       carriedItem.destroy();
 
       this.item.changeAttributeBy('ingredients', 1);
-      this.item.setAttribute(
-        'potion_subtype',
-        String(hexStringToNumber(newColor))
-      );
+      this.item.setAttribute('potion_subtype', hexStringToNumber(newColor));
       return true;
     }
     return false;
@@ -86,14 +83,13 @@ export class Cauldron {
     }
 
     this.item.setAttribute('ingredients', 0);
-
     itemGenerator.createItem({
       type: 'potion',
-      subtype: this.getPotionSubtype(),
+      subtype: String(this.getPotionSubtype()),
       carriedBy: mob
     });
 
-    this.item.setAttribute('potion_subtype', '');
+    this.item.setAttribute('potion_subtype', 0);
     return true;
   }
 }
