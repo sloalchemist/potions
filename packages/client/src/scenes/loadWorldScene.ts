@@ -47,9 +47,9 @@ export class LoadWorldScene extends Phaser.Scene {
     this.load.image('frame', 'static/titleFrame.png');
     this.load.image('title', 'static/title.png');
     this.load.atlas(
-      'water_world-atlas',
-      'static/global_water_world.png',
-      'static/water_world-atlas.json'
+      'global-atlas',
+      'static/global.png',
+      'static/global-atlas.json'
     );
   }
 
@@ -206,7 +206,7 @@ export class LoadWorldScene extends Phaser.Scene {
 
     this.anims.create({
       key: `test-idle`,
-      frames: this.anims.generateFrameNames('water_world-atlas', {
+      frames: this.anims.generateFrameNames('global-atlas', {
         start: 1,
         end: 4,
         prefix: `player-idle-`
@@ -224,7 +224,7 @@ export class LoadWorldScene extends Phaser.Scene {
 
     // Position the character sprite
     this.playerSprite = this.add
-      .sprite(panelContentX, panelY + 100, 'water_world-atlas')
+      .sprite(panelContentX, panelY + 100, 'global-atlas')
       .setScale(6);
     this.playerSprite.setOrigin(0, 0);
 
@@ -282,7 +282,7 @@ export class LoadWorldScene extends Phaser.Scene {
         this,
         'test-idle',
         animationKey,
-        'water_world-atlas',
+        'global-atlas',
         {
           COLOR_1: eyeColor,
           COLOR_2: bellyColor,
