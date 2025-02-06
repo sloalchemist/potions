@@ -8,20 +8,10 @@ import { potentialTones } from '../speech/tones/toneFactory';
 export class Relationships {
   private mob: Speaker;
 
-  /**
-   * Creates an instance of Relationships.
-   *
-   * @param mob - The speaker instance representing the mob.
-   */
   constructor(mob: Speaker) {
     this.mob = mob;
   }
 
-  /**
-   * Introduces the current mob to another mob, creating a relationship entry in the database.
-   *
-   * @param other - The other speaker instance to introduce to.
-   */
   introduce(other: Speaker) {
     const createRelationship = DB.prepare(`
             INSERT OR IGNORE INTO
@@ -35,12 +25,6 @@ export class Relationships {
     });
   }
 
-  /**
-   * Finds a special relationship (belief) between the current mob and another mob.
-   *
-   * @param other - The other speaker instance to find the relationship with.
-   * @returns The belief representing the special relationship.
-   */
   specialRelationshipWith(other: Speaker): Belief {
     const belief = memoryService.findConnectionBetweenNouns(
       this.mob.id,
@@ -50,12 +34,6 @@ export class Relationships {
     return belief;
   }
 
-  /**
-   * Updates the conversation summary between the current mob and another mob in the database.
-   *
-   * @param other - The other speaker instance to update the conversation summary with.
-   * @param summary - The summary of the conversation.
-   */
   updateConversationSummary(other: Speaker, summary: string) {
     const updateRelationship = DB.prepare(`
             UPDATE relationships 
@@ -69,12 +47,6 @@ export class Relationships {
     });
   }
 
-  /**
-   * Retrieves the conversation summary between the current mob and another mob from the database.
-   *
-   * @param other - The other speaker instance to get the conversation summary with.
-   * @returns The conversation summary.
-   */
   conversationSummaryWith(other: Speaker): string {
     const selectRelationship = DB.prepare(`
             SELECT conversation_summary
@@ -89,12 +61,6 @@ export class Relationships {
     return row?.conversation_summary ?? '';
   }
 
-  /**
-   * Selects the appropriate tones for the current mob when listening to another speaker.
-   *
-   * @param listening - The speaker instance that the current mob is listening to.
-   * @returns An array of tones selected based on various factors.
-   */
   selectTone(listening: Speaker): Tone[] {
     // Tone is a combination of:
     // - What the subject is (are they positive or negative towards the subject)
@@ -124,12 +90,6 @@ export class Relationships {
     return sortedTones.map(([tone]) => tone);
   }
 
-  /**
-   * Retrieves the affinity value between the current mob and another mob from the database.
-   *
-   * @param other - The other speaker instance to get the affinity with.
-   * @returns - The affinity value.
-   */
   getAffinity(other: Speaker): number {
     const selectRelationship = DB.prepare(`
             SELECT (2.0 / (1.0 + exp(-0.05 * raw_affinity)) - 1.0) AS affinity
@@ -144,12 +104,6 @@ export class Relationships {
     return relationship ? relationship.affinity : 0;
   }
 
-  /**
-   * Modifies the relationship affinity between the current mob and another mob in the database.
-   *
-   * @param other - The other speaker instance to modify the relationship with.
-   * @param affinity_change - The change in affinity value.
-   */
   modifyRelationship(other: Speaker, affinity_change: number) {
     if (affinity_change === 0) {
       return;
@@ -167,12 +121,6 @@ export class Relationships {
     });
   }
 
-  /**
-   * Processes the current mob listening to another speaker's speech act, modifying the relationship accordingly.
-   *
-   * @param speaker - The speaker instance that the current mob is listening to.
-   * @param speechAct - The speech act being listened to.
-   */
   listenTo(speaker: Speaker, speechAct: SpeechAct) {
     let affinityChange = 0;
 

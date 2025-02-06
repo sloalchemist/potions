@@ -28,7 +28,7 @@ export async function updateCharacterData(
   id: number,
   playerData: PlayerData
 ): Promise<ApiResponse> {
-  const url = new URL(`/character/${id}`, authUrl);
+  const url = `${authUrl}/character/${id}`;
   try {
     const response = await fetch(url, {
       method: 'PUT', // Using PUT for updating existing resources

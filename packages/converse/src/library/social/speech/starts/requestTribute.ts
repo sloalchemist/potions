@@ -3,18 +3,7 @@ import { Speaker } from '../../speaker/speaker';
 import { SpeechPart } from '../speechPart';
 import { SpeechStart } from './speechStart';
 
-/**
- * Represents a speech start when requesting a tribute.
- */
 export class RequestTribute implements SpeechStart {
-  /**
-   * Creates potential speech acts for requesting a tribute.
-   *
-   * @param speaking - The speaker initiating the speech act.
-   * @param listening - The listener of the speech act.
-   * @param alreadyTraversed - The list of already traversed topics.
-   * @returns The potential speech parts for the speech act.
-   */
   createPotentialSpeechAct(
     speaking: Speaker,
     listening: Speaker,
@@ -26,6 +15,7 @@ export class RequestTribute implements SpeechStart {
       if (alreadyTraversed.includes(initialRequest.hash())) {
         return [];
       }
+      //const askForSomething = new SpeechAct(this.initiator, `Hello ${this.respondent.name}, ${initialProposal.prompt()}`, 'offer', initialProposal);
       const offer = SpeechPart.buildOffer(
         'demanding',
         speaking,
@@ -34,6 +24,7 @@ export class RequestTribute implements SpeechStart {
         initialRequest
       );
       return [offer];
+      // const justChat = new SpeechAct(this.initiator, `Hello ${this.respondent.name}, tell me about yourself.`, 'chat');
     }
 
     return [];

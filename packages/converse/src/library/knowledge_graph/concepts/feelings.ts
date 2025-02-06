@@ -1,15 +1,6 @@
 import { Concept, ConceptHierarchy } from './concept';
 
-/**
- * Represents a hierarchy of feeling-related concepts.
- */
 export class Feelings implements ConceptHierarchy {
-  /**
-   * Gets concepts related to the emotions of a subject.
-   *
-   * @returns A list of emotion-related concepts, including options such as
-   *          happy, sad, angry, excited, scared, love, hate, and fear.
-   */
   getConcepts(): Concept[] {
     const topLevelConcept = {
       id: 'feeling',

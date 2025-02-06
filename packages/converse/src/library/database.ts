@@ -9,19 +9,10 @@ dotenv.config();
 
 let DB: Database;
 
-/**
- * Initializes an instance of the SQLite database.
- */
 export function initializeInMemoryDatabase() {
   DB = new DatabaseConstructor(':memory:');
 }
 
-/**
- * Initializes an SQLite database from a file.
- *
- * @param dbPath - The path to the database file.
- * @param rebuild - Whether to rebuild the database if it already exists.
- */
 export function initializeDatabase(dbPath: string, rebuild: boolean = false) {
   const absolutePath = path.resolve(dbPath);
 
@@ -35,10 +26,8 @@ export function initializeDatabase(dbPath: string, rebuild: boolean = false) {
   DB = new DatabaseConstructor(absolutePath);
   DB.pragma('journal_mode = WAL');
 
-  // Close the database connection
-  process.on('exit', () => {
-    DB.close();
-  });
+  // Close the database on process exit
+  process.on('exit', () => DB.close());
 }
 
 // Export the initialized database

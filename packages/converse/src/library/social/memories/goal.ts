@@ -13,14 +13,6 @@ import { Speaker } from '../speaker/speaker';
 export class Goal {
   owner: Speaker;
 
-  /**
-   * Initializes a new Goal instance for the specified owner.
-   * Prepares a goal by randomly selecting an interest_id from
-   * the 'nouns' table and inserting it into the 'goals' table
-   * if it does not already exist for the given owner.
-   *
-   * @param owner - The Speaker who owns this goal.
-   */
   constructor(owner: Speaker) {
     this.owner = owner;
 
@@ -37,10 +29,6 @@ export class Goal {
     // Add goal to beliefs?
   }
 
-  /**
-   * Returns the id of the person this mob is interested in for their current goal.
-   * @returns the id of the person, or undefined if no goal exists.
-   */
   getGoalTarget(): string | undefined {
     // Specify the parameter type and inline type for the returned row
     const stmt = DB.prepare<{ mob_key: string }, { interest_id: string }>(`
