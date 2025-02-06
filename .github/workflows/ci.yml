@@ -12,6 +12,9 @@ jobs:
   ci:
     runs-on: ubuntu-22.04
 
+    env:
+      AUTH_SERVER_URL: ${{ secrets.AUTH_SERVER_URL }}
+
     strategy:
       matrix:
         node-version: [20]
