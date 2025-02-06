@@ -259,7 +259,7 @@ resource "render_background_worker" "potions_test_world" {
         paths         = ["src/**"]
         ignored_paths = ["tests/**"]
       }
-      repo_url = https://github.com/sloalchemist/potions
+      repo_url = "https://github.com/sloalchemist/potions"
       runtime  = "node"
     }
   }
