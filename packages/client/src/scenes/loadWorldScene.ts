@@ -10,7 +10,7 @@ import { setGameState } from '../world/controller';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { parseName } from '../utils/validators';
 
-export const buttonStyle = {
+const buttonStyle = {
   fontSize: '24px',
   color: '#ffffff',
   backgroundColor: '#28a745', // Green background
@@ -21,7 +21,7 @@ export const buttonStyle = {
   align: 'center'
 };
 
-export const nameButtonHoverStyle = {
+const nameButtonHoverStyle = {
   backgroundColor: '#138496' // Darker teal
 };
 

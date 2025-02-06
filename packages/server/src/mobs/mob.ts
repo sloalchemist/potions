@@ -530,27 +530,11 @@ export class Mob {
   destroy() {
     if (this.gold > 0 && this.position) {
       const position = Item.findEmptyPosition(this.position);
-
-      if (this.type === 'player') {
-        // If the player dies, drop half their gold
-        const halfGold = Math.floor(this.gold / 2);
-        itemGenerator.createItem({
-          type: 'gold',
-          position,
-          attributes: { amount: halfGold }
-        });
-        // NOTE: The team working on the persistence feature (which
-        // is currently incomplete on mainline) will update the changeGold
-        // method to persist to supabase in addition to the local DB
-        this.changeGold(-halfGold);
-      } else {
-        // Otherwise drop all of the mob's gold
-        itemGenerator.createItem({
-          type: 'gold',
-          position,
-          attributes: { amount: this.gold }
-        });
-      }
+      itemGenerator.createItem({
+        type: 'gold',
+        position,
+        attributes: { amount: this.gold }
+      });
     }
 
     const carriedItem = this.carrying;
