@@ -4,9 +4,20 @@ import { Noun } from '../noun';
 import { Graphable } from './graphable';
 import { Region } from './region';
 
+/**
+ * Represents an item in the knowledge graph.
+ */
 export class Item implements Graphable {
   private readonly noun: Noun;
 
+  /**
+   * Creates a new item.
+   *
+   * @param name - the name of the item
+   * @param description - a description of the item
+   * @param region - the region that the item is located in
+   * @throws Error if `region` is not provided
+   */
   constructor(
     public readonly name: string,
     public description: string,
@@ -22,14 +33,34 @@ export class Item implements Graphable {
     }
   }
 
+  /**
+   * Gets the desires of this item.
+   *
+   * Returns an empty array, because an item does not have desires.
+   * @returns An empty array.
+   */
   getDesires(): Desire[] {
     return [];
   }
 
+  /**
+   * Retrieves the noun representation of this item.
+   *
+   * @returns {Noun} The noun associated with this item.
+   */
   getNoun(): Noun {
     return this.noun;
   }
 
+  /**
+   * Retrieves an array of beliefs associated with the item.
+   *
+   * This function returns beliefs that describe the item's description and
+   * its association with a region.
+   *
+   * @returns An array of Belief objects representing the item's attributes,
+   *          including its description and regional association.
+   */
   getBeliefs(): Belief[] {
     return [
       {

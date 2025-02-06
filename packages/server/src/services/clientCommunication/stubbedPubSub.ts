@@ -26,9 +26,23 @@ export class StubbedPubSub implements PubSub {
 
   changeHealth(_key: string, _health: number, _newValue: number): void {}
 
-  changeSpeed(_key: string, _speed: number, _newValue: number): void {}
+  changeEffect(
+    _key: string,
+    _attribute: string,
+    _delta: number,
+    _newValue: number
+  ): void {}
 
-  changeTargetSpeedTick(_key: string, _tick: number, _newValue: number): void {}
+  changeTargetTick(
+    _key: string,
+    _attribute: string,
+    _tick: number,
+    _newValue: number
+  ): void {}
+
+  changePersonality(_key: string, _trait: string, _newValue: number): void {}
+
+  changeAttack(_key: string, _attack: number, _newValue: number): void {}
 
   changeGold(_key: string, _gold: number, _newValue: number): void {}
 
