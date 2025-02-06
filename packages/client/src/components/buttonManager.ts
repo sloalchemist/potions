@@ -10,12 +10,21 @@ export class ButtonManager {
     this.buttons.push(object);
   }
 
-  getButtons() {
-    return this.buttons;
-  }
-  
   clearButtonOptions() {
     this.buttons.forEach((button: Button) => button.destroy());
     this.buttons = [];
   }
+
+  // Takes a texture string as an argument and removes all buttons that do not have that texture.
+  clearUnmatchedButtons(texture:string) {
+      this.buttons.forEach((button) => {
+        if (button.texture !== texture) {
+          button.destroy();
+        }
+      });
+  }
+
+  
 }
+
+
