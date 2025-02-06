@@ -1,10 +1,10 @@
 terraform {
   cloud {
 
-    organization = "cal-poly-potions-369"
+    organization = "SLOPotions"
 
     workspaces {
-      name = "potions-369"
+      name = "SLOPotions"
     }
   }
 
