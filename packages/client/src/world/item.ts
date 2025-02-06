@@ -98,6 +98,24 @@ export class Item extends Physical {
     // place in position determined by server
   }
 
+  stash(world: World, mob: Mob) {
+    if (!this.carried_by){
+      throw new Error("Must carry item being stashed");
+    }
+    //console.log('dropping item', this.key, this.carried_by);
+    mob.carrying = undefined;
+    this.position = null;
+  }
+
+  unstash(world: World, mob: Mob) {
+    mob.carrying = this.key;
+    this.carried_by = mob.key;
+    if (this.position) {
+      world.removeItemFromGrid(this);
+    }
+    this.position = null;
+  }
+
   tick(world: World, deltaTime: number) {
     super.tick(world, deltaTime);
   }
