@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
-import path from "path";
+import path from 'path';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -113,7 +113,7 @@ async function uploadLocalData() {
 }
 
 function shouldUploadDB(now: number, lastUpdated: number) {
-  const tenMinutes = 600000; 
+  const tenMinutes = 600000;
   return now - lastUpdated >= tenMinutes;
 }
 
