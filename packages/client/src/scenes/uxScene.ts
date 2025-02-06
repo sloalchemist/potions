@@ -283,7 +283,7 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.extroversionText);
 
-      // recipe text 
+      // recipe text
       this.recipeText = this.add.text(160, 35, 'POTION RECIPES');
       this.recipeContainer.add(this.recipeText);
 
@@ -298,14 +298,14 @@ export class UxScene extends Phaser.Scene {
         this.add.text(15, 95, 'BLUE:', { color: '#0000FF' })
       );
       this.recipeContainer.add(
-        this.add.text(70, 95, 'Slime Blob', { color: '#FFFFFF'})
+        this.add.text(70, 95, 'Slime Blob', { color: '#FFFFFF' })
       );
 
       this.recipeContainer.add(
         this.add.text(15, 120, 'GREEN:', { color: '#008000' })
       );
       this.recipeContainer.add(
-        this.add.text(80, 120, 'Bones', {color: '#FFFFFF'})
+        this.add.text(80, 120, 'Bones', { color: '#FFFFFF' })
       );
 
       this.recipeContainer.add(
@@ -315,13 +315,13 @@ export class UxScene extends Phaser.Scene {
         this.add.text(90, 145, 'RED', { color: '#E60000' })
       );
       this.recipeContainer.add(
-        this.add.text(125, 145, '+', {color: '#FFFFFF'})
+        this.add.text(125, 145, '+', { color: '#FFFFFF' })
       );
       this.recipeContainer.add(
         this.add.text(140, 145, 'GREEN', { color: '#008000' })
       );
       this.recipeContainer.add(
-        this.add.text(195, 145, '+ Sunflower', { color: '#FFFFFF'} )
+        this.add.text(195, 145, '+ Sunflower', { color: '#FFFFFF' })
       );
 
       this.recipeContainer.add(
@@ -331,13 +331,13 @@ export class UxScene extends Phaser.Scene {
         this.add.text(90, 170, 'RED', { color: '#E60000' })
       );
       this.recipeContainer.add(
-        this.add.text(125, 170, '+', {color: '#FFFFFF'})
+        this.add.text(125, 170, '+', { color: '#FFFFFF' })
       );
       this.recipeContainer.add(
         this.add.text(140, 170, 'BLUE', { color: '#0000FF' })
       );
       this.recipeContainer.add(
-        this.add.text(185, 170, '+ Lightning Bloom', { color: '#FFFFFF'} )
+        this.add.text(185, 170, '+ Lightning Bloom', { color: '#FFFFFF' })
       );
 
       this.recipeContainer.add(
@@ -347,13 +347,13 @@ export class UxScene extends Phaser.Scene {
         this.add.text(80, 195, 'GREEN', { color: '#008000' })
       );
       this.recipeContainer.add(
-        this.add.text(135, 195, '+', {color: '#FFFFFF'})
+        this.add.text(135, 195, '+', { color: '#FFFFFF' })
       );
       this.recipeContainer.add(
         this.add.text(150, 195, 'BLUE', { color: '#0000FF' })
       );
       this.recipeContainer.add(
-        this.add.text(195, 195, '+ Tar', { color: '#FFFFFF'} )
+        this.add.text(195, 195, '+ Tar', { color: '#FFFFFF' })
       );
 
       this.recipeContainer.add(
@@ -363,13 +363,13 @@ export class UxScene extends Phaser.Scene {
         this.add.text(70, 220, 'ORANGE', { color: '#FFA500' })
       );
       this.recipeContainer.add(
-        this.add.text(135, 220, '+', {color: '#FFFFFF'})
+        this.add.text(135, 220, '+', { color: '#FFFFFF' })
       );
       this.recipeContainer.add(
         this.add.text(150, 220, 'PURPLE', { color: '#800080' })
       );
       this.recipeContainer.add(
-        this.add.text(215, 220, '+ Sun Drop', {color: '#FFFFFF'})
+        this.add.text(215, 220, '+ Sun Drop', { color: '#FFFFFF' })
       );
 
       this.recipeContainer.add(
@@ -379,7 +379,7 @@ export class UxScene extends Phaser.Scene {
         this.add.text(70, 245, 'ORANGE', { color: '#FFA500' })
       );
       this.recipeContainer.add(
-        this.add.text(135, 245, '+', {color: '#FFFFFF'})
+        this.add.text(135, 245, '+', { color: '#FFFFFF' })
       );
       this.recipeContainer.add(
         this.add.text(150, 245, 'BLACK', { color: '#000000' })
@@ -395,25 +395,25 @@ export class UxScene extends Phaser.Scene {
         this.add.text(80, 270, 'BLACK', { color: '#000000' })
       );
       this.recipeContainer.add(
-        this.add.text(135, 270, '+', {color: '#FFFFFF'})
+        this.add.text(135, 270, '+', { color: '#FFFFFF' })
       );
       this.recipeContainer.add(
         this.add.text(150, 270, 'PURPLE', { color: '#800080' })
       );
       this.recipeContainer.add(
-        this.add.text(215, 270, '+ Gun Powder', {color: '#FFFFFF'})
+        this.add.text(215, 270, '+ Gun Powder', { color: '#FFFFFF' })
       );
-    
+
       // side effects text
       this.effectText = this.add.text(140, 35, 'POTION SIDE EFFECTS');
-      this.effectsContainer.add(this.effectText); 
+      this.effectsContainer.add(this.effectText);
 
       this.effectsContainer.add(
         this.add.text(15, 70, 'RED:', { color: '#E60000' })
       );
       this.effectsContainer.add(
         this.add.text(60, 70, 'Recovers 50 HP', { color: '#FFFFFF' })
-      ); 
+      );
 
       this.effectsContainer.add(
         this.add.text(15, 95, 'BLUE:', { color: '#0000FF' })
