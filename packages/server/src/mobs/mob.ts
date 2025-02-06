@@ -5,7 +5,7 @@ import {
   floor,
   followPath
 } from '@rt-potion/common';
-import { Personality } from './traits/personality';
+import { Personality, PersonalityTraits } from './traits/personality';
 import { DB } from '../services/database';
 import { Item } from '../items/item';
 import { House, HouseData } from '../community/house';
@@ -18,6 +18,7 @@ import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 
 export type MobData = {
+  personalities: Personality;
   id: string;
   action_type: string;
   subtype: string;
@@ -78,7 +79,7 @@ export class Mob {
 
   private _gold: number;
   private _health: number;
-  public readonly attack: number;
+  public attack: number;
 
   private constructor({
     key,
@@ -361,7 +362,11 @@ export class Mob {
     ).run({ health: newHealth, id: this.id });
     this._health = newHealth;
     pubSub.changeHealth(this.id, amount, this.health);
-    if (this.health <= 0) {
+    // don't remove mob from server db if it is the player
+    // so that the player info can be saved.
+    if (this.health <= 0 && this.type == 'player') {
+      this.destroy();
+    } else if (this.health <= 0) {
       DB.prepare(
         `
                 DELETE FROM mobs
@@ -370,6 +375,38 @@ export class Mob {
       ).run({ id: this.id });
       this.destroy();
     }
+  }
+
+  changeAttack(amount: number) {
+    if (amount === 0) return;
+    let newAttack = this.attack + amount;
+    if (newAttack <= 0) {
+      newAttack = 0;
+    }
+    DB.prepare(
+      `
+            UPDATE mobs
+            SET attack = :attack
+            WHERE id = :id
+        `
+    ).run({ attack: newAttack, id: this.id });
+    this.attack = newAttack;
+    pubSub.changeAttack(this.id, amount, this.attack);
+  }
+
+  changePersonality(trait: string, amount: number) {
+    if (amount === 0) return;
+    const traitKey = trait as PersonalityTraits;
+    let newValue = this.personality.traits[traitKey] + amount;
+    DB.prepare(
+      `
+            UPDATE personalities
+            SET ${trait} = :value
+            WHERE mob_id = :id
+        `
+    ).run({ value: newValue, id: this.id });
+    this.personality.traits[traitKey] = newValue;
+    pubSub.changePersonality(this.id, trait, amount);
   }
 
   changeEffect(delta: number, duration: number, attribute: string): void {
@@ -493,11 +530,27 @@ export class Mob {
   destroy() {
     if (this.gold > 0 && this.position) {
       const position = Item.findEmptyPosition(this.position);
-      itemGenerator.createItem({
-        type: 'gold',
-        position,
-        attributes: { amount: this.gold }
-      });
+
+      if (this.type === 'player') {
+        // If the player dies, drop half their gold
+        const halfGold = Math.floor(this.gold / 2);
+        itemGenerator.createItem({
+          type: 'gold',
+          position,
+          attributes: { amount: halfGold }
+        });
+        // NOTE: The team working on the persistence feature (which
+        // is currently incomplete on mainline) will update the changeGold
+        // method to persist to supabase in addition to the local DB
+        this.changeGold(-halfGold);
+      } else {
+        // Otherwise drop all of the mob's gold
+        itemGenerator.createItem({
+          type: 'gold',
+          position,
+          attributes: { amount: this.gold }
+        });
+      }
     }
 
     const carriedItem = this.carrying;
