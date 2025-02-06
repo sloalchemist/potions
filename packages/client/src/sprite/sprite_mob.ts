@@ -151,6 +151,10 @@ export class SpriteMob extends Mob {
     }
 
     this.attributeListeners.push((spriteMob, key, delta) => {
+      console.log("ATTRIBUTE LISTENER:")
+      console.log(key);
+      console.log(delta);
+      console.log();
       if (!spriteMob) {
         return;
       }

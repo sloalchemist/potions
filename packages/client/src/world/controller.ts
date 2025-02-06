@@ -375,7 +375,7 @@ export function addNewMob(scene: WorldScene, mob: MobI) {
   if (mob.id === publicCharacterId) {
     console.log(`setting currentCharacter ${newMob.key}`, mob);
     newMob.attributeListeners.push((_mob, key, _delta) => {
-      if (key === 'health' || key === 'gold' || key === 'speed') {
+      if (key === 'health' || key === 'gold' || key === 'speed' || key === 'attack') {
         refresh();
       }
     });

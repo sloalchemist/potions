@@ -420,6 +420,12 @@ export class Mob {
     };
     const tick = this.current_tick + duration;
 
+    console.log("CHANGE EFFECT ARGS:")
+    console.log(delta);
+    console.log(duration);
+    console.log(attribute);
+    console.log()
+
     let value = DB.prepare(
       `
       SELECT ${attribute}
@@ -442,11 +448,17 @@ export class Mob {
       attribute: attribute
     }) as QueryResult | undefined;
 
+    console.log(result)
+
     if (!result || duration === -1) {
       switch (attribute) {
         case 'speed': // TODO: add other attributes as we add them to the game
           this.speed += delta;
           value = this.speed;
+          console.log("IN CASE STATEMENT")
+          console.log(value)
+          console.log(this.speed)
+          console.log()
         case 'attack':
           this.attack += delta;
           value = this.attack;
@@ -462,7 +474,11 @@ export class Mob {
         value: value,
         id: this.id
       });
+
+      pubSub.changeEffect(this.id, attribute, delta, value);
     }
+
+    console.log(this.speed);
 
     DB.prepare(
       `
@@ -475,7 +491,6 @@ export class Mob {
       targetTick: tick
     });
 
-    pubSub.changeEffect(this.id, attribute, delta, value);
     pubSub.changeTargetTick(this.id, attribute, duration, tick);
   }
 
@@ -487,7 +502,7 @@ export class Mob {
       `
       SELECT potionType
       FROM mobEffects
-      WHERE id = :id AND targetTick <= :currentTick
+      WHERE id = :id AND targetTick < :currentTick
       `
     ).all({
       id: this.id,
@@ -498,12 +513,17 @@ export class Mob {
       switch (element.potionType) {
         case 'speed': {
           const delta = this.speed - (this.speed / 1.5)
-          this.changeEffect(-delta, -1, element.potionType);
+          console.log("RESET DELTA:");
+          console.log(this.speed);
+          console.log(this.speed / 1.5);
+          console.log(delta);
+          console.log();
+          this.changeEffect(delta, -1, element.potionType);
           break;
         }
         case 'attack': {
           const delta = this._attack - (this._attack / 1.5)
-          this.changeEffect(-delta, -1, element.potionType);
+          this.changeEffect(delta, -1, element.potionType);
           break;
         }
       }
