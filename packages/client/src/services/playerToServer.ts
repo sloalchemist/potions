@@ -48,9 +48,14 @@ export function startWorld() {
   });
 }
 
-export function leaveWorld() {
-  publishPlayerStateToPersist();
-  broadcastChannel.presence.leave(publicCharacterId, (err) => {
+/*target_world_id should be a text world_id from the worlds table in supabase
+  or 'STAY_AT_WORLD' as defined in serverToBroadcast to indicate staying in the same world */
+export function leaveWorld(target_world_id: string) {
+  const leaveData = {
+    publicCharacterId: publicCharacterId,
+    target_world_id: target_world_id
+  };
+  broadcastChannel.presence.leave(leaveData, (err) => {
     if (err) {
       console.error('Error leaving presence:', err);
     } else {
@@ -75,6 +80,8 @@ export function publishPlayerPosition(target: Coord) {
   }
 }
 
+// TODO: perhaps use this function in the case that we want to update player state on more than just leave
+// topic 'update_state' is not currently subscribed to on server side
 export function publishPlayerStateToPersist() {
   if (playerChannel) {
     console.log('Requesting data persistence.');
