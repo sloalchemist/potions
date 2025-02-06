@@ -32,12 +32,12 @@ export function initializeServerDatabase(
   DB.pragma('journal_mode = WAL');
 
   // Close the database on process exit or termination signals
-const closeDatabase = () => {
-  if (DB) {
-    console.log('Closing database...');
-    DB.close();
-  }
-};
+  const closeDatabase = () => {
+    if (DB) {
+      console.log('Closing database...');
+      DB.close();
+    }
+  };
 
   // Function to handle graceful shutdown and upload database
   const handleExit = async () => {
@@ -60,7 +60,6 @@ const closeDatabase = () => {
   process.on('SIGTERM', async () => {
     await handleExit();
   });
-
 
   return DB;
 }

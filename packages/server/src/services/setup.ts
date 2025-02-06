@@ -8,7 +8,11 @@ import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
-import { downloadData, uploadLocalData, shouldUploadDB } from './supabaseStorage';
+import {
+  downloadData,
+  uploadLocalData,
+  shouldUploadDB
+} from './supabaseStorage';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
@@ -39,16 +43,18 @@ async function initializeAsync() {
 
   try {
     await downloadData();
-    console.log("Data successfully downloaded from Supabase")
+    console.log('Data successfully downloaded from Supabase');
   } catch (error) {
-    try {  
-      console.log("Download failed, uploading local files instead");
+    try {
+      console.log('Download failed, uploading local files instead');
       initializeKnowledgeDB('data/knowledge-graph.db', false);
       initializeServerDatabase('data/server-data.db');
-      await uploadLocalData()
+      await uploadLocalData();
       downloaded = false;
     } catch (error) {
-      console.log("Could not download data or upload data, cannot play the game");
+      console.log(
+        'Could not download data or upload data, cannot play the game'
+      );
       throw error;
     }
   }
@@ -58,7 +64,7 @@ async function initializeAsync() {
       initializeKnowledgeDB('data/knowledge-graph.db', false);
       initializeServerDatabase('data/server-data.db');
     }
-  
+
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
       worldSpecificData as Partial<ServerWorldDescription>;
@@ -84,7 +90,6 @@ initializeAsync();
 
 // export async function worldTimer() {
 export function worldTimer() {
-
   const now = Date.now();
   const deltaTime = now - lastUpdateTime;
 
