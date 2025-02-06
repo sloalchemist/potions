@@ -1,4 +1,4 @@
-import { shouldUploadDB } from '../../src/services/supabaseStorage';
+import { shouldUploadDB } from '../../src/util/dataUploadUtil';
 
 describe('Upload and Download Supabase Bucket', () => {
   test('Test upload frequency to Supabase', () => {

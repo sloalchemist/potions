@@ -112,9 +112,4 @@ async function uploadLocalData() {
   }
 }
 
-function shouldUploadDB(now: number, lastUpdated: number) {
-  const tenMinutes = 600000;
-  return now - lastUpdated >= tenMinutes;
-}
-
-export { downloadData, uploadLocalData, shouldUploadDB };
+export { downloadData, uploadLocalData };

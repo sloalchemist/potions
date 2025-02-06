@@ -8,11 +8,8 @@ import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
-import {
-  downloadData,
-  uploadLocalData,
-  shouldUploadDB
-} from './supabaseStorage';
+import { downloadData, uploadLocalData } from './supabaseStorage';
+import { shouldUploadDB } from '../util/dataUploadUtil';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
