@@ -271,3 +271,4 @@ resource "render_background_worker" "potions_test_world" {
     "AUTH_SERVER_URL" = { value : "${render_web_service.potions_auth.url}" },
   }
 }
+ 
