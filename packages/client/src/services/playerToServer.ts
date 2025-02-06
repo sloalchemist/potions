@@ -16,8 +16,18 @@ export function requestChat(mob: Mob) {
   publishPlayerMessage('chat_request', { mob_key: mob.key });
 }
 
+export function requestFight(mob: Mob) {
+  publishPlayerMessage('fight_request', { mob_key: mob.key });
+}
+
 export function speak(message: string, response: number) {
   publishPlayerMessage('speak', { response: response });
+  const player = world.mobs[publicCharacterId] as SpriteMob;
+  player.showSpeechBubble(message, true);
+}
+
+export function fight(message: string, attack: number) {
+  publishPlayerMessage('fight', { attack });
   const player = world.mobs[publicCharacterId] as SpriteMob;
   player.showSpeechBubble(message, true);
 }

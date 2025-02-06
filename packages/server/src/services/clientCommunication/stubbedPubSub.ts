@@ -20,6 +20,8 @@ export class StubbedPubSub implements PubSub {
 
   closeChat(_mobKey: string, _target: string): void {}
 
+  closeFight(_mobKey: string, _target: string): void {}
+
   move(_key: string, _target: Coord, _path: Coord[]): void {}
 
   destroy(_item: Item): void {}
@@ -67,4 +69,6 @@ export class StubbedPubSub implements PubSub {
   playerResponses(_mobKey: string, _responses: string[]): void {}
 
   doing(_key: string, _action: string): void {}
+
+  playerAttacks(_mobKey: string, _attacks: string[]): void {}
 }

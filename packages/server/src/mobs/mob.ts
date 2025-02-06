@@ -600,6 +600,14 @@ export class Mob {
     return false;
   }
 
+  fightRequest(mob: Mob): boolean {
+    console.log('fight request from ' + mob.name);
+    // TODO: replace with FightTracker class
+    pubSub.playerAttacks(mob.id, ['Test Attack']);
+    // fightTracker.startFight(mob, this);
+    return false;
+  }
+
   static findCarryingMobID(item_id: string): string | undefined {
     const mob = DB.prepare(
       `
