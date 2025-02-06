@@ -27,43 +27,51 @@ describe('Community ownership based interactions', () => {
 
     // Define potion stand type with available interactions and their permissions
     const potionStandItemType: ItemType = {
-        name: 'Potion Stand',
-        type: 'potion-stand',
-        carryable: false,
-        smashable: false,
-        walkable: false,
-        interactions: [
-          {
-              "description": "Collect gold",
-              "action": "collect_gold",
-              "while_carried": false,
-              "permissions": {
-                  "community": true,
-                  "other": false
-              }
-          },
-          {
-              "description": "Purchase potion",
-              "action": "purchase",
-              "while_carried": false,
-              "permissions": {
-                  "community": false,
-                  "other": true
-              }
+      name: 'Potion Stand',
+      type: 'potion-stand',
+      carryable: false,
+      smashable: false,
+      walkable: false,
+      interactions: [
+        {
+          description: 'Collect gold',
+          action: 'collect_gold',
+          while_carried: false,
+          permissions: {
+            community: true,
+            other: false
           }
-        ],
-        attributes: []
-        };
+        },
+        {
+          description: 'Purchase potion',
+          action: 'purchase',
+          while_carried: false,
+          permissions: {
+            community: false,
+            other: true
+          }
+        }
+      ],
+      attributes: []
+    };
 
     // Instantiate potion stand
-    potionStand = new Item(world!, 'potionstand', { x: 1, y: 1 }, potionStandItemType);
+    potionStand = new Item(
+      world!,
+      'potionstand',
+      { x: 1, y: 1 },
+      potionStandItemType
+    );
   });
 
   test('Should allow community members to collect gold', () => {
     const playerPos: Coord = { x: 1, y: 0 };
 
     // Get interactable items within range of player
-    const interactablePhysicals = getInteractablePhysicals([potionStand], playerPos);
+    const interactablePhysicals = getInteractablePhysicals(
+      [potionStand],
+      playerPos
+    );
 
     // Determine if potion stand is currently interactable
     const standInteractable = interactablePhysicals.some(
@@ -89,7 +97,9 @@ describe('Community ownership based interactions', () => {
     const interactions = getPhysicalInteractions(potionStand);
 
     // Check that purchase is NOT an available interaction
-    expect(interactions.some((interaction) => interaction.action === 'purchase')).toBe(false);
+    expect(
+      interactions.some((interaction) => interaction.action === 'purchase')
+    ).toBe(false);
   });
 
   afterAll(() => {
