@@ -318,7 +318,7 @@ export class AblyService implements PubSub {
   ): void {
     if (newValue == undefined || key == undefined || tick == undefined) {
       throw new Error(
-        `Sending invalid changeTargetSpeedTick message ${key}, ${tick}, ${newValue}`
+        `Sending invalid changeTargetTick message ${key}, ${attribute}, ${tick}, ${newValue}`
       );
     }
 
@@ -443,7 +443,7 @@ export class AblyService implements PubSub {
     }
     let health_for_update = player.health;
     let gold_for_update = player.gold;
-    let attack_for_update = player.attack;
+    let attack_for_update = player._attack;
     if (player.health <= 0) {
       //get default health to reset
       health_for_update = mobFactory.getTemplate('player').health;

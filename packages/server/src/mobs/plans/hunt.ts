@@ -10,8 +10,8 @@ export class Hunt implements Plan {
     // Move toward the blob to attack
 
     const success = npc.moveToOrExecute(this.enemy.position, 1, () => {
-      this.enemy!.changeHealth(Math.floor(Math.random() * -1 * npc.attack));
-      npc.changeHealth(Math.floor(Math.random() * -1 * this.enemy!.attack));
+      this.enemy!.changeHealth(Math.floor(Math.random() * -1 * npc._attack));
+      npc.changeHealth(Math.floor(Math.random() * -1 * this.enemy!._attack));
 
       return false;
     });
@@ -39,7 +39,7 @@ export class Hunt implements Plan {
 
     const utility =
       npc.personality.traits[PersonalityTraits.Aggression] *
-      (npc.attack / this.enemy.attack);
+      (npc._attack / this.enemy._attack);
 
     return utility;
   }

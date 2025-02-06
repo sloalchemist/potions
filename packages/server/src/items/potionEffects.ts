@@ -13,9 +13,16 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
       return true;
     case '#0000ff':
       console.log('Drinking blue potion');
-      const speedDelta = 2;
+      // const speedDelta = mob._speed * 0.5;
+      const speedDelta = 1;
       const speedDuration = 30;
       mob.changeEffect(speedDelta, speedDuration, 'speed');
+      return true;
+    case "#ffa500":
+      console.log('Drinking orange potion');
+      const attackDelta = mob._attack * 0.5;
+      const attackDuration = 240;
+      mob.changeEffect(attackDelta, attackDuration, 'attack');
       return true;
     default:
       // Handle cases where potionStr doesn't match any known potion

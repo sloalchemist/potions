@@ -68,6 +68,7 @@ export class Mob {
   private target?: Coord;
   private path: Coord[];
   private speed: number;
+  private attack: number;
   private _name: string;
   private maxHealth: number;
   private _carrying?: string;
@@ -79,7 +80,6 @@ export class Mob {
 
   private _gold: number;
   private _health: number;
-  public attack: number;
 
   private constructor({
     key,
@@ -165,6 +165,10 @@ export class Mob {
 
   get _speed(): number {
     return this.speed;
+  }
+
+  get _attack(): number {
+    return this.attack;
   }
 
   get current_tick(): number {
@@ -414,7 +418,14 @@ export class Mob {
       potionType: string;
       targetTick: number;
     };
-    const tick = this.current_tick + duration;
+    
+    const tick = this.current_tick + duration
+
+    console.log("CHANGE EFFECT ARGS:")
+    console.log(delta);
+    console.log(duration);
+    console.log(attribute);
+    console.log();
 
     let value = DB.prepare(
       `
@@ -438,11 +449,20 @@ export class Mob {
       attribute: attribute
     }) as QueryResult | undefined;
 
+    console.log(result);
+
     if (!result || duration === -1) {
       switch (attribute) {
         case 'speed': // TODO: add other attributes as we add them to the game
           this.speed += delta;
           value = this.speed;
+          console.log("IN CASE STATEMENT")
+          console.log(value)
+          console.log(this.speed)
+          console.log()
+        case 'attack':
+          this.attack += delta;
+          value = this.attack;
       }
 
       DB.prepare(
@@ -455,6 +475,8 @@ export class Mob {
         value: value,
         id: this.id
       });
+
+      pubSub.changeEffect(this.id, attribute, delta, value);
     }
 
     DB.prepare(
@@ -468,7 +490,6 @@ export class Mob {
       targetTick: tick
     });
 
-    pubSub.changeEffect(this.id, attribute, delta, value);
     pubSub.changeTargetTick(this.id, attribute, duration, tick);
   }
 
@@ -480,7 +501,7 @@ export class Mob {
       `
       SELECT potionType
       FROM mobEffects
-      WHERE id = :id AND targetTick <= :currentTick
+      WHERE id = :id AND targetTick = :currentTick
       `
     ).all({
       id: this.id,
@@ -489,8 +510,21 @@ export class Mob {
 
     for (const element of result) {
       switch (element.potionType) {
-        case 'speed': // TODO: add other attributes as we add them to the game
-          this.changeEffect(-2, -1, element.potionType);
+        case 'speed': {
+          // const delta = this.speed - (this.speed / 1.5)
+          console.log("RESET DELTA:");
+          console.log(this.speed);
+          console.log(this.speed / 1.5);
+          // console.log(delta);
+          console.log();
+          this.changeEffect(-1, -1, element.potionType);
+          break;
+        }
+        case 'attack': {
+          const delta = this._attack - (this._attack / 1.5)
+          this.changeEffect(delta, -1, element.potionType);
+          break;
+        }
       }
     }
   }
@@ -740,6 +774,28 @@ export class Mob {
     return result.map((row) => row.id);
   }
 
+  validateAttributes(): void {
+    const result = DB.prepare(
+      `
+        SELECT speed
+        FROM mobs
+        WHERE id = :id
+        `
+    ).get({
+      id: this.id
+    }) as { speed: number };
+
+    if (!result) {
+      return;
+    }
+
+    const speed = result.speed;
+
+    if (speed < 0 || speed >= 5) {
+      throw new Error(`impossible speed detected: ${speed}`);
+    }
+  }
+
   tick(deltaTime: number) {
     this.updatePosition(deltaTime);
 
@@ -750,6 +806,7 @@ export class Mob {
       this.setAction(action.type(), finished);
     }
 
+    this.validateAttributes();
     this.checkTickReset();
     this.needs.tick();
   }
