@@ -8,8 +8,11 @@ import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
+import { downloadData, uploadLocalData } from './supabaseStorage';
+import { shouldUploadDB } from '../util/dataUploadUtil';
 
 let lastUpdateTime = Date.now();
+let lastUploadTime = Date.now();
 let world: ServerWorld;
 
 function initializeAbly(worldId: string): AblyService {
@@ -33,9 +36,31 @@ async function initializeAsync() {
 
   console.log(`loading world ${worldID}`);
 
+  let downloaded = true;
+
   try {
-    initializeKnowledgeDB('data/knowledge-graph.db', false);
-    initializeServerDatabase('data/server-data.db');
+    await downloadData();
+    console.log('Data successfully downloaded from Supabase');
+  } catch {
+    try {
+      console.log('Download failed, uploading local files instead');
+      initializeKnowledgeDB('data/knowledge-graph.db', false);
+      initializeServerDatabase('data/server-data.db');
+      await uploadLocalData();
+      downloaded = false;
+    } catch (error) {
+      console.log(
+        'Could not download data or upload data, cannot play the game'
+      );
+      throw error;
+    }
+  }
+
+  try {
+    if (downloaded) {
+      initializeKnowledgeDB('data/knowledge-graph.db', false);
+      initializeServerDatabase('data/server-data.db');
+    }
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
@@ -54,6 +79,7 @@ async function initializeAsync() {
     pubSub.startBroadcasting();
   } catch (error) {
     console.error('Failed to initialize world:', error);
+    throw error;
   }
 }
 
@@ -66,6 +92,11 @@ export function worldTimer() {
   if (world) {
     world.tick(deltaTime);
     pubSub.sendBroadcast();
+  }
+
+  if (shouldUploadDB(now, lastUploadTime)) {
+    uploadLocalData();
+    lastUploadTime = now;
   }
 
   lastUpdateTime = now;
