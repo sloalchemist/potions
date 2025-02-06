@@ -5,6 +5,9 @@ import { Speaker } from '../speaker/speaker';
 import { SpeechPart } from './speechPart';
 import { Tone } from './tones/tone';
 
+/**
+ * Represents a speech act in a conversation.
+ */
 export class SpeechAct {
   private readonly spokenBy: Speaker;
   private readonly spokenTo: Speaker;
@@ -80,18 +83,38 @@ export class SpeechAct {
     }
   }
 
+  /**
+   * Gets the initiative speech part.
+   *
+   * @returns The initiative speech part.
+   */
   getInitiative(): SpeechPart {
     return this.initiative;
   }
 
+  /**
+   * Gets the proposal associated with the speech act.
+   *
+   * @returns The proposal, or undefined if none exists.
+   */
   getProposal(): Proposal | undefined {
     return this.proposal;
   }
 
+  /**
+   * Checks if the speech act is a goodbye.
+   *
+   * @returns True if it is a goodbye, false otherwise.
+   */
   isGoodbye(): boolean {
     return this.initiative.isGoodbye();
   }
 
+  /**
+   * Calculates the benefit to the listener.
+   *
+   * @returns The benefit to the listener.
+   */
   benefitToListener(): number {
     return (
       this.initiative.getBenefitToListener() +
@@ -99,22 +122,47 @@ export class SpeechAct {
     );
   }
 
+  /**
+   * Gets the value of the speech act.
+   *
+   * @returns The value of the speech act.
+   */
   getValue(): number {
     return this.value;
   }
 
+  /**
+   * Gets the context of the speech act.
+   *
+   * @returns The context of the speech act.
+   */
   getContext(): Belief[] {
     return this.context;
   }
 
+  /**
+   * Sets the text of the speech act.
+   *
+   * @param text - The text to set.
+   */
   setText(text: string) {
     this.text = text;
   }
 
+  /**
+   * Gets the text of the speech act.
+   *
+   * @returns The text of the speech act.
+   */
   getText(): string {
     return this.text ? this.text : this.getPrompt();
   }
 
+  /**
+   * Gets the tones of the speech act.
+   *
+   * @returns The tones of the speech act.
+   */
   getTones(): Tone[] {
     const tones: Tone[] = [];
     tones.push(this.initiative.getTone());
@@ -124,6 +172,9 @@ export class SpeechAct {
     return tones;
   }
 
+  /**
+   * Applies the effects of the speech act.
+   */
   doEffects() {
     this.spokenTo.relationships.listenTo(this.spokenBy, this);
 
@@ -140,14 +191,29 @@ export class SpeechAct {
     }
   }
 
+  /**
+   * Gets the personality traits used in the speech act.
+   *
+   * @returns The personality traits used.
+   */
   getTraits(): PersonalityTraits[] {
     return this.personalityTraitsUse;
   }
 
+  /**
+   * Gets the topics of the speech act.
+   *
+   * @returns The topics of the speech act.
+   */
   getTopics(): string[] {
     return this.topics;
   }
 
+  /**
+   * Gets the prompt of the speech act.
+   *
+   * @returns The prompt of the speech act.
+   */
   getPrompt() {
     if (this.response) {
       return (
@@ -158,6 +224,11 @@ export class SpeechAct {
     }
   }
 
+  /**
+   * Gets the memories conveyed in the speech act.
+   *
+   * @returns The memories conveyed.
+   */
   getMemoriesConveyed(): Belief[] {
     return this.memoriesConveyed;
   }

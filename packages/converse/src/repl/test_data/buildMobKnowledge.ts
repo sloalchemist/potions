@@ -11,6 +11,23 @@ import { Item } from '../../library/knowledge_graph/people/item';
 import { Person } from '../../library/knowledge_graph/people/person';
 import { Region } from '../../library/knowledge_graph/people/region';
 
+/**
+ * Constructs and returns a `KnowledgeGraph` representing the Silverclaw Tribe and its environment.
+ *
+ * This function defines several regions, communities, items, and people within the fictional world
+ * of Elyndra, specifically focused on the Silverclaw Tribe. It includes:
+ *   - Regions such as Elyndra, the Shattered Expanse, and Claw Island.
+ *   - Communities like Silverclaw and the Alchemist's Guild.
+ *   - Items such as Blueberry, Heartbeet, and Eidelweiss.
+ *   - Various people with specific roles and personalities, forming a family tree.
+ *   - Events that have occurred or are anticipated within the tribe.
+ *
+ * The resulting `KnowledgeGraph` aggregates these entities, along with their relationships and
+ * associated beliefs, to provide a comprehensive representation of the Silverclaw Tribe's
+ * knowledge and lore.
+ *
+ * @returns The constructed knowledge graph of the Silverclaw Tribe.
+ */
 export function buildSilverclawTribe(): KnowledgeGraph {
   const elyndra = new Region(
     'elyndra',

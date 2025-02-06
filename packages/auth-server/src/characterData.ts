@@ -31,7 +31,7 @@ const characterData = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Failed to upsert player data.' });
   }
 
-  res.status(200).json({ message: 'Player data upserted successfully.', data });
+  res.status(200).json({ message: 'Player data upserted successfully.' });
 };
 
 export default characterData;

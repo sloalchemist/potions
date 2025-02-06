@@ -105,7 +105,10 @@ resource "local_file" "auth_server_env" {
 
 resource "local_file" "server_env" {
   filename        = "../packages/server/.env"
-  content         = "ABLY_API_KEY=${ably_api_key.root.key}"
+  content         = <<-EOT
+    ABLY_API_KEY=${ably_api_key.root.key}
+    AUTH_SERVER_URL=http://localhost:3000
+  EOT
   file_permission = "0600"
 }
 
