@@ -3,7 +3,7 @@ import DatabaseConstructor from 'better-sqlite3';
 import * as dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
-import { uploadLocalData } from './supabaseStorage';
+// import { uploadLocalData } from './supabaseStorage';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -43,7 +43,7 @@ const closeDatabase = () => {
   const handleExit = async () => {
     console.log('Process exiting, uploading database...');
     try {
-      await uploadLocalData();
+      // await uploadLocalData();
     } catch (error) {
       console.error('Error uploading database:', error);
     } finally {
@@ -55,10 +55,14 @@ const closeDatabase = () => {
   process.on('exit', closeDatabase);
   process.on('beforeExit', handleExit);
   process.on('SIGINT', async () => {
-    await handleExit();
+    // await handleExit();
+    process.exit(0);
+
   });
   process.on('SIGTERM', async () => {
-    await handleExit();
+    // await handleExit();
+    process.exit(0);
+
   });
 
 

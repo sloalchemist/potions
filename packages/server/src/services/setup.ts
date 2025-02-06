@@ -8,7 +8,7 @@ import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
-import { downloadData, uploadLocalData, shouldUploadDB } from './supabaseStorage';
+// import { downloadData, uploadLocalData, shouldUploadDB } from './supabaseStorage';
 
 let lastUpdateTime = Date.now();
 let world: ServerWorld;
@@ -36,21 +36,21 @@ async function initializeAsync() {
 
   let downloaded = true;
 
-  try {
-    await downloadData();
-    console.log("Data successfully downloaded from Supabase")
-  } catch (error) {
-    try {  
-      console.log("Download failed, uploading local files instead");
-      initializeKnowledgeDB('data/knowledge-graph.db', false);
-      initializeServerDatabase('data/server-data.db');
-      await uploadLocalData()
-      downloaded = false;
-    } catch (error) {
-      console.log("Could not download data or upload data, cannot play the game");
-      throw error;
-    }
-  }
+  // try {
+  //   await downloadData();
+  //   console.log("Data successfully downloaded from Supabase")
+  // } catch (error) {
+  //   try {  
+  //     console.log("Download failed, uploading local files instead");
+  //     initializeKnowledgeDB('data/knowledge-graph.db', false);
+  //     initializeServerDatabase('data/server-data.db');
+  //     await uploadLocalData()
+  //     downloaded = false;
+  //   } catch (error) {
+  //     console.log("Could not download data or upload data, cannot play the game");
+  //     throw error;
+  //   }
+  // }
 
   try {
     if (downloaded) {
@@ -90,8 +90,8 @@ export async function worldTimer() {
     pubSub.sendBroadcast();
   }
 
-  if (shouldUploadDB(now, lastUpdateTime)) {
-    uploadLocalData();
-    lastUpdateTime = now;
-  }
+  // if (shouldUploadDB(now, lastUpdateTime)) {
+  //   uploadLocalData();
+  //   lastUpdateTime = now;
+  // }
 }
