@@ -13,7 +13,7 @@ const characterData = async (req: Request, res: Response) => {
   const { data: worldData, error: worldError } = await supabase
     .from('worlds')
     .select('id')
-    .eq('world_id', current_world_id) 
+    .eq('world_id', current_world_id)
     .single(); // we expect a single result
 
   if (worldError || !worldData) {
@@ -24,7 +24,12 @@ const characterData = async (req: Request, res: Response) => {
   // Use the retrieved world ID to update the player's data
   const { data, error } = await supabase
     .from('characters')
-    .update({ current_world_id: worldData.id, health: health, pname: name, gold: gold })
+    .update({
+      current_world_id: worldData.id,
+      health: health,
+      pname: name,
+      gold: gold
+    })
     .eq('character_id', id);
   if (error) {
     console.error(error);

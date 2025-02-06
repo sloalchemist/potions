@@ -68,7 +68,10 @@ export class AblyService implements PubSub {
 
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
       //if MAINTAIN_WORLD_OPTION is passed from client, do not change world
-      const target_world_id = (presenceMsg.data.target_world_id === MAINTAIN_WORLD_OPTION) ? this.worldID : presenceMsg.data.target_world_id;
+      const target_world_id =
+        presenceMsg.data.target_world_id === MAINTAIN_WORLD_OPTION
+          ? this.worldID
+          : presenceMsg.data.target_world_id;
       console.log('Target World Received:', presenceMsg.data.target_world_id);
       console.log('Target World Being Sent:', target_world_id);
       this.sendPersistenceRequest(
@@ -443,7 +446,11 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(mob_key, 'player_responses', { responses });
   }
 
-  public sendPersistenceRequest(username: string, char_id: number, target_world_id: number) {
+  public sendPersistenceRequest(
+    username: string,
+    char_id: number,
+    target_world_id: number
+  ) {
     console.log('Updating state info for', username);
     const player = Mob.getMob(username);
     if (!player) {

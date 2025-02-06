@@ -53,7 +53,7 @@ export function startWorld() {
 export function leaveWorld(target_world_id: string) {
   const leaveData = {
     publicCharacterId: publicCharacterId,
-    target_world_id: target_world_id 
+    target_world_id: target_world_id
   };
   broadcastChannel.presence.leave(leaveData, (err) => {
     if (err) {
