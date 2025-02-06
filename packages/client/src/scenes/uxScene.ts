@@ -410,29 +410,35 @@ export class UxScene extends Phaser.Scene {
         }
       });
     }
-    // Create the toggle button at a fixed position
-    const toggleButton = new Button(
-      this,
-      toggleX,
-      toggleY,
-      true,
-      'Toggle Menu',
-      () => {
-        // Toggle the Brew menu.
-        if (this.scene.isActive('BrewScene')) {
-          this.scene.stop('BrewScene');
-        } else {
-          this.scene.launch('BrewScene');
+    if (brew.some(interaction => interaction.item.type === 'cauldron')) {
+      // Create the toggle button at a fixed position
+      const toggleButton = new Button(
+        this,
+        toggleX,
+        toggleY,
+        true,
+        'Toggle Menu',
+        () => {
+          // Toggle the Brew menu.
+          if (this.scene.isActive('BrewScene')) {
+            this.scene.stop('BrewScene');
+          } else {
+            this.scene.launch('BrewScene');
+          }
+          // Slight delay to allow the scene state to update before refreshing buttons.
+          setTimeout(() => {
+            this.setBrewOptions(brew);
+          }, 30);
         }
-        // Slight delay to allow the scene state to update before refreshing buttons.
-        // May need to increase value to account for different devices
-        setTimeout(() => {
-          this.setBrewOptions(brew);
-        }, 30);
-      }
-    );
-  
-    this.mixButtons.push(toggleButton);
-    this.mixContainer?.add(toggleButton);
+      );
+    
+      this.mixButtons.push(toggleButton);
+      this.mixContainer?.add(toggleButton);
+    }
+    else{
+      this.scene.stop('BrewScene');
+    }
+    
+
   }
 }
