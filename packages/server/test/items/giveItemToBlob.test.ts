@@ -28,8 +28,8 @@ describe('Item Giving Tests', () => {
       expect(playerMob).toBeDefined();
 
       // Create blob mob
-      mobFactory.makeMob('blob', position2, '2', 'testBlob');
-      const blobMob = Mob.getMob('2');
+      mobFactory.makeMob('blob', position2, '3', 'testBlob');
+      const blobMob = Mob.getMob('3');
       expect(blobMob).toBeDefined();
 
       // Create potion

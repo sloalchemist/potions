@@ -28,8 +28,8 @@ describe('Item Giving Tests', () => {
       expect(playerMob).toBeDefined();
 
       // Create fighter mob
-      mobFactory.makeMob('fighter', position2, '2', 'testFighter');
-      const fighterMob = Mob.getMob('2');
+      mobFactory.makeMob('fighter', position2, '3', 'testFighter');
+      const fighterMob = Mob.getMob('3');
       expect(fighterMob).toBeDefined();
 
       // Create potion
