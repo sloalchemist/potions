@@ -12,9 +12,6 @@ jobs:
   ci:
     runs-on: ubuntu-22.04
 
-    env:
-      AUTH_SERVER_URL: ${{ vars.AUTH_SERVER_URL }}
-
     strategy:
       matrix:
         node-version: [20]
@@ -59,3 +56,5 @@ jobs:
       # Step 8: Run Unit Tests
       - name: Run Unit Tests
         run: pnpm test
+        env:
+          AUTH_SERVER_URL: ${{ vars.AUTH_SERVER_URL }}
