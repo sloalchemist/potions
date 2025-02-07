@@ -532,7 +532,7 @@
         },
         {
           "name": "potion_subtype",
-          "value": ""
+          "value": 0
         }
       ],
       "interactions": [
