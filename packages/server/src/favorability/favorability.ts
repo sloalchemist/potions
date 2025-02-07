@@ -53,4 +53,21 @@ export class Favorability {
 
     return index + conversation_score;
   }
+  /**
+   * 
+   * @param x 
+   * @returns 
+   */
+  modifiedLogistic(x: number) : number {
+    return (Math.min(0, ((1 / (1 + Math.exp(-x))) - 0.5))) * 2
+  }
+  /**
+   * Increases each respective community buff
+   * @param player 
+   */
+  static updatePlayerStat(player: Mob) {
+    var fighterStatChange
+    var blobStatChange
+    var villagerStatChange
+  }
 }

@@ -11,6 +11,7 @@ beforeEach(() => {
   Community.makeVillage('alchemists', 'Alchemists guild');
   Community.makeVillage('blobs', 'Blobs');
   Community.makeVillage('silverclaw', 'Village of Silverclaw');
+  Community.makeVillage('fighters', 'Village of Silverclaw');
   mobFactory.loadTemplates(world.mobTypes);
 });
 
