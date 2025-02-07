@@ -1428,7 +1428,7 @@
     "meta": {
         "app": "https://www.codeandweb.com/texturepacker",
         "version": "1.0",
-        "image": "global_water_world.png",
+        "image": "water_world_global.png",
         "format": "RGBA8888",
         "size": {
             "w": 128,
