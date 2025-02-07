@@ -3,13 +3,15 @@ name: Build and Deploy Client
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the main branch
+      - main # Trigger on pushes to the main branch
   workflow_dispatch: # Allow manual triggering
 
 jobs:
   build:
     name: Build Client
     runs-on: ubuntu-latest
+    permissions:
+        contents: write
     environment: github-pages
 
     steps:
@@ -55,6 +57,6 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-            github_token: ${{ secrets.ACCESS_GITHUB_TOKEN }}
+            github_token: ${{ secrets.GITHUB_TOKEN }}
             publish_dir: ./packages/client/dist
             

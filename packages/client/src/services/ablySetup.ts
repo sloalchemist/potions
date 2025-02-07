@@ -8,13 +8,13 @@ export let broadcastChannel: Types.RealtimeChannelCallbacks;
 export let playerChannel: Types.RealtimeChannelCallbacks;
 
 const SERVER_URL = process.env.SERVER_URL;
-
 let channelsBoundToWorld: boolean = false;
-
 export function setupAbly(): Promise<void> {
+  let authorizer =
+    SERVER_URL.slice(-1) == '/' ? 'auth?username=' : '/auth?username=';
   let worldID: string;
   return new Promise((resolve, _reject) => {
-    const authUrl = SERVER_URL + 'auth?username=' + characterId;
+    const authUrl = SERVER_URL + authorizer + characterId;
 
     const ably = new Realtime({
       authCallback: (tokenParams, callback) => {
