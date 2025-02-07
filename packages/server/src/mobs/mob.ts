@@ -421,12 +421,6 @@ export class Mob {
     
     const tick = this.current_tick + duration
 
-    console.log("CHANGE EFFECT ARGS:")
-    console.log(delta);
-    console.log(duration);
-    console.log(attribute);
-    console.log();
-
     let value = DB.prepare(
       `
       SELECT ${attribute}
@@ -456,13 +450,11 @@ export class Mob {
         case 'speed': // TODO: add other attributes as we add them to the game
           this.speed += delta;
           value = this.speed;
-          console.log("IN CASE STATEMENT")
-          console.log(value)
-          console.log(this.speed)
-          console.log()
+          break;
         case 'attack':
           this.attack += delta;
           value = this.attack;
+          break;
       }
 
       DB.prepare(
@@ -499,9 +491,15 @@ export class Mob {
     };
     const result = DB.prepare(
       `
+      WITH current_effects AS (
+        SELECT potionType, MAX(targetTick) AS max_targetTick
+        FROM mobEffects
+        WHERE id = :id
+        GROUP BY potionType
+      )
       SELECT potionType
-      FROM mobEffects
-      WHERE id = :id AND targetTick = :currentTick
+      FROM current_effects
+      WHERE max_targetTick = :currentTick
       `
     ).all({
       id: this.id,
@@ -511,18 +509,13 @@ export class Mob {
     for (const element of result) {
       switch (element.potionType) {
         case 'speed': {
-          // const delta = this.speed - (this.speed / 1.5)
-          console.log("RESET DELTA:");
-          console.log(this.speed);
-          console.log(this.speed / 1.5);
-          // console.log(delta);
-          console.log();
-          this.changeEffect(-1, -1, element.potionType);
+          const delta = this.speed - (this.speed / 1.5)
+          this.changeEffect(-delta, -1, element.potionType);
           break;
         }
         case 'attack': {
           const delta = this._attack - (this._attack / 1.5)
-          this.changeEffect(delta, -1, element.potionType);
+          this.changeEffect(-delta, -1, element.potionType);
           break;
         }
       }
