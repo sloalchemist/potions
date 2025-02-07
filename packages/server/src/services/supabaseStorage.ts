@@ -1,14 +1,12 @@
 import fs from 'fs';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
 import path from 'path';
 
 // Load environment variables from .env file
 dotenv.config();
 
-export const supabase = initializeSupabase();
-
-function initializeSupabase() {
+export function initializeSupabase() {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
     throw new Error('Cannot run without supabase credentials in env.');
   }
@@ -19,7 +17,7 @@ function initializeSupabase() {
   );
 }
 
-async function downloadFile(file: string) {
+async function downloadFile(file: string, supabase: SupabaseClient) {
   if (!process.env.SUPABASE_BUCKET) {
     throw Error(
       'Your server env needs the SUPABASE_BUCKET var. Check README for info'
@@ -55,18 +53,18 @@ async function downloadFile(file: string) {
   });
 }
 
-async function downloadData() {
+async function downloadData(supabase: SupabaseClient) {
   await Promise.all([
-    downloadFile('knowledge-graph.db'),
-    downloadFile('knowledge-graph.db-wal'),
-    downloadFile('knowledge-graph.db-shm'),
-    downloadFile('server-data.db'),
-    downloadFile('server-data.db-wal'),
-    downloadFile('server-data.db-shm')
+    downloadFile('knowledge-graph.db', supabase),
+    downloadFile('knowledge-graph.db-wal', supabase),
+    downloadFile('knowledge-graph.db-shm', supabase),
+    downloadFile('server-data.db', supabase),
+    downloadFile('server-data.db-wal', supabase),
+    downloadFile('server-data.db-shm', supabase)
   ]);
 }
 
-async function uploadLocalFile(path: string) {
+async function uploadLocalFile(path: string, supabase: SupabaseClient) {
   const buffer = await fs.promises.readFile('data/' + path);
   const file = new File([buffer], path, {
     type: 'application/octet-stream',
@@ -96,15 +94,15 @@ async function uploadLocalFile(path: string) {
   }
 }
 
-async function uploadLocalData() {
+async function uploadLocalData(supabase: SupabaseClient) {
   try {
     await Promise.all([
-      uploadLocalFile('server-data.db'),
-      uploadLocalFile('server-data.db-wal'),
-      uploadLocalFile('server-data.db-shm'),
-      uploadLocalFile('knowledge-graph.db'),
-      uploadLocalFile('knowledge-graph.db-wal'),
-      uploadLocalFile('knowledge-graph.db-shm')
+      uploadLocalFile('server-data.db', supabase),
+      uploadLocalFile('server-data.db-wal', supabase),
+      uploadLocalFile('server-data.db-shm', supabase),
+      uploadLocalFile('knowledge-graph.db', supabase),
+      uploadLocalFile('knowledge-graph.db-wal', supabase),
+      uploadLocalFile('knowledge-graph.db-shm', supabase)
     ]);
     console.log('Successfully uploaded local data to Supabase');
   } catch (error) {

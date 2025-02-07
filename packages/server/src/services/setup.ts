@@ -8,12 +8,14 @@ import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
-import { downloadData, uploadLocalData } from './supabaseStorage';
+import { downloadData, initializeSupabase, uploadLocalData } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
 let world: ServerWorld;
+
+export const supabase = initializeSupabase();
 
 function initializeAbly(worldId: string): AblyService {
   if (
@@ -39,14 +41,14 @@ async function initializeAsync() {
   let downloaded = true;
 
   try {
-    await downloadData();
+    await downloadData(supabase);
     console.log('Data successfully downloaded from Supabase');
   } catch {
     try {
       console.log('Download failed, uploading local files instead');
       initializeKnowledgeDB('data/knowledge-graph.db', false);
       initializeServerDatabase('data/server-data.db');
-      await uploadLocalData();
+      await uploadLocalData(supabase);
       downloaded = false;
     } catch (error) {
       console.log(
@@ -100,7 +102,7 @@ export function worldTimer() {
   }
 
   if (shouldUploadDB(now, lastUploadTime)) {
-    uploadLocalData();
+    uploadLocalData(supabase);
     lastUploadTime = now;
   }
 
