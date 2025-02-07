@@ -483,16 +483,24 @@ export class Mob {
     type QueryResult = {
       potionType: string;
     };
+    
     const result = DB.prepare(
       `
       SELECT potionType
       FROM mobEffects
-      WHERE id = :id AND targetTick <= :currentTick
+      WHERE id = :id AND targetTick = :currentTick
       `
     ).all({
       id: this.id,
       currentTick: this.current_tick
     }) as QueryResult[];
+
+    DB.prepare(
+      `
+              DELETE FROM mobs
+              WHERE id = :id AND targetTick = :currentTick
+          `
+    ).run({ id: this.id, currentTick: this.current_tick });
 
     for (const element of result) {
       switch (element.potionType) {
@@ -786,9 +794,42 @@ export class Mob {
   static effectsSQL = `
         CREATE TABLE mobEffects (
             id TEXT,
-            potionType TEXT,
+            attribute TEXT,
+            delta INT,
             targetTick INTEGER,
             FOREIGN KEY (id) REFERENCES mobs (id) ON DELETE SET NULL 
         );
     `;
+
+  static viewSQL = `
+    CREATE VIEW mobView AS (
+        SELECT m.id,
+          m.action_type,
+          m.subtype,
+          m.name,
+          m.gold,
+          m.health,
+          m.maxHealth,
+          m.attack + COALESCE(
+            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'attack' ORDER BY e.target_tick DESC LIMIT 1)
+            , 0),
+          m.speed + COALESCE(
+            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'speed' ORDER BY e.target_tick DESC LIMIT 1)
+            , 0),
+          m.position_x,
+          m.position_y,
+          m.carrying_id,
+          m.path,
+          m.target_x,
+          m.target_y,
+          m.current_action,
+          m.satiation,
+          m.max_energy,
+          m.energy,
+          m.social,
+          m.community_id,
+          m.house_id
+        FROM mobs AS m
+    );
+  `;
 }
