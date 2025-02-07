@@ -25,7 +25,6 @@ variable "supabase_access_token" {
 variable "supabase_db_pass" {
   description = "Supabase database password"
   type        = string
-  sensitive   = true
 }
 
 variable "supabase_organization_id" {
