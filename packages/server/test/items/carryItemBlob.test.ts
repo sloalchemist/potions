@@ -2,12 +2,14 @@ import { commonSetup, world, itemGenerator } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Mob } from '../../src/mobs/mob';
 import { DB } from '../../src/services/database';
+import { Community } from '../../src/community/community';
 import { Carryable } from '../../src/items/carryable';
 import { Item } from '../../src/items/item';
 import { Coord } from '@rt-potion/common';
 
 beforeEach(() => {
   commonSetup();
+  Community.makeVillage('blobs', 'Blobby town');
   mobFactory.loadTemplates(world.mobTypes);
 });
 
@@ -18,8 +20,8 @@ describe('Carrying Item Tests', () => {
       const potionPosition: Coord = { x: 1, y: 1 };
 
       // Create blob mob
-      mobFactory.makeMob('blob', position1, '3', 'testBlob');
-      const blobMob = Mob.getMob('3');
+      mobFactory.makeMob('blob', position1, '1', 'testBlob');
+      const blobMob = Mob.getMob('1');
       expect(blobMob).toBeDefined();
 
       // Create potion

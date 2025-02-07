@@ -2,12 +2,14 @@ import { commonSetup, world, itemGenerator } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Mob } from '../../src/mobs/mob';
 import { DB } from '../../src/services/database';
+import { Community } from '../../src/community/community';
 import { Carryable } from '../../src/items/carryable';
 import { Item } from '../../src/items/item';
 import { Coord } from '@rt-potion/common';
 
 beforeEach(() => {
   commonSetup();
+  Community.makeVillage('fighters', 'Fighters guild');
   mobFactory.loadTemplates(world.mobTypes);
 });
 
@@ -18,8 +20,8 @@ describe('Carrying Item Tests', () => {
       const potionPosition: Coord = { x: 1, y: 1 };
 
       // Create fighter mob
-      mobFactory.makeMob('fighter', position1, '3', 'testFighter');
-      const fighterMob = Mob.getMob('3');
+      mobFactory.makeMob('fighter', position1, '1', 'testFighter');
+      const fighterMob = Mob.getMob('1');
       expect(fighterMob).toBeDefined();
 
       // Create potion
