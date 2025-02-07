@@ -999,11 +999,11 @@
           },
           {
             "name": "potion_subtype",
-            "value": ""
-          }
-        ],
-        "interactions": [
-          {
+            "value": 0
+        }
+    ],
+    "interactions": [
+        {
             "description": "Add Ingredient",
             "action": "add_ingredient",
             "while_carried": false,
