@@ -17,7 +17,7 @@ beforeEach(() => {
 
 describe('Item Giving Tests', () => {
   describe('Player and Fighter Item Exchange', () => {
-    test('Should  allow item exchange between player and fighter mob', () => {
+    test('Should allow item exchange between player and fighter mob', () => {
       const position1: Coord = { x: 0, y: 0 };
       const position2: Coord = { x: 1, y: 1 };
       const potionPosition: Coord = { x: 2, y: 2 };
