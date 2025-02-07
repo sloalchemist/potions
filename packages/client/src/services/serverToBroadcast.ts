@@ -6,6 +6,8 @@ import {
   DestroyMobData,
   DoingData,
   DropItemData,
+  StashItemData,
+  UnstashItemData,
   GiveItemData,
   ItemChangeData,
   MobChangeData,
@@ -69,6 +71,18 @@ export function setupBroadcast(
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
     item.drop(world, mob, data.position);
+  }
+
+  function handleStashItem(data: StashItemData) {
+    const item = world.items[data.item_key];
+    const mob = world.mobs[data.mob_key];
+    item.stash(world, mob);
+  }
+
+  function handleUnstashItem(data: UnstashItemData) {
+    const item = world.items[data.item_key];
+    const mob = world.mobs[data.mob_key];
+    item.unstash(world, mob);
   }
 
   function handleDoing(data: DoingData) {
@@ -179,6 +193,12 @@ export function setupBroadcast(
         case 'drop_item':
           handleDropItem(broadcastItem.data as DropItemData);
           break;
+        case 'stash_item':
+          console.log(broadcastItem.data as StashItemData, "BROADCAST STASH ITEM")
+          handleStashItem(broadcastItem.data as StashItemData)
+          break;
+        case 'unstash_item':
+          handleUnstashItem(broadcastItem.data as UnstashItemData)
         case 'doing':
           handleDoing(broadcastItem.data as DoingData);
           break;

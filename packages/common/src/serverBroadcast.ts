@@ -17,6 +17,17 @@ export type DropItemData = {
   mob_key: string;
   position: Coord;
 };
+
+export type StashItemData = {
+  item_key: string;
+  mob_key: string;
+}
+
+export type UnstashItemData = {
+  item_key: string;
+  mob_key: string;
+}
+
 export type DoingData = { id: string; action: string };
 export type MoveData = { id: string; target: Coord; path: Coord[] };
 export type DestroyMobData = { id: string };
@@ -41,6 +52,8 @@ export type BroadcastData =
       type: 'drop_item';
       data: DropItemData;
     }
+  | { type: 'stash_item'; data: StashItemData }
+  | { type: 'unstash_item'; data: UnstashItemData }
   | { type: 'doing'; data: DoingData }
   | { type: 'move'; data: MoveData }
   | { type: 'destroy_mob'; data: DestroyMobData }
