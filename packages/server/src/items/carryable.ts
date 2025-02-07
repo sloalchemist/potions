@@ -87,6 +87,7 @@ export class Carryable {
   stash(mob: Mob) : boolean {
     const carriedItem = mob.carrying;
 
+    console.log("stash hit")
     // carriedItem must exist and === item.id
     if (!carriedItem || carriedItem.id !== this.item.id){
       return false
@@ -109,31 +110,33 @@ export class Carryable {
     return true
   }
 
-  // unstash stored items, swtiches carried item with stored item if carried exists
+  // unstash stored items (drops at feet), swtiches carried item with stored item if carried exists
   unstash(mob: Mob): void {
-    const carriedItem = mob.carrying;
+    if (mob.position) {
+      const position = Item.findEmptyPosition(mob.position);
 
-    // carriedItem must exist and === item.id
-    if (carriedItem){
-      DB.prepare(`
-        UPDATE items 
-        SET stored_by = :mobId,
-            position_x = NULL,
-            position_y = NULL
-        WHERE id = :itemId
-      `).run({
-        mobId: mob.id,
-        itemId: carriedItem.id
+      DB.prepare(
+        `
+                UPDATE items
+                SET position_x = :position_x, position_y = :position_y, stored_by = NULL
+                WHERE id = :item_id;
+                `
+      ).run({
+        item_id: this.item.id,
+        position_x: position.x,
+        position_y: position.y
       });
 
-      mob.carrying = undefined;
+      this.item.position = position;
+    } else {
+      throw new Error('Mob has no position');
     }
-    
-    mob.carrying = this.item;
-      
-    pubSub.pickupItem(this.item.id, mob.id);
-  }
+    if (!this.item.position) {
+      throw new Error('Item has no position');
+    }
 
+    pubSub.dropItem(this.item.id, mob.id, this.item.position);
+  }
   
 
   static validateNoOrphanedItems(): void {
@@ -142,7 +145,7 @@ export class Carryable {
         SELECT COUNT(*) as orphans
         FROM items
         LEFT JOIN mobs ON mobs.carrying_id = items.id
-        WHERE mobs.id IS NULL AND items.position_x IS NULL AND items.position_y IS NULL
+        WHERE mobs.id IS NULL AND items.position_x IS NULL AND items.position_y IS NULL AND items.stored_by == NULL
         `
     ).get() as { orphans: number };
 
