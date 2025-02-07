@@ -18,8 +18,8 @@ describe('Carrying Item Tests', () => {
       const potionPosition: Coord = { x: 1, y: 1 };
 
       // Create fighter mob
-      mobFactory.makeMob('fighter', position1, '1', 'testFighter');
-      const fighterMob = Mob.getMob('1');
+      mobFactory.makeMob('fighter', position1, '3', 'testFighter');
+      const fighterMob = Mob.getMob('3');
       expect(fighterMob).toBeDefined();
 
       // Create potion
