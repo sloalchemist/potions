@@ -4,10 +4,10 @@ import { Use } from './use';
 
 export class EnterPortal implements Use {
   key: string;
-  worlds: string[]; 
+  worlds: string[];
   constructor() {
     this.key = 'enter';
-    this.worlds = ["Valoron", "Oozon"]
+    this.worlds = ['Valoron', 'Oozon'];
   }
 
   description(_mob: Mob, _item: Item): string {
@@ -37,17 +37,15 @@ export class EnterPortal implements Use {
     });
   }
 
-  
-
   private teleportToWorld(mob: Mob, world: string): void {
     const worldDestinations: Record<string, { x: number; y: number }> = {
       Oozon: { x: 5, y: 5 },
-      Valoron: { x: 50, y: 50 },
+      Valoron: { x: 50, y: 50 }
     };
 
     if (worldDestinations[world]) {
-     // mob.changePosition(mob.world, worldDestinations[world]);
+      // mob.changePosition(mob.world, worldDestinations[world]);
       mob.sendMessage(`You have entered ${world}!`);
     }
-  } 
+  }
 }
