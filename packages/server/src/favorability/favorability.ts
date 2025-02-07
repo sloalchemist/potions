@@ -42,11 +42,15 @@ export class Favorability {
     return prompt;
   }
   /**
+   * Combines both the mood index and conversation score from the LLM into one final increase/decrease
+   * in favorability as a result of the conversation.
    * 
-   * @param target_mob 
-   * @param conversation 
+   * @param target_mob The target of the conversation
+   * @param conversation_score The conversation score given by the LLM
    */
-  static aggConversationScore(target_mob: Mob, conversation: String) {
+  static aggConversationScore(target_mob: Mob, conversation_score: number) {
+    var index = this.getMoodIndex(target_mob);
 
+    return index + conversation_score;
   }
 }

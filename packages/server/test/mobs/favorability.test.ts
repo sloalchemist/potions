@@ -33,8 +33,14 @@ describe('Favorability Tests', () => {
     var testMob = Mob.getMob('testBlob')
     expect(testMob).not.toBeUndefined()
 
+    // test the initial score is correct
     const score = Favorability.getMoodIndex(testMob!)
     expect(score).toBeCloseTo(1)
+
+    // test the aggregation score is correct (assume LLM gave score of 2.5)
+    const score2 = Favorability.aggConversationScore(testMob!, 2.5)
+    expect(score2).toBeCloseTo(3.5)
+    
   })
 });
 
