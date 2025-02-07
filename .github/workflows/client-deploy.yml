@@ -10,6 +10,8 @@ jobs:
   build:
     name: Build Client
     runs-on: ubuntu-latest
+    permissions:
+        contents: write
     environment: github-pages
 
     steps:
