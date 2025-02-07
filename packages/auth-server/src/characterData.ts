@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 
 const characterData = async (req: Request, res: Response) => {
   const id = req.params.Id;
-  // console.log('Id:', id);
   const { current_world_id, health, name, gold } = req.body;
   if (!id || !current_world_id || !health || !name || gold === undefined) {
     return res.status(400).json({ error: 'Missing required fields.' });
