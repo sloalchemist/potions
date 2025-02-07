@@ -1,6 +1,8 @@
 // actionsConfig.ts
 import { Pickup } from './pickup';
 import { Drop } from './drop';
+import { Stash } from './stash';
+import { Unstash } from './unstash';
 import { Smash } from './smash';
 import { BottlePotion } from './cauldron/bottlePotion';
 import { Drink } from './drink';
@@ -23,6 +25,8 @@ import { Use } from './use';
 const uses = [
   Pickup,
   Drop,
+  Stash,
+  Unstash,
   Smash,
   BottlePotion,
   Drink,
