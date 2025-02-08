@@ -60,7 +60,7 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', 'static/valoron-background.png');
+    this.load.image('background', 'static/valoron-background.jpg');
 
     this.load.atlas(
       'global_atlas',
