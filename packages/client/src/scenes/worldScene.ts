@@ -60,12 +60,12 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', 'static/background.png');
+    this.load.image('background', 'static/fire_world_background.jpg');
 
     this.load.atlas(
       'global_atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      'static/fire_world_global.png',
+      'static/fire_world-atlas.json'
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -75,7 +75,7 @@ export class WorldScene extends Phaser.Scene {
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
     this.load.json('global_data', 'static/global.json');
-    this.load.json('world_specific_data', 'static/world_specific.json');
+    this.load.json('fire_world_specific_data', 'static/fire_world_specific.json');
   }
 
   loadAnimations(
@@ -92,7 +92,7 @@ export class WorldScene extends Phaser.Scene {
 
     this.anims.create({
       key: `foam`,
-      frames: this.anims.generateFrameNames('global_atlas', {
+      frames: this.anims.generateFrameNames('fire_world-atlas', {
         start: 1,
         end: 8,
         prefix: `foam-`
@@ -233,7 +233,7 @@ export class WorldScene extends Phaser.Scene {
   create() {
     const globalData = parseWorldFromJson(
       this.cache.json.get('global_data'),
-      this.cache.json.get('world_specific_data')
+      this.cache.json.get('fire_world_specific_data')
     );
 
     console.log('setting up world', needsAnimationsLoaded);

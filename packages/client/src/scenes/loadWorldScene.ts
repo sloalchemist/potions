@@ -47,9 +47,9 @@ export class LoadWorldScene extends Phaser.Scene {
     this.load.image('frame', 'static/titleFrame.png');
     this.load.image('title', 'static/title.png');
     this.load.atlas(
-      'global-atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      'fire_world-atlas',
+      'static/fire_world_global.png',
+      'static/fire_world-atlas.json'
     );
   }
 
@@ -206,7 +206,7 @@ export class LoadWorldScene extends Phaser.Scene {
 
     this.anims.create({
       key: `test-idle`,
-      frames: this.anims.generateFrameNames('global-atlas', {
+      frames: this.anims.generateFrameNames('fire_world-atlas', {
         start: 1,
         end: 4,
         prefix: `player-idle-`
@@ -224,7 +224,7 @@ export class LoadWorldScene extends Phaser.Scene {
 
     // Position the character sprite
     this.playerSprite = this.add
-      .sprite(panelContentX, panelY + 100, 'global-atlas')
+      .sprite(panelContentX, panelY + 100, 'fire_world-atlas')
       .setScale(6);
     this.playerSprite.setOrigin(0, 0);
 
@@ -282,7 +282,7 @@ export class LoadWorldScene extends Phaser.Scene {
         this,
         'test-idle',
         animationKey,
-        'global-atlas',
+        'fire_world-atlas',
         {
           COLOR_1: eyeColor,
           COLOR_2: bellyColor,
