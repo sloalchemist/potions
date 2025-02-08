@@ -104,7 +104,7 @@ export class UxScene extends Phaser.Scene {
     this.recipeContainer = this.add.container(0, 40);
     this.effectsContainer = this.add.container(0, 40);
 
-    const tabWidth = 78;
+    const tabWidth = 68;
     const tabHeight = 40;
     const tabSpacing = 5;
 
@@ -175,9 +175,9 @@ export class UxScene extends Phaser.Scene {
     );
     this.potionTabButton = new TabButton(
       this,
-      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
+      tabX + 5 * (tabWidth + tabSpacing) + tabWidth / 2,
       tabY,
-      'HandBook',
+      'HandB.',
       () => this.showPotionsTab(),
       tabWidth,
       tabHeight
@@ -688,6 +688,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(true);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(true);
@@ -703,6 +704,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(true);
     this.nextButton?.setVisible(false);
@@ -710,7 +712,9 @@ export class UxScene extends Phaser.Scene {
   }
 
   // Update the styles of the tab buttons based on the active tab
-  updateTabStyles(activeTab: 'items' | 'chat' | 'stats' | 'mix' | 'fight' | 'handbook') {
+  updateTabStyles(
+    activeTab: 'items' | 'chat' | 'stats' | 'mix' | 'fight' | 'handbook'
+  ) {
     if (
       this.itemsTabButton &&
       this.chatTabButton &&
