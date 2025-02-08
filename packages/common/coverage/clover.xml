@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1738784082252" clover="3.2.0">
-  <project timestamp="1738784082252" name="All files">
+<coverage generated="1739050319533" clover="3.2.0">
+  <project timestamp="1739050319534" name="All files">
     <metrics statements="181" coveredstatements="173" conditionals="76" coveredconditionals="68" methods="25" coveredmethods="24" elements="282" coveredelements="265" complexity="0" loc="181" ncloc="181" packages="1" files="2" classes="2"/>
     <file name="coord.ts" path="/Users/Ryan/Documents/CSC369/potions/packages/common/src/coord.ts">
       <metrics statements="54" coveredstatements="53" conditionals="5" coveredconditionals="5" methods="11" coveredmethods="10"/>
