@@ -30,6 +30,7 @@ let chatCompanionCallback: (companions: Mob[]) => void;
 let lastInteractions: Interactions[] = [];
 let lastChatCompanions: Mob[] = [];
 let chatting: boolean = false;
+let inventoryCallback: (items: Item[]) => void;
 
 export let fantasyDate: FantasyDateI;
 
@@ -151,6 +152,12 @@ export function getCarriedItemInteractions(
     action: 'drop',
     item: item as Item,
     label: `Drop ${item.itemType.name}`
+  });
+  
+  interactions.push({
+    action: 'stash',
+    item: item as Item,
+    label: `Stash ${item.itemType.name}`
   });
 
   // give to nearby mobs
@@ -352,6 +359,12 @@ export function setInteractionCallback(
   callback: (interactions: Interactions[]) => void
 ) {
   interactionCallback = callback;
+}
+
+export function setInventoryCallback(
+  callback: (items: Item[]) => void
+) {
+  inventoryCallback = callback;
 }
 
 export function addNewHouse(scene: WorldScene, house: HouseI) {

@@ -418,17 +418,17 @@ export class AblyService implements PubSub {
     });
   }
 
-  public stashItem(item_key: string, mob_key: string): void {
+  public stashItem(item_key: string, mob_key: string, position: Coord): void {
     this.addToBroadcast({
       type: 'stash_item',
-      data: { item_key, mob_key }
+      data: { item_key, mob_key, position }
     });
   }
 
-  public unstashItem(item_key: string, mob_key: string): void {
+  public unstashItem(item_key: string, mob_key: string, position: Coord): void {
     this.addToBroadcast({
       type: 'unstash_item',
-      data: { item_key, mob_key }
+      data: { item_key, mob_key, position }
     });
   }
 

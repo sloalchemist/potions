@@ -98,22 +98,25 @@ export class Item extends Physical {
     // place in position determined by server
   }
 
-  stash(world: World, mob: Mob) {
+  stash(world: World, mob: Mob, position: Coord) {
     if (!this.carried_by){
       throw new Error("Must carry item being stashed");
     }
-    //console.log('dropping item', this.key, this.carried_by);
+    console.log('stashing item', this.key, this.carried_by);
     mob.carrying = undefined;
+    this.position = position;
+    world.removeItemFromGrid(this);
     this.position = null;
+    this.carried_by = undefined;
   }
 
-  unstash(world: World, mob: Mob) {
-    mob.carrying = this.key;
-    this.carried_by = mob.key;
-    if (this.position) {
-      world.removeItemFromGrid(this);
+  unstash(world: World, mob: Mob, position: Coord) {
+    if (!mob.position) {
+      throw new Error('Mob has no position');
     }
-    this.position = null;
+    this.carried_by = undefined;
+    this.position = position;
+    world.addItemToGrid(this);
   }
 
   tick(world: World, deltaTime: number) {

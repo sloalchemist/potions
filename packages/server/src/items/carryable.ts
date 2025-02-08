@@ -85,6 +85,10 @@ export class Carryable {
 
 // stash carried item into inventory
   stash(mob: Mob) : boolean {
+    if (!mob.position) {
+      return false
+    }
+    const position = Item.findEmptyPosition(mob.position);
     const carriedItem = mob.carrying;
 
     console.log("stash hit")
@@ -93,19 +97,22 @@ export class Carryable {
       return false
     }
 
-    DB.prepare(`
-      UPDATE items 
-      SET stored_by = :mobId,
-          position_x = NULL,
-          position_y = NULL
-      WHERE id = :itemId
-    `).run({
-      mobId: mob.id,
-      itemId: this.item.id
-    });
+    DB.transaction((mobId, itemId) => {
+      DB.prepare(`
+          UPDATE items 
+          SET stored_by = ?, position_x = NULL, position_y = NULL
+          WHERE id = ?
+      `).run(mobId, itemId);
+  
+      DB.prepare(`
+          UPDATE mobs
+          SET carrying_id = NULL
+          WHERE carrying_id = ? AND id = ?
+      `).run(itemId, mobId);
+    })(mob.id, this.item.id); 
   
     mob.carrying = undefined;
-    pubSub.destroy(this.item);
+    pubSub.stashItem(this.item.id, mob.id, position)
 
     return true
   }
@@ -135,7 +142,7 @@ export class Carryable {
       throw new Error('Item has no position');
     }
 
-    pubSub.dropItem(this.item.id, mob.id, this.item.position);
+    pubSub.unstashItem(this.item.id, mob.id, this.item.position);
   }
   
 

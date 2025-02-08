@@ -24,6 +24,10 @@ export class StubbedPubSub implements PubSub {
 
   destroy(_item: Item): void {}
 
+  stashItem(_item: string, _mobKey: string, _position: Coord) : void {}
+
+  unstashItem(_itemKey: string, _mobKey: string, _position: Coord): void {}
+
   changeHealth(_key: string, _health: number, _newValue: number): void {}
 
   changeEffect(

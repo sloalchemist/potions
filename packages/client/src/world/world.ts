@@ -23,12 +23,14 @@ export class World {
 
   mobs: Record<string, Mob> = {};
   items: Record<string, Item> = {};
+  storedItems: Record<string, Item> = {};
   houses: Record<string, SpriteHouse> = {};
 
   private pathFinder?: PathFinder;
 
   // constructor
   constructor() {}
+
 
   load(worldDescription: WorldDescription) {
     this.pathFinder = new PathFinder(
