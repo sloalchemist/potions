@@ -56,5 +56,3 @@ jobs:
       # Step 8: Run Unit Tests
       - name: Run Unit Tests
         run: pnpm test
-        env:
-          AUTH_SERVER_URL: ${{ secrets.AUTH_SERVER_URL }}
