@@ -96,7 +96,7 @@
         ],
         "interactions": [],
         "drops_item": "obsidian-shard"
-    },
+    }
     {
       "name": "Fence",
       "type": "fence",
