@@ -1,0 +1,659 @@
+{
+  "tiles": [],
+  "terrain_types": [],
+  "item_types": [
+    {
+      "name": "Heartbeet",
+      "type": "heart-beet",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#FF0000"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": [],
+      "description": "A vibrant red vegetable that is both nutritious and restorative."
+    },
+    {
+      "name": "Wall",
+      "type": "wall",
+      "item_group": "wall",
+      "layout_type": "wall",
+      "carryable": false,
+      "smashable": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 100
+        }
+      ],
+      "interactions": [],
+      "walkable": false,
+      "drops_item": "log",
+      "description": "A sturdy structure that blocks movement and provides protection."
+    },
+    {
+      "name": "Partial Wall",
+      "type": "partial-wall",
+      "carryable": false,
+      "walkable": false,
+      "smashable": true,
+      "attributes": [
+        {
+          "name": "complete",
+          "value": 3
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [],
+      "drops_item": "log",
+      "description": "An incomplete wall, requiring additional materials to finish."
+    },
+    {
+      "name": "Fence",
+      "type": "fence",
+      "item_group": "fence",
+      "layout_type": "fence",
+      "carryable": false,
+      "walkable": false,
+      "smashable": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 100
+        }
+      ],
+      "interactions": [],
+      "drops_item": "log",
+      "description": "A simple barrier to mark boundaries or restrict movement."
+    },
+    {
+      "name": "Gate",
+      "type": "gate",
+      "item_group": "fence",
+      "layout_type": "opens",
+      "carryable": false,
+      "walkable": true,
+      "smashable": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 100
+        }
+      ],
+      "interactions": [],
+      "open": false,
+      "description": "A movable barrier allowing controlled entry."
+    },
+    {
+      "name": "Door",
+      "type": "door",
+      "item_group": "wall",
+      "layout_type": "opens",
+      "carryable": false,
+      "smashable": true,
+      "walkable": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 100
+        }
+      ],
+      "interactions": [],
+      "description": "Just a door."
+    },
+    {
+      "name": "Tree",
+      "type": "tree",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "log",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ],
+      "description": "A tall, woody plant that occasionally drops logs."
+    },
+    {
+      "type": "heart-beet-plant",
+      "name": "Heartbeet plant",
+      "carryable": false,
+      "walkable": true,
+      "smashable": false,
+      "flat": true,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "heart-beet",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ],
+      "description": "A red root vegetable known for its restorative properties."
+    },
+    {
+      "type": "blueberry",
+      "name": "Blueberry",
+      "carryable": true,
+      "walkable": true,
+      "smashable": true,
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#0000FF"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "description": "A small, round fruit that grows in clusters on bushes."
+    },
+    {
+      "type": "blueberry-bush",
+      "name": "Blueberry bush",
+      "carryable": false,
+      "walkable": false,
+      "smashable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "blueberry",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ],
+      "description": "A shrub that produces small, sweet blueberries."
+    },
+    {
+      "name": "Log",
+      "type": "log",
+      "carryable": true,
+      "smashable": true,
+      "walkable": true,
+      "flat": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Start wall",
+          "action": "start_wall",
+          "while_carried": true
+        },
+        {
+          "description": "Build wall",
+          "action": "build_wall",
+          "while_carried": true,
+          "requires_item": "partial-wall"
+        }
+      ]
+    },
+    {
+      "name": "Portal",
+      "type": "portal",
+      "carryable": false,
+      "walkable": true,
+      "flat": true,
+      "interactions": [],
+      "on_tick": [ 
+        {
+          "action": "spawn_mob",
+          "parameters": {
+            "type": "blob",
+            "max": 1,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_mob",
+          "parameters": {
+            "type": "fighter",
+            "max": 1,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_mob",
+          "parameters": {
+            "type": "villager",
+            "max": 12,
+            "rate": 0.1
+          }
+        }
+      ],
+      "description": "A magical gateway that spawns mobs and allows travel between locations."
+    },
+    {
+      "name": "Potion stand",
+      "type": "potion-stand",
+      "carryable": false,
+      "smashable": true,
+      "walkable": false,
+      "attributes": [
+        {
+          "name": "items",
+          "value": 0
+        },
+        {
+          "name": "price",
+          "value": 10
+        },
+        {
+          "name": "gold",
+          "value": 0
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Add $item_name",
+          "action": "add_item",
+          "while_carried": false,
+          "permissions": {
+            "community": true,
+            "other": false
+          }
+        },
+        {
+          "description": "Get $item_name",
+          "action": "get_item",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "items",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
+        },
+        {
+          "description": "Raise price",
+          "action": "raise_price",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "price",
+              "value": 99,
+              "comparison": "less_than"
+            }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
+        },
+        {
+          "description": "Lower price",
+          "action": "lower_price",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "price",
+              "value": 1,
+              "comparison": "greater_than"
+            }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
+        },
+        {
+          "description": "Collect gold",
+          "action": "collect_gold",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "gold",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
+        },
+        {
+          "description": "Purchase potion",
+          "action": "purchase",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "items",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
+        },
+        {
+          "description": "Add $item_name",
+          "action": "add_item",
+          "while_carried": false
+        },
+        {
+          "description": "Raise price",
+          "action": "raise_price",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "price",
+              "value": 99,
+              "comparison": "less_than"
+            }
+          ]
+        },
+        {
+          "description": "Lower price",
+          "action": "lower_price",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "price",
+              "value": 1,
+              "comparison": "greater_than"
+            }
+          ]
+        },
+        {
+          "description": "Collect gold",
+          "action": "collect_gold",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "gold",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
+        },
+        {
+          "description": "Destroy stand",
+          "action": "destroy_stand",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "items",
+              "value": 0,
+              "comparison": "equals"
+            }
+          ]
+        }
+      ],
+      "show_price_at": {
+        "x": 7,
+        "y": -10
+      },
+      "description": "A stand that sells health potions."
+    },
+    {
+      "name": "Potion",
+      "type": "potion",
+      "carryable": true,
+      "smashable": true,
+      "walkable": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Quaff potion",
+          "action": "drink",
+          "while_carried": true
+        },
+        {
+          "description": "Create stand",
+          "action": "create_stand",
+          "while_carried": true
+        }
+      ],
+      "description": "A magical concotion"
+    },
+    {
+      "name": "Basket",
+      "type": "basket",
+      "carryable": false,
+      "templated": true,
+      "walkable": false,
+      "show_template_at": {
+        "x": 0,
+        "y": 7
+      },
+      "attributes": [
+        {
+          "name": "items",
+          "value": 0
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Get $item_name",
+          "action": "get_item",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "items",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
+        },
+        {
+          "description": "Add $item_name",
+          "action": "add_item",
+          "while_carried": false
+        }
+      ],
+      "description": "Stores items for the community."
+    },
+    {
+      "name": "Cauldron",
+      "type": "cauldron",
+      "carryable": false,
+      "walkable": false,
+      "attributes": [
+        {
+          "name": "ingredients",
+          "value": 0
+        },
+        {
+          "name": "potion_subtype",
+          "value": ""
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Add Ingredient",
+          "action": "add_ingredient",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "ingredients",
+              "value": 3,
+              "comparison": "less_than"
+            }
+          ]
+        },
+        {
+          "description": "Bottle Potion",
+          "action": "bottle_potion",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "ingredients",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
+        },
+        {
+          "description": "Dump Cauldron",
+          "action": "dump_cauldron",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "ingredients",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Gold",
+      "type": "gold",
+      "walkable": true,
+      "smashable": false,
+      "carryable": true,
+      "interactions": [],
+      "description": "money!!!"
+    }
+  ],
+  "mob_types": [
+    {
+      "name": "Blob",
+      "type": "blob",
+      "speaker": false,
+      "name_style": "monstrous",
+      "description": "A slimy, aggressive creature known for its strong attacks.",
+      "health": 100,
+      "speed": 0.6,
+      "attack": 40,
+      "gold": 25,
+      "community": "blobs",
+      "stubbornness": 20,
+      "bravery": 60,
+      "aggression": 80,
+      "industriousness": 40,
+      "adventurousness": 20,
+      "gluttony": 10,
+      "sleepy": 10,
+      "extroversion": 50
+    },
+    {
+      "name": "Villager",
+      "type": "villager",
+      "speaker": true,
+      "name_style": "norse-english",
+      "description": "A friendly inhabitant of the silverclaw community.",
+      "health": 10,
+      "speed": 0.5,
+      "attack": 5,
+      "gold": 0,
+      "community": "silverclaw",
+      "stubbornness": 20,
+      "bravery": 5,
+      "aggression": 5,
+      "industriousness": 40,
+      "adventurousness": 10,
+      "gluttony": 50,
+      "sleepy": 80,
+      "extroversion": 50
+    },
+    {
+      "name": "Player",
+      "type": "player",
+      "speaker": true,
+      "description": "The player",
+      "name_style": "norse-english",
+      "health": 100,
+      "speed": 2.5,
+      "attack": 5,
+      "gold": 0,
+      "community": "alchemists",
+      "stubbornness": 20,
+      "bravery": 5,
+      "aggression": 5,
+      "industriousness": 40,
+      "adventurousness": 10,
+      "gluttony": 50,
+      "sleepy": 80,
+      "extroversion": 50
+    },
+    {
+      "name": "Fighter",
+      "type": "fighter",
+      "speaker": true,
+      "name_style": "french-roman",
+      "description": "A brave combatant, loyal to the fighters guild.",
+      "health": 100,
+      "speed": 0.75,
+      "attack": 100,
+      "gold": 0,
+      "community": "fighters",
+      "stubbornness": 20,
+      "bravery": 60,
+      "aggression": 80,
+      "industriousness": 40,
+      "adventurousness": 20,
+      "gluttony": 10,
+      "sleepy": 10,
+      "extroversion": 50
+    }
+  ],
+  "portals": [],
+  "communities": [],
+  "alliances": [],
+  "houses": [],
+  "items": [],
+  "containers": [],
+  "regions": []
+}
+

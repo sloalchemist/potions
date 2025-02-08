@@ -1,0 +1,16 @@
+{
+  "name": "@rt-potion/json-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/generator.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": " tsc src/generator.ts --lib es2015,esnext,dom && mv src/generator.js src/generator.cjs && node src/generator.cjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.13.1"
+  }
+}
