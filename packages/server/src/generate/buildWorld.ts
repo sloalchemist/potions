@@ -9,7 +9,7 @@ import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
 import globalData from '../../data/global.json';
-import worldSpecificData from '../../data/world_specific.json';
+import fireWorldSpecifcData from '../../data/fire_world_specific.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
@@ -32,7 +32,7 @@ async function main() {
   // Load global data and parse
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
-    worldSpecificData as Partial<ServerWorldDescription>;
+    fireWorldSpecifcData as Partial<ServerWorldDescription>;
 
   const worldDescription: ServerWorldDescription = {
     ...globalDescription,
