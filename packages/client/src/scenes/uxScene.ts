@@ -9,6 +9,7 @@ import {
   setChatCompanionCallback,
   setChatting,
   setInteractionCallback,
+  setInventoryCallback,
   setResponseCallback
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
@@ -285,6 +286,10 @@ export class UxScene extends Phaser.Scene {
       );
       setChatCompanionCallback((companions: Mob[]) =>
         this.setChatCompanions(companions)
+      );
+
+      setInventoryCallback((items: Item[]) =>
+        this.setInventory(items)
       );
       /*this.setChatOptions([
                 { label: 'Hello there chief, I am the lord of the world.', callback: () => speak('Hello there chief, I am the lord of the world.') },
