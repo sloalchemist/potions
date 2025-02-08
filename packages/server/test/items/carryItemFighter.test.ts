@@ -37,7 +37,7 @@ describe('Carrying Item Tests', () => {
 
       // Player picks up the potion
       carryablePotion!.pickup(fighterMob!);
-      expect(fighterMob!.carrying).toBeDefined(); // Blob should have the potion
+      expect(fighterMob!.carrying).toBeDefined(); // Fighter should have the potion
     });
   });
 });
