@@ -13,7 +13,7 @@ describe('EnterPortal', () => {
     testItem = {} as Item;
   });
 
-  test('should return false because no interaction between worlds', () => {
+  test('should return true because there is an interaction between worlds', () => {
     const result = enterPortal.interact(testMob, testItem);
     expect(result).toBe(true);
   });
