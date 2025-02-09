@@ -28,6 +28,9 @@ import {
 } from '../authMarshalling';
 import { applyCheat } from '../developerCheats';
 
+//must match MAINTAIN_WORLD_OPTION in client/src/services/serverToBroadcast.ts
+const MAINTAIN_WORLD_OPTION = 'NO_CHANGE';
+
 export class AblyService implements PubSub {
   private ably: Ably.Realtime;
   private userMembershipChannel: Types.RealtimeChannelCallbacks;
@@ -64,10 +67,17 @@ export class AblyService implements PubSub {
     });
 
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
-      // console.log(this.userDict);
+      //if MAINTAIN_WORLD_OPTION is passed from client, do not change world
+      const target_world_id =
+        presenceMsg.data.target_world_id === MAINTAIN_WORLD_OPTION
+          ? this.worldID
+          : presenceMsg.data.target_world_id;
+      console.log('Target World Received:', presenceMsg.data.target_world_id);
+      console.log('Target World Being Sent:', target_world_id);
       this.sendPersistenceRequest(
         presenceMsg.clientId,
-        this.userDict.get(presenceMsg.clientId)
+        this.userDict.get(presenceMsg.clientId),
+        target_world_id
       );
       this.checkConnectedClients();
       console.log(
@@ -444,7 +454,11 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(mob_key, 'player_attacks', { attacks });
   }
 
-  public sendPersistenceRequest(username: string, char_id: number) {
+  public sendPersistenceRequest(
+    username: string,
+    char_id: number,
+    target_world_id: number
+  ) {
     console.log('Updating state info for', username);
     const player = Mob.getMob(username);
     if (!player) {
@@ -464,6 +478,7 @@ export class AblyService implements PubSub {
     console.log('\t Persist player attack:', attack_for_update);
     // Update existing character data
     const playerData: PlayerData = {
+      current_world_id: target_world_id,
       health: health_for_update,
       name: player.name,
       gold: gold_for_update,

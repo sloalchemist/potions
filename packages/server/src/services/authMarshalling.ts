@@ -10,6 +10,7 @@ const authUrl = process.env.AUTH_SERVER_URL;
 console.log('Auth-Server URL:', authUrl);
 
 export interface PlayerData {
+  current_world_id: number;
   health: number;
   name: string;
   gold: number;
