@@ -410,6 +410,10 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(target, 'chat_close', { target: mob_key });
   }
 
+  public closeFight(mob_key: string, target: string): void {
+    this.publishMessageToPlayer(target, 'fight_close', { target: mob_key });
+  }
+
   //TODO: estrada check out kll function to send user data
   public kill(key: string): void {
     this.addToBroadcast({ type: 'destroy_mob', data: { id: key } });
@@ -445,6 +449,12 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(mob_key, 'player_responses', { responses });
   }
 
+  public playerAttacks(mob_key: string, attacks: string[]) {
+    console.log('player attacks', mob_key, attacks);
+    this.publishMessageToPlayer(mob_key, 'player_attacks', { attacks });
+  }
+
+  public sendPersistenceRequest(username: string, char_id: number) {
   public sendPersistenceRequest(
     username: string,
     char_id: number,
@@ -560,10 +570,29 @@ export class AblyService implements PubSub {
       }
     });
 
+    subscribeToPlayerChannel('fight_request', (data) => {
+      console.log('fight request', data);
+      const player = Mob.getMob(username);
+      const fightTarget = Mob.getMob(data.mob_key);
+      if (player && fightTarget) {
+        fightTarget.fightRequest(player);
+      }
+    });
+
     subscribeToPlayerChannel('speak', (data) => {
       const player = Mob.getMob(username);
       if (player) {
         conversationTracker.addTurnFromOptions(player, data.response);
+      }
+    });
+
+    subscribeToPlayerChannel('fight', (data) => {
+      const player = Mob.getMob(username);
+      if (player) {
+        // TODO: replace following two lines when FightTracker class is implemented
+        console.log('test fight', data);
+        this.closeFight(player.id, player.id);
+        // fightTracker.addTurnFromOptions(player, data.attack);
       }
     });
 

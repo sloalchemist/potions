@@ -16,8 +16,29 @@ export function requestChat(mob: Mob) {
   publishPlayerMessage('chat_request', { mob_key: mob.key });
 }
 
+// Helper function for both player and NPC speech
+function showSpeech(message: string, response?: number) {
+  if (response !== undefined) {
+    publishPlayerMessage('speak', { response: response });
+  }
+}
+
+export function requestFight(mob: Mob) {
+  publishPlayerMessage('fight_request', { mob_key: mob.key });
+}
+
+// Function for NPCs (includes a response)
 export function speak(message: string, response: number) {
-  publishPlayerMessage('speak', { response: response });
+  showSpeech(message, response);
+}
+
+// Function for players (only takes a message)
+export function chatPlayer(message: string) {
+  showSpeech(message);
+}
+
+export function fight(message: string, attack: number) {
+  publishPlayerMessage('fight', { attack });
   const player = world.mobs[publicCharacterId] as SpriteMob;
   player.showSpeechBubble(message, true);
 }
