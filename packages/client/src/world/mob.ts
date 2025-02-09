@@ -56,34 +56,10 @@ export class Mob extends Physical {
     delete world.mobs[this.key];
   }
 
-  /* changePosition(world: World, newPosition: Coord) {
+  changePosition(world: World, newPosition: Coord) {
     //console.log('changePosition', this.position, newPosition);
     world.moveMob(this, newPosition);
     this.position = newPosition;
-  } 
- */
-  changePosition(world: World, newPosition: Coord) {
-    if (this.position) {
-      world.removeMobFromGrid(this);
-    }
-    this.position = newPosition;
-    world.addMobToGrid(this);
-  }
-
-  sendMessage(message: string) {
-    console.log(`${this.name}: ${message}`);
-    // Replace with actual UI message display method if available
-  }
-
-  showMenu(
-    prompt: string,
-    options: string[],
-    callback: (selection: string) => void
-  ) {
-    console.log(`${prompt} ${options.join(', ')}`);
-    // Simulate user selection (replace with actual UI implementation)
-    const selectedOption = options[0]; // Mock selecting the first option
-    callback(selectedOption);
   }
 
   tick(world: World, deltaTime: number) {

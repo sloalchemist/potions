@@ -800,20 +800,4 @@ export class Mob {
             FOREIGN KEY (id) REFERENCES mobs (id) ON DELETE SET NULL 
         );
     `;
-
-  sendMessage(message: string) {
-    console.log(`${this.name}: ${message}`);
-    // Replace with actual UI message display method if available
-  }
-
-  showMenu(
-    prompt: string,
-    options: string[],
-    callback: (selection: string) => void
-  ) {
-    console.log(`${prompt} ${options.join(', ')}`);
-    // Simulate user selection (replace with actual UI implementation)
-    const selectedOption = options[0]; // Mock selecting the first option
-    callback(selectedOption);
-  }
 }
