@@ -7,7 +7,7 @@ export function hexStringToNumber(hexString: string): number {
   return parseInt(hexString, 16);
 }
 
-export function combineHexColors(hex1: string, hex2: string, weight1: number,weight2:number): string {
+export function combineHexColors(hex1: string, hex2: string, weight1: number, weight2:number): string {
   // Convert hex to RGB
   const hexToRgb = (hex: string): { r: number; g: number; b: number } => {
     if (hex.startsWith('#')) {
