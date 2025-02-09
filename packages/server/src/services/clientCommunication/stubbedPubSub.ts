@@ -24,6 +24,8 @@ export class StubbedPubSub implements PubSub {
 
   move(_key: string, _target: Coord, _path: Coord[]): void {}
 
+  showPortalMenu(_key: string): void {}
+
   destroy(_item: Item): void {}
 
   changeHealth(_key: string, _health: number, _newValue: number): void {}

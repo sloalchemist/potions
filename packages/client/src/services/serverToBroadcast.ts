@@ -13,7 +13,8 @@ import {
   PickupItemData,
   PortalData,
   SetDatetimeData,
-  SpeakData
+  SpeakData,
+  ShowPortalMenuData
 } from '@rt-potion/common';
 import { Types } from 'ably';
 import { focused } from '../main';
@@ -159,6 +160,12 @@ export function setupBroadcast(
     setDate(data.date);
   }
 
+  function handleShowPortalMenu(data: ShowPortalMenuData) {
+    if (data.mob_key === publicCharacterId) {
+      scene.scene.launch('PortalMenuScene');
+    }
+  }
+
   // Subscribe to broadcast and dispatch events using switch
   broadcast_channel.subscribe('tick', (message: Types.Message) => {
     if (gameState !== 'stateInitialized') return;
@@ -207,6 +214,9 @@ export function setupBroadcast(
           break;
         case 'set_datetime':
           handleSetDatetime(broadcastItem.data as SetDatetimeData);
+          break;
+        case 'show_portal_menu':
+          handleShowPortalMenu(broadcastItem.data);
           break;
         default:
           console.error(

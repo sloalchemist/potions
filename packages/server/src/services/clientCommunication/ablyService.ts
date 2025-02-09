@@ -232,6 +232,13 @@ export class AblyService implements PubSub {
     });
   }
 
+  public showPortalMenu(key: string): void {
+    this.addToBroadcast({
+      type: 'show_portal_menu',
+      data: { mob_key: key }
+    });
+  }
+
   public destroy(item: Item): void {
     if (!item.position) {
       const mobID = Mob.findCarryingMobID(item.id);
