@@ -454,7 +454,6 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(mob_key, 'player_attacks', { attacks });
   }
 
-  public sendPersistenceRequest(username: string, char_id: number) {
   public sendPersistenceRequest(
     username: string,
     char_id: number,
