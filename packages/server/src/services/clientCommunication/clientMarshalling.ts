@@ -154,6 +154,7 @@ function itemDataToItem(
     position: { x: itemData.position_x, y: itemData.position_y },
     lock: itemData.lock,
     house: itemData.house_id,
+    ownedBy: itemData.owned_by,
     carried_by: Mob.findCarryingMobID(itemData.id),
     attributes: itemAttributeData.reduce(
       (acc, attribute) => {
@@ -236,6 +237,7 @@ export function getItemAbly(key: string): ItemI {
             items.position_y,
             items.house_id,
             items.lock,
+            items.owned_by,
             mobs.id carrying_id
         FROM items
         LEFT JOIN mobs ON mobs.carrying_id = items.id
