@@ -225,7 +225,7 @@ export class Mob {
   findNearbyMobIDs(radius: number): string[] {
     const query = `
               SELECT id
-              FROM mobs
+              FROM mobView
               WHERE ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :radiusSquared
               AND id != :id
           `;
@@ -249,13 +249,13 @@ export class Mob {
     const query = `
             SELECT 
                 id
-            FROM mobs
+            FROM mobView
             WHERE NOT EXISTS (
                 SELECT 1 FROM alliances 
                 WHERE 
-                    (alliances.community_1_id = :community_id AND alliances.community_2_id = mobs.community_id) OR
-                    (alliances.community_2_id = :community_id AND alliances.community_1_id = mobs.community_id) OR
-                    mobs.community_id = :community_id
+                    (alliances.community_1_id = :community_id AND alliances.community_2_id = mobView.community_id) OR
+                    (alliances.community_2_id = :community_id AND alliances.community_1_id = mobView.community_id) OR
+                    mobView.community_id = :community_id
             )
             AND ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :maxDistanceSquared
             ORDER BY ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) ASC
@@ -414,6 +414,12 @@ export class Mob {
   }
 
   changeEffect(delta: number, duration: number, attribute: string): void {
+    // this function now just inserts a delta in mobEffects if there
+    // is not an effect currently active under the passed attribute.
+    // if this function is called with a negative duration, we delete
+    // all rows with this mob id and the passed attribute because
+    // checkTickReset knows when to delete an effect (to take away the delta)
+
     type QueryResult = {
       potionType: string;
       targetTick: number;
@@ -423,7 +429,7 @@ export class Mob {
     let value = DB.prepare(
       `
       SELECT ${attribute}
-      FROM mobs
+      FROM mobView
       WHERE id = :id 
       `
     ).get({
@@ -452,6 +458,7 @@ export class Mob {
           value = this.attack;
       }
 
+      // CHANGE THIS TO JUST INSERT A ROW IN MOBEFFECTS THAT INCLUDES THE DELTA
       DB.prepare(
         `
         UPDATE mobs
@@ -477,6 +484,47 @@ export class Mob {
 
     pubSub.changeEffect(this.id, attribute, delta, value);
     pubSub.changeTargetTick(this.id, attribute, duration, tick);
+  }
+  
+  changeEffect2(delta: number, duration: number, attribute: string): void {
+    // this function now just inserts a delta in mobEffects if there
+    // is not an effect currently active under the passed attribute.
+    // if this function is called with a negative duration, we delete
+    // all rows with this mob id and the passed attribute because
+    // checkTickReset knows when to delete an effect (to take away the delta)
+    type QueryResult = {
+      potionType: string;
+      targetTick: number;
+    };
+    const targetTick = this.current_tick + duration;
+
+    // put in new row into mobEffects with the delta
+    DB.prepare(
+      `
+      INSERT INTO mobEffects (id, attribute, delta, targetTick)
+      VALUES (:id, :attribute, :delta, :targetTick)
+      `
+    ).run({
+      id: this.id,
+      attribute: attribute,
+      delta: delta,
+      targetTick: targetTick
+    });
+
+    // grab the value after dynamic view updates with new delta
+    let value = DB.prepare(
+      `
+      SELECT ${attribute}
+      FROM mobView
+      WHERE id = :id 
+      `
+    ).get({
+      id: this.id
+    }) as number;
+
+
+    pubSub.changeEffect(this.id, attribute, delta, value);
+    pubSub.changeTargetTick(this.id, attribute, duration, targetTick);
   }
 
   private checkTickReset(): void {
@@ -523,8 +571,8 @@ export class Mob {
       `
             SELECT houses.id, top_left_x, top_left_y, width, height, houses.community_id
             FROM houses
-            JOIN mobs ON mobs.house_id = houses.id
-            WHERE mobs.id = :id
+            JOIN mobView ON mobView.house_id = houses.id
+            WHERE mobView.id = :id
         `
     ).get({ id: this.id }) as HouseData;
     return houseData
@@ -611,7 +659,7 @@ export class Mob {
     const mob = DB.prepare(
       `
             SELECT id
-            FROM mobs
+            FROM mobView
             WHERE carrying_id = :item_id
         `
     ).get({ item_id }) as { id: string };
@@ -626,7 +674,7 @@ export class Mob {
     const count = DB.prepare(
       `
             SELECT COUNT(*) as count
-            FROM mobs
+            FROM mobView
             WHERE action_type = :type
         `
     ).get({ type }) as { count: number };
@@ -642,7 +690,7 @@ export class Mob {
     const count = DB.prepare(
       `
         SELECT COUNT(*) as count
-        FROM mobs
+        FROM mobView
         WHERE community_id = :community_id AND
           target_x = :x AND
           target_y = :y AND
@@ -656,7 +704,7 @@ export class Mob {
     const mob = DB.prepare(
       `
             SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id
-            FROM mobs
+            FROM mobView
             WHERE id = :id
         `
     ).get({ id: key }) as MobData;
@@ -711,8 +759,8 @@ export class Mob {
             SELECT items.id
             FROM item_attributes
             JOIN items ON item_attributes.item_id = items.id
-            JOIN mobs ON mobs.community_id = items.owned_by
-            WHERE mobs.id = :id and item_attributes.attribute = 'items'
+            JOIN mobView ON mobView.community_id = items.owned_by
+            WHERE mobView.id = :id and item_attributes.attribute = 'items'
         `
     ).all({ id: this.id }) as { id: string }[];
 
@@ -725,8 +773,8 @@ export class Mob {
             SELECT items.id
             FROM item_attributes
             JOIN items ON item_attributes.item_id = items.id
-            JOIN mobs ON mobs.community_id = items.owned_by
-            WHERE item_attributes.attribute = 'items' AND mobs.id = :id
+            JOIN mobView ON mobView.community_id = items.owned_by
+            WHERE item_attributes.attribute = 'items' AND mobView.id = :id
         `
     ).get({ type, id: this.id }) as { id: string };
     return itemData ? itemData.id : undefined;
@@ -741,7 +789,7 @@ export class Mob {
       `
             SELECT 
                 id
-            FROM mobs;
+            FROM mobView;
             `
     ).all() as { id: string }[];
     return result.map((row) => row.id);
