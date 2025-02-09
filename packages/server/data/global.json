@@ -533,6 +533,10 @@
         {
           "name": "potion_subtype",
           "value": 0
+        },
+        {
+          "name": "color_weight",
+          "value": 1
         }
       ],
       "interactions": [
