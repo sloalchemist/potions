@@ -428,6 +428,7 @@ export class WorldScene extends Phaser.Scene {
       }
       if (event.shiftKey && event.code === 'KeyS') {
         persistWorldData();
+      }
       // Brings up chat box for user
       if (event.code === 'Slash') {
         if (!this.scene.isActive('ChatOverlayScene')) {
