@@ -413,106 +413,118 @@ export class Mob {
     pubSub.changePersonality(this.id, trait, amount);
   }
 
-  changeEffect(delta: number, duration: number, attribute: string): void {
-    // this function now just inserts a delta in mobEffects if there
-    // is not an effect currently active under the passed attribute.
-    // if this function is called with a negative duration, we delete
-    // all rows with this mob id and the passed attribute because
-    // checkTickReset knows when to delete an effect (to take away the delta)
+  // changeEffect(delta: number, duration: number, attribute: string): void {
+  //   // this function now just inserts a delta in mobEffects if there
+  //   // is not an effect currently active under the passed attribute.
+  //   // if this function is called with a negative duration, we delete
+  //   // all rows with this mob id and the passed attribute because
+  //   // checkTickReset knows when to delete an effect (to take away the delta)
 
-    type QueryResult = {
-      potionType: string;
-      targetTick: number;
-    };
-    const tick = this.current_tick + duration;
+  //   type QueryResult = {
+  //     potionType: string;
+  //     targetTick: number;
+  //   };
+  //   const tick = this.current_tick + duration;
 
-    let value = DB.prepare(
-      `
-      SELECT ${attribute}
-      FROM mobView
-      WHERE id = :id 
-      `
-    ).get({
-      id: this.id
-    }) as number;
+  //   let value = DB.prepare(
+  //     `
+  //     SELECT ${attribute}
+  //     FROM mobView
+  //     WHERE id = :id 
+  //     `
+  //   ).get({
+  //     id: this.id
+  //   }) as number;
 
-    const result = DB.prepare(
-      `
-      SELECT potionType, targetTick
-      FROM mobEffects
-      WHERE id = :id AND targetTick >= :currentTick AND potionType = :attribute
-      `
-    ).get({
-      id: this.id,
-      currentTick: this.current_tick,
-      attribute: attribute
-    }) as QueryResult | undefined;
+  //   const result = DB.prepare(
+  //     `
+  //     SELECT potionType, targetTick
+  //     FROM mobEffects
+  //     WHERE id = :id AND targetTick >= :currentTick AND potionType = :attribute
+  //     `
+  //   ).get({
+  //     id: this.id,
+  //     currentTick: this.current_tick,
+  //     attribute: attribute
+  //   }) as QueryResult | undefined;
 
-    if (!result || duration === -1) {
-      switch (attribute) {
-        case 'speed': // TODO: add other attributes as we add them to the game
-          this.speed += delta;
-          value = this.speed;
-        case 'attack':
-          this.attack += delta;
-          value = this.attack;
-      }
+  //   if (!result || duration === -1) {
+  //     switch (attribute) {
+  //       case 'speed': // TODO: add other attributes as we add them to the game
+  //         this.speed += delta;
+  //         value = this.speed;
+  //       case 'attack':
+  //         this.attack += delta;
+  //         value = this.attack;
+  //     }
 
-      // CHANGE THIS TO JUST INSERT A ROW IN MOBEFFECTS THAT INCLUDES THE DELTA
-      DB.prepare(
-        `
-        UPDATE mobs
-        SET ${attribute} = :value
-        WHERE id = :id
-        `
-      ).run({
-        value: value,
-        id: this.id
-      });
-    }
+  //     // CHANGE THIS TO JUST INSERT A ROW IN MOBEFFECTS THAT INCLUDES THE DELTA
+  //     DB.prepare(
+  //       `
+  //       UPDATE mobs
+  //       SET ${attribute} = :value
+  //       WHERE id = :id
+  //       `
+  //     ).run({
+  //       value: value,
+  //       id: this.id
+  //     });
+  //   }
 
-    DB.prepare(
-      `
-      INSERT INTO mobEffects (id, potionType, targetTick)
-      VALUES (:id, :potionType, :targetTick)
-      `
-    ).run({
-      id: this.id,
-      potionType: attribute,
-      targetTick: tick
-    });
+  //   DB.prepare(
+  //     `
+  //     INSERT INTO mobEffects (id, potionType, targetTick)
+  //     VALUES (:id, :potionType, :targetTick)
+  //     `
+  //   ).run({
+  //     id: this.id,
+  //     potionType: attribute,
+  //     targetTick: tick
+  //   });
 
-    pubSub.changeEffect(this.id, attribute, delta, value);
-    pubSub.changeTargetTick(this.id, attribute, duration, tick);
-  }
+  //   pubSub.changeEffect(this.id, attribute, delta, value);
+  //   pubSub.changeTargetTick(this.id, attribute, duration, tick);
+  // }
   
-  changeEffect2(delta: number, duration: number, attribute: string): void {
-    // this function now just inserts a delta in mobEffects if there
-    // is not an effect currently active under the passed attribute.
-    // if this function is called with a negative duration, we delete
-    // all rows with this mob id and the passed attribute because
-    // checkTickReset knows when to delete an effect (to take away the delta)
-    type QueryResult = {
-      potionType: string;
-      targetTick: number;
-    };
+  changeEffect(delta: number, duration: number, attribute: string): void {
+    // this function now just inserts a delta in mobEffects. 
+    //
+    // if there is an effect already in there for that same attribute, this row just gets
+    // added ahead of it and the view will select the delta from the newest row
+    //
+    // if this function is called with a negative duration, we delete the rows
+    // in mobEffects for this attribute/id and the mobView and must broadcast 
+    // the delta and new value for this newly changed attribute
+
     const targetTick = this.current_tick + duration;
 
-    // put in new row into mobEffects with the delta
-    DB.prepare(
-      `
-      INSERT INTO mobEffects (id, attribute, delta, targetTick)
-      VALUES (:id, :attribute, :delta, :targetTick)
-      `
-    ).run({
-      id: this.id,
-      attribute: attribute,
-      delta: delta,
-      targetTick: targetTick
-    });
+    if (duration < 0) {
+      // delete rows for this attribute/id
+      DB.prepare(
+        `
+        DELETE FROM mobEffects
+        WHERE id = :id AND targetTick <= :currentTick
+        `
+      ).run({ id: this.id, currentTick: this.current_tick });
+    }
+    else {
+      // put in new row into mobEffects with the delta
+      DB.prepare(
+        `
+        INSERT INTO mobEffects (id, attribute, delta, targetTick)
+        VALUES (:id, :attribute, :delta, :targetTick)
+        `
+      ).run({
+        id: this.id,
+        attribute: attribute,
+        delta: delta,
+        targetTick: targetTick
+      });
 
-    // grab the value after dynamic view updates with new delta
-    let value = DB.prepare(
+      // pubSub.changeTargetTick(this.id, attribute, duration, targetTick);
+    }
+
+    const value = DB.prepare(
       `
       SELECT ${attribute}
       FROM mobView
@@ -522,33 +534,28 @@ export class Mob {
       id: this.id
     }) as number;
 
-
     pubSub.changeEffect(this.id, attribute, delta, value);
-    pubSub.changeTargetTick(this.id, attribute, duration, targetTick);
   }
 
   private checkTickReset(): void {
+    // just need to query the mobEffects table to see if any effects
+    // expire on the current tick (or before?), then communicate back
+    
     type QueryResult = {
       potionType: string;
     };
     
     const result = DB.prepare(
       `
-      SELECT potionType
+      SELECT attribute
       FROM mobEffects
       WHERE id = :id AND targetTick = :currentTick
+      ORDER BY
       `
     ).all({
       id: this.id,
       currentTick: this.current_tick
     }) as QueryResult[];
-
-    DB.prepare(
-      `
-              DELETE FROM mobs
-              WHERE id = :id AND targetTick = :currentTick
-          `
-    ).run({ id: this.id, currentTick: this.current_tick });
 
     for (const element of result) {
       switch (element.potionType) {

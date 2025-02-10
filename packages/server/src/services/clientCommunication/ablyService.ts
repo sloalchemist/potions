@@ -319,7 +319,7 @@ export class AblyService implements PubSub {
   ): void {
     if (newValue == undefined || key == undefined || tick == undefined) {
       throw new Error(
-        `Sending invalid changeTargetSpeedTick message ${key}, ${tick}, ${newValue}`
+        `Sending invalid changeTargetTick message ${key}, ${tick}, ${newValue}`
       );
     }
 
