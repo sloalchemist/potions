@@ -521,7 +521,7 @@ export class Mob {
         targetTick: targetTick
       });
 
-      // pubSub.changeTargetTick(this.id, attribute, duration, targetTick);
+      pubSub.changeTargetTick(this.id, attribute, duration, targetTick);
     }
 
     const value = DB.prepare(
@@ -540,7 +540,7 @@ export class Mob {
   private checkTickReset(): void {
     // just need to query the mobEffects table to see if any effects
     // expire on the current tick (or before?), then communicate back
-    
+
     type QueryResult = {
       potionType: string;
     };
@@ -550,26 +550,18 @@ export class Mob {
       SELECT attribute
       FROM mobEffects
       WHERE id = :id AND targetTick = :currentTick
-      ORDER BY
       `
     ).all({
       id: this.id,
       currentTick: this.current_tick
     }) as QueryResult[];
 
+    if (!result) {
+      return;
+    }
+
     for (const element of result) {
-      switch (element.potionType) {
-        case 'speed': {
-          const delta = this.speed - (this.speed / 1.5)
-          this.changeEffect(-delta, -1, element.potionType);
-          break;
-        }
-        case 'attack': {
-          const delta = this._attack - (this._attack / 1.5)
-          this.changeEffect(-delta, -1, element.potionType);
-          break;
-        }
-      }
+      this.changeEffect(0, -1, element.potionType);
     }
   }
 
