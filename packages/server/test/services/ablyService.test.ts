@@ -27,6 +27,21 @@ jest.mock('ably', () => ({
   }))
 }));
 
+// Mock supabase setup - This shadows the supabase import throughout the code, as it
+// typically requires .env vars that the CI/CD does not have / does not need
+jest.mock('../../src/services/setup', () => ({
+  supabase: {
+    from: jest.fn().mockReturnThis(),
+    insert: jest.fn().mockResolvedValue({ data: null, error: null }),
+    storage: {
+      from: jest.fn(() => ({
+        upload: jest.fn().mockResolvedValue({ data: null, error: null }),
+        download: jest.fn().mockResolvedValue({ data: new Blob(), error: null })
+      }))
+    }
+  }
+}));
+
 const testAblyService = () => {
   const ablyService = new AblyService('test-key');
   ablyService.setupChannels(TEST_USER, 0, 0, 0, 0);
