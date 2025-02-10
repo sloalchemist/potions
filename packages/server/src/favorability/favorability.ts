@@ -50,7 +50,6 @@ export class Favorability {
    */
   static aggConversationScore(target_mob: Mob, conversation_score: number) {
     var index = this.getMoodIndex(target_mob);
-
     return index + conversation_score;
   }
   /**
@@ -59,7 +58,7 @@ export class Favorability {
    * @returns 
    */
   modifiedLogistic(x: number) : number {
-    return (Math.min(0, ((1 / (1 + Math.exp(-x))) - 0.5))) * 2
+    return (Math.min(0, ((1 / (1 + Math.exp(-2.5 * x))) - 0.5))) * 2
   }
   /**
    * Increases each respective community buff
