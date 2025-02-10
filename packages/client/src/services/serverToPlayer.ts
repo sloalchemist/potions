@@ -3,8 +3,10 @@ import {
   addNewHouse,
   addNewItem,
   addNewMob,
+  setAttacks,
   setChatting,
   setDate,
+  setFighting,
   setGameState,
   setResponses
 } from '../world/controller';
@@ -37,6 +39,11 @@ export function setupPlayerSubscriptions(
     setChatting(true);
   });
 
+  subscribeToPlayerChannel('player_attacks', (data) => {
+    setAttacks(data.attacks);
+    setFighting(true);
+  });
+
   subscribeToPlayerChannel('chat_confirm', (data) => {
     const mob = world.mobs[data.target] as SpriteMob;
     if (!mob) {
@@ -48,6 +55,10 @@ export function setupPlayerSubscriptions(
 
   subscribeToPlayerChannel('chat_close', () => {
     setChatting(false);
+  });
+
+  subscribeToPlayerChannel('fight_close', () => {
+    setFighting(false);
   });
 
   subscribeToPlayerChannel('state', (data) => {

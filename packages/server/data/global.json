@@ -346,7 +346,7 @@
           "action": "spawn_mob",
           "parameters": {
             "type": "fighter",
-            "max": 5,
+            "max": 10,
             "rate": 0.1
           }
         },
@@ -354,7 +354,7 @@
           "action": "spawn_mob",
           "parameters": {
             "type": "villager",
-            "max": 15,
+            "max": 12,
             "rate": 0.1
           }
         }
