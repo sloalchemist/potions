@@ -60,12 +60,12 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', 'static/background.png');
+    this.load.image('background', '../../../../world_assets/villager-world/background.png');
 
     this.load.atlas(
       'global_atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      '../../../../world_assets/villager-world/global.png',
+      '../../../../world_assets/villager-world/global-atlas.json'
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -74,8 +74,8 @@ export class WorldScene extends Phaser.Scene {
     });
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
-    this.load.json('global_data', 'static/global.json');
-    this.load.json('world_specific_data', 'static/world_specific.json');
+    this.load.json('global_data', '../../../../world_assets/villager-world/global.json');
+    this.load.json('world_specific_data', '../../../../world_assets/villager-world/world_specific.json');
   }
 
   loadAnimations(
