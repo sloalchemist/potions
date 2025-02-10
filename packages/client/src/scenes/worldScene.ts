@@ -13,7 +13,7 @@ import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
 import { GRAY } from './pauseScene';
-import { leaveWorld, publishPlayerPosition } from '../services/playerToServer';
+import { publishPlayerPosition } from '../services/playerToServer';
 import { getNightSkyOpacity } from '../utils/nightOverlayHandler';
 import {
   ItemType,
@@ -22,7 +22,11 @@ import {
 } from '../worldDescription';
 import { UxScene } from './uxScene';
 import { setGameState } from '../world/controller';
-import { restoreHealth, speedUpCharacter } from '../utils/developerCheats';
+import {
+  restoreHealth,
+  persistWorldData,
+  speedUpCharacter
+} from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 
 export let world: World;
@@ -422,6 +426,21 @@ export class WorldScene extends Phaser.Scene {
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
       }
+      if (event.shiftKey && event.code === 'KeyS') {
+        persistWorldData();
+      }
+      // Brings up chat box for user
+      if (event.code === 'Slash') {
+        if (!this.scene.isActive('ChatOverlayScene')) {
+          this.scene.launch('ChatOverlayScene');
+        }
+      }
+      // Ends chat box for user
+      if (event.code === 'Escape') {
+        if (this.scene.isActive('ChatOverlayScene')) {
+          this.scene.stop('ChatOverlayScene');
+        }
+      }
     });
 
     this.input.keyboard?.on('keyup', (event: KeyboardEvent) => {
@@ -566,8 +585,6 @@ export class WorldScene extends Phaser.Scene {
   }
 
   showGameOver() {
-    leaveWorld();
-
     let uxscene = this.scene.get('UxScene') as UxScene;
     uxscene.chatButtons?.clearButtonOptions();
 
@@ -632,6 +649,7 @@ export class WorldScene extends Phaser.Scene {
     this.scene.stop('WorldScene');
     this.scene.stop('UxScene');
     this.scene.stop('FrameScene');
+    this.scene.stop('ChatOverlayScene');
     this.scene.start('LoadWorldScene');
   }
 
