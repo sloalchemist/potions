@@ -1,3 +1,5 @@
+import { blob } from 'stream/consumers';
+import { Community } from '../community/community';
 import { Mob } from '../mobs/mob';
 
 export class Favorability {
@@ -53,20 +55,24 @@ export class Favorability {
     return index + conversation_score;
   }
   /**
-   * 
-   * @param x 
-   * @returns 
+   * Returns the corresponding y-value for a modified sigmoid function bounded between 0 and 1
+   * @param x A x-value
+   * @returns A y-value
    */
-  modifiedLogistic(x: number) : number {
-    return (Math.min(0, ((1 / (1 + Math.exp(-2.5 * x))) - 0.5))) * 2
+  static modifiedLogistic(x: number) : number {
+    return (Math.max(0, ((1 / (1 + Math.exp(-2.5 * x)) - 0.5))) * 2)
   }
   /**
-   * Increases each respective community buff
-   * @param player 
+   * Increases each respective community buff for a player
+   * @param player Player
    */
   static updatePlayerStat(player: Mob) {
-    var fighterStatChange
-    var blobStatChange
-    var villagerStatChange
+    var fighterStatChange = (((this.modifiedLogistic(Community.getFavor("alchemists", "fighters")/100) * player._speed)) / 2)
+    var blobStatChange = ((this.modifiedLogistic(Community.getFavor("alchemists", "blobs")/100) * player._attack)) / 2
+    var villagerStatChange = (this.modifiedLogistic(Community.getFavor("alchemists", "silverclaw")/100) * player._maxHealth)
+
+    player.changeAttack(Math.round(blobStatChange * 10) / 10)
+    player.changeSpeed(Math.round(fighterStatChange * 10) / 10)
+    player.changeMaxHealth(Math.round(villagerStatChange))
   }
 }

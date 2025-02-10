@@ -43,6 +43,30 @@ describe('Favorability Tests', () => {
     expect(score2).toBeCloseTo(3.5)
     
   })
+
+  test('Player stat change', () => {
+    // initialize player
+    const position: Coord = { x: 0, y: 0}
+    mobFactory.makeMob('player', position, "testPlayer", "playertest")
+    var testMob = Mob.getMob('testPlayer')
+    expect(testMob).not.toBeUndefined()
+
+    // test the initial score is correct
+    // console.log(testMob?._speed)
+    // console.log(testMob?._maxHealth)
+    console.log(testMob?._attack)
+
+    Community.makeFavor('alchemists', 'blobs', 100);
+    Community.makeFavor('alchemists', 'silverclaw', 100);
+    Community.makeFavor('alchemists', 'fighters', 100);
+
+    // console.log(Favorability.modifiedLogistic(1))
+
+    Favorability.updatePlayerStat(testMob!)
+    expect(testMob?._speed).toBeCloseTo(3.6)
+    expect(testMob?._maxHealth).toBeCloseTo(185)
+    expect(testMob?._attack).toBeCloseTo(7.1)
+  })
 });
 
 afterEach(() => {

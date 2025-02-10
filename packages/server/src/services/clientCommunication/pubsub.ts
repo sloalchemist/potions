@@ -41,6 +41,8 @@ export interface PubSub {
   changeAttack(key: string, attack: number, newValue: number): void;
   changePersonality(key: string, trait: string, newValue: number): void;
   changeItemAttribute(itemKey: string, property: string, value: number): void;
+  changeMaxHealth(key: string, maxHealth: number, newValue: number): void;
+  changeSpeed(key: string, speed: number, newValue: number): void;
   speak(key: string, message: string): void;
   setDateTime(fantasyDate: FantasyDate): void;
   kill(key: string): void;
