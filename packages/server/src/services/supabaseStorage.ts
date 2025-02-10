@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
+import { execSync } from 'child_process';
 import path from 'path';
 
 // Load environment variables from .env file
@@ -17,7 +18,11 @@ export function initializeSupabase() {
   );
 }
 
-async function downloadFile(file: string, supabase: SupabaseClient) {
+async function downloadFile(
+  supabase_file_name: string,
+  local_file_name: string,
+  supabase: SupabaseClient
+) {
   if (!process.env.SUPABASE_BUCKET) {
     throw Error(
       'Your server env needs the SUPABASE_BUCKET var. Check README for info'
@@ -26,7 +31,7 @@ async function downloadFile(file: string, supabase: SupabaseClient) {
 
   const { data, error } = await supabase.storage
     .from(process.env.SUPABASE_BUCKET)
-    .download(file);
+    .download(supabase_file_name);
 
   console.log(data);
 
@@ -35,7 +40,7 @@ async function downloadFile(file: string, supabase: SupabaseClient) {
   }
 
   // Convert Blob to file
-  const myfile = new File([data], file, {
+  const myfile = new File([data], local_file_name, {
     type: data.type,
     lastModified: new Date().getTime()
   });
@@ -44,7 +49,7 @@ async function downloadFile(file: string, supabase: SupabaseClient) {
   const buffer = Buffer.from(arrayBuffer);
 
   var newPath = path.join('..', 'server', 'data');
-  const destPath = path.join(newPath, file); // Target file path
+  const destPath = path.join(newPath, local_file_name); // Target file path
 
   fs.writeFile(destPath, buffer, (err) => {
     if (err) {
@@ -55,13 +60,43 @@ async function downloadFile(file: string, supabase: SupabaseClient) {
 
 async function downloadData(supabase: SupabaseClient) {
   await Promise.all([
-    downloadFile('knowledge-graph.db', supabase),
-    downloadFile('knowledge-graph.db-wal', supabase),
-    downloadFile('knowledge-graph.db-shm', supabase),
-    downloadFile('server-data.db', supabase),
-    downloadFile('server-data.db-wal', supabase),
-    downloadFile('server-data.db-shm', supabase)
+    downloadFile('knowledge-graph-snapshot.db', 'knowledge-graph.db', supabase),
+    downloadFile('server-data-snapshot.db', 'server-data.db', supabase)
   ]);
+}
+
+function createDbSnapshot(originalDbPath: string, snapshotDbPath: string) {
+  try {
+    console.log(
+      `Creating a snapshot of ${originalDbPath} at ${snapshotDbPath}...`
+    );
+
+    // Copy the database and its WAL file (if it exists)
+    fs.copyFileSync(originalDbPath, snapshotDbPath);
+    if (fs.existsSync(`${originalDbPath}-wal`)) {
+      fs.copyFileSync(`${originalDbPath}-wal`, `${snapshotDbPath}-wal`);
+    }
+
+    console.log(`Snapshot created at ${snapshotDbPath}`);
+  } catch (error) {
+    console.error(`Error creating snapshot:`, error);
+    throw error;
+  }
+}
+
+function mergeWalIntoDb(dbPath: string) {
+  try {
+    console.log(`Merging WAL into ${dbPath} snapshot...`);
+
+    // Run SQLite commands to merge WAL and compact the snapshot
+    execSync(`sqlite3 ${dbPath} "PRAGMA journal_mode=DELETE;"`);
+    execSync(`sqlite3 ${dbPath} "VACUUM;"`);
+
+    console.log(`Successfully merged WAL into ${dbPath}`);
+  } catch (error) {
+    console.error(`Error merging WAL into ${dbPath}:`, error);
+    throw error;
+  }
 }
 
 async function uploadLocalFile(path: string, supabase: SupabaseClient) {
@@ -94,15 +129,25 @@ async function uploadLocalFile(path: string, supabase: SupabaseClient) {
   }
 }
 
+// Merges WAL into a snapshot, then uploads database files in supabase
 async function uploadLocalData(supabase: SupabaseClient) {
   try {
+    // Take snapshot of current state, so upload can not interrupt the next tick
+    const serverDb = 'data/server-data.db';
+    const serverSnapshot = 'data/server-data-snapshot.db';
+
+    const knowledgeDb = 'data/knowledge-graph.db';
+    const knowledgeSnapshot = 'data/knowledge-graph-snapshot.db';
+
+    createDbSnapshot(serverDb, serverSnapshot);
+    createDbSnapshot(knowledgeDb, knowledgeSnapshot);
+
+    mergeWalIntoDb(serverSnapshot);
+    mergeWalIntoDb(knowledgeSnapshot);
+
     await Promise.all([
-      uploadLocalFile('server-data.db', supabase),
-      uploadLocalFile('server-data.db-wal', supabase),
-      uploadLocalFile('server-data.db-shm', supabase),
-      uploadLocalFile('knowledge-graph.db', supabase),
-      uploadLocalFile('knowledge-graph.db-wal', supabase),
-      uploadLocalFile('knowledge-graph.db-shm', supabase)
+      uploadLocalFile('server-data-snapshot.db', supabase),
+      uploadLocalFile('knowledge-graph-snapshot.db', supabase)
     ]);
     console.log('Successfully uploaded local data to Supabase');
   } catch (error) {

@@ -42,18 +42,13 @@ async function initializeAsync() {
 
   console.log(`loading world ${worldID}`);
 
-  let downloaded = true;
-
   try {
     await downloadData(supabase);
     console.log('Data successfully downloaded from Supabase');
   } catch {
     try {
       console.log('Download failed, uploading local files instead');
-      initializeKnowledgeDB('data/knowledge-graph.db', false);
-      initializeServerDatabase('data/server-data.db');
       await uploadLocalData(supabase);
-      downloaded = false;
     } catch (error) {
       console.log(
         'Could not download data or upload data, cannot play the game'
@@ -63,10 +58,8 @@ async function initializeAsync() {
   }
 
   try {
-    if (downloaded) {
-      initializeKnowledgeDB('data/knowledge-graph.db', false);
-      initializeServerDatabase('data/server-data.db');
-    }
+    initializeKnowledgeDB('data/knowledge-graph.db', false);
+    initializeServerDatabase('data/server-data.db');
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
