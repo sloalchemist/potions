@@ -58,10 +58,18 @@ async function downloadFile(
   });
 }
 
-async function downloadData(supabase: SupabaseClient) {
+async function downloadData(supabase: SupabaseClient, worldID: string) {
   await Promise.all([
-    downloadFile('knowledge-graph-snapshot.db', 'knowledge-graph.db', supabase),
-    downloadFile('server-data-snapshot.db', 'server-data.db', supabase)
+    downloadFile(
+      `${worldID}-knowledge-graph-snapshot.db`,
+      'knowledge-graph.db',
+      supabase
+    ),
+    downloadFile(
+      `${worldID}-server-data-snapshot.db`,
+      'server-data.db',
+      supabase
+    )
   ]);
 }
 
@@ -130,14 +138,14 @@ async function uploadLocalFile(path: string, supabase: SupabaseClient) {
 }
 
 // Merges WAL into a snapshot, then uploads database files in supabase
-async function uploadLocalData(supabase: SupabaseClient) {
+async function uploadLocalData(supabase: SupabaseClient, worldID: string) {
   try {
     // Take snapshot of current state, so upload can not interrupt the next tick
     const serverDb = 'data/server-data.db';
-    const serverSnapshot = 'data/server-data-snapshot.db';
+    const serverSnapshot = `data/${worldID}-server-data-snapshot.db`;
 
     const knowledgeDb = 'data/knowledge-graph.db';
-    const knowledgeSnapshot = 'data/knowledge-graph-snapshot.db';
+    const knowledgeSnapshot = `data/${worldID}-knowledge-graph-snapshot.db`;
 
     createDbSnapshot(serverDb, serverSnapshot);
     createDbSnapshot(knowledgeDb, knowledgeSnapshot);
@@ -146,8 +154,8 @@ async function uploadLocalData(supabase: SupabaseClient) {
     mergeWalIntoDb(knowledgeSnapshot);
 
     await Promise.all([
-      uploadLocalFile('server-data-snapshot.db', supabase),
-      uploadLocalFile('knowledge-graph-snapshot.db', supabase)
+      uploadLocalFile(`${worldID}-server-data-snapshot.db`, supabase),
+      uploadLocalFile(`${worldID}-knowledge-graph-snapshot.db`, supabase)
     ]);
     console.log('Successfully uploaded local data to Supabase');
   } catch (error) {

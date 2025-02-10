@@ -18,6 +18,7 @@ import { shouldUploadDB } from '../util/dataUploadUtil';
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
 let world: ServerWorld;
+export let worldID: string = '';
 
 export const supabase = initializeSupabase();
 
@@ -34,7 +35,7 @@ function initializeAbly(worldId: string): AblyService {
 
 async function initializeAsync() {
   const args = process.argv.slice(2);
-  const worldID = args[0];
+  worldID = args[0];
 
   if (!worldID) {
     throw new Error('No world ID provided, provide a world ID as an argument');
@@ -43,12 +44,12 @@ async function initializeAsync() {
   console.log(`loading world ${worldID}`);
 
   try {
-    await downloadData(supabase);
+    await downloadData(supabase, worldID);
     console.log('Data successfully downloaded from Supabase');
   } catch {
     try {
       console.log('Download failed, uploading local files instead');
-      await uploadLocalData(supabase);
+      await uploadLocalData(supabase, worldID);
     } catch (error) {
       console.log(
         'Could not download data or upload data, cannot play the game'
@@ -99,7 +100,7 @@ export function worldTimer() {
   }
 
   if (shouldUploadDB(now, lastUploadTime)) {
-    uploadLocalData(supabase);
+    uploadLocalData(supabase, worldID);
     lastUploadTime = now;
   }
 
