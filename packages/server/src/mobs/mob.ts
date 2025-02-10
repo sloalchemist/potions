@@ -541,28 +541,25 @@ export class Mob {
     // just need to query the mobEffects table to see if any effects
     // expire on the current tick (or before?), then communicate back
 
-    type QueryResult = {
-      potionType: string;
-    };
-    
-    const result = DB.prepare(
+    DB.prepare(
       `
-      SELECT attribute
-      FROM mobEffects
-      WHERE id = :id AND targetTick = :currentTick
+      DELETE FROM mobEffects
+      WHERE id = :id AND targetTick <= :currentTick
+      RETURNING id, attribute, delta
       `
-    ).all({
-      id: this.id,
-      currentTick: this.current_tick
-    }) as QueryResult[];
+    ).run({ id: this.id, currentTick: this.current_tick });
 
-    if (!result) {
-      return;
-    }
+    // get the new value for the attribute and broadcast it
+    const effects = DB.prepare(
+      `
+      SELECT ${attribute}
+      FROM mobView
+      WHERE id = :id
+      `
+    ).all({ id: this.id }) as { attribute: string}[];
 
-    for (const element of result) {
-      this.changeEffect(0, -1, element.potionType);
-    }
+
+    pubSub.changeEffect(this.id, attribute, 0, value);
   }
 
   getHouse(): House | undefined {
