@@ -11,3 +11,8 @@ export function restoreHealth(): void {
   // Broadcast PlayerToServer message here
   publishPlayerMessage('cheat', { action: 'health' });
 }
+
+export function persistWorldData(): void {
+  console.log('Attempting to save world data in Supabase');
+  publishPlayerMessage('cheat', { action: 'save' });
+}
