@@ -244,6 +244,9 @@ importers:
       '@rt-potion/converse':
         specifier: workspace:*
         version: link:../converse
+      '@supabase/supabase-js':
+        specifier: ^2.44.2
+        version: 2.47.12
       ably:
         specifier: ^1.2.21
         version: 1.2.50
