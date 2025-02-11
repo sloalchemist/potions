@@ -167,6 +167,14 @@ export class Mob {
     return this.speed;
   }
 
+  get _maxHealth(): number {
+    return this.maxHealth;
+  }
+
+  get _attack(): number {
+    return this.attack;
+  }
+
   get current_tick(): number {
     return gameWorld.currentDate().global_tick;
   }
@@ -392,6 +400,34 @@ export class Mob {
     ).run({ attack: newAttack, id: this.id });
     this.attack = newAttack;
     pubSub.changeAttack(this.id, amount, this.attack);
+  }
+
+  changeMaxHealth(amount: number) {
+    if (amount === 0) return;
+    let newMaxHealth = this.maxHealth + amount;
+    DB.prepare(
+      `
+            UPDATE mobs
+            SET maxHealth = :maxHealth
+            WHERE id = :id
+        `
+    ).run({ maxHealth: newMaxHealth, id: this.id });
+    this.maxHealth = newMaxHealth;
+    pubSub.changeMaxHealth(this.id, amount, this.maxHealth);
+  }
+
+  changeSpeed(amount: number) {
+    if (amount === 0) return;
+    let newSpeed = this.speed + amount;
+    DB.prepare(
+      `
+            UPDATE mobs
+            SET speed = :speed
+            WHERE id = :id
+        `
+    ).run({ speed: newSpeed, id: this.id });
+    this.speed = newSpeed;
+    pubSub.changeSpeed(this.id, amount, this.speed);
   }
 
   changePersonality(trait: string, amount: number) {
