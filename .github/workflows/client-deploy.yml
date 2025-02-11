@@ -52,6 +52,7 @@ jobs:
         run: |
           cp -r ./packages/client/static ./packages/client/dist/static
           cp -r ./packages/client/githubPages/index.html ./packages/client/dist
+          cp -r ./world_assets ./packages/client/dist
 
       # Step 8: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
