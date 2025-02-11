@@ -6,7 +6,6 @@ import { setupBroadcast } from './serverToBroadcast';
 
 export let broadcastChannel: Types.RealtimeChannelCallbacks;
 export let playerChannel: Types.RealtimeChannelCallbacks;
-
 const SERVER_URL = process.env.SERVER_URL;
 let channelsBoundToWorld: boolean = false;
 export function setupAbly(): Promise<void> {
