@@ -13,7 +13,7 @@ beforeAll(() => {
   commonSetup();
   Community.makeVillage('alchemists', 'Alchemists guild');
   mobFactory.loadTemplates(world.mobTypes);
-});gi
+});
 
 describe('Try to add logs to basket until max capacity is reached', () => {
   test('Should Limit added items to container', () => {
