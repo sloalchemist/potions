@@ -7,7 +7,12 @@ export function hexStringToNumber(hexString: string): number {
   return parseInt(hexString, 16);
 }
 
-export function combineHexColors(hex1: string, hex2: string, weight1: number, weight2:number): string {
+export function combineHexColors(
+  hex1: string,
+  hex2: string,
+  weight1: number,
+  weight2: number
+): string {
   // Convert hex to RGB
   const hexToRgb = (hex: string): { r: number; g: number; b: number } => {
     if (hex.startsWith('#')) {
@@ -37,17 +42,31 @@ export function combineHexColors(hex1: string, hex2: string, weight1: number, we
   const w1 = weight1 / totalWeight;
   const w2 = weight2 / totalWeight;
 
-  console.log('w1',w1);
-  console.log('w2',w2);
+  console.log('w1', w1);
+  console.log('w2', w2);
 
   // Apply gamma correction
   const gamma = 1.8;
   const combinedRgb = {
-    r: Math.round(Math.pow((Math.pow(rgb1.r, gamma) * w1 + Math.pow(rgb2.r, gamma) * w2), 1 / gamma)),
-    g: Math.round(Math.pow((Math.pow(rgb1.g, gamma) * w1 + Math.pow(rgb2.g, gamma) * w2), 1 / gamma)),
-    b: Math.round(Math.pow((Math.pow(rgb1.b, gamma) * w1 + Math.pow(rgb2.b, gamma) * w2), 1 / gamma))
+    r: Math.round(
+      Math.pow(
+        Math.pow(rgb1.r, gamma) * w1 + Math.pow(rgb2.r, gamma) * w2,
+        1 / gamma
+      )
+    ),
+    g: Math.round(
+      Math.pow(
+        Math.pow(rgb1.g, gamma) * w1 + Math.pow(rgb2.g, gamma) * w2,
+        1 / gamma
+      )
+    ),
+    b: Math.round(
+      Math.pow(
+        Math.pow(rgb1.b, gamma) * w1 + Math.pow(rgb2.b, gamma) * w2,
+        1 / gamma
+      )
+    )
   };
-
 
   // Convert back to hex
   return rgbToHex(combinedRgb.r, combinedRgb.g, combinedRgb.b);

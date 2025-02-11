@@ -49,21 +49,21 @@ export class Cauldron {
 
     if (
       carriedItem &&
-      (carriedItem.hasAttribute('brew_color') || carriedItem.type == "potion") &&
+      (carriedItem.hasAttribute('brew_color') ||
+        carriedItem.type == 'potion') &&
       this.getNumItems() < 3
     ) {
       // get ingredient color from carried item
-      var ingredientColor : string
+      var ingredientColor: string;
       if (carriedItem.type == 'potion') {
-        ingredientColor = numberToHexString(Number(carriedItem.subtype))
-      }
-      else {
+        ingredientColor = numberToHexString(Number(carriedItem.subtype));
+      } else {
         ingredientColor = carriedItem.getAttribute('brew_color');
       }
-    
+
       //calculate weight for added ingredient
-      let ingredientWeight = 1
-      if(carriedItem.type == 'potion'){
+      let ingredientWeight = 1;
+      if (carriedItem.type == 'potion') {
         ingredientWeight = 0.5; //change depending on how much you want potions to affect color
       }
 
@@ -80,7 +80,7 @@ export class Cauldron {
       }
 
       //convert subtype to hex string
-      const hexString = numberToHexString(Number(this.getPotionSubtype())); 
+      const hexString = numberToHexString(Number(this.getPotionSubtype()));
 
       //combine hex colors
       const newColor = combineHexColors(
@@ -93,11 +93,10 @@ export class Cauldron {
       //if output color is the same as the ingredient color, increase weight
       if (newColor == ingredientColor) {
         this.item.changeAttributeBy('color_weight', ingredientWeight);
-      }
-      else{
+      } else {
         this.item.setAttribute('color_weight', ingredientWeight);
       }
-      console.log("ingredient weight: ", ingredientWeight);
+      console.log('ingredient weight: ', ingredientWeight);
 
       // destroy carried item
       carriedItem.destroy();
