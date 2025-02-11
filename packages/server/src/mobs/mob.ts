@@ -167,6 +167,10 @@ export class Mob {
     return this.speed;
   }
 
+  get _maxHealth(): number {
+    return this.maxHealth;
+  }
+
   get _attack(): number {
     return this.attack;
   }
@@ -398,6 +402,34 @@ export class Mob {
     pubSub.changeAttack(this.id, amount, this.attack);
   }
 
+  changeMaxHealth(amount: number) {
+    if (amount === 0) return;
+    let newMaxHealth = this.maxHealth + amount;
+    DB.prepare(
+      `
+            UPDATE mobs
+            SET maxHealth = :maxHealth
+            WHERE id = :id
+        `
+    ).run({ maxHealth: newMaxHealth, id: this.id });
+    this.maxHealth = newMaxHealth;
+    pubSub.changeMaxHealth(this.id, amount, this.maxHealth);
+  }
+
+  changeSpeed(amount: number) {
+    if (amount === 0) return;
+    let newSpeed = this.speed + amount;
+    DB.prepare(
+      `
+            UPDATE mobs
+            SET speed = :speed
+            WHERE id = :id
+        `
+    ).run({ speed: newSpeed, id: this.id });
+    this.speed = newSpeed;
+    pubSub.changeSpeed(this.id, amount, this.speed);
+  }
+
   changePersonality(trait: string, amount: number) {
     if (amount === 0) return;
     const traitKey = trait as PersonalityTraits;
@@ -613,11 +645,27 @@ export class Mob {
   destroy() {
     if (this.gold > 0 && this.position) {
       const position = Item.findEmptyPosition(this.position);
-      itemGenerator.createItem({
-        type: 'gold',
-        position,
-        attributes: { amount: this.gold }
-      });
+
+      if (this.type === 'player') {
+        // If the player dies, drop half their gold
+        const halfGold = Math.floor(this.gold / 2);
+        itemGenerator.createItem({
+          type: 'gold',
+          position,
+          attributes: { amount: halfGold }
+        });
+        // NOTE: The team working on the persistence feature (which
+        // is currently incomplete on mainline) will update the changeGold
+        // method to persist to supabase in addition to the local DB
+        this.changeGold(-halfGold);
+      } else {
+        // Otherwise drop all of the mob's gold
+        itemGenerator.createItem({
+          type: 'gold',
+          position,
+          attributes: { amount: this.gold }
+        });
+      }
     }
 
     const carriedItem = this.carrying;
@@ -664,6 +712,14 @@ export class Mob {
 
   chatRequest(mob: Mob): boolean {
     conversationTracker.startConversation(mob, this);
+    return false;
+  }
+
+  fightRequest(mob: Mob): boolean {
+    console.log('fight request from ' + mob.name);
+    // TODO: replace with FightTracker class
+    pubSub.playerAttacks(mob.id, ['Test Attack']);
+    // fightTracker.startFight(mob, this);
     return false;
   }
 

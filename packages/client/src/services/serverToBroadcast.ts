@@ -15,16 +15,20 @@ import {
   SetDatetimeData,
   SpeakData
 } from '@rt-potion/common';
-import { world, WorldScene } from '../scenes/worldScene';
-import { addNewItem, addNewMob, gameState, setDate } from '../world/controller';
-import { SpriteMob } from '../sprite/sprite_mob';
-import { publicCharacterId } from '../worldMetadata';
-import { SpriteItem } from '../sprite/sprite_item';
 import { Types } from 'ably';
-import { leaveWorld } from './playerToServer';
 import { focused } from '../main';
+import { world, WorldScene } from '../scenes/worldScene';
+import { SpriteItem } from '../sprite/sprite_item';
+import { SpriteMob } from '../sprite/sprite_mob';
+import { addNewItem, addNewMob, gameState, setDate } from '../world/controller';
+import { publicCharacterId } from '../worldMetadata';
+import { leaveWorld } from './playerToServer';
 
 export let playerDead = false;
+
+//constant to indicate to server to have player remain in the current world
+//must match MAINTAIN_WORLD_OPTION in server/src/services/clientCommunication/ablyService.ts
+const MAINTAIN_WORLD_OPTION = 'NO_CHANGE';
 
 export function setupBroadcast(
   broadcast_channel: Types.RealtimeChannelCallbacks,
@@ -110,10 +114,11 @@ export function setupBroadcast(
           checkFocus();
         });
 
-        // one game focused, leave the world and display game over
+        // once game focused, leave the world and display game over
         waitUntilFocused.then(() => {
           scene.showGameOver();
-          leaveWorld();
+          // in cases where player should stay in the same world, pass MAINTAIN_WORLD_OPTION
+          leaveWorld(MAINTAIN_WORLD_OPTION);
           scene.resetToLoadWorldScene();
         });
       }

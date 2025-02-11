@@ -10,6 +10,7 @@ const authUrl = process.env.AUTH_SERVER_URL;
 console.log('Auth-Server URL:', authUrl);
 
 export interface PlayerData {
+  current_world_id: number;
   health: number;
   name: string;
   gold: number;
@@ -27,7 +28,7 @@ export async function updateCharacterData(
   id: number,
   playerData: PlayerData
 ): Promise<ApiResponse> {
-  const url = `${authUrl}/character/${id}`;
+  const url = new URL(`/character/${id}`, authUrl);
   try {
     const response = await fetch(url, {
       method: 'PUT', // Using PUT for updating existing resources

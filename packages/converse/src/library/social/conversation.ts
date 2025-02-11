@@ -13,12 +13,18 @@ import { PersonalityTraits } from './personality';
 import { SpeechAct } from './speech/speechAct';
 import { SpeakerService } from './speaker/speakerService';
 
+/**
+ * Enum representing the state of a conversation.
+ */
 enum ConversationState {
   PROCESSING,
   WAITING_FOR_RESPONSE,
   FINISHED
 }
 
+/**
+ * Represents a conversation between two speakers.
+ */
 export class Conversation {
   private readonly initiator: Speaker;
   private readonly respondent: Speaker;
@@ -35,6 +41,14 @@ export class Conversation {
 
   private state: ConversationState = ConversationState.WAITING_FOR_RESPONSE;
 
+  /**
+   * Creates a new Conversation instance.
+   *
+   * @param initiator - The speaker who initiates the conversation.
+   * @param respondent - The speaker who responds to the conversation.
+   * @param speakerService - The service managing speakers.
+   * @param usesLLM - Whether the conversation uses a large language model.
+   */
   constructor(
     initator: Speaker,
     respondent: Speaker,
@@ -60,10 +74,18 @@ export class Conversation {
     this.respondent.conversation = this;
   }
 
+  /**
+   * Returns the participants of the conversation.
+   *
+   * @returns An array containing the initiator and respondent.
+   */
   public participants(): Speaker[] {
     return [this.initiator, this.respondent];
   }
 
+  /**
+   * Prepares the next response in the conversation.
+   */
   prepareNextResponse() {
     const mob = this.whoseTurn();
 
@@ -79,6 +101,13 @@ export class Conversation {
     }
   }
 
+  /**
+   * Selects a speech option from the available options.
+   *
+   * @param option - The index of the selected option.
+   * @returns The selected speech act.
+   * @throws Will throw an error if the option is invalid.
+   */
   selectFromOptions(option: number): SpeechAct {
     const speechAct = this.speechOptions[option];
     if (!speechAct) {
@@ -90,15 +119,27 @@ export class Conversation {
 
     return this.speechOptions[option];
   }
-
+  /**
+   * Closes the conversation.
+   */
   close(): void {
     this.finishConversation();
   }
 
+  /**
+   * Checks if the conversation is finished.
+   *
+   * @returns True if the conversation is finished, false otherwise.
+   */
   isFinished(): boolean {
     return this.state === ConversationState.FINISHED;
   }
 
+  /**
+   * Gets the chat history as a single string.
+   *
+   * @returns The chat history.
+   */
   getChats(): string {
     return this.chatHistory
       .map((turn) => turn.getMessage())
@@ -106,6 +147,11 @@ export class Conversation {
       .join('\n');
   }
 
+  /**
+   * Prepares the next response for an NPC.
+   *
+   * @param npc - The NPC speaker.
+   */
   private prepareNPCResponse(npc: Speaker): void {
     const speechAct = this.generateSpeechAct(npc);
     if (speechAct == null) {
@@ -139,6 +185,11 @@ export class Conversation {
     }
   }
 
+  /**
+   * Prepares the next response for a player.
+   *
+   * @param player - The player speaker.
+   */
   private preparePlayerResponse(player: Speaker): void {
     this.speechOptions = this.getPotentialSpeechActs(player);
     const prompts = buildPromptsForResponses(
@@ -181,10 +232,21 @@ export class Conversation {
     }
   }
 
+  /**
+   * Gets the other participant in the conversation.
+   *
+   * @param person - The current speaker.
+   * @returns The other speaker.
+   */
   private other(person: Speaker): Speaker {
     return this.initiator === person ? this.respondent : this.initiator;
   }
 
+  /**
+   * Gets the last speech act in the conversation.
+   *
+   * @returns The last speech act, or null if there is none.
+   */
   private lastSpeechAct(): SpeechAct | null {
     const lastTurn = this.chatHistory[this.chatHistory.length - 1];
     if (lastTurn) {
@@ -193,6 +255,13 @@ export class Conversation {
     return null;
   }
 
+  /**
+   * Selects the top N highest value speech acts.
+   *
+   * @param speechActs - The array of speech acts to select from.
+   * @param n - The number of speech acts to select.
+   * @returns The selected speech acts.
+   */
   private selectNHighestValueSpeechAct(
     speechActs: SpeechAct[],
     n: number
@@ -203,6 +272,12 @@ export class Conversation {
     return sortedSpeechActs.slice(0, n);
   }
 
+  /**
+   * Generates the next speech act for the current speaker.
+   *
+   * @param currentSpeaker - The current speaker.
+   * @returns The generated speech act.
+   */
   private generateSpeechAct(currentSpeaker: Speaker): SpeechAct {
     const lastAct = this.lastSpeechAct();
     const lastInitiative = lastAct ? lastAct.getInitiative() : null;
@@ -220,10 +295,22 @@ export class Conversation {
     return nextAct;
   }
 
+  /**
+   * Determines whose turn it is in the conversation.
+   *
+   * @returns The speaker whose turn it is.
+   */
   private whoseTurn(): Speaker {
     return this.chatHistory.length % 2 === 0 ? this.initiator : this.respondent;
   }
 
+  /**
+   * Gets the potential speech acts for the current speaker.
+   * This function generates a list of possible speech acts that the current speaker can perform based on the last speech act, the current speaker, and the topics covered in the conversation.
+   *
+   * @param currentSpeaker - The current speaker.
+   * @returns The potential speech acts.
+   */
   private getPotentialSpeechActs(currentSpeaker: Speaker): SpeechAct[] {
     const lastAct = this.lastSpeechAct();
     const lastInitiative = lastAct ? lastAct.getInitiative() : null;
@@ -238,7 +325,13 @@ export class Conversation {
     return this.selectNHighestValueSpeechAct(potentialSpeechActs, 3);
   }
 
-  private summarize(subject: Speaker, other: Speaker) {
+  /**
+   * Summarizes the conversation between two speakers.
+   *
+   * @param subject - The subject speaker.
+   * @param other - The other speaker.
+   */
+  private summarize(subject: Speaker, other: Speaker): void {
     const prompt = summarizeConversation(subject, other);
     dialogService.sendPrompt(
       [prompt],
@@ -256,7 +349,10 @@ export class Conversation {
     );
   }
 
-  private finishConversation() {
+  /**
+   * Finishes the conversation.
+   */
+  private finishConversation(): void {
     if (this.state === ConversationState.FINISHED) {
       return;
     }
@@ -282,7 +378,13 @@ export class Conversation {
     this.state = ConversationState.FINISHED;
   }
 
-  private addTurn(participant: Speaker, speechAct: SpeechAct) {
+  /**
+   * Adds a turn to the conversation.
+   *
+   * @param participant - The participant of the turn.
+   * @param speechAct - The speech act of the turn.
+   */
+  private addTurn(participant: Speaker, speechAct: SpeechAct): void {
     this.chatHistory.push(new Turn(participant, speechAct));
     this.addToTraitsUsed(participant, speechAct.getTraits());
     this.topicsCovered.push(...speechAct.getTopics());
@@ -295,7 +397,13 @@ export class Conversation {
     }
   }
 
-  private addToTraitsUsed(speaker: Speaker, traits: PersonalityTraits[]) {
+  /**
+   * Adds traits to the list of traits used by a speaker.
+   *
+   * @param speaker - The speaker.
+   * @param traits - The traits to add.
+   */
+  private addToTraitsUsed(speaker: Speaker, traits: PersonalityTraits[]): void {
     for (const trait of traits) {
       if (!this.personalityTraitsUsed[speaker.id].includes(trait)) {
         this.personalityTraitsUsed[speaker.id].push(trait);

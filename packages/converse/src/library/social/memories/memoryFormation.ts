@@ -8,12 +8,23 @@ class PotentialMemory {
   private description: string;
   private connections: string[] = [];
 
+  /**
+   * Constructs a new instance of PotentialMemory with the provided key, name, and description.
+   * @param key Unique identifier for the potential memory.
+   * @param name Display name for the potential memory.
+   * @param description Description for the potential memory.
+   */
   constructor(key: string, name: string, description: string) {
     this.key = key;
     this.name = name;
     this.description = description;
   }
 
+  /**
+   * Add a connection to this potential memory.
+   *
+   * @param key The key of the concept to add a connection to.
+   */
   addConnection(key: string) {
     this.connections.push(key);
   }
@@ -22,6 +33,11 @@ class PotentialMemory {
 class MemoryChoice {
   private choices: PotentialMemory[];
 
+  /**
+   * Constructs a new instance of MemoryChoice with the provided potential memories.
+   *
+   * @param choices - An array of PotentialMemory instances to initialize the MemoryChoice with.
+   */
   constructor(choices: PotentialMemory[]) {
     this.choices = choices;
   }
@@ -30,6 +46,11 @@ class MemoryChoice {
 export class MemoryFormation {
   private mob: Speaker;
 
+  /**
+   * Creates a new MemoryFormation instance for the given mob.
+   *
+   * @param mob - The mob to create the memory formation for.
+   */
   constructor(mob: Speaker) {
     this.mob = mob;
   }
@@ -45,6 +66,11 @@ export class MemoryFormation {
   //     { "id": "fear", "name": "fear", "as_question": "is <subject> feeling fear?", "parent_concept": topLevelConcept }
   // ];
 
+  /**
+   * Creates memories for the given mob based on their relationships.
+   *
+   * @returns an empty array of MemoryChoice (for now)
+   */
   formMemoriesFromRelationships(): MemoryChoice[] {
     DB.prepare(
       `
@@ -155,6 +181,14 @@ export class MemoryFormation {
     return [];
   }
 
+  /**
+   * Aggregates potential memory choices for the mob by combining memories
+   * formed from various sources such as relationships, calendar events,
+   * today's events, and goals.
+   *
+   * @returns An array of MemoryChoice objects representing the collective
+   *          potential memories for the mob.
+   */
   gatherPotentialMemoryChoices(): MemoryChoice[] {
     const memoryChoices = [];
     memoryChoices.push(...this.formMemoriesFromRelationships());

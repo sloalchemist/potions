@@ -1,0 +1,89 @@
+# This workflow installs the latest version of Terraform CLI and configures the Terraform CLI configuration file
+# with an API token for Terraform Cloud (app.terraform.io). On pull request events, this workflow will run
+# `terraform init`, `terraform fmt`, and `terraform plan` (speculative plan via Terraform Cloud). On push events
+# to the "main" branch, `terraform apply` will be executed.
+#
+# Documentation for `hashicorp/setup-terraform` is located here: https://github.com/hashicorp/setup-terraform
+
+# Credit: AlfredMadere
+# Modified: EthanV1920
+
+name: 'Terraform Server Deploy'
+
+on:
+  push:
+    branches: 
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  
+jobs:
+  terraform:
+    name: Terraform Deploy
+    runs-on: ubuntu-latest
+    environment: prod
+
+    env:
+      TF_VAR_project_name: ${{ vars.SUPABASE_PROJECT_NAME }}  
+      TF_VAR_environment: ${{ vars.STAGE}}    
+      TF_VAR_ably_account_token: ${{ secrets.ABLY_ACCOUNT_TOKEN }}
+      TF_VAR_supabase_access_token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      TF_VAR_supabase_db_pass: ${{ secrets.SUPABASE_DB_PASS }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASS }} # necessary for supabase cli to not prompt for one
+      TF_VAR_supabase_organization_id: ${{ secrets.SUPABASE_ORGANIZATION_ID }}
+      TF_VAR_render_api_key: ${{ secrets.RENDER_API_KEY }}
+      TF_VAR_render_owner_id: ${{ secrets.RENDER_OWNER_ID }}
+      TF_VAR_github_token: ${{ secrets.WRITE_GITHUB_ENV_VARS_TOKEN}}
+
+    steps:
+      # 1. Check out your repository code
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # 1.1 Install Dependencies
+      - name: Install PostgreSQL Client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      # 1.2 Install Supabase CLI
+      - name: Install SupabaseCLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # 2. Set up Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          # Pin a Terraform version if you like (optional)
+          terraform_version: '1.10.4'
+          # This ensures Terraform CLI can authenticate with Terraform Cloud
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+  
+      # 3. Terraform Init
+      - name: Terraform Init
+        working-directory: ./.terraform-prod
+        run: terraform init
+
+      # 4. Terraform Format Check (fails CI if formatting is off)
+      - name: Terraform Format
+        working-directory: ./.terraform-prod
+        run: terraform fmt -check
+
+      # 5. Terraform Validate (checks syntax and basic config)
+      - name: Terraform Validate
+        working-directory: ./.terraform-prod
+        run: terraform validate
+
+      # 6. Terraform Plan (shows changes)
+      - name: Terraform Plan
+        working-directory: ./.terraform-prod
+        run: terraform plan -no-color
+
+      # 7. Terraform Apply (only applies on push to main, not on PR)
+      - name: Terraform Apply
+      #if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        working-directory: ./.terraform-prod
+        run: terraform apply -auto-approve -no-color

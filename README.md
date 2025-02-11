@@ -131,14 +131,14 @@ Run a script to automatically run all the build/run commands. `./setup.[ext] [op
   - `--all`
 
 ## Migrations
-### Supabase Setup
+### Supabase CLI Setup
 
 In order to migrate supabase tables we need to use the supabase CLI and connect it to our remote database.
 You can skip these steps by going to the migrations section, copying the SQL there and putting it into the supabase SQL editor.
 However, once you set this up it'll work for all future migrations.
 
 **1. Install the supabase CLI.**
-- Run `npm install -g supabase-cli` to install the supabase CLI globally or use a different package manager of your choice.
+- Follow the instructions [here](https://supabase.com/docs/guides/local-development/cli/getting-started). 
 
 **2. Connect the CLI to your supabase database.**
 - Run `supabase login` and follow the prompts to log in.
@@ -146,3 +146,32 @@ However, once you set this up it'll work for all future migrations.
 
 **3. Run the migrations.**
 - Run `supabase db push` to run the migrations in the `/migrations` directory.
+
+### Terraform Migration
+- Run `terraform apply` in the `/terraform` directory to apply the migrations.
+
+## Saving Server Data with Supabase
+Developers/players will now be able to save their world data to Supabase. This means any hard work you do is no longer erased when you close the server.
+
+**1. Create Supabase Storage**
+- Sign into your Supabase dashboard.
+- On the left hand side, navigate to Storage.
+- On the top left, select new bucket.
+- Name it what you want. It does not need to be public.
+
+**2. Update Server .env**
+- In you server .env add the following
+-    SUPABASE_BUCKET="your bucket name here" (include the quotes)
+-    SUPABASE_URL=
+-    SUPABASE_SERVICE_KEY=
+ - Your URL and Service key can be found in your auth server .env
+
+**How this works**
+ - The first time you start the server, your server data will be uploaded to Supabase.
+ - The next time you start your server, the data will be downloaded from Supabase.
+ - Data will also be saved every 10 minutes the server is running.
+ - You can manually save with the cheat code SHIFT+S 
+ - If you want to reset your world, stop the server, delete all the files in your bucket on the Supabase website, rebuild, then start your server. 
+
+ **DB Errors**
+ On the off chance you receive an error while running the server, you can always reset with the last bullet point above.

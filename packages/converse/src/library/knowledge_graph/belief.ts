@@ -1,5 +1,8 @@
 import { Noun } from './noun';
 
+/**
+ * Represents a belief in the knowledge graph.
+ */
 export interface Belief {
   id?: string;
   subject: Noun;

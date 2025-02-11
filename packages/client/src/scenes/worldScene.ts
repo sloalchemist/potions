@@ -5,7 +5,7 @@ import {
   initializePlayer,
   tick
 } from '../world/controller';
-import { bindAblyToWorldScene } from '../services/ablySetup';
+import { bindAblyToWorldScene, setupAbly } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
 import { Coord } from '@rt-potion/common';
 import { publicCharacterId } from '../worldMetadata';
@@ -22,7 +22,12 @@ import {
 } from '../worldDescription';
 import { UxScene } from './uxScene';
 import { setGameState } from '../world/controller';
-import { restoreHealth, speedUpCharacter } from '../utils/developerCheats';
+import {
+  restoreHealth,
+  persistWorldData,
+  speedUpCharacter
+} from '../utils/developerCheats';
+import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -45,6 +50,14 @@ export class WorldScene extends Phaser.Scene {
   terrainWidth: number = 0;
   terrainHeight: number = 0;
   nightOpacity: number = 0;
+  keys: { [key: string]: boolean } = { w: false, a: false, s: false, d: false };
+  prevKeys: { [key: string]: boolean } = {
+    w: false,
+    a: false,
+    s: false,
+    d: false
+  };
+  lastKeyUp = '';
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -158,8 +171,8 @@ export class WorldScene extends Phaser.Scene {
       right: number
     ) => void
   ) {
-    const terrainWidth = terrainData[0].length;
-    const terrainHeight = terrainData.length;
+    const terrainHeight = terrainData[0].length;
+    const terrainWidth = terrainData.length;
 
     // Iterate over each position in the terrain data
     for (let y = 0; y < terrainHeight; y++) {
@@ -359,8 +372,8 @@ export class WorldScene extends Phaser.Scene {
     this.nightOverlay.fillRect(
       0,
       0,
-      this.terrainWidth * TILE_SIZE,
-      this.terrainHeight * TILE_SIZE
+      this.terrainHeight * TILE_SIZE,
+      this.terrainWidth * TILE_SIZE
     );
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
     this.hideWorld();
@@ -394,12 +407,47 @@ export class WorldScene extends Phaser.Scene {
       }
     });
 
+    const movementKeys = ['w', 'a', 's', 'd'];
+
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (!world.mobs[publicCharacterId]) {
+        return;
+      }
+
+      const curKey = event.key.toLowerCase();
+      if (movementKeys.includes(curKey)) {
+        this.keys[curKey] = true;
+        this.lastKeyUp = curKey;
+      }
+
       if (event.shiftKey && event.code === 'KeyF') {
         speedUpCharacter();
       }
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
+      }
+      if (event.shiftKey && event.code === 'KeyS') {
+        persistWorldData();
+      }
+      // Brings up chat box for user
+      if (event.code === 'Slash') {
+        if (!this.scene.isActive('ChatOverlayScene')) {
+          this.scene.launch('ChatOverlayScene');
+        }
+      }
+      // Ends chat box for user
+      if (event.code === 'Escape') {
+        if (this.scene.isActive('ChatOverlayScene')) {
+          this.scene.stop('ChatOverlayScene');
+        }
+      }
+    });
+
+    this.input.keyboard?.on('keyup', (event: KeyboardEvent) => {
+      const curKey = event.key.toLowerCase();
+      if (movementKeys.includes(curKey)) {
+        this.keys[curKey] = false;
+        this.lastKeyUp = curKey;
       }
     });
 
@@ -423,6 +471,7 @@ export class WorldScene extends Phaser.Scene {
     this.hero = sprite;
   }
 
+  count = 0;
   update() {
     if (gameState !== 'stateInitialized') {
       this.hideWorld();
@@ -459,6 +508,80 @@ export class WorldScene extends Phaser.Scene {
         this.terrainHeight * TILE_SIZE
       );
     }
+
+    if (this.count > 50) {
+      this.count = 0;
+      this.handlePlayerMovement(true);
+    } else {
+      this.count++;
+      this.handlePlayerMovement(false);
+    }
+  }
+
+  keyChange() {
+    let different = false;
+    for (const key in this.keys) {
+      if (this.keys[key] !== this.prevKeys[key]) {
+        different = true;
+        break;
+      }
+    }
+    return different;
+  }
+
+  handlePlayerMovement(publish: boolean) {
+    const player = world.mobs[publicCharacterId];
+    if (!(player && player.position)) {
+      return;
+    }
+
+    let moveX = player.position.x;
+    let moveY = player.position.y;
+
+    let moved = false;
+    if (this.keys['w']) {
+      moveY--;
+      moved = true;
+    }
+    if (this.keys['s']) {
+      moveY++;
+      moved = true;
+    }
+    if (this.keys['a']) {
+      moveX--;
+      moved = true;
+    }
+    if (this.keys['d']) {
+      moveX++;
+      moved = true;
+    }
+
+    if (!moved) return;
+
+    let roundedX;
+    let roundedY;
+    const negKeys = ['w', 'a'];
+    if (negKeys.includes(this.lastKeyUp)) {
+      roundedX = Math.floor(moveX);
+      roundedY = Math.floor(moveY);
+    } else {
+      roundedX = Math.ceil(moveX);
+      roundedY = Math.ceil(moveY);
+    }
+
+    const target = { x: roundedX, y: roundedY };
+
+    // NOTE: the code in the 'else' block moves the player on the client side
+    //       publishPlayerPosition() calls that code itself, so player will
+    //       move on the client side for whichever case
+    if (publish) {
+      this.prevKeys = { ...this.keys };
+      publishPlayerPosition(target);
+    } else {
+      player.target = target;
+      const path = world.generatePath(player.unlocks, player.position!, target);
+      player.path = path;
+    }
   }
 
   showGameOver() {
@@ -473,18 +596,76 @@ export class WorldScene extends Phaser.Scene {
     text.setOrigin(0, 0);
     text.setScrollFactor(0); // Make it stay static
     text.setDepth(100);
+
+    this.time.delayedCall(RESPAWN_DELAY, () => {
+      // Add respawn button
+      const respawn = this.add.text(90, 200, 'RESPAWN', buttonStyle);
+      respawn.setOrigin(0, 0);
+      respawn.setScrollFactor(0);
+      respawn.setDepth(100);
+      respawn.setInteractive({ useHandCursor: true });
+
+      // Hover effects
+      respawn.on('pointerover', () => {
+        respawn.setStyle(nameButtonHoverStyle);
+      });
+      respawn.on('pointerout', () => {
+        respawn.setStyle(buttonStyle);
+      });
+
+      // Respawn button action
+      respawn.on('pointerdown', () => {
+        this.resetToRespawn();
+      });
+
+      // Add menu button
+      const menu = this.add.text(290, 200, 'MENU', buttonStyle);
+      menu.setOrigin(0, 0);
+      menu.setScrollFactor(0);
+      menu.setDepth(100);
+      menu.setInteractive({ useHandCursor: true });
+
+      // Hover effects
+      menu.on('pointerover', () => {
+        menu.setStyle(nameButtonHoverStyle);
+      });
+      menu.on('pointerout', () => {
+        menu.setStyle(buttonStyle);
+      });
+
+      // Main menu button
+      menu.on('pointerdown', () => {
+        this.resetToLoadWorldScene();
+      });
+    });
   }
 
   /* Stop all scenes related to game play and go back to the LoadWordScene 
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
-    this.time.delayedCall(RESPAWN_DELAY, () => {
-      setGameState('uninitialized');
-      this.scene.stop('PauseScene');
-      this.scene.stop('WorldScene');
-      this.scene.stop('UxScene');
-      this.scene.stop('FrameScene');
-      this.scene.start('LoadWorldScene');
-    });
+    setGameState('uninitialized');
+    this.scene.stop('BrewScene');
+    this.scene.stop('PauseScene');
+    this.scene.stop('WorldScene');
+    this.scene.stop('UxScene');
+    this.scene.stop('FrameScene');
+    this.scene.stop('ChatOverlayScene');
+    this.scene.start('LoadWorldScene');
+  }
+
+  /**
+   * Stop the world scene, re-connect to Ably after being disconnected by
+   * the server, then restart the world scene
+   */
+  resetToRespawn() {
+    this.scene.stop('WorldScene');
+
+    setupAbly()
+      .then(() => {
+        this.scene.start('WorldScene');
+      })
+      .catch((_error) => {
+        console.error('Error setting up Ably');
+      });
   }
 }
