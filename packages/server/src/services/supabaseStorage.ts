@@ -3,6 +3,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
 import { execSync } from 'child_process';
 import path from 'path';
+import Database = require('better-sqlite3');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -93,19 +94,24 @@ function createDbSnapshot(originalDbPath: string, snapshotDbPath: string) {
 }
 
 function mergeWalIntoDb(dbPath: string) {
-  try {
-    console.log(`Merging WAL into ${dbPath} snapshot...`);
+    try {
+        console.log(`Merging WAL into ${dbPath} snapshot...`);
 
-    // Run SQLite commands to merge WAL and compact the snapshot
-    execSync(`sqlite3 ${dbPath} "PRAGMA journal_mode=DELETE;"`);
-    execSync(`sqlite3 ${dbPath} "VACUUM;"`);
+        const db = new Database(dbPath);
 
-    console.log(`Successfully merged WAL into ${dbPath}`);
-  } catch (error) {
-    console.error(`Error merging WAL into ${dbPath}:`, error);
-    throw error;
-  }
+        // Merge WAL into the main database and switch back to DELETE mode
+        db.pragma('journal_mode = DELETE');
+        // Compact the database file
+        db.exec('VACUUM');
+        db.close();
+
+        console.log(`Successfully merged WAL into ${dbPath}`);
+    } catch (error) {
+        console.error(`Error merging WAL into ${dbPath}:`, error);
+        throw error;
+    }
 }
+
 
 async function uploadLocalFile(path: string, supabase: SupabaseClient) {
   const buffer = await fs.promises.readFile('data/' + path);
