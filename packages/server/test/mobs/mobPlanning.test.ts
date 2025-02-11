@@ -5,7 +5,6 @@ import { Coord } from '@rt-potion/common';
 import { Community } from '../../src/community/community';
 import { DB } from '../../src/services/database';
 import { FantasyDate } from '../../src/date/fantasyDate';
-import { Flee } from '../../src/mobs/plans/flee';
 
 beforeEach(() => {
   commonSetup(5);
@@ -64,8 +63,6 @@ describe('World Aggro Logic', () => {
       100
     );
     const test2Mob = Mob.getMob(mob2Id);
-    const mob1actions = mobFactory.getActionSet(test1Mob!);
-    const mob2actions = mobFactory.getActionSet(test2Mob!);
     Community.makeFavor('silverclaw', 'blobs', 0);
     Community.makeFavor('alchemists', 'blobs', 0);
     Community.makeFavor('fighters', 'blobs', -100);
@@ -98,8 +95,6 @@ describe('World Aggro Logic', () => {
       100
     );
     const test2Mob = Mob.getMob(mob2Id);
-    const mob1actions = mobFactory.getActionSet(test1Mob!);
-    const mob2actions = mobFactory.getActionSet(test2Mob!);
     Community.makeFavor('silverclaw', 'blobs', 0);
     Community.makeFavor('alchemists', 'blobs', 0);
     Community.makeFavor('fighters', 'blobs', 0);
@@ -142,8 +137,6 @@ describe('World Aggro Logic', () => {
       100
     );
     const test2Mob = Mob.getMob(mob2Id);
-    const mob1actions = mobFactory.getActionSet(test1Mob!);
-    const mob2actions = mobFactory.getActionSet(test2Mob!);
 
     Community.makeFavor('silverclaw', 'blobs', 0);
     Community.makeFavor('alchemists', 'blobs', 0);
