@@ -19,5 +19,8 @@
   },
   "dependencies": {
     "rt-potion": "file:"
-  }
+  },
+  "engines": {
+  "node": ">=20.0.0"
+}
 }
