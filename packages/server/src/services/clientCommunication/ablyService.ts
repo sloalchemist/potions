@@ -281,7 +281,11 @@ export class AblyService implements PubSub {
     });
   }
 
-  public changeMaxHealth(key: string, maxHealth: number, newValue: number): void {
+  public changeMaxHealth(
+    key: string,
+    maxHealth: number,
+    newValue: number
+  ): void {
     if (newValue == undefined || key == undefined || maxHealth == undefined) {
       throw new Error(
         `Sending invalid changeMaxHealth message ${key}, ${maxHealth}, ${newValue}`

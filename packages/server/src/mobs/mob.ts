@@ -170,7 +170,7 @@ export class Mob {
   get _maxHealth(): number {
     return this.maxHealth;
   }
-  
+
   get _attack(): number {
     return this.attack;
   }

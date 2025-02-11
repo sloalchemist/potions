@@ -29,44 +29,49 @@ describe('Favorability Tests', () => {
 
   test('Test whether mood index calculation works', () => {
     // initialize mob
-    const position: Coord = { x: 0, y: 0}
-    mobFactory.makeMob('villager', position, "testBlob", "blobtest")
-    var testMob = Mob.getMob('testBlob')
-    expect(testMob).not.toBeUndefined()
+    const position: Coord = { x: 0, y: 0 };
+    mobFactory.makeMob('villager', position, 'testBlob', 'blobtest');
+    var testMob = Mob.getMob('testBlob');
+    expect(testMob).not.toBeUndefined();
 
     // test the initial score is correct
-    const score = Favorability.getMoodIndex(testMob!)
-    expect(score).toBeCloseTo(1)
+    const score = Favorability.getMoodIndex(testMob!);
+    expect(score).toBeCloseTo(1);
 
     // test the aggregation score is correct (assume LLM gave score of 2.5)
-    const score2 = Favorability.aggConversationScore(testMob!, 2.5)
-    expect(score2).toBeCloseTo(3.5)
-    
-  })
+    const score2 = Favorability.aggConversationScore(testMob!, 2.5);
+    expect(score2).toBeCloseTo(3.5);
+  });
 
   test('Player stat change', () => {
     // initialize player
-    const position: Coord = { x: 0, y: 0}
-    mobFactory.makeMob('player', position, "testPlayer", "playertest")
-    var testMob = Mob.getMob('testPlayer')
-    expect(testMob).not.toBeUndefined()
+    const position: Coord = { x: 0, y: 0 };
+    mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
+    var testMob = Mob.getMob('testPlayer');
+    expect(testMob).not.toBeUndefined();
 
     // test the initial score is correct
-    // console.log(testMob?._speed)
-    // console.log(testMob?._maxHealth)
-    console.log(testMob?._attack)
-
     Community.makeFavor('alchemists', 'blobs', 100);
     Community.makeFavor('alchemists', 'silverclaw', 100);
     Community.makeFavor('alchemists', 'fighters', 100);
 
-    // console.log(Favorability.modifiedLogistic(1))
+    // test whether the stat change is correct if favorability = 100
+    Favorability.updatePlayerStat(testMob!);
+    expect(testMob?._speed).toBeCloseTo(3.5);
+    expect(testMob?._maxHealth).toBeCloseTo(176);
+    expect(testMob?._attack).toBeCloseTo(6.9);
 
-    Favorability.updatePlayerStat(testMob!)
-    expect(testMob?._speed).toBeCloseTo(3.6)
-    expect(testMob?._maxHealth).toBeCloseTo(185)
-    expect(testMob?._attack).toBeCloseTo(7.1)
-  })
+    // should revert back to normal if favorability back to 0
+    Community.adjustFavor('alchemists', 'blobs', -100);
+    expect(Community.getFavor('alchemists', 'blobs')).toBeCloseTo(0);
+    Community.adjustFavor('alchemists', 'silverclaw', -100);
+    Community.adjustFavor('alchemists', 'fighters', -100);
+
+    Favorability.updatePlayerStat(testMob!);
+    expect(testMob?._speed).toBeCloseTo(2.5);
+    expect(testMob?._maxHealth).toBeCloseTo(100);
+    expect(testMob?._attack).toBeCloseTo(5);
+  });
 });
 
 afterEach(() => {
