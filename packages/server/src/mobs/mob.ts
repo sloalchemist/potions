@@ -483,47 +483,26 @@ export class Mob {
   //   });
 
   //   pubSub.changeEffect(this.id, attribute, delta, value);
-  //   pubSub.changeTargetTick(this.id, attribute, duration, tick);
   // }
   
   changeEffect(delta: number, duration: number, attribute: string): void {
-    // this function now just inserts a delta in mobEffects. 
-    //
-    // if there is an effect already in there for that same attribute, this row just gets
-    // added ahead of it and the view will select the delta from the newest row
-    //
-    // if this function is called with a negative duration, we delete the rows
-    // in mobEffects for this attribute/id and the mobView and must broadcast 
-    // the delta and new value for this newly changed attribute
-
+    // only responsible for inserting rows and broadcasting changes
     const targetTick = this.current_tick + duration;
 
-    if (duration < 0) {
-      // delete rows for this attribute/id
-      DB.prepare(
-        `
-        DELETE FROM mobEffects
-        WHERE id = :id AND targetTick <= :currentTick
-        `
-      ).run({ id: this.id, currentTick: this.current_tick });
-    }
-    else {
-      // put in new row into mobEffects with the delta
-      DB.prepare(
-        `
-        INSERT INTO mobEffects (id, attribute, delta, targetTick)
-        VALUES (:id, :attribute, :delta, :targetTick)
-        `
-      ).run({
-        id: this.id,
-        attribute: attribute,
-        delta: delta,
-        targetTick: targetTick
-      });
-
-      pubSub.changeTargetTick(this.id, attribute, duration, targetTick);
-    }
-
+    // put in new row into mobEffects with the delta
+    DB.prepare(
+      `
+      INSERT INTO mobEffects (id, attribute, delta, targetTick)
+      VALUES (:id, :attribute, :delta, :targetTick)
+      `
+    ).run({
+      id: this.id,
+      attribute: attribute,
+      delta: delta,
+      targetTick: targetTick
+    });
+    
+    // grab updated value
     const value = DB.prepare(
       `
       SELECT ${attribute}
@@ -532,34 +511,71 @@ export class Mob {
       `
     ).get({
       id: this.id
-    }) as number;
+    }) as Record<string, number>;
 
-    pubSub.changeEffect(this.id, attribute, delta, value);
+    pubSub.changeEffect(this.id, attribute, delta, value[attribute]);
   }
 
   private checkTickReset(): void {
-    // just need to query the mobEffects table to see if any effects
-    // expire on the current tick (or before?), then communicate back
+    // grab all deleted effects from ids 
+    // loop through all of them, select for new value from mobView, then broadcast
+    // take deletion logic out of changeEffect
 
-    DB.prepare(
+    type QueryResult = {
+      attribute: string;
+      delta: number;
+    };
+
+    const result = DB.prepare(
       `
+      WITH current_effects AS (
+        SELECT attribute
+        FROM mobEffects
+        WHERE id = :id AND targetTick > :currentTick
+        GROUP BY attribute
+      )
       DELETE FROM mobEffects
-      WHERE id = :id AND targetTick <= :currentTick
-      RETURNING id, attribute, delta
+      WHERE id = :id AND attribute NOT IN (SELECT attribute FROM current_effects)
+      RETURNING attribute, delta
       `
-    ).run({ id: this.id, currentTick: this.current_tick });
+    ).all({ 
+      id: this.id, 
+      currentTick: this.current_tick 
+    }) as QueryResult[] | undefined;
 
-    // get the new value for the attribute and broadcast it
-    const effects = DB.prepare(
-      `
-      SELECT ${attribute}
-      FROM mobView
-      WHERE id = :id
-      `
-    ).all({ id: this.id }) as { attribute: string}[];
+    if (!result) {
+      return;
+    }
 
+    // reduce the list to only unique attr's so we don't broadcast multiple deletions
+    const uniqueRes: QueryResult[] = Object.values(
+      result.reduce((acc: Record<string, QueryResult>, item: QueryResult) => {
+        // if the attribute already exists in the accumulator, keep the higher delta
+        if (acc[item.attribute]) {
+          if (item.delta > acc[item.attribute].delta) {
+            acc[item.attribute] = item;
+          }
+        } else {
+          // else add the item to the accumulator
+          acc[item.attribute] = item;
+        }
+        return acc;
+      }, {})
+    );
 
-    pubSub.changeEffect(this.id, attribute, 0, value);
+    for (const row of uniqueRes){
+      // get the new value for the attribute and broadcast it
+      const value = DB.prepare(
+        `
+        SELECT ${row.attribute}
+        FROM mobView
+        WHERE id = :id
+        `
+      ).get({ id: this.id }) as Record<string, number>;
+      
+      pubSub.changeEffect(this.id, row.attribute, -row.delta, value[row.attribute]);
+    }
+
   }
 
   getHouse(): House | undefined {
@@ -846,8 +862,9 @@ export class Mob {
     `;
 
   static viewSQL = `
-    CREATE VIEW mobView AS (
-        SELECT m.id,
+    CREATE VIEW mobView AS
+        SELECT 
+          m.id,
           m.action_type,
           m.subtype,
           m.name,
@@ -855,11 +872,11 @@ export class Mob {
           m.health,
           m.maxHealth,
           m.attack + COALESCE(
-            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'attack' ORDER BY e.target_tick DESC LIMIT 1)
-            , 0),
+            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'attack' ORDER BY e.targetTick DESC LIMIT 1)
+            , 0) AS attack,
           m.speed + COALESCE(
-            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'speed' ORDER BY e.target_tick DESC LIMIT 1)
-            , 0),
+            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'speed' ORDER BY e.targetTick DESC LIMIT 1)
+            , 0) AS speed,
           m.position_x,
           m.position_y,
           m.carrying_id,
@@ -874,6 +891,6 @@ export class Mob {
           m.community_id,
           m.house_id
         FROM mobs AS m
-    );
-  `;
+      ;
+    `;
 }
