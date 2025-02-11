@@ -54,7 +54,7 @@ export class Flee implements Plan {
   }
 
   utility(npc: Mob): number {
-    if (!npc.position) return -Infinity;
+    if (!npc.position || npc.type == "fighter") return -Infinity;
 
     const visionMulitple = npc.action == this.type() ? 2 : 1;
     // If fleeing, increase radius to 12
