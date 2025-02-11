@@ -9,8 +9,6 @@ export let playerChannel: Types.RealtimeChannelCallbacks;
 
 const SERVER_URL = process.env.SERVER_URL;
 let channelsBoundToWorld: boolean = false;
-export let authorizer =
-  SERVER_URL.slice(-1) == '/' ? 'auth?username=' : '/auth?username=';
 export function setupAbly(): Promise<void> {
   let authorizer =
     SERVER_URL.slice(-1) == '/' ? 'auth?username=' : '/auth?username=';
