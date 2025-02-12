@@ -20,6 +20,13 @@ const schema = `
     ${Item.SQL}
     ${House.SQL}
 
+    CREATE TABLE grafanadata (
+      tick_id INTEGER NOT NULL PRIMARY KEY,
+      num_mobs INTEGER NULL,
+      num_items INTEGER NULL,
+      created_at TEXT NOT NULL DEFAULT (datetime('now', 'utc'))
+    );
+
     CREATE TABLE ticks (
         tick INTEGER NOT NULL
     );

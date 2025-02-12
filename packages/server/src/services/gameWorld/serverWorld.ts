@@ -83,7 +83,6 @@ export class ServerWorld implements GameWorld {
 
   tick(deltaTime: number) {
     //const startTime = Date.now();
-
     this.runItemTicks();
     this.runMobTicks(deltaTime);
 
