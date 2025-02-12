@@ -29,6 +29,32 @@
       "on_tick": []
     },
     {
+      "name": "Starfish",
+      "type": "starfish",
+      "description": "A gorgeous teal starfish",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#10BFBF"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
       "name": "Fireball",
       "type": "fire-ball",
       "description": "A spicy and tangy bite that has quite a kick!",
@@ -254,26 +280,6 @@
           "action": "spawn_item",
           "parameters": {
             "type": "message-in-bottle",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 3,
-            "rate": 0.1
-          }
-        }
-      ]
-    },
-    {
-      "name": "Starfish",
-      "type": "starfish",
-      "description": "A starfish",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": [
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "starfish",
             "global_max": 10,
             "local_max": 1,
             "radius": 3,
