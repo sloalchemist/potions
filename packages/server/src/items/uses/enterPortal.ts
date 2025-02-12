@@ -2,17 +2,50 @@ import { Mob } from '../../mobs/mob';
 import { pubSub } from '../../services/clientCommunication/pubsub';
 import { Item } from '../item';
 import { Use } from './use';
+import {
+  WorldData, // ApiResponse,
+  getWorldData
+} from '../../services/authMarshalling';
+
 
 export class EnterPortal implements Use {
   key: string;
   worlds: string[];
+  world: string[];
 
   constructor() {
     this.key = 'enter';
 
     // TODO: populate available worlds from DB
     this.worlds = ['Valoron', 'Oozon'];
+
+    //this.worldData = getWorldData();
+    this.world = ['none', 'oops']
+    this.initializeWorlds();
   }
+
+   private async initializeWorlds() {
+    console.log('hi')
+    // TODO: populate available worlds from DB
+    try {
+      const result = await getWorldData();
+      console.log(result.message); // "Get world data successfully."
+      this.world = ['test1', 'test2']
+      console.log(this.world)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async setWorlds() {
+    try {
+      const result = getWorldData();
+      console.log(result)
+    } catch (error) {
+      console.error('Failed to set worlds:', error);
+    }
+  }
+ 
 
   description(_mob: Mob, _item: Item): string {
     return 'Enter portal';
