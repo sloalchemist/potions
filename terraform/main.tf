@@ -108,7 +108,7 @@ resource "local_file" "server_env" {
   content         = <<-EOT
     ABLY_API_KEY=${ably_api_key.root.key}
     AUTH_SERVER_URL=http://localhost:3000
-    SUPABASE_URL=https://${supabase_project.potions.id}.supabase.co
+    SUPABASE_URL=https://${supabase_project.potions.id}capabilities.supabase.co
     SUPABASE_SERVICE_KEY=${data.supabase_apikeys.dev.service_role_key}
   EOT
   file_permission = "0600"
