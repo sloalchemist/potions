@@ -29,3 +29,5 @@ package-lock.json
 
 # Test Coverage Files
 **/build/logs/**
+build/logs/
+**/coverage/**
