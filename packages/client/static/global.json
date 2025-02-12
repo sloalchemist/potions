@@ -43,21 +43,21 @@
       "drops_item": "log"
     },
     {
-        "name": "obsidian-wall",
-        "type": "obsidian-wall",
-        "item_group": "wall",
-        "layout_type": "wall",
-        "carryable": false,
-        "smashable": true,
-        "walkable": false,
-        "attributes": [
-          {
-            "name": "health",
-            "value": 150
-          }
-        ],
-        "interactions": [],
-        "drops_item": "obsidian-shard"
+      "name": "obsidian-wall",
+      "type": "obsidian-wall",
+      "item_group": "wall",
+      "layout_type": "wall",
+      "carryable": false,
+      "smashable": true,
+      "walkable": false,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 150
+        }
+      ],
+      "interactions": [],
+      "drops_item": "obsidian-shard"
     },
     {
       "name": "Partial Wall",
@@ -79,23 +79,23 @@
       "drops_item": "log"
     },
     {
-        "name": "partial-obsidian-wall",
-        "type": "partial-obsidian-wall",
-        "carryable": false,
-        "walkable": false,
-        "smashable": true,
-        "attributes": [
-          {
-            "name": "complete",
-            "value": 3
-          },
-          {
-            "name": "health",
-            "value": 10
-          }
-        ],
-        "interactions": [],
-        "drops_item": "obsidian-shard"
+      "name": "partial-obsidian-wall",
+      "type": "partial-obsidian-wall",
+      "carryable": false,
+      "walkable": false,
+      "smashable": true,
+      "attributes": [
+        {
+          "name": "complete",
+          "value": 3
+        },
+        {
+          "name": "health",
+          "value": 10
+        }
+      ],
+      "interactions": [],
+      "drops_item": "obsidian-shard"
     },
     {
       "name": "Fence",
@@ -115,21 +115,21 @@
       "drops_item": "log"
     },
     {
-        "name": "obsidian-fence",
-        "type": "obsidian-fence",
-        "item_group": "fence",
-        "layout_type": "fence",
-        "carryable": false,
-        "walkable": false,
-        "smashable": true,
-        "attributes": [
-          {
-            "name": "health",
-            "value": 150
-          }
-        ],
-        "interactions": [],
-        "drops_item": "obsidian-shard"
+      "name": "Fence",
+      "type": "fence",
+      "item_group": "fence",
+      "layout_type": "fence",
+      "carryable": false,
+      "walkable": false,
+      "smashable": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 100
+        }
+      ],
+      "interactions": [],
+      "drops_item": "obsidian-shard"
     },
     {
       "name": "Gate",
@@ -149,21 +149,21 @@
       "open": false
     },
     {
-        "name": "obsidian-gate",
-        "type": "obsidian-gate",
-        "item_group": "fence",
-        "layout_type": "opens",
-        "carryable": false,
-        "walkable": true,
-        "smashable": true,
-        "attributes": [
-          {
-            "name": "health",
-            "value": 150
-          }
-        ],
-        "interactions": [],
-        "open": false
+      "name": "obsidian-gate",
+      "type": "obsidian-gate",
+      "item_group": "fence",
+      "layout_type": "opens",
+      "carryable": false,
+      "walkable": true,
+      "smashable": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 150
+        }
+      ],
+      "interactions": [],
+      "open": false
     },
     {
       "name": "Door",
@@ -182,20 +182,20 @@
       "interactions": []
     },
     {
-        "name": "stone-door",
-        "type": "stone-door",
-        "item_group": "wall",
-        "layout_type": "opens",
-        "carryable": false,
-        "smashable": true,
-        "walkable": true,
-        "attributes": [
-          {
-            "name": "health",
-            "value": 150
-          }
-        ],
-        "interactions": []
+      "name": "stone-door",
+      "type": "stone-door",
+      "item_group": "wall",
+      "layout_type": "opens",
+      "carryable": false,
+      "smashable": true,
+      "walkable": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 150
+        }
+      ],
+      "interactions": []
     },
     {
       "name": "Tree",
@@ -217,20 +217,20 @@
       ]
     },
     {
-        "name": "lava-pool",
-        "type": "lava-pool",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "lava-pool",
+      "type": "lava-pool",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "tar-pool",
-        "type": "tar-pool",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": [
+      "name": "tar-pool",
+      "type": "tar-pool",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
         {
           "action": "spawn_item",
           "parameters": {
@@ -464,126 +464,126 @@
       ]
     },
     {
-        "name": "large-rock",
-        "type": "large-rock",
-        "description": "A large rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "large-rock",
+      "type": "large-rock",
+      "description": "A large rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "medium-rock",
-        "type": "medium-rock",
-        "description": "A medium rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "medium-rock",
+      "type": "medium-rock",
+      "description": "A medium rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "small-rock-1",
-        "type": "small-rock-1",
-        "description": "A small rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "small-rock-1",
+      "type": "small-rock-1",
+      "description": "A small rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "small-rock-2",
-        "type": "small-rock-2",
-        "description": "A small rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "small-rock-2",
+      "type": "small-rock-2",
+      "description": "A small rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "small-rock-3",
-        "type": "small-rock-3",
-        "description": "A small rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "small-rock-3",
+      "type": "small-rock-3",
+      "description": "A small rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "small-rock-4",
-        "type": "small-rock-4",
-        "description": "A small rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "small-rock-4",
+      "type": "small-rock-4",
+      "description": "A small rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "small-rock-5",
-        "type": "small-rock-5",
-        "description": "A small rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "small-rock-5",
+      "type": "small-rock-5",
+      "description": "A small rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "small-rock-6",
-        "type": "small-rock-6",
-        "description": "A small rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "small-rock-6",
+      "type": "small-rock-6",
+      "description": "A small rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "small-rock-cluster-1",
-        "type": "small-rock-cluster-1",
-        "description": "A small rock cluster",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "small-rock-cluster-1",
+      "type": "small-rock-cluster-1",
+      "description": "A small rock cluster",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "small-rock-cluster-2",
-        "type": "small-rock-cluster-3",
-        "description": "A small rock cluster",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "small-rock-cluster-2",
+      "type": "small-rock-cluster-3",
+      "description": "A small rock cluster",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "rock-red-1",
-        "description": "A red rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "rock-red-1",
+      "description": "A red rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "red-rock-2",
-        "description": "A red rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "red-rock-2",
+      "description": "A red rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "small-red-rock-1",
-        "description": "A small red rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "small-red-rock-1",
+      "description": "A small red rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name": "small-red-rock-2",
-        "description": "A small red rock",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "small-red-rock-2",
+      "description": "A small red rock",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
       "name": "sun-flower",
@@ -669,86 +669,86 @@
       "name": "mushroom-single-large",
       "type": "mushroom-single-large",
       "description": "A large single mushroom",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": [
-          {
-            "action": "spawn_item",
-            "parameters": {
-              "type": "mushroom-single-large",
-              "global_max": 10,
-              "local_max": 1,
-              "radius": 3,
-              "rate": 0.1
-            }
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "mushroom-single-large",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
           }
-        ]
+        }
+      ]
     },
     {
       "name": "mushroom-single-small",
       "type": "mushroom-single-small",
-        "description": "A small single mushroom",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": [
-          {
-            "action": "spawn_item",
-            "parameters": {
-              "type": "mushroom-single-small",
-              "global_max": 10,
-              "local_max": 1,
-              "radius": 3,
-              "rate": 0.1
-            }
+      "description": "A small single mushroom",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "mushroom-single-small",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
           }
-        ]
+        }
+      ]
     },
     {
-        "name": "cliff",
-        "type": "cliff",
-        "description": "red cliff found in valoron",
-        "carryable": false,
-        "walkable": false,
-        "interactions": [],
-        "on_tick": []
+      "name": "cliff",
+      "type": "cliff",
+      "description": "red cliff found in valoron",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name":"stone-path-horizontal",
-        "type":"stone-path-horizontal",
-        "description":"A horizontal stone path",
-        "carryable":false,
-        "walkable":true,
-        "interactions":[],
-        "on_tick":[]
+      "name": "stone-path-horizontal",
+      "type": "stone-path-horizontal",
+      "description": "A horizontal stone path",
+      "carryable": false,
+      "walkable": true,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name":"stone-path-vertical",
-        "type":"stone-path-vertical",
-        "description":"A vertical stone path",
-        "carryable":false,
-        "walkable":true,
-        "interactions":[],
-        "on_tick":[]
+      "name": "stone-path-vertical",
+      "type": "stone-path-vertical",
+      "description": "A vertical stone path",
+      "carryable": false,
+      "walkable": true,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name":"stone-path-circular",
-        "type":"stone-path-circular",
-        "description":"A circular stone path",
-        "carryable":false,
-        "walkable":true,
-        "interactions":[],
-        "on_tick":[]
+      "name": "stone-path-circular",
+      "type": "stone-path-circular",
+      "description": "A circular stone path",
+      "carryable": false,
+      "walkable": true,
+      "interactions": [],
+      "on_tick": []
     },
     {
-        "name":"volcano",
-        "type":"volcano",
-        "description":"A volcano",
-        "carryable":false,
-        "walkable":false,
-        "interactions":[],
-        "on_tick":[]
+      "name": "volcano",
+      "type": "volcano",
+      "description": "A volcano",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": []
     },
     {
       "type": "heart-beet-plant",
@@ -816,7 +816,7 @@
       ]
     },
     {
-      "name": "Log",
+      "name": "Obsidian Shard",
       "type": "log",
       "carryable": true,
       "smashable": true,
@@ -1108,59 +1108,59 @@
       ]
     },
     {
-        "name": "obsidian-cauldron",
-        "type": "obsidian-cauldron",
-        "carryable": false,
-        "walkable": false,
-        "attributes": [
-          {
-            "name": "ingredients",
-            "value": 0
-          },
-          {
-            "name": "potion_subtype",
-            "value": 0
-        }
-    ],
-    "interactions": [
+      "name": "obsidian-cauldron",
+      "type": "obsidian-cauldron",
+      "carryable": false,
+      "walkable": false,
+      "attributes": [
         {
-            "description": "Add Ingredient",
-            "action": "add_ingredient",
-            "while_carried": false,
-            "conditions": [
-              {
-                "attribute_name": "ingredients",
-                "value": 3,
-                "comparison": "less_than"
-              }
-            ]
-          },
-          {
-            "description": "Bottle Potion",
-            "action": "bottle_potion",
-            "while_carried": false,
-            "conditions": [
-              {
-                "attribute_name": "ingredients",
-                "value": 0,
-                "comparison": "greater_than"
-              }
-            ]
-          },
-          {
-            "description": "Dump Cauldron",
-            "action": "dump_cauldron",
-            "while_carried": false,
-            "conditions": [
-              {
-                "attribute_name": "ingredients",
-                "value": 0,
-                "comparison": "greater_than"
-              }
-            ]
-          }
-        ]
-      },
+          "name": "ingredients",
+          "value": 0
+        },
+        {
+          "name": "potion_subtype",
+          "value": 0
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Add Ingredient",
+          "action": "add_ingredient",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "ingredients",
+              "value": 3,
+              "comparison": "less_than"
+            }
+          ]
+        },
+        {
+          "description": "Bottle Potion",
+          "action": "bottle_potion",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "ingredients",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
+        },
+        {
+          "description": "Dump Cauldron",
+          "action": "dump_cauldron",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "ingredients",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
+        }
+      ]
+    },
     {
       "name": "Gold",
       "type": "gold",

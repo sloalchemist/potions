@@ -446,6 +446,33 @@
       ]
     },
     {
+      "name": "Obsidian Shard",
+      "type": "obsidian-shard",
+      "carryable": true,
+      "smashable": true,
+      "walkable": true,
+      "flat": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Start wall",
+          "action": "start_wall",
+          "while_carried": true
+        },
+        {
+          "description": "Build wall",
+          "action": "build_wall",
+          "while_carried": true,
+          "requires_item": "partial-wall"
+        }
+      ]
+    },
+    {
       "name": "Portal",
       "type": "portal",
       "description": "A magical gateway that spawns mobs and allows travel between locations.",
