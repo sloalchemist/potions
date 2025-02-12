@@ -105,17 +105,7 @@ export class WorldScene extends Phaser.Scene {
       frameRate: 6,
       repeat: -1
     });
-    // this.anims.create({
-    //     key: `volacano`,
-    //     frames: this.anims.generateFrameNames('global_atlas', {
-    //       start: 1,
-    //       end: 8,
-    //       prefix: `volcano-`
-    //       //suffix: '.png'
-    //     }),
-    //     frameRate: 6,
-    //     repeat: -1
-    //   });
+    
     metadata.item_types.forEach((itemType) => {
       //console.log('Adding item', itemType.type);
       this.itemSource[itemType.type] = atlasName;
