@@ -61,9 +61,10 @@ Previously you were required to setup Ably, Supabase and several `.env` files ma
 **3. Go grab your ably account token.**
 - Create an Ably account if you don't have one already. On the dashboard, navigate to Account > My Access Tokens. Create a new token, **checking all of the permissions boxes**. Copy the token and paste it into your newly created `terraform.tfvars` file as your `ably_account_token`. 
 
-**4. Download docker desktop.**
+**4. Download and start docker desktop.**
 - Download [Docker Desktop](https://www.docker.com/products/docker-desktop/).
-- Make sure the daemon is running before proceeding. You can do this visually in the docker desktop app or using any of the methods described [here](https://chatgpt.com/share/67ace93b-7a4c-8003-8eed-e599196ddb2a).
+- **Make sure the daemon is running before proceeding**. You can do this visually in the docker desktop app or using any of the methods described [here](https://chatgpt.com/share/67ace93b-7a4c-8003-8eed-e599196ddb2a).
+- Create an account on Docker in the desktop app to allow you to pull docker images from the docker hub.
 
 **4. Run Terraform**
 
