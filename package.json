@@ -7,7 +7,7 @@
     "lint:fix": "eslint . --config eslint.config.mjs --fix",
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
-    "test:coverage": "pnpx jest --coverage=true --coverage-directory=build/logs",
+    "test:coverage": "pnpx jest --coverage=true --coverage-directory=build/logs --silent",
     "clean": "pnpm -r run clean"
   },
   "devDependencies": {
