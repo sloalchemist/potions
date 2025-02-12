@@ -46,26 +46,62 @@ Previously you were required to setup Ably, Supabase and several `.env` files ma
 
 ### Steps:
 
+> **Note**: YOU NEED TOKENS! Copying your current Ably and Supabase API keys will not work. You need account tokens. 
+
 **1. Create your `terraform.tfvars` file.** This will hold your account tokens for all providers.
-- Run `cp terraform/terraform.tfvars.example terraform/terraform.tfvars`. This will create your `terraform.tfvars` from the example.
+- From the project root, run `cp terraform/terraform.tfvars.example terraform/terraform.tfvars`. This will create your `terraform.tfvars` from the example.
 
 **2. Go grab your supabase credentials.**
 - In the supabase dashboard, go to your organization settings - creating an organization if you don't have one already. Copy the "Organization slug" and paste it into your newly created `terraform.tfvars` file as your `supabase_organization_id`.
 - Again in the supabase dashboard, navigate to "Access tokens". Create an access token and paste it into your newly created `terraform.tfvars` file as your `supabase_access_token`.
 - (optional) Change the default `supabase_db_pass` in your `terraform.tfvars` file.
 
+> **Note**: You are only allowed 2 active supabase projects at a time on the free tier. Because terraform will create a new one, you need to make sure you only have at most 1 active supabase project before running `terraform apply`.
+
 **3. Go grab your ably account token.**
-- Create an Ably account if you don't have one already. On the dashboard, navigate to Account > My Access Tokens. Create a new token,checking all of the permissions boxes. Copy the token and paste it into your newly created `terraform.tfvars` file as your `ably_account_token`. 
+- Create an Ably account if you don't have one already. On the dashboard, navigate to Account > My Access Tokens. Create a new token, **checking all of the permissions boxes**. Copy the token and paste it into your newly created `terraform.tfvars` file as your `ably_account_token`. 
 
-**4. Spin up all your resources with a single command.**
+**4. Download docker desktop.**
+- Download [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+- Make sure the daemon is running before proceeding. You can do this visually in the docker desktop app or using any of the methods described [here](https://chatgpt.com/share/67ace93b-7a4c-8003-8eed-e599196ddb2a).
 
-*Setup (you only need to do this once)*
-- Download Docker Desktop
-- In the root directory, run ./tf.ps1
-> NOTE FOR WINDOWS USERS: Check wether your editor's line endings are LF or CRLF (specifically for /terraform/main.tf). If they are CRLF, run the following commands in your root directory:
-- git rm --cached -r .
-- git reset --hard
-> After running these commands, you should see that your editor's line endings are LF.
+**4. Run Terraform**
+
+Dev Terraform now run in a docker container so you don't need to worry about downloading Terraform, supabase-cli, psql, jq or anything else. Depending on your operating system, use one of the following helper scripts to run terraform commands in docker:
+
+**For macOS:**
+
+Use `./tf.sh <any_terraform_command>`
+**Quick Start**: Run `./tf.sh` with no command line arguments which will automatically run `terraform init` followed by `terraform apply` in the docker container
+
+**For Windows:**
+
+Use `./tf.ps1 <any_terraform_command>`
+**Quick Start**: Run `./tf.ps1` with no command line arguments which will automatically run `terraform init` followed by `terraform apply` in the docker container
+
+> **IMPORTANT NOTE FOR WINDOWS**
+> All files ending in .sh or .tf must use LF line endings. The tf script automatically checks for this and will let you know if you need to convert them. 
+> 
+> **To convert line endings**: You will need to cleanly pull the repo by running the following commands (these will remove any uncommited changes so make sure to commit or stash them)
+>
+> On main run:
+> `git fetch`
+> `git pull`
+> `git rm --cached -r .`
+> `git reset --hard`
+> 
+> After running these commands (and possibly restarting your editor), you should see that your editor's line endings are LF for .sh and .tf files (shown in the bottom right of vscode). If it's still showing CRLF, you can manually force your editor to use LF line endings. Look this up.
+> 
+> The tf script should verify that your line endings are correct and let you know if they aren't.
+> 
+>  If you're getting an error similar to the following, your line endings are probably set to CRLF without the sh script catching it. DM Alfred Madere.
+> 
+> **CRLF line endings error**
+> `Output: /bin/bash: line 1: set: -
+│ set: usage: set [-abefhkmnptuvxBCEHPT] [-o option-name] [--] [-] [arg ...]
+│ /bin/bash: line 5: $'\r': command not found
+│ /bin/bash: -c: line 9: syntax error near unexpected token `|'
+' /bin/bash: -c: line 9: `    | jq -r '.status')`
 
 ### Build
 1. In your root folder, execute:
@@ -127,6 +163,7 @@ Run a script to automatically run all the build/run commands. `./setup.[ext] [op
   - `--all`
 
 ## Migrations
+> Note: Migrations are now automatically run by running `terraform apply` so the following steps are not necessary unless you choose to setup manually.
 ### Supabase CLI Setup
 
 In order to migrate supabase tables we need to use the supabase CLI and connect it to our remote database.
