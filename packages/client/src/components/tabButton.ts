@@ -11,6 +11,7 @@ export class TabButton extends Phaser.GameObjects.Container {
   active: boolean = false;
   width: number;
   height: number;
+  sound: Phaser.Sound.BaseSound;
 
   constructor(
     scene: Phaser.Scene,
@@ -27,6 +28,8 @@ export class TabButton extends Phaser.GameObjects.Container {
     this.callback = callback;
     this.width = width;
     this.height = height;
+
+    this.sound = scene.sound.add('tabClick');
 
     // Create background graphics
     this.background = scene.add.graphics();
@@ -135,6 +138,7 @@ export class TabButton extends Phaser.GameObjects.Container {
     });
 
     this.on('pointerdown', () => {
+      this.sound.play();
       this.callback();
     });
   }

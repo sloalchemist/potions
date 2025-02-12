@@ -10,6 +10,7 @@ export class Button extends Phaser.GameObjects.Container {
   active: boolean = true;
   fixedWidth: number;
   fixedHeight: number;
+  sound: Phaser.Sound.BaseSound;
 
   constructor(
     scene: Phaser.Scene,
@@ -28,6 +29,7 @@ export class Button extends Phaser.GameObjects.Container {
     this.callback = callback;
     this.fixedWidth = buttonWidth;
     this.fixedHeight = buttonHeight;
+    this.sound = scene.sound.add('buttonClick');
 
     if (treatAsText) {
       // Create the background rectangle
@@ -107,6 +109,7 @@ export class Button extends Phaser.GameObjects.Container {
         event: Phaser.Types.Input.EventData
       ) => {
         event.stopPropagation();
+        this.sound.play();
         this.buttonSprite.setScale(0.9);
         this.buttonBackground?.setScale(0.95);
         this.buttonBackground?.setFillStyle(0x5e7485); // Pressed color

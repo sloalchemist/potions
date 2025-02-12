@@ -87,6 +87,11 @@ export class UxScene extends Phaser.Scene {
     });
   }
 
+  preload() {
+    this.load.audio('tabClick', ['static/click.mp3']);
+    this.load.audio('buttonClick', ['static/click.mp3']);
+  }
+
   create() {
     this.cameras.main.setViewport(
       10,
