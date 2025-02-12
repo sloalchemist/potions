@@ -302,16 +302,16 @@ export class Mob {
   }
 
   setMoveTarget(target: Coord, fuzzy: boolean = false): boolean {
-    const start = floor(this.position);
+    const start = this.position;
     const end = floor(target);
     if (
       //equals(this.target?, end) ||
-      equals(start, end) &&
+      equals(floor(start), end) &&
       this.target == null
     ) {
       return true;
     }
-    if (equals(start, end)) {
+    if (equals(floor(start), end)) {
       this.updateMoveTarget(end, [end]);
       return true;
     }
