@@ -72,6 +72,30 @@ describe('Favorability Tests', () => {
     expect(testMob?._maxHealth).toBeCloseTo(100);
     expect(testMob?._attack).toBeCloseTo(5);
   });
+
+  test('Favorability should decrease upon hitting mob', () => {
+    // initialize villager / player
+    const position: Coord = { x: 0, y: 0 };
+    const position2: Coord = { x: 1, y: 1 };
+    mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
+    mobFactory.makeMob('villager', position2, 'testVillager', 'villagertest');
+    var testplayer = Mob.getMob('testPlayer');
+    var testvillager = Mob.getMob('testVillager');
+
+    Community.makeFavor('alchemists', 'silverclaw', 100);
+
+    // player attacks villager once
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(Community.getFavor("alchemists", "silverclaw")).toBe(80);
+
+    // player attacks villager five times
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(Community.getFavor("alchemists", "silverclaw")).toBe(-20);
+  });
 });
 
 afterEach(() => {
