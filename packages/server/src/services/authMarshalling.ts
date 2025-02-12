@@ -1,6 +1,7 @@
 import 'dotenv/config';
 
-if (!process.env.AUTH_SERVER_URL) {
+// If running in test, don't throw an error
+if (!process.env.AUTH_SERVER_URL && process.env.JEST_WORKER_ID === undefined) {
   throw new Error(
     'Cannot run without auth server url configured. Add path to .env'
   );
