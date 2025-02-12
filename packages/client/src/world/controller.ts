@@ -193,7 +193,7 @@ export function getCarriedItemInteractions(
 
   // give to nearby mobs
   nearbyMobs.forEach((mob) => {
-    if (mob.key !== playerId) {
+    if (mob.key !== playerId && !mob.carrying) {
       interactions.push({
         action: 'give',
         item: item as Item,
