@@ -129,6 +129,58 @@
       "on_tick": []
     },
     {
+      "name": "Tar",
+      "type": "tar",
+      "description": "tar",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#000000"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Sun-drop",
+      "type": "sun-drop",
+      "description": "sun drop",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#FF8800"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
       "name": "Wall",
       "type": "wall",
       "description": "A sturdy structure that blocks movement and provides protection.",
