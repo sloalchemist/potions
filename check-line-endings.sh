@@ -39,4 +39,4 @@ if [ "$found_crlf" = true ]; then
   exit 1  # Abort Docker run
 fi
 
-echo "No CRLF line endings found."
+echo "No CRLF line endings found. Continuing."
