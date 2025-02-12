@@ -88,8 +88,14 @@ export class UxScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.audio('tabClick', ['static/click.mp3']);
-    this.load.audio('buttonClick', ['static/click.mp3']);
+    this.load.audio('tabClick', ['static/sounds/button_with_flip.mp3']);
+    this.load.audio('buttonClick', ['static/sounds/button.mp3']);
+    this.load.audio('chatSound', [
+      'static/sounds/chat_high.mp3', 
+      'static/sounds/chat_low.mp3', 
+      'static/sounds/chat_mid.mp3', 
+      'static/sounds/chat_normal.mp3'
+    ]);
   }
 
   create() {
@@ -219,6 +225,9 @@ export class UxScene extends Phaser.Scene {
     backgroundTabs.lineTo(SCREEN_WIDTH, tabY + tabHeight / 2);
     backgroundTabs.strokePath();
     backgroundTabs.setDepth(-1);
+
+    // randomly select a chat sound
+    const chatSound = this.sound.add('chatSound');
 
     if (currentCharacter) {
       // Add character stats to itemsContainer
@@ -538,7 +547,7 @@ export class UxScene extends Phaser.Scene {
         this.setChatOptions(
           responses.map((response, i) => ({
             label: response,
-            callback: () => this.callSpeak(response, i)
+            callback: () => this.callSpeak(response, i, chatSound)
           }))
         );
       });
@@ -576,7 +585,8 @@ export class UxScene extends Phaser.Scene {
     this.showItemsTab();
   }
 
-  callSpeak(response: string, i: number) {
+  callSpeak(response: string, i: number, chatSound: Phaser.Sound.BaseSound) {
+    chatSound.play();
     speak(response, i);
     this.setChatOptions([]);
   }
