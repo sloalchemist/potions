@@ -6,7 +6,8 @@ import {
   HouseI,
   ItemI,
   MobI,
-  Coord
+  Coord,
+  WorldMetadata
 } from '@rt-potion/common';
 import { ItemType } from '../worldDescription';
 import { SpriteMob } from '../sprite/sprite_mob';
@@ -43,6 +44,12 @@ let attackCallback: (attacks: string[]) => void = () => {};
 type GameState = 'uninitialized' | 'worldLoaded' | 'stateInitialized';
 
 export let gameState: GameState = 'uninitialized';
+
+export let availableWorlds: WorldMetadata[] = [];
+
+export function setAvailableWorlds(worlds: WorldMetadata[]) {
+  availableWorlds = worlds;
+}
 
 export function setGameState(state: GameState) {
   console.log('Setting game state to:', state);
