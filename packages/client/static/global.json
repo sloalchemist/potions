@@ -52,6 +52,25 @@
         "carryable": true,
         "on_tick": []
     },
+    {
+        "name": "Pearl",
+        "type": "pearl",
+        "attributes": [
+            {
+                "name": "brew_color",
+                "value": "#FFFFFF"
+            },
+            {
+                "name": "health",
+                "value": 1
+            }
+        ],
+        "walkable": true,
+        "smashable": true,
+        "interactions": [],
+        "carryable": true,
+        "on_tick": []
+    },
 {
     "name": "Wall",
     "type": "wall",
@@ -208,11 +227,11 @@
       {
         "action": "spawn_item",
         "parameters": {
-          "type": "clam",
+          "type": "pearl",
           "global_max": 10,
-          "local_max": 1,
+          "local_max": 2,
           "radius": 3,
-          "rate": 0.1
+          "rate": 0.2
         }
       }
     ]
