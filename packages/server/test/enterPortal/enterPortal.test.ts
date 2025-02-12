@@ -3,8 +3,6 @@ import { Mob } from '../../src/mobs/mob';
 import { Item } from '../../src/items/item';
 import { pubSub } from '../../src/services/clientCommunication/pubsub';
 
-process.env.AUTH_SERVER_URL = 'test-auth-server';
-
 jest.mock('../../src/services/clientCommunication/pubsub', () => ({
   pubSub: {
     showPortalMenu: jest.fn()
