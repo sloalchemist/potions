@@ -7,7 +7,7 @@
     "lint:fix": "eslint . --config eslint.config.mjs --fix",
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
-    "test:coverage": "pnpm -r run test --coverage=true --coverage-directory=build/logs",
+    "test:coverage": "pnpx jest --coverage=true --coverage-directory=build/logs",
     "clean": "pnpm -r run clean"
   },
   "devDependencies": {
@@ -21,6 +21,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "jest": "^29.7.0",
     "rt-potion": "file:"
   },
   "engines": {
