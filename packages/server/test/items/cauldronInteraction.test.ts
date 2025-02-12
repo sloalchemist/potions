@@ -252,8 +252,8 @@ describe('Brewing potions in the cauldron', () => {
   });
 });
 
-describe('Brew and bottle a purple potion', () => {
-  test('Add items to cauldron to brew a purple potion and bottle it', () => {
+describe('Brew and bottle potions', () => {
+  test('Add a heartbeet to cauldron to brew a red potion and bottle it', () => {
     //set up the world
     const cauldronPosition: Coord = { x: 0, y: 1 };
     const position: Coord = { x: 0, y: 0 };
@@ -297,28 +297,67 @@ describe('Brew and bottle a purple potion', () => {
     expect(standAfter).not.toBeNull();
     expect(standAfter!.getAttribute('ingredients')).toBe(1);
 
-    // create a blueberry
+    //bottle potion
+    const testBottlePotion = new BottlePotion();
+    testBottlePotion.interact(testMob!, testCauldron!);
+
+    //ensure cauldron is empty
+    expect(testCauldron).not.toBeNull();
+    expect(testCauldron!.getAttribute('ingredients')).toBe(0);
+    expect(testCauldron!.getAttribute('potion_subtype')).toBe(0);
+
+    //ensure mob is carrying the correct potion
+    expect(testMob).not.toBeNull();
+    const testPotion = testMob!.carrying;
+    expect(testPotion).not.toBeNull();
+    expect(testMob!.carrying!.type).toBe('potion');
+    expect(testPotion!.subtype).toBe('16711680');
+  });
+
+  test('Add a red potion to cauldron to brew a red potion and bottle it', () => {
+    //set up the world
+    const cauldronPosition: Coord = { x: 0, y: 1 };
+    const position: Coord = { x: 0, y: 0 };
+
+    //create a cauldron
     itemGenerator.createItem({
-      type: 'blueberry',
-      carriedBy: testMob
+      type: 'cauldron',
+      position: cauldronPosition,
+      attributes: {
+        ingredients: 0,
+        potion_subtype: ''
+      }
+    });
+    const cauldronID = Item.getItemIDAt(cauldronPosition);
+    expect(cauldronID).not.toBeNull();
+    const testCauldron = Item.getItem(cauldronID!);
+    expect(testCauldron).not.toBeNull();
+
+    // create a player
+    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+    const testMob = Mob.getMob('TestID');
+    expect(testMob).not.toBeNull();
+
+    // create a heartbeat
+    itemGenerator.createItem({
+      type: 'potion',
+      carriedBy: testMob,
+      subtype: '16711680'
     });
 
     // ensure the player is carrying the ingredient
     expect(testMob!.carrying).not.toBeNull();
-    expect(testMob!.carrying!.type).toBe('blueberry');
+    expect(testMob!.carrying!.type).toBe('potion');
 
     // add the ingredient to the Cauldron
-    const testAddSecondIngredient = new AddIngredient();
-    const testSecond = testAddSecondIngredient.interact(
-      testMob!,
-      testCauldron!
-    );
-    expect(testSecond).toBe(true);
+    const testAddFirstIngredient = new AddIngredient();
+    const testFirst = testAddFirstIngredient.interact(testMob!, testCauldron!);
+    expect(testFirst).toBe(true);
 
     // check that the ingredient was added
-    const standAfterSecond = Item.getItem(cauldronID!);
-    expect(standAfterSecond).not.toBeNull();
-    expect(standAfterSecond!.getAttribute('ingredients')).toBe(2);
+    const standAfter = Item.getItem(cauldronID!);
+    expect(standAfter).not.toBeNull();
+    expect(standAfter!.getAttribute('ingredients')).toBe(1);
 
     //bottle potion
     const testBottlePotion = new BottlePotion();
@@ -334,7 +373,7 @@ describe('Brew and bottle a purple potion', () => {
     const testPotion = testMob!.carrying;
     expect(testPotion).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testPotion!.subtype).toBe('8388736');
+    expect(testPotion!.subtype).toBe('16711680');
   });
 });
 
