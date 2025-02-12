@@ -31,6 +31,12 @@ export interface PubSub {
     delta: number,
     newValue: number
   ): void;
+  changeTargetTick(
+    key: string,
+    attribute: string,
+    tick: number,
+    newValue: number
+  ): void;
   changeGold(key: string, gold: number, newValue: number): void;
   changeAttack(key: string, attack: number, newValue: number): void;
   changePersonality(key: string, trait: string, newValue: number): void;

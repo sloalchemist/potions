@@ -35,6 +35,13 @@ export class StubbedPubSub implements PubSub {
     _newValue: number
   ): void {}
 
+  changeTargetTick(
+    _key: string,
+    _attribute: string,
+    _tick: number,
+    _newValue: number
+  ): void {}
+
   changePersonality(_key: string, _trait: string, _newValue: number): void {}
 
   changeAttack(_key: string, _attack: number, _newValue: number): void {}

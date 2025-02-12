@@ -319,6 +319,30 @@ export class AblyService implements PubSub {
     });
   }
 
+  public changeTargetTick(
+    key: string,
+    attribute: string,
+    tick: number,
+    newValue: number
+  ): void {
+    if (newValue == undefined || key == undefined || tick == undefined) {
+      throw new Error(
+        `Sending invalid changeTargetTick message ${key}, ${tick}, ${attribute}, ${newValue}`
+      );
+    }
+
+    const prop = `target_${attribute}_tick`;
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: prop,
+        delta: tick,
+        new_value: newValue
+      }
+    });
+  }
+
   public changePersonality(key: string, trait: string, newValue: number): void {
     if (key === undefined || newValue === undefined || trait === undefined) {
       throw new Error(
