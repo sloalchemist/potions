@@ -53,6 +53,17 @@ export async function updateCharacterData(
   }
 }
 
+type GetWorldsResponse = {
+  id: string;
+  world_id: string;
+}[];
+
+export async function getWorlds(): Promise<GetWorldsResponse> {
+  const url = new URL('/worlds', authUrl);
+  const response = await fetch(url);
+  return response.json();
+}
+
 // Example usage:
 /*
 try {

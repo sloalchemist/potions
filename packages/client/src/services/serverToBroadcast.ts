@@ -21,7 +21,13 @@ import { focused } from '../main';
 import { world, WorldScene } from '../scenes/worldScene';
 import { SpriteItem } from '../sprite/sprite_item';
 import { SpriteMob } from '../sprite/sprite_mob';
-import { addNewItem, addNewMob, gameState, setDate } from '../world/controller';
+import {
+  addNewItem,
+  addNewMob,
+  gameState,
+  setAvailableWorlds,
+  setDate
+} from '../world/controller';
 import { publicCharacterId } from '../worldMetadata';
 import { leaveWorld } from './playerToServer';
 
@@ -162,6 +168,7 @@ export function setupBroadcast(
 
   function handleShowPortalMenu(data: ShowPortalMenuData) {
     if (data.mob_key === publicCharacterId) {
+      setAvailableWorlds(data.worlds);
       scene.scene.launch('PortalMenuScene');
     }
   }

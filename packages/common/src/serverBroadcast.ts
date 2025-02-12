@@ -30,12 +30,13 @@ export type MobChangeData = {
 export type SpeakData = { id: string; message: string };
 export type ItemChangeData = { id: string; property: string; value: number };
 export type SetDatetimeData = { date: FantasyDateI };
+export type WorldMetadata = {
+  id: string;
+  name: string;
+};
 export type ShowPortalMenuData = {
   mob_key: string;
-  worlds: {
-    // world id -> world name
-    [key: string]: string;
-  }[];
+  worlds: WorldMetadata[];
 };
 
 export type BroadcastData =

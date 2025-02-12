@@ -1,12 +1,10 @@
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
+import { availableWorlds } from '../world/controller';
 
 export class PortalMenuScene extends Phaser.Scene {
-  worlds: string[];
-
   constructor() {
     super({ key: 'PortalMenuScene' });
-    this.worlds = ['Valoron', 'Oozon'];
   }
 
   create() {
@@ -34,11 +32,11 @@ export class PortalMenuScene extends Phaser.Scene {
     title.setOrigin(0.5);
 
     // Add world selection buttons
-    this.worlds.forEach((world, index) => {
+    availableWorlds.forEach((world, index) => {
       const button = this.add.text(
         SCREEN_WIDTH / 2,
         SCREEN_HEIGHT / 3 + index * 60,
-        world,
+        world.name,
         buttonStyle
       );
       button.setInteractive({ useHandCursor: true });
@@ -55,7 +53,7 @@ export class PortalMenuScene extends Phaser.Scene {
       // Click handler
       button.on('pointerdown', () => {
         // TODO: Implement world transition
-        console.log(`Selected world: ${world}`);
+        console.log(`Selected world: ${world.name} with id ${world.id}`);
         this.scene.stop('PortalMenuScene');
       });
     });

@@ -1,17 +1,30 @@
+import { WorldMetadata } from '@rt-potion/common';
 import { Mob } from '../../mobs/mob';
+import { getWorlds } from '../../services/authMarshalling';
 import { pubSub } from '../../services/clientCommunication/pubsub';
 import { Item } from '../item';
 import { Use } from './use';
 
 export class EnterPortal implements Use {
   key: string;
-  worlds: string[];
+  worlds: WorldMetadata[];
 
   constructor() {
     this.key = 'enter';
+    this.worlds = [];
+    this.populateWorlds();
+  }
 
-    // TODO: populate available worlds from DB
-    this.worlds = ['Valoron', 'Oozon'];
+  private async populateWorlds() {
+    try {
+      const result = await getWorlds();
+      this.worlds = result.map((world) => ({
+        id: world.id,
+        name: world.world_id
+      }));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   description(_mob: Mob, _item: Item): string {
@@ -21,7 +34,7 @@ export class EnterPortal implements Use {
   interact(mob: Mob, item: Item): boolean {
     if (this.isNearPortal(mob, item)) {
       // Send message to client to show world selection
-      pubSub.showPortalMenu(mob.id);
+      pubSub.showPortalMenu(mob.id, this.worlds);
 
       return true;
     }
