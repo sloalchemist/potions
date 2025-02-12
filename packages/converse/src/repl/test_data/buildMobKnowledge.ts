@@ -76,6 +76,12 @@ export function buildSilverclawTribe(): KnowledgeGraph {
     'A hearty root vegetable with a sweet, earthy flavor.',
     clawIsland
   );
+  const slimeblob = new Item(
+    'Slimeblob',
+    'A green, gooey substance with a sour flavor and pungent odor.',
+    clawIsland
+  );
+
   const eidelweiss = new Item(
     'Eidelweiss',
     'A delicate white flower that grows across the Shattered Expanse.',

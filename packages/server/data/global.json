@@ -29,6 +29,32 @@
       "on_tick": []
     },
     {
+      "name": "Slimeblob",
+      "type": "slime-blob",
+      "description": "blob",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#0000FF"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
       "name": "Wall",
       "type": "wall",
       "description": "A sturdy structure that blocks movement and provides protection.",
