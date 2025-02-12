@@ -344,6 +344,126 @@
       ]
     },
     {
+      "name": "Fire-Flower",
+      "type": "fire-flower",
+      "description": "An fire flower",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "fire-flower",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mushroom-1",
+      "type": "mushroom-1",
+      "description": "A mushroom",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "mushroom-1",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rock-Pile",
+      "type": "rock-pile",
+      "description": "A mushroom",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "rock-pile",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rock-Columns",
+      "type": "rock-columns",
+      "description": "A rock column",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "rock-columns",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pebbles-1",
+      "type": "pebbles-1",
+      "description": "Some Pebbles",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "pebbles-1",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rock-Chunk-2-1",
+      "type": "rock-chunk-2-1",
+      "description": "Some Rock Chunks",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "rock-chunk-2-1",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
         "name": "large-rock",
         "type": "large-rock",
         "description": "A large rock",
