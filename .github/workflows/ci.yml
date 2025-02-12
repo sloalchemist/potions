@@ -57,7 +57,10 @@ jobs:
 
       # Step 8: Run Unit Tests
       - name: Run Unit Tests
-        run: pnpm test -- --coverage=true --coverage-directory=build/logs
+        run: pnpm test
+
+      - name: Run Unit Tests with Coverage
+        run: pnpm test:coverage
 
       - name: Upload Coverage
         env:
