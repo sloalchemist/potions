@@ -7,7 +7,7 @@ import Database from 'better-sqlite3';
 // Load environment variables from .env file
 dotenv.config();
 
-const bucketName = 'serverbucket';  // Name of standard bucket everyone will use
+const bucketName = 'serverbucket'; // Name of standard bucket everyone will use
 
 export function initializeSupabase() {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
@@ -23,9 +23,9 @@ export function initializeSupabase() {
 }
 
 export async function initializeBucket(supabase: SupabaseClient) {
-
   // Check if bucket exists
-  const { data: buckets, error: fetchError } = await supabase.storage.listBuckets();
+  const { data: buckets, error: fetchError } =
+    await supabase.storage.listBuckets();
 
   // Throw error if applicable
   if (fetchError) {
@@ -39,10 +39,13 @@ export async function initializeBucket(supabase: SupabaseClient) {
   // If the bucket does not exist, create it
   if (!bucketExists) {
     console.log(`Bucket '${bucketName}' does not exist, creating it.`);
-    const { error: createError } = await supabase.storage.createBucket(bucketName, {
-      public: true,
-      allowedMimeTypes: ['application/octet-stream']
-    });
+    const { error: createError } = await supabase.storage.createBucket(
+      bucketName,
+      {
+        public: true,
+        allowedMimeTypes: ['application/octet-stream']
+      }
+    );
 
     // Throw error if applicable
     if (createError) {
@@ -91,7 +94,6 @@ async function downloadFile(
     }
   });
 }
-
 
 async function downloadData(supabase: SupabaseClient, worldID: string) {
   await Promise.all([
