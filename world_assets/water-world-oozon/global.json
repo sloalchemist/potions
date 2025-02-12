@@ -1,31 +1,5 @@
 {
   "item_types": [
-    {
-        "name": "Heartbeet",
-        "type": "heart-beet",
-        "attributes": [
-            {
-                "name": "brew_color",
-                "value": "#FF0000"
-            },
-            {
-                "name": "health",
-                "value": 1
-            }
-        ],
-        "walkable": true,
-        "smashable": true,
-        "interactions": [
-            
-            {
-                "description": "Eat",
-                "action": "eat",
-                "while_carried": true
-            }
-        ],
-        "carryable": true,
-        "on_tick": []
-    },
 {
     "name": "Wall",
     "type": "wall",
@@ -192,26 +166,6 @@
     ]
   },
   {
-    "name": "Starfish",
-    "type": "starfish",
-    "description": "A starfish",
-    "carryable": false,
-    "walkable": false,
-    "interactions": [],
-    "on_tick": [
-      {
-        "action": "spawn_item",
-        "parameters": {
-          "type": "starfish",
-          "global_max": 10,
-          "local_max": 1,
-          "radius": 3,
-          "rate": 0.1
-        }
-      }
-    ]
-  },
-  {
     "name": "Anemone",
     "type": "anemone",
     "description": "An anemone",
@@ -232,35 +186,14 @@
     ]
   },
 {
-    "type": "heart-beet-plant",
-    "name": "Heartbeet plant",
-    "carryable": false,
-    "walkable": true,
-    "smashable": false,
-    "flat": true,
-    "interactions": [],
-    "on_tick": [
-        {
-            "action": "spawn_item",
-            "parameters": {
-                "type": "heart-beet",
-                "global_max": 10,
-                "local_max": 2,
-                "radius": 3,
-                "rate": 0.1
-            }
-        }
-    ]
-},
-{
-    "type": "blueberry",
-    "name": "Blueberry",
+    "type": "starfish",
+    "name": "Starfish",
     "carryable": true,
     "walkable": true,
     "smashable": true,
     "attributes": [{
         "name": "brew_color",
-        "value": "#0000FF"
+        "value": "#10BFBF"
     },
     {
         "name": "health",
@@ -272,53 +205,6 @@
             "description": "Eat",
             "action": "eat",
             "while_carried": true
-        }
-    ]
-},
-{
-    "type": "blueberry-bush",
-    "name": "Blueberry bush",
-    "carryable": false,
-    "walkable": false,
-    "smashable": false,
-    "interactions": [],
-    "on_tick": [
-        {
-            "action": "spawn_item",
-            "parameters": {
-                "type": "blueberry",
-                "global_max": 10,
-                "local_max": 2,
-                "radius": 3,
-                "rate": 0.1
-            }
-        }
-    ]
-},
-{
-    "name": "Log",
-    "type": "log",
-    "carryable": true,
-    "smashable": true,
-    "walkable": true,
-    "flat": true,
-    "attributes":[
-        {
-            "name": "health",
-            "value": 1
-        }
-    ],
-    "interactions": [
-        {
-            "description": "Start wall",
-            "action": "start_wall",
-            "while_carried": true
-        },
-        {
-            "description": "Build wall",
-            "action": "build_wall",
-            "while_carried": true,
-            "requires_item": "partial-wall"
         }
     ]
 },
