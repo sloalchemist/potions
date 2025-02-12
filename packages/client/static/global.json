@@ -50,6 +50,127 @@
         "carryable": true,
         "on_tick": []
     },
+    {
+        "name": "Bones",
+        "type": "bones",
+        "attributes": [
+            {
+                "name": "brew_color",
+                "value": "#00FF00"
+            },
+            {
+                "name": "health",
+                "value": 1
+            }
+        ],
+        "walkable": true,
+        "smashable": true,
+        "interactions": [
+            {
+                "description": "Eat",
+                "action": "eat",
+                "while_carried": true
+            }
+        ],
+        "carryable": true,
+        "on_tick": []
+    },
+    {
+        "name": "Lightning-Bloom",
+        "type": "lightning-bloom",
+        "attributes": [
+            {
+                "name": "brew_color",
+                "value": "#AA00FF"
+            },
+            {
+                "name": "health",
+                "value": 1
+            }
+        ],
+        "walkable": true,
+        "smashable": true,
+        "interactions": [
+            {
+                "description": "Eat",
+                "action": "eat",
+                "while_carried": true
+            }
+        ],
+        "carryable": true,
+        "on_tick": []
+    },
+    {
+        "name": "Bomb",
+        "type": "bomb",
+        "attributes": [
+            {
+                "name": "health",
+                "value": 1
+            }
+        ],
+        "walkable": true,
+        "smashable": true,
+        "interactions": [
+            {
+                "description": "Eat",
+                "action": "eat",
+                "while_carried": true
+            }
+        ],
+        "carryable": true,
+        "on_tick": []
+    },   
+    {
+        "name": "Tar",
+        "type": "tar",
+        "attributes": [
+            {
+                "name": "brew_color",
+                "value": "#000000"
+            },
+            {
+                "name": "health",
+                "value": 1
+            }
+        ],
+        "walkable": true,
+        "smashable": true,
+        "interactions": [
+            {
+                "description": "Eat",
+                "action": "eat",
+                "while_carried": true
+            }
+        ],
+        "carryable": true,
+        "on_tick": []
+    },
+    {
+        "name": "Sun-drop",
+        "type": "sun-drop",
+        "attributes": [
+            {
+                "name": "brew_color",
+                "value": "#FF8800"
+            },
+            {
+                "name": "health",
+                "value": 1
+            }
+        ],
+        "walkable": true,
+        "smashable": true,
+        "interactions": [
+            {
+                "description": "Eat",
+                "action": "eat",
+                "while_carried": true
+            }
+        ],
+        "carryable": true,
+        "on_tick": []
+    },
 {
     "name": "Wall",
     "type": "wall",

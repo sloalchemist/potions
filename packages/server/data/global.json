@@ -55,6 +55,80 @@
       "on_tick": []
     },
     {
+      "name": "Bones",
+      "type": "bones",
+      "description": "bones",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#00FF00"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Lightning-bloom",
+      "type": "lightning-bloom",
+      "description": "bones",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#AA00FF"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Bomb",
+      "type": "bomb",
+      "description": "bomb",
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
       "name": "Wall",
       "type": "wall",
       "description": "A sturdy structure that blocks movement and provides protection.",
