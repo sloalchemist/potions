@@ -92,14 +92,22 @@ export const commonSetup = (worldSize: number = 2) => {
       },
       {
         name: 'Basket',
-        description: 'test',
+        description: 'Stores items for the community.',
         type: 'basket',
-        carryable: true,
-        smashable: true,
-        walkable: true,
-        interactions: [],
-        attributes: [],
-        on_tick: []
+        carryable: false,
+        templated: true,
+        walkable: false,
+        show_template_at: {
+          x: 1,
+          y: 1
+        },
+        attributes: [
+          {
+            name: 'items',
+            value: 0
+          }
+        ],
+        interactions: []
       },
       {
         name: 'Gold',
