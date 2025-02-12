@@ -57,9 +57,13 @@ jobs:
 
       # Step 8: Run Unit Tests
       - name: Run Unit Tests
-        run: pnpm test -- --coverage=true --coverage-directory=build/logs
+        run: pnpm test
+
+      # Run Test Coverage
+      - name: Run Test Coverage
+        run: pnpm test:coverage
 
       - name: Upload Coverage
         env:
           OTTERWISE_TOKEN: ${{ secrets.OTTERWISE_TOKEN }}
-        run: bash <(curl -s https://raw.githubusercontent.com/getOtterWise/bash-uploader/main/uploader.sh)
+        run: bash <(curl -s https://raw.githubusercontent.com/getOtterWise/bash-uploader/main/uploader.sh) --repo-token "$OTTERWISE_TOKEN"
