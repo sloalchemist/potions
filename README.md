@@ -153,21 +153,14 @@ However, once you set this up it'll work for all future migrations.
 ## Saving Server Data with Supabase
 Developers/players will now be able to save their world data to Supabase. This means any hard work you do is no longer erased when you close the server.
 
-**1. Create Supabase Storage**
-- Sign into your Supabase dashboard.
-- On the left hand side, navigate to Storage.
-- On the top left, select new bucket.
-- Name it what you want. It does not need to be public.
-
-**2. Update Server .env**
+**Update Server .env**
 - In you server .env add the following
--    SUPABASE_BUCKET="your bucket name here" (include the quotes)
 -    SUPABASE_URL=
 -    SUPABASE_SERVICE_KEY=
  - Your URL and Service key can be found in your auth server .env
 
 **How this works**
- - The first time you start the server, your server data will be uploaded to Supabase.
+ - The first time you start the server, your server data will be uploaded to Supabase in an automatically generated bucket.
  - The next time you start your server, the data will be downloaded from Supabase.
  - Data will also be saved every 10 minutes the server is running.
  - You can manually save with the cheat code SHIFT+S 
