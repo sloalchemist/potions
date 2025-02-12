@@ -161,7 +161,6 @@ Developers/players will now be able to save their world data to Supabase. This m
 
 **2. Update Server .env**
 - In you server .env add the following
--    SUPABASE_BUCKET="your bucket name here" (include the quotes)
 -    SUPABASE_URL=
 -    SUPABASE_SERVICE_KEY=
  - Your URL and Service key can be found in your auth server .env
