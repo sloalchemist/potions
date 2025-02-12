@@ -23,5 +23,8 @@
   "dependencies": {
     "jest": "^29.7.0",
     "rt-potion": "file:"
-  }
+  },
+  "engines": {
+  "node": ">=20.0.0"
+}
 }
