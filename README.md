@@ -60,7 +60,8 @@ Previously you were required to setup Ably, Supabase and several `.env` files ma
 **4. Spin up all your resources with a single command.**
 
 *Setup (you only need to do this once)*
-- in the root directory, run ./tf.ps1
+- Download Docker Desktop
+- In the root directory, run ./tf.ps1
 > NOTE FOR WINDOWS USERS: Check wether your editor's line endings are LF or CRLF (specifically for /terraform/main.tf). If they are CRLF, run the following commands in your root directory:
 - git rm --cached -r .
 - git reset --hard
