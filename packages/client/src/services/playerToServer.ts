@@ -21,6 +21,9 @@ function showSpeech(message: string, response?: number) {
   if (response !== undefined) {
     publishPlayerMessage('speak', { response: response });
   }
+
+  const player = world.mobs[publicCharacterId] as SpriteMob;
+  player.showSpeechBubble(message, true);
 }
 
 export function requestFight(mob: Mob) {

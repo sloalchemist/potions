@@ -292,6 +292,44 @@ export class AblyService implements PubSub {
     });
   }
 
+  public changeMaxHealth(
+    key: string,
+    maxHealth: number,
+    newValue: number
+  ): void {
+    if (newValue == undefined || key == undefined || maxHealth == undefined) {
+      throw new Error(
+        `Sending invalid changeMaxHealth message ${key}, ${maxHealth}, ${newValue}`
+      );
+    }
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: 'maxHealth',
+        delta: maxHealth,
+        new_value: newValue
+      }
+    });
+  }
+
+  public changeSpeed(key: string, speed: number, newValue: number): void {
+    if (newValue == undefined || key == undefined || speed == undefined) {
+      throw new Error(
+        `Sending invalid changeSpeed message ${key}, ${speed}, ${newValue}`
+      );
+    }
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: 'speed',
+        delta: speed,
+        new_value: newValue
+      }
+    });
+  }
+
   public changePersonality(key: string, trait: string, newValue: number): void {
     if (key === undefined || newValue === undefined || trait === undefined) {
       throw new Error(

@@ -17,6 +17,7 @@ export class SpriteItem extends Item {
   hasPickedupFrame: boolean = false;
   healthBar?: Phaser.GameObjects.Graphics;
   maxHealth?: number;
+  ownedBy?: string;
 
   constructor(scene: WorldScene, item: ItemI) {
     super(world, item.id, item.position, scene.itemTypes[item.type]);
@@ -27,6 +28,7 @@ export class SpriteItem extends Item {
     this.house = item.house;
     this.carried_by = item.carried_by;
     this.lock = item.lock;
+    this.ownedBy = item.ownedBy;
 
     // copy over all attributes
     for (const key in item.attributes) {
