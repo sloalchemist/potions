@@ -89,6 +89,27 @@ export class ServerWorld implements GameWorld {
     conversationTracker.tick();
     FantasyDate.runTick();
 
+    // log data for Grafana
+    const num_mobs = Mob.getAllMobIDs().length as number;
+    const num_items = Item.getAllItemIDs().length as number;
+    const tick_id = DB.prepare(
+      `
+        SELECT tick FROM ticks;
+      `
+    ).get() as { tick: number };
+    if (tick_id !== null) {
+      DB.prepare(
+        `
+          INSERT INTO grafanadata (tick_id, num_mobs, num_items)
+          VALUES (:tick_id, :num_mobs, :num_items);
+        `
+      ).run({
+        tick_id: tick_id.tick,
+        num_mobs: num_mobs,
+        num_items: num_items
+      });
+    }
+
     //const totalTime = Date.now() - startTime;
     //console.log('time to tick', totalTime);
   }
