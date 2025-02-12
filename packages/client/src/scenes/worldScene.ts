@@ -60,7 +60,7 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', 'static/valoron-background.jpg');
+    this.load.image('background', 'static/valoron-background.png');
 
     this.load.atlas(
       'global_atlas',
@@ -75,7 +75,10 @@ export class WorldScene extends Phaser.Scene {
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
     this.load.json('global_data', 'static/global.json');
-    this.load.json('fire_world_specific_data', 'static/fire_world_specific.json');
+    this.load.json(
+      'fire_world_specific_data',
+      'static/fire_world_specific.json'
+    );
   }
 
   loadAnimations(
