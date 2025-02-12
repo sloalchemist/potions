@@ -16,6 +16,7 @@ import { pubSub } from '../services/clientCommunication/pubsub';
 import { Carryable } from '../items/carryable';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
+import { Favorability } from '../favorability/favorability';
 
 export type MobData = {
   personalities: Personality;
@@ -660,6 +661,7 @@ export class Mob {
             (community_1_id = :id_2 AND community_2_id = :id_1)
         `
     ).run({ id_1: "alchemists", id_2: id});
+    Favorability.updatePlayerStat(this);
   }
 
 
