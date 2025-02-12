@@ -7,6 +7,8 @@ import Database from 'better-sqlite3';
 // Load environment variables from .env file
 dotenv.config();
 
+const bucketName = 'serverbucket';  // Name of standard bucket everyone will use
+
 export function initializeSupabase() {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
     throw new Error('Cannot run without supabase credentials in env.');
@@ -21,7 +23,6 @@ export function initializeSupabase() {
 }
 
 export async function initializeBucket(supabase: SupabaseClient) {
-  const bucketName = 'serverbucket';  // Name of standard bucket everyone will use
 
   // Check if bucket exists
   const { data: buckets, error: fetchError } = await supabase.storage.listBuckets();
@@ -151,7 +152,6 @@ async function uploadLocalFile(path: string, supabase: SupabaseClient) {
     type: 'application/octet-stream',
     lastModified: new Date().getTime()
   });
-  const bucketName = 'serverbucket';  // Name of standard bucket everyone will use
 
   try {
     const { error } = await supabase.storage
