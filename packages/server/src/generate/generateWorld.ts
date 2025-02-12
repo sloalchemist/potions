@@ -7,6 +7,7 @@ import { FantasyDate } from '../date/fantasyDate';
 import { Item } from '../items/item';
 import { Personality } from '../mobs/traits/personality';
 import { Mob } from '../mobs/mob';
+import { DataLogger } from '../grafana/dataLogger';
 import {
   ItemConfig,
   ServerWorldDescription
@@ -19,13 +20,7 @@ const schema = `
     ${Community.SQL}
     ${Item.SQL}
     ${House.SQL}
-
-    CREATE TABLE grafanadata (
-      tick_id INTEGER NOT NULL PRIMARY KEY,
-      num_mobs INTEGER NULL,
-      num_items INTEGER NULL,
-      created_at TEXT NOT NULL DEFAULT (datetime('now', 'utc'))
-    );
+    ${DataLogger.SQL}
 
     CREATE TABLE ticks (
         tick INTEGER NOT NULL
