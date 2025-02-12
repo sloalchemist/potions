@@ -81,6 +81,8 @@ export class UxScene extends Phaser.Scene {
   recipeContainer: Phaser.GameObjects.Container | null = null;
   effectsContainer: Phaser.GameObjects.Container | null = null;
 
+  chatSounds: Phaser.Sound.BaseSound[] = [];
+
   constructor() {
     super({
       key: 'UxScene'
@@ -90,12 +92,10 @@ export class UxScene extends Phaser.Scene {
   preload() {
     this.load.audio('tabClick', ['static/sounds/button_with_flip.mp3']);
     this.load.audio('buttonClick', ['static/sounds/button.mp3']);
-    this.load.audio('chatSound', [
-      'static/sounds/chat_high.mp3', 
-      'static/sounds/chat_low.mp3', 
-      'static/sounds/chat_mid.mp3', 
-      'static/sounds/chat_normal.mp3'
-    ]);
+    this.load.audio('chatHigh', ['static/sounds/chat_high.mp3'])
+    this.load.audio('chatLow', ['static/sounds/chat_low.mp3']);
+    this.load.audio('chatMid', ['static/sounds/chat_mid.mp3']);
+    this.load.audio('chatNormal', ['static/sounds/chat_normal.mp3']);
   }
 
   create() {
@@ -226,8 +226,12 @@ export class UxScene extends Phaser.Scene {
     backgroundTabs.strokePath();
     backgroundTabs.setDepth(-1);
 
-    // randomly select a chat sound
-    const chatSound = this.sound.add('chatSound');
+    this.chatSounds = [
+      this.sound.add('chatHigh'),
+      this.sound.add('chatLow'),
+      this.sound.add('chatMid'),
+      this.sound.add('chatNormal')
+    ];
 
     if (currentCharacter) {
       // Add character stats to itemsContainer
@@ -547,7 +551,7 @@ export class UxScene extends Phaser.Scene {
         this.setChatOptions(
           responses.map((response, i) => ({
             label: response,
-            callback: () => this.callSpeak(response, i, chatSound)
+            callback: () => this.callSpeak(response, i)
           }))
         );
       });
@@ -585,7 +589,9 @@ export class UxScene extends Phaser.Scene {
     this.showItemsTab();
   }
 
-  callSpeak(response: string, i: number, chatSound: Phaser.Sound.BaseSound) {
+  callSpeak(response: string, i: number) {
+    // randomly select a chat sound
+    const chatSound = Phaser.Math.RND.pick(this.chatSounds);
     chatSound.play();
     speak(response, i);
     this.setChatOptions([]);
