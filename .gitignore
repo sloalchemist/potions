@@ -25,3 +25,7 @@ package-lock.json
 **/*.sensitive
 
 *.tfvars
+
+
+# Test Coverage Files
+**/build/logs/**
