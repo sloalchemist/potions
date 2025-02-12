@@ -471,7 +471,7 @@ export class AblyService implements PubSub {
       //get default health to reset
       health_for_update = mobFactory.getTemplate('player').health;
       gold_for_update = 0; //reset gold to 0
-      health_for_update = mobFactory.getTemplate('player').attack;
+      attack_for_update = mobFactory.getTemplate('player').attack;
     }
     console.log('\t Persist player health:', health_for_update);
     console.log('\t Persist player gold:', gold_for_update);
