@@ -11,7 +11,8 @@ import { initializeKnowledgeDB } from '@rt-potion/converse';
 import {
   downloadData,
   initializeSupabase,
-  uploadLocalData
+  uploadLocalData,
+  initializeBucket
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
 
@@ -42,6 +43,15 @@ async function initializeAsync() {
   }
 
   console.log(`loading world ${worldID}`);
+
+  // Create bucket if it doesn't exist
+  try {
+    await initializeBucket(supabase);
+    console.log('Bucket creation handled successfully');
+  } catch (err) {
+    console.error('Error during bucket initialization:', err);
+    throw err;
+  }
 
   try {
     await downloadData(supabase, worldID);
