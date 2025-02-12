@@ -269,5 +269,7 @@ resource "render_background_worker" "potions_test_world" {
   env_vars = {
     "ABLY_API_KEY"    = { value : "${ably_api_key.root.key}" },
     "AUTH_SERVER_URL" = { value : "${render_web_service.potions_auth.url}" },
+    "SUPABASE_URL"    = { value : "${"https://${supabase_project.potions.id}.supabase.co"}" },
+    "SUPABASE_SERVICE_KEY" = { value : "${data.supabase_apikeys.dev.service_role_key}" }
   }
 }

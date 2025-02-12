@@ -12,10 +12,47 @@ export function initializeSupabase() {
     throw new Error('Cannot run without supabase credentials in env.');
   }
 
-  return createClient(
+  const supabase = createClient(
     process.env.SUPABASE_URL,
     process.env.SUPABASE_SERVICE_KEY
   );
+
+  return supabase;
+}
+
+export async function initializeBucket(supabase: SupabaseClient) {
+  const bucketName = 'serverbucket';  // Name of standard bucket everyone will use
+
+  // Check if bucket exists
+  const { data: buckets, error: fetchError } = await supabase.storage.listBuckets();
+
+  // Throw error if applicable
+  if (fetchError) {
+    console.log('Error fetching buckets:', fetchError);
+    throw fetchError;
+  }
+
+  // Check if bucket exists
+  const bucketExists = buckets?.some((bucket) => bucket.name === bucketName);
+
+  // If the bucket does not exist, create it
+  if (!bucketExists) {
+    console.log(`Bucket '${bucketName}' does not exist, creating it.`);
+    const { error: createError } = await supabase.storage.createBucket(bucketName, {
+      public: true,
+      allowedMimeTypes: ['application/octet-stream']
+    });
+
+    // Throw error if applicable
+    if (createError) {
+      console.log('Error creating bucket:', createError);
+      throw createError;
+    }
+
+    console.log(`Bucket '${bucketName}' created successfully.`);
+  } else {
+    console.log(`Bucket '${bucketName}' already exists.`);
+  }
 }
 
 async function downloadFile(
@@ -23,14 +60,10 @@ async function downloadFile(
   local_file_name: string,
   supabase: SupabaseClient
 ) {
-  if (!process.env.SUPABASE_BUCKET) {
-    throw Error(
-      'Your server env needs the SUPABASE_BUCKET var. Check README for info'
-    );
-  }
+  const bucketName = 'serverbucket';
 
   const { data, error } = await supabase.storage
-    .from(process.env.SUPABASE_BUCKET)
+    .from(bucketName)
     .download(supabase_file_name);
 
   console.log(data);
@@ -57,6 +90,7 @@ async function downloadFile(
     }
   });
 }
+
 
 async function downloadData(supabase: SupabaseClient, worldID: string) {
   await Promise.all([
@@ -117,15 +151,11 @@ async function uploadLocalFile(path: string, supabase: SupabaseClient) {
     type: 'application/octet-stream',
     lastModified: new Date().getTime()
   });
+  const bucketName = 'serverbucket';  // Name of standard bucket everyone will use
 
   try {
-    if (!process.env.SUPABASE_BUCKET) {
-      throw Error(
-        'Your server env needs the SUPABASE_BUCKET var. Check README for info'
-      );
-    }
     const { error } = await supabase.storage
-      .from(process.env.SUPABASE_BUCKET)
+      .from(bucketName)
       .upload(file.name, file, {
         cacheControl: '3600',
         upsert: true
