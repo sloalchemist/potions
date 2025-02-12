@@ -29,6 +29,78 @@
       "on_tick": []
     },
     {
+      "name": "Starfish",
+      "type": "starfish",
+      "description": "A gorgeous teal starfish",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#10BFBF"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Fireball",
+      "type": "fire-ball",
+      "description": "A spicy and tangy bite that has quite a kick!",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#FF7509"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Pearl",
+      "type": "pearl",
+      "description": "A non-edible shiny treasure",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#FFFFFF"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
       "name": "Wall",
       "type": "wall",
       "description": "A sturdy structure that blocks movement and provides protection.",
@@ -111,9 +183,9 @@
       "interactions": []
     },
     {
-      "name": "Tree",
-      "type": "tree",
-      "description": "A tall, woody plant that occasionally drops logs.",
+      "name": "Seaweed",
+      "type": "seaweed",
+      "description": "A flowy plant, that occasionally drops leaves",
       "carryable": false,
       "walkable": false,
       "interactions": [],
@@ -121,7 +193,7 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "log",
+            "type": "seaweed-piece",
             "global_max": 10,
             "local_max": 2,
             "radius": 3,
@@ -151,6 +223,26 @@
       ]
     },
     {
+      "name": "Volcano",
+      "type": "volcano",
+      "description": "A volcano that will erupt...",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "fire-ball",
+            "global_max": 10,
+            "local_max": 5,
+            "radius": 6,
+            "rate": 0.4
+          }
+        }
+      ]
+    },
+    {
       "name": "Clam",
       "type": "clam",
       "description": "A pink clam with a pearl",
@@ -161,11 +253,11 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "clam",
+            "type": "pearl",
             "global_max": 10,
-            "local_max": 1,
+            "local_max": 2,
             "radius": 3,
-            "rate": 0.1
+            "rate": 0.2
           }
         }
       ]
@@ -174,34 +266,20 @@
       "name": "Message-In-Bottle",
       "type": "message-in-bottle",
       "description": "A bottle that contains a message... wonder what could be inside",
-      "carryable": false,
+      "carryable": true,
       "walkable": false,
-      "interactions": [],
+      "interactions": [
+        {
+          "description": "Open Message",
+          "action": null,
+          "while_carried": true
+        }
+      ],
       "on_tick": [
         {
           "action": "spawn_item",
           "parameters": {
             "type": "message-in-bottle",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 3,
-            "rate": 0.1
-          }
-        }
-      ]
-    },
-    {
-      "name": "Starfish",
-      "type": "starfish",
-      "description": "A starfish",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": [
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "starfish",
             "global_max": 10,
             "local_max": 1,
             "radius": 3,
@@ -299,8 +377,8 @@
       ]
     },
     {
-      "name": "Log",
-      "type": "log",
+      "name": "Seaweed Piece",
+      "type": "seaweed-piece",
       "carryable": true,
       "smashable": true,
       "walkable": true,
