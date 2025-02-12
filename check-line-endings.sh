@@ -7,7 +7,7 @@ echo "Checking if any files have CRLF endings... this may take a moment..."
 TARGET_DIR="${1:-.}"
 
 # Find all .tf or .sh files under TARGET_DIR
-files=$(find "$TARGET_DIR" -type f \( -name "*.tf" -o -name "*.sh" \))
+files=$(find "$TARGET_DIR" -name node_modules -prune -o -type f \( -name "*.tf" -o -name "*.sh" \) -print)
 
 found_crlf=false
 
