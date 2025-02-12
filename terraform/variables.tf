@@ -33,3 +33,9 @@ variable "supabase_organization_id" {
   type        = string
 }
 
+variable "supabase_bucket" {
+  description = "Name of Supabase Bucket"
+  type        = string
+  sensitive   = true
+}
+
