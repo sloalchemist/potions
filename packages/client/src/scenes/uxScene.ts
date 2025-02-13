@@ -95,7 +95,7 @@ export class UxScene extends Phaser.Scene {
     this.load.audio('tabClick', ['static/sounds/button_with_flip.mp3']);
     this.load.audio('buttonClick', ['static/sounds/button.mp3']);
     // chatting sounds
-    this.load.audio('chatHigh', ['static/sounds/chat_high.mp3'])
+    this.load.audio('chatHigh', ['static/sounds/chat_high.mp3']);
     this.load.audio('chatLow', ['static/sounds/chat_low.mp3']);
     this.load.audio('chatMid', ['static/sounds/chat_mid.mp3']);
     this.load.audio('chatNormal', ['static/sounds/chat_normal.mp3']);
@@ -106,7 +106,9 @@ export class UxScene extends Phaser.Scene {
     this.load.audio('give', ['static/sounds/drop.mp3']);
     // item interaction sounds
     this.load.audio('pickupGold', ['static/sounds/jingle.mp3']);
-    const interactions = globalData.item_types.flatMap((item) => item.interactions);
+    const interactions = globalData.item_types.flatMap(
+      (item) => item.interactions
+    );
     interactions.forEach((interaction) => {
       const soundPath = (interaction as { sound_path?: string }).sound_path;
       if (soundPath) {
@@ -779,7 +781,8 @@ export class UxScene extends Phaser.Scene {
         const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
         const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
 
-        const interactionAction = interaction.item.type === "gold" ? "pickupGold" : interaction.action;
+        const interactionAction =
+          interaction.item.type === 'gold' ? 'pickupGold' : interaction.action;
 
         const button = new Button(
           this,
@@ -795,7 +798,9 @@ export class UxScene extends Phaser.Scene {
             ),
           undefined,
           undefined,
-          this.cache.audio.has(interactionAction) ? interactionAction : undefined
+          this.cache.audio.has(interactionAction)
+            ? interactionAction
+            : undefined
         );
         this.interactButtons.push(button);
         this.itemsContainer?.add(button);

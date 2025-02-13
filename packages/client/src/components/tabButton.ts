@@ -28,8 +28,6 @@ export class TabButton extends Phaser.GameObjects.Container {
     this.width = width;
     this.height = height;
 
-    // scene.sound.add('tabClick');
-
     // Create background graphics
     this.background = scene.add.graphics();
     this.drawTabShape(this.background, this.width, this.height, this.active);

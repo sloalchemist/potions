@@ -30,11 +30,9 @@ export class Button extends Phaser.GameObjects.Container {
     this.callback = callback;
     this.fixedWidth = buttonWidth;
     this.fixedHeight = buttonHeight;
-    // scene.sound.add('buttonClick');
-    
+
     if (interactionSound) {
       this.interactionSound = interactionSound;
-      // scene.sound.add(interactionSound);
     }
 
     if (treatAsText) {
@@ -120,17 +118,17 @@ export class Button extends Phaser.GameObjects.Container {
         this.buttonBackground?.setScale(0.95);
         this.buttonBackground?.setFillStyle(0x5e7485); // Pressed color
       }
-      );
-      
-      this.on('pointerup', () => {
-        this.buttonSprite.setScale(1.1);
-        this.buttonBackground?.setScale(1.05);
-        this.buttonBackground?.setFillStyle(0xc0d9e8); // Hover color
-        this.callback();
-        // play interaction sound
-        if (this.interactionSound) {
-          this.scene.sound.play(this.interactionSound)
-        };
+    );
+
+    this.on('pointerup', () => {
+      this.buttonSprite.setScale(1.1);
+      this.buttonBackground?.setScale(1.05);
+      this.buttonBackground?.setFillStyle(0xc0d9e8); // Hover color
+      this.callback();
+      // play interaction sound
+      if (this.interactionSound) {
+        this.scene.sound.play(this.interactionSound);
+      }
     });
   }
 
