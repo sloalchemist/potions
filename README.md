@@ -1,6 +1,6 @@
 # Potions the Game
 
-[![OtterWise Coverage](https://img.shields.io/endpoint?url=https://otterwise.app/badge/github/sloalchemist/potions/coverage)](https://otterwise.app/github/smbock42/CSC-487)
+[![OtterWise Coverage](https://img.shields.io/endpoint?url=https://otterwise.app/badge/github/sloalchemist/potions/coverage)](https://otterwise.app/github/sloaclehmist/potions)
 
 ## Introduction
 
