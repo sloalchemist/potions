@@ -12,7 +12,7 @@
     "start": "node dist/src/server.js",
     "dev": "pnpm exec ts-node src/server.ts",
     "test": "jest --silent",
-    "test:coverage": "pnpm test --coverage=true --coverage-directory=../../build/logs",
+    "test:coverage": "pnpm test -- --coverage=true --coverage-directory=../../build/logs",
     "watch": "tsc --watch",
     "create": "ts-node src/generate/buildWorld.ts",
     "serve": "nodemon dist/src/server.js",

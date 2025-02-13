@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest --silent",
-    "test:coverage": "pnpm test --coverage=true --coverage-directory=../../build/logs",
+    "test:coverage": "pnpm test -- --coverage=true --coverage-directory=../../build/logs",
     "lint": "eslint src/ --ext .ts,.tsx --fix",
     "format": "prettier --config ../../.prettierrc 'src/**/*.ts' --write",
     "clean": "rimraf dist",
