@@ -29,3 +29,5 @@ package-lock.json
 # ignore test files
 **/build/logs/**
 **/coverage/**
+build/
+build/logs
