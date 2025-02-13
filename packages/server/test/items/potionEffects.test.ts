@@ -104,7 +104,7 @@ describe('Try to consume blue potion in various cases', () => {
     ).get({ id: testMob!.id }) as { speed: number };
 
     // check that speed is still the same (boosted from first blue bot not stacked)
-    expect(speed_blue_stacked.speed).toBe(startSpeed + startSpeed*0.5);
+    expect(speed_blue_stacked.speed).toBe(startSpeed + startSpeed * 0.5);
   });
 
   test('Allow effects from first blue potion to wear off, then drink another', () => {
@@ -148,8 +148,8 @@ describe('Try to consume blue potion in various cases', () => {
     const speed_worn_off = DB.prepare(
       `
             SELECT speed FROM mobView WHERE id = :id
-        `)
-    .get({ id: testMob!.id }) as { speed: number };
+        `
+    ).get({ id: testMob!.id }) as { speed: number };
 
     // check attributes on player (speed should be back to normal)
     expect(speed_worn_off.speed).toBe(startSpeed);
@@ -175,14 +175,13 @@ describe('Try to consume blue potion in various cases', () => {
     const new_speed = DB.prepare(
       `
             SELECT speed FROM mobView WHERE id = :id
-        `)
-      .get({ id: testMob!.id }) as { speed: number };
+        `
+    ).get({ id: testMob!.id }) as { speed: number };
 
     // check attributes on player (speed should be boosted again)
     expect(new_speed.speed).toBe(startSpeed + startSpeed * 0.5);
   });
 });
-
 
 // ORANGE POTION TESTS
 
@@ -235,8 +234,8 @@ describe('Try to consume orange potion in various cases', () => {
     const attack_boosted = DB.prepare(
       `
             SELECT attack FROM mobView WHERE id = :id
-        `)
-    .get({ id: testMob!.id }) as { attack: number };
+        `
+    ).get({ id: testMob!.id }) as { attack: number };
 
     // check attributes on player (should be boosted)
     expect(attack_boosted.attack).toBe(startAttack + startAttack * 0.5);
@@ -270,8 +269,8 @@ describe('Try to consume orange potion in various cases', () => {
     const attack_stacked = DB.prepare(
       `
             SELECT attack FROM mobView WHERE id = :id
-        `)
-    .get({ id: testMob!.id }) as { attack: number };
+        `
+    ).get({ id: testMob!.id }) as { attack: number };
 
     // check attributes on player (attack should be still boosted but not stacked)
     expect(attack_stacked.attack).toBe(startAttack + startAttack * 0.5);
@@ -318,8 +317,8 @@ describe('Try to consume orange potion in various cases', () => {
     const attack_worn_off = DB.prepare(
       `
             SELECT attack FROM mobView WHERE id = :id
-        `)
-    .get({ id: testMob!.id }) as { attack: number };
+        `
+    ).get({ id: testMob!.id }) as { attack: number };
 
     // check attributes on player (should be back to normal)
     expect(attack_worn_off.attack).toBe(startAttack);
@@ -342,9 +341,11 @@ describe('Try to consume orange potion in various cases', () => {
     expect(test2).toBe(true);
 
     // get new attack from DB
-    const new_attack = DB.prepare(`
-              SELECT attack FROM mobView WHERE id = :id
-          `).get({ id: testMob!.id }) as { attack: number };
+    const new_attack = DB.prepare(
+      `
+            SELECT attack FROM mobView WHERE id = :id
+        `
+    ).get({ id: testMob!.id }) as { attack: number };
 
     // check attributes on player (should be boosted again)
     expect(new_attack.attack).toBe(startAttack + startAttack * 0.5);

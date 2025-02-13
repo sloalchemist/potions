@@ -366,7 +366,10 @@ export class AblyService implements PubSub {
     delta: number,
     newValue: number
   ): void {
-    if (newValue == undefined || key == undefined || delta == undefined || attribute == undefined) {
+    if (newValue == undefined || 
+      key == undefined || 
+      delta == undefined || 
+      attribute == undefined) {
       throw new Error(
         `Sending invalid changeEffect message ${key}, ${attribute}, ${delta}, ${newValue}`
       );

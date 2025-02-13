@@ -552,7 +552,10 @@ export class Mob {
         `
       ).get({ id: this.id }) as Record<string, number>;
 
-      pubSub.changeEffect(this.id,row.attribute,-row.delta,value[row.attribute]);
+      pubSub.changeEffect(this.id,
+        row.attribute,
+        -row.delta,
+        value[row.attribute]);
     }
   }
 
