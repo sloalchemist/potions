@@ -392,7 +392,8 @@
             "permissions": {
                 "community": true,
                 "other": false
-            }
+            },
+            "sound_path": "static/sounds/drop.mp3"
         },
         {
             "description": "Get $item_name",
@@ -408,7 +409,8 @@
             "permissions": {
                 "community": true,
                 "other": false
-            }
+            },
+            "sound_path": "static/sounds/pick_up.mp3"
         },
         {
             "description": "Raise price",
@@ -424,7 +426,8 @@
             "permissions": {
                 "community": true,
                 "other": false
-            }
+            },
+            "sound_path": "static/sounds/bell.mp3"
         },
         {
             "description": "Lower price",
@@ -440,7 +443,8 @@
             "permissions": {
                 "community": true,
                 "other": false
-            }
+            },
+            "sound_path": "static/sounds/bell.mp3"
         },
         {
             "description": "Collect gold",
@@ -469,7 +473,8 @@
                     "value": 0,
                     "comparison": "greater_than"
                 }
-            ]
+            ],
+            "sound_path": "static/sounds/jingle.mp3"
         }
     ],
     "show_price_at": {
@@ -530,12 +535,14 @@
                     "value": 0,
                     "comparison": "greater_than"
                 }
-            ]
+            ],
+            "sound_path": "static/sounds/pick_up.mp3"
         },
         {
             "description": "Add $item_name",
             "action": "add_item",
-            "while_carried": false
+            "while_carried": false,
+            "sound_path": "static/sounds/drop.mp3"
         }
     ]
 },
@@ -565,7 +572,8 @@
                     "value": 3,
                     "comparison": "less_than"
                 }
-            ]
+            ],
+            "sound_path": "static/sounds/drop.mp3"
         },
         {
             "description": "Bottle Potion",
@@ -577,7 +585,8 @@
                     "value": 0,
                     "comparison": "greater_than"
                 }
-            ]
+            ],
+            "sound_path": "static/sounds/mix.mp3"
         },
         {
             "description": "Dump Cauldron",
@@ -589,7 +598,8 @@
                     "value": 0,
                     "comparison": "greater_than"
                 }
-            ]
+            ],
+            "sound_path": "static/sounds/dump.mp3"
         }
     ]
 },

@@ -30,11 +30,11 @@ export class Button extends Phaser.GameObjects.Container {
     this.callback = callback;
     this.fixedWidth = buttonWidth;
     this.fixedHeight = buttonHeight;
-    scene.sound.add('buttonClick');
+    // scene.sound.add('buttonClick');
     
     if (interactionSound) {
       this.interactionSound = interactionSound;
-      scene.sound.add(interactionSound);
+      // scene.sound.add(interactionSound);
     }
 
     if (treatAsText) {
