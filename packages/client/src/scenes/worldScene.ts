@@ -534,6 +534,10 @@ export class WorldScene extends Phaser.Scene {
       return;
     }
 
+    if (this.scene.isActive('ChatOverlayScene')) {
+      return;
+    }
+
     let moveX = player.position.x;
     let moveY = player.position.y;
 
