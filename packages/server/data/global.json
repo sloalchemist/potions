@@ -81,7 +81,7 @@
       "on_tick": []
     },
     {
-      "name": "Lightning-bloom",
+      "name": "Lightning Bloom",
       "type": "lightning-bloom",
       "description": "bones",
       "attributes": [
@@ -155,7 +155,7 @@
       "on_tick": []
     },
     {
-      "name": "Sun-drop",
+      "name": "Sun Drop",
       "type": "sun-drop",
       "description": "sun drop",
       "attributes": [
@@ -178,8 +178,94 @@
         }
       ],
       "carryable": true,
-      "on_tick": []
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sun-drop",
+            "global_max": 10,
+            "local_max": 3,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
     },
+    {
+      "name": "Sands of Time",
+      "type": "sands-of-time",
+      "attributes": [
+          {
+              "name": "brew_color",
+              "value": "#808080"
+          },
+          {
+              "name": "health",
+              "value": 1
+          }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+          {
+              "description": "Eat",
+              "action": "eat",
+              "while_carried": true
+          }
+      ],
+      "carryable": true,
+      "on_tick": []
+  },
+  {
+      "name": "Sunflower",
+      "type": "sunflower",
+      "attributes": [
+          {
+              "name": "brew_color",
+              "value": "#FF8800"
+          },
+          {
+              "name": "health",
+              "value": 1
+          }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+          {
+              "description": "Eat",
+              "action": "eat",
+              "while_carried": true
+          }
+      ],
+      "carryable": true,
+      "on_tick": []
+  },
+  {
+      "name": "Gun Powder",
+      "type": "gun-powder",
+      "attributes": [
+          {
+              "name": "brew_color",
+              "value": "#555555"
+          },
+          {
+              "name": "health",
+              "value": 1
+          }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+          {
+              "description": "Eat",
+              "action": "eat",
+              "while_carried": true
+          }
+      ],
+      "carryable": true,
+      "on_tick": []
+  },
     {
       "name": "Wall",
       "type": "wall",
