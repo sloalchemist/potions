@@ -59,10 +59,23 @@ jobs:
       - name: Run Unit Tests Silently
         run: pnpm test:silent
 
-      # Run Test Coverage
+      # Step 9: Run Test Coverage (Outputs coverage reports to each packages own build/logs folders)
       - name: Run Test Coverage
-        run: pnpm test:coverage
+        run: pnpm coverage
 
+      # Step 10: Merge Coverage Reports for Uplaod
+      - name: Merge Coverage Reports
+        run: |
+          mkdir -p build/logs
+          pnpx istanbul-merge --out coverage.json \
+            packages/client/build/logs/coverage-final.json \
+            packages/common/build/logs/coverage-final.json \
+            packages/converse/build/logs/coverage-final.json \
+            packages/server/build/logs/coverage-final.json
+          npx istanbul report --include coverage.json --dir build/logs clover
+
+
+      # Step 11: Upload Coverages 
       - name: Upload Coverage
         env:
           OTTERWISE_TOKEN: ${{ secrets.OTTERWISE_TOKEN }}
