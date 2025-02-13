@@ -5,6 +5,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "test": "jest --silent",
+    "test:coverage": "pnpm test --coverage=true --coverage-directory=../../build/logs",
     "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
     "lint": "pnpm eslint src/",
     "build": "pnpm tsc --project tsconfig.json",
