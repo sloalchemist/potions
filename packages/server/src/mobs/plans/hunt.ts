@@ -1,13 +1,14 @@
 import { Mob } from '../mob';
 import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
+import { Community } from '../../community/community';
+import globalData from '../../../data/global.json';
 
 export class Hunt implements Plan {
   enemy: Mob | null = null;
 
   execute(npc: Mob): boolean {
     if (!this.enemy || !this.enemy.position || !npc.position) return true;
-    // Move toward the blob to attack
 
     const success = npc.moveToOrExecute(this.enemy.position, 1, () => {
       this.enemy!.changeHealth(Math.floor(Math.random() * -1 * npc.attack));
@@ -25,7 +26,9 @@ export class Hunt implements Plan {
   }
 
   utility(npc: Mob): number {
-    if (!npc.position) return -Infinity;
+    const { passive_mobs, hungry_mobs, aggressive_mobs } =
+      globalData.mob_aggro_behaviors;
+    if (!npc.position || passive_mobs.includes(npc.type)) return -Infinity;
 
     const visionMulitple = npc.action == this.type() ? 2 : 1;
     const closerEnemyID = npc.findClosestEnemyID(
@@ -37,9 +40,22 @@ export class Hunt implements Plan {
 
     this.enemy = Mob.getMob(closerEnemyID)!;
 
-    const utility =
+    var utility =
       npc.personality.traits[PersonalityTraits.Aggression] *
       (npc.attack / this.enemy.attack);
+
+    if (hungry_mobs.includes(npc.type) && npc.needs.getNeed('satiation') < 10) {
+      utility = 100;
+      return utility;
+    }
+    if (Community.getFavor(npc.community_id, this.enemy.community_id) < 0) {
+      utility = 100;
+      return utility;
+    }
+    if (aggressive_mobs.includes(npc.type)) {
+      utility = 100;
+      return utility;
+    }
 
     return utility;
   }

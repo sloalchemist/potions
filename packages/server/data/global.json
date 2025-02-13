@@ -750,5 +750,10 @@
   "houses": [],
   "items": [],
   "containers": [],
-  "regions": []
+  "regions": [],
+  "mob_aggro_behaviors": {
+    "passive_mobs": ["villager"],
+    "hungry_mobs": ["blob"],
+    "aggressive_mobs": ["fighter"]
+  }
 }
