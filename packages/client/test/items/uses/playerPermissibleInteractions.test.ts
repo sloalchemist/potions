@@ -14,7 +14,6 @@ import {
 } from '../../../src/world/controller';
 import { Item } from '../../../src/world/item';
 // import { World } from '../../../src/world/world';
-// import { publicCharacterId } from '../../../src/worldMetadata';
 import { Mob } from '../../../src/world/mob';
 import { ItemType } from '../../../src/worldDescription';
 import { Coord } from '@rt-potion/common';
@@ -25,9 +24,7 @@ describe('Community ownership based interactions', () => {
 
   beforeAll(() => {
     // Initialize world
-    // globalThis.world = new World();
     // world = new World();
-
     world.load({
       tiles: [
         [0, 0, 0],
@@ -40,7 +37,6 @@ describe('Community ownership based interactions', () => {
     });
 
     const publicCharacterId = '11111';
-    // (global as any).publicCharacterId = '11111';
 
     const player = new Mob(
       world,
