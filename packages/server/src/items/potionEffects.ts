@@ -18,7 +18,7 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
       const speedDuration = 30;
       mob.changeEffect(speedDelta, speedDuration, 'speed');
       return true;
-    case "#ffa500":
+    case '#ffa500':
       console.log('Drinking orange potion');
       const attackDelta = mob._attack * 0.5;
       const attackDuration = 240;

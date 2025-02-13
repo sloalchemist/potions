@@ -444,7 +444,7 @@ export class Mob {
     this.personality.traits[traitKey] = newValue;
     pubSub.changePersonality(this.id, trait, amount);
   }
-  
+
   changeEffect(delta: number, duration: number, attribute: string): void {
     // only responsible for inserting rows and broadcasting changes
     const targetTick = this.current_tick + duration;
@@ -463,7 +463,7 @@ export class Mob {
       attribute: attribute,
       currentTick: this.current_tick
     }) as { delta: number };
-    
+
     // if so, then set the final delta to current delta
     if (current_delta) {
       finalDelta = current_delta.delta;
@@ -482,7 +482,7 @@ export class Mob {
       delta: finalDelta,
       targetTick: targetTick
     });
-    
+
     // grab updated value
     const value = DB.prepare(
       `
@@ -494,7 +494,7 @@ export class Mob {
       id: this.id
     }) as Record<string, number>;
 
-    if (!current_delta){
+    if (!current_delta) {
       pubSub.changeEffect(this.id, attribute, finalDelta, value[attribute]);
     }
   }
@@ -517,9 +517,9 @@ export class Mob {
       WHERE id = :id AND attribute NOT IN (SELECT attribute FROM current_effects)
       RETURNING attribute, delta
       `
-    ).all({ 
-      id: this.id, 
-      currentTick: this.current_tick 
+    ).all({
+      id: this.id,
+      currentTick: this.current_tick
     }) as QueryResult[] | undefined;
 
     if (!result) {
@@ -542,7 +542,7 @@ export class Mob {
       }, {})
     );
 
-    for (const row of uniqueRes){
+    for (const row of uniqueRes) {
       // get the new value for the attribute and broadcast it
       const value = DB.prepare(
         `
@@ -551,10 +551,9 @@ export class Mob {
         WHERE id = :id
         `
       ).get({ id: this.id }) as Record<string, number>;
-      
-      pubSub.changeEffect(this.id, row.attribute, -row.delta, value[row.attribute]);
-    }
 
+      pubSub.changeEffect(this.id,row.attribute,-row.delta,value[row.attribute]);
+    }
   }
 
   getHouse(): House | undefined {
