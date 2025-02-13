@@ -10,7 +10,7 @@ export class Button extends Phaser.GameObjects.Container {
   active: boolean = true;
   fixedWidth: number;
   fixedHeight: number;
-  sound: Phaser.Sound.BaseSound;
+  interactionSound?: string;
 
   constructor(
     scene: Phaser.Scene,
@@ -20,7 +20,8 @@ export class Button extends Phaser.GameObjects.Container {
     texture: string,
     callback: () => void,
     buttonWidth: number = BUTTON_WIDTH,
-    buttonHeight: number = BUTTON_HEIGHT
+    buttonHeight: number = BUTTON_HEIGHT,
+    interactionSound?: string
   ) {
     super(scene, x, y); // Initialize the container at position (x, y)
     scene.add.existing(this); // Add the container to the scene
@@ -29,7 +30,12 @@ export class Button extends Phaser.GameObjects.Container {
     this.callback = callback;
     this.fixedWidth = buttonWidth;
     this.fixedHeight = buttonHeight;
-    this.sound = scene.sound.add('buttonClick');
+    scene.sound.add('buttonClick');
+    
+    if (interactionSound) {
+      this.interactionSound = interactionSound;
+      scene.sound.add(interactionSound);
+    }
 
     if (treatAsText) {
       // Create the background rectangle
@@ -109,18 +115,22 @@ export class Button extends Phaser.GameObjects.Container {
         event: Phaser.Types.Input.EventData
       ) => {
         event.stopPropagation();
-        this.sound.play();
+        this.scene.sound.play('buttonClick');
         this.buttonSprite.setScale(0.9);
         this.buttonBackground?.setScale(0.95);
         this.buttonBackground?.setFillStyle(0x5e7485); // Pressed color
       }
-    );
-
-    this.on('pointerup', () => {
-      this.buttonSprite.setScale(1.1);
-      this.buttonBackground?.setScale(1.05);
-      this.buttonBackground?.setFillStyle(0xc0d9e8); // Hover color
-      this.callback();
+      );
+      
+      this.on('pointerup', () => {
+        this.buttonSprite.setScale(1.1);
+        this.buttonBackground?.setScale(1.05);
+        this.buttonBackground?.setFillStyle(0xc0d9e8); // Hover color
+        this.callback();
+        // play interaction sound
+        if (this.interactionSound) {
+          this.scene.sound.play(this.interactionSound)
+        };
     });
   }
 

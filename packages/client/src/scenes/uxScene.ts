@@ -28,6 +28,7 @@ import {
 } from '../services/playerToServer';
 import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
+import globalData from '../../static/global.json';
 export interface ChatOption {
   label: string;
   callback: () => void;
@@ -96,6 +97,15 @@ export class UxScene extends Phaser.Scene {
     this.load.audio('chatLow', ['static/sounds/chat_low.mp3']);
     this.load.audio('chatMid', ['static/sounds/chat_mid.mp3']);
     this.load.audio('chatNormal', ['static/sounds/chat_normal.mp3']);
+    
+    // load all item interaction sounds
+    const interactions = globalData.item_types.flatMap((item) => item.interactions);
+    interactions.forEach((interaction) => {
+      const soundPath = (interaction as { sound_path?: string }).sound_path;
+      if (soundPath) {
+        this.load.audio(interaction.action, [soundPath]);
+      }
+    });
   }
 
   create() {
@@ -773,7 +783,10 @@ export class UxScene extends Phaser.Scene {
               interaction.item.key,
               interaction.action,
               interaction.give_to ? interaction.give_to : null
-            )
+            ),
+          undefined,
+          undefined,
+          this.cache.audio.has(interaction.action) ? interaction.action : undefined
         );
         this.interactButtons.push(button);
         this.itemsContainer?.add(button);

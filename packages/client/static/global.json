@@ -271,7 +271,8 @@
         {
             "description": "Eat",
             "action": "eat",
-            "while_carried": true
+            "while_carried": true,
+            "sound_path": "static/sounds/eat_1.mp3"
         }
     ]
 },
@@ -312,13 +313,15 @@
         {
             "description": "Start wall",
             "action": "start_wall",
-            "while_carried": true
+            "while_carried": true,
+            "sound_path": "static/sounds/grunt_3.mp3"
         },
         {
             "description": "Build wall",
             "action": "build_wall",
             "while_carried": true,
-            "requires_item": "partial-wall"
+            "requires_item": "partial-wall",
+            "sound_path": "static/sounds/grunt_3.mp3"
         }
     ]
 },
@@ -453,7 +456,8 @@
             "permissions": {
                 "community": true,
                 "other": false
-            }
+            },
+            "sound_path": "static/sounds/jingle.mp3"
         },
         {
             "description": "Purchase potion",
@@ -489,7 +493,8 @@
         {
             "description": "Quaff potion",
             "action": "drink",
-            "while_carried": true
+            "while_carried": true,
+            "sound_path": "static/sounds/drink_1.mp3"
         },
         {
             "description": "Create stand",
