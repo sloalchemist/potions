@@ -5,7 +5,6 @@
   "main": "dist/generateWorld.js",
   "scripts": {
     "test": "echo 'No testing configured'",
-    "test:coverage": "pnpm test",
     "lint": "pnpm lint",
     "format": "pnpm prettier:format",
     "clean": "rimraf dist",
