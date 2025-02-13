@@ -4,7 +4,7 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest --silent",
     "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
     "lint": "pnpm eslint src/",
     "build": "pnpm tsc --project tsconfig.json",

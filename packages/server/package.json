@@ -11,7 +11,7 @@
     "build": "tsc",
     "start": "node dist/src/server.js",
     "dev": "pnpm exec ts-node src/server.ts",
-    "test": "jest",
+    "test": "jest --silent",
     "watch": "tsc --watch",
     "create": "ts-node src/generate/buildWorld.ts",
     "serve": "nodemon dist/src/server.js",
