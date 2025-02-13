@@ -59,13 +59,16 @@ export function setupBroadcast(
   function handlePickupItem(data: PickupItemData) {
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
-    if(mob.carrying){
+    console.log("mob is carrying: ", mob.key ,mob.carrying);
+    if(mob.carrying != undefined){
+      console.log("mob is already carrying an item");
       if(mob.position == null){
         throw new Error('Mob has no position');
       }
       handleDropItem({item_key: mob.carrying, mob_key: mob.key, position: mob.position}); 
     }
     item.pickup(world, mob);
+    console.log("mob is now carrying: ", mob.key ,mob.carrying);
   }
 
   function handleGiveItem(data: GiveItemData) {
