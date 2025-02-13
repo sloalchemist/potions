@@ -29,6 +29,185 @@
       "on_tick": []
     },
     {
+      "name": "Slimeblob",
+      "type": "slime-blob",
+      "description": "blob",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#0000FF"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Bones",
+      "type": "bones",
+      "description": "bones",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#00FF00"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Lightning Bloom",
+      "type": "lightning-bloom",
+      "description": "bones",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#AA00FF"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Bomb",
+      "type": "bomb",
+      "description": "bomb",
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Tar",
+      "type": "tar",
+      "description": "tar",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#000000"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Sun Drop",
+      "type": "sun-drop",
+      "description": "sun drop",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#FF8800"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Sands of Time",
+      "type": "sands-of-time",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#808080"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Sunflower",
+      "type": "sunflower",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#FF8800"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Gun Powder",
+      "type": "gun-powder",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#555555"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
       "name": "Starfish",
       "type": "starfish",
       "description": "A gorgeous teal starfish",
@@ -183,6 +362,72 @@
       "interactions": []
     },
     {
+      "name": "Tree",
+      "type": "tree",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "log",
+            "global_max": 10, 
+            "local_max": 2,
+            "radius": 3,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+             "type": "sun-drop",
+             "global_max": 10,
+             "local_max": 2,
+             "radius": 4,
+             "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sunflower",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Log",
+      "type": "log",
+      "carryable": true,
+      "smashable": true,
+      "walkable": true,
+      "flat": true,
+      "attributes":[
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Start wall",
+          "action": "start_wall",
+          "while_carried": true
+        },
+        {
+          "description": "Build wall",
+          "action": "build_wall",
+          "while_carried": true,
+          "requires_item": "partial-wall"
+        }
+      ]
+    },
+    {
       "name": "Seaweed",
       "type": "seaweed",
       "description": "A flowy plant, that occasionally drops leaves",
@@ -197,6 +442,26 @@
             "global_max": 10,
             "local_max": 2,
             "radius": 3,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sun-drop",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sunflower",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
             "rate": 0.1
           }
         }
@@ -327,6 +592,26 @@
             "radius": 3,
             "rate": 0.1
           }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "bones",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "slime-blob",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
         }
       ]
     },
@@ -371,6 +656,26 @@
             "global_max": 10,
             "local_max": 2,
             "radius": 3,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "tar",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "lightning-bloom",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
             "rate": 0.1
           }
         }
@@ -433,6 +738,36 @@
           "parameters": {
             "type": "villager",
             "max": 12,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sands-of-time",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "gun-powder",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "bomb",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
             "rate": 0.1
           }
         }
@@ -750,5 +1085,10 @@
   "houses": [],
   "items": [],
   "containers": [],
-  "regions": []
+  "regions": [],
+  "mob_aggro_behaviors": {
+    "passive_mobs": ["villager"],
+    "hungry_mobs": ["blob"],
+    "aggressive_mobs": ["fighter"]
+  }
 }

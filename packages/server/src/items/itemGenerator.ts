@@ -38,6 +38,9 @@ export class ItemGenerator {
   }
 
   public getItemType(type: string): ItemType {
+    if (!this.itemTypes[type]) {
+      throw new Error(`Unknown item type: ${type}`);
+    }
     return this.itemTypes[type];
   }
 
