@@ -255,7 +255,7 @@ export class Mob {
                 id
             FROM mobView
             WHERE mobView.id != :self_id
-              NOT EXISTS (
+              AND NOT EXISTS (
                 SELECT 1 FROM alliances 
                 WHERE 
                     (alliances.community_1_id = :community_id AND alliances.community_2_id = mobView.community_id) OR
