@@ -56,8 +56,8 @@ jobs:
         run: docker build -t potion-server .
 
       # Step 8: Run Unit Tests
-      - name: Run Unit Tests
-        run: pnpm test
+      - name: Run Unit Tests Silently
+        run: pnpm test:silent
 
       # Run Test Coverage
       - name: Run Test Coverage
