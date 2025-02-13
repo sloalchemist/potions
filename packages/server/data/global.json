@@ -154,59 +154,59 @@
       "name": "Sands of Time",
       "type": "sands-of-time",
       "attributes": [
-          {
-              "name": "brew_color",
-              "value": "#808080"
-          },
-          {
-              "name": "health",
-              "value": 1
-          }
+        {
+          "name": "brew_color",
+          "value": "#808080"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
       ],
       "walkable": true,
       "smashable": true,
       "interactions": [],
       "carryable": true,
       "on_tick": []
-  },
-  {
+    },
+    {
       "name": "Sunflower",
       "type": "sunflower",
       "attributes": [
-          {
-              "name": "brew_color",
-              "value": "#FF8800"
-          },
-          {
-              "name": "health",
-              "value": 1
-          }
+        {
+          "name": "brew_color",
+          "value": "#FF8800"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
       ],
       "walkable": true,
       "smashable": true,
       "interactions": [],
       "carryable": true,
       "on_tick": []
-  },
-  {
+    },
+    {
       "name": "Gun Powder",
       "type": "gun-powder",
       "attributes": [
-          {
-              "name": "brew_color",
-              "value": "#555555"
-          },
-          {
-              "name": "health",
-              "value": 1
-          }
+        {
+          "name": "brew_color",
+          "value": "#555555"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
       ],
       "walkable": true,
       "smashable": true,
       "interactions": [],
       "carryable": true,
       "on_tick": []
-  },
+    },
     {
       "name": "Starfish",
       "type": "starfish",
@@ -528,24 +528,24 @@
           }
         },
         {
-            "action": "spawn_item",
-            "parameters": {
-              "type": "bones",
-              "global_max": 10,
-              "local_max": 2,
-              "radius": 4,
-              "rate": 0.1
-            }
+          "action": "spawn_item",
+          "parameters": {
+            "type": "bones",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
         },
         {
-            "action": "spawn_item",
-            "parameters": {
-              "type": "slime-blob",
-              "global_max": 10,
-              "local_max": 2,
-              "radius": 4,
-              "rate": 0.1
-            }
+          "action": "spawn_item",
+          "parameters": {
+            "type": "slime-blob",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
         }
       ]
     },
@@ -592,7 +592,7 @@
             "radius": 3,
             "rate": 0.1
           }
-        },        
+        },
         {
           "action": "spawn_item",
           "parameters": {
@@ -602,8 +602,8 @@
             "radius": 4,
             "rate": 0.1
           }
-       },
-       {
+        },
+        {
           "action": "spawn_item",
           "parameters": {
             "type": "lightning-bloom",
@@ -612,7 +612,7 @@
             "radius": 4,
             "rate": 0.1
           }
-       }
+        }
       ]
     },
     {
