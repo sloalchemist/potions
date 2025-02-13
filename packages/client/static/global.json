@@ -3,6 +3,7 @@
     {
         "name": "Heartbeet",
         "type": "heart-beet",
+        "affiliation": "common",
         "attributes": [
             {
                 "name": "brew_color",
@@ -29,6 +30,7 @@
     {
         "name": "Fireball",
         "type": "fire-ball",
+        "affiliation": "fighter",
         "attributes": [
             {
                 "name": "brew_color",
@@ -55,6 +57,7 @@
     {
         "name": "Pearl",
         "type": "pearl",
+        "affiliation": "blob",
         "attributes": [
             {
                 "name": "brew_color",
@@ -74,6 +77,7 @@
 {
     "name": "Wall",
     "type": "wall",
+    "affiliation": "common",
     "item_group": "wall",
     "layout_type": "wall",
     "carryable": false,
@@ -91,6 +95,7 @@
 {
     "name": "Partial Wall",
     "type": "partial-wall",
+    "affiliation": "common",
     "carryable": false,
     "walkable": false,
     "smashable": true,
@@ -110,6 +115,7 @@
 {
     "name": "Fence",
     "type": "fence",
+    "affiliation": "common",
     "item_group": "fence",
     "layout_type": "fence",
     "carryable": false,
@@ -127,6 +133,7 @@
 {
     "name": "Gate",
     "type": "gate",
+    "affiliation": "common",
     "item_group": "fence",
     "layout_type": "opens",
     "carryable": false,
@@ -144,6 +151,7 @@
 {
     "name": "Door",
     "type": "door",
+    "affiliation": "common",
     "item_group": "wall",
     "layout_type": "opens",
     "carryable": false,
@@ -239,6 +247,7 @@
   {
     "name": "Message in a Bottle",
     "type": "message-in-bottle",
+    "affiliation": "blob",
     "description": "A bottle that contains a message... wonder what could be inside",
     "carryable": true,
     "walkable": false,
@@ -305,6 +314,7 @@
 {
     "type": "heart-beet-plant",
     "name": "Heartbeet plant",
+    "affiliation": "common",
     "carryable": false,
     "walkable": true,
     "smashable": false,
@@ -326,6 +336,7 @@
 {
     "type": "blueberry",
     "name": "Blueberry",
+    "affiliation": "common",
     "carryable": true,
     "walkable": true,
     "smashable": true,
@@ -369,6 +380,7 @@
 {
     "name": "Seaweed Piece",
     "type": "seaweed-piece",
+    "affiliation": "blob",
     "carryable": true,
     "smashable": true,
     "walkable": true,
@@ -396,6 +408,7 @@
 {
     "name": "Portal",
     "type": "portal",
+    "affiliation": "common",
     "carryable": false,
     "walkable": true,
     "flat": true,
@@ -436,6 +449,7 @@
 {
     "name": "Potion stand",
     "type": "potion-stand",
+    "affiliation": "common",
     "carryable": false,
     "smashable": true,
     "walkable": false,
@@ -552,6 +566,7 @@
 {
     "name": "Potion",
     "type": "potion",
+    "affiliation": "common",
     "carryable": true,
     "smashable": true,
     "walkable": true,
@@ -577,6 +592,7 @@
 {
     "name": "Basket",
     "type": "basket",
+    "affiliation": "common",
     "carryable": false,
     "templated": true,
     "walkable": false,
@@ -613,6 +629,7 @@
 {
     "name": "Cauldron",
     "type": "cauldron",
+    "affiliation": "common",
     "carryable": false,
     "walkable": false,
     "attributes": [
@@ -667,6 +684,7 @@
 {
     "name": "Gold",
     "type": "gold",
+    "affiliation": "common",
     "walkable": true,
     "smashable": false,
     "carryable": true,
