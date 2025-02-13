@@ -721,7 +721,7 @@
           "action": "spawn_mob",
           "parameters": {
             "type": "blob",
-            "max": 1,
+            "max": 10,
             "rate": 0.1
           }
         },
@@ -729,7 +729,7 @@
           "action": "spawn_mob",
           "parameters": {
             "type": "fighter",
-            "max": 1,
+            "max": 10,
             "rate": 0.1
           }
         },
