@@ -5,7 +5,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "test": "jest --silent",
-    "test:coverage": "pnpm test -- --coverage=true --coverage-directory=../../build/logs",
+    "test:coverage": "pnpm test --coverage --coverage-directory=../../build/logs/${npm_package_name#@rt-potion/} --reporter=clover",
     "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
     "lint": "pnpm eslint src/",
     "build": "pnpm tsc --project tsconfig.json",

@@ -13,7 +13,7 @@
         "lint": "pnpm eslint src/",
         "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
         "test": "pnpm jest --silent",
-        "test:coverage": "pnpm test -- --coverage=true --coverage-directory=../../build/logs",
+        "test:coverage": "pnpm test --coverage --coverage-directory=../../build/logs/${npm_package_name#@rt-potion/} --reporter=clover",
         "dev": "pnpm build && node dist/src/repl/index.js",
         "clean": "rimraf dist"
     },
