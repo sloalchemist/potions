@@ -31,3 +31,5 @@ package-lock.json
 **/coverage/**
 build/
 build/logs
+**/coverage
+coverage.json
