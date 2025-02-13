@@ -6,6 +6,7 @@
       "name": "Heartbeet",
       "type": "heart-beet",
       "description": "A vibrant red vegetable that is both nutritious and restorative.",
+      "affiliation": "common",
       "attributes": [
         {
           "name": "brew_color",
