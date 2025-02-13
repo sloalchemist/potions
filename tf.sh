@@ -21,7 +21,7 @@ fi
 containerName="terraform-temp-$(uuidgen 2>/dev/null || echo $RANDOM)"
 
 # Run container
-docker run --rm -it \
+docker run --name "$containerName" -it \
   -v "$PROJECT_DIR":/workspace \
   -w /workspace/terraform \
   "$IMAGE_NAME" \
@@ -38,33 +38,28 @@ docker rm "$containerName" > /dev/null
 
 # If the Terraform command failed, display error information.
 if [ $exitCode -ne 0 ]; then
-    echo -e "\e[31m========================================\e[0m"
-    echo -e "\e[31mTerraform command failed with exit code $exitCode.\e[0m"
-    echo -e "\e[31mError Output:\e[0m"
-    echo -e "\e[31m$output\e[0m"
-    echo -e "\e[31m========================================\e[0m"
+    echo -e "\033[31m========================================\033[0m"
+    echo -e "\033[31mThe Terraform team caught this error. Please see the tips below!\033[0m"
+    echo -e "\033[31m========================================\033[0m"
+    echo -e "\033[31mTIPS:\033[0m"
     
     # Custom error messages based on known patterns.
     if echo "$output" | grep -q "The following organization members have reached their maximum limits"; then
-         echo -e "\e[31mWhat went wrong?: You have more than 1 active Supabase project in your organization.\e[0m"
+         echo -e "\033[31mYou have more than 1 active Supabase project in your organization.\033[0m"
     elif echo "$output" | grep -q "CRLF line endings detected"; then
-         echo -e "\e[31mWhat went wrong?: The files listed above have CRLF line endings. Please change the line endings to LF.\e[0m"
+         echo -e "\033[31mThe files listed above have CRLF line endings. Please change the line endings to LF.\033[0m"
     elif echo "$output" | grep -q "Failed to retrieve user details\|jwt malformed"; then
-         echo -e "\e[31mWhat went wrong?: Check to make sure you correctly copied your supabase access token.\e[0m"
+         echo -e "\033[31mCheck to make sure you correctly copied your supabase access token.\033[0m"
     elif echo "$output" | grep -q "/me: Access denied: code 40100: status code: 401 see: https://help.ably.io/error/40100"; then
-         echo -e "\e[31mWhat went wrong?: Check to make sure you correctly copied your ably access token.\e[0m"
+         echo -e "\033[31mCheck to make sure you correctly copied your ably access token.\033[0m"
     elif echo "$output" | grep -q "/apps/o9BmWw/keys: Access denied: code 40100: status code: 401 see: https://help.ably.io/error/40100"; then
-         echo -e "\e[31mWhat went wrong?: Check to make sure your ably access token has all permissions.\e[0m"
+         echo -e "\033[31mCheck to make sure your ably access token has all permissions.\033[0m"
     elif echo "$output" | grep -q "Failed to retrieve organization"; then
-         echo -e "\e[31mWhat went wrong?: Check to make sure you correctly copied your supabase organization id.\e[0m"
+         echo -e "\033[31mCheck to make sure you correctly copied your supabase organization id.\033[0m"
     elif echo "$output" | grep -q "Project status did not reach ACTIVE_HEALTHY within."; then
-         echo -e "\e[31mWhat went wrong?: If you had to time out the run of apply, check to make sure your supabase db password is correct.\e[0m"
+         echo -e "\033[31mIf you had to time out the run of apply, check to make sure your supabase db password is correct.\033[0m"
     else
-         echo -e "\e[31mCustom Error: An unknown error occurred. Please review the output above.\e[0m"
+         echo -e "\033[31mWe haven't handle this case yet: An unknown error occurred. Please review the output above.\033[0m"
     fi
     exit $exitCode
-else
-    # If successful, display the Terraform output (using green color)
-    echo -e "\e[32mTerraform output:\e[0m"
-    echo "$output"
 fi
