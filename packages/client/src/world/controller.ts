@@ -230,24 +230,10 @@ export function getPhysicalInteractions(
   physical: Physical,
   carried?: Item
 ): Interactions[] {
-  console.log('Debugging getPhysicalInteractions');
-  console.log('world:', world);
-  console.log('publicCharacterId:', publicCharacterId);
-  console.log('world.mobs:', world ? world.mobs : ' world is undefined');
-  console.log(
-    'world.mobs[publicCharacterId]:',
-    world?.mobs?.[publicCharacterId] ??
-      ' world.mobs[publicCharacterId] is undefined'
-  );
-
   const interactions: Interactions[] = [];
   const item = physical as Item;
   const player = world.mobs[publicCharacterId] as SpriteMob;
   const isOwner = item.isOwnedBy(player.community_id);
-
-  console.log(
-    `commmunity: ${player.community_id}; item owned by ${item.ownedBy}; isOwner? ${isOwner}`
-  );
 
   // if the item can be picked up
   if (item.itemType.carryable) {
