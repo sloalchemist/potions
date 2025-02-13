@@ -73,8 +73,7 @@ async function initializeAsync() {
     initializeServerDatabase('data/server-data.db');
 
     const globalDescription = globalData as ServerWorldDescription;
-    const specificDescription =
-    worldSpecificData as Partial<ServerWorldDescription>;
+    const specificDescription = worldSpecificData as Partial<ServerWorldDescription>;
 
     const worldDescription: ServerWorldDescription = {
       ...globalDescription,
