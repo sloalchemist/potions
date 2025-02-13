@@ -683,7 +683,7 @@ export class Mob {
    * @param mob The target mob whose species you want to decrease favorability with
    */
   updateFightFavorability(mob: Mob): void {
-    var id = mob.community_id
+    var id = mob.community_id;
     DB.prepare(
       `   
       UPDATE favorability
@@ -692,10 +692,9 @@ export class Mob {
             (community_1_id = :id_1 AND community_2_id = :id_2) OR
             (community_1_id = :id_2 AND community_2_id = :id_1)
         `
-    ).run({ id_1: "alchemists", id_2: id});
+    ).run({ id_1: 'alchemists', id_2: id });
     Favorability.updatePlayerStat(this);
   }
-
 
   static findCarryingMobID(item_id: string): string | undefined {
     const mob = DB.prepare(

@@ -87,13 +87,13 @@ describe('Favorability Tests', () => {
     Community.makeFavor('alchemists', 'fighters', 100);
 
     expect(testplayer).toBeDefined();
-    
+
     Favorability.updatePlayerStat(testplayer!);
     expect(testplayer?._maxHealth).toBeCloseTo(176);
-    
+
     // player attacks villager once
     expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
-    expect(Community.getFavor("alchemists", "silverclaw")).toBe(80);
+    expect(Community.getFavor('alchemists', 'silverclaw')).toBe(80);
 
     // player attacks villager five times
     expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
@@ -101,7 +101,7 @@ describe('Favorability Tests', () => {
     expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
     expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
     expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
-    expect(Community.getFavor("alchemists", "silverclaw")).toBe(-20);
+    expect(Community.getFavor('alchemists', 'silverclaw')).toBe(-20);
     expect(testplayer?._maxHealth).toBeCloseTo(100);
   });
 });
