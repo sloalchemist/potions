@@ -894,9 +894,18 @@ export class UxScene extends Phaser.Scene {
           const potionSubtypeAttr = attributesArray.find(
             (attr) => attr.name === 'potion_subtype'
           );
+
+          const ingredientsAttr = attributesArray.find(
+            (attr) => attr.name === 'ingredients'
+          );
+
+          // Set brew color and number of ingredients based on cauldron attributes
           const brewScene = this.scene.get('BrewScene') as BrewScene;
           brewScene.setBrewColor(
             parseInt(potionSubtypeAttr?.value.toString() || '0') || 0xffffff
+          );
+          brewScene.setNumIngredients(
+            parseInt(ingredientsAttr?.value.toString() || '0') || 0
           );
 
           i++;
