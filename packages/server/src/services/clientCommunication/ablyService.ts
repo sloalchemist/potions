@@ -4,7 +4,8 @@ import {
   Coord,
   BroadcastData,
   PlayerToServerMessageMap,
-  ServerToPlayerMessageMap
+  ServerToPlayerMessageMap,
+  WorldMetadata
 } from '@rt-potion/common';
 import { Item } from '../../items/item';
 import { Types } from 'ably';
@@ -229,6 +230,16 @@ export class AblyService implements PubSub {
     this.addToBroadcast({
       type: 'move',
       data: { id: key, target, path: path }
+    });
+  }
+
+  public showPortalMenu(key: string, worlds: WorldMetadata[]): void {
+    this.addToBroadcast({
+      type: 'show_portal_menu',
+      data: {
+        mob_key: key,
+        worlds
+      }
     });
   }
 

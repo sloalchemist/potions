@@ -254,7 +254,8 @@ export class Mob {
             SELECT 
                 id
             FROM mobView
-            WHERE NOT EXISTS (
+            WHERE mobView.id != :self_id
+              NOT EXISTS (
                 SELECT 1 FROM alliances 
                 WHERE 
                     (alliances.community_1_id = :community_id AND alliances.community_2_id = mobView.community_id) OR
@@ -266,6 +267,7 @@ export class Mob {
             LIMIT 1
         `;
     const params = {
+      self_id: this.id,
       x: this.position.x,
       y: this.position.y,
       maxDistanceSquared,
