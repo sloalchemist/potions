@@ -110,7 +110,9 @@ export function loadDefaults(global: ServerWorldDescription) {
       count: number;
       capacity: number;
     }) => {
-      console.log(`Creating container ${container.type} at ${JSON.stringify(container.coord)}`);
+      console.log(
+        `Creating container ${container.type} at ${JSON.stringify(container.coord)}`
+      );
       itemGenerator.createItem({
         type: container.type,
         position: container.coord,
