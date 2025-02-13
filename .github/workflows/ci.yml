@@ -20,6 +20,8 @@ jobs:
       # Step 1: Checkout the code
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+            fetch-depth: 2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -55,4 +57,9 @@ jobs:
 
       # Step 8: Run Unit Tests
       - name: Run Unit Tests
-        run: pnpm test
+        run: pnpm test -- --coverage=true --coverage-directory=build/logs
+
+      - name: Upload Coverage
+        env:
+          OTTERWISE_TOKEN: ${{ secrets.OTTERWISE_TOKEN }}
+        run: bash <(curl -s https://raw.githubusercontent.com/getOtterWise/bash-uploader/main/uploader.sh)

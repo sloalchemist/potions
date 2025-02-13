@@ -26,7 +26,7 @@ export class Container {
   }
 
   getCapacity(): number {
-    return 10;
+    return this.item.getAttribute('capacity');
   }
 
   placeItem(mob: Mob): boolean {
@@ -34,6 +34,9 @@ export class Container {
 
     if (carriedItem && carriedItem.type === this.getType()) {
       if (carriedItem.subtype != this.item.subtype) {
+        return false;
+      }
+      if (this.getInventory() >= this.getCapacity()) {
         return false;
       }
       carriedItem.destroy();

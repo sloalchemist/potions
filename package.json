@@ -6,10 +6,12 @@
     "lint": "eslint . --config eslint.config.mjs",
     "lint:fix": "eslint . --config eslint.config.mjs --fix",
     "build": "pnpm -r run build",
-    "test": "pnpm -r run test",
+    "test": "pnpm -r run test --coverage",
     "clean": "pnpm -r run clean"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.20.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
@@ -19,5 +21,8 @@
   },
   "dependencies": {
     "rt-potion": "file:"
-  }
+  },
+  "engines": {
+  "node": ">=20.0.0"
+}
 }

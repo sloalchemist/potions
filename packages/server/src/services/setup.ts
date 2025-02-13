@@ -4,14 +4,16 @@ import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
 import globalData from '../../data/global.json';
-import worldSpecificData from '../../data/world_specific.json';
+// import worldSpecificData from '../../data/world_specific.json';
+import waterWorldSpecificData from '../../data/water_world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
 import {
   downloadData,
   initializeSupabase,
-  uploadLocalData
+  uploadLocalData,
+  initializeBucket
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
 
@@ -43,6 +45,15 @@ async function initializeAsync() {
 
   console.log(`loading world ${worldID}`);
 
+  // Create bucket if it doesn't exist
+  try {
+    await initializeBucket(supabase);
+    console.log('Bucket creation handled successfully');
+  } catch (err) {
+    console.error('Error during bucket initialization:', err);
+    throw err;
+  }
+
   try {
     await downloadData(supabase, worldID);
     console.log('Data successfully downloaded from Supabase');
@@ -64,7 +75,7 @@ async function initializeAsync() {
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
-      worldSpecificData as Partial<ServerWorldDescription>;
+      waterWorldSpecificData as Partial<ServerWorldDescription>;
 
     const worldDescription: ServerWorldDescription = {
       ...globalDescription,

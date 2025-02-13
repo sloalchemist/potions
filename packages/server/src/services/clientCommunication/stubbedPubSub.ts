@@ -24,6 +24,8 @@ export class StubbedPubSub implements PubSub {
 
   move(_key: string, _target: Coord, _path: Coord[]): void {}
 
+  showPortalMenu(_key: string): void {}
+
   destroy(_item: Item): void {}
 
   changeHealth(_key: string, _health: number, _newValue: number): void {}
@@ -53,6 +55,10 @@ export class StubbedPubSub implements PubSub {
     _property: string,
     _value: number
   ): void {}
+
+  changeMaxHealth(_key: string, _maxHealth: number, _newValue: number): void {}
+
+  changeSpeed(_key: string, _speed: number, _newValue: number): void {}
 
   speak(_key: string, _message: string): void {}
 

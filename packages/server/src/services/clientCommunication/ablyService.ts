@@ -4,7 +4,8 @@ import {
   Coord,
   BroadcastData,
   PlayerToServerMessageMap,
-  ServerToPlayerMessageMap
+  ServerToPlayerMessageMap,
+  WorldMetadata
 } from '@rt-potion/common';
 import { Item } from '../../items/item';
 import { Types } from 'ably';
@@ -232,6 +233,16 @@ export class AblyService implements PubSub {
     });
   }
 
+  public showPortalMenu(key: string, worlds: WorldMetadata[]): void {
+    this.addToBroadcast({
+      type: 'show_portal_menu',
+      data: {
+        mob_key: key,
+        worlds
+      }
+    });
+  }
+
   public destroy(item: Item): void {
     if (!item.position) {
       const mobID = Mob.findCarryingMobID(item.id);
@@ -276,6 +287,44 @@ export class AblyService implements PubSub {
         id: key,
         property: 'attack',
         delta: attack,
+        new_value: newValue
+      }
+    });
+  }
+
+  public changeMaxHealth(
+    key: string,
+    maxHealth: number,
+    newValue: number
+  ): void {
+    if (newValue == undefined || key == undefined || maxHealth == undefined) {
+      throw new Error(
+        `Sending invalid changeMaxHealth message ${key}, ${maxHealth}, ${newValue}`
+      );
+    }
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: 'maxHealth',
+        delta: maxHealth,
+        new_value: newValue
+      }
+    });
+  }
+
+  public changeSpeed(key: string, speed: number, newValue: number): void {
+    if (newValue == undefined || key == undefined || speed == undefined) {
+      throw new Error(
+        `Sending invalid changeSpeed message ${key}, ${speed}, ${newValue}`
+      );
+    }
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: 'speed',
+        delta: speed,
         new_value: newValue
       }
     });

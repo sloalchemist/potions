@@ -26,6 +26,51 @@
         "carryable": true,
         "on_tick": []
     },
+    {
+        "name": "Fireball",
+        "type": "fire-ball",
+        "attributes": [
+            {
+                "name": "brew_color",
+                "value": "#FF7509"
+            },
+            {
+                "name": "health",
+                "value": 1
+            }
+        ],
+        "walkable": true,
+        "smashable": true,
+        "interactions": [
+            
+            {
+                "description": "Eat",
+                "action": "eat",
+                "while_carried": true
+            }
+        ],
+        "carryable": true,
+        "on_tick": []
+    },
+    {
+        "name": "Pearl",
+        "type": "pearl",
+        "attributes": [
+            {
+                "name": "brew_color",
+                "value": "#FFFFFF"
+            },
+            {
+                "name": "health",
+                "value": 1
+            }
+        ],
+        "walkable": true,
+        "smashable": true,
+        "interactions": [],
+        "carryable": true,
+        "on_tick": []
+    },
 {
     "name": "Wall",
     "type": "wall",
@@ -113,8 +158,8 @@
     "interactions": []
 },
 {
-    "name": "Tree",
-    "type": "tree",
+    "name": "Seaweed",
+    "type": "seaweed",
     "carryable": false,
     "walkable": false,
     "interactions": [],
@@ -122,7 +167,7 @@
         {
             "action": "spawn_item",
             "parameters": {
-                "type": "log",
+                "type": "seaweed-piece",
                 "global_max": 10,
                 "local_max": 2,
                 "radius": 3,
@@ -152,6 +197,26 @@
     ]
   },
   {
+    "name": "Volcano",
+    "type": "volcano",
+    "description": "a volcano that will erupt",
+    "carryable": false,
+    "walkable": false,
+    "interactions": [],
+    "on_tick": [
+        {
+            "action": "spawn_item",
+            "parameters": {
+                "type": "fire-ball",
+                "global_max": 10,
+                "local_max": 2,
+                "radius": 3,
+                "rate": 0.1
+            }
+        }
+    ]
+  },
+  {
     "name": "Clam",
     "type": "clam",
     "description": "A pink clam with a pearl",
@@ -162,22 +227,28 @@
       {
         "action": "spawn_item",
         "parameters": {
-          "type": "clam",
+          "type": "pearl",
           "global_max": 10,
-          "local_max": 1,
+          "local_max": 2,
           "radius": 3,
-          "rate": 0.1
+          "rate": 0.2
         }
       }
     ]
   },
   {
-    "name": "Message-In-Bottle",
+    "name": "Message in a Bottle",
     "type": "message-in-bottle",
     "description": "A bottle that contains a message... wonder what could be inside",
-    "carryable": false,
+    "carryable": true,
     "walkable": false,
-    "interactions": [],
+    "interactions": [
+        {
+            "description": "Open Message",
+            "action": null,
+            "while_carried": true
+        }
+    ],
     "on_tick": [
       {
         "action": "spawn_item",
@@ -296,8 +367,8 @@
     ]
 },
 {
-    "name": "Log",
-    "type": "log",
+    "name": "Seaweed Piece",
+    "type": "seaweed-piece",
     "carryable": true,
     "smashable": true,
     "walkable": true,
@@ -329,6 +400,11 @@
     "walkable": true,
     "flat": true,
     "interactions": [
+        {
+            "description": "Enter portal",
+            "action": "enter",
+            "while_carried": false
+        }
     ],
     "on_tick": [
         {
