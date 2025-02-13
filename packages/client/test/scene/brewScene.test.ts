@@ -172,7 +172,6 @@ import { UxScene } from '../../src/scenes/uxScene';
 import { Item } from '../../src/world/item';
 import { World } from '../../src/world/world';
 import { Interactions } from '../../src/world/controller';
-import { interact } from '../../src/services/playerToServer';
 
 // Start of test suite
 const world = new World();
