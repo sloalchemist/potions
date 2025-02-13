@@ -11,8 +11,8 @@ export class Hunt implements Plan {
     if (!this.enemy || !this.enemy.position || !npc.position) return true;
 
     const success = npc.moveToOrExecute(this.enemy.position, 1, () => {
-      this.enemy!.changeHealth(Math.floor(Math.random() * -1 * npc.attack));
-      npc.changeHealth(Math.floor(Math.random() * -1 * this.enemy!.attack));
+      this.enemy!.changeHealth(Math.floor(Math.random() * -1 * npc._attack));
+      npc.changeHealth(Math.floor(Math.random() * -1 * this.enemy!._attack));
 
       return false;
     });
@@ -42,7 +42,7 @@ export class Hunt implements Plan {
 
     var utility =
       npc.personality.traits[PersonalityTraits.Aggression] *
-      (npc.attack / this.enemy.attack);
+      (npc._attack / this.enemy._attack);
 
     if (hungry_mobs.includes(npc.type) && npc.needs.getNeed('satiation') < 10) {
       utility = 100;

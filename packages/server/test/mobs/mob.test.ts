@@ -26,7 +26,7 @@ describe('Mob Tests', () => {
       expect(testMob?.health).toBe(100);
       expect(testMob?.position).toStrictEqual(position);
       expect(testMob?.gold).toBe(0);
-      expect(testMob?.attack).toBe(5);
+      expect(testMob?._attack).toBe(5);
       expect(testMob?.community_id).toBe('alchemists');
     });
 
@@ -146,9 +146,9 @@ describe('Mob Tests', () => {
       const testMob = Mob.getMob(mobId);
 
       // attack init is 5. -2 should be 3 attack.
-      expect(testMob?.attack).toBe(5);
+      expect(testMob?._attack).toBe(5);
       testMob?.changeAttack(-2);
-      expect(testMob?.attack).toBe(3);
+      expect(testMob?._attack).toBe(3);
     });
 
     test('Mob personality values can be changed', () => {

@@ -96,7 +96,7 @@ export function getMobsAbly(): MobI[] {
         current_action,
         carrying_id,
         community_id
-    FROM mobs;
+    FROM mobView;
     `
   ).all() as MobData[];
 
@@ -190,7 +190,7 @@ export function getMobAbly(key: string): MobI {
         current_action,
         carrying_id,
         community_id
-    FROM mobs
+    FROM mobView
     WHERE id = :id;
     `
   ).get({ id: key }) as MobData;
