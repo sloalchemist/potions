@@ -5,8 +5,8 @@
     {
       "name": "Heartbeet",
       "type": "heart-beet",
-      "description": "A vibrant red vegetable that is both nutritious and restorative.",
       "affiliation": "common",
+      "description": "A vibrant red vegetable that is both nutritious and restorative.",
       "attributes": [
         {
           "name": "brew_color",
@@ -32,6 +32,7 @@
     {
       "name": "Starfish",
       "type": "starfish",
+      "affiliation": "blob",
       "description": "A gorgeous teal starfish",
       "attributes": [
         {
@@ -58,6 +59,7 @@
     {
       "name": "Fireball",
       "type": "fire-ball",
+      "affiliation": "fighter",
       "description": "A spicy and tangy bite that has quite a kick!",
       "attributes": [
         {
@@ -84,6 +86,7 @@
     {
       "name": "Pearl",
       "type": "pearl",
+      "affiliation": "blob",
       "description": "A non-edible shiny treasure",
       "attributes": [
         {
@@ -104,6 +107,7 @@
     {
       "name": "Wall",
       "type": "wall",
+      "affiliation": "common",
       "description": "A sturdy structure that blocks movement and provides protection.",
       "carryable": false,
       "smashable": true,
@@ -120,6 +124,7 @@
     {
       "name": "Partial Wall",
       "type": "partial-wall",
+      "affiliation": "common",
       "description": "An incomplete wall, requiring additional materials to finish.",
       "carryable": false,
       "walkable": false,
@@ -140,6 +145,7 @@
     {
       "name": "Fence",
       "type": "fence",
+      "affiliation": "common",
       "description": "A simple barrier to mark boundaries or restrict movement.",
       "carryable": false,
       "walkable": false,
@@ -156,6 +162,7 @@
     {
       "name": "Gate",
       "type": "gate",
+      "affiliation": "common",
       "description": "A movable barrier allowing controlled entry.",
       "carryable": false,
       "walkable": true,
@@ -171,6 +178,7 @@
     {
       "name": "Door",
       "type": "door",
+      "affiliation": "common",
       "description": "Just a door.",
       "carryable": false,
       "smashable": true,
@@ -266,6 +274,7 @@
     {
       "name": "Message-In-Bottle",
       "type": "message-in-bottle",
+      "affiliation": "blob",
       "description": "A bottle that contains a message... wonder what could be inside",
       "carryable": true,
       "walkable": false,
@@ -334,6 +343,7 @@
     {
       "type": "blueberry",
       "name": "Blueberry",
+      "affiliation": "common",
       "description": "A small, round fruit that grows in clusters on bushes.",
       "carryable": true,
       "walkable": true,
@@ -380,6 +390,7 @@
     {
       "name": "Seaweed Piece",
       "type": "seaweed-piece",
+      "affiliation": "blob",
       "carryable": true,
       "smashable": true,
       "walkable": true,
@@ -443,6 +454,7 @@
       "name": "Potion stand",
       "description": "A stand that sells health potions.",
       "type": "potion-stand",
+      "affiliation": "common",
       "carryable": false,
       "smashable": true,
       "walkable": false,
@@ -540,6 +552,7 @@
       "name": "Potion",
       "description": "A magical concotion",
       "type": "potion",
+      "affiliation": "common",
       "carryable": true,
       "smashable": true,
       "walkable": true,
@@ -661,6 +674,7 @@
       "name": "Gold",
       "description": "money!!!",
       "type": "gold",
+      "affiliation": "common",
       "walkable": true,
       "smashable": false,
       "carryable": true,

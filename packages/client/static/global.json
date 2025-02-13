@@ -408,7 +408,6 @@
 {
     "name": "Portal",
     "type": "portal",
-    "affiliation": "common",
     "carryable": false,
     "walkable": true,
     "flat": true,
@@ -592,7 +591,6 @@
 {
     "name": "Basket",
     "type": "basket",
-    "affiliation": "common",
     "carryable": false,
     "templated": true,
     "walkable": false,
@@ -629,7 +627,6 @@
 {
     "name": "Cauldron",
     "type": "cauldron",
-    "affiliation": "common",
     "carryable": false,
     "walkable": false,
     "attributes": [
