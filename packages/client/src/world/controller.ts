@@ -234,6 +234,11 @@ export function getPhysicalInteractions(
   const item = physical as Item;
   const isOwner = item.isOwnedBy(currentCharacter?.community_id);
 
+
+  // const player = world.mobs[publicCharacterId] as SpriteMob;
+
+  // console.log(`commmunity: ${currentCharacter?.community_id}; item owned by ${item.ownedBy}; isOwner? ${isOwner}`)
+
   // if the item can be picked up
   if (item.itemType.carryable) {
     interactions.push({
