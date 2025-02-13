@@ -14,7 +14,7 @@ export class DataLogger {
     if (tick_id !== null) {
       DB.prepare(
         `
-                INSERT INTO grafanadata (tick_id, num_mobs, num_items)
+                INSERT INTO grafanadata (tick_id, num_mobs, num_item)
                 VALUES (:tick_id, :num_mobs, :num_items);
                 `
       ).run({
