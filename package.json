@@ -8,7 +8,7 @@
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
     "test:silent": "pnpm -- test --silent",
-    "test:coverage": "pnpm -- test:silent --coverage --coverage-directory=../../build/logs/${npm_package_name#@rt-potion/} --reporter=clover",
+    "coverage": "pnpm -- test:silent --coverage --coverageDirectory=build/logs",
     "clean": "pnpm -r run clean"
   },
   "devDependencies": {
