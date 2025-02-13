@@ -582,6 +582,27 @@
       "smashable": false,
       "carryable": true,
       "interactions": []
+    },
+    {
+      "name": "Bomb",
+      "description": "an explosive! BOOM",
+      "type": "bomb",
+      "carryable": true,
+      "smashable": true,
+      "walkable": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "destroy",
+          "action": "throw",
+          "while_carried": true
+        }
+      ]
     }
   ],
   "mob_types": [
