@@ -68,10 +68,7 @@ jobs:
         run: |
           mkdir -p build/logs
           pnpx istanbul-merge --out coverage.json \
-            packages/client/build/logs/coverage-final.json \
-            packages/common/build/logs/coverage-final.json \
-            packages/converse/build/logs/coverage-final.json \
-            packages/server/build/logs/coverage-final.json
+            packages/server/*/logs/coverage-final.json
           npx istanbul report --include coverage.json --dir build/logs clover
 
 
