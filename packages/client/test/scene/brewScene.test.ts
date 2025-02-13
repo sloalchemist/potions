@@ -17,6 +17,7 @@ jest.mock('../../src/components/button', () => {
       public callback: Function;
       public width?: number;
       public height?: number;
+      public interactionSound?: string;
 
       constructor(
         scene: any,
@@ -26,7 +27,8 @@ jest.mock('../../src/components/button', () => {
         texture: string,
         callback: Function,
         width?: number,
-        height?: number
+        height?: number,
+        interactionSound?: string
       ) {
         this.scene = scene;
         this.x = x;
@@ -36,6 +38,7 @@ jest.mock('../../src/components/button', () => {
         this.callback = callback;
         this.width = width;
         this.height = height;
+        this.interactionSound = interactionSound;
       }
 
       // A no op destroy method.
@@ -169,6 +172,7 @@ import { UxScene } from '../../src/scenes/uxScene';
 import { Item } from '../../src/world/item';
 import { World } from '../../src/world/world';
 import { Interactions } from '../../src/world/controller';
+import { interact } from '../../src/services/playerToServer';
 
 // Start of test suite
 const world = new World();
