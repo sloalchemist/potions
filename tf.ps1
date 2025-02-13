@@ -3,18 +3,18 @@ Param(
     [String[]]$TerraformArgs
 )
 
-# Name of the image and Dockerfile
+# Name of the Docker image / Dockerfile
 $IMAGE_NAME = "my-terraform"
 $DOCKERFILE = "Dockerfile.terraform"
 
-# Project root directory (contains 'terraform/' and 'packages/')
-# This is equivalent to 'pwd' on macOS/Linux
+# Project root directory (one level above 'terraform/'),
+# i.e., the folder where you run this script.
 $PROJECT_DIR = (Get-Location).Path
 
-# Build the image (optional if done frequently)
+# 1) Build the Docker image (optional if done frequently)
 docker build -t $IMAGE_NAME -f $DOCKERFILE .
 
-# If no arguments are passed, default to 'init && apply'
+# 2) Determine which Terraform command to run
 if (-not $TerraformArgs) {
     $CMD = "terraform init && terraform apply"
 } else {
@@ -22,23 +22,32 @@ if (-not $TerraformArgs) {
     $CMD = "terraform $joinedArgs"
 }
 
-Write-Host "Executing command: $CMD" -ForegroundColor Cyan
+# 3) Build the final command by running the CRLF check script first.
+#    If the CRLF check fails, Terraform will not run.
+$FinalCMD = "/workspace/check-line-endings.sh /workspace && $CMD"
 
-# Generate a unique container name
+Write-Host "Executing command: $FinalCMD" -ForegroundColor Cyan
+
+# 4) Docker run:
+#    - Mount entire project at /workspace
+#    - Set working directory to /workspace/terraform
+$volumeMount = "${PROJECT_DIR}:/workspace"
+
+# Generate a unique container name so we can capture logs later.
 $containerName = "terraform-temp-" + ([guid]::NewGuid().ToString())
 
-# Run the container interactively without piping output.
-# The user will see the interactive session.
+# Run the container interactively (with -it) without using --rm.
+# This preserves the interactive session for custom error sending.
 docker run --name $containerName -it `
-    -v "${PROJECT_DIR}:/workspace" `
+    -v $volumeMount `
     -w /workspace/terraform `
     $IMAGE_NAME `
-    $CMD
+    $FinalCMD
 
 # After the interactive session ends, capture the exit code.
 $exitCode = $LASTEXITCODE
 
-# Retrieve the logs from the container (i.e. the output from the interactive session).
+# Retrieve the logs from the container (the output from the interactive session).
 $output = docker logs $containerName | Out-String
 
 # Remove the container now that we've captured its logs.
@@ -52,15 +61,27 @@ if ($exitCode -ne 0) {
     Write-Host $output -ForegroundColor Red
     Write-Host "========================================" -ForegroundColor Red
 
-    # Custom error messages based on known patterns
+    # Custom error messages based on known patterns.
     if ($output -match "The following organization members have reached their maximum limits") {
          Write-Host "What went wrong?: You have more than 1 active Supabase project in your organization." -ForegroundColor Red
     }
-    elseif ($output -match "timeout" -or $output -match "did not reach") {
-         Write-Host "Custom Error: The operation timed out. Verify that the remote service is accessible and that your network is stable." -ForegroundColor Red
+    elseif ($output -match "CRLF line endings detected") {
+         Write-Host "What went wrong?: The files listed above have CRLF line endings. Please change the line endings to LF." -ForegroundColor Red
     }
-    elseif ($output -match "connection refused" -or $output -match "could not connect") {
-         Write-Host "Custom Error: Unable to connect to the remote service. Please ensure the service endpoint is correct and accessible." -ForegroundColor Red
+    elseif ($output -match "Failed to retrieve user details" -or $output -match "jwt malformed") {
+         Write-Host "What went wrong?: Check to make sure you correctly copied your supabase access token." -ForegroundColor Red
+    }
+    elseif($output -match "/me: Access denied: code 40100: status code: 401 see: https://help.ably.io/error/40100") {
+         Write-Host "What went wrong?: Check to make sure you correctly copied your ably access token."
+    }
+    elseif($output -match "/apps/o9BmWw/keys: Access denied: code 40100: status code: 401 see: https://help.ably.io/error/40100") {
+        Write-Host "What went wrong?: Check to make sure your ably access token has all permissions."
+    }
+    elseif($output -match "Failed to retrieve organization") {
+         Write-Host "What went wrong?: Check to make sure you correctly copied your supabase organization id."
+    }
+    elseif($output -match "Project status did not reach ACTIVE_HEALTHY within.") {
+         Write-Host "What went wrong?: If you had to time out the run of apply, check to make sure your supabase db password is correct."
     }
     else {
          Write-Host "Custom Error: An unknown error occurred. Please review the output above." -ForegroundColor Red
