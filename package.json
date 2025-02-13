@@ -7,7 +7,8 @@
     "lint:fix": "eslint . --config eslint.config.mjs --fix",
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
-    "test:coverage": "pnpm -r test:coverage",
+    "test:silent": "pnpm test --silent",
+    "test:coverage": "pnpm test:silent --coverage --coverage-directory=../../build/logs/${npm_package_name#@rt-potion/} --reporter=clover",
     "clean": "pnpm -r run clean"
   },
   "devDependencies": {
