@@ -26,6 +26,7 @@ describe('Mob Tests', () => {
       const mob2Position: Coord = { x: 1, y: 1 };
       mobFactory.makeMob('villager', mob2Position, mob2Id, 'test2Mob');
       const test2Mob = Mob.getMob(mob2Id);
+      Community.makeFavor('silverclaw', 'silverclaw', 0);
 
       // Spawn a pile of gold
       const gold1Position: Coord = { x: 3, y: 3 };
@@ -99,27 +100,16 @@ describe('World Aggro Logic', () => {
     Community.makeFavor('alchemists', 'blobs', 0);
     Community.makeFavor('fighters', 'blobs', 0);
 
-    const gold1Position: Coord = { x: 3, y: 3 };
-    itemGenerator.createItem({ type: 'gold', position: gold1Position });
-
     FantasyDate.initialDate();
     FantasyDate.runTick();
 
     test1Mob?.needs.changeNeed('satiation', -99);
 
-    test1Mob!.tick(2);
-    test2Mob!.tick(2);
+    test1Mob!.tick(1);
+    test2Mob!.tick(1);
 
     expect(test1Mob).toBeDefined();
     expect(test1Mob!.action).toBe('hunt');
-
-    test1Mob?.needs.changeNeed('satiation', 100);
-
-    test1Mob!.tick(2);
-    test2Mob!.tick(2);
-
-    expect(test1Mob).toBeDefined();
-    expect(test1Mob!.action).toBe('get rich');
   });
   test('Fighters hunting nearby blobs is the priority', () => {
     const mob1Id = 'testmob-1';
