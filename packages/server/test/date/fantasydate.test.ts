@@ -77,6 +77,28 @@ describe('FantasyDate', () => {
     expect(date.description()).toBe('It\'s morning on a working day in fall. ');
   });
   
+  test('toString should return the correct string representation', () => {
+    const date = new FantasyDate(1, 1, 0, 4, 0, 0);
+    expect(date.toString()).toBe('1/1/0 4 o\'clock');
+  });
+  
+  test('description should return the correct description for dusk', () => {
+    const date = new FantasyDate(2, 1, 0, 10, 0, 0);
+    expect(date.description()).toBe('It\'s afternoon on a working day in spring. ');
+  });
+  
+  test('description should return the correct description for dawn', () => {
+    const date = new FantasyDate(2, 1, 0, 2, 0, 0);
+    expect(date.description()).toBe('It\'s night-time on a working day in spring. ');
+  });
+  
+  
+  
+  test('description should return the correct description for winter', () => {
+    const date = new FantasyDate(2, 0, 0, 4, 0, 0);
+    expect(date.description()).toBe('It\'s morning on a working day in winter. ');
+  });
+  
   
   
   test('runTick should call pubSub.setDateTime when minute is 0', () => {
