@@ -6,6 +6,7 @@ dotenv.config();
 
 const supabase = initializeSupabase();
 const qName = "prompts";
+const qNameProcessed = 'processed'
 
 function initializeSupabase() {
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
@@ -18,54 +19,43 @@ function initializeSupabase() {
     );
 }
   
-async function sendToPromptQueue(userID: number, prompt: string) {
+async function sendToQueue(prompt: string, qName: String) {
     const result = await supabase.schema('pgmq_public').rpc('send', {
         queue_name: qName,
-        message: { UID: userID, data: prompt },
+        message: { data: prompt },
         sleep_seconds: 30,
     })
     console.log(result)
 }
 
 
-async function popFromPromptQueue(userID: number) {
-    const result = await supabase.schema('pgmq_public').rpc('pop', { queue_name: qName, UID: userID});
-    console.log(result);
-    return result;
+async function popFromQueue(msgID: number, qName: string) {
+  const { data, error } = await supabase
+      .from(qName) 
+      .delete()
+      .eq('msg_id', msgID)
+      .select('*')  // Returns the deleted row
+      .single();    // Ensure only one row is returned
+
+  if (error) console.error(error);
+  console.log(data);
+  return data;
 }
 
-
-
-async function popFromProcessedQueue(userID: number) {
-    const result = await supabase.schema('pgmq_public').rpc('pop', { queue_name: qName, UID: userID});
-    console.log(result);
-    return result;
-}
-
-
-async function sendToProcessedQueue(userID: number, prompt: string) {
-    const result = await supabase.schema('pgmq_public').rpc('send', {
-        queue_name: qName,
-        message: { UID: userID, data: prompt },
-        sleep_seconds: 30,
-    })
-    console.log(result)
-}
-
-async function createQueue(queueName: string) {
-    const { data, error } = await supabase.rpc('create_queue', {
-      queue_name: queueName,
-    });
+// async function createQueue(queueName: string) {
+//     const { data, error } = await supabase.rpc('create_queue', {
+//       queue_name: queueName,
+//     });
   
-    if (error) {
-      console.error('Error creating queue:', error);
-    } else {
-      console.log('Queue created successfully:', data);
-    }
-  }
+//     if (error) {
+//       console.error('Error creating queue:', error);
+//     } else {
+//       console.log('Queue created successfully:', data);
+//     }
+//   }
   
 // Usage
-sendToPromptQueue(12, "hello world");
+sendToQueue("hello world", qName);
 
   
 
