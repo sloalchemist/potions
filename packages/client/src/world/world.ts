@@ -31,6 +31,20 @@ export class World {
   // constructor
   constructor() {}
 
+  addStoredItem(item: Item) {
+    console.log('Adding stored item:', item);
+    this.storedItems[item.key] = item;
+  }
+
+  removeStoredItem(item: Item) {
+    console.log('Removing stored item:', item);
+    delete this.storedItems[item.key];
+  }
+
+  getStoredItems(): Item[] {
+    console.log('Getting stored items:', Object.values(this.storedItems));
+    return Object.values(this.storedItems);
+  }
 
   load(worldDescription: WorldDescription) {
     this.pathFinder = new PathFinder(

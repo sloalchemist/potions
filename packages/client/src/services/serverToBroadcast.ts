@@ -18,7 +18,7 @@ import {
   SpeakData
 } from '@rt-potion/common';
 import { world, WorldScene } from '../scenes/worldScene';
-import { addNewItem, addNewMob, gameState, setDate } from '../world/controller';
+import { addNewItem, addNewMob, gameState, setDate, updateInventory} from '../world/controller';
 import { SpriteMob } from '../sprite/sprite_mob';
 import { publicCharacterId } from '../worldMetadata';
 import { SpriteItem } from '../sprite/sprite_item';
@@ -77,12 +77,16 @@ export function setupBroadcast(
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
     item.stash(world, mob, data.position);
+    world.addStoredItem(item);
+    updateInventory();
   }
 
   function handleUnstashItem(data: UnstashItemData) {
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
     item.unstash(world, mob, data.position);
+    world.removeStoredItem(item); 
+    updateInventory();
   }
 
   function handleDoing(data: DoingData) {
@@ -191,7 +195,7 @@ export function setupBroadcast(
           handleGiveItem(broadcastItem.data as GiveItemData);
           break;
         case 'drop_item':
-          console.log(broadcastItem.data as DropItemData, "DROP")
+          // console.log(broadcastItem.data as DropItemData, "DROP")
           handleDropItem(broadcastItem.data as DropItemData);
           break;
         case 'stash_item':
@@ -199,6 +203,7 @@ export function setupBroadcast(
           handleStashItem(broadcastItem.data as StashItemData)
           break;
         case 'unstash_item':
+          console.log(broadcastItem.data as StashItemData, "BROADCAST UNSTASH ITEM")
           handleUnstashItem(broadcastItem.data as UnstashItemData)
         case 'doing':
           handleDoing(broadcastItem.data as DoingData);

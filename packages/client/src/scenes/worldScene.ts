@@ -21,8 +21,9 @@ import {
   WorldDescription
 } from '../worldDescription';
 import { UxScene } from './uxScene';
-import { setGameState } from '../world/controller';
+import { setGameState, setInventoryCallback} from '../world/controller';
 import { restoreHealth, speedUpCharacter } from '../utils/developerCheats';
+import { Item } from '../world/item';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -231,6 +232,13 @@ export class WorldScene extends Phaser.Scene {
     //console.log(this.world_data);
     world = new World();
     world.load(globalData);
+    
+
+    setInventoryCallback((items: Item[]) => {
+      console.log('Inventory callback called with items:', items);
+      const uxScene = this.scene.get('UxScene') as UxScene;
+      uxScene.setInventory(items);
+    });
 
     // Load globals
     if (needsAnimationsLoaded) {
@@ -268,7 +276,7 @@ export class WorldScene extends Phaser.Scene {
     for (const terrainType of globalData.terrain_types) {
       terrainMap[terrainType.id] = terrainType;
     }
-    console.log('waterTypes', waterTypes, 'landTypes', landTypes);
+    // console.log('waterTypes', waterTypes, 'landTypes', landTypes);
     // Draw water layer
     this.drawTerrainLayer(
       globalData.tiles,
@@ -289,6 +297,8 @@ export class WorldScene extends Phaser.Scene {
         }
       }
     );
+
+    
 
     // Draw land layer with stone
     this.drawTerrainLayer(
@@ -381,11 +391,11 @@ export class WorldScene extends Phaser.Scene {
         pointer.y >= cameraViewportY &&
         pointer.y <= cameraViewportY + cameraViewportHeight
       ) {
-        console.log(
-          'click',
-          pointer.worldX / TILE_SIZE,
-          pointer.worldY / TILE_SIZE
-        );
+        // console.log(
+        //   'click',
+        //   pointer.worldX / TILE_SIZE,
+        //   pointer.worldY / TILE_SIZE
+        // );
 
         publishPlayerPosition({
           x: pointer.worldX / TILE_SIZE,

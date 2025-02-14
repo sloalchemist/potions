@@ -423,6 +423,8 @@ export class AblyService implements PubSub {
       type: 'stash_item',
       data: { item_key, mob_key, position }
     });
+
+    console.log('stashing item', item_key, mob_key);
   }
 
   public unstashItem(item_key: string, mob_key: string, position: Coord): void {

@@ -99,7 +99,7 @@ export class Item extends Physical {
   }
 
   stash(world: World, mob: Mob, position: Coord) {
-    if (!this.carried_by){
+    if (!this.carried_by) {
       throw new Error("Must carry item being stashed");
     }
     console.log('stashing item', this.key, this.carried_by);
@@ -108,6 +108,7 @@ export class Item extends Physical {
     world.removeItemFromGrid(this);
     this.position = null;
     this.carried_by = undefined;
+    world.addStoredItem(this); // Add to stored items
   }
 
   unstash(world: World, mob: Mob, position: Coord) {
@@ -117,6 +118,7 @@ export class Item extends Physical {
     this.carried_by = undefined;
     this.position = position;
     world.addItemToGrid(this);
+    world.removeStoredItem(this); // Remove from stored items
   }
 
   tick(world: World, deltaTime: number) {

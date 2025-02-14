@@ -367,6 +367,13 @@ export function setInventoryCallback(
   inventoryCallback = callback;
 }
 
+export function updateInventory() {
+  if (inventoryCallback) {
+    const storedItems = world.getStoredItems();
+    inventoryCallback(storedItems);
+  }
+}
+
 export function addNewHouse(scene: WorldScene, house: HouseI) {
   const newHouse = new SpriteHouse(scene, house);
   world.houses[newHouse.key] = newHouse;
