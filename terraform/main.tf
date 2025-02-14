@@ -184,3 +184,11 @@ resource "local_file" "client_env" {
   file_permission = "0600"
 }
 
+resource "local_file" "converse_env" {
+  filename        = "../packages/converse/.env"
+  content         = <<-EOT
+    SUPABASE_URL=https://${supabase_project.potions.id}.supabase.co
+    SUPABASE_SERVICE_KEY=${data.supabase_apikeys.dev.service_role_key}
+  EOT
+  file_permission = "0600"
+}
