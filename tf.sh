@@ -59,7 +59,7 @@ if [ $exitCode -ne 0 ]; then
     elif echo "$output" | grep -q "Project status did not reach ACTIVE_HEALTHY within."; then
          echo -e "\033[31mIf you had to time out the run of apply, check to make sure your supabase db password is correct.\033[0m"
     else
-         echo -e "\033[31mWe haven't handle this case yet: An unknown error occurred. Please review the output above. For most issues, doing the following will solve them: You need to manually delete your /terraform/terraform.tfstate file and /terraform/terraform.tfstate.backup. Then, in their respective dashboards, delete your supabase potions-dev project and ably potions-dev projects. Then, rerun /tf.ps1 for Windows and /tf.sh for MacOS.\033[0m"
+         echo -e "\033[31mWe haven't handle this case yet: An unknown error occurred. Please review the output above. In most cases, this is due to out of sync terraform state. Please refer to the section of the README called SYNCING TERRAFORM STATE.\033[0m"
     fi
     exit $exitCode
 fi

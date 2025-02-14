@@ -83,7 +83,7 @@ if ($exitCode -ne 0) {
          Write-Host "If you had to time out the run of apply, check to make sure your supabase db password is correct."
     }
     else {
-         Write-Host "We haven't handle this case yet: An unknown error occurred. Please review the output above. For most issues, doing the following will solve them: You need to manually delete your /terraform/terraform.tfstate file and /terraform/terraform.tfstate.backup. Then, in their respective dashboards, delete your supabase potions-dev project and ably potions-dev projects. Then, rerun /tf.ps1 for Windows and /tf.sh for MacOS." -ForegroundColor Red
+         Write-Host "We haven't handle this case yet: An unknown error occurred. Please review the output above. In most cases, this is due to out of sync terraform state. Please refer to the section of the README called SYNCING TERRAFORM STATE." -ForegroundColor Red
     }
     Write-Host "========================================" -ForegroundColor Red
     exit $exitCode

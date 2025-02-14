@@ -106,20 +106,21 @@ Use `./tf.ps1 <any_terraform_command>`
 │ /bin/bash: -c: line 9: syntax error near unexpected token `|'
 ' /bin/bash: -c: line 9: `    | jq -r '.status')`
 
-If you see this error:
->Error: Invalid template interpolation value
-│
-│   on main.tf line 176, in resource "local_file" "server_env":
-│  172:   content         = <<-EOT
-│  173:     ABLY_API_KEY=${ably_api_key.root.key}
-│  174:     AUTH_SERVER_URL=http://localhost:3000
-│  175:     SUPABASE_URL=https://${supabase_project.potions.id}.supabase.co
-│  176:     SUPABASE_SERVICE_KEY=${data.supabase_apikeys.dev.service_role_key}
-│  177:   EOT
-│
-│ The expression result is null. Cannot include a null value in a string template.
+**TERRAFORM STATE PROBLEMS**
 
-You need to manually delete your /terraform/terraform.tfstate file and /terraform/terraform.tfstate.backup. Then, in their respective dashboards, delete your supabase potions-dev project and ably potions-dev projects. Then, rerun /tf.ps1 for Windows and /tf.sh for MacOS.
+Your state may become out of sync for several reasons. 
+
+1. If you manually delete or create projects in provider dashboards
+2. You delete your state file without also deleting all provisioned resources (Supabase or Ably projects)
+3. You change your credentials while resources are still provisioned (up and running)
+4. Any other way in which resources change without running a terraform command
+
+**HOW TO RESYNC YOUR STATE**
+
+1. You need to manually delete your /terraform/terraform.tfstate file and /terraform/terraform.tfstate.backup. 
+2. In their respective dashboards, delete your supabase potions-dev project and ably potions-dev projects. 
+3. In extreme cases, delete any running Docker containers or images associated with terraform using Docker Desktop. If this is necessary please reach out to Alfred Madere or Nick Perlich on Slack so we can find the root of the problem.
+4. Rerun /tf.ps1 for Windows or /tf.sh for MacOS.
 
 ### Build
 1. In your root folder, execute:
