@@ -107,7 +107,7 @@ export class UxScene extends Phaser.Scene {
     // item interaction sounds
     this.load.audio('pickupGold', ['static/sounds/jingle.mp3']);
     const interactions = globalData.item_types.flatMap(
-      (item) => item.interactions
+      (item) => item.interactions as Interactions[]
     );
     interactions.forEach((interaction) => {
       const soundPath = (interaction as { sound_path?: string }).sound_path;
