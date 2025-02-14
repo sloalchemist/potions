@@ -866,17 +866,17 @@
         },
         "log": {
             "frame": {
-                "x": 128,
-                "y": 0,
-                "w": 32,
+                "x": 301,
+                "y": 108,
+                "w": 24,
                 "h": 32
             }
         },
         "log-picked-up": {
             "frame": {
-                "x": 128,
-                "y": 0,
-                "w": 32,
+                "x": 301,
+                "y": 108,
+                "w": 24,
                 "h": 32
             }
         },
@@ -1288,7 +1288,7 @@
                 "h": 32
             }
         },
-        "tree": { 
+        "seaweed": { 
             "frame": {
                 "x": 289,
                 "y": 0,
@@ -1296,12 +1296,12 @@
                 "h": 104
             }
         },
-        "seaweed": { 
+        "seaweed-piece": { 
             "frame": {
-                "x": 289,
-                "y": 0,
-                "w": 48,
-                "h": 104
+                "x": 301,
+                "y": 108,
+                "w": 24,
+                "h": 32
             }
         },
         "coral": {
@@ -1312,20 +1312,20 @@
                 "h": 103
             }
         },
-        "volcano": {
-            "frame": {
-                "x": 407,
-                "y": 0,
-                "w": 57,
-                "h": 103
-            }
-        },
         "clam": {
             "frame": {
                 "x": 354,
                 "y": 303,
                 "w": 31,
                 "h": 40
+            }
+        },
+        "pearl": {
+            "frame": {
+                "x": 403,
+                "y": 398,
+                "w": 17,
+                "h": 19
             }
         },
         "message-in-bottle": {
@@ -1368,6 +1368,22 @@
                 "h": 54
             }
         },
+        "volcano": {
+            "frame": {
+                "x": 244,
+                "y": 450,
+                "w": 238,
+                "h": 204
+            }
+        },
+        "fire-ball": {
+            "frame": {
+                "x": 349,
+                "y": 387,
+                "w": 42,
+                "h": 42
+            }
+        },
         "heart-beet-plant": {
             "frame": {
                 "x": 448,
@@ -1396,7 +1412,7 @@
     "meta": {
         "app": "https://www.codeandweb.com/texturepacker",
         "version": "1.0",
-        "image": "global_water_world.png",
+        "image": "water_world_global.png",
         "format": "RGBA8888",
         "size": {
             "w": 128,

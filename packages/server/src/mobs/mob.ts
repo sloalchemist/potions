@@ -68,6 +68,7 @@ export class Mob {
   private target?: Coord;
   private path: Coord[];
   private speed: number;
+  private attack: number;
   private _name: string;
   private maxHealth: number;
   private _carrying?: string;
@@ -79,7 +80,6 @@ export class Mob {
 
   private _gold: number;
   private _health: number;
-  public attack: number;
 
   private constructor({
     key,
@@ -229,7 +229,7 @@ export class Mob {
   findNearbyMobIDs(radius: number): string[] {
     const query = `
               SELECT id
-              FROM mobs
+              FROM mobView
               WHERE ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :radiusSquared
               AND id != :id
           `;
@@ -253,19 +253,21 @@ export class Mob {
     const query = `
             SELECT 
                 id
-            FROM mobs
-            WHERE NOT EXISTS (
+            FROM mobView
+            WHERE mobView.id != :self_id
+              AND NOT EXISTS (
                 SELECT 1 FROM alliances 
                 WHERE 
-                    (alliances.community_1_id = :community_id AND alliances.community_2_id = mobs.community_id) OR
-                    (alliances.community_2_id = :community_id AND alliances.community_1_id = mobs.community_id) OR
-                    mobs.community_id = :community_id
+                    (alliances.community_1_id = :community_id AND alliances.community_2_id = mobView.community_id) OR
+                    (alliances.community_2_id = :community_id AND alliances.community_1_id = mobView.community_id) OR
+                    mobView.community_id = :community_id
             )
             AND ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :maxDistanceSquared
             ORDER BY ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) ASC
             LIMIT 1
         `;
     const params = {
+      self_id: this.id,
       x: this.position.x,
       y: this.position.y,
       maxDistanceSquared,
@@ -446,88 +448,118 @@ export class Mob {
   }
 
   changeEffect(delta: number, duration: number, attribute: string): void {
-    type QueryResult = {
-      potionType: string;
-      targetTick: number;
-    };
-    const tick = this.current_tick + duration;
+    // only responsible for inserting rows and broadcasting changes
+    const targetTick = this.current_tick + duration;
+    let finalDelta = delta;
 
-    let value = DB.prepare(
+    // check if an effect is already active
+    const current_delta = DB.prepare(
+      `
+      SELECT delta
+      FROM mobEffects
+      WHERE id = :id AND attribute = :attribute AND targetTick > :currentTick
+      LIMIT 1
+      `
+    ).get({
+      id: this.id,
+      attribute: attribute,
+      currentTick: this.current_tick
+    }) as { delta: number };
+
+    // if so, then set the final delta to current delta
+    if (current_delta) {
+      finalDelta = current_delta.delta;
+      pubSub.changeTargetTick(this.id, attribute, duration, targetTick);
+    }
+
+    // put in new row into mobEffects with the delta
+    DB.prepare(
+      `
+      INSERT INTO mobEffects (id, attribute, delta, targetTick)
+      VALUES (:id, :attribute, :delta, :targetTick)
+      `
+    ).run({
+      id: this.id,
+      attribute: attribute,
+      delta: finalDelta,
+      targetTick: targetTick
+    });
+
+    // grab updated value
+    const value = DB.prepare(
       `
       SELECT ${attribute}
-      FROM mobs
+      FROM mobView
       WHERE id = :id 
       `
     ).get({
       id: this.id
-    }) as number;
+    }) as Record<string, number>;
 
-    const result = DB.prepare(
-      `
-      SELECT potionType, targetTick
-      FROM mobEffects
-      WHERE id = :id AND targetTick >= :currentTick AND potionType = :attribute
-      `
-    ).get({
-      id: this.id,
-      currentTick: this.current_tick,
-      attribute: attribute
-    }) as QueryResult | undefined;
-
-    if (!result || duration === -1) {
-      switch (attribute) {
-        case 'speed': // TODO: add other attributes as we add them to the game
-          this.speed += delta;
-          value = this.speed;
-      }
-
-      DB.prepare(
-        `
-        UPDATE mobs
-        SET ${attribute} = :value
-        WHERE id = :id
-        `
-      ).run({
-        value: value,
-        id: this.id
-      });
+    if (!current_delta) {
+      pubSub.changeEffect(this.id, attribute, finalDelta, value[attribute]);
     }
-
-    DB.prepare(
-      `
-      INSERT INTO mobEffects (id, potionType, targetTick)
-      VALUES (:id, :potionType, :targetTick)
-      `
-    ).run({
-      id: this.id,
-      potionType: attribute,
-      targetTick: tick
-    });
-
-    pubSub.changeEffect(this.id, attribute, delta, value);
-    pubSub.changeTargetTick(this.id, attribute, duration, tick);
   }
 
   private checkTickReset(): void {
     type QueryResult = {
-      potionType: string;
+      attribute: string;
+      delta: number;
     };
+
     const result = DB.prepare(
       `
-      SELECT potionType
-      FROM mobEffects
-      WHERE id = :id AND targetTick <= :currentTick
+      WITH current_effects AS (
+        SELECT attribute
+        FROM mobEffects
+        WHERE id = :id AND targetTick > :currentTick
+        GROUP BY attribute
+      )
+      DELETE FROM mobEffects
+      WHERE id = :id AND attribute NOT IN (SELECT attribute FROM current_effects)
+      RETURNING attribute, delta
       `
     ).all({
       id: this.id,
       currentTick: this.current_tick
-    }) as QueryResult[];
+    }) as QueryResult[] | undefined;
 
-    for (const element of result) {
-      switch (element.potionType) {
-        case 'speed': // TODO: add other attributes as we add them to the game
-          this.changeEffect(-2, -1, element.potionType);
-      }
+    if (!result) {
+      return;
+    }
+
+    // reduce the list to only unique attr's so we don't broadcast multiple deletions
+    const uniqueRes: QueryResult[] = Object.values(
+      result.reduce((acc: Record<string, QueryResult>, item: QueryResult) => {
+        // if the attribute already exists in the accumulator, keep the higher delta
+        if (acc[item.attribute]) {
+          if (item.delta > acc[item.attribute].delta) {
+            acc[item.attribute] = item;
+          }
+        } else {
+          // else add the item to the accumulator
+          acc[item.attribute] = item;
+        }
+        return acc;
+      }, {})
+    );
+
+    for (const row of uniqueRes) {
+      // get the new value for the attribute and broadcast it
+      const value = DB.prepare(
+        `
+        SELECT ${row.attribute}
+        FROM mobView
+        WHERE id = :id
+        `
+      ).get({ id: this.id }) as Record<string, number>;
+
+      pubSub.changeEffect(
+        this.id,
+        row.attribute,
+        -row.delta,
+        value[row.attribute]
+      );
     }
   }
 
@@ -536,8 +568,8 @@ export class Mob {
       `
             SELECT houses.id, top_left_x, top_left_y, width, height, houses.community_id
             FROM houses
-            JOIN mobs ON mobs.house_id = houses.id
-            WHERE mobs.id = :id
+            JOIN mobView ON mobView.house_id = houses.id
+            WHERE mobView.id = :id
         `
     ).get({ id: this.id }) as HouseData;
     return houseData
@@ -648,7 +680,7 @@ export class Mob {
     const mob = DB.prepare(
       `
             SELECT id
-            FROM mobs
+            FROM mobView
             WHERE carrying_id = :item_id
         `
     ).get({ item_id }) as { id: string };
@@ -663,7 +695,7 @@ export class Mob {
     const count = DB.prepare(
       `
             SELECT COUNT(*) as count
-            FROM mobs
+            FROM mobView
             WHERE action_type = :type
         `
     ).get({ type }) as { count: number };
@@ -679,7 +711,7 @@ export class Mob {
     const count = DB.prepare(
       `
         SELECT COUNT(*) as count
-        FROM mobs
+        FROM mobView
         WHERE community_id = :community_id AND
           target_x = :x AND
           target_y = :y AND
@@ -693,7 +725,7 @@ export class Mob {
     const mob = DB.prepare(
       `
             SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id
-            FROM mobs
+            FROM mobView
             WHERE id = :id
         `
     ).get({ id: key }) as MobData;
@@ -748,8 +780,8 @@ export class Mob {
             SELECT items.id
             FROM item_attributes
             JOIN items ON item_attributes.item_id = items.id
-            JOIN mobs ON mobs.community_id = items.owned_by
-            WHERE mobs.id = :id and item_attributes.attribute = 'items'
+            JOIN mobView ON mobView.community_id = items.owned_by
+            WHERE mobView.id = :id and item_attributes.attribute = 'items'
         `
     ).all({ id: this.id }) as { id: string }[];
 
@@ -762,8 +794,8 @@ export class Mob {
             SELECT items.id
             FROM item_attributes
             JOIN items ON item_attributes.item_id = items.id
-            JOIN mobs ON mobs.community_id = items.owned_by
-            WHERE item_attributes.attribute = 'items' AND mobs.id = :id
+            JOIN mobView ON mobView.community_id = items.owned_by
+            WHERE item_attributes.attribute = 'items' AND mobView.id = :id
         `
     ).get({ type, id: this.id }) as { id: string };
     return itemData ? itemData.id : undefined;
@@ -778,7 +810,7 @@ export class Mob {
       `
             SELECT 
                 id
-            FROM mobs;
+            FROM mobView;
             `
     ).all() as { id: string }[];
     return result.map((row) => row.id);
@@ -831,9 +863,43 @@ export class Mob {
   static effectsSQL = `
         CREATE TABLE mobEffects (
             id TEXT,
-            potionType TEXT,
+            attribute TEXT,
+            delta INT,
             targetTick INTEGER,
             FOREIGN KEY (id) REFERENCES mobs (id) ON DELETE SET NULL 
         );
+    `;
+
+  static viewSQL = `
+    CREATE VIEW mobView AS
+        SELECT 
+          m.id,
+          m.action_type,
+          m.subtype,
+          m.name,
+          m.gold,
+          m.health,
+          m.maxHealth,
+          m.attack + COALESCE(
+            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'attack' ORDER BY e.targetTick DESC LIMIT 1)
+            , 0) AS attack,
+          m.speed + COALESCE(
+            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'speed' ORDER BY e.targetTick DESC LIMIT 1)
+            , 0) AS speed,
+          m.position_x,
+          m.position_y,
+          m.carrying_id,
+          m.path,
+          m.target_x,
+          m.target_y,
+          m.current_action,
+          m.satiation,
+          m.max_energy,
+          m.energy,
+          m.social,
+          m.community_id,
+          m.house_id
+        FROM mobs AS m
+      ;
     `;
 }

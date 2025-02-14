@@ -26,8 +26,10 @@ package-lock.json
 
 *.tfvars
 
-
-# Test Coverage Files
+# ignore test files
 **/build/logs/**
-build/logs/
 **/coverage/**
+build/
+build/logs
+**/coverage
+coverage.json

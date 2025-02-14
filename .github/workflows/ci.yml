@@ -21,48 +21,59 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-            fetch-depth: 2
+          fetch-depth: 2
 
+      # Step 2: Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Step 2: Install pnpm
+      # Step 3: Install pnpm
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
-      # Step 3: Use Node.js and enable caching
+      # Step 4: Use Node.js and enable caching
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
-      # Step 4: Install dependencies
+      # Step 5: Install dependencies
       - name: Install Dependencies
         run: pnpm install
 
-      # Step 5: Run Lint
+      # Step 6: Run Lint
       - name: Run Lint
         run: pnpm lint
 
-      # Step 6: Build Project
+      # Step 7: Build Project
       - name: Build Project
         run: pnpm build
 
-      # Step 7: Build Docker
+      # Step 8: Build Docker (only if needed)
       - name: Build Docker
         run: docker build -t potion-server .
+        if: ${{ github.event_name == 'push' }}  # Only build on push, not PRs
 
-      # Step 8: Run Unit Tests
-      - name: Run Unit Tests
-        run: pnpm test
+      # Step 9: Run Unit Tests Silently
+      - name: Run Unit Tests Silently
+        run: pnpm test:silent
 
-      - name: Run Unit Tests with Coverage
-        run: pnpm test:coverage
+      # Step 10: Run Test Coverage (outputs coverage reports to each package's own build/logs folder)
+      - name: Run Test Coverage
+        run: pnpm coverage
 
+      # Step 11: Merge Coverage Reports for Upload
+      - name: Merge Coverage Reports
+        run: |
+          mkdir -p build/logs
+          pnpx istanbul-merge --out coverage.json packages/**/build/logs/coverage-final.json
+          npx istanbul report --include coverage.json --dir build/logs clover
+
+      # Step 12: Upload Coverage 
       - name: Upload Coverage
         env:
           OTTERWISE_TOKEN: ${{ secrets.OTTERWISE_TOKEN }}
-        run: bash <(curl -s https://raw.githubusercontent.com/getOtterWise/bash-uploader/main/uploader.sh) --repo-token $OTTERWISE_TOKEN
+        run: bash <(curl -s https://raw.githubusercontent.com/getOtterWise/bash-uploader/main/uploader.sh) --repo-token "$OTTERWISE_TOKEN"

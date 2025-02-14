@@ -1,19 +1,30 @@
+jest.mock('../../../src/worldMetadata', () => ({
+  publicCharacterId: '11111'
+}));
+
+jest.mock('../../../src/scenes/worldScene', () => {
+  const { World } = jest.requireActual('../../../src/world/world');
+  return { world: new World() };
+});
+
+import { world } from '../../../src/scenes/worldScene';
 import {
   getInteractablePhysicals,
   getPhysicalInteractions
 } from '../../../src/world/controller';
 import { Item } from '../../../src/world/item';
-import { World } from '../../../src/world/world';
+// import { World } from '../../../src/world/world';
+import { Mob } from '../../../src/world/mob';
 import { ItemType } from '../../../src/worldDescription';
 import { Coord } from '@rt-potion/common';
 
 describe('Community ownership based interactions', () => {
-  let world: World | null = null;
+  // let world: World | null = null;
   let potionStand: Item;
 
   beforeAll(() => {
     // Initialize world
-    world = new World();
+    // world = new World();
     world.load({
       tiles: [
         [0, 0, 0],
@@ -24,6 +35,23 @@ describe('Community ownership based interactions', () => {
       item_types: [],
       mob_types: []
     });
+
+    const publicCharacterId = '11111';
+
+    const player = new Mob(
+      world,
+      publicCharacterId,
+      'player1',
+      'player',
+      100,
+      { x: 1, y: 1 },
+      {},
+      {},
+      'alchemists'
+    );
+
+    world.mobs[publicCharacterId] = player;
+    world.addMobToGrid(player);
 
     // Define potion stand type with available interactions and their permissions
     const potionStandItemType: ItemType = {
@@ -60,7 +88,15 @@ describe('Community ownership based interactions', () => {
       world!,
       'potionstand',
       { x: 1, y: 1 },
-      potionStandItemType
+      potionStandItemType,
+      'alchemists'
+    );
+
+    console.log('publicCharacterId:', publicCharacterId);
+    console.log('world.mobs:', world.mobs);
+    console.log(
+      'world.mobs[publicCharacterId]:',
+      world.mobs[publicCharacterId]
     );
   });
 
@@ -103,6 +139,6 @@ describe('Community ownership based interactions', () => {
   });
 
   afterAll(() => {
-    world = null;
+    // world = null;
   });
 });

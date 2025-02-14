@@ -16,7 +16,7 @@ export class Needs {
     const needs = DB.prepare(
       `
             SELECT ${need} as need_value
-            FROM mobs
+            FROM mobView
             WHERE id = :id
             `
     ).get({ id: this.mob.id }) as { need_value: number };
