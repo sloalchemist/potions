@@ -6,10 +6,14 @@
     "lint": "eslint . --config eslint.config.mjs",
     "lint:fix": "eslint . --config eslint.config.mjs --fix",
     "build": "pnpm -r run build",
-    "test": "pnpm -r run test --coverage",
+    "test": "pnpm -r run test",
+    "test:silent": "pnpm -- test --silent",
+    "coverage": "pnpm -- test:silent --coverage --coverageDirectory=build/logs",
     "clean": "pnpm -r run clean"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/mocha": "^10.0.10",
     "@typescript-eslint/eslint-plugin": "^8.18.1",
     "@typescript-eslint/parser": "^8.20.0",
     "eslint": "^9.18.0",
@@ -17,9 +21,19 @@
     "eslint-plugin-prettier": "^5.2.3",
     "jest-environment-jsdom": "^29.7.0",
     "rimraf": "^6.0.1",
+    "ts-jest": "^29.2.5",
     "typescript": "^5.7.3"
   },
   "dependencies": {
     "rt-potion": "file:"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "canvas"
+    ]
   }
 }

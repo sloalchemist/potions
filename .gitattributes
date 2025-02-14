@@ -1,0 +1,4 @@
+# Always use LF for shell scripts and Terraform files
+*.sh     text eol=lf
+*.tf     text eol=lf
+*.tfvars text eol=lf

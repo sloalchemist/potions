@@ -107,7 +107,6 @@ export class WorldScene extends Phaser.Scene {
       frameRate: 6,
       repeat: -1
     });
-
     metadata.item_types.forEach((itemType) => {
       //console.log('Adding item', itemType.type);
       this.itemSource[itemType.type] = atlasName;
@@ -544,6 +543,10 @@ export class WorldScene extends Phaser.Scene {
   handlePlayerMovement(publish: boolean) {
     const player = world.mobs[publicCharacterId];
     if (!(player && player.position)) {
+      return;
+    }
+
+    if (this.scene.isActive('ChatOverlayScene')) {
       return;
     }
 
