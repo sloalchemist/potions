@@ -18,17 +18,23 @@ function initializeSupabase() {
     );
 }
   
-async function sendToQueue(prompt: string) {
+async function sendToPromptQueue(userID: integer, prompt: string) {
     const result = await supabase.schema('pgmq_public').rpc('send', {
         queue_name: qName,
-        message: { data: prompt },
+        message: { UID: userID, data: prompt },
         sleep_seconds: 30,
     })
     console.log(result)
 }
 
-async function popFromQueue() {
-    const result = await supabase.schema('pgmq_public').rpc('pop', { queue_name: qName });
+async function popFromDialogueQueue(userID: integer) {
+    const result = await supabase.schema('pgmq_public').rpc('pop', { queue_name: qName, UID: userID});
+    console.log(result);
+    return result;
+}
+
+async function popFromPromptQueue(userID: integer) {
+    const result = await supabase.schema('pgmq_public').rpc('pop', { queue_name: qName, UID: userID});
     console.log(result);
     return result;
 }
