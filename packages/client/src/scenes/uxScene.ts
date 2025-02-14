@@ -678,6 +678,10 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
     this.fightContainer?.setVisible(true);
     this.updateTabStyles('fight');
   }
