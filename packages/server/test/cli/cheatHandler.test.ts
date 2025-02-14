@@ -89,7 +89,9 @@ describe('Cheat Handler Tests', () => {
       it('shold spawn mob with invalid mob type', () => {
         const logSpy = jest.spyOn(console, 'log');
         handleCliCommand('spawn mob invalidMob x:0 y:0');
-        expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Unknown mob type: invalidMob'));
+        expect(logSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Unknown mob type: invalidMob')
+        );
       });
     });
 
@@ -119,7 +121,9 @@ describe('Cheat Handler Tests', () => {
       it('should spawn item with invalid item type', () => {
         const logSpy = jest.spyOn(console, 'log');
         handleCliCommand('spawn item invalidItem x:0 y:0');
-        expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Unknown item type: invalidItem'));
+        expect(logSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Unknown item type: invalidItem')
+        );
       });
     });
 
