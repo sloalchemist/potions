@@ -48,8 +48,8 @@ export class LoadWorldScene extends Phaser.Scene {
     this.load.image('title', 'static/title.png');
     this.load.atlas(
       'global-atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      'https://potions.gg/world_assets/villager-world/client/global.png',
+      'https://potions.gg/world_assets/villager-world/client/global-atlas.json'
     );
   }
 
