@@ -7,6 +7,12 @@ if (!process.env.AUTH_SERVER_URL && process.env.JEST_WORKER_ID === undefined) {
   );
 }
 
+if (!process.env.AUTH_SERVER_SECRET) {
+  throw new Error(
+    'Cannot run without auth server secret configured. Add path to .env'
+  );
+}
+
 const authUrl = process.env.AUTH_SERVER_URL;
 console.log('Auth-Server URL:', authUrl);
 
@@ -35,7 +41,7 @@ export async function updateCharacterData(
       method: 'PUT', // Using PUT for updating existing resources
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.AUTH_TOKEN}` // Using Bearer token from environment variable
+        Authorization: `Bearer ${process.env.AUTH_SERVER_SECRET}` // Using secret from environment variable
       },
       body: JSON.stringify(playerData)
     });
@@ -64,7 +70,7 @@ export async function getWorlds(): Promise<GetWorldsResponse> {
   const url = new URL('/worlds', authUrl);
   const response = await fetch(url, {
     headers: {
-      'Authorization': `Bearer ${process.env.AUTH_TOKEN}` // Using Bearer token from environment variable
+      Authorization: `Bearer ${process.env.AUTH_SERVER_SECRET}` // Using secret from environment variable
     }
   });
   return response.json();
