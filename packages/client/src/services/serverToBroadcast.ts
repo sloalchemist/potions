@@ -13,17 +13,29 @@ import {
   PickupItemData,
   PortalData,
   SetDatetimeData,
-  SpeakData
+  SpeakData,
+  ShowPortalMenuData
 } from '@rt-potion/common';
 import { Types } from 'ably';
 import { focused } from '../main';
 import { world, WorldScene } from '../scenes/worldScene';
 import { SpriteItem } from '../sprite/sprite_item';
 import { SpriteMob } from '../sprite/sprite_mob';
-import { addNewItem, addNewMob, gameState, setDate } from '../world/controller';
+import {
+  addNewItem,
+  addNewMob,
+  gameState,
+  setAvailableWorlds,
+  setDate
+} from '../world/controller';
 import { publicCharacterId } from '../worldMetadata';
+import { leaveWorld } from './playerToServer';
 
 export let playerDead = false;
+
+//constant to indicate to server to have player remain in the current world
+//must match MAINTAIN_WORLD_OPTION in server/src/services/clientCommunication/ablyService.ts
+const MAINTAIN_WORLD_OPTION = 'NO_CHANGE';
 
 export function setupBroadcast(
   broadcast_channel: Types.RealtimeChannelCallbacks,
@@ -109,9 +121,12 @@ export function setupBroadcast(
           checkFocus();
         });
 
-        // one game focused, leave the world and display game over
+        // once game focused, leave the world and display game over
         waitUntilFocused.then(() => {
           scene.showGameOver();
+          // in cases where player should stay in the same world, pass MAINTAIN_WORLD_OPTION
+          leaveWorld(MAINTAIN_WORLD_OPTION);
+          scene.resetToLoadWorldScene();
         });
       }
     }
@@ -149,6 +164,13 @@ export function setupBroadcast(
 
   function handleSetDatetime(data: SetDatetimeData) {
     setDate(data.date);
+  }
+
+  function handleShowPortalMenu(data: ShowPortalMenuData) {
+    if (data.mob_key === publicCharacterId) {
+      setAvailableWorlds(data.worlds);
+      scene.scene.launch('PortalMenuScene');
+    }
   }
 
   // Subscribe to broadcast and dispatch events using switch
@@ -199,6 +221,9 @@ export function setupBroadcast(
           break;
         case 'set_datetime':
           handleSetDatetime(broadcastItem.data as SetDatetimeData);
+          break;
+        case 'show_portal_menu':
+          handleShowPortalMenu(broadcastItem.data);
           break;
         default:
           console.error(

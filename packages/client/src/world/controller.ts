@@ -6,7 +6,8 @@ import {
   HouseI,
   ItemI,
   MobI,
-  Coord
+  Coord,
+  WorldMetadata
 } from '@rt-potion/common';
 import { ItemType } from '../worldDescription';
 import { SpriteMob } from '../sprite/sprite_mob';
@@ -27,17 +28,28 @@ export type Interactions = {
 
 let interactionCallback: (interactions: Interactions[]) => void;
 let chatCompanionCallback: (companions: Mob[]) => void;
+let fightOpponentCallback: (opponents: Mob[]) => void;
+let brewCallback: (interactions: Interactions[]) => void;
 let lastInteractions: Interactions[] = [];
 let lastChatCompanions: Mob[] = [];
+let lastFightOpponents: Mob[] = [];
 let chatting: boolean = false;
+let fighting: boolean = false;
 
 export let fantasyDate: FantasyDateI;
 
 let responseCallback: (responses: string[]) => void = () => {};
+let attackCallback: (attacks: string[]) => void = () => {};
 
 type GameState = 'uninitialized' | 'worldLoaded' | 'stateInitialized';
 
 export let gameState: GameState = 'uninitialized';
+
+export let availableWorlds: WorldMetadata[] = [];
+
+export function setAvailableWorlds(worlds: WorldMetadata[]) {
+  availableWorlds = worlds;
+}
 
 export function setGameState(state: GameState) {
   console.log('Setting game state to:', state);
@@ -53,12 +65,29 @@ export function setChatting(chat: boolean) {
   }
 }
 
+export function setFighting(fight: boolean) {
+  console.log('setFighting', fight);
+  fighting = fight;
+  // Allows for refighting with the same NPC
+  if (!fight) {
+    lastFightOpponents = [];
+  }
+}
+
 export function setResponseCallback(callback: (responses: string[]) => void) {
   responseCallback = callback;
 }
 
+export function setAttackCallback(callback: (attacks: string[]) => void) {
+  attackCallback = callback;
+}
+
 export function setResponses(responses: string[]) {
   responseCallback(responses);
+}
+
+export function setAttacks(attacks: string[]) {
+  attackCallback(attacks);
 }
 
 export function initializePlayer() {
@@ -115,6 +144,15 @@ export function mobRangeListener(mobs: Mob[]) {
       lastChatCompanions = filteredMobs;
     }
   }
+  if (fightOpponentCallback && !fighting) {
+    const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
+    filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
+    if (!areListsEqual(filteredMobs, lastFightOpponents)) {
+      console.log('filter: ', filteredMobs, 'last:', lastFightOpponents);
+      fightOpponentCallback(filteredMobs);
+      lastFightOpponents = filteredMobs;
+    }
+  }
 }
 
 function prepInteraction(label: string, item: Item): string {
@@ -155,7 +193,7 @@ export function getCarriedItemInteractions(
 
   // give to nearby mobs
   nearbyMobs.forEach((mob) => {
-    if (mob.key !== playerId) {
+    if (mob.key !== playerId && !mob.carrying) {
       interactions.push({
         action: 'give',
         item: item as Item,
@@ -194,7 +232,8 @@ export function getPhysicalInteractions(
 ): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
-  const isOwner = item.isOwnedBy(currentCharacter?.community_id);
+  const player = world.mobs[publicCharacterId] as SpriteMob;
+  const isOwner = item.isOwnedBy(player.community_id);
 
   // if the item can be picked up
   if (item.itemType.carryable) {
@@ -335,9 +374,11 @@ function collisionListener(physicals: Item[]) {
   // updates client only if interactions changes
   if (
     !areInteractionsEqual(lastInteractions, interactions) &&
-    interactionCallback
+    interactionCallback &&
+    brewCallback
   ) {
     interactionCallback(interactions);
+    brewCallback(interactions);
     lastInteractions = interactions;
   }
 }
@@ -352,6 +393,16 @@ export function setInteractionCallback(
   callback: (interactions: Interactions[]) => void
 ) {
   interactionCallback = callback;
+}
+
+export function setFightOpponentCallback(callback: (opponents: Mob[]) => void) {
+  fightOpponentCallback = callback;
+}
+
+export function setBrewCallback(
+  callback: (interactions: Interactions[]) => void
+) {
+  brewCallback = callback;
 }
 
 export function addNewHouse(scene: WorldScene, house: HouseI) {

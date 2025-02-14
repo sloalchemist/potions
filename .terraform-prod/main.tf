@@ -1,12 +1,13 @@
 terraform {
   cloud {
 
-    organization = "cal-poly-potions-369"
+    organization = "SLOPotions"
 
     workspaces {
-      name = "potions-369"
+      name = "SLOPotions"
     }
   }
+
   required_providers {
     ably = {
       source = "ably/ably"
@@ -124,10 +125,15 @@ locals {
   db_connection_string = replace(data.supabase_pooler.main.url["transaction"], "[YOUR-PASSWORD]", var.supabase_db_pass)
 }
 
+# Add delay before believing that supabase is actually setup
+resource "time_sleep" "wait_for_supabase" {
+  depends_on      = [data.supabase_pooler.main]
+  create_duration = "30s"
+}
 
 # Execute database setup SQL
 resource "null_resource" "database_setup" {
-  depends_on = [data.supabase_pooler.main]
+  depends_on = [time_sleep.wait_for_supabase]
 
   provisioner "local-exec" {
     # Force Terraform to run under bash
@@ -135,6 +141,31 @@ resource "null_resource" "database_setup" {
 
     command = <<-EOT
       psql -f ../sql/setup.sql "${local.db_connection_string}"
+    EOT
+  }
+}
+
+# Run Supabase migrations
+resource "null_resource" "supabase_migrations" {
+  depends_on = [supabase_project.potions, null_resource.database_setup]
+
+  provisioner "local-exec" {
+    working_dir = "${path.module}/../"
+    interpreter = ["/bin/bash", "-c"]
+    command     = <<-EOT
+      echo "${var.supabase_db_pass}"
+      # Set supabase db password environment variable
+      export SUPABASE_DB_PASSWORD="${var.supabase_db_pass}"
+      
+      # Login using access token (non-interactive)
+      supabase login --token "${var.supabase_access_token}"
+      
+      # Link project (non-interactive)
+      supabase link --project-ref "${supabase_project.potions.id}"
+      
+      echo "${var.supabase_db_pass}"
+      # Run migrations
+      supabase db push -p "${var.supabase_db_pass}"
     EOT
   }
 }
@@ -153,14 +184,8 @@ resource "null_resource" "insert_test_world" {
   }
 }
 
-# Add delay before fetching API keys
-resource "time_sleep" "wait_30_seconds" {
-  depends_on      = [null_resource.poll_project_status]
-  create_duration = "30s"
-}
-
 data "supabase_apikeys" "dev" {
-  depends_on  = [time_sleep.wait_30_seconds]
+  depends_on  = [time_sleep.wait_for_supabase]
   project_ref = supabase_project.potions.id
 }
 
@@ -169,9 +194,9 @@ resource "render_web_service" "potions_auth" {
   name               = "${var.project_name}-${var.environment}-auth"
   plan               = "starter"
   region             = "oregon" # or "us-east", "frankfurt", etc.
-  start_command      = "pnpm start"
+  start_command      = "cd packages/auth-server && pnpm start"
   pre_deploy_command = "echo 'hello world'"
-  root_directory     = "packages/auth-server"
+  root_directory     = "." # Changed to root directory
 
   runtime_source = {
     native_runtime = {
@@ -219,3 +244,32 @@ resource "github_actions_environment_variable" "server_url" {
   value         = render_web_service.potions_auth.url
 }
 
+resource "render_background_worker" "potions_test_world" {
+  name               = "${var.project_name}-${var.environment}-test-world"
+  plan               = "starter"
+  region             = "oregon" # or "us-east", "frankfurt", etc.
+  start_command      = "cd packages/server && pnpm serve test-world"
+  pre_deploy_command = "echo 'hello world'"
+  root_directory     = "."
+
+  runtime_source = {
+    native_runtime = {
+      auto_deploy   = true
+      branch        = "main"
+      build_command = "pnpm install && pnpm build && cd packages/server && pnpm run create test-world"
+      build_filter = {
+        paths         = ["src/**"]
+        ignored_paths = ["tests/**"]
+      }
+      repo_url = "https://github.com/sloalchemist/potions"
+      runtime  = "node"
+    }
+  }
+
+  env_vars = {
+    "ABLY_API_KEY"         = { value : "${ably_api_key.root.key}" },
+    "AUTH_SERVER_URL"      = { value : "${render_web_service.potions_auth.url}" },
+    "SUPABASE_URL"         = { value : "${"https://${supabase_project.potions.id}.supabase.co"}" },
+    "SUPABASE_SERVICE_KEY" = { value : "${data.supabase_apikeys.dev.service_role_key}" }
+  }
+}
