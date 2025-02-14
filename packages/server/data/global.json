@@ -59,7 +59,7 @@
     {
       "name": "Fireball",
       "type": "fire-ball",
-      "affiliation": "fighter",
+      "affiliation": "blob",
       "description": "A spicy and tangy bite that has quite a kick!",
       "attributes": [
         {
