@@ -107,7 +107,6 @@
     {
       "name": "Wall",
       "type": "wall",
-      "affiliation": "common",
       "description": "A sturdy structure that blocks movement and provides protection.",
       "carryable": false,
       "smashable": true,
@@ -124,7 +123,6 @@
     {
       "name": "Partial Wall",
       "type": "partial-wall",
-      "affiliation": "common",
       "description": "An incomplete wall, requiring additional materials to finish.",
       "carryable": false,
       "walkable": false,
@@ -145,7 +143,6 @@
     {
       "name": "Fence",
       "type": "fence",
-      "affiliation": "common",
       "description": "A simple barrier to mark boundaries or restrict movement.",
       "carryable": false,
       "walkable": false,
@@ -162,7 +159,6 @@
     {
       "name": "Gate",
       "type": "gate",
-      "affiliation": "common",
       "description": "A movable barrier allowing controlled entry.",
       "carryable": false,
       "walkable": true,
@@ -178,7 +174,6 @@
     {
       "name": "Door",
       "type": "door",
-      "affiliation": "common",
       "description": "Just a door.",
       "carryable": false,
       "smashable": true,
@@ -454,7 +449,6 @@
       "name": "Potion stand",
       "description": "A stand that sells health potions.",
       "type": "potion-stand",
-      "affiliation": "common",
       "carryable": false,
       "smashable": true,
       "walkable": false,

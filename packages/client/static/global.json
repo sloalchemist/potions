@@ -77,7 +77,6 @@
 {
     "name": "Wall",
     "type": "wall",
-    "affiliation": "common",
     "item_group": "wall",
     "layout_type": "wall",
     "carryable": false,
@@ -95,7 +94,6 @@
 {
     "name": "Partial Wall",
     "type": "partial-wall",
-    "affiliation": "common",
     "carryable": false,
     "walkable": false,
     "smashable": true,
@@ -115,7 +113,6 @@
 {
     "name": "Fence",
     "type": "fence",
-    "affiliation": "common",
     "item_group": "fence",
     "layout_type": "fence",
     "carryable": false,
@@ -133,7 +130,6 @@
 {
     "name": "Gate",
     "type": "gate",
-    "affiliation": "common",
     "item_group": "fence",
     "layout_type": "opens",
     "carryable": false,
@@ -151,7 +147,6 @@
 {
     "name": "Door",
     "type": "door",
-    "affiliation": "common",
     "item_group": "wall",
     "layout_type": "opens",
     "carryable": false,
@@ -448,7 +443,6 @@
 {
     "name": "Potion stand",
     "type": "potion-stand",
-    "affiliation": "common",
     "carryable": false,
     "smashable": true,
     "walkable": false,
