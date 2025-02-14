@@ -117,28 +117,24 @@ describe('Switching carried items', () => {
     // --- Step 1: Player picks up Item 1 ---
     expect(playerMob.carrying).toBeUndefined();
     carryableItem1.pickup(playerMob);
-    // Now the player should be carrying item1, so its carried_by is set and its grid position cleared.
     expect(playerMob.carrying?.id).toBe(item1.id);
     expect(Item.getItemIDAt(item1Position)).toBeUndefined();
 
-    // --- Step 2: Player picks up Item 2 while already carrying Item 1 ---
-    // This should trigger the mob's setter to drop the currently carried item (item1) at the player's position.
-    carryableItem2.pickup(playerMob);
+    // --- Step 2: Player picks up Item 2 while already carrying Item 1 --- carryableItem2.pickup(playerMob);
     expect(playerMob.carrying?.id).toBe(item2.id);
-    // Now, item1 should have been dropped at the player's feet.
+    // item1 should have been dropped at the player's feet.
     const droppedAfterItem2 = Item.getItemIDAt(playerMob.position);
     expect(droppedAfterItem2).toBe(item1.id);
-    // And item2 (being carried) should no longer be on the grid.
+    // item2 (being carried) should no longer be on the grid.
     expect(Item.getItemIDAt(item2Position)).toBeUndefined();
 
     // --- Step 3: Player picks up Item 1 again while carrying Item 2 ---
-    // This should cause the player to drop item2 and pick up item1.
     carryableItem1.pickup(playerMob);
     expect(playerMob.carrying?.id).toBe(item1.id);
-    // Now, item2 should be dropped at the player's feet.
+    // item2 should be dropped at the player's feet.
     const droppedAfterItem1 = Item.getItemIDAt(playerMob.position);
     expect(droppedAfterItem1).toBe(item2.id);
-    // And item1 (now being carried) should not be on the grid.
+    // item1 (now being carried) should not be on the grid.
     expect(Item.getItemIDAt(item1Position)).toBeUndefined();
   });
 });
