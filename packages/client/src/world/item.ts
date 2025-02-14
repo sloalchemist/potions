@@ -89,7 +89,6 @@ export class Item extends Physical {
     if (!mob.position) {
       throw new Error('Mob has no position');
     }
-    console.log('dropping item', this.key, this.carried_by);
     mob.carrying = undefined;
     this.carried_by = undefined;
     this.position = position;

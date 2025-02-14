@@ -25,6 +25,10 @@ export class Pickup implements Use {
       return true;
     }
 
+    if(mob.carrying){
+      //drop item if currently carrying one
+      Carryable.fromItem(mob.carrying)!.dropAtFeet(mob);
+    }
     carryable.pickup(mob);
 
     return true;
