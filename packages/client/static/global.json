@@ -700,6 +700,11 @@
           "action": "build_wall",
           "while_carried": true,
           "requires_item": "partial-wall"
+        },
+        {
+            "description": "Create market",
+            "action": "create_market",
+            "while_carried": true
         }
       ]
     },
@@ -771,15 +776,131 @@
             "rate": 0.1
           }
         }
-      ]
-    },
-    {
-      "name": "Potion stand",
-      "type": "potion-stand",
-      "carryable": false,
-      "smashable": true,
-      "walkable": false,
-      "attributes": [
+    ]
+},
+{
+    "name": "Potion stand",
+    "type": "potion-stand",
+    "carryable": false,
+    "smashable": true,
+    "walkable": false,
+    "attributes": [
+        {
+            "name": "items",
+            "value": 0
+        },
+        {
+            "name": "price",
+            "value": 10
+        },
+        {
+            "name": "gold",
+            "value": 0
+        },
+        {
+            "name": "health",
+            "value": 1
+        }
+    ],
+    "interactions": [
+        {
+            "description": "Add $item_name",
+            "action": "add_item",
+            "while_carried": false,
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Get $item_name",
+            "action": "get_item",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "items",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Raise price",
+            "action": "raise_price",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "price",
+                    "value": 99,
+                    "comparison": "less_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Lower price",
+            "action": "lower_price",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "price",
+                    "value": 1,
+                    "comparison": "greater_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Collect gold",
+            "action": "collect_gold",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "gold",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Purchase potion",
+            "action": "purchase",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "items",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ]
+        }
+    ],
+    "show_price_at": {
+        "x": 7,
+        "y": -10
+    }
+},
+{
+    "name": "Market",
+    "type": "market-stand",
+    "carryable": false,
+    "smashable": true,
+    "walkable": false,
+    "attributes": [
         {
           "name": "items",
           "value": 0
