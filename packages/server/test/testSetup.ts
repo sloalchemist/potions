@@ -30,10 +30,6 @@ export const commonSetup = (worldSize: number = 2) => {
   createTables();
   initializePubSub(new StubbedPubSub());
 
-  // inject env vars for tests
-  process.env.AUTH_SERVER_URL = 'test-auth-server';
-  process.env.AUTH_SERVER_SECRET = 'test-auth-server-secret';
-
   const worldDescription = {
     // Makes a worldSize x worldSize matrix of tiles filled with 1
     tiles: Array.from({ length: worldSize }, () => Array(worldSize).fill(1)),

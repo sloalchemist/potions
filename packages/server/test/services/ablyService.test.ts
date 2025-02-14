@@ -1,3 +1,5 @@
+process.env.AUTH_SERVER_URL = 'test-auth-server';
+
 import { AblyService } from '../../src/services/clientCommunication/ablyService';
 
 const TEST_USER = 'test-user';
