@@ -7,7 +7,6 @@ import {
   fantasyDate,
   Interactions,
   setAttackCallback,
-  setBrewCallback,
   setChatCompanionCallback,
   setChatting,
   setFighting,
@@ -41,7 +40,6 @@ export interface FightOption {
 export class UxScene extends Phaser.Scene {
   interactButtons: ButtonManager = new ButtonManager([]);
   chatButtons: ButtonManager = new ButtonManager([]);
-  mixButtons: ButtonManager = new ButtonManager([]);
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
   attackText: Phaser.GameObjects.Text | null = null;
@@ -67,7 +65,6 @@ export class UxScene extends Phaser.Scene {
   itemsTabButton: TabButton | null = null;
   chatTabButton: TabButton | null = null;
   statsTabButton: TabButton | null = null;
-  mixTabButton: TabButton | null = null;
   fightTabButton: TabButton | null = null;
   potionTabButton: TabButton | null = null;
   nextButton: SlideButton | null = null;
@@ -76,7 +73,6 @@ export class UxScene extends Phaser.Scene {
   itemsContainer: Phaser.GameObjects.Container | null = null;
   chatContainer: Phaser.GameObjects.Container | null = null;
   statsContainer: Phaser.GameObjects.Container | null = null;
-  mixContainer: Phaser.GameObjects.Container | null = null;
   fightContainer: Phaser.GameObjects.Container | null = null;
   recipeContainer: Phaser.GameObjects.Container | null = null;
   effectsContainer: Phaser.GameObjects.Container | null = null;
@@ -99,12 +95,11 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer = this.add.container(0, 40);
     this.itemsContainer = this.add.container(0, 40);
     this.chatContainer = this.add.container(0, 40);
-    this.mixContainer = this.add.container(0, 40);
     this.fightContainer = this.add.container(0, 40);
     this.recipeContainer = this.add.container(0, 40);
     this.effectsContainer = this.add.container(0, 40);
 
-    const tabWidth = 68;
+    const tabWidth = 82;
     const tabHeight = 40;
     const tabSpacing = 5;
 
@@ -155,18 +150,9 @@ export class UxScene extends Phaser.Scene {
       tabWidth,
       tabHeight
     );
-    this.mixTabButton = new TabButton(
-      this,
-      tabX + 3 * (tabWidth + tabSpacing) + tabWidth / 2,
-      tabY,
-      'Mix',
-      () => this.showMixTab(),
-      tabWidth,
-      tabHeight
-    );
     this.fightTabButton = new TabButton(
       this,
-      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
+      tabX + 3 * (tabWidth + tabSpacing) + tabWidth / 2,
       tabY,
       'Fight',
       () => this.showFightTab(),
@@ -175,9 +161,9 @@ export class UxScene extends Phaser.Scene {
     );
     this.potionTabButton = new TabButton(
       this,
-      tabX + 5 * (tabWidth + tabSpacing) + tabWidth / 2,
+      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
       tabY,
-      'HandB.',
+      'HandBook',
       () => this.showPotionsTab(),
       tabWidth,
       tabHeight
@@ -550,10 +536,6 @@ export class UxScene extends Phaser.Scene {
       setInteractionCallback((interactions: Interactions[]) =>
         this.setInteractions(interactions)
       );
-      // Set interaction callback for mix interactions
-      setBrewCallback((interactions: Interactions[]) =>
-        this.setBrewOptions(interactions)
-      );
       setChatCompanionCallback((companions: Mob[]) =>
         this.setChatCompanions(companions)
       );
@@ -612,7 +594,6 @@ export class UxScene extends Phaser.Scene {
   }
 
   showStatsTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
@@ -628,7 +609,6 @@ export class UxScene extends Phaser.Scene {
 
   // Method to show the Items tab
   showItemsTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
@@ -642,7 +622,6 @@ export class UxScene extends Phaser.Scene {
 
   // Method to show the Chat tab
   showChatTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
@@ -656,23 +635,8 @@ export class UxScene extends Phaser.Scene {
     this.updateTabStyles('chat');
   }
 
-  // Method to show the Mix tab
-  showMixTab() {
-    this.mixContainer?.setVisible(true);
-    this.statsContainer?.setVisible(false);
-    this.itemsContainer?.setVisible(false);
-    this.chatContainer?.setVisible(false);
-    this.fightContainer?.setVisible(false);
-    this.recipeContainer?.setVisible(false);
-    this.effectsContainer?.setVisible(false);
-    this.nextButton?.setVisible(false);
-    this.backButton?.setVisible(false);
-    this.updateTabStyles('mix');
-  }
-
   // Method to show the Fight tab
   showFightTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
@@ -684,7 +648,6 @@ export class UxScene extends Phaser.Scene {
 
   // Method to show the Potions tab
   showPotionsTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
@@ -700,7 +663,6 @@ export class UxScene extends Phaser.Scene {
 
   // Method to show the Page Flips
   showNextTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
@@ -713,20 +675,18 @@ export class UxScene extends Phaser.Scene {
 
   // Update the styles of the tab buttons based on the active tab
   updateTabStyles(
-    activeTab: 'items' | 'chat' | 'stats' | 'mix' | 'fight' | 'handbook'
+    activeTab: 'items' | 'chat' | 'stats' | 'fight' | 'handbook'
   ) {
     if (
       this.itemsTabButton &&
       this.chatTabButton &&
       this.statsTabButton &&
-      this.mixTabButton &&
       this.fightTabButton &&
       this.potionTabButton
     ) {
       this.itemsTabButton.setTabActive(activeTab === 'items');
       this.chatTabButton.setTabActive(activeTab === 'chat');
       this.statsTabButton.setTabActive(activeTab === 'stats');
-      this.mixTabButton.setTabActive(activeTab === 'mix');
       this.fightTabButton.setTabActive(activeTab === 'fight');
       this.potionTabButton.setTabActive(activeTab == 'handbook');
     }
@@ -844,7 +804,7 @@ export class UxScene extends Phaser.Scene {
           // Slight delay to allow the scene state to update before refreshing buttons.
           setTimeout(() => {
             this.setInteractions(interactions);
-          }, 10);
+          }, 20);
         }
       );
 
@@ -941,10 +901,6 @@ export class UxScene extends Phaser.Scene {
       this.fightButtons.push(button);
       this.fightContainer?.add(button);
     });
-  }
-
-  setBrewOptions(brew: Interactions[]) {
-    
   }
 }
 
