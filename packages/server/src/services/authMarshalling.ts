@@ -34,7 +34,8 @@ export async function updateCharacterData(
     const response = await fetch(url, {
       method: 'PUT', // Using PUT for updating existing resources
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.AUTH_TOKEN}` // Using Bearer token from environment variable
       },
       body: JSON.stringify(playerData)
     });
@@ -61,7 +62,11 @@ type GetWorldsResponse = {
 
 export async function getWorlds(): Promise<GetWorldsResponse> {
   const url = new URL('/worlds', authUrl);
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    headers: {
+      'Authorization': `Bearer ${process.env.AUTH_TOKEN}` // Using Bearer token from environment variable
+    }
+  });
   return response.json();
 }
 
