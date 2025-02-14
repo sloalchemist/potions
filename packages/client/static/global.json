@@ -351,7 +351,7 @@
           "action": "spawn_item",
           "parameters": {
             "type": "log",
-            "global_max": 10, 
+            "global_max": 10,
             "local_max": 2,
             "radius": 3,
             "rate": 0.1
@@ -360,11 +360,11 @@
         {
           "action": "spawn_item",
           "parameters": {
-             "type": "sun-drop",
-             "global_max": 10,
-             "local_max": 2,
-             "radius": 4,
-             "rate": 0.1
+            "type": "sun-drop",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
           }
         },
         {
@@ -386,7 +386,7 @@
       "smashable": true,
       "walkable": true,
       "flat": true,
-      "attributes":[
+      "attributes": [
         {
           "name": "health",
           "value": 1
@@ -695,14 +695,14 @@
           "description": "Start wall",
           "action": "start_wall",
           "while_carried": true,
-            "sound_path": "static/sounds/grunt_3.mp3"
+          "sound_path": "static/sounds/grunt_3.mp3"
         },
         {
           "description": "Build wall",
           "action": "build_wall",
           "while_carried": true,
           "requires_item": "partial-wall",
-            "sound_path": "static/sounds/grunt_3.mp3"
+          "sound_path": "static/sounds/grunt_3.mp3"
         }
       ]
     },
@@ -809,7 +809,7 @@
             "community": true,
             "other": false
           },
-            "sound_path": "static/sounds/drop.mp3"
+          "sound_path": "static/sounds/drop.mp3"
         },
         {
           "description": "Get $item_name",
@@ -826,7 +826,7 @@
             "community": true,
             "other": false
           },
-            "sound_path": "static/sounds/pick_up.mp3"
+          "sound_path": "static/sounds/pick_up.mp3"
         },
         {
           "description": "Raise price",
@@ -843,7 +843,7 @@
             "community": true,
             "other": false
           },
-            "sound_path": "static/sounds/bell.mp3"
+          "sound_path": "static/sounds/bell.mp3"
         },
         {
           "description": "Lower price",
@@ -860,7 +860,7 @@
             "community": true,
             "other": false
           },
-            "sound_path": "static/sounds/bell.mp3"
+          "sound_path": "static/sounds/bell.mp3"
         },
         {
           "description": "Collect gold",
@@ -877,7 +877,7 @@
             "community": true,
             "other": false
           },
-            "sound_path": "static/sounds/jingle.mp3"
+          "sound_path": "static/sounds/jingle.mp3"
         },
         {
           "description": "Purchase potion",
@@ -890,7 +890,7 @@
               "comparison": "greater_than"
             }
           ],
-            "sound_path": "static/sounds/jingle.mp3"
+          "sound_path": "static/sounds/jingle.mp3"
         }
       ],
       "show_price_at": {
@@ -915,7 +915,7 @@
           "description": "Quaff potion",
           "action": "drink",
           "while_carried": true,
-            "sound_path": "static/sounds/drink_1.mp3"
+          "sound_path": "static/sounds/drink_1.mp3"
         },
         {
           "description": "Create stand",
@@ -952,13 +952,13 @@
               "comparison": "greater_than"
             }
           ],
-            "sound_path": "static/sounds/pick_up.mp3"
+          "sound_path": "static/sounds/pick_up.mp3"
         },
         {
           "description": "Add $item_name",
           "action": "add_item",
           "while_carried": false,
-            "sound_path": "static/sounds/drop.mp3"
+          "sound_path": "static/sounds/drop.mp3"
         }
       ]
     },
@@ -989,7 +989,7 @@
               "comparison": "less_than"
             }
           ],
-            "sound_path": "static/sounds/drop.mp3"
+          "sound_path": "static/sounds/drop.mp3"
         },
         {
           "description": "Bottle Potion",
@@ -1002,7 +1002,7 @@
               "comparison": "greater_than"
             }
           ],
-            "sound_path": "static/sounds/mix.mp3"
+          "sound_path": "static/sounds/mix.mp3"
         },
         {
           "description": "Dump Cauldron",
@@ -1015,7 +1015,7 @@
               "comparison": "greater_than"
             }
           ],
-            "sound_path": "static/sounds/dump.mp3"
+          "sound_path": "static/sounds/dump.mp3"
         }
       ]
     },
