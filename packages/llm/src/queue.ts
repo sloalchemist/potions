@@ -18,7 +18,7 @@ function initializeSupabase() {
     );
 }
   
-async function sendToPromptQueue(userID: integer, prompt: string) {
+async function sendToPromptQueue(userID: number, prompt: string) {
     const result = await supabase.schema('pgmq_public').rpc('send', {
         queue_name: qName,
         message: { UID: userID, data: prompt },
@@ -27,15 +27,45 @@ async function sendToPromptQueue(userID: integer, prompt: string) {
     console.log(result)
 }
 
-async function popFromDialogueQueue(userID: integer) {
+
+async function popFromPromptQueue(userID: number) {
     const result = await supabase.schema('pgmq_public').rpc('pop', { queue_name: qName, UID: userID});
     console.log(result);
     return result;
 }
 
-async function popFromPromptQueue(userID: integer) {
+
+
+async function popFromProcessedQueue(userID: number) {
     const result = await supabase.schema('pgmq_public').rpc('pop', { queue_name: qName, UID: userID});
     console.log(result);
     return result;
 }
+
+
+async function sendToProcessedQueue(userID: number, prompt: string) {
+    const result = await supabase.schema('pgmq_public').rpc('send', {
+        queue_name: qName,
+        message: { UID: userID, data: prompt },
+        sleep_seconds: 30,
+    })
+    console.log(result)
+}
+
+async function createQueue(queueName: string) {
+    const { data, error } = await supabase.rpc('create_queue', {
+      queue_name: queueName,
+    });
+  
+    if (error) {
+      console.error('Error creating queue:', error);
+    } else {
+      console.log('Queue created successfully:', data);
+    }
+  }
+  
+// Usage
+sendToPromptQueue(12, "hello world");
+
+  
 
