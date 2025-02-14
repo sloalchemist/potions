@@ -26,12 +26,16 @@ describe('FantasyDate', () => {
 
   test('description should return the correct description for morning', () => {
     const date = new FantasyDate(2, 1, 0, 4, 0, 0);
-    expect(date.description()).toBe("It's morning on a working day in spring. ");
+    expect(date.description()).toBe(
+      "It's morning on a working day in spring. "
+    );
   });
 
   test('description should return the correct description for mid-day', () => {
     const date = new FantasyDate(2, 1, 0, 6, 0, 0);
-    expect(date.description()).toBe("It's mid-day on a working day in spring. ");
+    expect(date.description()).toBe(
+      "It's mid-day on a working day in spring. "
+    );
   });
 
   test('description should return the correct description for afternoon', () => {
@@ -69,7 +73,9 @@ describe('FantasyDate', () => {
 
   test('description should return the correct description for summer', () => {
     const date = new FantasyDate(2, 2, 0, 4, 0, 0);
-    expect(date.description()).toBe("It's morning on a working day in summer. ");
+    expect(date.description()).toBe(
+      "It's morning on a working day in summer. "
+    );
   });
 
   test('description should return the correct description for fall', () => {
