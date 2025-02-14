@@ -189,6 +189,11 @@ data "supabase_apikeys" "dev" {
   project_ref = supabase_project.potions.id
 }
 
+# Generate random string for AUTH_SERVER_SECRET
+resource "random_password" "auth_server_secret" {
+  length  = 32
+  special = true
+}
 
 resource "render_web_service" "potions_auth" {
   name               = "${var.project_name}-${var.environment}-auth"
@@ -216,6 +221,7 @@ resource "render_web_service" "potions_auth" {
     "ABLY_API_KEY"         = { value : "${ably_api_key.root.key}" },
     "SUPABASE_URL"         = { value : "https://${supabase_project.potions.id}.supabase.co" },
     "SUPABASE_SERVICE_KEY" = { value : "${data.supabase_apikeys.dev.service_role_key}" },
+    "AUTH_SERVER_SECRET"   = { value : "${random_password.auth_server_secret.result}" },
   }
 
   # Optionally depends on Supabase or Ably if you want to ensure
@@ -270,6 +276,7 @@ resource "render_background_worker" "potions_test_world" {
     "ABLY_API_KEY"         = { value : "${ably_api_key.root.key}" },
     "AUTH_SERVER_URL"      = { value : "${render_web_service.potions_auth.url}" },
     "SUPABASE_URL"         = { value : "${"https://${supabase_project.potions.id}.supabase.co"}" },
-    "SUPABASE_SERVICE_KEY" = { value : "${data.supabase_apikeys.dev.service_role_key}" }
+    "SUPABASE_SERVICE_KEY" = { value : "${data.supabase_apikeys.dev.service_role_key}" },
+    "AUTH_SERVER_SECRET"   = { value : "${random_password.auth_server_secret.result}" }
   }
 }
