@@ -106,6 +106,21 @@ Use `./tf.ps1 <any_terraform_command>`
 │ /bin/bash: -c: line 9: syntax error near unexpected token `|'
 ' /bin/bash: -c: line 9: `    | jq -r '.status')`
 
+If you see this error:
+>Error: Invalid template interpolation value
+│
+│   on main.tf line 176, in resource "local_file" "server_env":
+│  172:   content         = <<-EOT
+│  173:     ABLY_API_KEY=${ably_api_key.root.key}
+│  174:     AUTH_SERVER_URL=http://localhost:3000
+│  175:     SUPABASE_URL=https://${supabase_project.potions.id}.supabase.co
+│  176:     SUPABASE_SERVICE_KEY=${data.supabase_apikeys.dev.service_role_key}
+│  177:   EOT
+│
+│ The expression result is null. Cannot include a null value in a string template.
+
+You need to manually delete your /terraform/terraform.tfstate file and /terraform/terraform.tfstate.backup. Then, in their respective dashboards, delete your supabase potions-dev project and ably potions-dev projects. Then, rerun /tf.ps1 for Windows and /tf.sh for MacOS.
+
 ### Build
 1. In your root folder, execute:
    ```
