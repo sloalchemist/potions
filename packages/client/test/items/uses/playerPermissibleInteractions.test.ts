@@ -86,7 +86,6 @@ describe('Community ownership based interactions', () => {
   });
 
   test('Should allow community members to collect gold', () => {
-
     // Get interactable items within range of player
     const interactablePhysicals = getInteractablePhysicals(
       [potionStand],
@@ -102,7 +101,11 @@ describe('Community ownership based interactions', () => {
     // console.log('Interactable items in proximity: ', interactablePhysicals);
 
     // Get all interactions available for potion stand
-    const interactions = getPhysicalInteractions(potionStand, undefined, player.community_id);
+    const interactions = getPhysicalInteractions(
+      potionStand,
+      undefined,
+      player.community_id
+    );
     // console.log('Interactions available: ', interactions);
 
     // Collect gold should be an interaction given the defined permissions
@@ -114,7 +117,11 @@ describe('Community ownership based interactions', () => {
 
   test('Should prevent community members from purchasing potions', () => {
     // Get interactions available for the potion stand
-    const interactions = getPhysicalInteractions(potionStand, undefined, player.community_id);
+    const interactions = getPhysicalInteractions(
+      potionStand,
+      undefined,
+      player.community_id
+    );
 
     // Check that purchase is NOT an available interaction
     expect(
