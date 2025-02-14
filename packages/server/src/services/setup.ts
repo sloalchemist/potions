@@ -4,7 +4,6 @@ import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
 import globalData from '../../data/global.json';
-import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
@@ -43,6 +42,7 @@ async function initializeAsync() {
   }
 
   console.log(`loading world ${worldID}`);
+  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
 
   // Create bucket if it doesn't exist
   try {
