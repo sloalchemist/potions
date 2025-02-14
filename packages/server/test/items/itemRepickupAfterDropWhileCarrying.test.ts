@@ -14,7 +14,7 @@ describe('Pickup', () => {
     pickup = new Pickup();
     mockMob = {
       carrying: null,
-      changeGold: jest.fn(),
+      changeGold: jest.fn()
       // Add other necessary properties and methods
     } as unknown as Mob;
 
@@ -22,7 +22,7 @@ describe('Pickup', () => {
       position: { x: 0, y: 0 },
       type: 'item',
       getAttribute: jest.fn().mockReturnValue(10),
-      destroy: jest.fn(),
+      destroy: jest.fn()
       // Add other necessary properties and methods
     } as unknown as Item;
 
@@ -30,13 +30,13 @@ describe('Pickup', () => {
       position: { x: 1, y: 1 },
       type: 'item',
       getAttribute: jest.fn().mockReturnValue(10),
-      destroy: jest.fn(),
+      destroy: jest.fn()
       // Add other necessary properties and methods
     } as unknown as Item;
 
     mockCarryable = {
       pickup: jest.fn(),
-      dropAtFeet: jest.fn(),
+      dropAtFeet: jest.fn()
     } as unknown as Carryable;
 
     jest.spyOn(Carryable, 'fromItem').mockReturnValue(mockCarryable);
@@ -59,5 +59,4 @@ describe('Pickup', () => {
     expect(mockCarryable.dropAtFeet).toHaveBeenCalledWith(mockMob);
     expect(mockCarryable.pickup).toHaveBeenCalledWith(mockMob);
   });
-
 });
