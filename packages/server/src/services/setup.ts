@@ -25,7 +25,7 @@ export let worldID: string = '';
 export const supabase = initializeSupabase();
 
 function initializeAbly(worldId: string): AblyService {
-  const apiKey = getEnv('ABLY_API_KEY')
+  const apiKey = getEnv('ABLY_API_KEY');
   if (apiKey.indexOf('INSERT') === 0) {
     throw new Error('Cannot run without an API key. Add your key to .env');
   }
