@@ -15,7 +15,6 @@ describe('Pickup', () => {
     mockMob = {
       carrying: null,
       changeGold: jest.fn()
-      // Add other necessary properties and methods
     } as unknown as Mob;
 
     mockItem = {
@@ -23,7 +22,6 @@ describe('Pickup', () => {
       type: 'item',
       getAttribute: jest.fn().mockReturnValue(10),
       destroy: jest.fn()
-      // Add other necessary properties and methods
     } as unknown as Item;
 
     mockItem2 = {
@@ -31,7 +29,6 @@ describe('Pickup', () => {
       type: 'item',
       getAttribute: jest.fn().mockReturnValue(10),
       destroy: jest.fn()
-      // Add other necessary properties and methods
     } as unknown as Item;
 
     mockCarryable = {
