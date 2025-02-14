@@ -1,4 +1,5 @@
 process.env.AUTH_SERVER_URL = 'test-auth-server';
+process.env.AUTH_SERVER_SECRET = 'test-auth-server-secret';
 
 import { AblyService } from '../../src/services/clientCommunication/ablyService';
 
