@@ -6,7 +6,8 @@ import {
   HouseI,
   ItemI,
   MobI,
-  Coord
+  Coord,
+  WorldMetadata
 } from '@rt-potion/common';
 import { ItemType } from '../worldDescription';
 import { SpriteMob } from '../sprite/sprite_mob';
@@ -43,6 +44,12 @@ let attackCallback: (attacks: string[]) => void = () => {};
 type GameState = 'uninitialized' | 'worldLoaded' | 'stateInitialized';
 
 export let gameState: GameState = 'uninitialized';
+
+export let availableWorlds: WorldMetadata[] = [];
+
+export function setAvailableWorlds(worlds: WorldMetadata[]) {
+  availableWorlds = worlds;
+}
 
 export function setGameState(state: GameState) {
   console.log('Setting game state to:', state);
@@ -186,7 +193,7 @@ export function getCarriedItemInteractions(
 
   // give to nearby mobs
   nearbyMobs.forEach((mob) => {
-    if (mob.key !== playerId) {
+    if (mob.key !== playerId && !mob.carrying) {
       interactions.push({
         action: 'give',
         item: item as Item,
@@ -225,7 +232,8 @@ export function getPhysicalInteractions(
 ): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
-  const isOwner = item.isOwnedBy(currentCharacter?.community_id);
+  const player = world.mobs[publicCharacterId] as SpriteMob;
+  const isOwner = item.isOwnedBy(player.community_id);
 
   // if the item can be picked up
   if (item.itemType.carryable) {

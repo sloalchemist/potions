@@ -47,7 +47,8 @@ export class SpriteMob extends Mob {
       mob.maxHealth,
       mob.position,
       mob.attributes,
-      mob.personalities
+      mob.personalities,
+      mob.community_id
     );
     this.scene = scene;
     this.path = mob.path;
@@ -56,6 +57,7 @@ export class SpriteMob extends Mob {
     this.carrying = mob.carrying;
     this.doing = mob.doing;
     this.unlocks = mob.unlocks;
+    this.community_id = mob.community_id;
 
     if (this.subtype) {
       const parts = this.subtype.split('-');

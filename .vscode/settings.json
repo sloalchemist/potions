@@ -1,0 +1,7 @@
+{
+  // Force LF line endings
+  "files.eol": "\n"
+
+  // Optional: disable auto-guessing of encodings, if you want full control
+  // "files.autoGuessEncoding": false
+}

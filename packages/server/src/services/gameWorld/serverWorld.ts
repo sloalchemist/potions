@@ -11,6 +11,7 @@ import { ServerWorldDescription } from './worldMetadata';
 import { UsesRegistry } from '../../items/uses/usesRegistry';
 import { OnTickRegistry } from '../../items/on_ticks/onTickRegistry';
 import { DB } from '../database';
+import { DataLogger } from '../../grafana/dataLogger';
 
 export class ServerWorld implements GameWorld {
   private pathFinder: PathFinder;
@@ -83,12 +84,14 @@ export class ServerWorld implements GameWorld {
 
   tick(deltaTime: number) {
     //const startTime = Date.now();
-
     this.runItemTicks();
     this.runMobTicks(deltaTime);
 
     conversationTracker.tick();
     FantasyDate.runTick();
+
+    // log data for Grafana
+    DataLogger.logData();
 
     //const totalTime = Date.now() - startTime;
     //console.log('time to tick', totalTime);

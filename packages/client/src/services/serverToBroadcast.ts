@@ -13,14 +13,21 @@ import {
   PickupItemData,
   PortalData,
   SetDatetimeData,
-  SpeakData
+  SpeakData,
+  ShowPortalMenuData
 } from '@rt-potion/common';
 import { Types } from 'ably';
 import { focused } from '../main';
 import { world, WorldScene } from '../scenes/worldScene';
 import { SpriteItem } from '../sprite/sprite_item';
 import { SpriteMob } from '../sprite/sprite_mob';
-import { addNewItem, addNewMob, gameState, setDate } from '../world/controller';
+import {
+  addNewItem,
+  addNewMob,
+  gameState,
+  setAvailableWorlds,
+  setDate
+} from '../world/controller';
 import { publicCharacterId } from '../worldMetadata';
 import { leaveWorld } from './playerToServer';
 
@@ -168,6 +175,13 @@ export function setupBroadcast(
     setDate(data.date);
   }
 
+  function handleShowPortalMenu(data: ShowPortalMenuData) {
+    if (data.mob_key === publicCharacterId) {
+      setAvailableWorlds(data.worlds);
+      scene.scene.launch('PortalMenuScene');
+    }
+  }
+
   // Subscribe to broadcast and dispatch events using switch
   broadcast_channel.subscribe('tick', (message: Types.Message) => {
     if (gameState !== 'stateInitialized') return;
@@ -216,6 +230,9 @@ export function setupBroadcast(
           break;
         case 'set_datetime':
           handleSetDatetime(broadcastItem.data as SetDatetimeData);
+          break;
+        case 'show_portal_menu':
+          handleShowPortalMenu(broadcastItem.data);
           break;
         default:
           console.error(
