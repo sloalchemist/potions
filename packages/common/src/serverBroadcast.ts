@@ -30,6 +30,14 @@ export type MobChangeData = {
 export type SpeakData = { id: string; message: string };
 export type ItemChangeData = { id: string; property: string; value: number };
 export type SetDatetimeData = { date: FantasyDateI };
+export type WorldMetadata = {
+  id: string;
+  name: string;
+};
+export type ShowPortalMenuData = {
+  mob_key: string;
+  worlds: WorldMetadata[];
+};
 
 export type BroadcastData =
   | { type: 'add_mob'; data: AddMobData }
@@ -54,7 +62,8 @@ export type BroadcastData =
       type: 'item_change';
       data: ItemChangeData;
     }
-  | { type: 'set_datetime'; data: SetDatetimeData };
+  | { type: 'set_datetime'; data: SetDatetimeData }
+  | { type: 'show_portal_menu'; data: ShowPortalMenuData };
 
 export type ServerToBroadcastMessageMap = {
   tick: BroadcastData[];
