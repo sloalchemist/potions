@@ -109,7 +109,7 @@ export function handleCliCommand(input: string) {
         } else {
           console.log(
             `Unknown mob type: ${name}. 
-            Your database likely saved an mob from a version your code currently doesn't support. 
+            Your database likely saved a mob from a version your code currently doesn't support. 
             Try emptying your supabase bucket`
           );
         }
