@@ -15,9 +15,23 @@ describe('Purchase', () => {
     purchase = new Purchase();
 
     // Mock instances instead of calling constructors
-    mockMob = { /* mock Mob methods if needed */ } as any;
-    mockItem = { /* mock Item methods if needed */ } as any;
-    mockStand = { purchaseItem: jest.fn() } as any;
+    mockMob = {} as jest.Mocked<Mob>;
+    mockItem = {} as jest.Mocked<Item>;
+    mockStand = Object.create(
+      Purchasable.prototype
+    ) as jest.Mocked<Purchasable>;
+    Object.assign(mockStand, {
+      item: mockItem,
+      templateType: '',
+      gold: 0,
+      price: 0,
+      items: 0,
+      purchaseItem: jest.fn(),
+      collectGold: jest.fn(),
+      changeGold: jest.fn(),
+      changeItems: jest.fn(),
+      changePrice: jest.fn()
+    });
 
     (Purchasable.fromItem as jest.Mock).mockReturnValue(mockStand);
   });
