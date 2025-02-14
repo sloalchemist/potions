@@ -731,7 +731,6 @@ export class UxScene extends Phaser.Scene {
             interaction.item.attributes;
 
           // Relaunch BrewScene to update the color
-          //let menuOpen = this.scene.isActive('BrewScene');
           if (this.scene.isActive('BrewScene')) {
             this.scene.launch('BrewScene');
           }
@@ -749,7 +748,7 @@ export class UxScene extends Phaser.Scene {
           // Set brew color and number of ingredients based on cauldron attributes
           const brewScene = this.scene.get('BrewScene') as BrewScene;
           brewScene.setBrewColor(
-            parseInt(potionSubtypeAttr?.value.toString() || '0') || 0xffffff
+            parseInt(potionSubtypeAttr?.value.toString() || '10402260') || 0x9eb9d4
           );
           brewScene.setNumIngredients(
             parseInt(ingredientsAttr?.value.toString() || '0') || 0
