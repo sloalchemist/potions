@@ -72,7 +72,7 @@ async function initializeAsync() {
     initializeServerDatabase('data/server-data.db');
 
     const worldSpecificData = await fetchWorldSpecificData("world_specific");
-    const globalData = await fetchWorldSpecificData("global.json");
+    const globalData = await fetchWorldSpecificData("global");
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
       worldSpecificData as Partial<ServerWorldDescription>;

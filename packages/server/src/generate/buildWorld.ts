@@ -30,7 +30,7 @@ async function main() {
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
   const worldSpecificData = await fetchWorldSpecificData("world_specific");
-  const globalData = await fetchWorldSpecificData("global.json");
+  const globalData = await fetchWorldSpecificData("global");
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
     worldSpecificData as Partial<ServerWorldDescription>;
