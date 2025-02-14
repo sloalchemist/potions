@@ -42,7 +42,7 @@ export class MarketStand {
     carriedItem.destroy();
 
     return true;
-}
+  }
 
   setPrice(itemType: string, price: number): void {
     const prices = this.getPrices();
@@ -63,8 +63,8 @@ export class MarketStand {
     inventory[itemType] -= 1;
 
     // 🔥 Store inventory as a JSON string
-    this.item.setAttribute('inventory', JSON.stringify(inventory)); 
-    
+    this.item.setAttribute('inventory', JSON.stringify(inventory));
+
     itemGenerator.createItem({
       type: itemType,
       carriedBy: mob

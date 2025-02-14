@@ -27,7 +27,7 @@ export class SetMarketPrice implements Use {
     // Hardcoded price adjustment logic (for now)
     let newPrice = carriedItem.getAttribute<number>('price') || 10;
     marketStand.setPrice(carriedItem.type, newPrice);
-    
+
     return true;
   }
 }
