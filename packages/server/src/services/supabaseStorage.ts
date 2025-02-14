@@ -3,6 +3,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
 import path from 'path';
 import Database from 'better-sqlite3';
+import { getEnv } from '@rt-potion/common';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -10,13 +11,9 @@ dotenv.config();
 const bucketName = 'serverbucket'; // Name of standard bucket everyone will use
 
 export function initializeSupabase() {
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
-    throw new Error('Cannot run without supabase credentials in env.');
-  }
-
   const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_KEY
+    getEnv('SUPABASE_URL'),
+    getEnv('SUPABASE_SERVICE_KEY')
   );
 
   return supabase;

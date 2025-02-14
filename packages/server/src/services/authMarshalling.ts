@@ -1,24 +1,8 @@
+import { getEnv } from '@rt-potion/common';
 import 'dotenv/config';
 
-// If running in test, don't throw an error
-if (!process.env.AUTH_SERVER_URL && process.env.JEST_WORKER_ID === undefined) {
-  throw new Error(
-    'Cannot run without auth server url configured. Add path to .env'
-  );
-}
-
-// If running in test, don't throw an error
-if (
-  !process.env.AUTH_SERVER_SECRET &&
-  process.env.JEST_WORKER_ID === undefined
-) {
-  throw new Error(
-    'Cannot run without auth server secret configured. Add path to .env'
-  );
-}
-
-// Make this a function so it's reactive to environment changes (e.g., when running tests)
-const getAuthUrl = () => process.env.AUTH_SERVER_URL;
+const authUrl = getEnv('AUTH_SERVER_URL');
+console.log('Auth-Server URL:', authUrl);
 
 export interface PlayerData {
   current_world_id: number;

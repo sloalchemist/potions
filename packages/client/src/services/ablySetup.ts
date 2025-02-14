@@ -3,11 +3,12 @@ import { WorldScene } from '../scenes/worldScene';
 import { publicCharacterId, characterId } from '../worldMetadata';
 import { setupPlayerSubscriptions } from './serverToPlayer';
 import { setupBroadcast } from './serverToBroadcast';
+import { getEnv } from '@rt-potion/common';
 
 export let broadcastChannel: Types.RealtimeChannelCallbacks;
 export let playerChannel: Types.RealtimeChannelCallbacks;
 
-const SERVER_URL = process.env.SERVER_URL;
+const SERVER_URL = getEnv('SERVER_URL');
 let channelsBoundToWorld: boolean = false;
 
 export function setupAbly(): Promise<void> {
