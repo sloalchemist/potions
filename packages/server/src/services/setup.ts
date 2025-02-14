@@ -3,8 +3,6 @@ import { AblyService } from './clientCommunication/ablyService';
 import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
-import globalData from '../../data/global.json';
-import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
@@ -15,6 +13,7 @@ import {
   initializeBucket
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
+import { fetchWorldSpecificData } from '../util/githubPagesUtil';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
@@ -72,6 +71,8 @@ async function initializeAsync() {
     initializeKnowledgeDB('data/knowledge-graph.db', false);
     initializeServerDatabase('data/server-data.db');
 
+    const worldSpecificData = await fetchWorldSpecificData("world_specific");
+    const globalData = await fetchWorldSpecificData("global.json");
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
       worldSpecificData as Partial<ServerWorldDescription>;

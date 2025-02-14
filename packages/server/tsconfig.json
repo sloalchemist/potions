@@ -16,8 +16,6 @@
   "include": [
     "src/**/*.ts",
     "test/**/*.ts",
-    "data/global.json",
-    "data/world_specific.json"
   ],
   "exclude": ["node_modules"]
 }

@@ -2,10 +2,23 @@ import { Mob } from '../mob';
 import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { Community } from '../../community/community';
-import globalData from '../../../data/global.json';
+import { fetchWorldSpecificData } from '../../util/githubPagesUtil';
 
 export class Hunt implements Plan {
   enemy: Mob | null = null;
+  globalData: any = null;
+
+  constructor() {
+    this.loadGlobalData();
+  }
+
+  async loadGlobalData() {
+    try {
+      this.globalData = await fetchWorldSpecificData('global');
+    } catch (error) {
+      console.error('Error loading world data:', error);
+    }
+  }
 
   execute(npc: Mob): boolean {
     if (!this.enemy || !this.enemy.position || !npc.position) return true;
@@ -27,7 +40,7 @@ export class Hunt implements Plan {
 
   utility(npc: Mob): number {
     const { passive_mobs, hungry_mobs, aggressive_mobs } =
-      globalData.mob_aggro_behaviors;
+      this.globalData.mob_aggro_behaviors;
     if (!npc.position || passive_mobs.includes(npc.type)) return -Infinity;
 
     const visionMulitple = npc.action == this.type() ? 2 : 1;
