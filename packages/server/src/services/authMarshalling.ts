@@ -7,7 +7,11 @@ if (!process.env.AUTH_SERVER_URL && process.env.JEST_WORKER_ID === undefined) {
   );
 }
 
-if (!process.env.AUTH_SERVER_SECRET) {
+// If running in test, don't throw an error
+if (
+  !process.env.AUTH_SERVER_SECRET &&
+  process.env.JEST_WORKER_ID === undefined
+) {
   throw new Error(
     'Cannot run without auth server secret configured. Add path to .env'
   );
