@@ -228,12 +228,12 @@ export function getCarriedItemInteractions(
 
 export function getPhysicalInteractions(
   physical: Physical,
-  carried?: Item
+  carried?: Item,
+  ownerId?: string
 ): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
-  const player = world.mobs[publicCharacterId] as SpriteMob;
-  const isOwner = item.isOwnedBy(player.community_id);
+  const isOwner: boolean = ownerId ? item.isOwnedBy(ownerId) : true;
 
   // if the item can be picked up
   if (item.itemType.carryable) {
@@ -371,7 +371,7 @@ function collisionListener(physicals: Item[]) {
   interactableObjects.forEach((physical) => {
     interactions = [
       ...interactions,
-      ...getPhysicalInteractions(physical, carriedItem)
+      ...getPhysicalInteractions(physical, carriedItem, player.community_id)
     ];
   });
   // updates client only if interactions changes
