@@ -6,17 +6,11 @@ import { fetchWorldSpecificData } from '../../util/githubPagesUtil';
 
 export class Hunt implements Plan {
   enemy: Mob | null = null;
-  globalData: any = null;
+  static globalData: any = null;
 
   constructor() {
-    this.loadGlobalData();
-  }
-
-  async loadGlobalData() {
-    try {
-      this.globalData = await fetchWorldSpecificData('global');
-    } catch (error) {
-      console.error('Error loading world data:', error);
+    if (!Hunt.globalData) {
+      throw new Error('Global data not loaded yet!');
     }
   }
 
@@ -40,7 +34,7 @@ export class Hunt implements Plan {
 
   utility(npc: Mob): number {
     const { passive_mobs, hungry_mobs, aggressive_mobs } =
-      this.globalData.mob_aggro_behaviors;
+      Hunt.globalData.mob_aggro_behaviors;
     if (!npc.position || passive_mobs.includes(npc.type)) return -Infinity;
 
     const visionMulitple = npc.action == this.type() ? 2 : 1;
@@ -85,3 +79,7 @@ export class Hunt implements Plan {
     return 'hunt';
   }
 }
+
+(async () => {
+  Hunt.globalData = await fetchWorldSpecificData('global');
+})();
