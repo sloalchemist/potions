@@ -20,6 +20,7 @@
     "ably": "^1.2.21",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
+    "ioredis": "^5.5.0",
     "ollama": "^0.5.13"
   },
   "devDependencies": {
