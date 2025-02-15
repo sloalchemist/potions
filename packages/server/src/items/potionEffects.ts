@@ -24,6 +24,10 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
       const attackDuration = 240;
       mob.changeEffect(attackDelta, attackDuration, 'attack');
       return true;
+    case '#ffd700':
+      console.log('Drinking gold potion');
+      mob.changeMaxHealth(20, true);
+      return true;    
     default:
       // handle cases where potionStr doesn't match any known potion
       console.log('Unknown potion color');
