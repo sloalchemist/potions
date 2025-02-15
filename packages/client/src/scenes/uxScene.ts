@@ -12,7 +12,8 @@ import {
   setFighting,
   setFightOpponentCallback,
   setInteractionCallback,
-  setResponseCallback
+  setResponseCallback,
+  currentInteractions,
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
 import { SlideButton } from '../components/slideButton';
@@ -602,8 +603,9 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
-    this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
+    // this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('stats');
   }
 
@@ -617,7 +619,10 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.setInteractions(currentInteractions);
+    this.scene.stop('BrewScene');
     this.updateTabStyles('items');
+    // this.setInteractions(currentInteractions);
   }
 
   // Method to show the Chat tab
@@ -630,8 +635,9 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
-    this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
+    // this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('chat');
   }
 
@@ -641,14 +647,13 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
     this.fightContainer?.setVisible(true);
-    this.scene.stop('BrewScene');
-    this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
-    this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
+    // this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('fight');
   }
 
@@ -662,8 +667,9 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(true);
     this.backButton?.setVisible(false);
+    this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
-    this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
+    // this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('handbook');
   }
 
@@ -677,6 +683,7 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(true);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(true);
+    this.setInteractions(currentInteractions);
   }
 
   // Update the styles of the tab buttons based on the active tab
@@ -698,6 +705,13 @@ export class UxScene extends Phaser.Scene {
     }
   }
 
+  // Refresh button interactions
+  refreshInteractions() {
+    this.interactButtons.clearButtonOptions();
+    this.setInteractions(currentInteractions);
+  }
+
+
   // Method to set item interactions
   setInteractions(interactions: Interactions[]) {
     this.interactButtons?.clearButtonOptions();
@@ -706,7 +720,11 @@ export class UxScene extends Phaser.Scene {
     const toggleX = 85;
     const toggleY = 60;
 
-    let i = 1; // start counter at 1 to skip the toggle button
+    let i = 0; // Always initialize i to 0
+    const hasCauldron = interactions.some(interaction => interaction.item.type === 'cauldron');
+    if (hasCauldron) {
+        i = 1;  // Set i to 1 if there are cauldron interactions
+    }
     if (this.scene.isActive('BrewScene')) {
       interactions.forEach((interaction) => {
         if (interaction.item.type === 'cauldron') {
@@ -760,12 +778,6 @@ export class UxScene extends Phaser.Scene {
       
     }
     else{
-      if (interactions.some((interaction) => interaction.item.type === 'cauldron')) {
-        i = 1;
-      }
-      else {
-        i = 0;
-      }
       interactions.forEach((interaction) => {
         if (interaction.item.type != 'cauldron') {
           const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
@@ -803,6 +815,7 @@ export class UxScene extends Phaser.Scene {
           // Toggle the Brew menu.
           if (this.scene.isActive('BrewScene')) {
             this.scene.stop('BrewScene');
+            // this.setInteractions(currentInteractions);
           } else {
             this.scene.launch('BrewScene');
           }

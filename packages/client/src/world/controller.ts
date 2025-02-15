@@ -35,6 +35,7 @@ let lastFightOpponents: Mob[] = [];
 let chatting: boolean = false;
 let fighting: boolean = false;
 
+export let currentInteractions: Interactions[] = [];
 export let fantasyDate: FantasyDateI;
 
 let responseCallback: (responses: string[]) => void = () => {};
@@ -371,12 +372,10 @@ function collisionListener(physicals: Item[]) {
     ];
   });
   // updates client only if interactions changes
-  if (
-    !areInteractionsEqual(lastInteractions, interactions) &&
-    interactionCallback
-  ) {
+  if (!areInteractionsEqual(lastInteractions, interactions) && interactionCallback) {
     interactionCallback(interactions);
     lastInteractions = interactions;
+    currentInteractions = interactions;
   }
 }
 
