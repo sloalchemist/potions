@@ -41,4 +41,4 @@ export async function popFromQueue(qName: string) {
 const qName = "prompts";
   
 // Usage
-sendToQueue("hello world", qName);
+// sendToQueue("hello world", qName);
