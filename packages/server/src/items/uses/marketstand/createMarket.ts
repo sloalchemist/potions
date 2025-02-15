@@ -17,6 +17,7 @@ export class CreateMarket implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
+    console.log("Created Market")
     return Create.createItemFrom(item, mob, this.type);
   }
 }

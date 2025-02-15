@@ -814,7 +814,7 @@
         },
         {
             "description": "Get $item_name",
-            "action": "get_item",
+            "action": "get_market",
             "while_carried": false,
             "conditions": [
                 {
