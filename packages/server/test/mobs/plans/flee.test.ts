@@ -5,21 +5,21 @@ import { gameWorld } from '../../../src/services/gameWorld/gameWorld';
 import {
   addVectorAndMagnitude,
   getCoordinatesWithinRadius,
-  normalizedSubtraction,
+  normalizedSubtraction
 } from '@rt-potion/common';
 
 // Mock the utility functions from @rt-potion/common
 jest.mock('@rt-potion/common', () => ({
   addVectorAndMagnitude: jest.fn(),
   getCoordinatesWithinRadius: jest.fn(),
-  normalizedSubtraction: jest.fn(),
+  normalizedSubtraction: jest.fn()
 }));
 
 // Mock gameWorld.spawnCoord
 jest.mock('../../../src/services/gameWorld/gameWorld', () => ({
   gameWorld: {
-    spawnCoord: jest.fn(),
-  },
+    spawnCoord: jest.fn()
+  }
 }));
 
 describe('Flee Plan', () => {
@@ -42,10 +42,10 @@ describe('Flee Plan', () => {
       health: 100,
       personality: {
         traits: {
-          [PersonalityTraits.Bravery]: 20,
-        },
+          [PersonalityTraits.Bravery]: 20
+        }
       },
-      action: 'flee',
+      action: 'flee'
     } as any;
 
     // Create a fresh mock enemy object.
@@ -53,11 +53,13 @@ describe('Flee Plan', () => {
       name: 'Enemy1',
       position: { x: 0, y: 0 },
       health: 50,
-      type: 'monster', // Set at initialization.
+      type: 'monster' // Set at initialization.
     } as any;
 
     // Mock Mob.getMob to return mockEnemy when requested.
-    Mob.getMob = jest.fn((id: string) => (id === 'enemy1' ? mockEnemy : undefined));
+    Mob.getMob = jest.fn((id: string) =>
+      id === 'enemy1' ? mockEnemy : undefined
+    );
 
     // Reset mocks for the imported functions.
     (normalizedSubtraction as jest.Mock).mockReset();
@@ -104,7 +106,10 @@ describe('Flee Plan', () => {
     const fleeCoord = { x: 16, y: 16 };
     (addVectorAndMagnitude as jest.Mock).mockReturnValue(fleeCoord);
     // Simulate getCoordinatesWithinRadius returns an array of coordinates.
-    const possibleCoords = [{ x: 15, y: 15 }, { x: 16, y: 16 }];
+    const possibleCoords = [
+      { x: 15, y: 15 },
+      { x: 16, y: 16 }
+    ];
     (getCoordinatesWithinRadius as jest.Mock).mockReturnValue(possibleCoords);
 
     // Simulate npc.setMoveTarget returning true for the coordinate {16,16}.
@@ -137,12 +142,12 @@ describe('Flee Plan', () => {
     expect(util).toBe(-Infinity);
   });
 
-//   test('utility returns -Infinity if no enemy is found', () => {
-//     // Simulate findClosestEnemyID returns null.
-//     mockNpc.findClosestEnemyID = jest.fn((): string | undefined => null);
-//     const util = flee.utility(mockNpc);
-//     expect(util).toBe(-Infinity);
-//   });
+  //   test('utility returns -Infinity if no enemy is found', () => {
+  //     // Simulate findClosestEnemyID returns null.
+  //     mockNpc.findClosestEnemyID = jest.fn((): string | undefined => null);
+  //     const util = flee.utility(mockNpc);
+  //     expect(util).toBe(-Infinity);
+  //   });
 
   test('utility returns computed value when enemy is found', () => {
     // Ensure findClosestEnemyID returns enemy id.

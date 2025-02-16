@@ -4,7 +4,7 @@ import { PersonalityTraits } from '../../../src/mobs/traits/personality';
 import { logistic } from '../../../src/util/mathUtil';
 
 jest.mock('../../../src/util/mathUtil', () => ({
-  logistic: jest.fn(),
+  logistic: jest.fn()
 }));
 
 describe('Heal Plan', () => {
@@ -18,9 +18,9 @@ describe('Heal Plan', () => {
       health: 50,
       personality: {
         traits: {
-          [PersonalityTraits.Bravery]: 30,
-        },
-      },
+          [PersonalityTraits.Bravery]: 30
+        }
+      }
     } as any;
     (logistic as jest.Mock).mockReset();
   });

@@ -1,20 +1,19 @@
 import { Sleep } from '../../../src/mobs/plans/sleep';
 import { Mob } from '../../../src/mobs/mob';
-import { HOURS_IN_DAY } from '@rt-potion/common';
 import { logistic } from '../../../src/util/mathUtil';
 import { gameWorld } from '../../../src/services/gameWorld/gameWorld';
 import { PersonalityTraits } from '../../../src/mobs/traits/personality';
 
 jest.mock('../../../src/util/mathUtil', () => ({
-  logistic: jest.fn(),
+  logistic: jest.fn()
 }));
 
 jest.mock('../../../src/services/gameWorld/gameWorld', () => ({
   gameWorld: {
     getPortal: jest.fn(),
     currentDate: jest.fn(),
-    spawnCoord: jest.fn(),
-  },
+    spawnCoord: jest.fn()
+  }
 }));
 
 describe('Sleep Plan', () => {
@@ -28,17 +27,15 @@ describe('Sleep Plan', () => {
     mockNpc = {
       needs: {
         changeNeed: jest.fn(),
-        getNeed: jest.fn(),
+        getNeed: jest.fn()
       },
       setMoveTarget: jest.fn(),
       moveToOrExecute: jest.fn(),
       getHouse: jest.fn(),
       changeHealth: jest.fn(),
       position: { x: 10, y: 10 },
-      personality: {
-        traits: {},
-      },
-    } as any;
+      personality: { traits: {} }
+    } as unknown as Mob; // Use Partial to avoid missing required fields
 
     // Reset gameWorld and logistic mocks.
     (gameWorld.getPortal as jest.Mock).mockReset();
@@ -51,12 +48,12 @@ describe('Sleep Plan', () => {
   test('execute uses house if available', () => {
     const mockHouse = {
       id: 'house1',
-      center: jest.fn(() => ({ x: 5, y: 5 })),
+      center: jest.fn(() => ({ x: 5, y: 5 }))
     };
     (mockNpc.getHouse as jest.Mock).mockReturnValue(mockHouse);
     // Set global_tick so that the energy/health block is not triggered.
     (gameWorld.currentDate as jest.Mock).mockReturnValue({ global_tick: 1 });
-    
+
     const result = sleepPlan.execute(mockNpc);
     expect(mockHouse.center).toHaveBeenCalled();
     expect(mockNpc.setMoveTarget).toHaveBeenCalledWith({ x: 5, y: 5 });
@@ -67,15 +64,21 @@ describe('Sleep Plan', () => {
     (mockNpc.getHouse as jest.Mock).mockReturnValue(null);
     const fakePortal = {
       position: { x: 20, y: 20 },
-      interact: jest.fn(),
+      interact: jest.fn()
     };
     (gameWorld.getPortal as jest.Mock).mockReturnValue(fakePortal);
     // Simulate npc.moveToOrExecute calls its callback.
-    (mockNpc.moveToOrExecute as jest.Mock).mockImplementation((pos, num, callback) => callback());
+    (mockNpc.moveToOrExecute as jest.Mock).mockImplementation(
+      (pos, num, callback) => callback()
+    );
     (gameWorld.currentDate as jest.Mock).mockReturnValue({ global_tick: 1 });
 
     const result = sleepPlan.execute(mockNpc);
-    expect(mockNpc.moveToOrExecute).toHaveBeenCalledWith({ x: 20, y: 20 }, 1, expect.any(Function));
+    expect(mockNpc.moveToOrExecute).toHaveBeenCalledWith(
+      { x: 20, y: 20 },
+      1,
+      expect.any(Function)
+    );
     expect(fakePortal.interact).toHaveBeenCalledWith(mockNpc, 'enter');
     expect(result).toBe(false);
   });
@@ -84,18 +87,20 @@ describe('Sleep Plan', () => {
     (mockNpc.getHouse as jest.Mock).mockReturnValue(null);
     const fakePortal = {
       position: undefined,
-      interact: jest.fn(),
+      interact: jest.fn()
     };
     (gameWorld.getPortal as jest.Mock).mockReturnValue(fakePortal);
     (gameWorld.currentDate as jest.Mock).mockReturnValue({ global_tick: 1 });
-    expect(() => sleepPlan.execute(mockNpc)).toThrow('No portal position found');
+    expect(() => sleepPlan.execute(mockNpc)).toThrow(
+      'No portal position found'
+    );
   });
 
   test('execute triggers energy/health changes when global_tick condition met and returns true if max_energy >= 100', () => {
     // Simulate global_tick condition: divisible by 48.
     (gameWorld.currentDate as jest.Mock).mockReturnValue({ global_tick: 48 });
     const mockHouse = {
-      center: jest.fn(() => ({ x: 5, y: 5 })),
+      center: jest.fn(() => ({ x: 5, y: 5 }))
     };
     (mockNpc.getHouse as jest.Mock).mockReturnValue(mockHouse);
     (mockNpc.needs.getNeed as jest.Mock).mockImplementation((need: string) => {
@@ -113,7 +118,7 @@ describe('Sleep Plan', () => {
   test('execute returns false when global_tick condition met but max_energy < 100', () => {
     (gameWorld.currentDate as jest.Mock).mockReturnValue({ global_tick: 48 });
     const mockHouse = {
-      center: jest.fn(() => ({ x: 5, y: 5 })),
+      center: jest.fn(() => ({ x: 5, y: 5 }))
     };
     (mockNpc.getHouse as jest.Mock).mockReturnValue(mockHouse);
     (mockNpc.needs.getNeed as jest.Mock).mockImplementation((need: string) => {
@@ -127,10 +132,12 @@ describe('Sleep Plan', () => {
 
   // --- Tests for utility() ---
 
-
   test('utility computes sleep utility correctly', () => {
     // Set current hour to 10.
-    (gameWorld.currentDate as jest.Mock).mockReturnValue({ hour: 10, global_tick: 1 });
+    (gameWorld.currentDate as jest.Mock).mockReturnValue({
+      hour: 10,
+      global_tick: 1
+    });
     // Calculate: distanceFromMidnight = (HOURS_IN_DAY/2) - |(HOURS_IN_DAY/2 - 10)|
     // For HOURS_IN_DAY=24, that is 12 - |12-10| = 12 - 2 = 10.
     // Let logistic return 0.7.

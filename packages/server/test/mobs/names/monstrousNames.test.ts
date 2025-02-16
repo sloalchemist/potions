@@ -16,7 +16,6 @@ describe('MonstrousNames', () => {
 
     it('should generate a name with a prefix, optional middle, and suffix', () => {
       const name = monstrousNames.generateName();
-      const prefix = name.slice(0, 4); // Prefix length based on your data
       const suffix = name.slice(-3); // Suffix length based on your data
 
       expect(monstrousNames['monstrousSuffixes']).toContain(suffix); // Check suffix
@@ -27,14 +26,15 @@ describe('MonstrousNames', () => {
     it('should generate a name with the correct syllable count', () => {
       const minSyllables = 3;
       const maxSyllables = 5;
-      const name = monstrousNames.generateRandomSyllableName(minSyllables, maxSyllables);
+      const name = monstrousNames.generateRandomSyllableName(
+        minSyllables,
+        maxSyllables
+      );
       const syllableCount = (name.match(/[aeiou]/g) || []).length;
 
       expect(syllableCount).toBeGreaterThanOrEqual(minSyllables);
       expect(syllableCount).toBeLessThanOrEqual(maxSyllables);
     });
-
-
   });
 
   // You can also test helper methods indirectly by testing the public ones.

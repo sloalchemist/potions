@@ -7,12 +7,12 @@ import { Item } from '../../../src/items/item';
 
 jest.mock('../../../src/items/container', () => ({
   Container: {
-    fromItem: jest.fn(),
-  },
+    fromItem: jest.fn()
+  }
 }));
 
 jest.mock('../../../src/util/mathUtil', () => ({
-  logistic: jest.fn(),
+  logistic: jest.fn()
 }));
 
 describe('Gather', () => {
@@ -31,7 +31,9 @@ describe('Gather', () => {
 
   test('constructor should throw error if basket type is not "basket"', () => {
     const badBasket = { type: 'not_basket' } as Item;
-    expect(() => new Gather(itemType, bonus, badBasket)).toThrow('Gather action requires a basket');
+    expect(() => new Gather(itemType, bonus, badBasket)).toThrow(
+      'Gather action requires a basket'
+    );
   });
 
   test('constructor should create an instance correctly', () => {
@@ -47,9 +49,9 @@ describe('Gather', () => {
     const dummyMob = {
       personality: {
         traits: {
-          [PersonalityTraits.Industriousness]: 2,
-        },
-      },
+          [PersonalityTraits.Industriousness]: 2
+        }
+      }
     } as Mob;
     expect(() => gather.benefit(dummyMob)).toThrow('Basket has no container');
   });
@@ -59,7 +61,7 @@ describe('Gather', () => {
     // Create a mock container with specific inventory and capacity values
     const containerMock = {
       getInventory: jest.fn(() => 2), // e.g., 2 items in inventory
-      getCapacity: jest.fn(() => 10),   // capacity is 10
+      getCapacity: jest.fn(() => 10) // capacity is 10
     };
     (Container.fromItem as jest.Mock).mockReturnValue(containerMock);
     // For percentFull = 2/10 = 0.2, let logistic return 0.3 so that:
@@ -69,9 +71,9 @@ describe('Gather', () => {
     const dummyMob = {
       personality: {
         traits: {
-          [PersonalityTraits.Industriousness]: 2, // For example, 2
-        },
-      },
+          [PersonalityTraits.Industriousness]: 2 // For example, 2
+        }
+      }
     } as Mob;
     // Expected utilityLevel = 0.7 * bonus * 2 = 0.7 * 10 * 2 = 14
     expect(gather.benefit(dummyMob)).toBeCloseTo(14);

@@ -39,7 +39,7 @@ describe('Carrying Item Tests', () => {
       carryablePotion!.pickup(fighterMob!);
       expect(fighterMob!.carrying).toBeDefined(); // Fighter should have the potion
     });
-  
+
     test('Should throw error when trying to drop item with no position', () => {
       const position1: Coord = { x: 0, y: 0 };
 
@@ -51,7 +51,10 @@ describe('Carrying Item Tests', () => {
       }
 
       // Here we simulate the "no position" by setting the position to undefined through a method or check
-      Object.defineProperty(fighterMob, 'position', { value: undefined, writable: false });
+      Object.defineProperty(fighterMob, 'position', {
+        value: undefined,
+        writable: false
+      });
 
       // Create potion
       itemGenerator.createItem({ type: 'potion', position: position1 });
@@ -68,7 +71,9 @@ describe('Carrying Item Tests', () => {
       }
 
       // Mob tries to drop item without a position
-      expect(() => carryablePotion.dropAtFeet(fighterMob)).toThrowError('Mob has no position');
+      expect(() => carryablePotion.dropAtFeet(fighterMob)).toThrowError(
+        'Mob has no position'
+      );
     });
   });
 });

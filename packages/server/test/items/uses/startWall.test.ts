@@ -6,8 +6,8 @@ import { itemGenerator } from '../../../src/items/itemGenerator';
 // Ensure that the path matches the correct location of itemGenerator
 jest.mock('../../../src/items/itemGenerator', () => ({
   itemGenerator: {
-    createItem: jest.fn(),
-  },
+    createItem: jest.fn()
+  }
 }));
 
 describe('StartWall', () => {
@@ -21,11 +21,11 @@ describe('StartWall', () => {
     startWall = new StartWall();
 
     mockMob = {
-      position: { x: 10, y: 20 },
+      position: { x: 10, y: 20 }
     } as any;
 
     mockItem = {
-      destroy: jest.fn(),
+      destroy: jest.fn()
     } as any;
   });
 
@@ -47,7 +47,7 @@ describe('StartWall', () => {
     // Check that createItem was called with the correct arguments
     expect(itemGenerator.createItem).toHaveBeenCalledWith({
       type: 'partial-wall',
-      position: mockMob.position,
+      position: mockMob.position
     });
   });
 

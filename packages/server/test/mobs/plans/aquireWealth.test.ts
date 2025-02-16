@@ -1,14 +1,13 @@
 import { AcquireWealth } from '../../../src/mobs/plans/acquireWealth';
 import { Mob } from '../../../src/mobs/mob';
-import { FindItem } from '../../../src/mobs/plans/means/findItem';
 
 // Mocking FindItem class
 jest.mock('../../../src/mobs/plans/means/findItem', () => {
   return {
     FindItem: jest.fn().mockImplementation(() => ({
       itemTypes: ['gold'],
-      action: 'pickup',
-    })),
+      action: 'pickup'
+    }))
   };
 });
 
@@ -18,7 +17,7 @@ describe('AcquireWealth', () => {
 
   beforeEach(() => {
     acquireWealth = new AcquireWealth();
-    mockMob = {} as any; // Mock any Mob properties needed
+    mockMob = {} as jest.Mocked<Mob>; // Corrected type for mockMob
   });
 
   test('should have the correct description', () => {
@@ -40,6 +39,4 @@ describe('AcquireWealth', () => {
     const benefit = acquireWealth.benefit(mockMob);
     expect(benefit).toBe(100);
   });
-
-
 });
