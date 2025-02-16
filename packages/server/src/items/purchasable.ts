@@ -62,24 +62,27 @@ export class Purchasable {
     const favor = Community.getFavor(mob.community_id, ownedBy);
 
     // Base price settings
-    const baseMaxPrice = 20;  
+    const baseMaxPrice = 20;
     const favorThreshold = 50; // Neutral favor level
-    const minPriceCap = 10;    // Minimum price they will tolerate
-    const maxPriceCap = 100;   // Maximum price limit
+    const minPriceCap = 10; // Minimum price they will tolerate
+    const maxPriceCap = 100; // Maximum price limit
 
     // Adjust max price dynamically based on favorability
     let effectiveMaxPrice;
 
     if (favor >= favorThreshold) {
-        // More favor = Higher price tolerance (scales at 0.5 per point above 50)
-        effectiveMaxPrice = baseMaxPrice + (favor - favorThreshold) * 0.5;
+      // More favor = Higher price tolerance (scales at 0.5 per point above 50)
+      effectiveMaxPrice = baseMaxPrice + (favor - favorThreshold) * 0.5;
     } else {
-        // Less favor = Lower price tolerance (scales at 0.2 per point below 50)
-        effectiveMaxPrice = baseMaxPrice - (favorThreshold - favor) * 0.2;
+      // Less favor = Lower price tolerance (scales at 0.2 per point below 50)
+      effectiveMaxPrice = baseMaxPrice - (favorThreshold - favor) * 0.2;
     }
 
     // Enforce minimum and maximum caps
-    effectiveMaxPrice = Math.max(minPriceCap, Math.min(effectiveMaxPrice, maxPriceCap));
+    effectiveMaxPrice = Math.max(
+      minPriceCap,
+      Math.min(effectiveMaxPrice, maxPriceCap)
+    );
 
     // If the price exceeds the max cap, favorability doesn't matter—reject outright
     if (this.price > maxPriceCap) {

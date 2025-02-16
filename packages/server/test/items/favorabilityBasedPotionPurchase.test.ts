@@ -44,7 +44,15 @@ describe('Favorability-Based Purchase Tests', () => {
     expect(potionStand).toBeDefined();
 
     // Create a fighter with gold
-    mobFactory.makeMob('fighter', playerPosition, 'TestID', 'TestFighter', undefined, undefined, 100);
+    mobFactory.makeMob(
+      'fighter',
+      playerPosition,
+      'TestID',
+      'TestFighter',
+      undefined,
+      undefined,
+      100
+    );
     const fighter = Mob.getMob('TestID');
     expect(fighter).toBeDefined();
     expect(fighter!.carrying).toBeUndefined();
@@ -88,7 +96,15 @@ describe('Favorability-Based Purchase Tests', () => {
     expect(potionStand).toBeDefined();
 
     // Create a fighter
-    mobFactory.makeMob('fighter', playerPosition, 'TestID', 'TestFighter', undefined, undefined, 100);
+    mobFactory.makeMob(
+      'fighter',
+      playerPosition,
+      'TestID',
+      'TestFighter',
+      undefined,
+      undefined,
+      100
+    );
     const fighter = Mob.getMob('TestID');
     expect(fighter).toBeDefined();
     expect(fighter!.carrying).toBeUndefined();
@@ -132,7 +148,15 @@ describe('Favorability-Based Purchase Tests', () => {
     expect(potionStand).toBeDefined();
 
     // Create a fighter
-    mobFactory.makeMob('fighter', playerPosition, 'TestID2', 'TestFighter', undefined, undefined, 100);
+    mobFactory.makeMob(
+      'fighter',
+      playerPosition,
+      'TestID2',
+      'TestFighter',
+      undefined,
+      undefined,
+      100
+    );
     const fighter = Mob.getMob('TestID2');
     expect(fighter).toBeDefined();
     expect(fighter!.carrying).toBeUndefined();
@@ -176,7 +200,15 @@ describe('Favorability-Based Purchase Tests', () => {
     expect(potionStand).toBeDefined();
 
     // Create a fighter
-    mobFactory.makeMob('fighter', playerPosition, 'TestID2', 'TestFighter', undefined, undefined, 100);
+    mobFactory.makeMob(
+      'fighter',
+      playerPosition,
+      'TestID2',
+      'TestFighter',
+      undefined,
+      undefined,
+      100
+    );
     const fighter = Mob.getMob('TestID2');
     expect(fighter).toBeDefined();
     expect(fighter!.carrying).toBeUndefined();
