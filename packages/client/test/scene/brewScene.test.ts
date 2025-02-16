@@ -172,7 +172,6 @@ import { UxScene } from '../../src/scenes/uxScene';
 import { Item } from '../../src/world/item';
 import { World } from '../../src/world/world';
 import { Interactions } from '../../src/world/controller';
-import exp from 'constants';
 
 // Start of test suite
 const world = new World();
@@ -208,7 +207,10 @@ function patchUxScene(uxScene: UxScene) {
     isActive: jest.fn().mockReturnValue(false),
     launch: jest.fn(),
     stop: jest.fn(),
-    get: jest.fn(() => ({ setBrewColor: jest.fn(), setNumIngredients: jest.fn() })) as any
+    get: jest.fn(() => ({
+      setBrewColor: jest.fn(),
+      setNumIngredients: jest.fn()
+    })) as any
   } as any;
 }
 
@@ -362,7 +364,7 @@ describe('Buttons shown when BrewScene is and is not active', () => {
     // Confirm the texture of the first button is 'cooked'
     const blueberryButton = uxScene.interactButtons.buttons[0];
     expect(blueberryButton.texture).toEqual('cooked');
-    
+
     // Confirm the texture of the second button is 'Toggle Menu'
     const toggleButton = uxScene.interactButtons.buttons[1];
     expect(toggleButton.texture).toEqual('Toggle Menu');
@@ -425,7 +427,7 @@ describe('Buttons shown when BrewScene is and is not active', () => {
     // Confirm the texture of the first button is 'omnom'
     const blueberryButton = uxScene.interactButtons.buttons[0];
     expect(blueberryButton.texture).toEqual('omnom');
-    
+
     // Confirm the texture of the second button is 'Toggle Menu'
     const toggleButton = uxScene.interactButtons.buttons[1];
     expect(toggleButton.texture).toEqual('Toggle Menu');

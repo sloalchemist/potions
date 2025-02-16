@@ -824,7 +824,9 @@ export class UxScene extends Phaser.Scene {
           const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
 
           const interactionAction =
-          interaction.item.type === 'gold' ? 'pickupGold' : interaction.action;
+            interaction.item.type === 'gold'
+              ? 'pickupGold'
+              : interaction.action;
           const button = new Button(
             this,
             x,
@@ -836,12 +838,12 @@ export class UxScene extends Phaser.Scene {
                 interaction.item.key,
                 interaction.action,
                 interaction.give_to ? interaction.give_to : null
-                ),
-                undefined,
-                undefined,
-                this.cache.audio.has(interactionAction)
-                  ? interactionAction
-                  : undefined
+              ),
+            undefined,
+            undefined,
+            this.cache.audio.has(interactionAction)
+              ? interactionAction
+              : undefined
           );
           this.interactButtons.push(button);
           this.itemsContainer?.add(button);
