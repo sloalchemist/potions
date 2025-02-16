@@ -212,6 +212,13 @@ function patchUxScene(uxScene: UxScene) {
       setNumIngredients: jest.fn()
     })) as any
   } as any;
+
+  // Add a fake cache property with an audio object.
+  uxScene.cache = {
+    audio: {
+      has: jest.fn((key: string) => true)
+    }
+  } as any;
 }
 
 describe('BrewScene actions based on state', () => {
