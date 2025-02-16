@@ -22,11 +22,26 @@ describe('StartWall', () => {
 
     mockMob = {
       position: { x: 10, y: 20 }
-    } as any;
+    } as jest.Mocked<Mob>;
 
+    // Create the mock object and cast it to unknown then to jest.Mocked<Item>
     mockItem = {
-      destroy: jest.fn()
-    } as any;
+      id: 'item1',
+      position: { x: 0, y: 0 },
+      // We cast 'wall' to the expected type using a double cast since ItemType isn't exported.
+      itemType: 'wall' as unknown as Item['itemType'],
+      type: 'building',
+      drops_item: 'partial-wall',
+      owned_by: 'mob1',
+      destroy: jest.fn(),
+      validateOwnership: jest.fn(),
+      setAttribute: jest.fn(),
+      changeAttributeBy: jest.fn(),
+      getAttribute: jest.fn(),
+      hasAttribute: jest.fn(),
+      tick: jest.fn(),
+      interact: jest.fn()
+    } as unknown as jest.Mocked<Item>;
   });
 
   test('should have the correct key', () => {

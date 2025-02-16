@@ -22,6 +22,19 @@ jest.mock('../../../src/services/gameWorld/gameWorld', () => ({
   }
 }));
 
+// Define a complete set of personality traits.
+// Adjust these keys and default values to match your actual PersonalityTraits definition.
+const completePersonalityTraits: Record<PersonalityTraits, number> = {
+  [PersonalityTraits.Bravery]: 20,
+  [PersonalityTraits.Stubbornness]: 0,
+  [PersonalityTraits.Aggression]: 0,
+  [PersonalityTraits.Industriousness]: 0,
+  [PersonalityTraits.Adventurousness]: 0,
+  [PersonalityTraits.Gluttony]: 0, // Add gluttony
+  [PersonalityTraits.Sleepy]: 0, // Add sleepy
+  [PersonalityTraits.Extroversion]: 0
+};
+
 describe('Flee Plan', () => {
   let flee: Flee;
   let mockNpc: Mob;
@@ -30,8 +43,7 @@ describe('Flee Plan', () => {
   beforeEach(() => {
     flee = new Flee();
 
-    // Create a fresh mock NPC object.
-    // We use an object literal (and cast as any) so that we can later create modified copies.
+    // Create a fresh mock NPC object with complete personality traits.
     mockNpc = {
       name: 'NPC1',
       position: { x: 10, y: 10 },
@@ -41,20 +53,18 @@ describe('Flee Plan', () => {
       visionDistance: 5,
       health: 100,
       personality: {
-        traits: {
-          [PersonalityTraits.Bravery]: 20
-        }
+        traits: completePersonalityTraits
       },
       action: 'flee'
-    } as any;
+    } as Partial<Mob> as Mob;
 
     // Create a fresh mock enemy object.
     mockEnemy = {
       name: 'Enemy1',
       position: { x: 0, y: 0 },
       health: 50,
-      type: 'monster' // Set at initialization.
-    } as any;
+      type: 'monster'
+    } as Partial<Mob> as Mob;
 
     // Mock Mob.getMob to return mockEnemy when requested.
     Mob.getMob = jest.fn((id: string) =>
@@ -69,25 +79,27 @@ describe('Flee Plan', () => {
   });
 
   // --- Tests for execute() ---
-
   test('execute returns true if enemy or positions are missing', () => {
     // Case 1: no enemy defined
     flee.enemy = undefined;
     expect(flee.execute(mockNpc)).toBe(true);
 
     // Case 2: enemy has no position.
-    flee.enemy = { ...mockEnemy, position: undefined } as any;
+    flee.enemy = { ...mockEnemy, position: undefined } as Partial<Mob> as Mob;
     expect(flee.execute(mockNpc)).toBe(true);
 
     // Case 3: NPC has no position.
-    const npcNoPos = { ...mockNpc, position: undefined } as any;
+    const npcNoPos = { ...mockNpc, position: undefined } as Partial<Mob> as Mob;
     flee.enemy = mockEnemy;
     expect(flee.execute(npcNoPos)).toBe(true);
   });
 
   test('execute moves NPC to spawn coord if at same position as enemy', () => {
     // Set enemy's position equal to NPC's position.
-    flee.enemy = { ...mockEnemy, position: { ...mockNpc.position } } as any;
+    flee.enemy = {
+      ...mockEnemy,
+      position: { ...mockNpc.position }
+    } as Partial<Mob> as Mob;
     const fakeSpawn = { x: 20, y: 20 };
     (gameWorld.spawnCoord as jest.Mock).mockReturnValue(fakeSpawn);
 
@@ -113,9 +125,11 @@ describe('Flee Plan', () => {
     (getCoordinatesWithinRadius as jest.Mock).mockReturnValue(possibleCoords);
 
     // Simulate npc.setMoveTarget returning true for the coordinate {16,16}.
-    (mockNpc.setMoveTarget as jest.Mock).mockImplementation((coord: any) => {
-      return coord.x === 16 && coord.y === 16;
-    });
+    (mockNpc.setMoveTarget as jest.Mock).mockImplementation(
+      (coord: { x: number; y: number }) => {
+        return coord.x === 16 && coord.y === 16;
+      }
+    );
 
     const result = flee.execute(mockNpc);
     expect(result).toBe(false);
@@ -135,39 +149,45 @@ describe('Flee Plan', () => {
   });
 
   // --- Tests for utility() ---
-
   test('utility returns -Infinity if NPC position is missing', () => {
-    const npcNoPos = { ...mockNpc, position: undefined } as any;
+    const npcNoPos = { ...mockNpc, position: undefined } as Partial<Mob> as Mob;
     const util = flee.utility(npcNoPos);
     expect(util).toBe(-Infinity);
   });
 
-  //   test('utility returns -Infinity if no enemy is found', () => {
-  //     // Simulate findClosestEnemyID returns null.
-  //     mockNpc.findClosestEnemyID = jest.fn((): string | undefined => null);
-  //     const util = flee.utility(mockNpc);
-  //     expect(util).toBe(-Infinity);
-  //   });
+  // test('utility returns -Infinity if no enemy is found', () => {
+  //   // Simulate findClosestEnemyID returns null.
+  //   mockNpc.findClosestEnemyID = jest.fn((): string | undefined => null);
+  //   const util = flee.utility(mockNpc);
+  //   expect(util).toBe(-Infinity);
+  // });
 
   test('utility returns computed value when enemy is found', () => {
     // Ensure findClosestEnemyID returns enemy id.
     mockNpc.findClosestEnemyID = jest.fn(() => 'enemy1');
     // For visionMultiple: if npc.action equals flee.type() ('flee'), visionMultiple is 2.
-    const npcWithAction = { ...mockNpc, action: 'flee' } as any;
-    // Set Bravery trait to 30, npc.health = 100, enemy.health = 50.
-    npcWithAction.personality.traits[PersonalityTraits.Bravery] = 30;
-    const npcWithHealth = { ...npcWithAction, health: 100 } as any;
-    //mockEnemy.health = 50;
+    const npcWithAction = { ...mockNpc, action: 'flee' } as Partial<Mob> as Mob;
+    // Set personality traits with bravery overridden to 30.
+    npcWithAction.personality.traits = {
+      ...completePersonalityTraits,
+      [PersonalityTraits.Bravery]: 30
+    };
+    const npcWithHealth = {
+      ...npcWithAction,
+      health: 100
+    } as Partial<Mob> as Mob;
     const util = flee.utility(npcWithHealth);
     const expectedUtility = (100 - 30) * (50 / 100); // 70 * 0.5 = 35
     expect(util).toBe(expectedUtility);
   });
 
   // --- Tests for description, reaction, type ---
-
   test('description returns correct string', () => {
     // To test description, set enemy with type.
-    const enemyWithType = { ...mockEnemy, type: 'monster' } as any;
+    const enemyWithType = {
+      ...mockEnemy,
+      type: 'monster'
+    } as Partial<Mob> as Mob;
     flee.enemy = enemyWithType;
     const desc = flee.description();
     expect(desc).toContain(enemyWithType.name);

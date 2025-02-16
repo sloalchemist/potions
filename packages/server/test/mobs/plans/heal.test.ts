@@ -14,6 +14,7 @@ describe('Heal Plan', () => {
   beforeEach(() => {
     heal = new Heal();
     // Create a mock NPC with health below 100 and a Bravery trait value.
+    // We're casting a Partial<Mob> to Mob.
     mockNpc = {
       health: 50,
       personality: {
@@ -21,7 +22,7 @@ describe('Heal Plan', () => {
           [PersonalityTraits.Bravery]: 30
         }
       }
-    } as any;
+    } as Partial<Mob> as Mob;
     (logistic as jest.Mock).mockReset();
   });
 
