@@ -34,6 +34,7 @@ let needsAnimationsLoaded: boolean = true;
 
 export const TILE_SIZE = 32;
 export const RESPAWN_DELAY = 3000;
+const worldID = 'fire-world';
 
 export class WorldScene extends Phaser.Scene {
   worldLayer!: Phaser.Tilemaps.TilemapLayer;
@@ -64,12 +65,12 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', 'static/background.png');
+    this.load.image('background', `static/${worldID}_background.png`);
 
     this.load.atlas(
       'global_atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      `static/${worldID}_assets.png`,
+      `static/${worldID}_atlas.json`
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -79,7 +80,7 @@ export class WorldScene extends Phaser.Scene {
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
     this.load.json('global_data', 'static/global.json');
-    this.load.json('world_specific_data', 'static/world_specific.json');
+    this.load.json('world_specific_data', `static/${worldID}_specific.json`);
   }
 
   loadAnimations(

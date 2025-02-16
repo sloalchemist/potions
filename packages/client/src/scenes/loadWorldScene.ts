@@ -25,6 +25,8 @@ export const nameButtonHoverStyle = {
   backgroundColor: '#138496' // Darker teal
 };
 
+const worldID = 'fire-world';
+
 export class LoadWorldScene extends Phaser.Scene {
   constructor() {
     super({ key: 'LoadWorldScene' });
@@ -48,8 +50,8 @@ export class LoadWorldScene extends Phaser.Scene {
     this.load.image('title', 'static/title.png');
     this.load.atlas(
       'global-atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      `static/${worldID}_assets.png`,
+      `static/${worldID}_atlas.json`
     );
   }
 
