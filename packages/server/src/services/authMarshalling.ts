@@ -17,8 +17,8 @@ if (
   );
 }
 
-const authUrl = process.env.AUTH_SERVER_URL;
-console.log('Auth-Server URL:', authUrl);
+// Make this a function so it's reactive to environment changes (e.g., when running tests)
+const getAuthUrl = () => process.env.AUTH_SERVER_URL;
 
 export interface PlayerData {
   current_world_id: number;
@@ -39,7 +39,7 @@ export async function updateCharacterData(
   id: number,
   playerData: PlayerData
 ): Promise<ApiResponse> {
-  const url = new URL(`/character/${id}`, authUrl);
+  const url = new URL(`/character/${id}`, getAuthUrl());
   try {
     const response = await fetch(url, {
       method: 'PUT', // Using PUT for updating existing resources
@@ -71,7 +71,7 @@ type GetWorldsResponse = {
 }[];
 
 export async function getWorlds(): Promise<GetWorldsResponse> {
-  const url = new URL('/worlds', authUrl);
+  const url = new URL('/worlds', getAuthUrl());
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${process.env.AUTH_SERVER_SECRET}` // Using secret from environment variable
