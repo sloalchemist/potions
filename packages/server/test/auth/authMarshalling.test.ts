@@ -1,4 +1,8 @@
-import { updateCharacterData, getWorlds, PlayerData } from '../../src/services/authMarshalling';
+import {
+  updateCharacterData,
+  getWorlds,
+  PlayerData
+} from '../../src/services/authMarshalling';
 
 // Mock fetch globally
 global.fetch = jest.fn();
@@ -31,7 +35,8 @@ describe('Auth Marshalling Service', () => {
     it('should include authorization header in updateCharacterData', async () => {
       (fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve({ message: 'success', data: [mockPlayerData] })
+        json: () =>
+          Promise.resolve({ message: 'success', data: [mockPlayerData] })
       });
 
       expect(process.env.AUTH_SERVER_URL).toBe('http://test-auth-server.com');
@@ -86,7 +91,7 @@ describe('Auth Marshalling Service', () => {
       expect(() => {
         // Re-import the module to trigger the environment check
         jest.isolateModules(() => {
-          require('../../src/services/authMarshalling');
+          import('../../src/services/authMarshalling');
         });
       }).not.toThrow();
     });
@@ -101,17 +106,17 @@ describe('Auth Marshalling Service', () => {
       expect(() => {
         // Re-import the module to trigger the environment check
         jest.isolateModules(() => {
-          require('../../src/services/authMarshalling');
+          import('../../src/services/authMarshalling');
         });
       }).not.toThrow();
     });
-    
+
     // MAYBE - TODO:
     /* To test the error throwing in production environment:
      * 1. Create a separate script that imports authMarshalling.ts
      * 2. Run it with NODE_ENV=production and without AUTH_SERVER_SECRET
      * 3. Verify it throws the appropriate error
-     * 
+     *
      * Example script (checkAuth.js):
      * ```
      * try {
@@ -121,7 +126,7 @@ describe('Auth Marshalling Service', () => {
      *   process.exit(1);
      * }
      * ```
-     * 
+     *
      * Run with: NODE_ENV=production AUTH_SERVER_URL=http://example.com node checkAuth.js
      */
   });
