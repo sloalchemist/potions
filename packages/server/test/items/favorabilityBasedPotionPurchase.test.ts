@@ -223,6 +223,58 @@ describe('Favorability-Based Purchase Tests', () => {
     expect(result).toBe(false); // Should be false based on high price
     expect(fighter!.carrying).toBeUndefined(); // Fighter should not have the potion
   });
+
+  test('Should not allow fighter to purchase a potion from market if price is too high no matter what', () => {
+    // Set high favorability
+    Community.makeFavor('alchemists', 'fighters', 1000);
+    expect(Community.getFavor('alchemists', 'fighters')).toBe(1000);
+
+    const standPosition: Coord = { x: 0, y: 1 };
+    const playerPosition: Coord = { x: 0, y: 0 };
+
+    // Create a potion stand
+    itemGenerator.createItem({
+      type: 'potion-stand',
+      subtype: '255',
+      position: standPosition,
+      ownedBy: Community.getVillage('alchemists'),
+      attributes: {
+        templateType: 'potion',
+        subtype: '255',
+        price: 999, // Set a high price
+        items: 1
+      }
+    });
+    const standID = Item.getItemIDAt(standPosition);
+    expect(standID).not.toBeNull();
+
+    const potionStand = Item.getItem(standID!);
+    expect(potionStand).toBeDefined();
+
+    // Create a fighter
+    mobFactory.makeMob(
+      'fighter',
+      playerPosition,
+      'TestID2',
+      'TestFighter',
+      undefined,
+      undefined,
+      100
+    );
+    const fighter = Mob.getMob('TestID2');
+    expect(fighter).toBeDefined();
+    expect(fighter!.carrying).toBeUndefined();
+    expect(fighter!.gold).toBe(100);
+
+    // Verify the potion is on the stand
+    expect(potionStand!.getAttribute('items')).toBe(1);
+
+    // Fighter purchases the potion from the stand
+    const purchasePotion = new Purchase();
+    const result = purchasePotion.interact(fighter!, potionStand!);
+    expect(result).toBe(false); // Should be false based on too high price
+    expect(fighter!.carrying).toBeUndefined(); // Fighter should not have the potion
+  });
 });
 
 afterEach(() => {
