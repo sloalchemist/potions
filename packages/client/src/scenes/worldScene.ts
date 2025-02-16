@@ -80,6 +80,8 @@ export class WorldScene extends Phaser.Scene {
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
     this.load.json('global_data', 'static/global.json');
     this.load.json('world_specific_data', 'static/world_specific.json');
+
+    this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
 
   loadAnimations(
@@ -483,8 +485,18 @@ export class WorldScene extends Phaser.Scene {
     }
     tick(this);
     if (this.cameraDolly && this.hero) {
-      this.cameraDolly.x = Math.floor(this.hero.x);
-      this.cameraDolly.y = Math.floor(this.hero.y);
+      const roundedX = Math.floor(this.hero.x);
+      const roundedY = Math.floor(this.hero.y);
+
+      if (roundedX !== this.cameraDolly.x || roundedY !== this.cameraDolly.y) {
+        if (!this.sound.isPlaying('walk')) {
+          this.sound.add('walk', { loop: true, volume: 0.6 }).play();
+        }
+      } else {
+        this.sound.removeByKey('walk');
+      }
+      this.cameraDolly.x = roundedX;
+      this.cameraDolly.y = roundedY;
     }
     if (this.hero) {
       const [x, y] = this.convertToTileXY({ x: this.hero.x, y: this.hero.y });
