@@ -645,7 +645,6 @@ export class UxScene extends Phaser.Scene {
     this.backButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
-    // this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('stats');
   }
 
@@ -662,7 +661,6 @@ export class UxScene extends Phaser.Scene {
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.updateTabStyles('items');
-    // this.setInteractions(currentInteractions);
   }
 
   // Method to show the Chat tab
@@ -677,7 +675,6 @@ export class UxScene extends Phaser.Scene {
     this.backButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
-    // this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('chat');
   }
 
@@ -693,7 +690,6 @@ export class UxScene extends Phaser.Scene {
     this.backButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
-    // this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('fight');
   }
 
@@ -709,7 +705,6 @@ export class UxScene extends Phaser.Scene {
     this.backButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
-    // this.interactButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('handbook');
   }
 
