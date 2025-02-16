@@ -15,7 +15,7 @@ describe('GetFromBasket', () => {
   let mockContainer: jest.Mocked<Container>;
 
   beforeEach(() => {
-    // Mock Item
+    // Create a mock basket item.
     mockBasket = {
       hasAttribute: jest
         .fn()
@@ -26,40 +26,43 @@ describe('GetFromBasket', () => {
       position: { x: 5, y: 5 }
     } as unknown as jest.Mocked<Item>;
 
-    // Mock Container
+    // Create a mock container that will be returned via Container.fromItem.
     mockContainer = {
-      getInventory: jest.fn().mockReturnValue(3), // Set nonzero inventory for default test
+      getInventory: jest.fn().mockReturnValue(3), // nonzero inventory for normal operation
       getCapacity: jest.fn().mockReturnValue(10)
     } as unknown as jest.Mocked<Container>;
 
-    // Mock Container.fromItem() to return the mock container
+    // Ensure Container.fromItem returns our mock container.
     jest.spyOn(Container, 'fromItem').mockReturnValue(mockContainer);
 
+    // Create the GetFromBasket instance.
     getFromBasket = new GetFromBasket(mockBasket);
 
-    // Mock NPC with all required properties
+    // Create a mock NPC with required properties.
     mockNpc = {
       name: 'NPC1',
       position: { x: 10, y: 10 },
       moveToOrExecute: jest.fn(),
-      personality: {}, // Mocked as empty object for this test
+      personality: {},
       community_id: '123',
       needs: {},
       visionDistance: 5,
       id: 'npc-001',
       unlocks: [],
       tick: jest.fn(),
-      type: 'type', // Add missing properties here
+      type: 'type',
       subtype: 'subtype',
       gold: 100,
       health: 100
-      // Add any other properties required by Mob type
     } as unknown as jest.Mocked<Mob>;
 
     (calculateDistance as jest.Mock).mockReset();
   });
 
+  // --- Tests for cost() method ---
+
   test('cost returns Infinity if basket has no items', () => {
+    // Simulate an empty basket.
     mockContainer.getInventory.mockReturnValue(0);
     expect(getFromBasket.cost(mockNpc)).toBe(Infinity);
   });
@@ -68,5 +71,36 @@ describe('GetFromBasket', () => {
     const distance = 10;
     (calculateDistance as jest.Mock).mockReturnValue(distance);
     expect(getFromBasket.cost(mockNpc)).toBe(distance);
+  });
+
+  test('cost throws an error if npc.position is missing', () => {
+    Object.defineProperty(mockNpc, 'position', { value: undefined });
+    expect(() => getFromBasket.cost(mockNpc)).toThrow('NPC has no position');
+  });
+
+  // --- Tests for execute() method ---
+
+  test('execute returns true if npc.position is missing', () => {
+    Object.defineProperty(mockNpc, 'position', { value: undefined });
+    expect(getFromBasket.execute(mockNpc)).toBe(true);
+  });
+
+  test('execute returns true if basket.position is missing', () => {
+    Object.defineProperty(mockBasket, 'position', { value: undefined });
+    expect(getFromBasket.execute(mockNpc)).toBe(true);
+  });
+
+  test('execute calls moveToOrExecute and then interact when conditions are met', () => {
+    // Execute should call moveToOrExecute with basket.position, 1, and a callback.
+    getFromBasket.execute(mockNpc);
+    expect(mockNpc.moveToOrExecute).toHaveBeenCalledWith(
+      mockBasket.position,
+      1,
+      expect.any(Function)
+    );
+    // Simulate executing the callback passed to moveToOrExecute.
+    const callback = (mockNpc.moveToOrExecute as jest.Mock).mock.calls[0][2];
+    callback();
+    expect(mockBasket.interact).toHaveBeenCalledWith(mockNpc, 'get_item');
   });
 });
