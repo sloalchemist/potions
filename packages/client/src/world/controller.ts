@@ -372,7 +372,10 @@ function collisionListener(physicals: Item[]) {
     ];
   });
   // updates client only if interactions changes
-  if (!areInteractionsEqual(lastInteractions, interactions) && interactionCallback) {
+  if (
+    !areInteractionsEqual(lastInteractions, interactions) &&
+    interactionCallback
+  ) {
     interactionCallback(interactions);
     lastInteractions = interactions;
     currentInteractions = interactions;

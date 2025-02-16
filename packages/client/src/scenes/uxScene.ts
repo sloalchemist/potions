@@ -13,7 +13,7 @@ import {
   setFightOpponentCallback,
   setInteractionCallback,
   setResponseCallback,
-  currentInteractions,
+  currentInteractions
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
 import { SlideButton } from '../components/slideButton';
@@ -711,7 +711,6 @@ export class UxScene extends Phaser.Scene {
     this.setInteractions(currentInteractions);
   }
 
-
   // Method to set item interactions
   setInteractions(interactions: Interactions[]) {
     this.interactButtons?.clearButtonOptions();
@@ -721,9 +720,11 @@ export class UxScene extends Phaser.Scene {
     const toggleY = 60;
 
     let i = 0; // Always initialize i to 0
-    const hasCauldron = interactions.some(interaction => interaction.item.type === 'cauldron');
+    const hasCauldron = interactions.some(
+      (interaction) => interaction.item.type === 'cauldron'
+    );
     if (hasCauldron) {
-        i = 1;  // Set i to 1 if there are cauldron interactions
+      i = 1; // Set i to 1 if there are cauldron interactions
     }
     if (this.scene.isActive('BrewScene')) {
       interactions.forEach((interaction) => {
@@ -766,7 +767,8 @@ export class UxScene extends Phaser.Scene {
           // Set brew color and number of ingredients based on cauldron attributes
           const brewScene = this.scene.get('BrewScene') as BrewScene;
           brewScene.setBrewColor(
-            parseInt(potionSubtypeAttr?.value.toString() || '10402260') || 0x9eb9d4
+            parseInt(potionSubtypeAttr?.value.toString() || '10402260') ||
+              0x9eb9d4
           );
           brewScene.setNumIngredients(
             parseInt(ingredientsAttr?.value.toString() || '0') || 0
@@ -775,9 +777,7 @@ export class UxScene extends Phaser.Scene {
           i++;
         }
       });
-      
-    }
-    else{
+    } else {
       interactions.forEach((interaction) => {
         if (interaction.item.type != 'cauldron') {
           const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
@@ -802,8 +802,10 @@ export class UxScene extends Phaser.Scene {
         i++;
       });
     }
-    
-    if (interactions.some((interaction) => interaction.item.type === 'cauldron')) {
+
+    if (
+      interactions.some((interaction) => interaction.item.type === 'cauldron')
+    ) {
       // Create the toggle button at a fixed position
       const toggleButton = new Button(
         this,
@@ -831,7 +833,6 @@ export class UxScene extends Phaser.Scene {
     } else {
       this.scene.stop('BrewScene');
     }
-    
   }
 
   setChatCompanions(companions: Mob[]) {
@@ -921,4 +922,3 @@ export class UxScene extends Phaser.Scene {
     });
   }
 }
-
