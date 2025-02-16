@@ -151,13 +151,13 @@ describe('Favorability-Based Purchase Tests', () => {
     mobFactory.makeMob(
       'fighter',
       playerPosition,
-      'TestID2',
+      'TestID',
       'TestFighter',
       undefined,
       undefined,
       100
     );
-    const fighter = Mob.getMob('TestID2');
+    const fighter = Mob.getMob('TestID');
     expect(fighter).toBeDefined();
     expect(fighter!.carrying).toBeUndefined();
     expect(fighter!.gold).toBe(100);
@@ -203,13 +203,13 @@ describe('Favorability-Based Purchase Tests', () => {
     mobFactory.makeMob(
       'fighter',
       playerPosition,
-      'TestID2',
+      'TestID',
       'TestFighter',
       undefined,
       undefined,
       100
     );
-    const fighter = Mob.getMob('TestID2');
+    const fighter = Mob.getMob('TestID');
     expect(fighter).toBeDefined();
     expect(fighter!.carrying).toBeUndefined();
     expect(fighter!.gold).toBe(100);
@@ -255,13 +255,13 @@ describe('Favorability-Based Purchase Tests', () => {
     mobFactory.makeMob(
       'fighter',
       playerPosition,
-      'TestID2',
+      'TestID',
       'TestFighter',
       undefined,
       undefined,
       100
     );
-    const fighter = Mob.getMob('TestID2');
+    const fighter = Mob.getMob('TestID');
     expect(fighter).toBeDefined();
     expect(fighter!.carrying).toBeUndefined();
     expect(fighter!.gold).toBe(100);
