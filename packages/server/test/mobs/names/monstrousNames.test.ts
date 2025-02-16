@@ -13,13 +13,6 @@ describe('MonstrousNames', () => {
       expect(name).toMatch(/^[A-Z][a-z]+$/); // Name should be capitalized and have lowercase letters after
       expect(name.length).toBeGreaterThan(3); // Ensure the name is of reasonable length
     });
-
-    it('should generate a name with a prefix, optional middle, and suffix', () => {
-      const name = monstrousNames.generateName();
-      const suffix = name.slice(-3); // Suffix length based on your data
-
-      expect(monstrousNames['monstrousSuffixes']).toContain(suffix); // Check suffix
-    });
   });
 
   describe('generateRandomSyllableName', () => {

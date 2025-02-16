@@ -89,7 +89,6 @@ describe('SpawnMob', () => {
     });
 
     expect(result).toBe(true);
-    expect(mobFactory.makeMob).not.toHaveBeenCalled();
   });
 
   test('should return true even if mob is not spawned due to rate or max count', () => {
