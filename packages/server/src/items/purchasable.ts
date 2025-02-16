@@ -47,7 +47,7 @@ export class Purchasable {
     // Check favorability
     const ownedBy = this.item.owned_by ?? '';
     const favor = Community.getFavor(mob.community_id, ownedBy);
-    const favorThreshold = 50; // Define a threshold for favorability
+    const favorThreshold = 50;
     if (favor < favorThreshold && this.price > 20) {
       // If favor is low and price is high, don't buy
       return false;
