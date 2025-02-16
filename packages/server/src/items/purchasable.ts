@@ -1,5 +1,6 @@
 import { Mob } from '../mobs/mob';
 import { Item } from './item';
+import { Community } from '../community/community';
 import { itemGenerator } from './itemGenerator';
 
 export class Purchasable {
@@ -40,6 +41,15 @@ export class Purchasable {
 
   purchaseItem(mob: Mob): boolean {
     if (mob.gold < this.price || this.items <= 0) {
+      return false;
+    }
+
+    // Check favorability
+    const ownedBy = this.item.owned_by ?? '';
+    const favor = Community.getFavor(mob.community_id, ownedBy);
+    const favorThreshold = 50; // Define a threshold for favorability
+    if (favor < favorThreshold && this.price > 20) {
+      // If favor is low and price is high, don't buy
       return false;
     }
 
