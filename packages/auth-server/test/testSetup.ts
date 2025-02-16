@@ -21,11 +21,8 @@ export const setupTestServer = (): Express => {
 
 // Mock external services
 jest.mock('@supabase/supabase-js', () => ({
-  createClient: jest.fn(() => ({
-    auth: {
-      getUser: jest.fn()
-    },
-    from: jest.fn(() => ({
+  createClient: jest.fn(() => {
+    const mockData = {
       select: jest.fn().mockReturnThis(),
       insert: jest.fn().mockReturnThis(),
       update: jest.fn().mockReturnThis(),
@@ -35,8 +32,23 @@ jest.mock('@supabase/supabase-js', () => ({
         data: { id: 1 },
         error: null
       })
-    }))
-  }))
+    };
+
+    // Add resolved value for update operation
+    mockData.update.mockImplementation(() => ({
+      eq: jest.fn().mockResolvedValue({
+        data: { id: 1, health: 100, pname: 'TestHero', gold: 500 },
+        error: null
+      })
+    }));
+
+    return {
+      auth: {
+        getUser: jest.fn()
+      },
+      from: jest.fn(() => mockData)
+    };
+  })
 }));
 
 jest.mock('ably', () => ({
