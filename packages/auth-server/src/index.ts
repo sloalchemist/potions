@@ -1,21 +1,32 @@
-import express from 'express';
+import express, { Express } from 'express';
 import corsMiddleware from './corsMiddleware';
 import authController from './authController';
 import characterData from './characterData';
 import worldController from './worldController';
 
-const app = express();
+export function createApp(): Express {
+  const app = express();
 
-app.use(express.json());
+  // Middleware
+  app.use(express.json());
+  app.use(corsMiddleware);
 
-app.use(corsMiddleware);
+  // Routes
+  app.get('/auth', authController);
+  app.get('/worlds', worldController);
+  app.put('/character/:Id', characterData);
 
-app.get('/auth', authController);
+  return app;
+}
 
-app.get('/worlds', worldController);
+// Only start the server if this file is run directly
+if (require.main === module) {
+  const app = createApp();
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`Auth server listening on port ${port}`);
+  });
+}
 
-app.put('/character/:Id', characterData);
-
-app.listen(3000, () => {
-  console.log("I'm listening yo!");
-});
+// Export for testing
+export default createApp;
