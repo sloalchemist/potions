@@ -68,10 +68,12 @@ export class AblyService implements PubSub {
     });
 
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
-      //if MAINTAIN_WORLD_OPTION is passed from client, do not change world
-      const target_world_id =
-        presenceMsg.data.target_world_id === MAINTAIN_WORLD_OPTION
-          ? this.worldID
+      // if MAINTAIN_WORLD_OPTION is passed from client, do not change world;
+      // undefined will be recieved if the client unexpectedly disconnects (ex: refreshing page)
+      // we should also stay in the same world in this case
+      const target_world_id = 
+        presenceMsg.data.target_world_id == null || presenceMsg.data.target_world_id === MAINTAIN_WORLD_OPTION 
+          ? this.worldID 
           : presenceMsg.data.target_world_id;
       console.log('Target World Received:', presenceMsg.data.target_world_id);
       console.log('Target World Being Sent:', target_world_id);
