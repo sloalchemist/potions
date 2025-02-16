@@ -216,7 +216,7 @@ function patchUxScene(uxScene: UxScene) {
   // Add a fake cache property with an audio object.
   uxScene.cache = {
     audio: {
-      has: jest.fn((key: string) => true)
+      has: jest.fn((_: string) => true)
     }
   } as any;
 }
