@@ -23,24 +23,40 @@ export const setupTestServer = (): Express => {
 jest.mock('@supabase/supabase-js', () => ({
   createClient: jest.fn(() => {
     const mockData = {
-      select: jest.fn().mockReturnThis(),
+      select: jest.fn().mockImplementation(() => {
+        // For single() calls
+        const singleMock = {
+          single: jest.fn().mockResolvedValue({
+            data: { id: 1 },
+            error: null
+          })
+        };
+        // Return mock data for both array and single responses
+        return {
+          ...singleMock,
+          eq: jest.fn().mockReturnThis(),
+          mockResolvedValue: jest.fn(),
+          then: jest.fn((callback) =>
+            Promise.resolve(
+              callback({
+                data: [{ id: 1, world_id: 1 }],
+                error: null
+              })
+            )
+          ),
+          catch: jest.fn()
+        };
+      }),
       insert: jest.fn().mockReturnThis(),
-      update: jest.fn().mockReturnThis(),
+      update: jest.fn().mockImplementation(() => ({
+        eq: jest.fn().mockResolvedValue({
+          data: { id: 1, health: 100, pname: 'TestHero', gold: 500 },
+          error: null
+        })
+      })),
       delete: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({
-        data: { id: 1 },
-        error: null
-      })
+      eq: jest.fn().mockReturnThis()
     };
-
-    // Add resolved value for update operation
-    mockData.update.mockImplementation(() => ({
-      eq: jest.fn().mockResolvedValue({
-        data: { id: 1, health: 100, pname: 'TestHero', gold: 500 },
-        error: null
-      })
-    }));
 
     return {
       auth: {
