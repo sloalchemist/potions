@@ -167,8 +167,11 @@ export async function retrieveCharacter() {
 }
 
 export function getWorldID() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('worldID') || 'test-world';
+  return worldID;
+}
+
+export function setWorldID(worldName: string) {
+  worldID = worldName;
 }
 
 export async function saveColors() {

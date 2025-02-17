@@ -34,8 +34,6 @@ let needsAnimationsLoaded: boolean = true;
 
 export const TILE_SIZE = 32;
 export const RESPAWN_DELAY = 3000;
-// const urlParams = new URLSearchParams(window.location.search);
-// const worldID = urlParams.get('worldID') || 'test-world';
 
 export class WorldScene extends Phaser.Scene {
   worldLayer!: Phaser.Tilemaps.TilemapLayer;
@@ -244,8 +242,6 @@ export class WorldScene extends Phaser.Scene {
       this.cache.json.get('world_specific_data')
     );
 
-    console.log('setting up world', needsAnimationsLoaded);
-    //console.log(this.world_data);
     world = new World();
     world.load(globalData);
 

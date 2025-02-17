@@ -10,7 +10,7 @@ export let playerChannel: Types.RealtimeChannelCallbacks;
 const SERVER_URL = process.env.SERVER_URL;
 let channelsBoundToWorld: boolean = false;
 
-export function setupAbly(): Promise<void> {
+export function setupAbly(): Promise<string> {
   let authorizer =
     SERVER_URL.slice(-1) == '/' ? 'auth?username=' : '/auth?username=';
   let worldID: string;
@@ -37,7 +37,7 @@ export function setupAbly(): Promise<void> {
       broadcastChannel = ably.channels.get(`world-${worldID}`);
       playerChannel = ably.channels.get(`${publicCharacterId}-${worldID}`);
 
-      resolve();
+      resolve(worldID);
       console.log('Ably client initialized successfully.', worldID);
     });
   });
