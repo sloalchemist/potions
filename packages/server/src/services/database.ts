@@ -45,6 +45,10 @@ export function initializeServerDatabase(
   process.on('SIGTERM', async () => {
     process.exit(0);
   });
+  // Nodemon sends SIGUSR2 when restarting
+  process.on('SIGUSR2', async () => {
+    process.exit(0);
+  });
 
   return DB;
 }
