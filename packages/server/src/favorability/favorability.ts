@@ -73,7 +73,7 @@ export class Favorability {
     }
   }
   /**
-   * Increases each respective community buff for a player
+   * Updates each respective community buff for a player
    * @param player Target player
    */
   static updatePlayerStat(player: Mob) {
