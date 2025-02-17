@@ -740,12 +740,6 @@ export class UxScene extends Phaser.Scene {
     }
   }
 
-  // Refresh button interactions
-  refreshInteractions() {
-    this.interactButtons.clearButtonOptions();
-    this.setInteractions(currentInteractions);
-  }
-
   // Method to set item interactions
   setInteractions(interactions: Interactions[]) {
     this.interactButtons?.clearButtonOptions();
@@ -861,7 +855,6 @@ export class UxScene extends Phaser.Scene {
           // Toggle the Brew menu.
           if (this.scene.isActive('BrewScene')) {
             this.scene.stop('BrewScene');
-            // this.setInteractions(currentInteractions);
           } else {
             this.scene.launch('BrewScene');
           }
