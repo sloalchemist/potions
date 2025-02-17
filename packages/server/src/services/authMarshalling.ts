@@ -1,9 +1,6 @@
 import { getEnv } from '@rt-potion/common';
 import 'dotenv/config';
 
-const authUrl = getEnv('AUTH_SERVER_URL');
-console.log('Auth-Server URL:', authUrl);
-
 export interface PlayerData {
   current_world_id: number;
   health: number;
@@ -23,13 +20,13 @@ export async function updateCharacterData(
   id: number,
   playerData: PlayerData
 ): Promise<ApiResponse> {
-  const url = new URL(`/character/${id}`, getAuthUrl());
+  const url = new URL(`/character/${id}`, getEnv('AUTH_SERVER_URL'));
   try {
     const response = await fetch(url, {
       method: 'PUT', // Using PUT for updating existing resources
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.AUTH_SERVER_SECRET}` // Using secret from environment variable
+        Authorization: `Bearer ${getEnv('AUTH_SERVER_SECRET')}` // Using secret from environment variable
       },
       body: JSON.stringify(playerData)
     });
@@ -55,10 +52,10 @@ type GetWorldsResponse = {
 }[];
 
 export async function getWorlds(): Promise<GetWorldsResponse> {
-  const url = new URL('/worlds', getAuthUrl());
+  const url = new URL('/worlds', getEnv('AUTH_SERVER_URL'));
   const response = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${process.env.AUTH_SERVER_SECRET}` // Using secret from environment variable
+      Authorization: `Bearer ${getEnv('AUTH_SERVER_SECRET')}` // Using secret from environment variable
     }
   });
   return response.json();
