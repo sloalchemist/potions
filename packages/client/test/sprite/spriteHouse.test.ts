@@ -1,4 +1,4 @@
-import { SpriteHouse } from '../../src/sprite/sprite_house'
+import { SpriteHouse } from '../../src/sprite/sprite_house';
 import { Coord, HouseI } from '@rt-potion/common';
 import { WorldScene } from '../../src/scenes/worldScene';
 import { World } from '../../src/world/world';
@@ -72,10 +72,12 @@ describe('SpriteHouse', () => {
     });
 
     // Mock coordinate conversion
-    (mockWorldScene.convertToWorldXY as jest.Mock).mockImplementation((coord: Coord) => [
-      coord.x * 32, // Simulate tile to world conversion
-      coord.y * 32
-    ]);
+    (mockWorldScene.convertToWorldXY as jest.Mock).mockImplementation(
+      (coord: Coord) => [
+        coord.x * 32, // Simulate tile to world conversion
+        coord.y * 32
+      ]
+    );
 
     spriteHouse = new SpriteHouse(mockWorldScene, mockHouse);
   });
@@ -95,15 +97,15 @@ describe('SpriteHouse', () => {
     // });
 
     it('should set floor sprites to correct depth', () => {
-      spriteHouse.floorSprites.forEach(sprite => {
+      spriteHouse.floorSprites.forEach((sprite) => {
         expect(sprite.depth).toBe(0.1);
       });
     });
 
     it('should create all required roof sprites', () => {
       // Check if all roof parts are created with correct frames
-      const roofFrames = spriteHouse.roofSprites.map(sprite => sprite.frame);
-      
+      const roofFrames = spriteHouse.roofSprites.map((sprite) => sprite.frame);
+
       expect(roofFrames).toContain('roof-top-left');
       expect(roofFrames).toContain('roof-top-right');
       expect(roofFrames).toContain('roof-bottom-left');
@@ -113,7 +115,7 @@ describe('SpriteHouse', () => {
     });
 
     it('should set roof sprites to correct depth', () => {
-      spriteHouse.roofSprites.forEach(sprite => {
+      spriteHouse.roofSprites.forEach((sprite) => {
         expect(sprite.depth).toBe(100);
       });
     });
@@ -123,9 +125,9 @@ describe('SpriteHouse', () => {
     it('should create roof sprite with correct properties', () => {
       const coord = { x: 1, y: 1 };
       const frame = 'roof-test';
-      
+
       spriteHouse.generateRoofSprite(mockWorldScene, coord, frame);
-      
+
       const lastSprite = createdSprites[createdSprites.length - 1];
       expect(lastSprite.frame).toBe(frame);
       expect(lastSprite.depth).toBe(100);
@@ -136,7 +138,7 @@ describe('SpriteHouse', () => {
     it('should set roof sprites to full alpha when outside house bounds', () => {
       spriteHouse.animate(0, 0); // Position outside house
 
-      spriteHouse.roofSprites.forEach(sprite => {
+      spriteHouse.roofSprites.forEach((sprite) => {
         expect(sprite.alpha).toBe(1);
       });
     });
@@ -144,7 +146,7 @@ describe('SpriteHouse', () => {
     it('should set roof sprites to low alpha when inside house bounds', () => {
       spriteHouse.animate(6, 6); // Position inside house
 
-      spriteHouse.roofSprites.forEach(sprite => {
+      spriteHouse.roofSprites.forEach((sprite) => {
         expect(sprite.alpha).toBe(0.05);
       });
     });
@@ -170,10 +172,10 @@ describe('SpriteHouse', () => {
       spriteHouse.destroy(mockWorld);
 
       // Verify all sprites are destroyed
-      spriteHouse.floorSprites.forEach(sprite => {
+      spriteHouse.floorSprites.forEach((sprite) => {
         expect((sprite as unknown as MockSprite).destroyed).toBe(true);
       });
-      spriteHouse.roofSprites.forEach(sprite => {
+      spriteHouse.roofSprites.forEach((sprite) => {
         expect((sprite as unknown as MockSprite).destroyed).toBe(true);
       });
 

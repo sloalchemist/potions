@@ -1,4 +1,4 @@
-import { PaletteSwapper, Colors, SwappableColors } from '../../src/sprite/palette_swapper'
+import { PaletteSwapper, Colors } from '../../src/sprite/palette_swapper';
 
 // Mock Phaser objects and types
 const mockPutImageData = jest.fn();
@@ -63,10 +63,7 @@ describe('PaletteSwapper', () => {
     const mockOriginalAnim = {
       frameRate: 24,
       repeat: -1,
-      frames: [
-        { frame: { name: 'frame1' } },
-        { frame: { name: 'frame2' } }
-      ]
+      frames: [{ frame: { name: 'frame1' } }, { frame: { name: 'frame2' } }]
     };
 
     beforeEach(() => {
@@ -75,7 +72,7 @@ describe('PaletteSwapper', () => {
 
     it('should not create animation if it already exists', () => {
       (mockScene.anims.exists as jest.Mock).mockReturnValue(true);
-      
+
       paletteSwapper.swapAnimationPalette(
         mockScene,
         'originalAnim',
@@ -89,7 +86,7 @@ describe('PaletteSwapper', () => {
 
     // it('should create new animation with swapped palette', () => {
     //   (mockScene.anims.exists as jest.Mock).mockReturnValue(false);
-      
+
     //   paletteSwapper.swapAnimationPalette(
     //     mockScene,
     //     'originalAnim',
@@ -112,9 +109,9 @@ describe('PaletteSwapper', () => {
     it('should handle missing original animation', () => {
       (mockScene.anims.exists as jest.Mock).mockReturnValue(false);
       (mockScene.anims.get as jest.Mock).mockReturnValue(null);
-      
+
       const consoleSpy = jest.spyOn(console, 'error');
-      
+
       paletteSwapper.swapAnimationPalette(
         mockScene,
         'missingAnim',
@@ -140,8 +137,10 @@ describe('PaletteSwapper', () => {
       (mockScene.textures.get as jest.Mock).mockReturnValue({
         get: jest.fn().mockReturnValue(mockTexture)
       });
-      (mockScene.textures.createCanvas as jest.Mock).mockReturnValue(new MockCanvasTexture());
-      
+      (mockScene.textures.createCanvas as jest.Mock).mockReturnValue(
+        new MockCanvasTexture()
+      );
+
       mockGetImageData.mockReturnValue({
         data: new Uint8ClampedArray(64 * 64 * 4)
       });
@@ -155,7 +154,7 @@ describe('PaletteSwapper', () => {
         'existingSprite',
         { COLOR_1: 0xff0000 }
       );
-      
+
       paletteSwapper.swapPalette(
         mockScene,
         'atlas',
@@ -171,9 +170,9 @@ describe('PaletteSwapper', () => {
       (mockScene.textures.get as jest.Mock).mockReturnValue({
         get: jest.fn().mockReturnValue(null)
       });
-      
+
       const consoleSpy = jest.spyOn(console, 'error');
-      
+
       paletteSwapper.swapPalette(
         mockScene,
         'atlas',
@@ -189,18 +188,16 @@ describe('PaletteSwapper', () => {
 
     it('should handle canvas creation failure', () => {
       (mockScene.textures.createCanvas as jest.Mock).mockReturnValue(null);
-      
-      const consoleSpy = jest.spyOn(console, 'error');
-      
-      paletteSwapper.swapPalette(
-        mockScene,
-        'atlas',
-        'sprite',
-        'newSprite',
-        { COLOR_1: 0xff0000 }
-      );
 
-      expect(consoleSpy).toHaveBeenCalledWith('Failed to create canvas texture');
+      const consoleSpy = jest.spyOn(console, 'error');
+
+      paletteSwapper.swapPalette(mockScene, 'atlas', 'sprite', 'newSprite', {
+        COLOR_1: 0xff0000
+      });
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Failed to create canvas texture'
+      );
     });
 
     it('should swap colors correctly', () => {
@@ -214,13 +211,9 @@ describe('PaletteSwapper', () => {
 
       mockGetImageData.mockReturnValue({ data: imageData });
 
-      paletteSwapper.swapPalette(
-        mockScene,
-        'atlas',
-        'sprite',
-        'newSprite',
-        { COLOR_1: 0xff0000 }
-      );
+      paletteSwapper.swapPalette(mockScene, 'atlas', 'sprite', 'newSprite', {
+        COLOR_1: 0xff0000
+      });
 
       expect(mockPutImageData).toHaveBeenCalled();
       expect(mockRefresh).toHaveBeenCalled();
