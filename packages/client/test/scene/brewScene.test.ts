@@ -148,18 +148,52 @@ jest.mock('phaser', () => {
     }
   }
 
+  const createMockBrewScene = () => {
+    class MockBrewScene {
+      brewColor = 0x9eb9d4;
+      numIngredients = 0;
+
+      setBrewColor(color: number) {
+        this.brewColor = color;
+      }
+
+      setNumIngredients(num: number) {
+        this.numIngredients = num;
+      }
+
+      create() {}
+
+      add = {
+        graphics: jest.fn(() => ({
+          fillStyle: jest.fn().mockReturnThis(),
+          fillRect: jest.fn().mockReturnThis(),
+          clear: jest.fn().mockReturnThis(),
+          setTint: jest.fn().mockReturnThis()
+        }))
+      };
+    }
+    return MockBrewScene;
+  };
+
   return {
     Scene: MockScene,
     Game: FakeGame,
     GameObjects: {
       Container: FakeContainer,
-      Text: FakeText
+      Text: FakeText,
+      Graphics: jest.fn(() => ({
+        fillStyle: jest.fn().mockReturnThis(),
+        fillRect: jest.fn().mockReturnThis(),
+        clear: jest.fn().mockReturnThis(),
+        setTint: jest.fn().mockReturnThis()
+      }))
     },
-    // Minimal stub for Phaser.Scale with required properties
     Scale: {
       FIT: 'FIT',
       CENTER_HORIZONTALLY: 'CENTER_HORIZONTALLY'
-    }
+    },
+    BrewScene: createMockBrewScene(),
+    createMockBrewScene: createMockBrewScene
   };
 });
 
@@ -212,6 +246,9 @@ function patchUxScene(uxScene: UxScene) {
       setNumIngredients: jest.fn()
     })) as any
   } as any;
+
+  const MockBrewScene = (Phaser as any).createMockBrewScene();
+  uxScene.scene.get = jest.fn(() => new MockBrewScene());
 
   // Add a fake cache property with an audio object.
   uxScene.cache = {
@@ -318,7 +355,7 @@ describe('Buttons shown when BrewScene is and is not active', () => {
   test('Active BrewScene shows brew options', () => {
     const uxScene = new UxScene();
     patchUxScene(uxScene);
-    // Ensure isActive returns false
+    // Ensure isActive returns true
     uxScene.scene.isActive = jest.fn().mockReturnValue(true);
 
     const cauldron = new Item(
@@ -365,8 +402,6 @@ describe('Buttons shown when BrewScene is and is not active', () => {
 
     //check that the buttons were created
     expect(uxScene.interactButtons.buttons.length).toEqual(2);
-
-    console.log(uxScene.interactButtons.buttons);
 
     // Confirm the texture of the first button is 'cooked'
     const blueberryButton = uxScene.interactButtons.buttons[0];
@@ -438,5 +473,24 @@ describe('Buttons shown when BrewScene is and is not active', () => {
     // Confirm the texture of the second button is 'Toggle Menu'
     const toggleButton = uxScene.interactButtons.buttons[1];
     expect(toggleButton.texture).toEqual('Toggle Menu');
+  });
+});
+
+describe('Check BrewScene Defaults', () => {
+  let brewScene: any;
+
+  beforeEach(() => {
+    brewScene = new UxScene();
+    patchUxScene(brewScene);
+  });
+
+  test('Test default color is 0x9eb9d4', () => {
+    brewScene.scene.get().create();
+    expect(brewScene.scene.get().brewColor).toBe(0x9eb9d4);
+  });
+
+  test('Test default num Ingredients is 0', () => {
+    brewScene.scene.get().create();
+    expect(brewScene.scene.get().numIngredients).toBe(0);
   });
 });
