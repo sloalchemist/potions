@@ -1044,6 +1044,64 @@
       ]
     },
     {
+      "name": "Market stand",
+      "description": "A stand that sells THINGS.",
+      "type": "market-stand",
+      "carryable": false,
+      "smashable": true,
+      "walkable": false,
+      "attributes": [
+        {
+          "name": "items",
+          "value": 0
+        },
+        {
+          "name": "price",
+          "value": 10
+        },
+        {
+          "name": "gold",
+          "value": 0
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+      ],
+      "show_price_at": {
+        "x": 7,
+        "y": -10
+      }
+    },
+    {
+      "name": "Potion",
+      "description": "A magical concotion",
+      "type": "potion",
+      "carryable": true,
+      "smashable": true,
+      "walkable": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Quaff potion",
+          "action": "drink",
+          "while_carried": true
+        },
+        {
+          "description": "Create stand",
+          "action": "create_stand",
+          "while_carried": true
+        }
+      ]
+    },
+    {
       "name": "Basket",
       "description": "Stores items for the community.",
       "type": "basket",
