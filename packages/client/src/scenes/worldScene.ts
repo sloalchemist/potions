@@ -67,7 +67,7 @@ export class WorldScene extends Phaser.Scene {
     this.load.image('background', 'static/water_world_background.png');
 
     this.load.atlas(
-      'global-atlas',
+      'global_atlas',
       'static/water_world_global.png',
       'static/water_world-atlas.json'
     );
