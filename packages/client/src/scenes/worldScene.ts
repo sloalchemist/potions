@@ -8,7 +8,7 @@ import {
 import { bindAblyToWorldScene, setupAbly } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
 import { Coord } from '@rt-potion/common';
-import { publicCharacterId } from '../worldMetadata';
+import { publicCharacterId, getWorldID } from '../worldMetadata';
 import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
@@ -34,9 +34,8 @@ let needsAnimationsLoaded: boolean = true;
 
 export const TILE_SIZE = 32;
 export const RESPAWN_DELAY = 3000;
-// const worldID = 'fire-world';
-const urlParams = new URLSearchParams(window.location.search);
-const worldID = urlParams.get('worldID') || 'test-world';
+// const urlParams = new URLSearchParams(window.location.search);
+// const worldID = urlParams.get('worldID') || 'test-world';
 
 export class WorldScene extends Phaser.Scene {
   worldLayer!: Phaser.Tilemaps.TilemapLayer;
@@ -67,6 +66,7 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
+    const worldID = getWorldID();
     this.load.image('background', `static/${worldID}_background.png`);
 
     this.load.atlas(

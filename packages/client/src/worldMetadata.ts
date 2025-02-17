@@ -166,10 +166,9 @@ export async function retrieveCharacter() {
   saveColors();
 }
 
-export async function retrieveWorld() {
-  worldID = localStorage.getItem('worldID') || 'test-world';
-  localStorage.setItem('worldID', worldID);
-  console.log('World ID:', worldID);
+export function getWorldID() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('worldID') || 'test-world';
 }
 
 export async function saveColors() {
