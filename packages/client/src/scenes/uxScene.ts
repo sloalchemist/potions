@@ -342,7 +342,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
-    this.inventoryContainer?.setVisible(true);
+    this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('stats');
   }
 
@@ -352,7 +352,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
-    this.inventoryContainer?.setVisible(true);
+    this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('items');
   }
 
@@ -362,7 +362,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
-    this.inventoryContainer?.setVisible(true);
+    this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('chat');
   }
 
@@ -372,7 +372,7 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
-    this.inventoryContainer?.setVisible(true);
+    this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('mix');
   }
 
@@ -474,12 +474,8 @@ export class UxScene extends Phaser.Scene {
       const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
       const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
 
-      const button = new Button(this, x, y, true, `${item.itemType.name})`, () =>
-        interact(
-          item.key,
-          'unstash',
-          null
-        )
+      const button = new Button(this, x, y, true, `${item.itemType.name}`, () =>
+        interact(item.key, 'unstash', null)
       );
       this.inventoryButtons.push(button);
       this.inventoryContainer?.add(button);

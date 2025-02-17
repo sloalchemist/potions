@@ -321,6 +321,13 @@ export class SpriteItem extends Item {
     this.animate();
   }
 
+  stash(world: World, mob: Mob, position: Coord): void {
+    super.stash(world, mob, position);
+    this.sprite.setDepth(0);
+    [this.sprite.x, this.sprite.y] = [-1, -1];
+    this.animate();
+  }
+
   drop(world: World, mob: Mob, position: Coord): void {
     super.drop(world, mob, position);
     this.sprite.setDepth(0);
@@ -329,6 +336,20 @@ export class SpriteItem extends Item {
         this.position
       );
     }
+    this.animate();
+  }
+
+
+  unstash(world: World, mob: Mob, position: Coord): void {
+    // Call base unstash to update world state
+    super.unstash(world, mob, position);
+    // Reposition and make sprite visible
+    if (this.position) {
+      const [worldX, worldY] = this.scene.convertToWorldXY(this.position);
+      this.sprite.x = worldX;
+      this.sprite.y = worldY;
+    }
+    this.sprite.visible = true;
     this.animate();
   }
 
