@@ -38,7 +38,7 @@ export function setupAbly(): Promise<void> {
       playerChannel = ably.channels.get(`${publicCharacterId}-${worldID}`);
 
       resolve();
-      console.log('Ably client initialized successfully.');
+      console.log('Ably client initialized successfully.', worldID);
     });
   });
 }

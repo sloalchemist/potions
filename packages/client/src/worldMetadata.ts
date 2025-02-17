@@ -9,6 +9,7 @@ import { setupAbly } from './services/ablySetup';
 
 export let characterId: string;
 export let publicCharacterId: string;
+export let worldID: string;
 
 export class Character {
   name: string;
@@ -163,6 +164,12 @@ export async function retrieveCharacter() {
   );
 
   saveColors();
+}
+
+export async function retrieveWorld() {
+  worldID = localStorage.getItem('worldID') || 'test-world';
+  localStorage.setItem('worldID', worldID);
+  console.log('World ID:', worldID);
 }
 
 export async function saveColors() {
