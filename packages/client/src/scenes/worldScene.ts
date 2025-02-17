@@ -34,7 +34,9 @@ let needsAnimationsLoaded: boolean = true;
 
 export const TILE_SIZE = 32;
 export const RESPAWN_DELAY = 3000;
-const worldID = 'fire-world';
+// const worldID = 'fire-world';
+const urlParams = new URLSearchParams(window.location.search);
+const worldID = urlParams.get('worldID') || 'test-world';
 
 export class WorldScene extends Phaser.Scene {
   worldLayer!: Phaser.Tilemaps.TilemapLayer;

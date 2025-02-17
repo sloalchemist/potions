@@ -25,7 +25,7 @@ export const nameButtonHoverStyle = {
   backgroundColor: '#138496' // Darker teal
 };
 
-const worldID = 'fire-world';
+// const worldID = 'fire-world';
 
 export class LoadWorldScene extends Phaser.Scene {
   constructor() {
@@ -35,6 +35,7 @@ export class LoadWorldScene extends Phaser.Scene {
   playerSprite!: Phaser.GameObjects.Sprite;
   paletteSwapper: PaletteSwapper = PaletteSwapper.getInstance();
   lastAnimationKey: string = '';
+  worldID: string = 'test-world';
 
   /* 
     Reset lastAnimationKey to the empty string to ensure that in the update function below
@@ -43,15 +44,24 @@ export class LoadWorldScene extends Phaser.Scene {
     */
   init() {
     this.lastAnimationKey = '';
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryWorldID = urlParams.get('worldID');
+
+    if (queryWorldID) {
+      this.worldID = queryWorldID;
+    } else {
+      console.warn('No worldID found in query params. Using test-world.');
+    }
   }
 
   preload() {
+    console.log('Loading assets for world:', this.worldID);
     this.load.image('frame', 'static/titleFrame.png');
     this.load.image('title', 'static/title.png');
     this.load.atlas(
       'global-atlas',
-      `static/${worldID}_assets.png`,
-      `static/${worldID}_atlas.json`
+      `static/${this.worldID}_assets.png`,
+      `static/${this.worldID}_atlas.json`
     );
   }
 
