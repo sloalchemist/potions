@@ -13,7 +13,11 @@ import worldSpecificData from '../../data/world_specific.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
-import { initializeSupabase, initializeBucket, uploadLocalData } from '../services/supabaseStorage';
+import {
+  initializeSupabase,
+  initializeBucket,
+  uploadLocalData
+} from '../services/supabaseStorage';
 
 async function main() {
   // Build and save the knowledge graph
