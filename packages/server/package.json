@@ -10,7 +10,7 @@
     "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
     "build": "tsc",
     "start": "node dist/src/server.js",
-    "dev": "pnpm exec ts-node src/server.ts",
+    "dev": "nodemon --watch src --exec ts-node src/server.ts",
     "test": "jest",
     "watch": "tsc --watch",
     "create": "ts-node src/generate/buildWorld.ts",
@@ -23,6 +23,7 @@
   "dependencies": {
     "@rt-potion/common": "workspace:*",
     "@rt-potion/converse": "workspace:*",
+    "@supabase/supabase-js": "^2.44.2",
     "ably": "^1.2.21",
     "better-sqlite3": "^11.5.0",
     "cookie-parser": "^1.4.6",

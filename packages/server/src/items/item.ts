@@ -100,6 +100,7 @@ export class Item {
       },
       {} as Record<string, string | number>
     );
+    console.log('itemData', itemData);
     const item = new Item({
       id: itemData.id,
       position: { x: itemData.position_x, y: itemData.position_y },

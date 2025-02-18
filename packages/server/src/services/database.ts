@@ -33,16 +33,20 @@ export function initializeServerDatabase(
   // Close the database on process exit or termination signals
   const closeDatabase = () => {
     if (DB) {
-      console.log('closing database');
+      console.log('Closing database...');
       DB.close();
     }
   };
 
   process.on('exit', closeDatabase);
-  process.on('SIGINT', () => {
+  process.on('SIGINT', async () => {
     process.exit(0);
   });
-  process.on('SIGTERM', () => {
+  process.on('SIGTERM', async () => {
+    process.exit(0);
+  });
+  // Nodemon sends SIGUSR2 when restarting
+  process.on('SIGUSR2', async () => {
     process.exit(0);
   });
 

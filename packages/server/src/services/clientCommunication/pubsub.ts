@@ -1,6 +1,6 @@
 // IPubSubService.ts
 
-import { Coord } from '@rt-potion/common';
+import { Coord, WorldMetadata } from '@rt-potion/common';
 import { Item } from '../../items/item';
 import { FantasyDate } from '../../date/fantasyDate';
 
@@ -17,9 +17,14 @@ export interface PubSub {
   closeChat(mobKey: string, target: string): void;
   playerResponses(mobKey: string, responses: string[]): void;
 
+  // Fight methods
+  closeFight(mobKey: string, target: string): void;
+  playerAttacks(mobKey: string, attacks: string[]): void;
+
   // Messaging and state update methods
   move(key: string, target: Coord | undefined, path: Coord[]): void;
   destroy(item: Item): void;
+  showPortalMenu(key: string, worlds: WorldMetadata[]): void;
   changeHealth(key: string, health: number, newValue: number): void;
   changeEffect(
     key: string,
@@ -37,6 +42,8 @@ export interface PubSub {
   changeAttack(key: string, attack: number, newValue: number): void;
   changePersonality(key: string, trait: string, newValue: number): void;
   changeItemAttribute(itemKey: string, property: string, value: number): void;
+  changeMaxHealth(key: string, maxHealth: number, newValue: number): void;
+  changeSpeed(key: string, speed: number, newValue: number): void;
   speak(key: string, message: string): void;
   setDateTime(fantasyDate: FantasyDate): void;
   kill(key: string): void;

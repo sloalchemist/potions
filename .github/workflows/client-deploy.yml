@@ -3,13 +3,15 @@ name: Build and Deploy Client
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the main branch
+      - main # Trigger on pushes to the main branch
   workflow_dispatch: # Allow manual triggering
 
 jobs:
   build:
     name: Build Client
     runs-on: ubuntu-latest
+    permissions:
+        contents: write
     environment: github-pages
 
     steps:
@@ -21,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18' # Use the version your project requires
+          node-version: '20' # Use the version your project requires
 
       # Step 3: Install PNPM
       - name: Install PNPM
@@ -50,11 +52,12 @@ jobs:
         run: |
           cp -r ./packages/client/static ./packages/client/dist/static
           cp -r ./packages/client/githubPages/index.html ./packages/client/dist
+          cp -r ./world_assets ./packages/client/dist
 
       # Step 8: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-            github_token: ${{ secrets.ACCESS_GITHUB_TOKEN }}
+            github_token: ${{ secrets.GITHUB_TOKEN }}
             publish_dir: ./packages/client/dist
-            
+            cname: potions.gg

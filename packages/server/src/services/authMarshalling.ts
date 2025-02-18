@@ -1,6 +1,7 @@
 import 'dotenv/config';
 
-if (!process.env.AUTH_SERVER_URL) {
+// If running in test, don't throw an error
+if (!process.env.AUTH_SERVER_URL && process.env.JEST_WORKER_ID === undefined) {
   throw new Error(
     'Cannot run without auth server url configured. Add path to .env'
   );
@@ -10,6 +11,7 @@ const authUrl = process.env.AUTH_SERVER_URL;
 console.log('Auth-Server URL:', authUrl);
 
 export interface PlayerData {
+  current_world_id: number;
   health: number;
   name: string;
   gold: number;
@@ -27,7 +29,7 @@ export async function updateCharacterData(
   id: number,
   playerData: PlayerData
 ): Promise<ApiResponse> {
-  const url = `${authUrl}/character/${id}`;
+  const url = new URL(`/character/${id}`, authUrl);
   try {
     const response = await fetch(url, {
       method: 'PUT', // Using PUT for updating existing resources
@@ -50,6 +52,17 @@ export async function updateCharacterData(
     }
     throw new Error('An unknown error occurred while updating character data');
   }
+}
+
+type GetWorldsResponse = {
+  id: string;
+  world_id: string;
+}[];
+
+export async function getWorlds(): Promise<GetWorldsResponse> {
+  const url = new URL('/worlds', authUrl);
+  const response = await fetch(url);
+  return response.json();
 }
 
 // Example usage:

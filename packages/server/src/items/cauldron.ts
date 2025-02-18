@@ -28,13 +28,18 @@ export class Cauldron {
     return this.item.getAttribute('ingredients');
   }
 
-  getPotionSubtype(): string {
+  getPotionSubtype(): number {
     return this.item.getAttribute('potion_subtype');
+  }
+
+  getColorWeight(): number {
+    return this.item.getAttribute('color_weight');
   }
 
   DumpCauldron(): boolean {
     this.item.setAttribute('ingredients', 0);
-    this.item.setAttribute('potion_subtype', '');
+    this.item.setAttribute('potion_subtype', 0);
+    this.item.setAttribute('color_weight', 1);
 
     return true;
   }
@@ -44,17 +49,33 @@ export class Cauldron {
 
     if (
       carriedItem &&
-      carriedItem.hasAttribute('brew_color') &&
+      (carriedItem.hasAttribute('brew_color') ||
+        carriedItem.type == 'potion') &&
       this.getNumItems() < 3
     ) {
+      // get ingredient color from carried item
+      var ingredientColor: string;
+      if (carriedItem.type == 'potion') {
+        ingredientColor = numberToHexString(Number(carriedItem.subtype));
+      } else {
+        ingredientColor = carriedItem.getAttribute('brew_color');
+      }
+
+      //calculate weight for added ingredient
+      let ingredientWeight = 1;
+      if (carriedItem.type == 'potion') {
+        ingredientWeight = 0.5; //change depending on how much you want potions to affect color
+      }
+
       // if no items in cauldron, add item
-      if (this.getPotionSubtype() == '') {
+      if (Number(this.getPotionSubtype()) == 0) {
         this.item.setAttribute(
           'potion_subtype',
-          String(hexStringToNumber(carriedItem.getAttribute('brew_color')))
+          hexStringToNumber(ingredientColor)
         );
         this.item.changeAttributeBy('ingredients', 1);
         carriedItem.destroy();
+        this.item.setAttribute('color_weight', ingredientWeight);
         return true;
       }
 
@@ -64,17 +85,24 @@ export class Cauldron {
       //combine hex colors
       const newColor = combineHexColors(
         hexString,
-        carriedItem.getAttribute('brew_color')
+        ingredientColor,
+        this.getColorWeight(),
+        ingredientWeight
       );
+
+      //if output color is the same as the ingredient color, increase weight
+      if (newColor == ingredientColor) {
+        this.item.changeAttributeBy('color_weight', ingredientWeight);
+      } else {
+        this.item.setAttribute('color_weight', ingredientWeight);
+      }
+      console.log('ingredient weight: ', ingredientWeight);
 
       // destroy carried item
       carriedItem.destroy();
 
       this.item.changeAttributeBy('ingredients', 1);
-      this.item.setAttribute(
-        'potion_subtype',
-        String(hexStringToNumber(newColor))
-      );
+      this.item.setAttribute('potion_subtype', hexStringToNumber(newColor));
       return true;
     }
     return false;
@@ -86,14 +114,13 @@ export class Cauldron {
     }
 
     this.item.setAttribute('ingredients', 0);
-
     itemGenerator.createItem({
       type: 'potion',
-      subtype: this.getPotionSubtype(),
+      subtype: String(this.getPotionSubtype()),
       carriedBy: mob
     });
 
-    this.item.setAttribute('potion_subtype', '');
+    this.item.setAttribute('potion_subtype', 0);
     return true;
   }
 }

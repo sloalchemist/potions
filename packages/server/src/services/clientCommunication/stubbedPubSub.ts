@@ -20,7 +20,11 @@ export class StubbedPubSub implements PubSub {
 
   closeChat(_mobKey: string, _target: string): void {}
 
+  closeFight(_mobKey: string, _target: string): void {}
+
   move(_key: string, _target: Coord, _path: Coord[]): void {}
+
+  showPortalMenu(_key: string): void {}
 
   destroy(_item: Item): void {}
 
@@ -56,6 +60,10 @@ export class StubbedPubSub implements PubSub {
     _value: number
   ): void {}
 
+  changeMaxHealth(_key: string, _maxHealth: number, _newValue: number): void {}
+
+  changeSpeed(_key: string, _speed: number, _newValue: number): void {}
+
   speak(_key: string, _message: string): void {}
 
   setDateTime(_fantasyDate: FantasyDate): void {}
@@ -71,4 +79,6 @@ export class StubbedPubSub implements PubSub {
   playerResponses(_mobKey: string, _responses: string[]): void {}
 
   doing(_key: string, _action: string): void {}
+
+  playerAttacks(_mobKey: string, _attacks: string[]): void {}
 }
