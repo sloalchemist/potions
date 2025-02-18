@@ -119,8 +119,19 @@
         { "type": "fence", "coord": { "x": 27, "y": 4 } },
         { "type": "fence", "coord": { "x": 27, "y": 3 } },
 
-        { "type": "potion-stand", "coord": { "x": 41, "y": 42 } }
+        { "type": "potion-stand", "coord": { "x": 41, "y": 42 } },
         
+
+        { "type": "seaweed", "coord": { "x": 11, "y": 36 } },
+        { "type": "seaweed", "coord": { "x": 10, "y": 40 } },
+        { "type": "seaweed", "coord": { "x": 7, "y": 39 } },
+        { "type": "seaweed", "coord": { "x": 6, "y": 42 } },
+
+
+        { "type": "coral", "coord": { "x": 9, "y": 16 } },
+        { "type": "coral", "coord": { "x": 10, "y": 12 } },
+        { "type": "coral", "coord": { "x": 5, "y": 11 } },
+        { "type": "coral", "coord": { "x": 9, "y": 8 } }
 
           ],
           "containers": [
