@@ -408,6 +408,9 @@
     { "type": "blueberry-bush", "coord": { "x": 21, "y": 30 } },
     { "type": "blueberry-bush", "coord": { "x": 26, "y": 31 } },
     { "type": "portal", "coord": { "x": 15, "y": 38 } },
+    { "type": "cloud", "coord": { "x": 18, "y": 22 } },
+    { "type": "sun", "coord": { "x": 27, "y": 25 } },
+    { "type": "cannon", "coord": { "x": 42, "y": 42 } },
     { "type": "cauldron", "coord": { "x": 20, "y": 15 } }
   ],
   "containers": [

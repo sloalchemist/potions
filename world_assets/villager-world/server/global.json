@@ -381,17 +381,84 @@
         {
           "action": "spawn_item",
           "parameters": {
-             "type": "sun-drop",
-             "global_max": 10,
-             "local_max": 2,
-             "radius": 4,
-             "rate": 0.1
+            "type": "sunflower",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cloud",
+      "type": "cloud",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sands-of-time",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 4,
+            "rate": 0.1
           }
         },
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "sunflower",
+            "type": "lightning-bloom",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 1,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cannon",
+      "type": "cannon",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "bomb",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "gun-powder",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sun",
+      "type": "sun",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sun-drop",
             "global_max": 10,
             "local_max": 2,
             "radius": 4,
@@ -442,16 +509,6 @@
             "global_max": 10,
             "local_max": 2,
             "radius": 3,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sun-drop",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
             "rate": 0.1
           }
         },
@@ -592,26 +649,6 @@
             "radius": 3,
             "rate": 0.1
           }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "bones",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "slime-blob",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
         }
       ]
     },
@@ -740,36 +777,6 @@
             "max": 12,
             "rate": 0.1
           }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sands-of-time",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "gun-powder",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "bomb",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
         }
       ]
     },
@@ -864,6 +871,64 @@
             }
           ]
         }
+      ],
+      "show_price_at": {
+        "x": 7,
+        "y": -10
+      }
+    },
+    {
+      "name": "Potion",
+      "description": "A magical concotion",
+      "type": "potion",
+      "carryable": true,
+      "smashable": true,
+      "walkable": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Quaff potion",
+          "action": "drink",
+          "while_carried": true
+        },
+        {
+          "description": "Create stand",
+          "action": "create_stand",
+          "while_carried": true
+        }
+      ]
+    },
+    {
+      "name": "Market stand",
+      "description": "A stand that sells THINGS.",
+      "type": "market-stand",
+      "carryable": false,
+      "smashable": true,
+      "walkable": false,
+      "attributes": [
+        {
+          "name": "items",
+          "value": 0
+        },
+        {
+          "name": "price",
+          "value": 10
+        },
+        {
+          "name": "gold",
+          "value": 0
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
       ],
       "show_price_at": {
         "x": 7,

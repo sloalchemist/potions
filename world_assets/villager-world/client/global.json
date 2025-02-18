@@ -351,20 +351,10 @@
           "action": "spawn_item",
           "parameters": {
             "type": "log",
-            "global_max": 10, 
+            "global_max": 10,
             "local_max": 2,
             "radius": 3,
             "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-             "type": "sun-drop",
-             "global_max": 10,
-             "local_max": 2,
-             "radius": 4,
-             "rate": 0.1
           }
         },
         {
@@ -380,13 +370,90 @@
       ]
     },
     {
+      "name": "Cloud",
+      "type": "cloud",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sands-of-time",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "lightning-bloom",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 1,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cannon",
+      "type": "cannon",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "bomb",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "gun-powder",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sun",
+      "type": "sun",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sun-drop",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
       "name": "Log",
       "type": "log",
       "carryable": true,
       "smashable": true,
       "walkable": true,
       "flat": true,
-      "attributes":[
+      "attributes": [
         {
           "name": "health",
           "value": 1
@@ -403,6 +470,11 @@
           "action": "build_wall",
           "while_carried": true,
           "requires_item": "partial-wall"
+        },
+        {
+            "description": "Create market",
+            "action": "create_market",
+            "while_carried": true
         }
       ]
     },
@@ -420,16 +492,6 @@
             "global_max": 10,
             "local_max": 2,
             "radius": 3,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sun-drop",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
             "rate": 0.1
           }
         },
@@ -589,26 +651,6 @@
             "radius": 3,
             "rate": 0.1
           }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "bones",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "slime-blob",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
         }
       ]
     },
@@ -632,7 +674,8 @@
         {
           "description": "Eat",
           "action": "eat",
-          "while_carried": true
+          "while_carried": true,
+          "sound_path": "static/sounds/eat_1.mp3"
         }
       ]
     },
@@ -663,16 +706,6 @@
             "radius": 4,
             "rate": 0.1
           }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "lightning-bloom",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
         }
       ]
     },
@@ -693,13 +726,15 @@
         {
           "description": "Start wall",
           "action": "start_wall",
-          "while_carried": true
+          "while_carried": true,
+          "sound_path": "static/sounds/grunt_3.mp3"
         },
         {
           "description": "Build wall",
           "action": "build_wall",
           "while_carried": true,
-          "requires_item": "partial-wall"
+          "requires_item": "partial-wall",
+          "sound_path": "static/sounds/grunt_3.mp3"
         }
       ]
     },
@@ -740,46 +775,132 @@
             "max": 15,
             "rate": 0.1
           }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "bomb",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sands-of-time",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "gun-powder",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
         }
-      ]
-    },
-    {
-      "name": "Potion stand",
-      "type": "potion-stand",
-      "carryable": false,
-      "smashable": true,
-      "walkable": false,
-      "attributes": [
+    ]
+},
+{
+    "name": "Potion stand",
+    "type": "potion-stand",
+    "carryable": false,
+    "smashable": true,
+    "walkable": false,
+    "attributes": [
+        {
+            "name": "items",
+            "value": 0
+        },
+        {
+            "name": "price",
+            "value": 10
+        },
+        {
+            "name": "gold",
+            "value": 0
+        },
+        {
+            "name": "health",
+            "value": 1
+        }
+    ],
+    "interactions": [
+        {
+            "description": "Add $item_name",
+            "action": "add_item",
+            "while_carried": false,
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Get $item_name",
+            "action": "get_item",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "items",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Raise price",
+            "action": "raise_price",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "price",
+                    "value": 99,
+                    "comparison": "less_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Lower price",
+            "action": "lower_price",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "price",
+                    "value": 1,
+                    "comparison": "greater_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Collect gold",
+            "action": "collect_gold",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "gold",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ],
+            "permissions": {
+                "community": true,
+                "other": false
+            }
+        },
+        {
+            "description": "Purchase potion",
+            "action": "purchase",
+            "while_carried": false,
+            "conditions": [
+                {
+                    "attribute_name": "items",
+                    "value": 0,
+                    "comparison": "greater_than"
+                }
+            ]
+        }
+    ],
+    "show_price_at": {
+        "x": 7,
+        "y": -10
+    }
+},
+{
+    "name": "Market",
+    "type": "market-stand",
+    "carryable": false,
+    "smashable": true,
+    "walkable": false,
+    "attributes": [
         {
           "name": "items",
           "value": 0
@@ -805,7 +926,8 @@
           "permissions": {
             "community": true,
             "other": false
-          }
+          },
+          "sound_path": "static/sounds/drop.mp3"
         },
         {
           "description": "Get $item_name",
@@ -821,7 +943,8 @@
           "permissions": {
             "community": true,
             "other": false
-          }
+          },
+          "sound_path": "static/sounds/pick_up.mp3"
         },
         {
           "description": "Raise price",
@@ -837,7 +960,8 @@
           "permissions": {
             "community": true,
             "other": false
-          }
+          },
+          "sound_path": "static/sounds/bell.mp3"
         },
         {
           "description": "Lower price",
@@ -853,7 +977,8 @@
           "permissions": {
             "community": true,
             "other": false
-          }
+          },
+          "sound_path": "static/sounds/bell.mp3"
         },
         {
           "description": "Collect gold",
@@ -869,7 +994,8 @@
           "permissions": {
             "community": true,
             "other": false
-          }
+          },
+          "sound_path": "static/sounds/jingle.mp3"
         },
         {
           "description": "Purchase potion",
@@ -881,7 +1007,8 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ]
+          ],
+          "sound_path": "static/sounds/jingle.mp3"
         }
       ],
       "show_price_at": {
@@ -905,7 +1032,8 @@
         {
           "description": "Quaff potion",
           "action": "drink",
-          "while_carried": true
+          "while_carried": true,
+          "sound_path": "static/sounds/drink_1.mp3"
         },
         {
           "description": "Create stand",
@@ -941,12 +1069,14 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ]
+          ],
+          "sound_path": "static/sounds/pick_up.mp3"
         },
         {
           "description": "Add $item_name",
           "action": "add_item",
-          "while_carried": false
+          "while_carried": false,
+          "sound_path": "static/sounds/drop.mp3"
         }
       ]
     },
@@ -976,7 +1106,8 @@
               "value": 3,
               "comparison": "less_than"
             }
-          ]
+          ],
+          "sound_path": "static/sounds/drop.mp3"
         },
         {
           "description": "Bottle Potion",
@@ -988,7 +1119,8 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ]
+          ],
+          "sound_path": "static/sounds/mix.mp3"
         },
         {
           "description": "Dump Cauldron",
@@ -1000,7 +1132,8 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ]
+          ],
+          "sound_path": "static/sounds/dump.mp3"
         }
       ]
     },
