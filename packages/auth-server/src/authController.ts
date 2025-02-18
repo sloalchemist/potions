@@ -10,6 +10,11 @@ export const userMembershipChannel = ably.channels.get('membership');
 export const supabase = initializeSupabase();
 
 function initializeSupabase() {
+  // In test environment, we'll use mocked Supabase client
+  if (process.env.NODE_ENV === 'test') {
+    return createClient('http://test-supabase.com', 'test-key');
+  }
+
   return createClient(getEnv('SUPABASE_URL'), getEnv('SUPABASE_SERVICE_KEY'));
 }
 
