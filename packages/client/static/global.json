@@ -403,6 +403,11 @@
           "action": "build_wall",
           "while_carried": true,
           "requires_item": "partial-wall"
+        },
+        {
+          "description": "Create market",
+          "action": "create_market",
+          "while_carried": true
         }
       ]
     },
@@ -700,11 +705,6 @@
           "action": "build_wall",
           "while_carried": true,
           "requires_item": "partial-wall"
-        },
-        {
-            "description": "Create market",
-            "action": "create_market",
-            "while_carried": true
         }
       ]
     },
