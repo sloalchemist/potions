@@ -246,7 +246,6 @@ export class WorldScene extends Phaser.Scene {
     //console.log(this.world_data);
     world = new World();
     world.load(globalData);
-    
 
     setInventoryCallback((items: Item[]) => {
       console.log('Inventory callback called with items:', items);
@@ -311,8 +310,6 @@ export class WorldScene extends Phaser.Scene {
         }
       }
     );
-
-    
 
     // Draw land layer with stone
     this.drawTerrainLayer(

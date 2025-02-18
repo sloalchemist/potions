@@ -98,7 +98,7 @@ export class Item extends Physical {
 
   stash(world: World, mob: Mob, position: Coord) {
     if (!this.carried_by) {
-      throw new Error("Must carry item being stashed");
+      throw new Error('Must carry item being stashed');
     }
     console.log('stashing item', this.key, this.carried_by);
     mob.carrying = undefined;

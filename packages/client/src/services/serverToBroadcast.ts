@@ -21,7 +21,7 @@ import {
 import { Types } from 'ably';
 import { focused } from '../main';
 import { world, WorldScene } from '../scenes/worldScene';
-import { SpriteItem} from '../sprite/sprite_item';
+import { SpriteItem } from '../sprite/sprite_item';
 import { SpriteMob } from '../sprite/sprite_mob';
 import {
   addNewItem,
@@ -97,7 +97,7 @@ export function setupBroadcast(
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
     item.unstash(world, mob, data.position);
-    world.removeStoredItem(item); 
+    world.removeStoredItem(item);
     updateInventory();
   }
 
@@ -219,12 +219,18 @@ export function setupBroadcast(
           handleDropItem(broadcastItem.data as DropItemData);
           break;
         case 'stash_item':
-          console.log(broadcastItem.data as StashItemData, "BROADCAST STASH ITEM")
-          handleStashItem(broadcastItem.data as StashItemData)
+          console.log(
+            broadcastItem.data as StashItemData,
+            'BROADCAST STASH ITEM'
+          );
+          handleStashItem(broadcastItem.data as StashItemData);
           break;
         case 'unstash_item':
-          console.log(broadcastItem.data as StashItemData, "BROADCAST UNSTASH ITEM")
-          handleUnstashItem(broadcastItem.data as UnstashItemData)
+          console.log(
+            broadcastItem.data as StashItemData,
+            'BROADCAST UNSTASH ITEM'
+          );
+          handleUnstashItem(broadcastItem.data as UnstashItemData);
         case 'doing':
           handleDoing(broadcastItem.data as DoingData);
           break;

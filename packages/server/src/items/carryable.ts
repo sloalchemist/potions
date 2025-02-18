@@ -83,38 +83,42 @@ export class Carryable {
     pubSub.dropItem(this.item.id, mob.id, this.item.position);
   }
 
-// stash carried item into inventory
-  stash(mob: Mob) : boolean {
+  // stash carried item into inventory
+  stash(mob: Mob): boolean {
     if (!mob.position) {
-      return false
+      return false;
     }
     const position = Item.findEmptyPosition(mob.position);
     const carriedItem = mob.carrying;
 
-    console.log("stash hit")
+    console.log('stash hit');
     // carriedItem must exist and === item.id
-    if (!carriedItem || carriedItem.id !== this.item.id){
-      return false
+    if (!carriedItem || carriedItem.id !== this.item.id) {
+      return false;
     }
 
     DB.transaction((mobId, itemId) => {
-      DB.prepare(`
+      DB.prepare(
+        `
           UPDATE items 
           SET stored_by = ?, position_x = NULL, position_y = NULL
           WHERE id = ?
-      `).run(mobId, itemId);
-  
-      DB.prepare(`
+      `
+      ).run(mobId, itemId);
+
+      DB.prepare(
+        `
           UPDATE mobs
           SET carrying_id = NULL
           WHERE carrying_id = ? AND id = ?
-      `).run(itemId, mobId);
-    })(mob.id, this.item.id); 
-  
-    mob.carrying = undefined;
-    pubSub.stashItem(this.item.id, mob.id, position)
+      `
+      ).run(itemId, mobId);
+    })(mob.id, this.item.id);
 
-    return true
+    mob.carrying = undefined;
+    pubSub.stashItem(this.item.id, mob.id, position);
+
+    return true;
   }
 
   // unstash stored items (drops at feet), swtiches carried item with stored item if carried exists
@@ -144,7 +148,6 @@ export class Carryable {
 
     pubSub.unstashItem(this.item.id, mob.id, this.item.position);
   }
-  
 
   static validateNoOrphanedItems(): void {
     const result = DB.prepare(

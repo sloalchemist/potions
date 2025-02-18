@@ -612,8 +612,7 @@ export class UxScene extends Phaser.Scene {
       setFightOpponentCallback((opponents: Mob[]) =>
         this.setFightOpponents(opponents)
       );
-      setInventoryCallback((items: Item[]) =>
-        this.setInventory(items));
+      setInventoryCallback((items: Item[]) => this.setInventory(items));
       /*this.setChatOptions([
                 { label: 'Hello there chief, I am the lord of the world.', callback: () => speak('Hello there chief, I am the lord of the world.') },
                 { label: 'Goodbye little man hahahhahahah', callback: () => speak('Goodbye little man hahahhahahah') },
@@ -794,14 +793,14 @@ export class UxScene extends Phaser.Scene {
 
   // Update the styles of the tab buttons based on the active tab
   updateTabStyles(
-    activeTab: 
-    | 'items'
-    | 'chat' 
-    | 'stats' 
-    | 'mix' 
-    | 'pack' 
-    | 'fight' 
-    | 'handbook'
+    activeTab:
+      | 'items'
+      | 'chat'
+      | 'stats'
+      | 'mix'
+      | 'pack'
+      | 'fight'
+      | 'handbook'
   ) {
     if (
       this.itemsTabButton &&
@@ -1039,8 +1038,8 @@ export class UxScene extends Phaser.Scene {
     }
   }
 
-   // Method to set inventory
-   setInventory(inventory: Item[]) {
+  // Method to set inventory
+  setInventory(inventory: Item[]) {
     this.inventoryButtons?.clearButtonOptions();
 
     inventory.forEach((item, i) => {

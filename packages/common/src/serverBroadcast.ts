@@ -22,13 +22,13 @@ export type StashItemData = {
   item_key: string;
   mob_key: string;
   position: Coord;
-}
+};
 
 export type UnstashItemData = {
   item_key: string;
   mob_key: string;
   position: Coord;
-}
+};
 
 export type DoingData = { id: string; action: string };
 export type MoveData = { id: string; target: Coord; path: Coord[] };

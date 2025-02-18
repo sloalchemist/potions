@@ -341,7 +341,6 @@ export class SpriteItem extends Item {
     this.animate();
   }
 
-
   unstash(world: World, mob: Mob, position: Coord): void {
     // Call base unstash to update world state
     super.unstash(world, mob, position);

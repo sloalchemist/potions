@@ -191,7 +191,7 @@ export function getCarriedItemInteractions(
     item: item as Item,
     label: `Drop ${item.itemType.name}`
   });
-  
+
   interactions.push({
     action: 'stash',
     item: item as Item,
@@ -415,9 +415,7 @@ export function setBrewCallback(
   brewCallback = callback;
 }
 
-export function setInventoryCallback(
-  callback: (items: Item[]) => void
-) {
+export function setInventoryCallback(callback: (items: Item[]) => void) {
   inventoryCallback = callback;
 }
 
