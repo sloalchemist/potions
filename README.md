@@ -204,3 +204,39 @@ Developers/players will now be able to save their world data to Supabase. This m
 
  **DB Errors**
  On the off chance you receive an error while running the server, you can always reset with the last bullet point above.
+
+### Database Setup for New Worlds
+
+To add new worlds and assign characters to the correct world, run the following SQL commands in Supabase:
+
+#### 1. Add New Worlds
+Insert the `world_id` and corresponding `ably_api_key` for the worlds you're adding:
+
+```sql
+INSERT INTO worlds (world_id, ably_api_key) 
+VALUES ('fire-world', 'your_ably_api_key');
+
+INSERT INTO worlds (world_id, ably_api_key) 
+VALUES ('water-world', 'your_ably_api_key');
+```
+#### 2. Assign Characters to Worlds
+Set the current_world_id for the character to ensure they are in the correct world.
+To assign a character to the Fire World (world_id = 2):
+
+```sql
+UPDATE characters
+SET current_world_id = 2 -- fire-world
+WHERE character_id = 'your_current_character_id';
+```
+
+To assign a character to the Water World (world_id = 3):
+```sql
+UPDATE characters
+SET current_world_id = 3 -- water-world
+WHERE character_id = 'your_current_character_id';
+```
+
+#### 3. Notes
+
+- Replace `'your_ably_api_key'` with your ably api key. The ably api key should be the same across worlds.
+- Replace `'your_current_character_id'` with the specific character's ID that you are using. You can find this by running the game and checking the `auth-server` terminal output, where you’ll see a message like `Player joined! 1f238661-9a4a-4d1a-92e6-9178f76f6dba`. This is the `character_id` for the player that joined.
