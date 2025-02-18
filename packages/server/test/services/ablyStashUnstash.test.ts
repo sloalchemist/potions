@@ -2,8 +2,8 @@ process.env.AUTH_SERVER_URL = 'test-auth-server';
 
 import { AblyService } from '../../src/services/clientCommunication/ablyService';
 
-jest.spyOn(console, "log").mockImplementation(() => {});
-jest.spyOn(console, "error").mockImplementation(() => {});
+jest.spyOn(console, 'log').mockImplementation(() => {});
+jest.spyOn(console, 'error').mockImplementation(() => {});
 
 const subscribedChannels: string[] = [];
 const publishedMessages: object[] = [];
@@ -11,18 +11,24 @@ const publishedMessages: object[] = [];
 jest.mock('ably', () => ({
   Realtime: jest.fn().mockImplementation(() => ({
     channels: {
-      get: jest.fn().mockImplementation((channelName: string) => ({
-        subscribe: jest.fn().mockImplementation((event, callback) => {
-          subscribedChannels.push(event);
+      get: jest.fn().mockImplementation((_channelName: string) => ({
+        subscribe: jest.fn().mockImplementation((_event, _callback) => {
+          subscribedChannels.push(_event);
         }),
-        publish: jest.fn().mockImplementation((name, data) => {
+        publish: jest.fn().mockImplementation((name: string, data: unknown) => {
           publishedMessages.push({ name, data });
         }),
         presence: {
           subscribe: jest.fn(),
-          get: jest.fn().mockImplementation((cb) => {
-            cb(null, [{ clientId: 'dummy' }]);
-          })
+          get: jest
+            .fn()
+            .mockImplementation(
+              (
+                cb: (err: unknown, result: Array<{ clientId: string }>) => void
+              ) => {
+                cb(null, [{ clientId: 'dummy' }]);
+              }
+            )
         }
       }))
     }
@@ -60,7 +66,9 @@ describe('AblyService stashing and unstashing broadcasts', () => {
 
   it('publishes stash_item broadcast after sending broadcast (when client is connected)', () => {
     const ablyService = testAblyService();
-    (ablyService as any).hasConnectedClients = true;
+    (
+      ablyService as unknown as { hasConnectedClients: boolean }
+    ).hasConnectedClients = true;
 
     ablyService.startBroadcasting();
     ablyService.stashItem('item123', 'mob123', { x: 10, y: 20 });
@@ -72,7 +80,11 @@ describe('AblyService stashing and unstashing broadcasts', () => {
         broadcast: [
           {
             type: 'stash_item',
-            data: { item_key: 'item123', mob_key: 'mob123', position: { x: 10, y: 20 } }
+            data: {
+              item_key: 'item123',
+              mob_key: 'mob123',
+              position: { x: 10, y: 20 }
+            }
           }
         ]
       }
@@ -81,7 +93,9 @@ describe('AblyService stashing and unstashing broadcasts', () => {
 
   it('publishes unstash_item broadcast after sending broadcast (when client is connected)', () => {
     const ablyService = testAblyService();
-    (ablyService as any).hasConnectedClients = true;
+    (
+      ablyService as unknown as { hasConnectedClients: boolean }
+    ).hasConnectedClients = true;
 
     ablyService.startBroadcasting();
     ablyService.unstashItem('item456', 'mob456', { x: 5, y: 25 });
@@ -93,7 +107,11 @@ describe('AblyService stashing and unstashing broadcasts', () => {
         broadcast: [
           {
             type: 'unstash_item',
-            data: { item_key: 'item456', mob_key: 'mob456', position: { x: 5, y: 25 } }
+            data: {
+              item_key: 'item456',
+              mob_key: 'mob456',
+              position: { x: 5, y: 25 }
+            }
           }
         ]
       }
