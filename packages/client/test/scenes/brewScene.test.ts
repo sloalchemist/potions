@@ -371,7 +371,7 @@ describe('BrewScene actions based on state', () => {
     ];
 
     uxScene.setInteractions(interactions);
-    
+
     // Because isActive returned true, the callback should call scene.stop('BrewScene')
     expect(uxScene.scene.stop).toHaveBeenCalledWith('BrewScene');
 
