@@ -21,14 +21,15 @@ import {
 import { Types } from 'ably';
 import { focused } from '../main';
 import { world, WorldScene } from '../scenes/worldScene';
-import { SpriteItem, updateInventory} from '../sprite/sprite_item';
+import { SpriteItem} from '../sprite/sprite_item';
 import { SpriteMob } from '../sprite/sprite_mob';
 import {
   addNewItem,
   addNewMob,
   gameState,
   setAvailableWorlds,
-  setDate
+  setDate,
+  updateInventory
 } from '../world/controller';
 import { publicCharacterId } from '../worldMetadata';
 import { leaveWorld } from './playerToServer';

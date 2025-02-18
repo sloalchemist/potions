@@ -748,6 +748,7 @@ export class UxScene extends Phaser.Scene {
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
     this.fightContainer?.setVisible(true);
+    this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('fight');
   }
 
@@ -762,6 +763,7 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(true);
     this.backButton?.setVisible(false);
+    this.inventoryContainer?.setVisible(false);
     this.scene.stop('BrewScene');
     this.mixButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('handbook');
@@ -782,10 +784,15 @@ export class UxScene extends Phaser.Scene {
 
   showInventoryTab() {
     this.inventoryContainer?.setVisible(true);
-    this.mixContainer?.setVisible(false);
+    this.mixContainer?.setVisible(true);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
     this.updateTabStyles('pack');
   }
 
