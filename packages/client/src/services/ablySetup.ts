@@ -7,7 +7,7 @@ import { setupBroadcast } from './serverToBroadcast';
 export let broadcastChannel: Types.RealtimeChannelCallbacks;
 export let playerChannel: Types.RealtimeChannelCallbacks;
 
-const SERVER_URL = process.env.SERVER_URL;
+const SERVER_URL = process.env.SERVER_URL; //Cannot use getEnv in the client package https://webpack.js.org/guides/environment-variables/
 let channelsBoundToWorld: boolean = false;
 
 export function setupAbly(): Promise<string> {
