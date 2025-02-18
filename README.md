@@ -219,20 +219,23 @@ VALUES ('fire-world', 'your_ably_api_key');
 INSERT INTO worlds (world_id, ably_api_key) 
 VALUES ('water-world', 'your_ably_api_key');
 ```
+Your ably_api_key is the same across worlds so you can use the same one that you are already using for test-world.
+
 #### 2. Assign Characters to Worlds
 Set the current_world_id for the character to ensure they are in the correct world.
-To assign a character to the Fire World (world_id = 2):
+See the id column in your worlds table for the corresponding id.
+To assign a character to the Fire World:
 
 ```sql
 UPDATE characters
-SET current_world_id = 2 -- fire-world
+SET current_world_id = 'id' -- fire-world
 WHERE character_id = 'your_current_character_id';
 ```
 
 To assign a character to the Water World (world_id = 3):
 ```sql
 UPDATE characters
-SET current_world_id = 3 -- water-world
+SET current_world_id = 'id' -- water-world
 WHERE character_id = 'your_current_character_id';
 ```
 
