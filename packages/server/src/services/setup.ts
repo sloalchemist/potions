@@ -15,6 +15,7 @@ import {
   initializeBucket
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
+import { DataLogger } from "../grafana/dataLogger"; 
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
@@ -94,6 +95,8 @@ async function initializeAsync() {
 }
 
 initializeAsync();
+
+DataLogger.startMetricsServer();
 
 // Used for update on developer cheat
 export function setLastUploadTime(time: number) {
