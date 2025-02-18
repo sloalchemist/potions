@@ -9,6 +9,12 @@ export const userMembershipChannel = ably.channels.get('membership');
 export const supabase = initializeSupabase();
 
 function initializeSupabase() {
+  // In test environment, we'll use mocked Supabase client
+  if (process.env.NODE_ENV === 'test') {
+    return createClient('http://test-supabase.com', 'test-key');
+  }
+
+  // In non-test environments, we still need real credentials
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
     throw new Error('Cannot run without supabase credentials in env.');
   }

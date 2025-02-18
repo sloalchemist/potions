@@ -7,8 +7,18 @@ if (!process.env.AUTH_SERVER_URL && process.env.JEST_WORKER_ID === undefined) {
   );
 }
 
-const authUrl = process.env.AUTH_SERVER_URL;
-console.log('Auth-Server URL:', authUrl);
+// If running in test, don't throw an error
+if (
+  !process.env.AUTH_SERVER_SECRET &&
+  process.env.JEST_WORKER_ID === undefined
+) {
+  throw new Error(
+    'Cannot run without auth server secret configured. Add path to .env'
+  );
+}
+
+// Make this a function so it's reactive to environment changes (e.g., when running tests)
+const getAuthUrl = () => process.env.AUTH_SERVER_URL;
 
 export interface PlayerData {
   current_world_id: number;
@@ -29,12 +39,13 @@ export async function updateCharacterData(
   id: number,
   playerData: PlayerData
 ): Promise<ApiResponse> {
-  const url = new URL(`/character/${id}`, authUrl);
+  const url = new URL(`/character/${id}`, getAuthUrl());
   try {
     const response = await fetch(url, {
       method: 'PUT', // Using PUT for updating existing resources
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.AUTH_SERVER_SECRET}` // Using secret from environment variable
       },
       body: JSON.stringify(playerData)
     });
@@ -60,8 +71,12 @@ type GetWorldsResponse = {
 }[];
 
 export async function getWorlds(): Promise<GetWorldsResponse> {
-  const url = new URL('/worlds', authUrl);
-  const response = await fetch(url);
+  const url = new URL('/worlds', getAuthUrl());
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.AUTH_SERVER_SECRET}` // Using secret from environment variable
+    }
+  });
   return response.json();
 }
 
