@@ -613,8 +613,7 @@ export class UxScene extends Phaser.Scene {
         this.setFightOpponents(opponents)
       );
       setInventoryCallback((items: Item[]) =>
-        this.setInventory(items)
-      );
+        this.setInventory(items));
       /*this.setChatOptions([
                 { label: 'Hello there chief, I am the lord of the world.', callback: () => speak('Hello there chief, I am the lord of the world.') },
                 { label: 'Goodbye little man hahahhahahah', callback: () => speak('Goodbye little man hahahhahahah') },
