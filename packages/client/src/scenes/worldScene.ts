@@ -427,7 +427,7 @@ export class WorldScene extends Phaser.Scene {
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
       }
-      if (event.shiftKey && event.code === 'KeyS') {
+      if (event.shiftKey && event.code === 'KeyG') {
         persistWorldData();
       }
       // Brings up chat box for user
