@@ -55,7 +55,6 @@ export class DataLogger {
         res.end(await this.getMetrics());
       } else {
         res.writeHead(404, { "Content-Type": "text/plain" });
-        res.end("Not Found");
       }
     }).listen(port, () => {
       console.log(`Prometheus metrics available at http://localhost:${port}/metrics`);
