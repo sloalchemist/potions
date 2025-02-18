@@ -28,6 +28,7 @@ import {
 } from '../services/playerToServer';
 import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
+import globalData from '../../static/global.json';
 export interface ChatOption {
   label: string;
   callback: () => void;
@@ -81,9 +82,38 @@ export class UxScene extends Phaser.Scene {
   recipeContainer: Phaser.GameObjects.Container | null = null;
   effectsContainer: Phaser.GameObjects.Container | null = null;
 
+  chatSounds: Phaser.Sound.BaseSound[] = [];
+
   constructor() {
     super({
       key: 'UxScene'
+    });
+  }
+
+  preload() {
+    // button sounds
+    this.load.audio('tabClick', ['static/sounds/button_with_flip.mp3']);
+    this.load.audio('buttonClick', ['static/sounds/button.mp3']);
+    // chatting sounds
+    this.load.audio('chatHigh', ['static/sounds/chat_high.mp3']);
+    this.load.audio('chatLow', ['static/sounds/chat_low.mp3']);
+    this.load.audio('chatMid', ['static/sounds/chat_mid.mp3']);
+    this.load.audio('chatNormal', ['static/sounds/chat_normal.mp3']);
+    // generic interaction sounds
+    this.load.audio('smash', ['static/sounds/smash.mp3']);
+    this.load.audio('pickup', ['static/sounds/pick_up.mp3']);
+    this.load.audio('drop', ['static/sounds/drop.mp3']);
+    this.load.audio('give', ['static/sounds/drop.mp3']);
+    // item interaction sounds
+    this.load.audio('pickupGold', ['static/sounds/jingle.mp3']);
+    const interactions = globalData.item_types.flatMap(
+      (item) => item.interactions as Interactions[]
+    );
+    interactions.forEach((interaction) => {
+      const soundPath = (interaction as { sound_path?: string }).sound_path;
+      if (soundPath) {
+        this.load.audio(interaction.action, [soundPath]);
+      }
     });
   }
 
@@ -214,6 +244,13 @@ export class UxScene extends Phaser.Scene {
     backgroundTabs.lineTo(SCREEN_WIDTH, tabY + tabHeight / 2);
     backgroundTabs.strokePath();
     backgroundTabs.setDepth(-1);
+
+    this.chatSounds = [
+      this.sound.add('chatHigh'),
+      this.sound.add('chatLow'),
+      this.sound.add('chatMid'),
+      this.sound.add('chatNormal')
+    ];
 
     if (currentCharacter) {
       // Add character stats to itemsContainer
@@ -572,6 +609,9 @@ export class UxScene extends Phaser.Scene {
   }
 
   callSpeak(response: string, i: number) {
+    // randomly select a chat sound
+    const chatSound = Phaser.Math.RND.pick(this.chatSounds);
+    chatSound.play();
     speak(response, i);
     this.setChatOptions([]);
   }
@@ -678,6 +718,10 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
     this.fightContainer?.setVisible(true);
     this.updateTabStyles('fight');
   }
@@ -741,6 +785,9 @@ export class UxScene extends Phaser.Scene {
         const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
         const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
 
+        const interactionAction =
+          interaction.item.type === 'gold' ? 'pickupGold' : interaction.action;
+
         const button = new Button(
           this,
           x,
@@ -752,7 +799,12 @@ export class UxScene extends Phaser.Scene {
               interaction.item.key,
               interaction.action,
               interaction.give_to ? interaction.give_to : null
-            )
+            ),
+          undefined,
+          undefined,
+          this.cache.audio.has(interactionAction)
+            ? interactionAction
+            : undefined
         );
         this.interactButtons.push(button);
         this.itemsContainer?.add(button);
