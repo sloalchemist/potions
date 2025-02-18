@@ -342,6 +342,42 @@ describe('BrewScene actions based on state', () => {
     // Advance timers so that the setTimeout callback is executed
     jest.runAllTimers();
   });
+
+  test('Brew scene stops when there is no cauldron nearby', () => {
+    const uxScene = new UxScene();
+    patchUxScene(uxScene);
+    // Ensure isActive returns true
+    uxScene.scene.isActive = jest.fn().mockReturnValue(true);
+
+    const blueberry = new Item(
+      world,
+      'blueberry',
+      { x: 1, y: 0 },
+      {
+        name: 'Blueberry',
+        type: 'blueberry',
+        carryable: true,
+        walkable: true,
+        interactions: []
+      }
+    );
+
+    const interactions: Interactions[] = [
+      {
+        item: blueberry,
+        action: 'ew',
+        label: 'label'
+      }
+    ];
+
+    uxScene.setInteractions(interactions);
+    
+    // Because isActive returned true, the callback should call scene.stop('BrewScene')
+    expect(uxScene.scene.stop).toHaveBeenCalledWith('BrewScene');
+
+    // Advance timers so that the setTimeout callback is executed
+    jest.runAllTimers();
+  });
 });
 
 describe('Buttons shown when BrewScene is and is not active', () => {
