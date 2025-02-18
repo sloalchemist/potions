@@ -795,7 +795,8 @@ export class UxScene extends Phaser.Scene {
 
   // Update the styles of the tab buttons based on the active tab
   updateTabStyles(
-    activeTab: 'items'
+    activeTab: 
+    | 'items'
     | 'chat' 
     | 'stats' 
     | 'mix' 
