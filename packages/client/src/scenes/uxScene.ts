@@ -89,7 +89,6 @@ export class UxScene extends Phaser.Scene {
   chatSounds: Phaser.Sound.BaseSound[] = [];
   inventoryContainer: Phaser.GameObjects.Container | null = null;
 
-
   constructor() {
     super({
       key: 'UxScene'
@@ -140,7 +139,6 @@ export class UxScene extends Phaser.Scene {
     this.recipeContainer = this.add.container(0, 40);
     this.effectsContainer = this.add.container(0, 40);
     this.inventoryContainer = this.add.container(0, 40);
-
 
     const tabWidth = 68;
     const tabHeight = 40;
@@ -614,7 +612,6 @@ export class UxScene extends Phaser.Scene {
       setFightOpponentCallback((opponents: Mob[]) =>
         this.setFightOpponents(opponents)
       );
-
       setInventoryCallback((items: Item[]) =>
         this.setInventory(items)
       );
@@ -798,7 +795,13 @@ export class UxScene extends Phaser.Scene {
 
   // Update the styles of the tab buttons based on the active tab
   updateTabStyles(
-    activeTab: 'items' | 'chat' | 'stats' | 'mix' | 'pack' | 'fight' | 'handbook'
+    activeTab: 'items'
+    | 'chat' 
+    | 'stats' 
+    | 'mix' 
+    | 'pack' 
+    | 'fight' 
+    | 'handbook'
   ) {
     if (
       this.itemsTabButton &&

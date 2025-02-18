@@ -21,7 +21,7 @@ import {
   WorldDescription
 } from '../worldDescription';
 import { UxScene } from './uxScene';
-import { setGameState, setInventoryCallback} from '../world/controller';
+import { setGameState, setInventoryCallback } from '../world/controller';
 import {
   restoreHealth,
   persistWorldData,
