@@ -16,6 +16,7 @@ import {
   initializeBucket
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
+import { getEnv } from '@rt-potion/common';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
@@ -25,14 +26,11 @@ export let worldID: string = '';
 export const supabase = initializeSupabase();
 
 function initializeAbly(worldId: string): AblyService {
-  if (
-    !process.env.ABLY_API_KEY ||
-    process.env.ABLY_API_KEY.indexOf('INSERT') === 0
-  ) {
+  const apiKey = getEnv('ABLY_API_KEY');
+  if (apiKey.indexOf('INSERT') === 0) {
     throw new Error('Cannot run without an API key. Add your key to .env');
   }
-
-  return new AblyService(process.env.ABLY_API_KEY, worldId);
+  return new AblyService(apiKey, worldId);
 }
 
 async function initializeAsync() {
