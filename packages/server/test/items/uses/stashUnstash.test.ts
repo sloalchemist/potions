@@ -6,7 +6,7 @@ import { Item } from '../../../src/items/item';
 
 jest.mock('../../../src/items/carryable', () => ({
   Carryable: {
-    fromItem: jest.fn(),
+    fromItem: jest.fn()
   }
 }));
 
