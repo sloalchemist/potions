@@ -29,13 +29,13 @@ export type Interactions = {
 let interactionCallback: (interactions: Interactions[]) => void;
 let chatCompanionCallback: (companions: Mob[]) => void;
 let fightOpponentCallback: (opponents: Mob[]) => void;
-let brewCallback: (interactions: Interactions[]) => void;
 let lastInteractions: Interactions[] = [];
 let lastChatCompanions: Mob[] = [];
 let lastFightOpponents: Mob[] = [];
 let chatting: boolean = false;
 let fighting: boolean = false;
 
+export let currentInteractions: Interactions[] = [];
 export let fantasyDate: FantasyDateI;
 
 let responseCallback: (responses: string[]) => void = () => {};
@@ -377,12 +377,11 @@ function collisionListener(physicals: Item[]) {
   // updates client only if interactions changes
   if (
     !areInteractionsEqual(lastInteractions, interactions) &&
-    interactionCallback &&
-    brewCallback
+    interactionCallback
   ) {
     interactionCallback(interactions);
-    brewCallback(interactions);
     lastInteractions = interactions;
+    currentInteractions = interactions;
   }
 }
 
@@ -400,12 +399,6 @@ export function setInteractionCallback(
 
 export function setFightOpponentCallback(callback: (opponents: Mob[]) => void) {
   fightOpponentCallback = callback;
-}
-
-export function setBrewCallback(
-  callback: (interactions: Interactions[]) => void
-) {
-  brewCallback = callback;
 }
 
 export function addNewHouse(scene: WorldScene, house: HouseI) {
