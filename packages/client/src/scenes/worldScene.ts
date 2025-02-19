@@ -8,7 +8,7 @@ import {
 import { bindAblyToWorldScene, setupAbly } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
 import { Coord } from '@rt-potion/common';
-import { publicCharacterId } from '../worldMetadata';
+import { publicCharacterId, getWorldID } from '../worldMetadata';
 import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
@@ -64,12 +64,13 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', 'static/background.png');
+    const worldID = getWorldID();
+    this.load.image('background', `static/${worldID}_background.png`);
 
     this.load.atlas(
       'global_atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      `static/${worldID}_assets.png`,
+      `static/${worldID}_atlas.json`
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -79,7 +80,7 @@ export class WorldScene extends Phaser.Scene {
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
     this.load.json('global_data', 'static/global.json');
-    this.load.json('world_specific_data', 'static/world_specific.json');
+    this.load.json('world_specific_data', `static/${worldID}_specific.json`);
 
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
@@ -241,8 +242,6 @@ export class WorldScene extends Phaser.Scene {
       this.cache.json.get('world_specific_data')
     );
 
-    console.log('setting up world', needsAnimationsLoaded);
-    //console.log(this.world_data);
     world = new World();
     world.load(globalData);
 
