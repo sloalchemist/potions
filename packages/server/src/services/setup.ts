@@ -41,7 +41,7 @@ async function initializeAsync() {
   }
 
   console.log(`loading world ${worldID}`);
-  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
+  // const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
 
   // Create bucket if it doesn't exist
   try {
