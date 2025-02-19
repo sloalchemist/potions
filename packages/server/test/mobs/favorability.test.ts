@@ -112,8 +112,8 @@ describe('Favorability Tests', () => {
     mobFactory.makeMob('villager', position2, 'testVillager', 'villagertest');
     var testplayer = Mob.getMob('testPlayer');
 
-    console.log(11111)
-    console.log(testplayer?._favorite_item)
+    expect(testplayer).toBeDefined();
+    expect(testplayer?._favorite_item).toBeDefined();
 
   });
 });
