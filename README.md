@@ -231,8 +231,28 @@ Developers/players will now be able to save their world data to Supabase. This m
 **DB Errors**
 On the off chance you receive an error while running the server, you can always reset with the last bullet point above.
 
-### LLM Setup
+## LLM Setup
 
 **1. Download Ollama**
 
 - Download Ollama from [this site](https://ollama.com/download).
+
+**2. Run Bash Command**
+
+- Run `ollama run deepseek-r1:1.5b` in your terminal
+
+**3. Setup Queues in Supabase**
+
+- Navigate to your potions project in your Supabase dashboard
+- In that project, go to the Integrations tab on the bottom left-hand side of the screen
+- Click the Queues integration
+- Click the **create queue** button
+- Name the queue _"processed"_ and click the **create queue** button
+- Repeat this step, expect this time name the queue _"prompts"_
+- Under the **Settings** tab enable _Expose Queues via PostgREST_
+- Return to the **Queues** tab and click on the _"processed"_ queue
+- Find the **Queue** settings button which is represented by a gear
+- Enable all permissions
+- Repeat this for the _"prompts"_ queue
+- Navigate to the **Table Editor**
+- Select the **schema pgmq** from the drop down menu
