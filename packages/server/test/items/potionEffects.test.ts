@@ -7,6 +7,7 @@ import { Mob } from '../../src/mobs/mob';
 import { Drink } from '../../src/items/uses/drink';
 import { FantasyDate } from '../../src/date/fantasyDate';
 import { Coord } from '@rt-potion/common';
+import { Hunt } from ''
 
 beforeEach(() => {
   commonSetup();
