@@ -48,8 +48,8 @@ export class LoadWorldScene extends Phaser.Scene {
     this.load.image('title', 'static/title.png');
     this.load.atlas(
       'global-atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      '../../world_assets/global/client/global.png',
+      '../../world_assets/global/client/global-atlas.json'
     );
   }
 

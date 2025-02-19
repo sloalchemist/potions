@@ -68,8 +68,8 @@ export class WorldScene extends Phaser.Scene {
 
     this.load.atlas(
       'global_atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      '../../world_assets/global/client/global.png',
+      '../../world_assets/global/client/global-atlas.json'
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -78,7 +78,7 @@ export class WorldScene extends Phaser.Scene {
     });
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
-    this.load.json('global_data', 'static/global.json');
+    this.load.json('global_data', '../../world_assets/global/client/global.json');
     this.load.json('world_specific_data', 'static/world_specific.json');
 
     this.load.audio('walk', ['static/sounds/walk.mp3']);

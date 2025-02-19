@@ -2,7 +2,7 @@ import { Mob } from '../mob';
 import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { Community } from '../../community/community';
-import globalData from '../../../data/global.json';
+import globalData from '../../../../../world_assets/global/server/global.json';
 
 export class Hunt implements Plan {
   enemy: Mob | null = null;

@@ -1,6 +1,6 @@
 import * as readline from 'readline';
 import { mobFactory } from '../src/mobs/mobFactory';
-import globalData from '../data/global.json';
+import globalData from '../../../world_assets/global/server/global.json';
 import { itemGenerator } from '../src/items/itemGenerator';
 import { Coord } from '@rt-potion/common';
 

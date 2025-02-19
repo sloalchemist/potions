@@ -28,7 +28,7 @@ import {
 } from '../services/playerToServer';
 import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
-import globalData from '../../static/global.json';
+import globalData from '../../../../world_assets/global/client/global.json';
 export interface ChatOption {
   label: string;
   callback: () => void;

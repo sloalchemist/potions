@@ -3,7 +3,7 @@ import { AblyService } from './clientCommunication/ablyService';
 import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
-import globalData from '../../data/global.json';
+import globalData from '../../../../world_assets/global/server/global.json';
 import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
