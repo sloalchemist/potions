@@ -7,14 +7,14 @@ import {
   fantasyDate,
   Interactions,
   setAttackCallback,
-  setBrewCallback,
   setChatCompanionCallback,
   setChatting,
   setFighting,
   setFightOpponentCallback,
   setInteractionCallback,
   setInventoryCallback,
-  setResponseCallback
+  setResponseCallback,
+  currentInteractions
 } from '../world/controller';
 import { TabButton } from '../components/tabButton';
 import { SlideButton } from '../components/slideButton';
@@ -44,7 +44,6 @@ export interface FightOption {
 export class UxScene extends Phaser.Scene {
   interactButtons: ButtonManager = new ButtonManager([]);
   chatButtons: ButtonManager = new ButtonManager([]);
-  mixButtons: ButtonManager = new ButtonManager([]);
   inventoryButtons: ButtonManager = new ButtonManager([]);
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
@@ -71,7 +70,6 @@ export class UxScene extends Phaser.Scene {
   itemsTabButton: TabButton | null = null;
   chatTabButton: TabButton | null = null;
   statsTabButton: TabButton | null = null;
-  mixTabButton: TabButton | null = null;
   fightTabButton: TabButton | null = null;
   potionTabButton: TabButton | null = null;
   nextButton: SlideButton | null = null;
@@ -81,7 +79,6 @@ export class UxScene extends Phaser.Scene {
   itemsContainer: Phaser.GameObjects.Container | null = null;
   chatContainer: Phaser.GameObjects.Container | null = null;
   statsContainer: Phaser.GameObjects.Container | null = null;
-  mixContainer: Phaser.GameObjects.Container | null = null;
   fightContainer: Phaser.GameObjects.Container | null = null;
   recipeContainer: Phaser.GameObjects.Container | null = null;
   effectsContainer: Phaser.GameObjects.Container | null = null;
@@ -134,13 +131,12 @@ export class UxScene extends Phaser.Scene {
     this.statsContainer = this.add.container(0, 40);
     this.itemsContainer = this.add.container(0, 40);
     this.chatContainer = this.add.container(0, 40);
-    this.mixContainer = this.add.container(0, 40);
     this.fightContainer = this.add.container(0, 40);
     this.recipeContainer = this.add.container(0, 40);
     this.effectsContainer = this.add.container(0, 40);
     this.inventoryContainer = this.add.container(0, 40);
 
-    const tabWidth = 68;
+    const tabWidth = 82;
     const tabHeight = 40;
     const tabSpacing = 5;
 
@@ -191,18 +187,9 @@ export class UxScene extends Phaser.Scene {
       tabWidth,
       tabHeight
     );
-    this.mixTabButton = new TabButton(
-      this,
-      tabX + 3 * (tabWidth + tabSpacing) + tabWidth / 2,
-      tabY,
-      'Mix',
-      () => this.showMixTab(),
-      tabWidth,
-      tabHeight
-    );
     this.fightTabButton = new TabButton(
       this,
-      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
+      tabX + 3 * (tabWidth + tabSpacing) + tabWidth / 2,
       tabY,
       'Fight',
       () => this.showFightTab(),
@@ -211,9 +198,9 @@ export class UxScene extends Phaser.Scene {
     );
     this.potionTabButton = new TabButton(
       this,
-      tabX + 5 * (tabWidth + tabSpacing) + tabWidth / 2,
+      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
       tabY,
-      'HandB.',
+      'HandBook',
       () => this.showPotionsTab(),
       tabWidth,
       tabHeight
@@ -602,10 +589,6 @@ export class UxScene extends Phaser.Scene {
       setInteractionCallback((interactions: Interactions[]) =>
         this.setInteractions(interactions)
       );
-      // Set interaction callback for mix interactions
-      setBrewCallback((interactions: Interactions[]) =>
-        this.setBrewOptions(interactions)
-      );
       setChatCompanionCallback((companions: Mob[]) =>
         this.setChatCompanions(companions)
       );
@@ -668,7 +651,6 @@ export class UxScene extends Phaser.Scene {
   }
 
   showStatsTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
@@ -677,15 +659,14 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
-    this.mixButtons?.clearUnmatchedButtons('Toggle Menu');
     this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('stats');
   }
 
   // Method to show the Items tab
   showItemsTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(true);
     this.chatContainer?.setVisible(false);
@@ -694,15 +675,14 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
-    this.mixButtons?.clearUnmatchedButtons('Toggle Menu');
     this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('items');
   }
 
   // Method to show the Chat tab
   showChatTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(true);
@@ -711,45 +691,30 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
-    this.mixButtons?.clearUnmatchedButtons('Toggle Menu');
     this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('chat');
   }
 
-  // Method to show the Mix tab
-  showMixTab() {
-    this.mixContainer?.setVisible(true);
-    this.statsContainer?.setVisible(false);
-    this.itemsContainer?.setVisible(false);
-    this.chatContainer?.setVisible(false);
-    this.fightContainer?.setVisible(false);
-    this.recipeContainer?.setVisible(false);
-    this.effectsContainer?.setVisible(false);
-    this.nextButton?.setVisible(false);
-    this.backButton?.setVisible(false);
-    this.inventoryContainer?.setVisible(false);
-    this.updateTabStyles('mix');
-  }
-
   // Method to show the Fight tab
   showFightTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(true);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
-    this.fightContainer?.setVisible(true);
+    this.setInteractions(currentInteractions);
+    this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('fight');
   }
 
   // Method to show the Potions tab
   showPotionsTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
@@ -758,15 +723,14 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(true);
     this.backButton?.setVisible(false);
+    this.setInteractions(currentInteractions);
     this.inventoryContainer?.setVisible(false);
     this.scene.stop('BrewScene');
-    this.mixButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('handbook');
   }
 
   // Method to show the Page Flips
   showNextTab() {
-    this.mixContainer?.setVisible(false);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
@@ -779,7 +743,6 @@ export class UxScene extends Phaser.Scene {
 
   showInventoryTab() {
     this.inventoryContainer?.setVisible(true);
-    this.mixContainer?.setVisible(true);
     this.statsContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
@@ -797,7 +760,7 @@ export class UxScene extends Phaser.Scene {
       | 'items'
       | 'chat'
       | 'stats'
-      | 'mix'
+     
       | 'pack'
       | 'fight'
       | 'handbook'
@@ -806,7 +769,6 @@ export class UxScene extends Phaser.Scene {
       this.itemsTabButton &&
       this.chatTabButton &&
       this.statsTabButton &&
-      this.mixTabButton &&
       this.fightTabButton &&
       this.potionTabButton &&
       this.inventoryTabButton
@@ -814,7 +776,6 @@ export class UxScene extends Phaser.Scene {
       this.itemsTabButton.setTabActive(activeTab === 'items');
       this.chatTabButton.setTabActive(activeTab === 'chat');
       this.statsTabButton.setTabActive(activeTab === 'stats');
-      this.mixTabButton.setTabActive(activeTab === 'mix');
       this.fightTabButton.setTabActive(activeTab === 'fight');
       this.potionTabButton.setTabActive(activeTab == 'handbook');
       this.inventoryTabButton.setTabActive(activeTab === 'pack');
@@ -825,36 +786,132 @@ export class UxScene extends Phaser.Scene {
   setInteractions(interactions: Interactions[]) {
     this.interactButtons?.clearButtonOptions();
 
-    interactions.forEach((interaction, i) => {
-      if (interaction.item.type != 'cauldron') {
-        const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
-        const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+    // Fixed start position for the buttons
+    const toggleX = 85;
+    const toggleY = 60;
 
-        const interactionAction =
-          interaction.item.type === 'gold' ? 'pickupGold' : interaction.action;
+    let i = 0; // Always initialize i to 0
+    const hasCauldron = interactions.some(
+      (interaction) => interaction.item.type === 'cauldron'
+    );
+    if (hasCauldron) {
+      i = 1; // Set i to 1 if there are cauldron interactions
+    }
+    if (this.scene.isActive('BrewScene')) {
+      interactions.forEach((interaction) => {
+        if (interaction.item.type === 'cauldron') {
+          const x = toggleX + (i % 3) * (BUTTON_WIDTH + 10);
+          const y = toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + 10);
 
-        const button = new Button(
-          this,
-          x,
-          y,
-          true,
-          `${interaction.label}`,
-          () =>
+          const button = new Button(this, x, y, true, interaction.label, () => {
             interact(
               interaction.item.key,
               interaction.action,
               interaction.give_to ? interaction.give_to : null
-            ),
-          undefined,
-          undefined,
-          this.cache.audio.has(interactionAction)
-            ? interactionAction
-            : undefined
-        );
-        this.interactButtons.push(button);
-        this.itemsContainer?.add(button);
-      }
-    });
+            );
+            // Refresh the buttons in case the interaction state has changed
+            this.setInteractions(interactions);
+          });
+
+          this.interactButtons.push(button);
+          this.itemsContainer?.add(button);
+
+          // Update BrewScene based on the cauldron's attributes
+          const attributesRecord: Record<string, string | number> =
+            interaction.item.attributes;
+
+          // Relaunch BrewScene to update the color
+          if (this.scene.isActive('BrewScene')) {
+            this.scene.launch('BrewScene');
+          }
+          const attributesArray = Object.entries(attributesRecord).map(
+            ([key, value]) => ({ name: key, value })
+          );
+          const potionSubtypeAttr = attributesArray.find(
+            (attr) => attr.name === 'potion_subtype'
+          );
+
+          const ingredientsAttr = attributesArray.find(
+            (attr) => attr.name === 'ingredients'
+          );
+
+          // Set brew color and number of ingredients based on cauldron attributes
+          const brewScene = this.scene.get('BrewScene') as BrewScene;
+          brewScene.setBrewColor(
+            parseInt(potionSubtypeAttr?.value.toString() || '10402260') ||
+              0x9eb9d4
+          );
+          brewScene.setNumIngredients(
+            parseInt(ingredientsAttr?.value.toString() || '0') || 0
+          );
+
+          i++;
+        }
+      });
+    } else {
+      interactions.forEach((interaction) => {
+        if (interaction.item.type != 'cauldron') {
+          const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+          const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+
+          const interactionAction =
+            interaction.item.type === 'gold'
+              ? 'pickupGold'
+              : interaction.action;
+          const button = new Button(
+            this,
+            x,
+            y,
+            true,
+            `${interaction.label}`,
+            () =>
+              interact(
+                interaction.item.key,
+                interaction.action,
+                interaction.give_to ? interaction.give_to : null
+              ),
+            undefined,
+            undefined,
+            this.cache.audio.has(interactionAction)
+              ? interactionAction
+              : undefined
+          );
+          this.interactButtons.push(button);
+          this.itemsContainer?.add(button);
+        }
+        i++;
+      });
+    }
+
+    if (
+      interactions.some((interaction) => interaction.item.type === 'cauldron')
+    ) {
+      // Create the toggle button at a fixed position
+      const toggleButton = new Button(
+        this,
+        toggleX,
+        toggleY,
+        true,
+        'Toggle Menu',
+        () => {
+          // Toggle the Brew menu.
+          if (this.scene.isActive('BrewScene')) {
+            this.scene.stop('BrewScene');
+          } else {
+            this.scene.launch('BrewScene');
+          }
+          // Slight delay to allow the scene state to update before refreshing buttons.
+          setTimeout(() => {
+            this.setInteractions(interactions);
+          }, 20);
+        }
+      );
+
+      this.interactButtons.push(toggleButton);
+      this.itemsContainer?.add(toggleButton);
+    } else {
+      this.scene.stop('BrewScene');
+    }
   }
 
   setChatCompanions(companions: Mob[]) {
@@ -942,100 +999,6 @@ export class UxScene extends Phaser.Scene {
       this.fightButtons.push(button);
       this.fightContainer?.add(button);
     });
-  }
-
-  setBrewOptions(brew: Interactions[]) {
-    // Clear any existing buttons
-    this.mixButtons?.clearButtonOptions();
-
-    // Fixed start position for the buttons
-    const toggleX = 85;
-    const toggleY = 60;
-
-    // check if the Brew menu is currently open
-    //const menuOpen = this.scene.isActive('BrewScene');
-
-    // if the menu is open, add the cauldron interaction buttons
-    if (this.scene.isActive('BrewScene')) {
-      let i = 1; // start counter at 1 to skip the toggle button
-      brew.forEach((interaction) => {
-        if (interaction.item.type === 'cauldron') {
-          const x = toggleX + (i % 3) * (BUTTON_WIDTH + 10);
-          const y = toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + 10);
-
-          const button = new Button(this, x, y, true, interaction.label, () => {
-            interact(
-              interaction.item.key,
-              interaction.action,
-              interaction.give_to ? interaction.give_to : null
-            );
-            // Refresh the buttons in case the interaction state has changed
-            this.setBrewOptions(brew);
-          });
-
-          this.mixButtons.push(button);
-          this.mixContainer?.add(button);
-
-          // Update BrewScene based on the cauldron's attributes
-          const attributesRecord: Record<string, string | number> =
-            interaction.item.attributes;
-
-          // Relaunch BrewScene to update the color
-          //let menuOpen = this.scene.isActive('BrewScene');
-          if (this.scene.isActive('BrewScene')) {
-            this.scene.launch('BrewScene');
-          }
-          const attributesArray = Object.entries(attributesRecord).map(
-            ([key, value]) => ({ name: key, value })
-          );
-          const potionSubtypeAttr = attributesArray.find(
-            (attr) => attr.name === 'potion_subtype'
-          );
-
-          const ingredientsAttr = attributesArray.find(
-            (attr) => attr.name === 'ingredients'
-          );
-
-          // Set brew color and number of ingredients based on cauldron attributes
-          const brewScene = this.scene.get('BrewScene') as BrewScene;
-          brewScene.setBrewColor(
-            parseInt(potionSubtypeAttr?.value.toString() || '0') || 0xffffff
-          );
-          brewScene.setNumIngredients(
-            parseInt(ingredientsAttr?.value.toString() || '0') || 0
-          );
-
-          i++;
-        }
-      });
-    }
-    if (brew.some((interaction) => interaction.item.type === 'cauldron')) {
-      // Create the toggle button at a fixed position
-      const toggleButton = new Button(
-        this,
-        toggleX,
-        toggleY,
-        true,
-        'Toggle Menu',
-        () => {
-          // Toggle the Brew menu.
-          if (this.scene.isActive('BrewScene')) {
-            this.scene.stop('BrewScene');
-          } else {
-            this.scene.launch('BrewScene');
-          }
-          // Slight delay to allow the scene state to update before refreshing buttons.
-          setTimeout(() => {
-            this.setBrewOptions(brew);
-          }, 30);
-        }
-      );
-
-      this.mixButtons.push(toggleButton);
-      this.mixContainer?.add(toggleButton);
-    } else {
-      this.scene.stop('BrewScene');
-    }
   }
 
   // Method to set inventory
