@@ -8,7 +8,6 @@
     "clean": "rimraf dist",
     "lint": "pnpm eslint .",
     "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
-    "build": "tsc",
     "test": "jest",
     "watch": "tsc --watch"
   },
