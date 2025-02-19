@@ -388,9 +388,9 @@ export class WorldScene extends Phaser.Scene {
       }
 
       // Disable movement clicks if portal menu is open
-      if (this.scene.isActive('PortalMenuScene')) {
-        return;
-      }
+      // if (this.scene.isActive('PortalMenuScene')) {
+      //   return;
+      // }
 
       // Check if mouse click is within the viewport of the game world for
       // player movement to occur
