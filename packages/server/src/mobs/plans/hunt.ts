@@ -11,8 +11,28 @@ export class Hunt implements Plan {
     if (!this.enemy || !this.enemy.position || !npc.position) return true;
 
     const success = npc.moveToOrExecute(this.enemy.position, 1, () => {
+      // attack/fight each other
       this.enemy!.changeHealth(Math.floor(Math.random() * -1 * npc._attack));
       npc.changeHealth(Math.floor(Math.random() * -1 * this.enemy!._attack));
+
+      // get slowEnemy debuff count
+      const mobDebuffs = DB.prepare(
+        `SELECT slowEnemy FROM mobs WHERE id = :id`
+      ).get({ id: npc.id }) as { slowEnemy: number };
+
+      slowEnemyCounter = mobDebuffs.slowEnemy;
+      if (slowEnemyCounter <= 0) {
+        // no slowEnemy debuff available to use, continue normally
+        continue;
+      } else {
+        // decrement slowEnemy count (1 usage)
+        npc.changeSlowEnemy(-1);
+        // decrease targeted enemy's speed
+        console.log(this.enemy!._speed);
+        const speedDelta = this.enemy!._speed * -0.5;
+        const speedDuration = 15;
+        this.enemy!.changeEffect(speedDelta, speedDuration, 'speed');
+      }
 
       return false;
     });

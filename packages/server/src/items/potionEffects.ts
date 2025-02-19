@@ -27,7 +27,11 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
     case '#ffd700':
       console.log('Drinking gold potion');
       mob.changeMaxHealth(20, true);
-      return true;    
+      return true;
+    case '#8b7f6e':
+      console.log('Drinking grey potion');
+      mob.changeSlowEnemy(1);
+      return true;
     default:
       // handle cases where potionStr doesn't match any known potion
       console.log('Unknown potion color');

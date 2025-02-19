@@ -410,16 +410,18 @@ export class Mob {
 
     // get the number of gold potions already used
     const currentIncreases = DB.prepare(
-        `SELECT goldPotionsUsed FROM mobs WHERE id = :id`
+      `SELECT goldPotionsUsed FROM mobs WHERE id = :id`
     ).get({ id: this.id }) as { goldPotionsUsed: number };
 
     // stop if at limit
     if (fromGold && currentIncreases.goldPotionsUsed >= 5) {
-        return;
+      return;
     }
 
     // increment usage count (only if from gold potion) and max health
-    const newIncreaseCount = fromGold ? currentIncreases.goldPotionsUsed + 1 : currentIncreases.goldPotionsUsed;
+    const newIncreaseCount = fromGold
+      ? currentIncreases.goldPotionsUsed + 1
+      : currentIncreases.goldPotionsUsed;
     const newMaxHealth = this.maxHealth + amount;
 
     // apply changes
@@ -428,11 +430,37 @@ export class Mob {
       SET maxHealth = :maxHealth, 
           goldPotionsUsed = :increaseCount 
       WHERE id = :id`
-    ).run({ maxHealth: newMaxHealth, increaseCount: newIncreaseCount, id: this.id });
+    ).run({
+      maxHealth: newMaxHealth,
+      increaseCount: newIncreaseCount,
+      id: this.id
+    });
 
     this.maxHealth = newMaxHealth;
     pubSub.changeMaxHealth(this.id, amount, this.maxHealth);
-}
+  }
+
+  changeSlowEnemy(amount: number) {
+    // get current amount of slowEnemy debuffs
+    const currentIncreases = DB.prepare(
+      `SELECT slowEnemy FROM mobs WHERE id = :id`
+    ).get({ id: this.id }) as { slowEnemy: number };
+
+    // change amount of slowEnemy debuffs
+    const newSlowEnemy = currentIncreases.slowEnemy + amount;
+
+    DB.prepare(
+      `
+            UPDATE mobs
+            SET slowEnemy = :newSlowEnemy
+            WHERE id = :id
+        `
+    ).run({ id: this.id, newSlowEnemy: newSlowEnemy });
+
+    this.slowEnemy = newSlowEnemy;
+
+    pubSub.incrementSlowEnemy(this.id, amount, this.slowEnemy);
+  }
 
   changeSpeed(amount: number) {
     if (amount === 0) return;
@@ -856,6 +884,7 @@ export class Mob {
             health INTEGER NOT NULL,
             maxHealth INTEGER NOT NULL,
             goldPotionsUsed INTEGER DEFAULT 0,
+            slowEnemy INTEGER DEFAULT 0,
             attack INTEGER NOT NULL,
             speed REAL NOT NULL,
             position_x REAL NOT NULL,
@@ -898,6 +927,7 @@ export class Mob {
           m.health,
           m.maxHealth,
           m.goldPotionsUsed,
+          m.slowEnemy,
           m.attack + COALESCE(
             (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'attack' ORDER BY e.targetTick DESC LIMIT 1)
             , 0) AS attack,

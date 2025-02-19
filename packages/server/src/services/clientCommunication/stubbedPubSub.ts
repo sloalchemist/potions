@@ -58,6 +58,8 @@ export class StubbedPubSub implements PubSub {
 
   changeMaxHealth(_key: string, _maxHealth: number, _newValue: number): void {}
 
+  changeSlowEnemy(_key: string, _slowEnemy: number, _newValue: number): void {}
+
   changeSpeed(_key: string, _speed: number, _newValue: number): void {}
 
   speak(_key: string, _message: string): void {}
