@@ -58,6 +58,7 @@ export class WorldScene extends Phaser.Scene {
     d: false
   };
   lastKeyUp = '';
+  portalMenusOpen: boolean = false; // states if 'Enter portal' menu is open for a characterID
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -383,6 +384,11 @@ export class WorldScene extends Phaser.Scene {
 
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       if (!world.mobs[publicCharacterId]) {
+        return;
+      }
+
+      // Disable movement clicks if portal menu is open
+      if (this.scene.isActive('PortalMenuScene')) {
         return;
       }
 
