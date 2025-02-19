@@ -27,6 +27,8 @@ async function processJobs() {
       const jobResponse = await redis.brPop(jobQueue, 0); // Wait indefinitely for a job
 
       if (jobResponse) {
+        console.log("Job Found")
+        console.log(jobResponse.element)
         const element = jobResponse.element; // Access the element property directly
         const job = JSON.parse(element);
         const { jobID, jobData, responseQueue } = job;

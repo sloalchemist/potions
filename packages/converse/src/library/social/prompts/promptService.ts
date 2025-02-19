@@ -44,7 +44,7 @@ export let dialogService: Dialog = {
       }
       const jobID = uuidv4();
       const responseQueue = `response:${jobID}`;
-      const jobQueue = "jobQueue";
+      const jobQueue = 'multijobs';
       const job = JSON.stringify({ jobID, jobData: prompt, responseQueue });
       await redis.lPush(jobQueue, job);
       await listenForResponse(responseQueue, onMessage, onError);
