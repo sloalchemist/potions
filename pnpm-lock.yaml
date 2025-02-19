@@ -216,6 +216,9 @@ importers:
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
+      redis:
+        specifier: ^4.7.0
+        version: 4.7.0
       uuid:
         specifier: ^11.0.3
         version: 11.0.5
@@ -277,6 +280,9 @@ importers:
       ollama:
         specifier: ^0.5.13
         version: 0.5.13
+      redis:
+        specifier: ^4.7.0
+        version: 4.7.0
     devDependencies:
       '@types/better-sqlite3':
         specifier: ^7.6.12

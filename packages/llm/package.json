@@ -21,7 +21,8 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "ioredis": "^5.5.0",
-    "ollama": "^0.5.13"
+    "ollama": "^0.5.13",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.12",
