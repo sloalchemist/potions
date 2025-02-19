@@ -10,7 +10,7 @@ export let playerChannel: Types.RealtimeChannelCallbacks;
 const SERVER_URL = process.env.SERVER_URL; //Cannot use getEnv in the client package https://webpack.js.org/guides/environment-variables/
 let channelsBoundToWorld: boolean = false;
 
-export function setupAbly(): Promise<void> {
+export function setupAbly(): Promise<string> {
   let authorizer =
     SERVER_URL.slice(-1) == '/' ? 'auth?username=' : '/auth?username=';
   let worldID: string;
@@ -37,8 +37,8 @@ export function setupAbly(): Promise<void> {
       broadcastChannel = ably.channels.get(`world-${worldID}`);
       playerChannel = ably.channels.get(`${publicCharacterId}-${worldID}`);
 
-      resolve();
-      console.log('Ably client initialized successfully.');
+      resolve(worldID);
+      console.log('Ably client initialized successfully.', worldID);
     });
   });
 }
