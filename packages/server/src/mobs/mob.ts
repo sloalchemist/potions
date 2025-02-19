@@ -612,12 +612,22 @@ export class Mob {
         // is currently incomplete on mainline) will update the changeGold
         // method to persist to supabase in addition to the local DB
         this.changeGold(-halfGold);
+      } else if (this.type === 'blob') {
+        itemGenerator.createItem({
+          type: 'slime-blob',
+          position
+        });
       } else {
         // Otherwise drop all of the mob's gold
         itemGenerator.createItem({
           type: 'gold',
           position,
           attributes: { amount: this.gold }
+        });
+
+        itemGenerator.createItem({
+          type: 'bones',
+          position
         });
       }
     }
