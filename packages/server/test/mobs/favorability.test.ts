@@ -1,4 +1,4 @@
-import { commonSetup, world } from '../testSetup';
+import { commonSetup, world, itemGenerator } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
 import { DB } from '../../src/services/database';
@@ -105,15 +105,20 @@ describe('Favorability Tests', () => {
     expect(testplayer?._maxHealth).toBeCloseTo(100);
   });
   test('Mob should have a favorite item', () => {
-    // initialize villager / player
+    // initialize player
     const position: Coord = { x: 0, y: 0 };
-    const position2: Coord = { x: 1, y: 1 };
+    const possible_items = Object.keys(itemGenerator._itemTypes);
+
     mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
-    mobFactory.makeMob('villager', position2, 'testVillager', 'villagertest');
     var testplayer = Mob.getMob('testPlayer');
+    var testplayer_item = testplayer!._favorite_item!;
 
     expect(testplayer).toBeDefined();
-    expect(testplayer?._favorite_item).toBeDefined();
+    expect(testplayer_item).toBeDefined();
+    expect(testplayer_item).not.toBeNull();
+
+    // testing whether the item actually a possible item type that could be generated
+    expect(possible_items.includes(testplayer_item)).toBe(true);
   });
 });
 
