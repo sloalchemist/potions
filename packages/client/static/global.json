@@ -321,8 +321,7 @@
           "value": 100
         }
       ],
-      "interactions": [],
-      "open": false
+      "interactions": []
     },
     {
       "name": "Door",
