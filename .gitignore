@@ -33,3 +33,6 @@ build/
 build/logs
 **/coverage
 coverage.json
+
+# ignore terraform state
+*.tfstate
