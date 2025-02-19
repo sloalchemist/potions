@@ -54,7 +54,7 @@ export class Conversation {
   constructor(
     initator: Speaker,
     respondent: Speaker,
-    usesLLM: boolean = process.env.LLM == "false" ? false : true,
+    usesLLM: boolean,
     speakerService: SpeakerService
   ) {
     if (initator.conversation !== null || respondent.conversation !== null) {

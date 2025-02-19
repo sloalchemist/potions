@@ -13,10 +13,9 @@ const redis = createClient({
   password: 'pZQM4UBUyMOr5WG4MX44R2a1qtfKXx2T' // Add your Redis password if required
 });
 
-
-const jobQueue = 'multijobs';
-
 async function processJobs() {
+  const jobQueue = 'multijobs';
+
   await redis.connect();
 
   console.log(`Worker is listening for jobs on the queue: ${jobQueue}`);

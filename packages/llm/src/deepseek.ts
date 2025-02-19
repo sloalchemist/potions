@@ -11,7 +11,7 @@ export async function sendPrompts(prompts: string[]): Promise<string[]> {
 
         // Generate response using Ollama
         const response = await ollama.generate({
-          model: "deepseek-llm:7b",
+          model: "deepseek-r1:1.5b",
           prompt: prompt,
         });
 
