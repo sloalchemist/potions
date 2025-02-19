@@ -1,4 +1,9 @@
-import { hexStringToNumber, darkenColor, numberToHexString, getRandomColor } from '../../src/utils/color';
+import {
+  hexStringToNumber,
+  darkenColor,
+  numberToHexString,
+  getRandomColor
+} from '../../src/utils/color';
 
 describe('hexStringToNumber', () => {
   test('should convert hex string to number', () => {
@@ -43,9 +48,18 @@ describe('numberToHexString', () => {
 describe('getRandomColor', () => {
   test('should return a valid color from the predefined list', () => {
     const colors = [
-      '#a3f1d8', '#7b2c9f', '#e5a73c', '#4d9bea', '#ff5733', 
-      '#2ecc71', '#c70039', '#900c3f', '#f1c40f', '#2980b9', 
-      '#8e44ad', '#16a085'
+      '#a3f1d8',
+      '#7b2c9f',
+      '#e5a73c',
+      '#4d9bea',
+      '#ff5733',
+      '#2ecc71',
+      '#c70039',
+      '#900c3f',
+      '#f1c40f',
+      '#2980b9',
+      '#8e44ad',
+      '#16a085'
     ];
     const randomColor = getRandomColor();
     expect(colors).toContain(randomColor);
