@@ -33,7 +33,6 @@ async function main() {
   // Load global data and parse
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
-    //worldSpecificData as Partial<ServerWorldDescription>;
     worldSpecificData as Partial<ServerWorldDescription>;
 
   const worldDescription: ServerWorldDescription = {
