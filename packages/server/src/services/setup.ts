@@ -4,7 +4,6 @@ import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
 import globalData from '../../data/global.json';
-import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
@@ -15,6 +14,7 @@ import {
   initializeBucket
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
+import { getEnv } from '@rt-potion/common';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
@@ -24,14 +24,11 @@ export let worldID: string = '';
 export const supabase = initializeSupabase();
 
 function initializeAbly(worldId: string): AblyService {
-  if (
-    !process.env.ABLY_API_KEY ||
-    process.env.ABLY_API_KEY.indexOf('INSERT') === 0
-  ) {
+  const apiKey = getEnv('ABLY_API_KEY');
+  if (apiKey.indexOf('INSERT') === 0) {
     throw new Error('Cannot run without an API key. Add your key to .env');
   }
-
-  return new AblyService(process.env.ABLY_API_KEY, worldId);
+  return new AblyService(apiKey, worldId);
 }
 
 async function initializeAsync() {
@@ -43,6 +40,7 @@ async function initializeAsync() {
   }
 
   console.log(`loading world ${worldID}`);
+  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
 
   // Create bucket if it doesn't exist
   try {
