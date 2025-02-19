@@ -9,8 +9,7 @@ import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
 import globalData from '../../data/global.json';
-// import worldSpecificData from '../../data/world_specific.json';
-import waterWorldSpecificData from '../../data/water_world_specific.json';
+import worldSpecificData from '../../data/world_specific.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
@@ -34,7 +33,7 @@ async function main() {
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
     //worldSpecificData as Partial<ServerWorldDescription>;
-    waterWorldSpecificData as Partial<ServerWorldDescription>;
+    worldSpecificData as Partial<ServerWorldDescription>;
 
   const worldDescription: ServerWorldDescription = {
     ...globalDescription,
