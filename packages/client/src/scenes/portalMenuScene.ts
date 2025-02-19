@@ -20,7 +20,14 @@ export class PortalMenuScene extends Phaser.Scene {
     overlay.setOrigin(0, 0);
 
     // Add a full-screen invisible blocker
-    const blocker = this.add.rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0x000000, 0);
+    const blocker = this.add.rectangle(
+      0,
+      0,
+      SCREEN_WIDTH,
+      SCREEN_HEIGHT,
+      0x000000,
+      0
+    );
     blocker.setOrigin(0, 0);
     blocker.setInteractive(); // This makes it catch pointer events
     blocker.setDepth(overlay.depth); // Ensure it's above the game but below UI elements
