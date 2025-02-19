@@ -5,6 +5,7 @@ import { DB } from '../../src/services/database';
 import { Coord } from '@rt-potion/common';
 import { Favorability } from '../../src/favorability/favorability';
 import { Mob } from '../../src/mobs/mob';
+import { ItemGenerator } from '../../src/items/itemGenerator';
 
 beforeEach(() => {
   commonSetup();
@@ -119,6 +120,21 @@ describe('Favorability Tests', () => {
 
     // testing whether the item actually a possible item type that could be generated
     expect(possible_items.includes(testplayer_item)).toBe(true);
+  });
+  test('Mobs favorite item should be carryable', () => {
+    // initialize player
+    const position: Coord = { x: 0, y: 0 };
+
+    mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
+    var testplayer = Mob.getMob('testPlayer');
+    var testplayer_item = testplayer!._favorite_item!;
+
+    expect(testplayer).toBeDefined();
+    expect(testplayer_item).toBeDefined();
+    expect(testplayer_item).not.toBeNull();
+
+    // testing whether the item actually a possible item type that could be generated
+    expect(itemGenerator._itemTypes[testplayer_item].carryable).toBe(true);
   });
 });
 
