@@ -15,6 +15,7 @@ export class Hunt implements Plan {
       this.enemy!.changeHealth(Math.floor(Math.random() * -1 * npc._attack));
       npc.changeHealth(Math.floor(Math.random() * -1 * this.enemy!._attack));
 
+      /*
       // get slowEnemy debuff count
       const mobDebuffs = DB.prepare(
         `SELECT slowEnemy FROM mobs WHERE id = :id`
@@ -33,6 +34,7 @@ export class Hunt implements Plan {
         const speedDuration = 15;
         this.enemy!.changeEffect(speedDelta, speedDuration, 'speed');
       }
+      */
 
       return false;
     });

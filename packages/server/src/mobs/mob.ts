@@ -457,9 +457,6 @@ export class Mob {
         `
     ).run({ id: this.id, newSlowEnemy: newSlowEnemy });
 
-    this.slowEnemy = newSlowEnemy;
-
-    pubSub.incrementSlowEnemy(this.id, amount, this.slowEnemy);
   }
 
   changeSpeed(amount: number) {

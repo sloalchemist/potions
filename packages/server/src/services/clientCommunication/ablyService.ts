@@ -313,27 +313,6 @@ export class AblyService implements PubSub {
     });
   }
 
-  public changeSlowEnemy(
-    key: string,
-    slowEnemy: number,
-    newValue: number
-  ): void {
-    if (newValue == undefined || key == undefined || slowEnemy == undefined) {
-      throw new Error(
-        `Sending invalid changeSlowEnemy message ${key}, ${slowEnemy}, ${newValue}`
-      );
-    }
-    this.addToBroadcast({
-      type: 'mob_change',
-      data: {
-        id: key,
-        property: 'slowEnemy',
-        delta: slowEnemy,
-        new_value: newValue
-      }
-    });
-  }
-
   public changeSpeed(key: string, speed: number, newValue: number): void {
     if (newValue == undefined || key == undefined || speed == undefined) {
       throw new Error(
