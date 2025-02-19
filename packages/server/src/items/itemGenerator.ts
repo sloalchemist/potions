@@ -38,7 +38,7 @@ export class ItemGenerator {
   }
 
   get _itemTypes() {
-    return this.itemTypes
+    return this.itemTypes;
   }
 
   public getItemType(type: string): ItemType {

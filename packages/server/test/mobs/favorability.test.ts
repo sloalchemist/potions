@@ -1,4 +1,4 @@
-import { commonSetup, world, itemGenerator } from '../testSetup';
+import { commonSetup, world } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
 import { DB } from '../../src/services/database';
@@ -114,10 +114,8 @@ describe('Favorability Tests', () => {
 
     expect(testplayer).toBeDefined();
     expect(testplayer?._favorite_item).toBeDefined();
-
   });
 });
-
 
 afterEach(() => {
   DB.close();

@@ -359,8 +359,10 @@ export class Item {
   }
 
   static getRandomItem(): string {
-    var key = Object.keys(itemGenerator._itemTypes)[Math.floor(Math.random() * Object.keys(itemGenerator._itemTypes).length)]
-    return itemGenerator._itemTypes[key].type
+    var key = Object.keys(itemGenerator._itemTypes)[
+      Math.floor(Math.random() * Object.keys(itemGenerator._itemTypes).length)
+    ];
+    return itemGenerator._itemTypes[key].type;
   }
 
   destroy(): void {
