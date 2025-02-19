@@ -65,7 +65,7 @@ export class Conversation {
 
     this.initiator = initator;
     this.respondent = respondent;
-    this.usesLLM = usesLLM;
+    this.usesLLM = true;
     this.initiator.relationships.introduce(this.respondent);
     this.respondent.relationships.introduce(this.initiator);
     this.personalityTraitsUsed[initator.id] = [];
