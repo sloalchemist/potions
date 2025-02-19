@@ -33,3 +33,7 @@ variable "supabase_organization_id" {
   type        = string
 }
 
+variable "llm_flag" {
+  description = "true if LLM responses generated for dialog"
+  type        = string
+}
