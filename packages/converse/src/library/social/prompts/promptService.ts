@@ -6,13 +6,12 @@ import {v4 as uuidv4} from 'uuid';
 dotenv.config();
 
 const redis = createClient({
-  password: process.env.REDIS_PASSWORD,
   socket: {
-    host: process.env.REDIS_HOST,
-    port: parseInt('6379', 10) // Default to 6379 if not provided
-  }
+    host: 'redis-15426.c244.us-east-1-2.ec2.redns.redis-cloud.com',
+    port: 15426
+  },
+  password: 'pZQM4UBUyMOr5WG4MX44R2a1qtfKXx2T' // Add your Redis password if required
 });
-
 
 /**
  * Interface representing a dialog service for sending prompts.
@@ -45,7 +44,7 @@ export let dialogService: Dialog = {
       }
       const jobID = uuidv4();
       const responseQueue = `response:${jobID}`;
-      const jobQueue = "jobQueue";
+      const jobQueue = 'multijobs';
       const job = JSON.stringify({ jobID, jobData: prompt, responseQueue });
       await redis.lPush(jobQueue, job);
       await listenForResponse(responseQueue, onMessage, onError);

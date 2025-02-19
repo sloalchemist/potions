@@ -6,12 +6,13 @@ import { sendPrompts } from './deepseek';
 dotenv.config();
 
 const redis = createClient({
-  password: process.env.REDIS_PASSWORD,
   socket: {
-    host: process.env.REDIS_HOST,
-    port: parseInt('6379', 10) // Default to 6379 if not provided
-  }
+    host: 'redis-15426.c244.us-east-1-2.ec2.redns.redis-cloud.com',
+    port: 15426
+  },
+  password: 'pZQM4UBUyMOr5WG4MX44R2a1qtfKXx2T' // Add your Redis password if required
 });
+
 
 const jobQueue = 'multijobs';
 
@@ -26,6 +27,8 @@ async function processJobs() {
       const jobResponse = await redis.brPop(jobQueue, 0); // Wait indefinitely for a job
 
       if (jobResponse) {
+        console.log("Job Found")
+        console.log(jobResponse.element)
         const element = jobResponse.element; // Access the element property directly
         const job = JSON.parse(element);
         const { jobID, jobData, responseQueue } = job;
