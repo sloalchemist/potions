@@ -215,7 +215,6 @@ export function setupBroadcast(
           handleGiveItem(broadcastItem.data as GiveItemData);
           break;
         case 'drop_item':
-          // console.log(broadcastItem.data as DropItemData, "DROP")
           handleDropItem(broadcastItem.data as DropItemData);
           break;
         case 'stash_item':
