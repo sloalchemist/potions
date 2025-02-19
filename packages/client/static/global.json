@@ -26,6 +26,235 @@
       "on_tick": []
     },
     {
+      "name": "Slimeblob",
+      "type": "slime-blob",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#0000FF"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Bones",
+      "type": "bones",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#00FF00"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Lightning Bloom",
+      "type": "lightning-bloom",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#AA00FF"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Bomb",
+      "type": "bomb",
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Tar",
+      "type": "tar",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#000000"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Sun Drop",
+      "type": "sun-drop",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#FF8800"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Sands of Time",
+      "type": "sands-of-time",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#808080"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Sunflower",
+      "type": "sunflower",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#FF8800"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Gun Powder",
+      "type": "gun-powder",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#555555"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Fireball",
+      "type": "fire-ball",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#FF7509"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
+        }
+      ],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
+      "name": "Pearl",
+      "type": "pearl",
+      "attributes": [
+        {
+          "name": "brew_color",
+          "value": "#FFFFFF"
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "walkable": true,
+      "smashable": true,
+      "interactions": [],
+      "carryable": true,
+      "on_tick": []
+    },
+    {
       "name": "Wall",
       "type": "wall",
       "item_group": "wall",
@@ -41,23 +270,6 @@
       "interactions": [],
       "walkable": false,
       "drops_item": "log"
-    },
-    {
-      "name": "obsidian-wall",
-      "type": "obsidian-wall",
-      "item_group": "wall",
-      "layout_type": "wall",
-      "carryable": false,
-      "smashable": true,
-      "walkable": false,
-      "attributes": [
-        {
-          "name": "health",
-          "value": 150
-        }
-      ],
-      "interactions": [],
-      "drops_item": "obsidian-shard"
     },
     {
       "name": "Partial Wall",
@@ -79,25 +291,6 @@
       "drops_item": "log"
     },
     {
-      "name": "partial-obsidian-wall",
-      "type": "partial-obsidian-wall",
-      "carryable": false,
-      "walkable": false,
-      "smashable": true,
-      "attributes": [
-        {
-          "name": "complete",
-          "value": 3
-        },
-        {
-          "name": "health",
-          "value": 10
-        }
-      ],
-      "interactions": [],
-      "drops_item": "obsidian-shard"
-    },
-    {
       "name": "Fence",
       "type": "fence",
       "item_group": "fence",
@@ -115,23 +308,6 @@
       "drops_item": "log"
     },
     {
-      "name": "Fence",
-      "type": "fence",
-      "item_group": "fence",
-      "layout_type": "fence",
-      "carryable": false,
-      "walkable": false,
-      "smashable": true,
-      "attributes": [
-        {
-          "name": "health",
-          "value": 100
-        }
-      ],
-      "interactions": [],
-      "drops_item": "obsidian-shard"
-    },
-    {
       "name": "Gate",
       "type": "gate",
       "item_group": "fence",
@@ -143,23 +319,6 @@
         {
           "name": "health",
           "value": 100
-        }
-      ],
-      "interactions": [],
-      "open": false
-    },
-    {
-      "name": "obsidian-gate",
-      "type": "obsidian-gate",
-      "item_group": "fence",
-      "layout_type": "opens",
-      "carryable": false,
-      "walkable": true,
-      "smashable": true,
-      "attributes": [
-        {
-          "name": "health",
-          "value": 150
         }
       ],
       "interactions": [],
@@ -182,22 +341,6 @@
       "interactions": []
     },
     {
-      "name": "stone-door",
-      "type": "stone-door",
-      "item_group": "wall",
-      "layout_type": "opens",
-      "carryable": false,
-      "smashable": true,
-      "walkable": true,
-      "attributes": [
-        {
-          "name": "health",
-          "value": 150
-        }
-      ],
-      "interactions": []
-    },
-    {
       "name": "Tree",
       "type": "tree",
       "carryable": false,
@@ -213,20 +356,91 @@
             "radius": 3,
             "rate": 0.1
           }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sun-drop",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sunflower",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
         }
       ]
     },
     {
-      "name": "lava-pool",
-      "type": "lava-pool",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
+      "name": "Log",
+      "type": "log",
+      "carryable": true,
+      "smashable": true,
+      "walkable": true,
+      "flat": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Start wall",
+          "action": "start_wall",
+          "while_carried": true
+        },
+        {
+          "description": "Build wall",
+          "action": "build_wall",
+          "while_carried": true,
+          "requires_item": "partial-wall"
+        }
+      ]
     },
     {
-      "name": "tar-pool",
-      "type": "tar-pool",
+      "name": "Obsidian Shard",
+      "type": "obsidian-shard",
+      "carryable": true,
+      "smashable": true,
+      "walkable": true,
+      "flat": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Start wall",
+          "action": "start_wall",
+          "while_carried": true
+        },
+        {
+          "description": "Build wall",
+          "action": "build_wall",
+          "while_carried": true,
+          "requires_item": "partial-wall"
+        },
+        {
+          "description": "Create market",
+          "action": "create_market",
+          "while_carried": true
+        }
+      ]
+    },
+    {
+      "name": "Seaweed",
+      "type": "seaweed",
       "carryable": false,
       "walkable": false,
       "interactions": [],
@@ -234,10 +448,30 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "tar-drop",
+            "type": "seaweed-piece",
             "global_max": 10,
-            "local_max": 4,
+            "local_max": 2,
             "radius": 3,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sun-drop",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sunflower",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
             "rate": 0.1
           }
         }
@@ -264,6 +498,26 @@
       ]
     },
     {
+      "name": "Volcano",
+      "type": "volcano",
+      "description": "a volcano that will erupt",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "fire-ball",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
       "name": "Clam",
       "type": "clam",
       "description": "A pink clam with a pearl",
@@ -274,22 +528,28 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "clam",
+            "type": "pearl",
             "global_max": 10,
-            "local_max": 1,
+            "local_max": 2,
             "radius": 3,
-            "rate": 0.1
+            "rate": 0.2
           }
         }
       ]
     },
     {
-      "name": "Message-In-Bottle",
+      "name": "Message in a Bottle",
       "type": "message-in-bottle",
       "description": "A bottle that contains a message... wonder what could be inside",
-      "carryable": false,
+      "carryable": true,
       "walkable": false,
-      "interactions": [],
+      "interactions": [
+        {
+          "description": "Open Message",
+          "action": null,
+          "while_carried": true
+        }
+      ],
       "on_tick": [
         {
           "action": "spawn_item",
@@ -386,7 +646,7 @@
     {
       "name": "Rock-Pile",
       "type": "rock-pile",
-      "description": "A mushroom",
+      "description": "A rock pile",
       "carryable": false,
       "walkable": false,
       "interactions": [],
@@ -464,293 +724,6 @@
       ]
     },
     {
-      "name": "large-rock",
-      "type": "large-rock",
-      "description": "A large rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "medium-rock",
-      "type": "medium-rock",
-      "description": "A medium rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "small-rock-1",
-      "type": "small-rock-1",
-      "description": "A small rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "small-rock-2",
-      "type": "small-rock-2",
-      "description": "A small rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "small-rock-3",
-      "type": "small-rock-3",
-      "description": "A small rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "small-rock-4",
-      "type": "small-rock-4",
-      "description": "A small rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "small-rock-5",
-      "type": "small-rock-5",
-      "description": "A small rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "small-rock-6",
-      "type": "small-rock-6",
-      "description": "A small rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "small-rock-cluster-1",
-      "type": "small-rock-cluster-1",
-      "description": "A small rock cluster",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "small-rock-cluster-2",
-      "type": "small-rock-cluster-3",
-      "description": "A small rock cluster",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "rock-red-1",
-      "description": "A red rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "red-rock-2",
-      "description": "A red rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "small-red-rock-1",
-      "description": "A small red rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "small-red-rock-2",
-      "description": "A small red rock",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "sun-flower",
-      "type": "sun-flower",
-      "description": "A sun flower",
-      "carryable": true,
-      "walkable": true,
-      "interactions": [],
-      "on_tick": [
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sun-flower",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 3,
-            "rate": 0.1
-          }
-        }
-      ]
-    },
-    {
-      "name": "tar-drop",
-      "type": "tar-drop",
-      "description": "A drop of tar",
-      "carryable": true,
-      "walkable": true,
-      "interactions": [],
-      "on_tick": [
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "tar-drop",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 3,
-            "rate": 0.1
-          }
-        }
-      ]
-    },
-    {
-      "name": "obsidian-shard",
-      "type": "obsidian-shard",
-      "description": "A shard of obsidian",
-      "carryable": true,
-      "walkable": true,
-      "interactions": [],
-      "on_tick": [
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "obsidian-shard",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 3,
-            "rate": 0.1
-          }
-        }
-      ]
-    },
-    {
-      "name": "mushroom-cluster",
-      "type": "mushroom-cluster",
-      "description": "A small cluster of mushrooms",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": [
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "mushroom-cluster",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 3,
-            "rate": 0.1
-          }
-        }
-      ]
-    },
-    {
-      "name": "mushroom-single-large",
-      "type": "mushroom-single-large",
-      "description": "A large single mushroom",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": [
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "mushroom-single-large",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 3,
-            "rate": 0.1
-          }
-        }
-      ]
-    },
-    {
-      "name": "mushroom-single-small",
-      "type": "mushroom-single-small",
-      "description": "A small single mushroom",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": [
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "mushroom-single-small",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 3,
-            "rate": 0.1
-          }
-        }
-      ]
-    },
-    {
-      "name": "cliff",
-      "type": "cliff",
-      "description": "red cliff found in valoron",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "stone-path-horizontal",
-      "type": "stone-path-horizontal",
-      "description": "A horizontal stone path",
-      "carryable": false,
-      "walkable": true,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "stone-path-vertical",
-      "type": "stone-path-vertical",
-      "description": "A vertical stone path",
-      "carryable": false,
-      "walkable": true,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "stone-path-circular",
-      "type": "stone-path-circular",
-      "description": "A circular stone path",
-      "carryable": false,
-      "walkable": true,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
-      "name": "volcano",
-      "type": "volcano",
-      "description": "A volcano",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": []
-    },
-    {
       "type": "heart-beet-plant",
       "name": "Heartbeet plant",
       "carryable": false,
@@ -766,6 +739,26 @@
             "global_max": 10,
             "local_max": 2,
             "radius": 3,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "bones",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "slime-blob",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
             "rate": 0.1
           }
         }
@@ -791,7 +784,8 @@
         {
           "description": "Eat",
           "action": "eat",
-          "while_carried": true
+          "while_carried": true,
+          "sound_path": "static/sounds/eat_1.mp3"
         }
       ]
     },
@@ -812,12 +806,32 @@
             "radius": 3,
             "rate": 0.1
           }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "tar",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "lightning-bloom",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
         }
       ]
     },
     {
-      "name": "Obsidian Shard",
-      "type": "log",
+      "name": "Seaweed Piece",
+      "type": "seaweed-piece",
       "carryable": true,
       "smashable": true,
       "walkable": true,
@@ -832,13 +846,15 @@
         {
           "description": "Start wall",
           "action": "start_wall",
-          "while_carried": true
+          "while_carried": true,
+          "sound_path": "static/sounds/grunt_3.mp3"
         },
         {
           "description": "Build wall",
           "action": "build_wall",
           "while_carried": true,
-          "requires_item": "partial-wall"
+          "requires_item": "partial-wall",
+          "sound_path": "static/sounds/grunt_3.mp3"
         }
       ]
     },
@@ -848,7 +864,13 @@
       "carryable": false,
       "walkable": true,
       "flat": true,
-      "interactions": [],
+      "interactions": [
+        {
+          "description": "Enter portal",
+          "action": "enter",
+          "while_carried": false
+        }
+      ],
       "on_tick": [
         {
           "action": "spawn_mob",
@@ -871,6 +893,36 @@
           "parameters": {
             "type": "villager",
             "max": 15,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "bomb",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sands-of-time",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "gun-powder",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
             "rate": 0.1
           }
         }
@@ -993,6 +1045,128 @@
       }
     },
     {
+      "name": "Market",
+      "type": "market-stand",
+      "carryable": false,
+      "smashable": true,
+      "walkable": false,
+      "attributes": [
+        {
+          "name": "items",
+          "value": 0
+        },
+        {
+          "name": "price",
+          "value": 10
+        },
+        {
+          "name": "gold",
+          "value": 0
+        },
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Add $item_name",
+          "action": "add_item",
+          "while_carried": false,
+          "permissions": {
+            "community": true,
+            "other": false
+          },
+          "sound_path": "static/sounds/drop.mp3"
+        },
+        {
+          "description": "Get $item_name",
+          "action": "get_item",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "items",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          },
+          "sound_path": "static/sounds/pick_up.mp3"
+        },
+        {
+          "description": "Raise price",
+          "action": "raise_price",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "price",
+              "value": 99,
+              "comparison": "less_than"
+            }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          },
+          "sound_path": "static/sounds/bell.mp3"
+        },
+        {
+          "description": "Lower price",
+          "action": "lower_price",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "price",
+              "value": 1,
+              "comparison": "greater_than"
+            }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          },
+          "sound_path": "static/sounds/bell.mp3"
+        },
+        {
+          "description": "Collect gold",
+          "action": "collect_gold",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "gold",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          },
+          "sound_path": "static/sounds/jingle.mp3"
+        },
+        {
+          "description": "Purchase potion",
+          "action": "purchase",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "items",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ],
+          "sound_path": "static/sounds/jingle.mp3"
+        }
+      ],
+      "show_price_at": {
+        "x": 7,
+        "y": -10
+      }
+    },
+    {
       "name": "Potion",
       "type": "potion",
       "carryable": true,
@@ -1008,7 +1182,8 @@
         {
           "description": "Quaff potion",
           "action": "drink",
-          "while_carried": true
+          "while_carried": true,
+          "sound_path": "static/sounds/drink_1.mp3"
         },
         {
           "description": "Create stand",
@@ -1044,12 +1219,14 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ]
+          ],
+          "sound_path": "static/sounds/pick_up.mp3"
         },
         {
           "description": "Add $item_name",
           "action": "add_item",
-          "while_carried": false
+          "while_carried": false,
+          "sound_path": "static/sounds/drop.mp3"
         }
       ]
     },
@@ -1065,60 +1242,6 @@
         },
         {
           "name": "potion_subtype",
-          "value": ""
-        }
-      ],
-      "interactions": [
-        {
-          "description": "Add Ingredient",
-          "action": "add_ingredient",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "ingredients",
-              "value": 3,
-              "comparison": "less_than"
-            }
-          ]
-        },
-        {
-          "description": "Bottle Potion",
-          "action": "bottle_potion",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "ingredients",
-              "value": 0,
-              "comparison": "greater_than"
-            }
-          ]
-        },
-        {
-          "description": "Dump Cauldron",
-          "action": "dump_cauldron",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "ingredients",
-              "value": 0,
-              "comparison": "greater_than"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "obsidian-cauldron",
-      "type": "obsidian-cauldron",
-      "carryable": false,
-      "walkable": false,
-      "attributes": [
-        {
-          "name": "ingredients",
-          "value": 0
-        },
-        {
-          "name": "potion_subtype",
           "value": 0
         }
       ],
@@ -1133,7 +1256,8 @@
               "value": 3,
               "comparison": "less_than"
             }
-          ]
+          ],
+          "sound_path": "static/sounds/drop.mp3"
         },
         {
           "description": "Bottle Potion",
@@ -1145,7 +1269,8 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ]
+          ],
+          "sound_path": "static/sounds/mix.mp3"
         },
         {
           "description": "Dump Cauldron",
@@ -1157,7 +1282,8 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ]
+          ],
+          "sound_path": "static/sounds/dump.mp3"
         }
       ]
     },

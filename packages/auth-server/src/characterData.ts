@@ -1,23 +1,46 @@
 import { supabase } from './authController';
 import { Request, Response } from 'express';
+import { isValidAuthHeader } from './authHeaderValidator';
 
 const characterData = async (req: Request, res: Response) => {
+  if (!isValidAuthHeader(req.headers)) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
   const id = req.params.Id;
-  console.log('Id:', id);
-  const { health, name, gold } = req.body;
-  if (!id || !health || !name || gold === undefined) {
+  const { current_world_id, health, name, gold } = req.body;
+  if (!id || !current_world_id || !health || !name || gold === undefined) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
-  const { error } = await supabase
+
+  // get the primary key of the target world based on the world_id column
+  const { data: worldData, error: worldError } = await supabase
+    .from('worlds')
+    .select('id')
+    .eq('world_id', current_world_id)
+    .single(); // we expect a single result
+
+  if (worldError || !worldData) {
+    console.error(worldError || 'World not found');
+    return res.status(400).json({ error: 'Invalid world ID.' });
+  }
+
+  // Use the retrieved world ID to update the player's data
+  const { data, error } = await supabase
     .from('characters')
-    .update({ health: health, pname: name, gold: gold })
+    .update({
+      current_world_id: worldData.id,
+      health: health,
+      pname: name,
+      gold: gold
+    })
     .eq('character_id', id);
   if (error) {
     console.error(error);
     return res.status(500).json({ error: 'Failed to upsert player data.' });
   }
 
-  res.status(200).json({ message: 'Player data upserted successfully.' });
+  res.status(200).json({ message: 'Player data upserted successfully.', data });
 };
 
 export default characterData;

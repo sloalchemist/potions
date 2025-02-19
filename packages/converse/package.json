@@ -12,7 +12,7 @@
         "start:repl": "node dist/src/repl/index.js",
         "lint": "pnpm eslint src/",
         "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
-        "test": "pnpm jest",
+        "test": "jest",
         "dev": "pnpm build && node dist/src/repl/index.js",
         "clean": "rimraf dist"
     },

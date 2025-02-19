@@ -6,7 +6,8 @@ import {
   HouseI,
   ItemI,
   MobI,
-  Coord
+  Coord,
+  WorldMetadata
 } from '@rt-potion/common';
 import { ItemType } from '../worldDescription';
 import { SpriteMob } from '../sprite/sprite_mob';
@@ -43,6 +44,12 @@ let attackCallback: (attacks: string[]) => void = () => {};
 type GameState = 'uninitialized' | 'worldLoaded' | 'stateInitialized';
 
 export let gameState: GameState = 'uninitialized';
+
+export let availableWorlds: WorldMetadata[] = [];
+
+export function setAvailableWorlds(worlds: WorldMetadata[]) {
+  availableWorlds = worlds;
+}
 
 export function setGameState(state: GameState) {
   console.log('Setting game state to:', state);
@@ -186,7 +193,7 @@ export function getCarriedItemInteractions(
 
   // give to nearby mobs
   nearbyMobs.forEach((mob) => {
-    if (mob.key !== playerId) {
+    if (mob.key !== playerId && !mob.carrying) {
       interactions.push({
         action: 'give',
         item: item as Item,
@@ -221,11 +228,12 @@ export function getCarriedItemInteractions(
 
 export function getPhysicalInteractions(
   physical: Physical,
-  carried?: Item
+  carried?: Item,
+  ownerId?: string
 ): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
-  const isOwner = item.isOwnedBy(currentCharacter?.community_id);
+  const isOwner: boolean = ownerId ? item.isOwnedBy(ownerId) : true;
 
   // if the item can be picked up
   if (item.itemType.carryable) {
@@ -314,6 +322,8 @@ export function getInteractablePhysicals(
   // nearby non-walkable items
   let nearbyObjects = physicals.filter((p) => !p.itemType.walkable);
 
+  let nearbyBaskets = physicals.filter((p) => p.itemType.type === 'basket');
+
   // find distinct non-walkable objects next to player
   let unique_nearbyObjects = nearbyObjects.filter(
     (item, index, self) =>
@@ -324,7 +334,8 @@ export function getInteractablePhysicals(
   let interactableObjects = [
     ...onTopObjects,
     ...unique_nearbyObjects,
-    ...nearbyOpenableObjects
+    ...nearbyOpenableObjects,
+    ...nearbyBaskets
   ];
   interactableObjects = interactableObjects.filter(
     (item, index, self) =>
@@ -360,7 +371,7 @@ function collisionListener(physicals: Item[]) {
   interactableObjects.forEach((physical) => {
     interactions = [
       ...interactions,
-      ...getPhysicalInteractions(physical, carriedItem)
+      ...getPhysicalInteractions(physical, carriedItem, player.community_id)
     ];
   });
   // updates client only if interactions changes

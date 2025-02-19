@@ -17,7 +17,7 @@ beforeEach(() => {
 
 describe('Item Giving Tests', () => {
   describe('Player and Villager Mob Item Exchange', () => {
-    test('Should  allow item exchange between player and villager mob', () => {
+    test('Should allow item exchange between player and villager mob', () => {
       const position1: Coord = { x: 0, y: 0 };
       const position2: Coord = { x: 1, y: 1 };
       const potionPosition: Coord = { x: 2, y: 2 };
@@ -53,7 +53,7 @@ describe('Item Giving Tests', () => {
       // Assertions
       expect(result).toBe(true); // Item should be passed
       expect(playerMob!.carrying).toBeUndefined(); // Player should not have the potion
-      expect(villagerMob!.carrying).toBeDefined(); // Villager should  have the potion
+      expect(villagerMob!.carrying).toBeDefined(); // Villager should have the potion
     });
   });
 });

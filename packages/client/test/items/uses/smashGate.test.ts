@@ -43,8 +43,6 @@ describe('Openable, smashable items have prompts to smash', () => {
       ]
     };
 
-    //const player1 = new Mob(world!, 'mob1', 'Player1', 'player', 100, playerPos, 2, {});
-
     // Instantiate the gate object
     const gate = new Item(world!, 'gate1', { x: 1, y: 1 }, gateItemType);
 

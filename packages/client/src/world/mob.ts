@@ -13,6 +13,7 @@ export class Mob extends Physical {
   personalities: Record<string, number> = {};
   unlocks: string[] = [];
   doing: string = '';
+  community_id?: string;
 
   constructor(
     world: World,
@@ -22,7 +23,8 @@ export class Mob extends Physical {
     maxHealth: number,
     position: Coord | null,
     attributes: Record<string, number>,
-    personalities: Record<string, number>
+    personalities: Record<string, number>,
+    community_id?: string
   ) {
     super(world, key, type, position);
     this.name = name;
@@ -36,6 +38,10 @@ export class Mob extends Physical {
     }
     for (const [key, value] of Object.entries(personalities)) {
       this.personalities[key] = value;
+    }
+
+    if (community_id) {
+      this.community_id = community_id;
     }
   }
 

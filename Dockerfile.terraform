@@ -1,0 +1,23 @@
+# Use the official HashiCorp Terraform base image
+FROM hashicorp/terraform
+
+# Install bash, jq, and postgresql-client
+RUN apk add --no-cache bash jq postgresql-client curl 
+
+
+ENV SUPABASE_CLI_VERSION=2.9.6
+ENV SUPABASE_CLI_APK_URL=https://github.com/supabase/cli/releases/download/v${SUPABASE_CLI_VERSION}/supabase_${SUPABASE_CLI_VERSION}_linux_amd64.apk
+
+RUN curl -fsSL $SUPABASE_CLI_APK_URL -o /tmp/supabase.apk && \
+    apk add --allow-untrusted /tmp/supabase.apk && \
+    rm /tmp/supabase.apk
+
+
+# Set the working directory inside the container
+WORKDIR /terraform
+
+# Override the default Terraform entrypoint to allow running multiple commands
+ENTRYPOINT ["/bin/sh", "-c"]
+
+# Default command when running the container
+CMD ["terraform -help"]

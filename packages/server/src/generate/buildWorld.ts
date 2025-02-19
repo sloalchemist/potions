@@ -9,7 +9,6 @@ import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
 import globalData from '../../data/global.json';
-import fireWorldSpecifcData from '../../data/fire_world_specific.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
@@ -27,6 +26,8 @@ async function main() {
   }
 
   console.log(`Loading world ${worldID}`);
+
+  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse

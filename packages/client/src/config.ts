@@ -5,7 +5,9 @@ import { LoadWorldScene } from './scenes/loadWorldScene';
 import { LoadCharacterScene } from './scenes/loadCharacterScene';
 import { FrameScene } from './scenes/frameScene';
 import { PauseScene } from './scenes/pauseScene';
+import { ChatOverlayScene } from './scenes/chatOverlayScene';
 import { BrewScene } from './scenes/brewScene';
+import { PortalMenuScene } from './scenes/portalMenuScene';
 
 export const SCREEN_WIDTH = 480;
 export const SCREEN_HEIGHT = 720;
@@ -31,7 +33,9 @@ const config: Phaser.Types.Core.GameConfig = {
     WorldScene,
     UxScene,
     FrameScene,
-    BrewScene
+    ChatOverlayScene,
+    BrewScene,
+    PortalMenuScene
   ]
 };
 

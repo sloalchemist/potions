@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18' # Use the version your project requires
+          node-version: '20' # Use the version your project requires
 
       # Step 3: Install PNPM
       - name: Install PNPM
@@ -52,6 +52,7 @@ jobs:
         run: |
           cp -r ./packages/client/static ./packages/client/dist/static
           cp -r ./packages/client/githubPages/index.html ./packages/client/dist
+          cp -r ./world_assets ./packages/client/dist
 
       # Step 8: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
@@ -59,4 +60,4 @@ jobs:
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             publish_dir: ./packages/client/dist
-            
+            cname: potions.gg
