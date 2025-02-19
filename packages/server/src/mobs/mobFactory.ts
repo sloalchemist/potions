@@ -178,7 +178,9 @@ class MobFactory {
     const template = this.mobTemplates[type];
     if (!template) {
       throw new Error(
-        `Unknown mob type: ${type} - ${JSON.stringify(this.mobTemplates)}`
+        `Unknown mob type: ${type} - ${JSON.stringify(this.mobTemplates)}. 
+        Your database likely saved an item from a version your code currently doesn't support. 
+        Try emptying your supabase bucket`
       );
     }
     return template;

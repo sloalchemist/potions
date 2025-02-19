@@ -8,3 +8,4 @@ export * from './playerToServer';
 export * from './serverToPlayer';
 export * from './pathFinder';
 export * from './terrainType';
+export * from './utils';

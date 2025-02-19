@@ -9,7 +9,7 @@
       "resolveJsonModule": true,
       "target": "es2019",
       "module": "commonjs",
-      "types": ["jest"]
+      "types": ["jest", "node"]
       },
     "references": []
 }

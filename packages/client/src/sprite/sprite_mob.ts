@@ -29,6 +29,7 @@ export class SpriteMob extends Mob {
   speechBubbleHeight?: number;
   bubbleOffsetX?: number;
   bubbleOffsetY?: number;
+  id?: string;
 
   addCollisionListener(collisionListener: (physicals: Item[]) => void) {
     this.collisionListeners.push(collisionListener);
@@ -58,6 +59,7 @@ export class SpriteMob extends Mob {
     this.doing = mob.doing;
     this.unlocks = mob.unlocks;
     this.community_id = mob.community_id;
+    this.id = mob.id;
 
     if (this.subtype) {
       const parts = this.subtype.split('-');

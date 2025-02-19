@@ -9,10 +9,14 @@ import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
 import globalData from '../../data/global.json';
-import worldSpecificData from '../../data/world_specific.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
+import {
+  initializeSupabase,
+  initializeBucket,
+  uploadLocalData
+} from '../services/supabaseStorage';
 
 async function main() {
   // Build and save the knowledge graph
@@ -27,6 +31,8 @@ async function main() {
   }
 
   console.log(`Loading world ${worldID}`);
+
+  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
@@ -50,6 +56,20 @@ async function main() {
   await createTables();
   await loadDefaults(worldDescription);
 
+  // Upload created world to Supabase, overwriting existing versions
+  const supabase = initializeSupabase();
+
+  try {
+    await initializeBucket(supabase);
+    console.log('Bucket creation handled successfully');
+  } catch (err) {
+    console.error('Error during bucket initialization:', err);
+    throw err;
+  }
+
+  await uploadLocalData(supabase, worldID);
+
+  // Exit
   console.log('Script finished successfully');
   process.exit(0);
 }

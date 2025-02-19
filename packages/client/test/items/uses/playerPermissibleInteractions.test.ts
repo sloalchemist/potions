@@ -1,30 +1,22 @@
-jest.mock('../../../src/worldMetadata', () => ({
-  publicCharacterId: '11111'
-}));
-
-jest.mock('../../../src/scenes/worldScene', () => {
-  const { World } = jest.requireActual('../../../src/world/world');
-  return { world: new World() };
-});
-
-import { world } from '../../../src/scenes/worldScene';
 import {
   getInteractablePhysicals,
   getPhysicalInteractions
 } from '../../../src/world/controller';
 import { Item } from '../../../src/world/item';
-// import { World } from '../../../src/world/world';
+import { World } from '../../../src/world/world';
 import { Mob } from '../../../src/world/mob';
 import { ItemType } from '../../../src/worldDescription';
 import { Coord } from '@rt-potion/common';
 
 describe('Community ownership based interactions', () => {
-  // let world: World | null = null;
+  let world: World | null = null;
   let potionStand: Item;
+  let player: Mob;
+  let playerPos: Coord;
 
   beforeAll(() => {
     // Initialize world
-    // world = new World();
+    world = new World();
     world.load({
       tiles: [
         [0, 0, 0],
@@ -36,20 +28,20 @@ describe('Community ownership based interactions', () => {
       mob_types: []
     });
 
+    // Put player in world to allow controller to test client side permissions
     const publicCharacterId = '11111';
-
-    const player = new Mob(
+    playerPos = { x: 1, y: 0 };
+    player = new Mob(
       world,
       publicCharacterId,
       'player1',
       'player',
       100,
-      { x: 1, y: 1 },
+      playerPos,
       {},
       {},
       'alchemists'
     );
-
     world.mobs[publicCharacterId] = player;
     world.addMobToGrid(player);
 
@@ -91,18 +83,9 @@ describe('Community ownership based interactions', () => {
       potionStandItemType,
       'alchemists'
     );
-
-    console.log('publicCharacterId:', publicCharacterId);
-    console.log('world.mobs:', world.mobs);
-    console.log(
-      'world.mobs[publicCharacterId]:',
-      world.mobs[publicCharacterId]
-    );
   });
 
   test('Should allow community members to collect gold', () => {
-    const playerPos: Coord = { x: 1, y: 0 };
-
     // Get interactable items within range of player
     const interactablePhysicals = getInteractablePhysicals(
       [potionStand],
@@ -118,7 +101,11 @@ describe('Community ownership based interactions', () => {
     // console.log('Interactable items in proximity: ', interactablePhysicals);
 
     // Get all interactions available for potion stand
-    const interactions = getPhysicalInteractions(potionStand);
+    const interactions = getPhysicalInteractions(
+      potionStand,
+      undefined,
+      player.community_id
+    );
     // console.log('Interactions available: ', interactions);
 
     // Collect gold should be an interaction given the defined permissions
@@ -130,7 +117,11 @@ describe('Community ownership based interactions', () => {
 
   test('Should prevent community members from purchasing potions', () => {
     // Get interactions available for the potion stand
-    const interactions = getPhysicalInteractions(potionStand);
+    const interactions = getPhysicalInteractions(
+      potionStand,
+      undefined,
+      player.community_id
+    );
 
     // Check that purchase is NOT an available interaction
     expect(
@@ -139,6 +130,6 @@ describe('Community ownership based interactions', () => {
   });
 
   afterAll(() => {
-    // world = null;
+    world = null;
   });
 });

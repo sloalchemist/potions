@@ -30,3 +30,14 @@ game.events.on('focus', () => {
     game.scene.start('WorldScene');
   }
 });
+
+// NodeModule type does not implicitly have a hot property
+// So we need to cast it to any and disable the eslint rule
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mod = module as any;
+if (mod.hot) {
+  // Accept new changes
+  mod.hot.accept();
+  // Reload on changes to prevent stale state
+  mod.hot.dispose(() => window.location.reload());
+}

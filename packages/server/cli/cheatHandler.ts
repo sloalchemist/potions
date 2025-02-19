@@ -107,7 +107,11 @@ export function handleCliCommand(input: string) {
           mobFactory.makeMob(name, { x: x as number, y: y as number });
           console.log(`Spawned mob: ${name} at (${x}, ${y})`);
         } else {
-          console.log(`Unknown mob type: ${name}`);
+          console.log(
+            `Unknown mob type: ${name}. 
+            Your database likely saved a mob from a version your code currently doesn't support. 
+            Try emptying your supabase bucket`
+          );
         }
         break;
       case 'item':
@@ -131,7 +135,11 @@ export function handleCliCommand(input: string) {
 
           console.log(`Spawned item: ${name} at (${x}, ${y})`);
         } else {
-          console.log(`Unknown item type: ${name}`);
+          console.log(
+            `Unknown item type: ${name}. 
+            Your database likely saved an item from a version your code currently doesn't support.
+            Try emptying your supabase bucket`
+          );
         }
         break;
       default:

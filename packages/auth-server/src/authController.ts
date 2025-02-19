@@ -3,20 +3,19 @@ import { Types } from 'ably';
 import { ably } from './ablyService';
 import { createClient } from '@supabase/supabase-js';
 import Ably from 'ably';
+import { getEnv } from '@rt-potion/common';
 
 export const userMembershipChannel = ably.channels.get('membership');
 
 export const supabase = initializeSupabase();
 
 function initializeSupabase() {
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
-    throw new Error('Cannot run without supabase credentials in env.');
+  // In test environment, we'll use mocked Supabase client
+  if (process.env.NODE_ENV === 'test') {
+    return createClient('http://test-supabase.com', 'test-key');
   }
 
-  return createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_KEY
-  );
+  return createClient(getEnv('SUPABASE_URL'), getEnv('SUPABASE_SERVICE_KEY'));
 }
 
 const authController = async (req: Request, res: Response) => {

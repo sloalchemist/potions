@@ -5,5 +5,6 @@ export default {
   transform: {
     '^.+\\.ts$': 'ts-jest'
   },
-  testMatch: ['**/test/**/*.test.ts'] // Adjust this to match your test directory structure
+  testMatch: ['**/test/**/*.test.ts'], // Adjust this to match your test directory structure
+  setupFiles: ['<rootDir>/test/jestTestSetup.ts']
 };

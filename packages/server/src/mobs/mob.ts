@@ -16,6 +16,7 @@ import { pubSub } from '../services/clientCommunication/pubsub';
 import { Carryable } from '../items/carryable';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
+import { Favorability } from '../favorability/favorability';
 
 export type MobData = {
   personalities: Personality;
@@ -673,7 +674,26 @@ export class Mob {
     // TODO: replace with FightTracker class
     pubSub.playerAttacks(mob.id, ['Test Attack']);
     // fightTracker.startFight(mob, this);
+    this.updateFightFavorability(mob);
     return false;
+  }
+
+  /**
+   * Updates mob species' favorability to decrease by 20 with the player
+   * @param mob The target mob whose species you want to decrease favorability with
+   */
+  updateFightFavorability(mob: Mob): void {
+    var id = mob.community_id;
+    DB.prepare(
+      `   
+      UPDATE favorability
+        SET favor = favor - 20
+        WHERE
+            (community_1_id = :id_1 AND community_2_id = :id_2) OR
+            (community_1_id = :id_2 AND community_2_id = :id_1)
+        `
+    ).run({ id_1: 'alchemists', id_2: id });
+    Favorability.updatePlayerStat(this);
   }
 
   static findCarryingMobID(item_id: string): string | undefined {

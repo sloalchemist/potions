@@ -59,7 +59,7 @@ if [ $exitCode -ne 0 ]; then
     elif echo "$output" | grep -q "Project status did not reach ACTIVE_HEALTHY within."; then
          echo -e "\033[31mIf you had to time out the run of apply, check to make sure your supabase db password is correct.\033[0m"
     else
-         echo -e "\033[31mWe haven't handle this case yet: An unknown error occurred. Please review the output above.\033[0m"
+         echo -e "\033[31mWe haven't handle this case yet: An unknown error occurred. Please review the output above. In most cases, this is due to out of sync terraform state. Please refer to the section of the README called SYNCING TERRAFORM STATE.\033[0m"
     fi
     exit $exitCode
 fi

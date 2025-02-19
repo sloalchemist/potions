@@ -3,7 +3,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 
 export class BrewScene extends Phaser.Scene {
   private messageStack!: MessageStack;
-  private brewColor = 0x222222;
+  private brewColor = 0x9eb9d4;
   private numIngredients = 0;
 
   constructor() {

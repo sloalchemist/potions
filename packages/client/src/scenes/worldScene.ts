@@ -8,7 +8,7 @@ import {
 import { bindAblyToWorldScene, setupAbly } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
 import { Coord } from '@rt-potion/common';
-import { publicCharacterId } from '../worldMetadata';
+import { publicCharacterId, getWorldID } from '../worldMetadata';
 import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
@@ -64,12 +64,13 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', 'static/background.png');
+    const worldID = getWorldID();
+    this.load.image('background', `static/${worldID}_background.png`);
 
     this.load.atlas(
       'global_atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      `static/${worldID}_assets.png`,
+      `static/${worldID}_atlas.json`
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -79,7 +80,9 @@ export class WorldScene extends Phaser.Scene {
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
     this.load.json('global_data', 'static/global.json');
-    this.load.json('world_specific_data', 'static/world_specific.json');
+    this.load.json('world_specific_data', `static/${worldID}_specific.json`);
+
+    this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
 
   loadAnimations(
@@ -239,8 +242,6 @@ export class WorldScene extends Phaser.Scene {
       this.cache.json.get('world_specific_data')
     );
 
-    console.log('setting up world', needsAnimationsLoaded);
-    //console.log(this.world_data);
     world = new World();
     world.load(globalData);
 
@@ -399,6 +400,11 @@ export class WorldScene extends Phaser.Scene {
           pointer.worldY / TILE_SIZE
         );
 
+        // Prevent player movement if the brew scene is active
+        if (this.scene.isActive('BrewScene')) {
+          return;
+        }
+
         publishPlayerPosition({
           x: pointer.worldX / TILE_SIZE,
           y: pointer.worldY / TILE_SIZE
@@ -425,7 +431,7 @@ export class WorldScene extends Phaser.Scene {
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
       }
-      if (event.shiftKey && event.code === 'KeyS') {
+      if (event.shiftKey && event.code === 'KeyG') {
         persistWorldData();
       }
       // Brings up chat box for user
@@ -478,8 +484,18 @@ export class WorldScene extends Phaser.Scene {
     }
     tick(this);
     if (this.cameraDolly && this.hero) {
-      this.cameraDolly.x = Math.floor(this.hero.x);
-      this.cameraDolly.y = Math.floor(this.hero.y);
+      const roundedX = Math.floor(this.hero.x);
+      const roundedY = Math.floor(this.hero.y);
+
+      if (roundedX !== this.cameraDolly.x || roundedY !== this.cameraDolly.y) {
+        if (!this.sound.isPlaying('walk')) {
+          this.sound.add('walk', { loop: true, volume: 0.6 }).play();
+        }
+      } else {
+        this.sound.removeByKey('walk');
+      }
+      this.cameraDolly.x = roundedX;
+      this.cameraDolly.y = roundedY;
     }
     if (this.hero) {
       const [x, y] = this.convertToTileXY({ x: this.hero.x, y: this.hero.y });
@@ -534,7 +550,11 @@ export class WorldScene extends Phaser.Scene {
       return;
     }
 
-    if (this.scene.isActive('ChatOverlayScene')) {
+    // Prevent player movement if the chat overlay or brew scene is active
+    if (
+      this.scene.isActive('ChatOverlayScene') ||
+      this.scene.isActive('BrewScene')
+    ) {
       return;
     }
 

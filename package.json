@@ -25,6 +25,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "jest": "^29.7.0",
     "rt-potion": "file:"
   },
   "engines": {

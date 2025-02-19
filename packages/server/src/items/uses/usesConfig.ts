@@ -9,6 +9,7 @@ import { EnterPortal } from './enterPortal';
 import { Purchase } from './stand/purchase';
 import { CollectGold } from './stand/collectGold';
 import { CreateStand } from './stand/createStand';
+import { CreateMarket } from './marketstand/createMarket';
 import { RaisePrice } from './stand/raisePrice';
 import { LowerPrice } from './stand/lowerPrice';
 import { BuildWall } from './building/buildWall';
@@ -31,6 +32,7 @@ const uses = [
   Purchase,
   CollectGold,
   CreateStand,
+  CreateMarket,
   RaisePrice,
   LowerPrice,
   BuildWall,
