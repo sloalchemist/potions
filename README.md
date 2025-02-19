@@ -106,6 +106,22 @@ Use `./tf.ps1 <any_terraform_command>`
 │ /bin/bash: -c: line 9: syntax error near unexpected token `|'
 ' /bin/bash: -c: line 9: `    | jq -r '.status')`
 
+**TERRAFORM STATE PROBLEMS**
+
+Your state may become out of sync for several reasons. 
+
+1. If you manually delete or create projects in provider dashboards
+2. You delete your state file without also deleting all provisioned resources (Supabase or Ably projects)
+3. You change your credentials while resources are still provisioned (up and running)
+4. Any other way in which resources change without running a terraform command
+
+**HOW TO RESYNC YOUR STATE**
+
+1. You need to manually delete your /terraform/terraform.tfstate file and /terraform/terraform.tfstate.backup. 
+2. In their respective dashboards, delete your supabase potions-dev project and ably potions-dev projects. 
+3. In extreme cases, delete any running Docker containers or images associated with terraform using Docker Desktop. If this is necessary please reach out to Alfred Madere or Nick Perlich on Slack so we can find the root of the problem.
+4. Rerun /tf.ps1 for Windows or /tf.sh for MacOS.
+
 ### Build
 1. In your root folder, execute:
    ```
@@ -199,5 +215,47 @@ Developers/players will now be able to save their world data to Supabase. This m
  - Running "pnpm run create your-world-name" creates a world with the name your-world-name and saves it to Supabase.
  - Running "pnpm dev your-world-name" will load the data for the world your-world-name, if it exists.
  - Data will also be saved every 10 minutes the server is running.
- - You can manually save with the cheat code SHIFT+S 
  - If you want to reset your world, run the create script, as it overwrites all data with that world name and creates a fresh one.
+ - You can manually save with the cheat code SHIFT+G 
+
+ **DB Errors**
+ On the off chance you receive an error while running the server, you can always reset with the last bullet point above.
+
+### Database Setup for New Worlds
+
+To add new worlds and assign characters to the correct world, run the following SQL commands in Supabase:
+
+#### 1. Add New Worlds
+Insert the `world_id` and corresponding `ably_api_key` for the worlds you're adding:
+
+```sql
+INSERT INTO worlds (world_id, ably_api_key) 
+VALUES ('fire-world', 'your_ably_api_key');
+
+INSERT INTO worlds (world_id, ably_api_key) 
+VALUES ('water-world', 'your_ably_api_key');
+```
+Your ably_api_key is the same across worlds so you can use the same one that you are already using for test-world.
+
+#### 2. Assign Characters to Worlds
+Set the current_world_id for the character to ensure they are in the correct world.
+See the id column in your worlds table for the corresponding id.
+To assign a character to the Fire World:
+
+```sql
+UPDATE characters
+SET current_world_id = 'id' -- fire-world
+WHERE character_id = 'your_current_character_id';
+```
+
+To assign a character to the Water World (world_id = 3):
+```sql
+UPDATE characters
+SET current_world_id = 'id' -- water-world
+WHERE character_id = 'your_current_character_id';
+```
+
+#### 3. Notes
+
+- Replace `'your_ably_api_key'` with your ably api key. The ably api key should be the same across worlds.
+- Replace `'your_current_character_id'` with the specific character's ID that you are using. You can find this by running the game and checking the `auth-server` terminal output, where you’ll see a message like `Player joined! 1f238661-9a4a-4d1a-92e6-9178f76f6dba`. This is the `character_id` for the player that joined.
