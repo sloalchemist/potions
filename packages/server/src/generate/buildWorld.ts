@@ -27,6 +27,8 @@ async function main() {
 
   console.log(`Loading world ${worldID}`);
 
+  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
+
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
   const worldSpecificData = await fetchWorldSpecificData("world_specific");
