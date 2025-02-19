@@ -200,7 +200,7 @@ export class Conversation {
       this.speechOptions
     );
 
-    if (this.usesLLM) {
+    if (!this.usesLLM) {
       dialogService.sendPrompt(
         prompts,
         (data) => {

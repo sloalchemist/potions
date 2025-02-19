@@ -7,16 +7,14 @@ export async function sendPrompts(prompts: string[]): Promise<string[]> {
     // Use Promise.all to process each prompt concurrently
     const responses = await Promise.all(
       prompts.map(async (prompt) => {
-        console.log(`sending prompt:\n${prompt}`);
 
         // Generate response using Ollama
         const response = await ollama.generate({
-          model: "deepseek-r1:1.5b",
+          model: "tinyllama:latest",
           prompt: prompt,
         });
 
-        console.log(`response:\n${response.response}`);
-
+        console.log(`Prompt turned into ${response.response}`)
         return response.response; // Extract the response text
       })
     );
