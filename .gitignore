@@ -36,3 +36,6 @@ coverage.json
 
 # ignore terraform state
 *.tfstate
+
+# ignore log file
+*.log
