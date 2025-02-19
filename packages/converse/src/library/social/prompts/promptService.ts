@@ -1,3 +1,4 @@
+import { LlmDialogService } from "./llmService";
 /**
  * Interface representing a dialog service for sending prompts.
  */
@@ -26,4 +27,5 @@ export function initializeDialog(dialog: Dialog): void {
   dialogService = dialog;
 }
 
+initializeDialog(new LlmDialogService());
 export let dialogService: Dialog;

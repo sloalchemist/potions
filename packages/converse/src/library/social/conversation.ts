@@ -9,6 +9,7 @@ import {
 import { Speaker } from './speaker/speaker';
 import { SpeechFactory } from './speech/speechFactory';
 import { Turn } from './turn';
+import * as dotenv from 'dotenv';
 import { PersonalityTraits } from './personality';
 import { SpeechAct } from './speech/speechAct';
 import { SpeakerService } from './speaker/speakerService';
@@ -22,6 +23,7 @@ enum ConversationState {
   FINISHED
 }
 
+dotenv.config();
 /**
  * Represents a conversation between two speakers.
  */
@@ -52,7 +54,7 @@ export class Conversation {
   constructor(
     initator: Speaker,
     respondent: Speaker,
-    usesLLM: boolean = false,
+    usesLLM: boolean = process.env.LLM == "false" ? false : true,
     speakerService: SpeakerService
   ) {
     if (initator.conversation !== null || respondent.conversation !== null) {

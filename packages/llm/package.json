@@ -1,9 +1,9 @@
 {
-  "name": "@rt-potion/deepseak",
+  "name": "@rt-potion/llm",
   "version": "1.0.0",
   "type": "commonjs",
   "description": "",
-  "main": "dist/deepseakjs",
+  "main": "dist/deepseek.js",
   "scripts": {
     "clean": "rimraf dist",
     "lint": "pnpm eslint .",
@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@rt-potion/deepseak": "link:",
     "@supabase/supabase-js": "^2.44.2",
     "ably": "^1.2.21",
     "cookie-parser": "^1.4.6",
