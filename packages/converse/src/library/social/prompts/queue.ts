@@ -17,15 +17,26 @@ function initializeSupabase() {
     );
 }
   
-export async function sendToQueue(prompt: string, qName: String) {
-    const result = await supabase
-      .schema('pgmq_public')
-      .rpc('send', {
-          queue_name: qName,
-          message: { data: prompt }
-      })
-
-    console.log(result)
+export async function sendToQueue(prompt: string, qName: string): Promise<string | null> {
+    const { data, error } = await supabase
+        .schema("pgmq_public")
+        .rpc("send", {
+            queue_name: qName,
+            message: { data: prompt }
+        });
+    
+    if (error) {
+        console.error("Error sending to queue:", error);
+        return null;
+    }
+    // Extract and return the assigned msg_id
+    if (data && data.length > 0) {
+        const msg_id = data[0].msg_id;
+        console.log(`Message queued with msg_id: ${msg_id}`);
+        return msg_id;
+    }
+    
+    return null;
 }
 
 
@@ -37,8 +48,3 @@ export async function popFromQueue(qName: string) {
   if (error) console.error(error);
   return data;
 }
-
-const qName = "prompts";
-  
-// Usage
-sendToQueue("hello world", qName);
