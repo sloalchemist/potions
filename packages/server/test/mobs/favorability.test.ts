@@ -1,11 +1,10 @@
-import { commonSetup, world } from '../testSetup';
+import { commonSetup, world, itemGenerator } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
 import { DB } from '../../src/services/database';
 import { Coord } from '@rt-potion/common';
 import { Favorability } from '../../src/favorability/favorability';
 import { Mob } from '../../src/mobs/mob';
-import { ItemGenerator } from '../../src/items/itemGenerator';
 
 beforeEach(() => {
   commonSetup();
