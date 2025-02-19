@@ -739,6 +739,7 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(true);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(true);
+    this.setInteractions(currentInteractions);
   }
 
   showInventoryTab() {

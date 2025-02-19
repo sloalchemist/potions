@@ -412,6 +412,11 @@ export class WorldScene extends Phaser.Scene {
           return;
         }
 
+        // Prevent player movement if the brew scene is active
+        if (this.scene.isActive('BrewScene')) {
+          return;
+        }
+
         publishPlayerPosition({
           x: pointer.worldX / TILE_SIZE,
           y: pointer.worldY / TILE_SIZE
