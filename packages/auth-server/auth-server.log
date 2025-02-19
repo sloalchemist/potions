@@ -1,0 +1,37 @@
+
+> @rt-potion/auth-server@1.0.0 dev /Users/parshanasekhon/Desktop/CSC_369/potions/packages/auth-server
+> nodemon --watch src --exec ts-node src/index.ts
+
+[33m[nodemon] 3.1.9[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): src/**/*[39m
+[33m[nodemon] watching extensions: ts,json[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+Ably API Key: lesXHw.VM8Fzg:ihHhYOFjpTz9CR0JCOq6cwEZIu1U5x70bEgcDxkb5Yg
+Ably client initialized successfully.
+(node:3899) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Auth server listening on port 3000
+22:09:54.965 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 38955ms; assuming connection has dropped
+22:20:11.543 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 586137ms; assuming connection has dropped
+22:29:36.489 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 489572ms; assuming connection has dropped
+[32m[nodemon] restarting child process[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+Ably API Key: lesXHw.VM8Fzg:ihHhYOFjpTz9CR0JCOq6cwEZIu1U5x70bEgcDxkb5Yg
+Ably client initialized successfully.
+(node:27782) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Auth server listening on port 3000
+23:29:29.247 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 193363ms; assuming connection has dropped
+23:39:37.560 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 577942ms; assuming connection has dropped
+23:42:05.941 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 117971ms; assuming connection has dropped
+00:16:01.473 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 25101ms; assuming connection has dropped
+07:54:15.504 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 25101ms; assuming connection has dropped
+09:18:07.531 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 813715ms; assuming connection has dropped
+09:39:34.856 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 1286953ms; assuming connection has dropped
+09:55:25.199 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 177091ms; assuming connection has dropped
+11:19:11.496 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 5026009ms; assuming connection has dropped
+11:53:24.420 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 2052559ms; assuming connection has dropped
+11:57:27.335 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 127009ms; assuming connection has dropped
+12:20:18.453 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 1355181ms; assuming connection has dropped
+13:13:42.073 Ably: Transport.onIdleTimerExpire(): No activity seen from realtime in 3203472ms; assuming connection has dropped
