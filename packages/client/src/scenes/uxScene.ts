@@ -679,6 +679,8 @@ export class UxScene extends Phaser.Scene {
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
     this.fightContainer?.setVisible(true);
+    this.scene.stop('BrewScene');
+    this.mixButtons?.clearUnmatchedButtons('Toggle Menu');
     this.updateTabStyles('fight');
   }
 
@@ -715,21 +717,20 @@ export class UxScene extends Phaser.Scene {
   updateTabStyles(
     activeTab: 'items' | 'chat' | 'stats' | 'mix' | 'fight' | 'handbook'
   ) {
-    if (
-      this.itemsTabButton &&
-      this.chatTabButton &&
-      this.statsTabButton &&
-      this.mixTabButton &&
-      this.fightTabButton &&
-      this.potionTabButton
-    ) {
-      this.itemsTabButton.setTabActive(activeTab === 'items');
-      this.chatTabButton.setTabActive(activeTab === 'chat');
-      this.statsTabButton.setTabActive(activeTab === 'stats');
-      this.mixTabButton.setTabActive(activeTab === 'mix');
-      this.fightTabButton.setTabActive(activeTab === 'fight');
-      this.potionTabButton.setTabActive(activeTab == 'handbook');
-    }
+    const tabButtons = [
+      { tab: 'items', button: this.itemsTabButton, container: this.itemsContainer },
+      { tab: 'chat', button: this.chatTabButton, container: this.chatContainer },
+      { tab: 'stats', button: this.statsTabButton, container: this.statsContainer },
+      { tab: 'mix', button: this.mixTabButton, container: this.mixContainer },
+      { tab: 'fight', button: this.fightTabButton, container: this.fightContainer },
+      { tab: 'handbook', button: this.potionTabButton, container: this.recipeContainer },
+    ];
+  
+    // Hide all containers and deactivate all buttons first
+    tabButtons.forEach(({ tab, button, container }) => {
+      if (button) button.setTabActive(activeTab === tab); // Toggle the button active state
+      if (container) container.setVisible(activeTab === tab); // Toggle visibility of the container
+    });
   }
 
   // Method to set item interactions
@@ -806,6 +807,13 @@ export class UxScene extends Phaser.Scene {
 
   setFightOpponents(opponents: Mob[]) {
     this.fightButtons?.clearButtonOptions();
+
+    if (this.scene.isActive('BrewScene')) {
+
+      this.scene.get('BrewScene')?.children?.each((child) => child.destroy());
+
+      this.scene.stop('BrewScene');
+  }
 
     opponents.forEach((opponent, i) => {
       const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
