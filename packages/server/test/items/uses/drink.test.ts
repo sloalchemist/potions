@@ -54,4 +54,4 @@ describe('Drink', () => {
     expect(drinkPotion).not.toHaveBeenCalled();
     expect(mockItem.destroy).not.toHaveBeenCalled();
   });
-}); 
+});
