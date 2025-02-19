@@ -59,13 +59,7 @@
       ],
       "walkable": true,
       "smashable": true,
-      "interactions": [
-        {
-          "description": "Eat",
-          "action": "eat",
-          "while_carried": true
-        }
-      ],
+      "interactions": [],
       "carryable": true,
       "on_tick": []
     },
@@ -84,13 +78,7 @@
       ],
       "walkable": true,
       "smashable": true,
-      "interactions": [
-        {
-          "description": "Eat",
-          "action": "eat",
-          "while_carried": true
-        }
-      ],
+      "interactions": [],
       "carryable": true,
       "on_tick": []
     },
