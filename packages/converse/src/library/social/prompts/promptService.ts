@@ -9,7 +9,7 @@ const redis = createClient({
   password: process.env.REDIS_PASSWORD,
   socket: {
     host: process.env.REDIS_HOST,
-    port: parseInt(process.env.REDIS_PORT || '6379', 10) // Default to 6379 if not provided
+    port: parseInt('6379', 10) // Default to 6379 if not provided
   }
 });
 
