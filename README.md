@@ -106,6 +106,22 @@ Use `./tf.ps1 <any_terraform_command>`
 │ /bin/bash: -c: line 9: syntax error near unexpected token `|'
 ' /bin/bash: -c: line 9: `    | jq -r '.status')`
 
+**TERRAFORM STATE PROBLEMS**
+
+Your state may become out of sync for several reasons. 
+
+1. If you manually delete or create projects in provider dashboards
+2. You delete your state file without also deleting all provisioned resources (Supabase or Ably projects)
+3. You change your credentials while resources are still provisioned (up and running)
+4. Any other way in which resources change without running a terraform command
+
+**HOW TO RESYNC YOUR STATE**
+
+1. You need to manually delete your /terraform/terraform.tfstate file and /terraform/terraform.tfstate.backup. 
+2. In their respective dashboards, delete your supabase potions-dev project and ably potions-dev projects. 
+3. In extreme cases, delete any running Docker containers or images associated with terraform using Docker Desktop. If this is necessary please reach out to Alfred Madere or Nick Perlich on Slack so we can find the root of the problem.
+4. Rerun /tf.ps1 for Windows or /tf.sh for MacOS.
+
 ### Build
 1. In your root folder, execute:
    ```
@@ -196,11 +212,11 @@ Developers/players will now be able to save their world data to Supabase. This m
  - Your URL and Service key can be found in your auth server .env
 
 **How this works**
- - The first time you start the server, your server data will be uploaded to Supabase in an automatically generated bucket.
- - The next time you start your server, the data will be downloaded from Supabase.
+ - Running "pnpm run create your-world-name" creates a world with the name your-world-name and saves it to Supabase.
+ - Running "pnpm dev your-world-name" will load the data for the world your-world-name, if it exists.
  - Data will also be saved every 10 minutes the server is running.
- - You can manually save with the cheat code SHIFT+S 
- - If you want to reset your world, stop the server, delete all the files in your bucket on the Supabase website, rebuild, then start your server. 
+ - If you want to reset your world, run the create script, as it overwrites all data with that world name and creates a fresh one.
+ - You can manually save with the cheat code SHIFT+G 
 
  **DB Errors**
  On the off chance you receive an error while running the server, you can always reset with the last bullet point above.
