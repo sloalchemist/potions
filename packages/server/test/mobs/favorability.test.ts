@@ -1,4 +1,4 @@
-import { commonSetup, world } from '../testSetup';
+import { commonSetup, world, itemGenerator } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
 import { DB } from '../../src/services/database';
@@ -104,7 +104,20 @@ describe('Favorability Tests', () => {
     expect(Community.getFavor('alchemists', 'silverclaw')).toBe(-20);
     expect(testplayer?._maxHealth).toBeCloseTo(100);
   });
+  test('Mob should have a favorite item', () => {
+    // initialize villager / player
+    const position: Coord = { x: 0, y: 0 };
+    const position2: Coord = { x: 1, y: 1 };
+    mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
+    mobFactory.makeMob('villager', position2, 'testVillager', 'villagertest');
+    var testplayer = Mob.getMob('testPlayer');
+
+    console.log(11111)
+    console.log(testplayer?._favorite_item)
+
+  });
 });
+
 
 afterEach(() => {
   DB.close();

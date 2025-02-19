@@ -359,6 +359,11 @@ export class Item {
     return result.map((row) => row.id);
   }
 
+  static getRandomItem(): string {
+    var key = Object.keys(itemGenerator._itemTypes)[Math.floor(Math.random() * Object.keys(itemGenerator._itemTypes).length)]
+    return itemGenerator._itemTypes[key].type
+  }
+
   destroy(): void {
     DB.prepare(
       `
