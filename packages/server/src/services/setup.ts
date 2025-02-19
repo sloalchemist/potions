@@ -59,7 +59,8 @@ async function initializeAsync() {
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
-      worldSpecificData as Partial<ServerWorldDescription>;
+      fireWorldSpecificData as Partial<ServerWorldDescription>;
+
     const worldDescription: ServerWorldDescription = {
       ...globalDescription,
       ...specificDescription
