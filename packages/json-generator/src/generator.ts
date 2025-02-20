@@ -163,7 +163,7 @@ const server_breakup = (json: JsonData) => {
 // Generate specific json file
 let ran = false
 process.argv.forEach(function (val, index) {
-  if (val == "client") {
+  if (val == 'client') {
     const rawJson = readFileSync('../global.json', 'utf8');
     const json_client = JSON.parse(rawJson);
     client_breakup(json_client)
@@ -172,7 +172,7 @@ process.argv.forEach(function (val, index) {
       JSON.stringify(json_client, null, 4)
     );
     ran = true;
-  } else if (val === "server") {
+  } else if (val === 'server') {
     const rawJson = readFileSync('../global.json', 'utf8');
     const json_server = JSON.parse(rawJson);
     server_breakup(json_server);
@@ -185,5 +185,5 @@ process.argv.forEach(function (val, index) {
 });
 
 if (ran === false) {
-  console.log("No recognized locations")
+  console.log('No recognized locations')
 }
