@@ -6,6 +6,8 @@ import {
   DestroyMobData,
   DoingData,
   DropItemData,
+  StashItemData,
+  UnstashItemData,
   GiveItemData,
   ItemChangeData,
   MobChangeData,
@@ -26,7 +28,8 @@ import {
   addNewMob,
   gameState,
   setAvailableWorlds,
-  setDate
+  setDate,
+  updateInventory
 } from '../world/controller';
 import { publicCharacterId } from '../worldMetadata';
 import { leaveWorld } from './playerToServer';
@@ -80,6 +83,22 @@ export function setupBroadcast(
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
     item.drop(world, mob, data.position);
+  }
+
+  function handleStashItem(data: StashItemData) {
+    const item = world.items[data.item_key];
+    const mob = world.mobs[data.mob_key];
+    item.stash(world, mob, data.position);
+    world.addStoredItem(item);
+    updateInventory();
+  }
+
+  function handleUnstashItem(data: UnstashItemData) {
+    const item = world.items[data.item_key];
+    const mob = world.mobs[data.mob_key];
+    item.unstash(world, mob, data.position);
+    world.removeStoredItem(item);
+    updateInventory();
   }
 
   function handleDoing(data: DoingData) {
@@ -198,6 +217,19 @@ export function setupBroadcast(
         case 'drop_item':
           handleDropItem(broadcastItem.data as DropItemData);
           break;
+        case 'stash_item':
+          console.log(
+            broadcastItem.data as StashItemData,
+            'BROADCAST STASH ITEM'
+          );
+          handleStashItem(broadcastItem.data as StashItemData);
+          break;
+        case 'unstash_item':
+          console.log(
+            broadcastItem.data as StashItemData,
+            'BROADCAST UNSTASH ITEM'
+          );
+          handleUnstashItem(broadcastItem.data as UnstashItemData);
         case 'doing':
           handleDoing(broadcastItem.data as DoingData);
           break;

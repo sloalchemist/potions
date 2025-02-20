@@ -12,6 +12,7 @@ import {
   setFighting,
   setFightOpponentCallback,
   setInteractionCallback,
+  setInventoryCallback,
   setResponseCallback,
   currentInteractions
 } from '../world/controller';
@@ -19,6 +20,7 @@ import { TabButton } from '../components/tabButton';
 import { SlideButton } from '../components/slideButton';
 import { Mob } from '../world/mob';
 import { World } from '../world/world';
+import { Item } from '../world/item';
 import {
   fight,
   interact,
@@ -42,6 +44,7 @@ export interface FightOption {
 export class UxScene extends Phaser.Scene {
   interactButtons: ButtonManager = new ButtonManager([]);
   chatButtons: ButtonManager = new ButtonManager([]);
+  inventoryButtons: ButtonManager = new ButtonManager([]);
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
   attackText: Phaser.GameObjects.Text | null = null;
@@ -72,6 +75,7 @@ export class UxScene extends Phaser.Scene {
   potionTabButton: TabButton | null = null;
   nextButton: SlideButton | null = null;
   backButton: SlideButton | null = null;
+  inventoryTabButton: TabButton | null = null;
 
   itemsContainer: Phaser.GameObjects.Container | null = null;
   chatContainer: Phaser.GameObjects.Container | null = null;
@@ -81,6 +85,7 @@ export class UxScene extends Phaser.Scene {
   effectsContainer: Phaser.GameObjects.Container | null = null;
 
   chatSounds: Phaser.Sound.BaseSound[] = [];
+  inventoryContainer: Phaser.GameObjects.Container | null = null;
 
   constructor() {
     super({
@@ -130,6 +135,7 @@ export class UxScene extends Phaser.Scene {
     this.fightContainer = this.add.container(0, 40);
     this.recipeContainer = this.add.container(0, 40);
     this.effectsContainer = this.add.container(0, 40);
+    this.inventoryContainer = this.add.container(0, 40);
 
     const tabWidth = 82;
     const tabHeight = 40;
@@ -219,6 +225,15 @@ export class UxScene extends Phaser.Scene {
       50,
       30,
       'left'
+    );
+    this.inventoryTabButton = new TabButton(
+      this,
+      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
+      tabY,
+      'Pack',
+      () => this.showInventoryTab(),
+      tabWidth,
+      tabHeight
     );
 
     const backgroundTabs = this.add.graphics();
@@ -533,6 +548,7 @@ export class UxScene extends Phaser.Scene {
       setFightOpponentCallback((opponents: Mob[]) =>
         this.setFightOpponents(opponents)
       );
+      setInventoryCallback((items: Item[]) => this.setInventory(items));
       /*this.setChatOptions([
                 { label: 'Hello there chief, I am the lord of the world.', callback: () => speak('Hello there chief, I am the lord of the world.') },
                 { label: 'Goodbye little man hahahhahahah', callback: () => speak('Goodbye little man hahahhahahah') },
@@ -599,6 +615,7 @@ export class UxScene extends Phaser.Scene {
     this.backButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
+    this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('stats');
   }
 
@@ -614,6 +631,7 @@ export class UxScene extends Phaser.Scene {
     this.backButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
+    this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('items');
   }
 
@@ -629,6 +647,7 @@ export class UxScene extends Phaser.Scene {
     this.backButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
+    this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('chat');
   }
 
@@ -644,6 +663,7 @@ export class UxScene extends Phaser.Scene {
     this.backButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
+    this.inventoryContainer?.setVisible(false);
     this.updateTabStyles('fight');
   }
 
@@ -658,6 +678,7 @@ export class UxScene extends Phaser.Scene {
     this.nextButton?.setVisible(true);
     this.backButton?.setVisible(false);
     this.setInteractions(currentInteractions);
+    this.inventoryContainer?.setVisible(false);
     this.scene.stop('BrewScene');
     this.updateTabStyles('handbook');
   }
@@ -675,22 +696,37 @@ export class UxScene extends Phaser.Scene {
     this.setInteractions(currentInteractions);
   }
 
+  showInventoryTab() {
+    this.inventoryContainer?.setVisible(true);
+    this.statsContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.nextButton?.setVisible(false);
+    this.backButton?.setVisible(false);
+    this.updateTabStyles('pack');
+  }
+
   // Update the styles of the tab buttons based on the active tab
   updateTabStyles(
-    activeTab: 'items' | 'chat' | 'stats' | 'fight' | 'handbook'
+    activeTab: 'items' | 'chat' | 'stats' | 'pack' | 'fight' | 'handbook'
   ) {
     if (
       this.itemsTabButton &&
       this.chatTabButton &&
       this.statsTabButton &&
       this.fightTabButton &&
-      this.potionTabButton
+      this.potionTabButton &&
+      this.inventoryTabButton
     ) {
       this.itemsTabButton.setTabActive(activeTab === 'items');
       this.chatTabButton.setTabActive(activeTab === 'chat');
       this.statsTabButton.setTabActive(activeTab === 'stats');
       this.fightTabButton.setTabActive(activeTab === 'fight');
       this.potionTabButton.setTabActive(activeTab == 'handbook');
+      this.inventoryTabButton.setTabActive(activeTab === 'pack');
     }
   }
 
@@ -910,6 +946,22 @@ export class UxScene extends Phaser.Scene {
       );
       this.fightButtons.push(button);
       this.fightContainer?.add(button);
+    });
+  }
+
+  // Method to set inventory
+  setInventory(inventory: Item[]) {
+    this.inventoryButtons?.clearButtonOptions();
+
+    inventory.forEach((item, i) => {
+      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+      const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+
+      const button = new Button(this, x, y, true, `${item.itemType.name}`, () =>
+        interact(item.key, 'unstash', null)
+      );
+      this.inventoryButtons.push(button);
+      this.inventoryContainer?.add(button);
     });
   }
 }
