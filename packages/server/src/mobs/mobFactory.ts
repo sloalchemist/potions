@@ -78,7 +78,7 @@ class MobFactory {
             (id, action_type, name, subtype, gold, health, maxHealth, attack, defense, favorite_item, speed, position_x, position_y, community_id, house_id,
             satiation, max_energy, energy, social)
             VALUES
-            (:id, :type, :name, :subtype, :gold, :health, :health, :attack, :favorite_item, :speed, :position_x, :position_y, :community_id, :house_id, 100, 100, 100, 100);
+            (:id, :type, :name, :subtype, :gold, :health, :health, :attack, :defense, :favorite_item, :speed, :position_x, :position_y, :community_id, :house_id, 100, 100, 100, 100);
             `
     ).run({
       id,
