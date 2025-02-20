@@ -43,15 +43,12 @@ async function processJobs() {
         const job = JSON.parse(element);
         const { jobID, jobData, responseQueue } = job;
 
-        //console.log(`Processing job ID ${jobID} with data: ${jobData}`);
-
         try {
           // Call sendPrompt with await, since it's assumed to return a Promise
           const data = await sendPrompts(jobData);
 
           // Publish the result to the specific response queue
           await redis.lPush(responseQueue, JSON.stringify(data));
-          //console.log(`Published result for job ID ${jobID} to response queue: ${responseQueue}`);
         } catch (error) {
           console.error(`Error processing job ID ${jobID}:`, error);
         }
