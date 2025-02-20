@@ -18,7 +18,7 @@ check_port_3000
 
 # finishing state
 pnpm dev > auth-server.log 2>&1 &
-while ! grep -q "yo!" auth-server.log; do
+while ! grep -q "listening" auth-server.log; do
     sleep 1
 done
 
