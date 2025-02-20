@@ -139,9 +139,9 @@ Your state may become out of sync for several reasons.
    ```
 2. In the **server** package, execute:
    ```
-   pnpm run create test-world
+   pnpm run create world-name
    ```
-   to build your world.
+   to build a world named world-name.
 
 ### Run!
 
@@ -155,7 +155,7 @@ Your state may become out of sync for several reasons.
 
 2. Then, in the **server** package, execute:
    ```
-   pnpm dev test-world
+   pnpm dev world-name
    ```
    This starts your server. Keep it running in a separate terminal.
 3. In the **client** package, execute:
