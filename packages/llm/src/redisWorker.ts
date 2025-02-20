@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
 import * as dotenv from 'dotenv';
-import { sendPrompts } from './deepseek';
+import { sendPrompts } from './model';
 import ollama from "ollama";
 
 // Load environment variables from .env file
