@@ -492,8 +492,8 @@
             "walkable": false,
             "interactions": [
                 {
-                    "description": "Open Message",
-                    "action": null,
+                    "description": "Read Message",
+                    "action": "read",
                     "while_carried": true
                 }
             ],
