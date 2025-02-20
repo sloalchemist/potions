@@ -34,10 +34,6 @@ export class Item extends Physical {
 
   isWalkable(unlocks: string[]): boolean {
     if (this.lock) {
-      if (this.itemType.layout_type == 'opens' && this.itemType.open) {
-        return true;
-      }
-      //console.log('checking if walkable', mob.unlocks, this.lock);
       return unlocks.includes(this.lock);
     }
     return this.itemType.walkable ? true : false;
