@@ -241,6 +241,32 @@ On the off chance you receive an error while running the server, you can always 
 
 - Run `ollama run deepseek-r1:1.5b` in your terminal
 
-**3. Install Redis**
+**3. Make a Redis Account**
 
-- Follow the steps at [this link](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/)
+- Make a Redis Account at [this link](https://redis.io/)
+
+**4. Create a Database**
+
+- Click Cache
+- Choose the Essentials package for $0
+- Choose 30MB
+- Create database
+
+**5. Create `.env` files**
+
+- Open the `.env` file in the **server package**
+- Navigate to your database and find the public endpoint. This contains the REDIS_HOST and REDIS_PORT
+- In your `.env` file add the following lines:
+
+LLM_FLAG=true
+REDIS_HOST=
+REDIS_PORT=
+REDIS_PASSWORD=
+
+- Fill in the REDIS_HOST with the first half of the public endpoint (everything before the colon).
+- Fill in the REDIS_PORT with the second half of the public endpoint (everything after the colon).
+- Scroll down and click on the **Security** tab.
+- Copy the password and paste it into the REDIS_PASSWORD
+- Create a new `.env` file in the **llm package**
+- Add the REDIS_PORT, REDIS_HOST, and REDIS_PASSWORD to the `.env` file in the **llm package**
+- Open Ollama
