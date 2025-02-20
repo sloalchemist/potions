@@ -66,6 +66,7 @@ class MobFactory {
     const speed = mobType.speed;
     const attack = attack_from_auth ?? mobType.attack;
     const defense = mobType.defense;
+    const favorite_item = Item.getRandomItem();
     const community_id = mobType.community;
     const health = health_from_auth ?? mobType.health; // mobType.health;
 
@@ -74,10 +75,10 @@ class MobFactory {
     DB.prepare(
       `
             INSERT INTO mobs
-            (id, action_type, name, subtype, gold, health, maxHealth, attack, defense, speed, position_x, position_y, community_id, house_id,
+            (id, action_type, name, subtype, gold, health, maxHealth, attack, defense, favorite_item, speed, position_x, position_y, community_id, house_id,
             satiation, max_energy, energy, social)
             VALUES
-            (:id, :type, :name, :subtype, :gold, :health, :health, :attack, :defense, :speed, :position_x, :position_y, :community_id, :house_id, 100, 100, 100, 100);
+            (:id, :type, :name, :subtype, :gold, :health, :health, :attack, :favorite_item, :speed, :position_x, :position_y, :community_id, :house_id, 100, 100, 100, 100);
             `
     ).run({
       id,
@@ -88,6 +89,7 @@ class MobFactory {
       health,
       attack,
       defense,
+      favorite_item,
       speed,
       position_x: position.x,
       position_y: position.y,
