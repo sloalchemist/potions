@@ -8,7 +8,7 @@
     "clean": "rimraf dist",
     "lint": "pnpm eslint .",
     "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
-    "build": "tsc && pnpm --filter @rt-potion/json-generator generate server",
+    "build": "pnpm --filter @rt-potion/json-generator generate server && tsc",
     "start": "node dist/src/server.js",
     "dev": "nodemon --watch src --exec ts-node src/server.ts",
     "test": "jest",
