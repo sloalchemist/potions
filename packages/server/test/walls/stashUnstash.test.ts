@@ -1,8 +1,8 @@
-import { Stash } from '../../../src/items/uses/stash';
-import { Unstash } from '../../../src/items/uses/unstash';
-import { Carryable } from '../../../src/items/carryable';
-import { Mob } from '../../../src/mobs/mob';
-import { Item } from '../../../src/items/item';
+import { Stash } from '../../src/items/uses/stash';
+import { Unstash } from '../../src/items/uses/unstash';
+import { Carryable } from '../../src/items/carryable';
+import { Mob } from '../../src/mobs/mob';
+import { Item } from '../../src/items/item';
 
 jest.mock('../../../src/items/carryable', () => ({
   Carryable: {
