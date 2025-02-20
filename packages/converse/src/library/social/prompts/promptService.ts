@@ -6,11 +6,11 @@ import {v4 as uuidv4} from 'uuid';
 dotenv.config();
 
 const redis = createClient({
-  socket: {
-    host: 'redis-15426.c244.us-east-1-2.ec2.redns.redis-cloud.com',
-    port: 15426
-  },
-  password: 'pZQM4UBUyMOr5WG4MX44R2a1qtfKXx2T'
+    socket: {
+      host: process.env.REDIS_HOST,
+      port: Number(process.env.REDIS_PORT)
+    },
+    password: process.env.REDIS_PASSWORD // Add your Redis password if required
 });
 
 /**
