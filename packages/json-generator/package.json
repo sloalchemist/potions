@@ -5,7 +5,7 @@
   "main": "src/generator.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": " tsc src/generator.ts --lib es2015,esnext,dom && mv src/generator.js src/generator.cjs && node src/generator.cjs"
+    "generate": " tsc -p tsconfig.json && mv dist/generator.js dist/generator.cjs && node dist/generator.cjs"
   },
   "keywords": [],
   "author": "",

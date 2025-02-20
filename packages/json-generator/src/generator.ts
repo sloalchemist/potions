@@ -169,7 +169,7 @@ const server_breakup = (json: JsonData) => {
 
 // Generate specific json file
 let ran = false;
-process.argv.forEach(function (val: string, _: number) {
+process.argv.forEach(function (val: string) {
   if (val == 'client') {
     const rawJson = readFileSync('./global.json', 'utf8');
     const json_client = JSON.parse(rawJson);
@@ -180,7 +180,7 @@ process.argv.forEach(function (val: string, _: number) {
     );
     ran = true;
   } else if (val === 'server') {
-    const rawJson = readFileSync(resolve(__dirname, './global.json'), 'utf8');
+    const rawJson = readFileSync('./global.json', 'utf8');
     const json_server = JSON.parse(rawJson);
     server_breakup(json_server);
     writeFileSync(
