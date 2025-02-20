@@ -269,6 +269,7 @@ export function getItemsAbly(): ItemI[] {
             items.position_y,
             items.house_id,
             items.lock,
+            items.owned_by,
             mobs.id carrying_id
         FROM items
         LEFT JOIN mobs ON mobs.carrying_id = items.id;
