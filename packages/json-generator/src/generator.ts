@@ -136,6 +136,7 @@ const server_breakup = (json: JsonData) => {
         'speed',
         'attack',
         'gold',
+        'defense',
         'community',
         'stubbornness',
         'bravery',
