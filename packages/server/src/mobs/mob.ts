@@ -154,6 +154,11 @@ export class Mob {
     }
   }
 
+  sendMessage(message: string) {
+    console.log(`${this.name} reads: "${message}"`);
+    pubSub.speak(this.id, message);
+  }
+
   get type(): string {
     return this._type;
   }
