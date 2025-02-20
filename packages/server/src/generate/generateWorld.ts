@@ -7,7 +7,7 @@ import { FantasyDate } from '../date/fantasyDate';
 import { Item } from '../items/item';
 import { Personality } from '../mobs/traits/personality';
 import { Mob } from '../mobs/mob';
-import { DataLogger } from '../grafana/dataLogger';
+
 import {
   ItemConfig,
   ServerWorldDescription
@@ -21,7 +21,6 @@ const schema = `
     ${Community.SQL}
     ${Item.SQL}
     ${House.SQL}
-    ${DataLogger.SQL}
 
     CREATE TABLE ticks (
         tick INTEGER NOT NULL

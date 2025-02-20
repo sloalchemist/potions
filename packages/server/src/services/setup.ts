@@ -13,6 +13,7 @@ import {
   uploadLocalData
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
+import { DataLogger } from '../grafana/dataLogger';
 import { getEnv } from '@rt-potion/common';
 
 let lastUpdateTime = Date.now();
@@ -77,6 +78,8 @@ async function initializeAsync() {
 }
 
 initializeAsync();
+
+DataLogger.startMetricsServer();
 
 // Used for update on developer cheat
 export function setLastUploadTime(time: number) {
