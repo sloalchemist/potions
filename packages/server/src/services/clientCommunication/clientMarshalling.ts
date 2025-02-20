@@ -89,6 +89,7 @@ export function getMobsAbly(): MobI[] {
         maxHealth,
         attack,
         speed,
+        defense,
         position_x,
         position_y,
         path,
