@@ -9,7 +9,8 @@
     "lint": "pnpm eslint .",
     "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
     "test": "jest --passWithNoTests",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "dev": "npx ts-node src/redisWorker.ts"
   },
   "keywords": [],
   "author": "",
