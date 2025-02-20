@@ -83,7 +83,7 @@ if ($exitCode -ne 0) {
          Write-Host "If you had to time out the run of apply, check to make sure your supabase db password is correct."
     }
     else {
-         Write-Host "We haven't handle this case yet: An unknown error occurred. Please review the output above." -ForegroundColor Red
+         Write-Host "We haven't handle this case yet: An unknown error occurred. Please review the output above. In most cases, this is due to out of sync terraform state. Please refer to the section of the README called SYNCING TERRAFORM STATE." -ForegroundColor Red
     }
     Write-Host "========================================" -ForegroundColor Red
     exit $exitCode
