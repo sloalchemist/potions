@@ -20,7 +20,7 @@ import { Give } from './give';
 import { AddIngredient } from './cauldron/addIngredient';
 import { DumpCauldron } from './cauldron/dumpCauldron';
 import { Use } from './use';
-import { Read } from './read'
+import { Read } from './read';
 
 const uses = [
   Pickup,

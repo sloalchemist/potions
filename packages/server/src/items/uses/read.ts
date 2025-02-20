@@ -18,7 +18,7 @@ export class Read implements Use {
       return false;
     }
 
-    const message = "some message here (replace)"; 
+    const message = 'some·message·here·(replace)'; 
     mob.sendMessage(`You read the message: "${message}"`);
 
     return true;
