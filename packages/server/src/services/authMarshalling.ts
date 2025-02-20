@@ -1,13 +1,5 @@
+import { getEnv } from '@rt-potion/common';
 import 'dotenv/config';
-
-if (!process.env.AUTH_SERVER_URL) {
-  throw new Error(
-    'Cannot run without auth server url configured. Add path to .env'
-  );
-}
-
-const authUrl = process.env.AUTH_SERVER_URL;
-console.log('Auth-Server URL:', authUrl);
 
 export interface PlayerData {
   current_world_id: number;
@@ -28,12 +20,13 @@ export async function updateCharacterData(
   id: number,
   playerData: PlayerData
 ): Promise<ApiResponse> {
-  const url = new URL(`/character/${id}`, authUrl);
+  const url = new URL(`/character/${id}`, getEnv('AUTH_SERVER_URL'));
   try {
     const response = await fetch(url, {
       method: 'PUT', // Using PUT for updating existing resources
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getEnv('AUTH_SERVER_SECRET')}` // Using secret from environment variable
       },
       body: JSON.stringify(playerData)
     });
@@ -51,6 +44,21 @@ export async function updateCharacterData(
     }
     throw new Error('An unknown error occurred while updating character data');
   }
+}
+
+type GetWorldsResponse = {
+  id: string;
+  world_id: string;
+}[];
+
+export async function getWorlds(): Promise<GetWorldsResponse> {
+  const url = new URL('/worlds', getEnv('AUTH_SERVER_URL'));
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${getEnv('AUTH_SERVER_SECRET')}` // Using secret from environment variable
+    }
+  });
+  return response.json();
 }
 
 // Example usage:

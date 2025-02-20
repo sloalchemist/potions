@@ -4,7 +4,8 @@ import {
   Coord,
   BroadcastData,
   PlayerToServerMessageMap,
-  ServerToPlayerMessageMap
+  ServerToPlayerMessageMap,
+  WorldMetadata
 } from '@rt-potion/common';
 import { Item } from '../../items/item';
 import { Types } from 'ably';
@@ -67,8 +68,11 @@ export class AblyService implements PubSub {
     });
 
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
-      //if MAINTAIN_WORLD_OPTION is passed from client, do not change world
+      // if MAINTAIN_WORLD_OPTION is passed from client, do not change world;
+      // undefined will be recieved if the client unexpectedly disconnects (ex: refreshing page)
+      // we should also stay in the same world in this case
       const target_world_id =
+        presenceMsg.data.target_world_id == null ||
         presenceMsg.data.target_world_id === MAINTAIN_WORLD_OPTION
           ? this.worldID
           : presenceMsg.data.target_world_id;
@@ -232,6 +236,16 @@ export class AblyService implements PubSub {
     });
   }
 
+  public showPortalMenu(key: string, worlds: WorldMetadata[]): void {
+    this.addToBroadcast({
+      type: 'show_portal_menu',
+      data: {
+        mob_key: key,
+        worlds
+      }
+    });
+  }
+
   public destroy(item: Item): void {
     if (!item.position) {
       const mobID = Mob.findCarryingMobID(item.id);
@@ -319,6 +333,30 @@ export class AblyService implements PubSub {
     });
   }
 
+  public changeTargetTick(
+    key: string,
+    attribute: string,
+    tick: number,
+    newValue: number
+  ): void {
+    if (newValue == undefined || key == undefined || tick == undefined) {
+      throw new Error(
+        `Sending invalid changeTargetTick message ${key}, ${tick}, ${attribute}, ${newValue}`
+      );
+    }
+
+    const prop = `target_${attribute}_tick`;
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: prop,
+        delta: tick,
+        new_value: newValue
+      }
+    });
+  }
+
   public changePersonality(key: string, trait: string, newValue: number): void {
     if (key === undefined || newValue === undefined || trait === undefined) {
       throw new Error(
@@ -342,41 +380,23 @@ export class AblyService implements PubSub {
     delta: number,
     newValue: number
   ): void {
-    if (newValue == undefined || key == undefined || delta == undefined) {
+    if (
+      newValue == undefined ||
+      key == undefined ||
+      delta == undefined ||
+      attribute == undefined
+    ) {
       throw new Error(
         `Sending invalid changeEffect message ${key}, ${attribute}, ${delta}, ${newValue}`
       );
     }
+
     this.addToBroadcast({
       type: 'mob_change',
       data: {
         id: key,
         property: attribute,
         delta: delta,
-        new_value: newValue
-      }
-    });
-  }
-
-  public changeTargetTick(
-    key: string,
-    attribute: string,
-    tick: number,
-    newValue: number
-  ): void {
-    if (newValue == undefined || key == undefined || tick == undefined) {
-      throw new Error(
-        `Sending invalid changeTargetSpeedTick message ${key}, ${tick}, ${newValue}`
-      );
-    }
-
-    const prop = `target_${attribute}_tick`;
-    this.addToBroadcast({
-      type: 'mob_change',
-      data: {
-        id: key,
-        property: prop,
-        delta: tick,
         new_value: newValue
       }
     });
@@ -504,12 +524,11 @@ export class AblyService implements PubSub {
     }
     let health_for_update = player.health;
     let gold_for_update = player.gold;
-    let attack_for_update = player.attack;
+    let attack_for_update = player._attack;
     if (player.health <= 0) {
       //get default health to reset
       health_for_update = mobFactory.getTemplate('player').health;
-      gold_for_update = 0; //reset gold to 0
-      health_for_update = mobFactory.getTemplate('player').attack;
+      attack_for_update = mobFactory.getTemplate('player').attack;
     }
     console.log('\t Persist player health:', health_for_update);
     console.log('\t Persist player gold:', gold_for_update);

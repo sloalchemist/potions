@@ -3,7 +3,8 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 
 export class BrewScene extends Phaser.Scene {
   private messageStack!: MessageStack;
-  private brewColor = 0x222222;
+  private brewColor = 0x9eb9d4;
+  private numIngredients = 0;
 
   constructor() {
     super({ key: 'BrewScene' });
@@ -14,9 +15,27 @@ export class BrewScene extends Phaser.Scene {
   }
 
   create() {
-    const graphics = this.add.graphics();
-    graphics.fillStyle(this.brewColor, 1);
-    graphics.fillRect(
+    const barBackground = this.add.graphics();
+    barBackground.fillStyle(0x9eb9d4, 1);
+    barBackground.fillRect(
+      180,
+      290,
+      this.game.scale.width * 0.4,
+      this.game.scale.height * -0.3
+    );
+
+    const barBackgroundColored = this.add.graphics();
+    barBackgroundColored.fillStyle(this.brewColor, 1);
+    barBackgroundColored.fillRect(
+      180,
+      290,
+      this.game.scale.width * 0.4,
+      this.game.scale.height * -0.1 * this.numIngredients
+    );
+
+    const circleBackground = this.add.graphics();
+    circleBackground.fillStyle(this.brewColor, 1);
+    circleBackground.fillRect(
       90,
       90,
       this.game.scale.width * 0.4,
@@ -36,5 +55,9 @@ export class BrewScene extends Phaser.Scene {
 
   setBrewColor(color: number) {
     this.brewColor = color;
+  }
+
+  setNumIngredients(num: number) {
+    this.numIngredients = num;
   }
 }

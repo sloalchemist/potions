@@ -10,7 +10,7 @@
     "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
     "build": "tsc && pnpm --filter @rt-potion/json-generator generate server",
     "start": "node dist/src/server.js",
-    "dev": "pnpm exec ts-node src/server.ts",
+    "dev": "nodemon --watch src --exec ts-node src/server.ts",
     "test": "jest",
     "watch": "tsc --watch",
     "create": "ts-node src/generate/buildWorld.ts",
