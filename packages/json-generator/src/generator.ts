@@ -4,7 +4,6 @@
 // * mv generator.js generator.cjs
 
 import { writeFileSync, readFileSync } from 'fs';
-import { resolve } from 'path';
 
 interface JsonData {
   tiles: unknown[]; // Array of tiles
