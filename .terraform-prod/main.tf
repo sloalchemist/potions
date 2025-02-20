@@ -283,3 +283,65 @@ resource "render_background_worker" "potions_test_world" {
     "AUTH_SERVER_SECRET"   = { value : "${random_password.auth_server_secret.result}" }
   }
 }
+
+resource "render_background_worker" "potions_fire_world" {
+  name               = "${var.project_name}-${var.environment}-fire-world"
+  plan               = "starter"
+  region             = "oregon" # or "us-east", "frankfurt", etc.
+  start_command      = "cd packages/server && pnpm serve fire-world"
+  pre_deploy_command = "echo 'hello fire world'"
+  root_directory     = "."
+
+  runtime_source = {
+    native_runtime = {
+      auto_deploy   = true
+      branch        = "main"
+      build_command = "pnpm install && pnpm build && cd packages/server && pnpm run create fire-world"
+      build_filter = {
+        paths         = ["src/**"]
+        ignored_paths = ["tests/**"]
+      }
+      repo_url = "https://github.com/sloalchemist/potions"
+      runtime  = "node"
+    }
+  }
+
+  env_vars = {
+    "ABLY_API_KEY"         = { value : "${ably_api_key.root.key}" },
+    "AUTH_SERVER_URL"      = { value : "${render_web_service.potions_auth.url}" },
+    "SUPABASE_URL"         = { value : "${"https://${supabase_project.potions.id}.supabase.co"}" },
+    "SUPABASE_SERVICE_KEY" = { value : "${data.supabase_apikeys.dev.service_role_key}" },
+    "AUTH_SERVER_SECRET"   = { value : "${random_password.auth_server_secret.result}" }
+  }
+}
+
+resource "render_background_worker" "potions_water_world" {
+  name               = "${var.project_name}-${var.environment}-water-world"
+  plan               = "starter"
+  region             = "oregon" # or "us-east", "frankfurt", etc.
+  start_command      = "cd packages/server && pnpm serve water-world"
+  pre_deploy_command = "echo 'hello water world'"
+  root_directory     = "."
+
+  runtime_source = {
+    native_runtime = {
+      auto_deploy   = true
+      branch        = "main"
+      build_command = "pnpm install && pnpm build && cd packages/server && pnpm run create water-world"
+      build_filter = {
+        paths         = ["src/**"]
+        ignored_paths = ["tests/**"]
+      }
+      repo_url = "https://github.com/sloalchemist/potions"
+      runtime  = "node"
+    }
+  }
+
+  env_vars = {
+    "ABLY_API_KEY"         = { value : "${ably_api_key.root.key}" },
+    "AUTH_SERVER_URL"      = { value : "${render_web_service.potions_auth.url}" },
+    "SUPABASE_URL"         = { value : "${"https://${supabase_project.potions.id}.supabase.co"}" },
+    "SUPABASE_SERVICE_KEY" = { value : "${data.supabase_apikeys.dev.service_role_key}" },
+    "AUTH_SERVER_SECRET"   = { value : "${random_password.auth_server_secret.result}" }
+  }
+}
