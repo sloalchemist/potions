@@ -261,6 +261,7 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.attackText);
 
+      // problem area
       this.defenseText = this.add.text(
         15,
         140,
