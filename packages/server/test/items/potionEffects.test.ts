@@ -99,15 +99,8 @@ describe('Try to consume blue potion in various cases', () => {
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
 
-    // get new speed from DB
-    const speed_blue_stacked = DB.prepare(
-      `
-            SELECT speed FROM mobView WHERE id = :id
-        `
-    ).get({ id: testMob!.id }) as { speed: number };
-
     // check that speed is still the same (boosted from first blue bot not stacked)
-    expect(speed_blue_stacked.speed).toBe(startSpeed + startSpeed * 0.5);
+    expect(testMob!._speed).toBe(startSpeed + startSpeed * 0.5);
   });
 
   test('Allow effects from first blue potion to wear off, then drink another', () => {
@@ -147,15 +140,8 @@ describe('Try to consume blue potion in various cases', () => {
     }
     testMob?.tick(500);
 
-    // get new speed from DB
-    const speed_worn_off = DB.prepare(
-      `
-            SELECT speed FROM mobView WHERE id = :id
-        `
-    ).get({ id: testMob!.id }) as { speed: number };
-
     // check attributes on player (speed should be back to normal)
-    expect(speed_worn_off.speed).toBe(startSpeed);
+    expect(testMob!._speed).toBe(startSpeed);
 
     // create a potion
     itemGenerator.createItem({
@@ -174,15 +160,8 @@ describe('Try to consume blue potion in various cases', () => {
     const test2 = testDrink2.interact(testMob!, potionItem2!);
     expect(test2).toBe(true);
 
-    // get new speed from DB
-    const new_speed = DB.prepare(
-      `
-            SELECT speed FROM mobView WHERE id = :id
-        `
-    ).get({ id: testMob!.id }) as { speed: number };
-
     // check attributes on player (speed should be boosted again)
-    expect(new_speed.speed).toBe(startSpeed + startSpeed * 0.5);
+    expect(testMob!._speed).toBe(startSpeed + startSpeed * 0.5);
   });
 });
 
@@ -233,15 +212,8 @@ describe('Try to consume orange potion in various cases', () => {
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
 
-    // get new attack from DB
-    const attack_boosted = DB.prepare(
-      `
-            SELECT attack FROM mobView WHERE id = :id
-        `
-    ).get({ id: testMob!.id }) as { attack: number };
-
     // check attributes on player (should be boosted)
-    expect(attack_boosted.attack).toBe(startAttack + startAttack * 0.5);
+    expect(testMob!._attack).toBe(startAttack + startAttack * 0.5);
 
     // create a potion
     itemGenerator.createItem({
@@ -268,15 +240,8 @@ describe('Try to consume orange potion in various cases', () => {
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
 
-    // get new attack from DB
-    const attack_stacked = DB.prepare(
-      `
-            SELECT attack FROM mobView WHERE id = :id
-        `
-    ).get({ id: testMob!.id }) as { attack: number };
-
     // check attributes on player (attack should be still boosted but not stacked)
-    expect(attack_stacked.attack).toBe(startAttack + startAttack * 0.5);
+    expect(testMob!._attack).toBe(startAttack + startAttack * 0.5);
   });
 
   test('Allow effects from first orange potion to wear off, then drink another', () => {
@@ -316,15 +281,8 @@ describe('Try to consume orange potion in various cases', () => {
     }
     testMob?.tick(500);
 
-    // get new attack from DB
-    const attack_worn_off = DB.prepare(
-      `
-            SELECT attack FROM mobView WHERE id = :id
-        `
-    ).get({ id: testMob!.id }) as { attack: number };
-
     // check attributes on player (should be back to normal)
-    expect(attack_worn_off.attack).toBe(startAttack);
+    expect(testMob!._attack).toBe(startAttack);
 
     // create a potion
     itemGenerator.createItem({
@@ -343,15 +301,8 @@ describe('Try to consume orange potion in various cases', () => {
     const test2 = testDrink2.interact(testMob!, potionItem2!);
     expect(test2).toBe(true);
 
-    // get new attack from DB
-    const new_attack = DB.prepare(
-      `
-            SELECT attack FROM mobView WHERE id = :id
-        `
-    ).get({ id: testMob!.id }) as { attack: number };
-
     // check attributes on player (should be boosted again)
-    expect(new_attack.attack).toBe(startAttack + startAttack * 0.5);
+    expect(testMob!._attack).toBe(startAttack + startAttack * 0.5);
   });
 });
 
@@ -661,17 +612,10 @@ describe('Try to consume grey potion in various cases', () => {
         `
     ).get({ id: testAttacker!.id }) as { slowEnemy: number };
 
-    // get new speed from DB
-    const enemySlowed = DB.prepare(
-      `
-            SELECT speed FROM mobView WHERE id = :id
-        `
-    ).get({ id: testEnemy!.id }) as { speed: number };
-
     // check attributes on attacker (should be 0)
     expect(slowEnemyWornOff.slowEnemy).toBe(startSlowEnemy);
     // check enemy speed (should be slowed)
-    expect(enemySlowed.speed).toBe(startEnemySpeed * 0.5);
+    expect(testEnemy!._speed).toBe(startEnemySpeed * 0.5);
   });
 });
 
@@ -734,92 +678,81 @@ describe('Try to consume purple potion in various cases', () => {
     const test2 = testDrink2.interact(testMob!, potionItem2!);
     expect(test2).toBe(true);
 
-    // should not change
+    // check attributes on player (should be boosted)
     expect(testMob!._defense).toBe(startDefense + (startDefense * 0.5));
     
-    for (let i = 0; i < 225; i++) {
+    for (let i = 0; i < 250; i++) {
       // let the effect run out
       FantasyDate.runTick();
     }
     testMob?.tick(500);
-    
-    // should return to default defense
+
+    // check attributes on player (should be boosted)
     expect(testMob!._defense).toBe(startDefense);
   });
   
   test('Test purple potion in combat', () => {
     FantasyDate.initialDate();
-    const position: Coord = { x: 0, y: 0 };
+
+    const playerPosition: Coord = { x: 0, y: 0 };
+    const enemyPosition: Coord = { x: 0, y: 1 };
     const potionLocation: Coord = { x: 1, y: 0 };
 
-    // create a player
-    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
-    const testMob = Mob.getMob('TestID');
-    expect(testMob).not.toBeNull();
+    // create a fight initiator (blob -> hunt)
+    mobFactory.makeMob('blob', playerPosition, 'TestingID', 'TestAttacker');
+    const testAttacker = Mob.getMob('TestingID');
+    expect(testAttacker).not.toBeNull();
+
+    // create a enemy (player)
+    mobFactory.makeMob('player', enemyPosition, 'TestEnemyID', 'TestEnemy');
+    const testEnemy = Mob.getMob('TestEnemyID');
+    expect(testEnemy).not.toBeNull();
+
+    // make the blob fight the player (due to low favorability)
+    Community.makeFavor('alchemists', 'blobs', -100);
 
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
       subtype: String(hexStringToNumber('#ab00e7')),
       position: potionLocation,
-      carriedBy: testMob
+      carriedBy: testAttacker
     });
     const potion = Item.getItemIDAt(potionLocation);
     expect(potion).not.toBeNull();
     const potionItem = Item.getItem(potion!);
     expect(potionItem).not.toBeNull();
 
-    // ensure the player is carrying the potion
-    expect(testMob!.carrying).not.toBeNull();
-    expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#ab00e7')));
+    testAttacker?.tick(500);
+    testEnemy?.tick(500);
 
-    // set initial max health
-    const startDefense = testMob!._defense;
+    expect(testAttacker!.action).toBe('hunt');
+
+    testAttacker?.tick(500);
+    testEnemy?.tick(500);
+
+    // grab health of enemy, make sure it has changed
+    const healthWithBaseDefense = testEnemy!.health;
+    expect(healthWithBaseDefense).toBeLessThan(testEnemy!._maxHealth);
+
+    // heal enemy so we can register another tick of damage
+    testEnemy?.changeHealth(testEnemy!._maxHealth - testEnemy!.health)
 
     // have the player drink the potion
     const testDrink = new Drink();
-    const test = testDrink.interact(testMob!, potionItem!);
+    const test = testDrink.interact(testEnemy!, potionItem!);
     expect(test).toBe(true);
 
-    for (let i = 0; i < 15; i++) {
-      // 15 ticks to check stacking
-      FantasyDate.runTick();
-    }
-    testMob?.tick(500);
+    // allow attack for a tick
+    testAttacker?.tick(500);
+    testEnemy?.tick(500);
 
-    // check to make sure potion is not being carried
-    expect(testMob!.carrying).toBeUndefined();
+    // grab health of enemy after defense pot and damage taken
+    const healthWithMoreDefense = testEnemy!.health;
+    expect(healthWithMoreDefense).not.toBe(testEnemy!._maxHealth);
 
-    // check attributes on player (should be boosted)
-    expect(testMob!._defense).toBe(startDefense + (startDefense * 0.5));
-
-    // create another potion
-    itemGenerator.createItem({
-      type: 'potion',
-      subtype: String(hexStringToNumber('#ab00e7')),
-      position: potionLocation,
-      carriedBy: testMob
-    });
-    const potion2 = Item.getItemIDAt(potionLocation);
-    const potionItem2 = Item.getItem(potion2!);
-
-    // have the player drink the potion
-    const testDrink2 = new Drink();
-    const test2 = testDrink2.interact(testMob!, potionItem2!);
-    expect(test2).toBe(true);
-
-    // should not change
-    expect(testMob!._defense).toBe(startDefense + (startDefense * 0.5));
-    
-    for (let i = 0; i < 225; i++) {
-      // let the effect run out
-      FantasyDate.runTick();
-    }
-    testMob?.tick(500);
-    
-    // should return to default defense
-    expect(testMob!._defense).toBe(startDefense);
+    // check attributes on enemy
+    expect(healthWithBaseDefense).toBeLessThan(healthWithMoreDefense);
   });
 });
 

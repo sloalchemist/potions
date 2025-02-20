@@ -167,11 +167,23 @@ export class Mob {
   }
 
   get health(): number {
-    return this._health;
+    const mob = DB.prepare(
+      `
+      SELECT health FROM mobView WHERE id = :id
+      `
+    ).get({ id: this.id }) as { health: number };
+
+    return mob.health;
   }
 
   get _speed(): number {
-    return this.speed;
+    const mob = DB.prepare(
+      `
+      SELECT speed FROM mobView WHERE id = :id
+      `
+    ).get({ id: this.id }) as { speed: number };
+
+    return mob.speed;
   }
 
   get _maxHealth(): number {
@@ -179,11 +191,23 @@ export class Mob {
   }
 
   get _attack(): number {
-    return this.attack;
+    const mob = DB.prepare(
+      `
+      SELECT attack FROM mobView WHERE id = :id
+      `
+    ).get({ id: this.id }) as { attack: number };
+
+    return mob.attack;
   }
 
   get _defense(): number {
-    return this.defense;
+    const mob = DB.prepare(
+      `
+      SELECT defense FROM mobView WHERE id = :id
+      `
+    ).get({ id: this.id }) as { defense: number };
+
+    return mob.defense;
   }
   
   get name(): string {
@@ -374,6 +398,11 @@ export class Mob {
     let newHealth = this.health + amount;
     newHealth = Math.min(newHealth, this.maxHealth);
     newHealth = Math.max(newHealth, 0);
+
+    console.log("CHANGE HEALTH:")
+    console.log(amount);
+    console.log(newHealth);
+
     DB.prepare(
       `
             UPDATE mobs
