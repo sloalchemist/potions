@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
 import globalData from '../../data/global.json';
+import fireWorldSpecificData from '../../data/fire_world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
@@ -40,7 +41,7 @@ async function initializeAsync() {
   }
 
   console.log(`loading world ${worldID}`);
-  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
+  //const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
 
   try {
     await downloadData(supabase, worldID);
@@ -59,7 +60,8 @@ async function initializeAsync() {
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
-      worldSpecificData as Partial<ServerWorldDescription>;
+      fireWorldSpecificData as Partial<ServerWorldDescription>;
+
     const worldDescription: ServerWorldDescription = {
       ...globalDescription,
       ...specificDescription
