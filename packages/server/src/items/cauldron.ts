@@ -96,7 +96,6 @@ export class Cauldron {
       } else {
         this.item.setAttribute('color_weight', ingredientWeight);
       }
-      console.log('ingredient weight: ', ingredientWeight);
 
       // destroy carried item
       carriedItem.destroy();

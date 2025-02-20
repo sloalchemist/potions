@@ -115,7 +115,7 @@
       "attributes": [
         {
           "name": "brew_color",
-          "value": "#000000"
+          "value": "#1B1212"
         },
         {
           "name": "health",
@@ -402,11 +402,38 @@
           "action": "build_wall",
           "while_carried": true,
           "requires_item": "partial-wall"
+        }
+      ]
+    },
+    {
+      "name": "Obsidian Shard",
+      "type": "obsidian-shard",
+      "carryable": true,
+      "smashable": true,
+      "walkable": true,
+      "flat": true,
+      "attributes": [
+        {
+          "name": "health",
+          "value": 1
+        }
+      ],
+      "interactions": [
+        {
+          "description": "Start wall",
+          "action": "start_wall",
+          "while_carried": true
         },
         {
-            "description": "Create market",
-            "action": "create_market",
-            "while_carried": true
+          "description": "Build wall",
+          "action": "build_wall",
+          "while_carried": true,
+          "requires_item": "partial-wall"
+        },
+        {
+          "description": "Create market",
+          "action": "create_market",
+          "while_carried": true
         }
       ]
     },
@@ -567,6 +594,126 @@
           "action": "spawn_item",
           "parameters": {
             "type": "anemone",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fire-Flower",
+      "type": "fire-flower",
+      "description": "An fire flower",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "fire-flower",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mushroom-1",
+      "type": "mushroom-1",
+      "description": "A mushroom",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "mushroom-1",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rock-Pile",
+      "type": "rock-pile",
+      "description": "A rock pile",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "rock-pile",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rock-Columns",
+      "type": "rock-columns",
+      "description": "A rock column",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "rock-columns",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pebbles-1",
+      "type": "pebbles-1",
+      "description": "Some Pebbles",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "pebbles-1",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rock-Chunk-2-1",
+      "type": "rock-chunk-2-1",
+      "description": "Some Rock Chunks",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "rock-chunk-2-1",
             "global_max": 10,
             "local_max": 1,
             "radius": 3,
@@ -778,131 +925,131 @@
             "rate": 0.1
           }
         }
-    ]
-},
-{
-    "name": "Potion stand",
-    "type": "potion-stand",
-    "carryable": false,
-    "smashable": true,
-    "walkable": false,
-    "attributes": [
+      ]
+    },
+    {
+      "name": "Potion stand",
+      "type": "potion-stand",
+      "carryable": false,
+      "smashable": true,
+      "walkable": false,
+      "attributes": [
         {
-            "name": "items",
-            "value": 0
+          "name": "items",
+          "value": 0
         },
         {
-            "name": "price",
-            "value": 10
+          "name": "price",
+          "value": 10
         },
         {
-            "name": "gold",
-            "value": 0
+          "name": "gold",
+          "value": 0
         },
         {
-            "name": "health",
-            "value": 1
+          "name": "health",
+          "value": 1
         }
-    ],
-    "interactions": [
+      ],
+      "interactions": [
         {
-            "description": "Add $item_name",
-            "action": "add_item",
-            "while_carried": false,
-            "permissions": {
-                "community": true,
-                "other": false
-            }
+          "description": "Add $item_name",
+          "action": "add_item",
+          "while_carried": false,
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         },
         {
-            "description": "Get $item_name",
-            "action": "get_item",
-            "while_carried": false,
-            "conditions": [
-                {
-                    "attribute_name": "items",
-                    "value": 0,
-                    "comparison": "greater_than"
-                }
-            ],
-            "permissions": {
-                "community": true,
-                "other": false
+          "description": "Get $item_name",
+          "action": "get_item",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "items",
+              "value": 0,
+              "comparison": "greater_than"
             }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         },
         {
-            "description": "Raise price",
-            "action": "raise_price",
-            "while_carried": false,
-            "conditions": [
-                {
-                    "attribute_name": "price",
-                    "value": 99,
-                    "comparison": "less_than"
-                }
-            ],
-            "permissions": {
-                "community": true,
-                "other": false
+          "description": "Raise price",
+          "action": "raise_price",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "price",
+              "value": 99,
+              "comparison": "less_than"
             }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         },
         {
-            "description": "Lower price",
-            "action": "lower_price",
-            "while_carried": false,
-            "conditions": [
-                {
-                    "attribute_name": "price",
-                    "value": 1,
-                    "comparison": "greater_than"
-                }
-            ],
-            "permissions": {
-                "community": true,
-                "other": false
+          "description": "Lower price",
+          "action": "lower_price",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "price",
+              "value": 1,
+              "comparison": "greater_than"
             }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         },
         {
-            "description": "Collect gold",
-            "action": "collect_gold",
-            "while_carried": false,
-            "conditions": [
-                {
-                    "attribute_name": "gold",
-                    "value": 0,
-                    "comparison": "greater_than"
-                }
-            ],
-            "permissions": {
-                "community": true,
-                "other": false
+          "description": "Collect gold",
+          "action": "collect_gold",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "gold",
+              "value": 0,
+              "comparison": "greater_than"
             }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         },
         {
-            "description": "Purchase potion",
-            "action": "purchase",
-            "while_carried": false,
-            "conditions": [
-                {
-                    "attribute_name": "items",
-                    "value": 0,
-                    "comparison": "greater_than"
-                }
-            ]
+          "description": "Purchase potion",
+          "action": "purchase",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "items",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
         }
-    ],
-    "show_price_at": {
+      ],
+      "show_price_at": {
         "x": 7,
         "y": -10
-    }
-},
-{
-    "name": "Market",
-    "type": "market-stand",
-    "carryable": false,
-    "smashable": true,
-    "walkable": false,
-    "attributes": [
+      }
+    },
+    {
+      "name": "Market",
+      "type": "market-stand",
+      "carryable": false,
+      "smashable": true,
+      "walkable": false,
+      "attributes": [
         {
           "name": "items",
           "value": 0
