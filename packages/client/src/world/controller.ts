@@ -286,12 +286,13 @@ export function getPhysicalInteractions(
 }
 
 export function getClosestPhysical(physicals: Item[], playerPos: Coord): Item {
-  return physicals.reduce((closest, current) => {
+  const a = physicals.reduce((closest, current) => {
     if (!closest.position || !current.position) return closest;
     const closestDistance = calculateDistance(closest.position, playerPos);
     const currentDistance = calculateDistance(current.position, playerPos);
     return currentDistance < closestDistance ? current : closest;
   });
+  return a
 }
 
 function getItemsAtPosition(physicals: Item[], position: Coord): Item[] {
@@ -319,10 +320,20 @@ export function getInteractablePhysicals(
     ];
   }
 
+
   // nearby non-walkable items
-  let nearbyObjects = physicals.filter((p) => !p.itemType.walkable);
+  let nearbyObjects = physicals.filter((p) => !p.itemType.walkable && p.itemType.layout_type !== 'fence');
+
+  let fences = physicals.filter((p) => p.itemType.layout_type === 'fence');
 
   let nearbyBaskets = physicals.filter((p) => p.itemType.type === 'basket');
+
+  
+  if (fences.length > 1) {
+    fences = [
+      getClosestPhysical(fences, playerPos)
+    ];
+  }
 
   // find distinct non-walkable objects next to player
   let unique_nearbyObjects = nearbyObjects.filter(
@@ -335,7 +346,8 @@ export function getInteractablePhysicals(
     ...onTopObjects,
     ...unique_nearbyObjects,
     ...nearbyOpenableObjects,
-    ...nearbyBaskets
+    ...nearbyBaskets,
+    ...fences
   ];
   interactableObjects = interactableObjects.filter(
     (item, index, self) =>
