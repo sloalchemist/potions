@@ -1,0 +1,15 @@
+{
+  "name": "@rt-potion/json-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/generator.ts",
+  "scripts": {
+    "generate": " tsc -p tsconfig.json && mv dist/generator.js dist/generator.cjs && node dist/generator.cjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.13.4"
+  }
+}
