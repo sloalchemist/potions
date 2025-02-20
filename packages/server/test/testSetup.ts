@@ -152,7 +152,7 @@ export const commonSetup = (worldSize: number = 2) => {
             while_carried: false
           },
           {
-            description: 'Dump Cauldron',
+            description: 'Dump cauldron',
             action: 'dump_cauldron',
             while_carried: false
           }
