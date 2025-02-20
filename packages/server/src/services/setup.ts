@@ -9,8 +9,7 @@ import { initializeKnowledgeDB } from '@rt-potion/converse';
 import {
   downloadData,
   initializeSupabase,
-  uploadLocalData,
-  initializeBucket
+  uploadLocalData
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
 import { fetchWorldSpecificData } from '../util/githubPagesUtil';
@@ -41,28 +40,15 @@ async function initializeAsync() {
 
   console.log(`loading world ${worldID}`);
 
-  // Create bucket if it doesn't exist
-  try {
-    await initializeBucket(supabase);
-    console.log('Bucket creation handled successfully');
-  } catch (err) {
-    console.error('Error during bucket initialization:', err);
-    throw err;
-  }
-
   try {
     await downloadData(supabase, worldID);
-    console.log('Data successfully downloaded from Supabase');
-  } catch {
-    try {
-      console.log('Download failed, uploading local files instead');
-      await uploadLocalData(supabase, worldID);
-    } catch (error) {
-      console.log(
-        'Could not download data or upload data, cannot play the game'
-      );
-      throw error;
-    }
+    console.log('Server data successfully downloaded from Supabase');
+  } catch (error) {
+    console.log(`
+      Could not download data for ${worldID}. Ensure it exists by creating it. 
+      Otherwise, it could be a network error or something outside our control.
+    `);
+    throw error;
   }
 
   try {

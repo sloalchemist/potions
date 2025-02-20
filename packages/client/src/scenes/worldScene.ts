@@ -409,6 +409,11 @@ export class WorldScene extends Phaser.Scene {
           pointer.worldY / TILE_SIZE
         );
 
+        // Prevent player movement if the brew scene is active
+        if (this.scene.isActive('BrewScene')) {
+          return;
+        }
+
         publishPlayerPosition({
           x: pointer.worldX / TILE_SIZE,
           y: pointer.worldY / TILE_SIZE
@@ -435,7 +440,7 @@ export class WorldScene extends Phaser.Scene {
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
       }
-      if (event.shiftKey && event.code === 'KeyS') {
+      if (event.shiftKey && event.code === 'KeyG') {
         persistWorldData();
       }
       // Brings up chat box for user
@@ -554,7 +559,11 @@ export class WorldScene extends Phaser.Scene {
       return;
     }
 
-    if (this.scene.isActive('ChatOverlayScene')) {
+    // Prevent player movement if the chat overlay or brew scene is active
+    if (
+      this.scene.isActive('ChatOverlayScene') ||
+      this.scene.isActive('BrewScene')
+    ) {
       return;
     }
 
