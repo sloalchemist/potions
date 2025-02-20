@@ -239,7 +239,7 @@ export class WorldScene extends Phaser.Scene {
   create() {
     const globalData = parseWorldFromJson(
       this.cache.json.get('global_data'),
-      this.cache.json.get('fire_world_specific_data')
+      this.cache.json.get('world_specific_data')
     );
 
     world = new World();

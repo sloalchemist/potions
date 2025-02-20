@@ -295,7 +295,7 @@ export class LoadWorldScene extends Phaser.Scene {
         this,
         'test-idle',
         animationKey,
-        'fire_world-atlas',
+        'global-atlas',
         {
           COLOR_1: eyeColor,
           COLOR_2: bellyColor,
