@@ -58,7 +58,6 @@ export interface ItemType {
   show_price_at?: TextureLocation;
   show_template_at?: TextureLocation;
   attributes?: Attribute[];
-  open?: boolean;
 }
 
 export interface MobType {
