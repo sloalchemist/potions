@@ -18,6 +18,10 @@ export class GetItem implements Use {
       return false;
     }
 
+    if (mob.carrying) {
+      return false;
+    }
+
     const container = Container.fromItem(item);
 
     if (!container) {
