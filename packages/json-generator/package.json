@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/generator.ts",
   "scripts": {
-    "generate": " tsc -p tsconfig.json && mv dist/generator.js dist/generator.cjs && node dist/generator.cjs"
+    "generate": " tsc -p tsconfig.json && node dist/generator.js"
   },
   "keywords": [],
   "author": "",
