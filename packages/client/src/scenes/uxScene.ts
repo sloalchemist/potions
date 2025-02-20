@@ -45,7 +45,7 @@ export class UxScene extends Phaser.Scene {
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
   attackText: Phaser.GameObjects.Text | null = null;
-  DefenseText: Phaser.GameObjects.Text | null = null;
+  defenseText: Phaser.GameObjects.Text | null = null;
   speedText: Phaser.GameObjects.Text | null = null;
   affiliationText: Phaser.GameObjects.Text | null = null;
   stubbornnessText: Phaser.GameObjects.Text | null = null;
@@ -261,12 +261,12 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.attackText);
 
-      this.DefenseText = this.add.text(
+      this.defenseText = this.add.text(
         15,
         140,
         'Defense: ' + currentCharacter.defense
       );
-      this.statsContainer.add(this.attackText);
+      this.statsContainer.add(this.defenseText);
 
       this.speedText = this.add.text(
         15,
@@ -561,6 +561,7 @@ export class UxScene extends Phaser.Scene {
       this.goldText?.setText('Gold: ' + currentCharacter.gold);
       this.healthText?.setText('Health: ' + currentCharacter.health);
       this.attackText?.setText('Attack: ' + currentCharacter.attack);
+      this.defenseText?.setText('Defense: ' + currentCharacter.defense);
       this.speedText?.setText('Speed: ' + currentCharacter.speed);
       this.affiliationText?.setText(
         'Affiliation: ' + currentCharacter.community_id
