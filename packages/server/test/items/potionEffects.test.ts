@@ -692,8 +692,8 @@ describe('Try to consume purple potion in various cases', () => {
     expect(test2).toBe(true);
 
     // check attributes on player (should be boosted)
-    expect(testMob!._defense).toBe(startDefense + (startDefense * 0.5));
-    
+    expect(testMob!._defense).toBe(startDefense + startDefense * 0.5);
+
     for (let i = 0; i < 250; i++) {
       // let the effect run out
       FantasyDate.runTick();
@@ -749,7 +749,7 @@ describe('Try to consume purple potion in various cases', () => {
     expect(healthWithBaseDefense).toBeLessThan(testEnemy!._maxHealth);
 
     // heal enemy so we can register another tick of damage
-    testEnemy?.changeHealth(testEnemy!._maxHealth - testEnemy!.health)
+    testEnemy?.changeHealth(testEnemy!._maxHealth - testEnemy!.health);
 
     // have the player drink the potion
     const testDrink = new Drink();

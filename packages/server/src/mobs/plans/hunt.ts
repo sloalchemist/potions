@@ -17,15 +17,16 @@ export class Hunt implements Plan {
       const npcDamage = Math.floor(Math.random() * -1 * this.enemy!._attack);
 
       // this formula means 100 armor gives ~30% damage reduction
-      const adjustedEnemyDamage = Math.floor(enemyDamage * (0.3 + 0.7 * Math.exp(-this.enemy!._defense / 40)));
-      const adjustedNpcDamage = Math.floor(npcDamage * (0.3 + 0.7 * Math.exp(-npc._defense / 40)));
-      
+      const adjustedEnemyDamage = Math.floor(
+        enemyDamage * (0.3 + 0.7 * Math.exp(-this.enemy!._defense / 40))
+      );
+
+      const adjustedNpcDamage = Math.floor(
+        npcDamage * (0.3 + 0.7 * Math.exp(-npc._defense / 40))
+      );
+
       // attack/fight each other
-      console.log("ENEMY HEALTH CHANGE:")
-      console.log(adjustedEnemyDamage);
       this.enemy!.changeHealth(adjustedEnemyDamage);
-      console.log("NPC HEALTH CHANGE:")
-      console.log(adjustedNpcDamage);
       npc.changeHealth(adjustedNpcDamage);
 
       // get slowEnemy debuff count

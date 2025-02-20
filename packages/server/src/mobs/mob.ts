@@ -397,11 +397,6 @@ export class Mob {
     let newHealth = this.health + amount;
     newHealth = Math.min(newHealth, this.maxHealth);
     newHealth = Math.max(newHealth, 0);
-
-    console.log("CHANGE HEALTH:")
-    console.log(amount);
-    console.log(newHealth);
-
     DB.prepare(
       `
             UPDATE mobs
