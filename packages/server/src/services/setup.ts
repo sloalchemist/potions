@@ -13,7 +13,7 @@ import {
   uploadLocalData
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
-import { DataLogger } from '../grafana/dataLogger'; 
+import { DataLogger } from '../grafana/dataLogger';
 import { getEnv } from '@rt-potion/common';
 
 let lastUpdateTime = Date.now();
