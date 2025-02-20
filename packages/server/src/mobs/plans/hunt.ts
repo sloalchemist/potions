@@ -2,6 +2,7 @@ import { Mob } from '../mob';
 import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { Community } from '../../community/community';
+import { DB } from '../../services/database';
 import globalData from '../../../data/global.json';
 
 export class Hunt implements Plan {
@@ -11,8 +12,42 @@ export class Hunt implements Plan {
     if (!this.enemy || !this.enemy.position || !npc.position) return true;
 
     const success = npc.moveToOrExecute(this.enemy.position, 1, () => {
-      this.enemy!.changeHealth(Math.floor(Math.random() * -1 * npc._attack));
-      npc.changeHealth(Math.floor(Math.random() * -1 * this.enemy!._attack));
+      // create damage values
+      const enemyDamage = Math.floor(Math.random() * -1 * npc._attack);
+      const npcDamage = Math.floor(Math.random() * -1 * this.enemy!._attack);
+
+      // this formula means 100 armor gives ~30% damage reduction
+      const adjustedEnemyDamage = Math.floor(
+        enemyDamage * (0.3 + 0.7 * Math.exp(-this.enemy!._defense / 40))
+      );
+
+      const adjustedNpcDamage = Math.floor(
+        npcDamage * (0.3 + 0.7 * Math.exp(-npc._defense / 40))
+      );
+
+      // attack/fight each other
+      this.enemy!.changeHealth(adjustedEnemyDamage);
+      npc.changeHealth(adjustedNpcDamage);
+
+      // get slowEnemy debuff count
+      try {
+        const mobDebuffs = DB.prepare(
+          `SELECT slowEnemy FROM mobs WHERE id = :id`
+        ).get({ id: npc.id }) as { slowEnemy: number };
+
+        const slowEnemyCounter = mobDebuffs.slowEnemy;
+        if (slowEnemyCounter > 0) {
+          // decrement slowEnemy count (1 usage)
+          npc.changeSlowEnemy(-1);
+          // decrease targeted enemy's speed
+          console.log(this.enemy!._speed);
+          const speedDelta = this.enemy!._speed * -0.5;
+          const speedDuration = 15;
+          this.enemy!.changeEffect(speedDelta, speedDuration, 'speed');
+        }
+      } catch {
+        console.log('Could not get slowEnemy in hunt');
+      }
 
       return false;
     });

@@ -53,6 +53,13 @@ export class Character {
     return world.mobs[publicCharacterId].attributes['attack'];
   }
 
+  get defense(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].attributes['defense'];
+  }
+
   get speed(): number {
     if (!world || !world.mobs[publicCharacterId]) {
       return 0;
