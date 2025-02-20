@@ -9,7 +9,8 @@
     "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names
     "outDir": "./dist", // Redirect output structure to the dist directory
     "rootDir": "./src", // Specify the root directory of input files
-    "types": ["node"]
+    "types": ["node"],
+    "allowJs": true
   },
 
   "include": ["src/*.ts", "src/generator.ts"],

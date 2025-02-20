@@ -4,6 +4,7 @@
 // * mv generator.js generator.cjs
 
 import { writeFileSync, readFileSync } from 'fs';
+import { resolve } from 'path';
 
 interface JsonData {
   tiles: unknown[]; // Array of tiles
@@ -56,7 +57,9 @@ const client_breakup = (json: JsonData) => {
       for (let i = 0; i < json['item_types'].length; i++) {
         Object.keys(json['item_types'][i]!).forEach((sub_item_type) => {
           if (!toKeep.has(sub_item_type)) {
-            delete json['item_types'][i][sub_item_type];
+            delete (json['item_types'][i] as { [key: string]: unknown })[
+              sub_item_type
+            ];
           }
         });
       }
@@ -66,7 +69,9 @@ const client_breakup = (json: JsonData) => {
       for (let i = 0; i < json['mob_types'].length; i++) {
         Object.keys(json['mob_types'][i]!).forEach((sub_item_type) => {
           if (!toKeep.has(sub_item_type)) {
-            delete json['mob_types'][i][sub_item_type];
+            delete (json['mob_types'][i] as { [key: string]: unknown })[
+              sub_item_type
+            ];
           }
         });
       }
@@ -109,7 +114,9 @@ const server_breakup = (json: JsonData) => {
       for (let i = 0; i < json['item_types'].length; i++) {
         Object.keys(json['item_types'][i]!).forEach((sub_item_type) => {
           if (!toKeep.has(sub_item_type)) {
-            delete json['item_types'][i][sub_item_type];
+            delete (json['item_types'][i] as { [key: string]: unknown })[
+              sub_item_type
+            ];
           }
         });
       }
@@ -140,10 +147,12 @@ const server_breakup = (json: JsonData) => {
             if (
               !(
                 sub_item_type == 'speaker' &&
-                json['mob_types'][i]['name'] == 'Fighter'
+                (json['mob_types'][i] as { name: string }).name == 'Fighter'
               )
             ) {
-              delete json['mob_types'][i][sub_item_type];
+              delete (json['mob_types'][i] as { [key: string]: unknown })[
+                sub_item_type
+              ];
             }
           }
         });
@@ -160,22 +169,22 @@ const server_breakup = (json: JsonData) => {
 
 // Generate specific json file
 let ran = false;
-process.argv.forEach(function (val) {
+process.argv.forEach(function (val: string, _: number) {
   if (val == 'client') {
-    const rawJson = readFileSync('../global.json', 'utf8');
+    const rawJson = readFileSync('./global.json', 'utf8');
     const json_client = JSON.parse(rawJson);
     client_breakup(json_client);
     writeFileSync(
-      '../../client/static/global.json',
+      '../client/static/global.json',
       JSON.stringify(json_client, null, 4)
     );
     ran = true;
   } else if (val === 'server') {
-    const rawJson = readFileSync('../global.json', 'utf8');
+    const rawJson = readFileSync(resolve(__dirname, './global.json'), 'utf8');
     const json_server = JSON.parse(rawJson);
     server_breakup(json_server);
     writeFileSync(
-      '../../server/data/global.json',
+      '../server/data/global.json',
       JSON.stringify(json_server, null, 4)
     );
     ran = true;
