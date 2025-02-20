@@ -10,7 +10,7 @@ const redis = createClient({
       host: process.env.REDIS_HOST,
       port: Number(process.env.REDIS_PORT)
     },
-    password: process.env.REDIS_PASSWORD // Add your Redis password if required
+    password: process.env.REDIS_PASSWORD
 });
 
 /**
