@@ -343,5 +343,5 @@ REDIS_PASSWORD=
 - Open Ollama
 
 **Run Redis Listener for LLM**
-- In packages/llm run `npx ts-node src/redisWorker.ts`
+- In packages/llm run `pnpm dev`
 - This pops prompts from queue and processes then with model
