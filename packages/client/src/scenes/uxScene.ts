@@ -48,6 +48,7 @@ export class UxScene extends Phaser.Scene {
   goldText: Phaser.GameObjects.Text | null = null;
   healthText: Phaser.GameObjects.Text | null = null;
   attackText: Phaser.GameObjects.Text | null = null;
+  DefenseText: Phaser.GameObjects.Text | null = null;
   speedText: Phaser.GameObjects.Text | null = null;
   affiliationText: Phaser.GameObjects.Text | null = null;
   stubbornnessText: Phaser.GameObjects.Text | null = null;
@@ -275,82 +276,33 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.attackText);
 
-      this.speedText = this.add.text(
+      this.DefenseText = this.add.text(
         15,
         140,
+        'Defense: ' + currentCharacter.defense
+      );
+      this.statsContainer.add(this.attackText);
+
+      this.speedText = this.add.text(
+        15,
+        165,
         'Speed: ' + currentCharacter.speed
       );
       this.statsContainer.add(this.speedText);
 
       this.affiliationText = this.add.text(
         15,
-        165,
+        190,
         'Affiliation: ' + currentCharacter.community_id
       );
       this.statsContainer.add(this.affiliationText);
 
       this.dateText = this.add.text(
         15,
-        190,
+        215,
         'Date: reading position of sun and stars'
       );
       this.statsContainer.add(this.dateText);
-
-      this.stubbornnessText = this.add.text(
-        240,
-        40,
-        'Stubborness: ' + currentCharacter.stubbornness
-      );
-      this.statsContainer.add(this.stubbornnessText);
-
-      this.braveryText = this.add.text(
-        240,
-        65,
-        'Bravery: ' + currentCharacter.bravery
-      );
-      this.statsContainer.add(this.braveryText);
-
-      this.aggressionText = this.add.text(
-        240,
-        90,
-        'Aggression: ' + currentCharacter.aggression
-      );
-      this.statsContainer.add(this.aggressionText);
-
-      this.industriousnessText = this.add.text(
-        240,
-        115,
-        'Industriousness: ' + currentCharacter.industriousness
-      );
-      this.statsContainer.add(this.industriousnessText);
-
-      this.adventurousnessText = this.add.text(
-        240,
-        140,
-        'Adventurousness: ' + currentCharacter.adventurousness
-      );
-      this.statsContainer.add(this.adventurousnessText);
-
-      this.gluttonyText = this.add.text(
-        240,
-        165,
-        'Gluttony: ' + currentCharacter.gluttony
-      );
-      this.statsContainer.add(this.gluttonyText);
-
-      this.sleepyText = this.add.text(
-        240,
-        190,
-        'Sleepy: ' + currentCharacter.sleepy
-      );
-      this.statsContainer.add(this.sleepyText);
-
-      this.extroversionText = this.add.text(
-        240,
-        215,
-        'Extroversion: ' + currentCharacter.extroversion
-      );
-      this.statsContainer.add(this.extroversionText);
 
       // recipe text
       this.recipeText = this.add.text(160, 35, 'POTION RECIPES');

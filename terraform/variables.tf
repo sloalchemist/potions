@@ -33,3 +33,23 @@ variable "supabase_organization_id" {
   type        = string
 }
 
+variable "redis_host" {
+  description = "redis host"
+  type        = string
+}
+
+variable "redis_port" {
+  description = "redis port"
+  type        = string
+}
+
+variable "redis_password" {
+  description = "redis password"
+  type        = string
+}
+
+variable "llm_flag" {
+  description = "llm flag"
+  type        = string
+  default     = "false"
+}

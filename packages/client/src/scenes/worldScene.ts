@@ -617,6 +617,9 @@ export class WorldScene extends Phaser.Scene {
       const path = world.generatePath(player.unlocks, player.position!, target);
       player.path = path;
     }
+
+    const movementKeys = ['a', 'w', 's', 'd'];
+    movementKeys.forEach((k) => (this.keys[k] = false));
   }
 
   showGameOver() {
