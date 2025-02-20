@@ -9,9 +9,11 @@ import {
 import { Speaker } from './speaker/speaker';
 import { SpeechFactory } from './speech/speechFactory';
 import { Turn } from './turn';
+import * as dotenv from 'dotenv';
 import { PersonalityTraits } from './personality';
 import { SpeechAct } from './speech/speechAct';
 import { SpeakerService } from './speaker/speakerService';
+import { shouldUsePrompts } from './prompts/shouldUsePrompts';
 
 /**
  * Enum representing the state of a conversation.
@@ -21,6 +23,8 @@ enum ConversationState {
   WAITING_FOR_RESPONSE,
   FINISHED
 }
+
+dotenv.config();
 
 /**
  * Represents a conversation between two speakers.
@@ -52,7 +56,7 @@ export class Conversation {
   constructor(
     initator: Speaker,
     respondent: Speaker,
-    usesLLM: boolean = false,
+    usesLLM: boolean,
     speakerService: SpeakerService
   ) {
     if (initator.conversation !== null || respondent.conversation !== null) {
@@ -63,7 +67,7 @@ export class Conversation {
 
     this.initiator = initator;
     this.respondent = respondent;
-    this.usesLLM = usesLLM;
+    this.usesLLM = shouldUsePrompts();
     this.initiator.relationships.introduce(this.respondent);
     this.respondent.relationships.introduce(this.initiator);
     this.personalityTraitsUsed[initator.id] = [];
@@ -198,7 +202,9 @@ export class Conversation {
       this.speechOptions
     );
 
-    if (this.usesLLM) {
+    // Machines are not powerful enough to generate immediate responses for 3 prompts
+    // This will be changed in the future
+    if (false) {
       dialogService.sendPrompt(
         prompts,
         (data) => {
