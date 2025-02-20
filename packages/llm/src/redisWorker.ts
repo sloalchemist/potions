@@ -1,6 +1,7 @@
 import { createClient } from 'redis';
 import * as dotenv from 'dotenv';
 import { sendPrompts } from './deepseek';
+import ollama from "ollama";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -50,6 +51,14 @@ async function processJobs() {
     }
   }
 }
+
+async function preloadModel() {
+  console.log("Preloading model...");
+  await ollama.pull({ model: "deepseek-llm:7b" });
+  console.log("Model ready to use.");
+}
+
+preloadModel()
 
 processJobs().catch(console.error);
 

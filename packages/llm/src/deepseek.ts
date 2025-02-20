@@ -10,7 +10,7 @@ export async function sendPrompts(prompts: string[]): Promise<string[]> {
 
         // Generate response using Ollama
         const response = await ollama.generate({
-          model: "tinyllama:latest",
+          model: "deepseek-llm:7b",
           prompt: prompt,
         });
 
