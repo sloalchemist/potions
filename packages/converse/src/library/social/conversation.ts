@@ -54,7 +54,7 @@ export class Conversation {
   constructor(
     initator: Speaker,
     respondent: Speaker,
-    usesLLM: boolean = process.env.LLM == "false" ? false : true,
+    usesLLM: boolean,
     speakerService: SpeakerService
   ) {
     if (initator.conversation !== null || respondent.conversation !== null) {
@@ -65,7 +65,7 @@ export class Conversation {
 
     this.initiator = initator;
     this.respondent = respondent;
-    this.usesLLM = true;
+    this.usesLLM = process.env.LLM_FLAG === "true";
     this.initiator.relationships.introduce(this.respondent);
     this.respondent.relationships.introduce(this.initiator);
     this.personalityTraitsUsed[initator.id] = [];
@@ -160,6 +160,8 @@ export class Conversation {
       throw Error('No speech act found');
     }
 
+    console.log(this.usesLLM)
+
     if (this.usesLLM) {
       const prompt = buildPromptForSpeech(npc, this.other(npc), speechAct);
 
@@ -200,7 +202,8 @@ export class Conversation {
       this.speechOptions
     );
 
-    if (this.usesLLM) {
+    // Machines are not powerful enough to generate immediate responses for 3 prompts
+    if (false) {
       dialogService.sendPrompt(
         prompts,
         (data) => {

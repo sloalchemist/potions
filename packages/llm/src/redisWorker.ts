@@ -1,22 +1,22 @@
 import { createClient } from 'redis';
 import * as dotenv from 'dotenv';
 import { sendPrompts } from './deepseek';
+import ollama from "ollama";
 
 // Load environment variables from .env file
 dotenv.config();
 
 const redis = createClient({
   socket: {
-    host: 'redis-15426.c244.us-east-1-2.ec2.redns.redis-cloud.com',
-    port: 15426
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT)
   },
-  password: 'pZQM4UBUyMOr5WG4MX44R2a1qtfKXx2T' // Add your Redis password if required
+  password: process.env.REDIS_PASSWORD 
 });
 
-
-const jobQueue = 'multijobs';
-
 async function processJobs() {
+  const jobQueue = 'multijobs';
+
   await redis.connect();
 
   console.log(`Worker is listening for jobs on the queue: ${jobQueue}`);
@@ -51,6 +51,14 @@ async function processJobs() {
     }
   }
 }
+
+async function preloadModel() {
+  console.log("Preloading model...");
+  await ollama.pull({ model: "deepseek-llm:7b" });
+  console.log("Model ready to use.");
+}
+
+preloadModel()
 
 processJobs().catch(console.error);
 

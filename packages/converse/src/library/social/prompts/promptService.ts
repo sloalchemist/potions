@@ -6,11 +6,11 @@ import {v4 as uuidv4} from 'uuid';
 dotenv.config();
 
 const redis = createClient({
-  socket: {
-    host: 'redis-15426.c244.us-east-1-2.ec2.redns.redis-cloud.com',
-    port: 15426
-  },
-  password: 'pZQM4UBUyMOr5WG4MX44R2a1qtfKXx2T' // Add your Redis password if required
+    socket: {
+      host: process.env.REDIS_HOST,
+      port: Number(process.env.REDIS_PORT)
+    },
+    password: process.env.REDIS_PASSWORD
 });
 
 /**
@@ -44,9 +44,11 @@ export let dialogService: Dialog = {
       }
       const jobID = uuidv4();
       const responseQueue = `response:${jobID}`;
+      console.log("Job Created")
       const jobQueue = 'multijobs';
       const job = JSON.stringify({ jobID, jobData: prompt, responseQueue });
       await redis.lPush(jobQueue, job);
+      console.log("Job Pushed to Queue")
       await listenForResponse(responseQueue, onMessage, onError);
     } catch (error) {
       console.error('Error publishing job with response:', error);
@@ -86,4 +88,3 @@ try {
   }
 }
 };
-
