@@ -213,10 +213,7 @@ export class World {
       if (!item) {
         continue;
       }
-      if (
-        (!item.itemType.walkable || (item.lock && !item.itemType.open)) &&
-        item.position
-      ) {
+      if ((!item.itemType.walkable || item.lock) && item.position) {
         this.pathFinder.setBlockingItem(
           item.position.x,
           item.position.y,

@@ -34,10 +34,6 @@ export class Item extends Physical {
 
   isWalkable(unlocks: string[]): boolean {
     if (this.lock) {
-      if (this.itemType.layout_type == 'opens' && this.itemType.open) {
-        return true;
-      }
-      //console.log('checking if walkable', mob.unlocks, this.lock);
       return unlocks.includes(this.lock);
     }
     return this.itemType.walkable ? true : false;
@@ -77,7 +73,6 @@ export class Item extends Physical {
   }
 
   pickup(world: World, mob: Mob) {
-    //console.log('picked up item', this.key, mob);
     mob.carrying = this.key;
     this.carried_by = mob.key;
     if (this.position) {
@@ -90,7 +85,6 @@ export class Item extends Physical {
     if (!mob.position) {
       throw new Error('Mob has no position');
     }
-    //console.log('dropping item', this.key, this.carried_by);
     mob.carrying = undefined;
     this.carried_by = undefined;
     this.position = position;

@@ -1,11 +1,8 @@
 import Ably from 'ably';
 import 'dotenv/config';
+import { getEnv } from '@rt-potion/common';
 
-if (!process.env.ABLY_API_KEY) {
-  throw new Error('Cannot run without an API key. Add your key to .env');
-}
-
-export const apiKey = process.env.ABLY_API_KEY;
+export const apiKey = getEnv('ABLY_API_KEY');
 console.log('Ably API Key:', apiKey);
 
 let ably: Ably.Realtime;
