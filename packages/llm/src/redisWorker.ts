@@ -1,14 +1,18 @@
 import { createClient } from 'redis';
 import * as dotenv from 'dotenv';
 import { sendPrompts } from './model';
-import ollama from "ollama";
+import ollama from 'ollama';
 
 // Load environment variables from .env file
 dotenv.config();
 
 let redis;
 
-if (process.env.REDIS_HOST && process.env.REDIS_PORT && process.env.REDIS_PASSWORD) {
+if (
+  process.env.REDIS_HOST &&
+  process.env.REDIS_PORT &&
+  process.env.REDIS_PASSWORD
+) {
   redis = createClient({
     socket: {
       host: process.env.REDIS_HOST,
@@ -17,7 +21,7 @@ if (process.env.REDIS_HOST && process.env.REDIS_PORT && process.env.REDIS_PASSWO
     password: process.env.REDIS_PASSWORD
   });
 } else {
-  throw "Redis variables missing from llm package .env";
+  throw 'Redis variables missing from llm package .env';
 }
 
 async function processJobs() {
@@ -33,8 +37,8 @@ async function processJobs() {
       const jobResponse = await redis.brPop(jobQueue, 0); // Wait indefinitely for a job
 
       if (jobResponse) {
-        console.log("Job Found")
-        console.log(jobResponse.element)
+        console.log('Job Found');
+        console.log(jobResponse.element);
         const element = jobResponse.element; // Access the element property directly
         const job = JSON.parse(element);
         const { jobID, jobData, responseQueue } = job;
@@ -59,9 +63,9 @@ async function processJobs() {
 }
 
 async function preloadModel() {
-  console.log("Preloading model...");
-  await ollama.pull({ model: "deepseek-llm:7b" });
-  console.log("Model ready to use.");
+  console.log('Preloading model...');
+  await ollama.pull({ model: 'deepseek-llm:7b' });
+  console.log('Model ready to use.');
 }
 
 preloadModel();
