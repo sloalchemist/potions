@@ -403,7 +403,12 @@ export const commonSetup = (worldSize: number = 2) => {
         parent: 'shattered_expanse',
         concepts: []
       }
-    ]
+    ],
+    mob_aggro_behaviors: {
+      passive_mobs: [],
+      hungry_mobs: [],
+      aggressive_mobs: []
+    }
   };
   itemGenerator = new ItemGenerator(worldDescription.item_types);
   world = new ServerWorld(worldDescription);
