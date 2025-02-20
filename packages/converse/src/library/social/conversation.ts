@@ -160,6 +160,8 @@ export class Conversation {
       throw Error('No speech act found');
     }
 
+    console.log(this.usesLLM)
+
     if (this.usesLLM) {
       const prompt = buildPromptForSpeech(npc, this.other(npc), speechAct);
 
@@ -200,7 +202,8 @@ export class Conversation {
       this.speechOptions
     );
 
-    if (!this.usesLLM) {
+    // Machines are not powerful enough to generate immediate responses for 3 prompts
+    if (false) {
       dialogService.sendPrompt(
         prompts,
         (data) => {
