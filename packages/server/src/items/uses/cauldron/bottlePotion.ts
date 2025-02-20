@@ -18,6 +18,10 @@ export class BottlePotion implements Use {
       return false;
     }
 
+    if (mob.carrying) {
+      return false;
+    }
+
     const cauldron = Cauldron.fromItem(item);
 
     if (!cauldron) {

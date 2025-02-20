@@ -90,7 +90,7 @@ export class ServerWorld implements GameWorld {
     conversationTracker.tick();
     FantasyDate.runTick();
 
-    // log data for Grafana
+    // log data for Prometheus
     DataLogger.logData();
 
     //const totalTime = Date.now() - startTime;
