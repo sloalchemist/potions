@@ -240,20 +240,8 @@ Developers/players will now be able to save their world data to Supabase. This m
 - The first time you start the server, your server data will be uploaded to Supabase in an automatically generated bucket.
 - The next time you start your server, the data will be downloaded from Supabase.
 - Data will also be saved every 10 minutes the server is running.
-- You can manually save with the cheat code SHIFT+S
-- If you want to reset your world, stop the server, delete all the files in your bucket on the Supabase website, rebuild, then start your server.
-
-**DB Errors**
-On the off chance you receive an error while running the server, you can always reset with the last bullet point above.
-
- - Running "pnpm run create your-world-name" creates a world with the name your-world-name and saves it to Supabase.
- - Running "pnpm dev your-world-name" will load the data for the world your-world-name, if it exists.
- - Data will also be saved every 10 minutes the server is running.
- - If you want to reset your world, run the create script, as it overwrites all data with that world name and creates a fresh one.
- - You can manually save with the cheat code SHIFT+G 
-
- **DB Errors**
- On the off chance you receive an error while running the server, you can always reset with the last bullet point above.
+- If you want to reset your world, run the create script, as it overwrites all data with that world name and creates a fresh one.
+- You can manually save with the cheat code SHIFT+G 
 
 ### Database Setup for New Worlds
 
