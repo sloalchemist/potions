@@ -72,7 +72,7 @@ describe('BottlePotion', () => {
   test('should fail if item is not a cauldron', () => {
     const bottlePotion = new BottlePotion();
     const mob = createTestMob();
-    
+
     // Create and retrieve the non-cauldron item properly
     const nonCauldronPos: Coord = { x: 2, y: 2 };
     itemGenerator.createItem({
