@@ -1,22 +1,22 @@
-"use strict";
-// * run with this command 
+'use strict';
+// * run with this command
 // * tsc generator.ts --module CommonJS                       add the right if the left doesn't work    --outFile generator.cjs
 // * mv generator.js generator.cjs
 
 import { writeFileSync, readFileSync } from 'fs';
 
 interface JsonData {
-  tiles: any[];          // Array of tiles
-  terrain_types: any[];  // Array of terrain types
-  item_types: any[];     // Array of item types
-  mob_types: any[];      // Array of mob types
-  portals: any[];        // Array of portals
-  communities: any[];    // Array of communities
-  alliances: any[];      // Array of alliances
-  houses: any[];         // Array of houses
-  items: any[];          // Array of items
-  containers: any[];     // Array of containers
-  regions: any[];        // Array of regions
+  tiles: unknown[]; // Array of tiles
+  terrain_types: unknown[]; // Array of terrain types
+  item_types: unknown[]; // Array of item types
+  mob_types: unknown[]; // Array of mob types
+  portals: unknown[]; // Array of portals
+  communities: unknown[]; // Array of communities
+  alliances: unknown[]; // Array of alliances
+  houses: unknown[]; // Array of houses
+  items: unknown[]; // Array of items
+  containers: unknown[]; // Array of containers
+  regions: unknown[]; // Array of regions
 }
 
 // Pull client data from global
@@ -161,12 +161,12 @@ const server_breakup = (json: JsonData) => {
 };
 
 // Generate specific json file
-let ran = false
-process.argv.forEach(function (val, index) {
+let ran = false;
+process.argv.forEach(function (val) {
   if (val == 'client') {
     const rawJson = readFileSync('../global.json', 'utf8');
     const json_client = JSON.parse(rawJson);
-    client_breakup(json_client)
+    client_breakup(json_client);
     writeFileSync(
       '../../client/static/global.json',
       JSON.stringify(json_client, null, 4)
@@ -185,5 +185,5 @@ process.argv.forEach(function (val, index) {
 });
 
 if (ran === false) {
-  console.log('No recognized locations')
+  console.log('No recognized locations');
 }
