@@ -16,7 +16,6 @@ import { pubSub } from '../services/clientCommunication/pubsub';
 import { Carryable } from '../items/carryable';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
-import { ReadableStreamDefaultController } from 'stream/web';
 import { Favorability } from '../favorability/favorability';
 
 export type MobData = {
@@ -209,7 +208,7 @@ export class Mob {
 
     return mob.defense;
   }
-  
+
   get name(): string {
     return this._name;
   }

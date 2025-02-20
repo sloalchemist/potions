@@ -7,7 +7,6 @@ import { Mob } from '../../src/mobs/mob';
 import { Drink } from '../../src/items/uses/drink';
 import { FantasyDate } from '../../src/date/fantasyDate';
 import { Coord } from '@rt-potion/common';
-import { Hunt } from '../../src/mobs/plans/hunt';
 import { hexStringToNumber } from '../../src/util/colorUtil';
 
 beforeEach(() => {
@@ -45,7 +44,9 @@ describe('Try to consume blue potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#0000ff')));
+    expect(testMob!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#0000ff'))
+    );
 
     // set initial speed
     const startSpeed = testMob!._speed;
@@ -89,7 +90,9 @@ describe('Try to consume blue potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#0000ff')));
+    expect(testMob!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#0000ff'))
+    );
 
     // have the player drink the potion
     const testDrink2 = new Drink();
@@ -193,7 +196,9 @@ describe('Try to consume orange potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#e79600')));
+    expect(testMob!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#e79600'))
+    );
 
     // set initial attack
     const startAttack = testMob!._attack; // should be 5 at default
@@ -230,7 +235,9 @@ describe('Try to consume orange potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#e79600')));
+    expect(testMob!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#e79600'))
+    );
 
     // have the player drink the potion
     const testDrink2 = new Drink();
@@ -334,7 +341,9 @@ describe('Try to consume gold potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#ef7d55')));
+    expect(testMob!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#ef7d55'))
+    );
 
     // set initial max health
     const startMaxHealth = testMob!._maxHealth;
@@ -371,7 +380,9 @@ describe('Try to consume gold potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#ef7d55')));
+    expect(testMob!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#ef7d55'))
+    );
 
     // have the player drink the potion
     const testDrink2 = new Drink();
@@ -394,7 +405,7 @@ describe('Try to consume gold potion in various cases', () => {
     const potion3 = Item.getItemIDAt(potionLocation);
     const potionItem3 = Item.getItem(potion3!);
     const testDrink3 = new Drink();
-    const test3 = testDrink3.interact(testMob!, potionItem3!);
+    testDrink3.interact(testMob!, potionItem3!);
     itemGenerator.createItem({
       type: 'potion',
       subtype: String(hexStringToNumber('#ef7d55')),
@@ -404,7 +415,7 @@ describe('Try to consume gold potion in various cases', () => {
     const potion4 = Item.getItemIDAt(potionLocation);
     const potionItem4 = Item.getItem(potion4!);
     const testDrink4 = new Drink();
-    const test4 = testDrink4.interact(testMob!, potionItem4!);
+    testDrink4.interact(testMob!, potionItem4!);
     itemGenerator.createItem({
       type: 'potion',
       subtype: String(hexStringToNumber('#ef7d55')),
@@ -414,7 +425,7 @@ describe('Try to consume gold potion in various cases', () => {
     const potion5 = Item.getItemIDAt(potionLocation);
     const potionItem5 = Item.getItem(potion5!);
     const testDrink5 = new Drink();
-    const test5 = testDrink5.interact(testMob!, potionItem5!);
+    testDrink5.interact(testMob!, potionItem5!);
 
     // should all have applied increases to max health (5 total now)
     expect(testMob!._maxHealth).toBe(startMaxHealth + 20 * 5);
@@ -431,7 +442,7 @@ describe('Try to consume gold potion in various cases', () => {
 
     // drink 6th potion
     const testDrink6 = new Drink();
-    const test6 = testDrink6.interact(testMob!, potionItem6!);
+    testDrink6.interact(testMob!, potionItem6!);
 
     // should see no difference from last increase (capped at 5 effects)
     expect(testMob!._maxHealth).toBe(startMaxHealth + 20 * 5);
@@ -647,7 +658,9 @@ describe('Try to consume purple potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#ab00e7')));
+    expect(testMob!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#ab00e7'))
+    );
 
     // set initial defense
     const startDefense = testMob!._defense;
@@ -661,7 +674,7 @@ describe('Try to consume purple potion in various cases', () => {
     expect(testMob!.carrying).toBeUndefined();
 
     // check attributes on player (should be boosted)
-    expect(testMob!._defense).toBe(startDefense + (startDefense * 0.5));
+    expect(testMob!._defense).toBe(startDefense + startDefense * 0.5);
 
     // create another potion
     itemGenerator.createItem({
@@ -687,10 +700,10 @@ describe('Try to consume purple potion in various cases', () => {
     }
     testMob?.tick(500);
 
-    // check attributes on player (should be boosted)
+    // should return to default defense
     expect(testMob!._defense).toBe(startDefense);
   });
-  
+
   test('Test purple potion in combat', () => {
     FantasyDate.initialDate();
 
