@@ -22,7 +22,7 @@ interface JsonData {
     hungry_mobs: string[];
     aggressive_mobs: string[];
   };
-  }
+}
 
 // Pull client data from global
 const client_breakup = (json: JsonData) => {
@@ -34,7 +34,7 @@ const client_breakup = (json: JsonData) => {
     'items',
     'containers',
     'regions',
-    "mob_aggro_behaviors",
+    'mob_aggro_behaviors',
     'tiles',
     'terrain_types'
   ]);
