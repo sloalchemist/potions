@@ -124,15 +124,15 @@ export class Community {
    * @param second The ID of the second community
    * @param amount The amount you want to adjust the favor by
    */
-  static adjustFavor(first: Community, second: Community, amount: number) {
+  static adjustFavor(first: string, second: string, amount: number) {
     DB.prepare(
       `   UPDATE favorability
-        SET favor = favor + :amount
+        SET favor = favor + :num
         WHERE
             (community_1_id = :id_1 AND community_2_id = :id_2) OR
             (community_1_id = :id_2 AND community_2_id = :id_1)
         `
-    ).run({ id_1: first.id, id_2: second.id, num: amount });
+    ).run({ id_1: first, id_2: second, num: amount });
   }
 
   static SQL = `

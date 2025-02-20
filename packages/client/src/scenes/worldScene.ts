@@ -13,7 +13,7 @@ import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
 import { GRAY } from './pauseScene';
-import { leaveWorld, publishPlayerPosition } from '../services/playerToServer';
+import { publishPlayerPosition } from '../services/playerToServer';
 import { getNightSkyOpacity } from '../utils/nightOverlayHandler';
 import {
   ItemType,
@@ -22,7 +22,11 @@ import {
 } from '../worldDescription';
 import { UxScene } from './uxScene';
 import { setGameState } from '../world/controller';
-import { restoreHealth, speedUpCharacter } from '../utils/developerCheats';
+import {
+  restoreHealth,
+  persistWorldData,
+  speedUpCharacter
+} from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 
 export let world: World;
@@ -46,6 +50,14 @@ export class WorldScene extends Phaser.Scene {
   terrainWidth: number = 0;
   terrainHeight: number = 0;
   nightOpacity: number = 0;
+  keys: { [key: string]: boolean } = { w: false, a: false, s: false, d: false };
+  prevKeys: { [key: string]: boolean } = {
+    w: false,
+    a: false,
+    s: false,
+    d: false
+  };
+  lastKeyUp = '';
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -395,12 +407,47 @@ export class WorldScene extends Phaser.Scene {
       }
     });
 
+    const movementKeys = ['w', 'a', 's', 'd'];
+
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (!world.mobs[publicCharacterId]) {
+        return;
+      }
+
+      const curKey = event.key.toLowerCase();
+      if (movementKeys.includes(curKey)) {
+        this.keys[curKey] = true;
+        this.lastKeyUp = curKey;
+      }
+
       if (event.shiftKey && event.code === 'KeyF') {
         speedUpCharacter();
       }
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
+      }
+      if (event.shiftKey && event.code === 'KeyS') {
+        persistWorldData();
+      }
+      // Brings up chat box for user
+      if (event.code === 'Slash') {
+        if (!this.scene.isActive('ChatOverlayScene')) {
+          this.scene.launch('ChatOverlayScene');
+        }
+      }
+      // Ends chat box for user
+      if (event.code === 'Escape') {
+        if (this.scene.isActive('ChatOverlayScene')) {
+          this.scene.stop('ChatOverlayScene');
+        }
+      }
+    });
+
+    this.input.keyboard?.on('keyup', (event: KeyboardEvent) => {
+      const curKey = event.key.toLowerCase();
+      if (movementKeys.includes(curKey)) {
+        this.keys[curKey] = false;
+        this.lastKeyUp = curKey;
       }
     });
 
@@ -424,6 +471,7 @@ export class WorldScene extends Phaser.Scene {
     this.hero = sprite;
   }
 
+  count = 0;
   update() {
     if (gameState !== 'stateInitialized') {
       this.hideWorld();
@@ -460,11 +508,83 @@ export class WorldScene extends Phaser.Scene {
         this.terrainHeight * TILE_SIZE
       );
     }
+
+    if (this.count > 50) {
+      this.count = 0;
+      this.handlePlayerMovement(true);
+    } else {
+      this.count++;
+      this.handlePlayerMovement(false);
+    }
+  }
+
+  keyChange() {
+    let different = false;
+    for (const key in this.keys) {
+      if (this.keys[key] !== this.prevKeys[key]) {
+        different = true;
+        break;
+      }
+    }
+    return different;
+  }
+
+  handlePlayerMovement(publish: boolean) {
+    const player = world.mobs[publicCharacterId];
+    if (!(player && player.position)) {
+      return;
+    }
+
+    let moveX = player.position.x;
+    let moveY = player.position.y;
+
+    let moved = false;
+    if (this.keys['w']) {
+      moveY--;
+      moved = true;
+    }
+    if (this.keys['s']) {
+      moveY++;
+      moved = true;
+    }
+    if (this.keys['a']) {
+      moveX--;
+      moved = true;
+    }
+    if (this.keys['d']) {
+      moveX++;
+      moved = true;
+    }
+
+    if (!moved) return;
+
+    let roundedX;
+    let roundedY;
+    const negKeys = ['w', 'a'];
+    if (negKeys.includes(this.lastKeyUp)) {
+      roundedX = Math.floor(moveX);
+      roundedY = Math.floor(moveY);
+    } else {
+      roundedX = Math.ceil(moveX);
+      roundedY = Math.ceil(moveY);
+    }
+
+    const target = { x: roundedX, y: roundedY };
+
+    // NOTE: the code in the 'else' block moves the player on the client side
+    //       publishPlayerPosition() calls that code itself, so player will
+    //       move on the client side for whichever case
+    if (publish) {
+      this.prevKeys = { ...this.keys };
+      publishPlayerPosition(target);
+    } else {
+      player.target = target;
+      const path = world.generatePath(player.unlocks, player.position!, target);
+      player.path = path;
+    }
   }
 
   showGameOver() {
-    leaveWorld();
-
     let uxscene = this.scene.get('UxScene') as UxScene;
     uxscene.chatButtons?.clearButtonOptions();
 
@@ -524,10 +644,12 @@ export class WorldScene extends Phaser.Scene {
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
     setGameState('uninitialized');
+    this.scene.stop('BrewScene');
     this.scene.stop('PauseScene');
     this.scene.stop('WorldScene');
     this.scene.stop('UxScene');
     this.scene.stop('FrameScene');
+    this.scene.stop('ChatOverlayScene');
     this.scene.start('LoadWorldScene');
   }
 

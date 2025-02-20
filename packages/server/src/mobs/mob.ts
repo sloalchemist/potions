@@ -167,6 +167,14 @@ export class Mob {
     return this.speed;
   }
 
+  get _maxHealth(): number {
+    return this.maxHealth;
+  }
+
+  get _attack(): number {
+    return this.attack;
+  }
+
   get current_tick(): number {
     return gameWorld.currentDate().global_tick;
   }
@@ -294,16 +302,16 @@ export class Mob {
   }
 
   setMoveTarget(target: Coord, fuzzy: boolean = false): boolean {
-    const start = floor(this.position);
+    const start = this.position;
     const end = floor(target);
     if (
       //equals(this.target?, end) ||
-      equals(start, end) &&
+      equals(floor(start), end) &&
       this.target == null
     ) {
       return true;
     }
-    if (equals(start, end)) {
+    if (equals(floor(start), end)) {
       this.updateMoveTarget(end, [end]);
       return true;
     }
@@ -392,6 +400,34 @@ export class Mob {
     ).run({ attack: newAttack, id: this.id });
     this.attack = newAttack;
     pubSub.changeAttack(this.id, amount, this.attack);
+  }
+
+  changeMaxHealth(amount: number) {
+    if (amount === 0) return;
+    let newMaxHealth = this.maxHealth + amount;
+    DB.prepare(
+      `
+            UPDATE mobs
+            SET maxHealth = :maxHealth
+            WHERE id = :id
+        `
+    ).run({ maxHealth: newMaxHealth, id: this.id });
+    this.maxHealth = newMaxHealth;
+    pubSub.changeMaxHealth(this.id, amount, this.maxHealth);
+  }
+
+  changeSpeed(amount: number) {
+    if (amount === 0) return;
+    let newSpeed = this.speed + amount;
+    DB.prepare(
+      `
+            UPDATE mobs
+            SET speed = :speed
+            WHERE id = :id
+        `
+    ).run({ speed: newSpeed, id: this.id });
+    this.speed = newSpeed;
+    pubSub.changeSpeed(this.id, amount, this.speed);
   }
 
   changePersonality(trait: string, amount: number) {
@@ -597,6 +633,14 @@ export class Mob {
 
   chatRequest(mob: Mob): boolean {
     conversationTracker.startConversation(mob, this);
+    return false;
+  }
+
+  fightRequest(mob: Mob): boolean {
+    console.log('fight request from ' + mob.name);
+    // TODO: replace with FightTracker class
+    pubSub.playerAttacks(mob.id, ['Test Attack']);
+    // fightTracker.startFight(mob, this);
     return false;
   }
 
