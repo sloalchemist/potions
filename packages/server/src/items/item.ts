@@ -100,6 +100,7 @@ export class Item {
       },
       {} as Record<string, string | number>
     );
+
     const item = new Item({
       id: itemData.id,
       position: { x: itemData.position_x, y: itemData.position_y },
@@ -356,6 +357,25 @@ export class Item {
     ).all() as { id: string }[];
     //console.log('starting item ticks');
     return result.map((row) => row.id);
+  }
+
+  /**
+   * Takes all item types possible from the itemGenerator class and
+   * generates a random CARRYABLE item. This function is intended to be used to
+   * generate a favorite item for a mob.
+   *
+   * @returns A single carryable item
+   */
+  static getRandomItem(): string {
+    const carryable_items = [];
+    for (const type in itemGenerator._itemTypes) {
+      if (itemGenerator._itemTypes[type].carryable == true) {
+        carryable_items.push(type);
+      }
+    }
+    const item =
+      carryable_items[Math.floor(Math.random() * carryable_items.length)];
+    return item;
   }
 
   destroy(): void {
