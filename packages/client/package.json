@@ -9,7 +9,7 @@
     "lint": "eslint src/ --ext .ts,.tsx --fix",
     "format": "prettier --config ../../.prettierrc 'src/**/*.ts' --write",
     "clean": "rimraf dist",
-    "build": "webpack",
+    "build": "pnpm --filter @rt-potion/json-generator generate client && webpack",
     "dev": "webpack serve --mode development",
     "start": "npx live-server"
   },
