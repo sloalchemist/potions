@@ -231,11 +231,11 @@ Developers/players will now be able to save their world data to Supabase. This m
 **DB Errors**
 On the off chance you receive an error while running the server, you can always reset with the last bullet point above.
 
-## LLM Setup
+## LLM Setup (OPTIONAL)
 
 **1. Download Ollama**
 
-- Download Ollama from [this site](https://ollama.com/download).
+- Download Ollama from [this site](https://ollama.com/download)
 
 **2. Run Bash Command**
 
@@ -266,9 +266,9 @@ REDIS_PORT=
 
 REDIS_PASSWORD=
 
-- Fill in the REDIS_HOST with the first half of the public endpoint (everything before the colon).
-- Fill in the REDIS_PORT with the second half of the public endpoint (everything after the colon).
-- Scroll down and click on the **Security** tab.
+- Fill in the REDIS_HOST with the first half of the public endpoint (everything before the colon)
+- Fill in the REDIS_PORT with the second half of the public endpoint (everything after the colon)
+- Scroll down and click on the **Security** tab
 - Copy the password and paste it into the REDIS_PASSWORD
 - Create a new `.env` file in the **llm package**
 - Add the REDIS_PORT, REDIS_HOST, and REDIS_PASSWORD to the `.env` file in the **llm package**
