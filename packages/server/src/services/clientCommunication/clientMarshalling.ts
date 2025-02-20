@@ -67,7 +67,8 @@ function mobDataToMob(mobData: MobData): MobI {
       health: mobData.health,
       gold: mobData.gold,
       speed: mobData.speed,
-      attack: mobData.attack
+      attack: mobData.attack,
+      defense: mobData.defense
     },
     unlocks: mobData.community_id ? [mobData.community_id] : [],
     doing: mobData.current_action
