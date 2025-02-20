@@ -33,7 +33,7 @@ describe('Try to consume blue potion in various cases', () => {
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '255',
+      subtype: String(hexStringToNumber('#0000ff')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -45,7 +45,7 @@ describe('Try to consume blue potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe('255');
+    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#0000ff')));
 
     // set initial speed
     const startSpeed = testMob!._speed;
@@ -77,7 +77,7 @@ describe('Try to consume blue potion in various cases', () => {
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '255',
+      subtype: String(hexStringToNumber('#0000ff')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -89,7 +89,7 @@ describe('Try to consume blue potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe('255');
+    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#0000ff')));
 
     // have the player drink the potion
     const testDrink2 = new Drink();
@@ -124,7 +124,7 @@ describe('Try to consume blue potion in various cases', () => {
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '255',
+      subtype: String(hexStringToNumber('#0000ff')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -160,7 +160,7 @@ describe('Try to consume blue potion in various cases', () => {
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '255',
+      subtype: String(hexStringToNumber('#0000ff')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -202,7 +202,7 @@ describe('Try to consume orange potion in various cases', () => {
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '16753920',
+      subtype: String(hexStringToNumber('#e79600')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -214,7 +214,7 @@ describe('Try to consume orange potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe('16753920');
+    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#e79600')));
 
     // set initial attack
     const startAttack = testMob!._attack; // should be 5 at default
@@ -246,7 +246,7 @@ describe('Try to consume orange potion in various cases', () => {
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '16753920',
+      subtype: String(hexStringToNumber('#e79600')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -258,7 +258,7 @@ describe('Try to consume orange potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe('16753920');
+    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#e79600')));
 
     // have the player drink the potion
     const testDrink2 = new Drink();
@@ -293,7 +293,7 @@ describe('Try to consume orange potion in various cases', () => {
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '16753920',
+      subtype: String(hexStringToNumber('#e79600')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -329,7 +329,7 @@ describe('Try to consume orange potion in various cases', () => {
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '16753920',
+      subtype: String(hexStringToNumber('#e79600')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -371,7 +371,7 @@ describe('Try to consume gold potion in various cases', () => {
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '16766720',
+      subtype: String(hexStringToNumber('#ef7d55')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -383,7 +383,7 @@ describe('Try to consume gold potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe('16766720');
+    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#ef7d55')));
 
     // set initial max health
     const startMaxHealth = testMob!._maxHealth;
@@ -408,7 +408,7 @@ describe('Try to consume gold potion in various cases', () => {
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '16766720',
+      subtype: String(hexStringToNumber('#ef7d55')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -420,7 +420,7 @@ describe('Try to consume gold potion in various cases', () => {
     // ensure the player is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe('16766720');
+    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#ef7d55')));
 
     // have the player drink the potion
     const testDrink2 = new Drink();
@@ -436,7 +436,7 @@ describe('Try to consume gold potion in various cases', () => {
     // create 3 more potions and drink them all
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '16766720',
+      subtype: String(hexStringToNumber('#ef7d55')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -446,7 +446,7 @@ describe('Try to consume gold potion in various cases', () => {
     const test3 = testDrink3.interact(testMob!, potionItem3!);
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '16766720',
+      subtype: String(hexStringToNumber('#ef7d55')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -456,7 +456,7 @@ describe('Try to consume gold potion in various cases', () => {
     const test4 = testDrink4.interact(testMob!, potionItem4!);
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '16766720',
+      subtype: String(hexStringToNumber('#ef7d55')),
       position: potionLocation,
       carriedBy: testMob
     });
@@ -471,7 +471,7 @@ describe('Try to consume gold potion in various cases', () => {
     // make one more potion
     itemGenerator.createItem({
       type: 'potion',
-      subtype: '16766720',
+      subtype: String(hexStringToNumber('#ef7d55')),
       position: potionLocation,
       carriedBy: testMob
     });

@@ -1,29 +1,18 @@
-jest.mock('../../../src/worldMetadata', () => ({
-  publicCharacterId: '11111'
-}));
-
-jest.mock('../../../src/scenes/worldScene', () => {
-  const { World } = jest.requireActual('../../../src/world/world');
-  return { world: new World() };
-});
-
-import { world } from '../../../src/scenes/worldScene';
 import {
   getInteractablePhysicals,
   getPhysicalInteractions
 } from '../../../src/world/controller';
 import { Item } from '../../../src/world/item';
-// import { World } from '../../../src/world/world';
-import { Mob } from '../../../src/world/mob';
+import { World } from '../../../src/world/world';
 import { ItemType } from '../../../src/worldDescription';
 import { Coord } from '@rt-potion/common';
 
 describe('Openable, smashable items have prompts to smash', () => {
-  // let world: World | null = null;
+  let world: World | null = null;
 
   beforeAll(() => {
     // Initialize world
-    // world = new World();
+    world = new World();
     world.load({
       tiles: [
         [0, 0, 0],
@@ -34,23 +23,6 @@ describe('Openable, smashable items have prompts to smash', () => {
       item_types: [],
       mob_types: []
     });
-
-    const publicCharacterId = '11111';
-
-    const player = new Mob(
-      world,
-      publicCharacterId,
-      'player1',
-      'player',
-      100,
-      { x: 1, y: 0 },
-      {},
-      {},
-      'alchemists'
-    );
-
-    world.mobs[publicCharacterId] = player;
-    world.addMobToGrid(player);
   });
 
   test('Proximity to gate results in "smash gate" prompt', () => {
@@ -70,8 +42,6 @@ describe('Openable, smashable items have prompts to smash', () => {
         }
       ]
     };
-
-    //const player1 = new Mob(world!, 'mob1', 'Player1', 'player', 100, playerPos, 2, {});
 
     // Instantiate the gate object
     const gate = new Item(world!, 'gate1', { x: 1, y: 1 }, gateItemType);
@@ -162,6 +132,6 @@ describe('Openable, smashable items have prompts to smash', () => {
   });
 
   afterAll(() => {
-    // world = null;
+    world = null;
   });
 });

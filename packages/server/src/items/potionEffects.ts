@@ -18,13 +18,13 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
       const speedDuration = 30;
       mob.changeEffect(speedDelta, speedDuration, 'speed');
       return true;
-    case '#ffa500':
+    case '#e79600':
       console.log('Drinking orange potion');
       const attackDelta = mob._attack * 0.5;
       const attackDuration = 240;
       mob.changeEffect(attackDelta, attackDuration, 'attack');
       return true;
-    case '#ffd700':
+    case '#ef7d55':
       console.log('Drinking gold potion');
       mob.changeMaxHealth(20, true);
       return true;
