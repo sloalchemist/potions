@@ -1,5 +1,7 @@
 'use strict';
 // * run with this command
+'use strict';
+// * run with this command
 // * tsc generator.ts --module CommonJS                       add the right if the left doesn't work    --outFile generator.cjs
 // * mv generator.js generator.cjs
 
@@ -101,8 +103,6 @@ const server_breakup = (json: JsonData) => {
         'carryable',
         'on_tick',
         'drops_item',
-        'item_group',
-        'layout_type',
         'open',
         'flat',
         'templated',
@@ -166,6 +166,7 @@ process.argv.forEach(function (val) {
   if (val == 'client') {
     const rawJson = readFileSync('../global.json', 'utf8');
     const json_client = JSON.parse(rawJson);
+    client_breakup(json_client);
     client_breakup(json_client);
     writeFileSync(
       '../../client/static/global.json',

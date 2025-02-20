@@ -501,7 +501,7 @@
             "rate": 0.1
           }
         }
-      ],
+      ]
     },
     {
       "name": "Message-In-Bottle",
@@ -746,7 +746,9 @@
             "radius": 3,
             "rate": 0.1
           }
-      }]},
+        }
+      ]
+    },
     {
       "type": "heart-beet-plant",
       "name": "Heartbeet plant",
@@ -889,7 +891,7 @@
       "walkable": true,
       "flat": true,
       "interactions": [],
-      "on_tick": [ 
+      "on_tick": [
         {
           "action": "spawn_mob",
           "parameters": {
@@ -1253,8 +1255,7 @@
           "value": 1
         }
       ],
-      "interactions": [
-      ],
+      "interactions": [],
       "show_price_at": {
         "x": 7,
         "y": -10
@@ -1486,4 +1487,3 @@
     "aggressive_mobs": ["fighter"]
   }
 }
-
