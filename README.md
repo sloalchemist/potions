@@ -328,8 +328,8 @@ REDIS_PASSWORD=
 **LLM Package**
 - Create a new `.env` file in the **llm package**
 - Add the REDIS_PORT, REDIS_HOST, and REDIS_PASSWORD to the `.env` file in the **llm package**
-- Open Ollama
 
 **Run Redis Listener for LLM**
+- Open Ollama (the app on your computer)
 - In packages/llm run `pnpm dev`
 - This pops prompts from queue and processes then with model
