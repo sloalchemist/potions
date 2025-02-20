@@ -259,8 +259,11 @@ On the off chance you receive an error while running the server, you can always 
 - In your `.env` file add the following lines:
 
 LLM_FLAG=true
+
 REDIS_HOST=
+
 REDIS_PORT=
+
 REDIS_PASSWORD=
 
 - Fill in the REDIS_HOST with the first half of the public endpoint (everything before the colon).
@@ -270,3 +273,4 @@ REDIS_PASSWORD=
 - Create a new `.env` file in the **llm package**
 - Add the REDIS_PORT, REDIS_HOST, and REDIS_PASSWORD to the `.env` file in the **llm package**
 - Open Ollama
+- In packages/llm run `npx ts-node src/redisWorker.ts`
