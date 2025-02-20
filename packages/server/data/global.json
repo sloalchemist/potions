@@ -533,10 +533,13 @@
       "description": "A bottle that contains a message... wonder what could be inside",
       "carryable": true,
       "walkable": false,
+      "attributes": {
+        "message": "some message here (replace)"
+      },
       "interactions": [
         {
-          "description": "Open Message",
-          "action": null,
+          "description": "Read Message",
+          "action": "read",
           "while_carried": true
         }
       ],
