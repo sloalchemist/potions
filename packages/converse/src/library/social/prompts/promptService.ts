@@ -5,13 +5,15 @@ import {v4 as uuidv4} from 'uuid';
 // Load environment variables from .env file
 dotenv.config();
 
+
 const redis = createClient({
-    socket: {
-      host: process.env.REDIS_HOST,
-      port: Number(process.env.REDIS_PORT)
-    },
-    password: process.env.REDIS_PASSWORD
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT)
+  },
+  password: process.env.REDIS_PASSWORD
 });
+
 
 /**
  * Interface representing a dialog service for sending prompts.

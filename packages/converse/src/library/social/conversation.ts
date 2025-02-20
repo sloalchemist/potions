@@ -24,6 +24,7 @@ enum ConversationState {
 }
 
 dotenv.config();
+
 /**
  * Represents a conversation between two speakers.
  */
@@ -65,7 +66,7 @@ export class Conversation {
 
     this.initiator = initator;
     this.respondent = respondent;
-    this.usesLLM = process.env.LLM_FLAG === "true";
+    this.usesLLM = process.env.LLM_FLAG == "true";
     this.initiator.relationships.introduce(this.respondent);
     this.respondent.relationships.introduce(this.initiator);
     this.personalityTraitsUsed[initator.id] = [];
@@ -159,8 +160,6 @@ export class Conversation {
     if (speechAct == null) {
       throw Error('No speech act found');
     }
-
-    console.log(this.usesLLM)
 
     if (this.usesLLM) {
       const prompt = buildPromptForSpeech(npc, this.other(npc), speechAct);

@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
 import * as dotenv from 'dotenv';
-import { sendPrompts } from './deepseek';
+import { sendPrompts } from './model';
 import ollama from "ollama";
 
 // Load environment variables from .env file
@@ -11,7 +11,7 @@ const redis = createClient({
     host: process.env.REDIS_HOST,
     port: Number(process.env.REDIS_PORT)
   },
-  password: process.env.REDIS_PASSWORD 
+  password: process.env.REDIS_PASSWORD
 });
 
 async function processJobs() {
