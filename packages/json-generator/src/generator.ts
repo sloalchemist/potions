@@ -1,3 +1,8 @@
+"use strict";
+// * run with this command 
+// * tsc generator.ts --module CommonJS                       add the right if the left doesn't work    --outFile generator.cjs
+// * mv generator.js generator.cjs
+
 import { writeFileSync, readFileSync } from 'fs';
 
 interface JsonData {
@@ -159,20 +164,20 @@ const server_breakup = (json: JsonData) => {
 let ran = false
 process.argv.forEach(function (val, index) {
   if (val == "client") {
-    const rawJson = readFileSync('global.json', 'utf8');
+    const rawJson = readFileSync('../global.json', 'utf8');
     const json_client = JSON.parse(rawJson);
     client_breakup(json_client)
     writeFileSync(
-      '../client/static/global.json',
+      '../../client/static/global.json',
       JSON.stringify(json_client, null, 4)
     );
     ran = true;
   } else if (val === "server") {
-    const rawJson = readFileSync('global.json', 'utf8');
+    const rawJson = readFileSync('../global.json', 'utf8');
     const json_server = JSON.parse(rawJson);
     server_breakup(json_server);
     writeFileSync(
-      '../server/data/global.json',
+      '../../server/data/global.json',
       JSON.stringify(json_server, null, 4)
     );
     ran = true;

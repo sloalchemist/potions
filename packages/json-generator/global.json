@@ -140,6 +140,104 @@
       "description": "A tall, woody plant that occasionally drops logs."
     },
     {
+      "name": "Message-In-Bottle",
+      "type": "message-in-bottle",
+      "description": "A bottle that contains a message... wonder what could be inside",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "message-in-bottle",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Starfish",
+      "type": "starfish",
+      "description": "A starfish",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "starfish",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clam",
+      "type": "clam",
+      "description": "A pink clam with a pearl",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "clam",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Coral",
+      "type": "coral",
+      "description": "A small pink plan on the ocean floor",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "coral",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Anemone",
+      "type": "anemone",
+      "description": "An anemone",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "anemone",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+      }]},
+    {
       "type": "heart-beet-plant",
       "name": "Heartbeet plant",
       "carryable": false,
@@ -262,7 +360,7 @@
           "action": "spawn_mob",
           "parameters": {
             "type": "villager",
-            "max": 12,
+            "max": 15,
             "rate": 0.1
           }
         }
@@ -514,7 +612,7 @@
         },
         {
           "name": "potion_subtype",
-          "value": ""
+          "value": 0
         }
       ],
       "interactions": [
