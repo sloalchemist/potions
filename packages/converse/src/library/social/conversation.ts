@@ -162,7 +162,7 @@ export class Conversation {
 
     console.log(this.usesLLM)
 
-    if (this.usesLLM) {
+    if (true) {
       const prompt = buildPromptForSpeech(npc, this.other(npc), speechAct);
 
       dialogService.sendPrompt(
