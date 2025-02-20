@@ -32,6 +32,12 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
       console.log('Drinking grey potion');
       mob.changeSlowEnemy(1);
       return true;
+    case '#ab00e7':
+      console.log('Drinking purple potion');
+      const defenseDelta = mob._defense * 0.5;
+      const defenseDuration = 240;
+      mob.changeEffect(defenseDelta, defenseDuration, 'defense');
+      return true;
     default:
       // handle cases where potionStr doesn't match any known potion
       console.log('Unknown potion color');

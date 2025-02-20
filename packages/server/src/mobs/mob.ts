@@ -30,6 +30,7 @@ export type MobData = {
   maxHealth: number;
   attack: number;
   speed: number;
+  defense: number;
   position_x: number;
   position_y: number;
   path: string;
@@ -50,6 +51,7 @@ interface MobParams {
   health: number;
   maxHealth: number;
   attack: number;
+  defense: number;
   community_id: string;
   subtype: string;
   currentAction?: string;
@@ -71,6 +73,7 @@ export class Mob {
   private path: Coord[];
   private speed: number;
   private attack: number;
+  private defense: number;
   private _name: string;
   private maxHealth: number;
   private _carrying?: string;
@@ -93,6 +96,7 @@ export class Mob {
     health,
     maxHealth,
     attack,
+    defense,
     community_id,
     subtype,
     currentAction,
@@ -115,6 +119,7 @@ export class Mob {
     this._health = health;
     this.maxHealth = maxHealth;
     this.attack = attack;
+    this.defense = defense;
 
     this.personality = Personality.loadPersonality(this);
     this.community_id = community_id;
@@ -177,12 +182,16 @@ export class Mob {
     return this.attack;
   }
 
-  get current_tick(): number {
-    return gameWorld.currentDate().global_tick;
+  get _defense(): number {
+    return this.defense;
   }
-
+  
   get name(): string {
     return this._name;
+  }
+
+  get current_tick(): number {
+    return gameWorld.currentDate().global_tick;
   }
 
   set carrying(item: Item | undefined) {
@@ -785,7 +794,7 @@ export class Mob {
   static getMob(key: string): Mob | undefined {
     const mob = DB.prepare(
       `
-            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id
+            SELECT id, action_type, subtype, name, gold, maxHealth, health, attack, defense, speed, position_x, position_y, path, target_x, target_y, current_action, carrying_id, community_id
             FROM mobView
             WHERE id = :id
         `
@@ -803,6 +812,7 @@ export class Mob {
       health: mob.health,
       maxHealth: mob.maxHealth,
       attack: mob.attack,
+      defense: mob.defense,
       community_id: mob.community_id,
       subtype: mob.subtype,
       currentAction: mob.current_action,
@@ -903,6 +913,7 @@ export class Mob {
             goldPotionsUsed INTEGER DEFAULT 0,
             slowEnemy INTEGER DEFAULT 0,
             attack INTEGER NOT NULL,
+            defense INTEGER NOT NULL,
             speed REAL NOT NULL,
             position_x REAL NOT NULL,
             position_y REAL NOT NULL,
@@ -945,6 +956,9 @@ export class Mob {
           m.maxHealth,
           m.goldPotionsUsed,
           m.slowEnemy,
+          m.defense + COALESCE(
+            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'defense' ORDER BY e.targetTick DESC LIMIT 1)
+            , 0) AS defense,
           m.attack + COALESCE(
             (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'attack' ORDER BY e.targetTick DESC LIMIT 1)
             , 0) AS attack,

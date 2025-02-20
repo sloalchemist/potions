@@ -90,6 +90,7 @@ export interface MobType {
   health: number;
   speed: number;
   attack: number;
+  defense: number;
   gold: number;
   community: string;
 

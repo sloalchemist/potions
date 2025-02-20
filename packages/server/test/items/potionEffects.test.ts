@@ -484,3 +484,158 @@ describe('Try to consume gold potion in various cases', () => {
     expect(testMob!._maxHealth).toBe(startMaxHealth + 20 * 5);
   });
 });
+
+// PURPLE POTION TESTS
+
+describe('Try to consume purple potion in various cases', () => {
+  test('Test purple potion stacking', () => {
+    FantasyDate.initialDate();
+    const position: Coord = { x: 0, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 };
+
+    // create a player
+    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+    const testMob = Mob.getMob('TestID');
+    expect(testMob).not.toBeNull();
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: String(hexStringToNumber('#ab00e7')),
+      position: potionLocation,
+      carriedBy: testMob
+    });
+    const potion = Item.getItemIDAt(potionLocation);
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
+
+    // ensure the player is carrying the potion
+    expect(testMob!.carrying).not.toBeNull();
+    expect(testMob!.carrying!.type).toBe('potion');
+    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#ab00e7')));
+
+    // set initial max health
+    const startDefense = testMob!._defense;
+
+    // have the player drink the potion
+    const testDrink = new Drink();
+    const test = testDrink.interact(testMob!, potionItem!);
+    expect(test).toBe(true);
+
+    for (let i = 0; i < 15; i++) {
+      // 15 ticks to check stacking
+      FantasyDate.runTick();
+    }
+    testMob?.tick(500);
+
+    // check to make sure potion is not being carried
+    expect(testMob!.carrying).toBeUndefined();
+
+    // check attributes on player (should be boosted)
+    expect(testMob!._defense).toBe(startDefense + (startDefense * 0.5));
+
+    // create another potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: String(hexStringToNumber('#ab00e7')),
+      position: potionLocation,
+      carriedBy: testMob
+    });
+    const potion2 = Item.getItemIDAt(potionLocation);
+    const potionItem2 = Item.getItem(potion2!);
+
+    // have the player drink the potion
+    const testDrink2 = new Drink();
+    const test2 = testDrink2.interact(testMob!, potionItem2!);
+    expect(test2).toBe(true);
+
+    // should not change
+    expect(testMob!._defense).toBe(startDefense + (startDefense * 0.5));
+    
+    for (let i = 0; i < 225; i++) {
+      // let the effect run out
+      FantasyDate.runTick();
+    }
+    testMob?.tick(500);
+    
+    // should return to default defense
+    expect(testMob!._defense).toBe(startDefense);
+  });
+  
+  test('Test purple potion in combat', () => {
+    FantasyDate.initialDate();
+    const position: Coord = { x: 0, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 };
+
+    // create a player
+    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+    const testMob = Mob.getMob('TestID');
+    expect(testMob).not.toBeNull();
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: String(hexStringToNumber('#ab00e7')),
+      position: potionLocation,
+      carriedBy: testMob
+    });
+    const potion = Item.getItemIDAt(potionLocation);
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
+
+    // ensure the player is carrying the potion
+    expect(testMob!.carrying).not.toBeNull();
+    expect(testMob!.carrying!.type).toBe('potion');
+    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#ab00e7')));
+
+    // set initial max health
+    const startDefense = testMob!._defense;
+
+    // have the player drink the potion
+    const testDrink = new Drink();
+    const test = testDrink.interact(testMob!, potionItem!);
+    expect(test).toBe(true);
+
+    for (let i = 0; i < 15; i++) {
+      // 15 ticks to check stacking
+      FantasyDate.runTick();
+    }
+    testMob?.tick(500);
+
+    // check to make sure potion is not being carried
+    expect(testMob!.carrying).toBeUndefined();
+
+    // check attributes on player (should be boosted)
+    expect(testMob!._defense).toBe(startDefense + (startDefense * 0.5));
+
+    // create another potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: String(hexStringToNumber('#ab00e7')),
+      position: potionLocation,
+      carriedBy: testMob
+    });
+    const potion2 = Item.getItemIDAt(potionLocation);
+    const potionItem2 = Item.getItem(potion2!);
+
+    // have the player drink the potion
+    const testDrink2 = new Drink();
+    const test2 = testDrink2.interact(testMob!, potionItem2!);
+    expect(test2).toBe(true);
+
+    // should not change
+    expect(testMob!._defense).toBe(startDefense + (startDefense * 0.5));
+    
+    for (let i = 0; i < 225; i++) {
+      // let the effect run out
+      FantasyDate.runTick();
+    }
+    testMob?.tick(500);
+    
+    // should return to default defense
+    expect(testMob!._defense).toBe(startDefense);
+  });
+
+});

@@ -260,23 +260,30 @@ export class UxScene extends Phaser.Scene {
       );
       this.statsContainer.add(this.attackText);
 
-      this.speedText = this.add.text(
+      this.attackText = this.add.text(
         15,
         140,
+        'Defense: ' + currentCharacter.defense
+      );
+      this.statsContainer.add(this.attackText);
+
+      this.speedText = this.add.text(
+        15,
+        165,
         'Speed: ' + currentCharacter.speed
       );
       this.statsContainer.add(this.speedText);
 
       this.affiliationText = this.add.text(
         15,
-        165,
+        190,
         'Affiliation: ' + currentCharacter.community_id
       );
       this.statsContainer.add(this.affiliationText);
 
       this.dateText = this.add.text(
         15,
-        190,
+        215,
         'Date: reading position of sun and stars'
       );
       this.statsContainer.add(this.dateText);
