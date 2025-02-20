@@ -423,10 +423,11 @@ export class Item {
             type TEXT NOT NULL,
             subtype TEXT,
             position_x INTEGER,
-            position_y INTEGER,
+            position_y INTEGER, 
             lock TEXT,
             house_id TEXT REFERENCES houses (id) ON DELETE SET NULL,
             owned_by TEXT REFERENCES community (id) ON DELETE SET NULL,
+            stored_by TEXT REFERENCES mobs (id) ON DELETE SET NULL, 
             UNIQUE (position_x, position_y)
         );
 
