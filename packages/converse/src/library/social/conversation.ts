@@ -13,6 +13,7 @@ import * as dotenv from 'dotenv';
 import { PersonalityTraits } from './personality';
 import { SpeechAct } from './speech/speechAct';
 import { SpeakerService } from './speaker/speakerService';
+import { shouldUsePrompts } from './prompts/shouldUsePrompts';
 
 /**
  * Enum representing the state of a conversation.
@@ -66,7 +67,7 @@ export class Conversation {
 
     this.initiator = initator;
     this.respondent = respondent;
-    this.usesLLM = process.env.LLM_FLAG == 'true';
+    this.usesLLM = shouldUsePrompts();
     this.initiator.relationships.introduce(this.respondent);
     this.respondent.relationships.introduce(this.initiator);
     this.personalityTraitsUsed[initator.id] = [];
@@ -202,6 +203,7 @@ export class Conversation {
     );
 
     // Machines are not powerful enough to generate immediate responses for 3 prompts
+    // This will be changed in the future
     if (false) {
       dialogService.sendPrompt(
         prompts,
