@@ -27,12 +27,13 @@ async function main() {
 
   console.log(`Loading world ${worldID}`);
 
-  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
-
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
-  const worldSpecificData = await fetchWorldSpecificData("world_specific");
-  const globalData = await fetchWorldSpecificData("global");
+  const worldSpecificData = await fetchWorldSpecificData(
+    worldID,
+    'world_specific'
+  );
+  const globalData = await fetchWorldSpecificData(worldID, 'global');
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
     worldSpecificData as Partial<ServerWorldDescription>;

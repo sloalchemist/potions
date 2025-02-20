@@ -16,10 +16,6 @@
   "include": [
     "src/**/*.ts",
     "test/**/*.ts",
-    "data/global.json",
-    "data/test-world_specific.json",
-    "data/water-world_specific.json",
-    "data/fire-world_specific.json"
   ],
   "exclude": ["node_modules"]
 }

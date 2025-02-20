@@ -103,6 +103,12 @@ export interface MobType {
   extroversion: number;
 }
 
+export type MobAggroBehaviors = {
+  passive_mobs: string[];
+  hungry_mobs: string[];
+  aggressive_mobs: string[];
+};
+
 export type RegionConfig = {
   id: string;
   name: string;
@@ -123,4 +129,5 @@ export interface ServerWorldDescription {
   houses: HouseConfig[];
   items: ItemConfig[];
   containers: ContainerConfig[];
+  mob_aggro_behaviors: MobAggroBehaviors;
 }

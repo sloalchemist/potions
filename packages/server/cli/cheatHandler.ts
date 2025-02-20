@@ -3,7 +3,12 @@ import { mobFactory } from '../src/mobs/mobFactory';
 import { itemGenerator } from '../src/items/itemGenerator';
 import { Coord } from '@rt-potion/common';
 import { fetchWorldSpecificData } from '../src/util/githubPagesUtil';
-
+import { worldID } from '../src/services/setup';
+import {
+  ItemType,
+  MobType,
+  Attribute
+} from '../src/services/gameWorld/worldMetadata';
 
 export const HELP_PROMPT = `Available commands:
 - spawn mob [type] x:[x-coord] y:[y-coord]
@@ -85,9 +90,13 @@ function parseCoordinates(
 export async function handleCliCommand(input: string) {
   const [command, entityType, name, ...args] = input.trim().split(' ');
 
-  const globalData = await fetchWorldSpecificData('global');
-  const itemTypes: Array<string> = globalData.item_types.map((item: any) => item.type);
-  const mobTypes: Array<string> = globalData.mob_types.map((mob: any) => mob.type);
+  const globalData = await fetchWorldSpecificData(worldID, 'global');
+  const itemTypes: Array<string> = globalData.item_types.map(
+    (item: ItemType) => item.type
+  );
+  const mobTypes: Array<string> = globalData.mob_types.map(
+    (mob: MobType) => mob.type
+  );
 
   if (command === 'spawn') {
     let attributes: Record<string, string | number>;
@@ -119,10 +128,12 @@ export async function handleCliCommand(input: string) {
       case 'item':
         if (itemTypes.includes(name)) {
           const attributes: Record<string, string | number> = {};
-          const item = globalData.item_types.find((item: any) => item.type === name);
+          const item = globalData.item_types.find(
+            (item: ItemType) => item.type === name
+          );
           if (item) {
             if (item.attributes) {
-              item.attributes.forEach((attr: any) => {
+              item.attributes.forEach((attr: Attribute) => {
                 attributes[attr.name] = attr.value;
               });
             }

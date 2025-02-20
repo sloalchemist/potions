@@ -3,10 +3,12 @@ import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { Community } from '../../community/community';
 import { fetchWorldSpecificData } from '../../util/githubPagesUtil';
+import { worldID } from '../../services/setup';
+import { ServerWorldDescription } from '../../services/gameWorld/worldMetadata';
 
 export class Hunt implements Plan {
   enemy: Mob | null = null;
-  static globalData: any = null;
+  static globalData: ServerWorldDescription;
 
   constructor() {
     if (!Hunt.globalData) {
@@ -81,5 +83,5 @@ export class Hunt implements Plan {
 }
 
 (async () => {
-  Hunt.globalData = await fetchWorldSpecificData('global');
+  Hunt.globalData = await fetchWorldSpecificData(worldID, 'global');
 })();

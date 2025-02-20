@@ -40,7 +40,6 @@ async function initializeAsync() {
   }
 
   console.log(`loading world ${worldID}`);
-  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
 
   // Create bucket if it doesn't exist
   try {
@@ -70,8 +69,11 @@ async function initializeAsync() {
     initializeKnowledgeDB('data/knowledge-graph.db', false);
     initializeServerDatabase('data/server-data.db');
 
-    const worldSpecificData = await fetchWorldSpecificData("world_specific");
-    const globalData = await fetchWorldSpecificData("global");
+    const worldSpecificData = await fetchWorldSpecificData(
+      worldID,
+      'world_specific'
+    );
+    const globalData = await fetchWorldSpecificData(worldID, 'global');
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
       worldSpecificData as Partial<ServerWorldDescription>;

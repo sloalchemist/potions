@@ -65,12 +65,15 @@ export class WorldScene extends Phaser.Scene {
 
   preload() {
     const worldID = getWorldID();
-    this.load.image('background', `static/${worldID}_background.png`);
+    this.load.image(
+      'background',
+      `https://potions.gg/world_assets/${worldID}/client/background.png`
+    );
 
     this.load.atlas(
       'global_atlas',
-      `static/${worldID}_assets.png`,
-      `static/${worldID}_atlas.json`
+      `https://potions.gg/world_assets/${worldID}/client/global.png`,
+      `https://potions.gg/world_assets/${worldID}/client/global-atlas.json`
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -79,8 +82,14 @@ export class WorldScene extends Phaser.Scene {
     });
 
     //this.load.json('world_data', currentWorld?.world_tile_map_url);
-    this.load.json('global_data', 'static/global.json');
-    this.load.json('world_specific_data', `static/${worldID}_specific.json`);
+    this.load.json(
+      'global_data',
+      `https://potions.gg/world_assets/${worldID}/client/global.json`
+    );
+    this.load.json(
+      'world_specific_data',
+      `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
+    );
 
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
