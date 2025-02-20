@@ -612,6 +612,12 @@ export class Mob {
         // is currently incomplete on mainline) will update the changeGold
         // method to persist to supabase in addition to the local DB
         this.changeGold(-halfGold);
+      }
+      if (this.type === 'blob' && Math.random() < 0.1) {
+        itemGenerator.createItem({
+          type: 'slime-blob',
+          position
+        });
       } else {
         // Otherwise drop all of the mob's gold
         itemGenerator.createItem({
@@ -619,7 +625,19 @@ export class Mob {
           position,
           attributes: { amount: this.gold }
         });
+        if (Math.random() < 0.1) {
+          itemGenerator.createItem({
+            type: 'bones',
+            position
+          });
+        }
       }
+      // this.pendingPositions.push(position);
+      // console.log(this.pendingPositions);
+      //   if (this.pendingPositions.length >= 4) {
+      //     this.smashItemsAtPositions(this.pendingPositions, this);
+      //     this.pendingPositions = [];
+      //   }
     }
 
     const carriedItem = this.carrying;
