@@ -231,15 +231,16 @@ Developers/players will now be able to save their world data to Supabase. This m
 **DB Errors**
 On the off chance you receive an error while running the server, you can always reset with the last bullet point above.
 
-## LLM Setup
+## LLM Setup (OPTIONAL)
 
 **1. Download Ollama**
 
 - Download Ollama from [this site](https://ollama.com/download).
 
 **2. Run Bash Command**
-
-- Run `ollama run deepseek-r1:1.5b` in your terminal
+- Download model you want
+- Run `ollama run deepseek-r1:1.5b` in your terminal for 1.5b model
+- Run `ollama run deepseek-r1:7b` for 7b
 
 **3. Make a Redis Account**
 
@@ -254,6 +255,7 @@ On the off chance you receive an error while running the server, you can always 
 
 **5. Create `.env` files**
 
+**Server Package**
 - Open the `.env` file in the **server package**
 - Navigate to your database and find the public endpoint. This contains the REDIS_HOST and REDIS_PORT
 - In your `.env` file add the following lines:
@@ -270,7 +272,12 @@ REDIS_PASSWORD=
 - Fill in the REDIS_PORT with the second half of the public endpoint (everything after the colon).
 - Scroll down and click on the **Security** tab.
 - Copy the password and paste it into the REDIS_PASSWORD
+
+**LLM Package**
 - Create a new `.env` file in the **llm package**
 - Add the REDIS_PORT, REDIS_HOST, and REDIS_PASSWORD to the `.env` file in the **llm package**
 - Open Ollama
+
+**Run Redis Listener for LLM**
 - In packages/llm run `npx ts-node src/redisWorker.ts`
+- This pops prompts from queue and processes then with model
