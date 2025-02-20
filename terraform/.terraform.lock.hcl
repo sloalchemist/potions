@@ -5,6 +5,7 @@ provider "registry.terraform.io/ably/ably" {
   version = "0.8.0"
   hashes = [
     "h1:CiJ6Lq1fuFdQiqL5Cg3CCoEPaFxknQeZsaYG2vLGdew=",
+    "h1:DJBOV91AkfBGt6nRNu29B5NiOjrQJ2hdtLXvkFv1cvg=",
     "h1:r3wptrbYht0AiS7/q+lXeMHrUDJzipf/NsqcT13gfog=",
     "zh:0312f2b0477f4484233254bc0d5ad3354a06d9c83d70b842232f98b8d6d6cd97",
     "zh:29f7c408af10d3c7be03c00c61af7045de43a129a6b5430df4bed10d18b07410",
@@ -69,6 +70,7 @@ provider "registry.terraform.io/hashicorp/null" {
 provider "registry.terraform.io/hashicorp/time" {
   version = "0.12.1"
   hashes = [
+    "h1:6BhxSYBJdBBKyuqatOGkuPKVenfx6UmLdiI13Pb3his=",
     "h1:JzYsPugN8Fb7C4NlfLoFu7BBPuRVT2/fCOdCaxshveI=",
     "h1:ny87bLSd1q3AcQNBXmKhUHRBErwuPEX/nCa05C7tyF0=",
     "zh:090023137df8effe8804e81c65f636dadf8f9d35b79c3afff282d39367ba44b2",
@@ -90,6 +92,7 @@ provider "registry.terraform.io/supabase/supabase" {
   version = "1.5.1"
   hashes = [
     "h1:9DLpnwV4yjavw+XafW7sRdEs9kCHdNMMMvjv7Dy0FgA=",
+    "h1:A4kqrLbrPeyfOXuk2eN8L15ue7JSRtkV/FhqFyY9Dzg=",
     "h1:rTxTmQ7IGlQNi5H1oS8e2+AgmiXeWM+jnJN5TNS69vU=",
     "zh:1834f1cfbab811ca53eae9bdb6485032a674aef5d84fa7fe65342f72e50e3880",
     "zh:1d53f3c0c6d82c50a7a29d658f77f3e44db0c0196714f0891ec2cadfdeb58764",

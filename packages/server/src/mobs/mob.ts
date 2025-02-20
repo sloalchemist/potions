@@ -456,7 +456,6 @@ export class Mob {
             WHERE id = :id
         `
     ).run({ id: this.id, newSlowEnemy: newSlowEnemy });
-
   }
 
   changeSpeed(amount: number) {
