@@ -586,7 +586,7 @@ describe('Try to consume grey potion in various cases', () => {
         `
     ).get({ id: testMob!.id }) as { slowEnemy: number };
 
-    // check attributes on player (attack should be still boosted but not stacked)
+    // check attributes on player
     expect(slowEnemy_stacked.slowEnemy).toBe(slowEnemy_boosted.slowEnemy + 1);
   });
 
@@ -625,12 +625,8 @@ describe('Try to consume grey potion in various cases', () => {
     // set initial slowEnemy
     const startSlowEnemy = 0; // should be 0 at default
 
-    // get start enemy speed from DB
-    const startEnemy = DB.prepare(
-      `
-            SELECT speed FROM mobView WHERE id = :id
-        `
-    ).get({ id: testEnemy!.id }) as { speed: number };
+    // get start enemy speed
+    const startEnemySpeed = testEnemy!._speed;
 
     // ensure the initiator is carrying the potion
     expect(testAttacker!.carrying).not.toBeNull();
@@ -644,11 +640,9 @@ describe('Try to consume grey potion in various cases', () => {
     const test = testDrink.interact(testAttacker!, potionItem!);
     expect(test).toBe(true);
 
-    for (let i = 0; i < 15; i++) {
-      // 15 ticks to check stacking
-      FantasyDate.runTick();
-    }
+    // run ticks
     testAttacker?.tick(500);
+    testEnemy?.tick(500);
 
     // check to make sure potion is not being carried
     expect(testAttacker!.carrying).toBeUndefined();
@@ -656,30 +650,28 @@ describe('Try to consume grey potion in various cases', () => {
     // make sure the fight initiator is attacking
     expect(testAttacker!.action).toBe('hunt');
 
-    for (let i = 0; i < 13; i++) {
-      // 13 ticks to check stacking
-      FantasyDate.runTick();
-    }
+    // run ticks
     testAttacker?.tick(500);
+    testEnemy?.tick(500);
 
     // get attacker's new slowEnemy count from DB
-    const slowEnemy_worn_off = DB.prepare(
+    const slowEnemyWornOff = DB.prepare(
       `
             SELECT slowEnemy FROM mobs WHERE id = :id
         `
     ).get({ id: testAttacker!.id }) as { slowEnemy: number };
 
-    // get new enemy speed from DB
-    const enemy_slowed = DB.prepare(
+    // get new speed from DB
+    const enemySlowed = DB.prepare(
       `
             SELECT speed FROM mobView WHERE id = :id
         `
     ).get({ id: testEnemy!.id }) as { speed: number };
 
-    // check attributes on attacker (should be back to normal)
-    expect(slowEnemy_worn_off.slowEnemy).toBe(startSlowEnemy);
+    // check attributes on attacker (should be 0)
+    expect(slowEnemyWornOff.slowEnemy).toBe(startSlowEnemy);
     // check enemy speed (should be slowed)
-    expect(enemy_slowed.speed).toBe(startEnemy.speed * 0.5);
+    expect(enemySlowed.speed).toBe(startEnemySpeed * 0.5);
   });
 });
 
@@ -713,19 +705,13 @@ describe('Try to consume purple potion in various cases', () => {
     expect(testMob!.carrying!.type).toBe('potion');
     expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#ab00e7')));
 
-    // set initial max health
+    // set initial defense
     const startDefense = testMob!._defense;
 
     // have the player drink the potion
     const testDrink = new Drink();
     const test = testDrink.interact(testMob!, potionItem!);
     expect(test).toBe(true);
-
-    for (let i = 0; i < 15; i++) {
-      // 15 ticks to check stacking
-      FantasyDate.runTick();
-    }
-    testMob?.tick(500);
 
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
