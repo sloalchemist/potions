@@ -17,10 +17,12 @@
         "clean": "rimraf dist"
     },
     "dependencies": {
-        "@rt-potion/converse": "file:",
+        "@rt-potion/converse": "link:",
+        "@supabase/supabase-js": "^2.44.2",
         "@types/node": "^20.0.0",
         "better-sqlite3": "^11.5.0",
         "dotenv": "^16.4.7",
+        "redis": "^4.7.0",
         "uuid": "^11.0.3"
     },
     "devDependencies": {
