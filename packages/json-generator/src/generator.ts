@@ -17,7 +17,12 @@ interface JsonData {
   items: unknown[]; // Array of items
   containers: unknown[]; // Array of containers
   regions: unknown[]; // Array of regions
-}
+  mob_aggro_behaviors: {
+    passive_mobs: string[];
+    hungry_mobs: string[];
+    aggressive_mobs: string[];
+  };
+  }
 
 // Pull client data from global
 const client_breakup = (json: JsonData) => {
@@ -29,6 +34,7 @@ const client_breakup = (json: JsonData) => {
     'items',
     'containers',
     'regions',
+    "mob_aggro_behaviors",
     'tiles',
     'terrain_types'
   ]);
