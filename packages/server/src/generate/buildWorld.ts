@@ -34,7 +34,8 @@ async function main() {
   const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
 
   const globalData = await import(
-    `../../../../world_assets/${worldID}/server/global.json`);
+    `../../../../world_assets/${worldID}/server/global.json`
+  );
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
