@@ -632,12 +632,6 @@ export class Mob {
           });
         }
       }
-      // this.pendingPositions.push(position);
-      // console.log(this.pendingPositions);
-      //   if (this.pendingPositions.length >= 4) {
-      //     this.smashItemsAtPositions(this.pendingPositions, this);
-      //     this.pendingPositions = [];
-      //   }
     }
 
     const carriedItem = this.carrying;
