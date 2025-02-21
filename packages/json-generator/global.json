@@ -650,12 +650,9 @@
       ]
     },
     {
-      "name": "Mushroom-1",
-      "type": "mushroom-1",
-      "description": "A mushroom",
-      "carryable": false,
-      "walkable": false,
-      "on_tick": [
+      "name": "Red Mushroom",
+      "type": "red_mushroom",
+      "attributes": [
         {
           "name": "health",
           "value": 500

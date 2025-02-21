@@ -1303,11 +1303,7 @@
         {
           "description": "Add $item_name",
           "action": "add_item",
-          "while_carried": false,
-          "permissions": {
-            "community": true,
-            "other": false
-          }
+          "while_carried": false
         }
       ],
       "description": "Stores items for the community."
