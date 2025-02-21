@@ -650,22 +650,20 @@
       ]
     },
     {
-      "name": "Mushroom-1",
-      "type": "mushroom-1",
-      "description": "A mushroom",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": [
+      "name": "Red Mushroom",
+      "type": "red_mushroom",
+      "attributes": [
         {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "mushroom-1",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 3,
-            "rate": 0.1
-          }
+          "name": "health",
+          "value": 500
+        }
+      ],
+      "smashable": true,
+      "interactions": [
+        {
+          "description": "Eat",
+          "action": "eat",
+          "while_carried": true
         }
       ]
     },
