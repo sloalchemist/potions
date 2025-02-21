@@ -948,6 +948,7 @@ export class Mob {
             health INTEGER NOT NULL,
             maxHealth INTEGER NOT NULL,
             goldPotionsUsed INTEGER DEFAULT 0,
+            damageOverTime INTEGER DEFAULT 0,
             slowEnemy INTEGER DEFAULT 0,
             attack INTEGER NOT NULL,
             defense INTEGER NOT NULL,
@@ -993,6 +994,9 @@ export class Mob {
           m.health,
           m.maxHealth,
           m.goldPotionsUsed,
+          m.damageOverTime + COALESCE(
+            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'damageOverTime' ORDER BY e.targetTick DESC LIMIT 1)
+            , 0) AS damageOverTime,
           m.slowEnemy,
           m.defense + COALESCE(
             (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'defense' ORDER BY e.targetTick DESC LIMIT 1)
