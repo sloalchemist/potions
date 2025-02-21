@@ -8,7 +8,6 @@ import { createTables, loadDefaults } from './generateWorld';
 import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
-import globalData from '../../data/global.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
@@ -17,6 +16,7 @@ import {
   initializeBucket,
   uploadLocalData
 } from '../services/supabaseStorage';
+import { fetchWorldSpecificData } from '@rt-potion/common';
 
 async function main() {
   // Build and save the knowledge graph
@@ -32,10 +32,14 @@ async function main() {
 
   console.log(`Loading world ${worldID}`);
 
-  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
-
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
+  const worldSpecificData = await fetchWorldSpecificData(
+    worldID,
+    'server',
+    'world_specific'
+  );
+  const globalData = await fetchWorldSpecificData(worldID, 'server', 'global');
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
     worldSpecificData as Partial<ServerWorldDescription>;

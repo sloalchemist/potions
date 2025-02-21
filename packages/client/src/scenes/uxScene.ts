@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { BUTTON_HEIGHT, BUTTON_WIDTH, Button } from '../components/button';
 import { world } from './worldScene';
-import { currentCharacter, addRefreshCallback } from '../worldMetadata';
+import { currentCharacter, addRefreshCallback, getWorldID } from '../worldMetadata';
 import {
   fantasyDate,
   Interactions,
@@ -30,7 +30,9 @@ import {
 } from '../services/playerToServer';
 import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
-import globalData from '../../static/global.json';
+import { fetchWorldSpecificData } from '@rt-potion/common';
+import { InteractionType, WorldDescription } from '../worldDescription';
+
 export interface ChatOption {
   label: string;
   callback: () => void;
@@ -87,10 +89,16 @@ export class UxScene extends Phaser.Scene {
   chatSounds: Phaser.Sound.BaseSound[] = [];
   inventoryContainer: Phaser.GameObjects.Container | null = null;
 
+  static globalData: WorldDescription;
+
   constructor() {
     super({
       key: 'UxScene'
     });
+
+    if (!UxScene.globalData) {
+      throw new Error('Global data not loaded yet!');
+    }
   }
 
   preload() {
@@ -109,8 +117,9 @@ export class UxScene extends Phaser.Scene {
     this.load.audio('give', ['static/sounds/drop.mp3']);
     // item interaction sounds
     this.load.audio('pickupGold', ['static/sounds/jingle.mp3']);
-    const interactions = globalData.item_types.flatMap(
-      (item) => item.interactions as Interactions[]
+    
+    const interactions = UxScene.globalData.item_types.flatMap(
+      (item) => item.interactions as InteractionType[]
     );
     interactions.forEach((interaction) => {
       const soundPath = (interaction as { sound_path?: string }).sound_path;
@@ -965,3 +974,9 @@ export class UxScene extends Phaser.Scene {
     });
   }
 }
+
+(async () => {
+  const worldID = getWorldID();
+  UxScene.globalData = await fetchWorldSpecificData(worldID, 'client', 'global');
+  const scene = new UxScene();
+})();
