@@ -66,6 +66,7 @@ export class WorldScene extends Phaser.Scene {
 
   preload() {
     const worldID = getWorldID();
+    
     this.load.image(
       'background',
       `https://potions.gg/world_assets/${worldID}/client/background.png`

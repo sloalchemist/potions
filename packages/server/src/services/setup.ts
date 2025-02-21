@@ -20,6 +20,7 @@ let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
 let world: ServerWorld;
 export let worldID: string = '';
+export let globalData: ServerWorldDescription;
 
 export const supabase = initializeSupabase();
 
@@ -61,7 +62,7 @@ async function initializeAsync() {
       'server',
       'world_specific'
     );
-    const globalData = await fetchWorldSpecificData(worldID, 'server', 'global');
+    globalData = await fetchWorldSpecificData(worldID, 'server', 'global');
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
       worldSpecificData as Partial<ServerWorldDescription>;

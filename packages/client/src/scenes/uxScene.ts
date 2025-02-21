@@ -89,16 +89,12 @@ export class UxScene extends Phaser.Scene {
   chatSounds: Phaser.Sound.BaseSound[] = [];
   inventoryContainer: Phaser.GameObjects.Container | null = null;
 
-  static globalData: WorldDescription;
+  globalData: WorldDescription | null = null;
 
   constructor() {
     super({
       key: 'UxScene'
     });
-
-    if (!UxScene.globalData) {
-      throw new Error('Global data not loaded yet!');
-    }
   }
 
   preload() {
@@ -118,7 +114,19 @@ export class UxScene extends Phaser.Scene {
     // item interaction sounds
     this.load.audio('pickupGold', ['static/sounds/jingle.mp3']);
     
-    const interactions = UxScene.globalData.item_types.flatMap(
+
+    const worldID = getWorldID();
+
+    fetchWorldSpecificData(worldID, "client", "global")
+      .then((data) => {
+        this.globalData = data;
+      })
+      .catch(console.error);
+    
+    if (!this.globalData){
+      throw new Error("Global data not loaded!!");
+    }
+    const interactions = this.globalData.item_types.flatMap(
       (item) => item.interactions as InteractionType[]
     );
     interactions.forEach((interaction) => {
@@ -974,9 +982,3 @@ export class UxScene extends Phaser.Scene {
     });
   }
 }
-
-(async () => {
-  const worldID = getWorldID();
-  UxScene.globalData = await fetchWorldSpecificData(worldID, 'client', 'global');
-  const scene = new UxScene();
-})();

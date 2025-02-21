@@ -3,18 +3,13 @@ import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { Community } from '../../community/community';
 import { DB } from '../../services/database';
-import { fetchWorldSpecificData } from '@rt-potion/common';
-import { worldID } from '../../services/setup';
-import { ServerWorldDescription } from '../../services/gameWorld/worldMetadata';
+import { globalData } from '../../services/setup';
 
 export class Hunt implements Plan {
   enemy: Mob | null = null;
-  static globalData: ServerWorldDescription;
 
   constructor() {
-    if (!Hunt.globalData) {
-      throw new Error('Global data not loaded yet!');
-    }
+
   }
 
   execute(npc: Mob): boolean {
@@ -71,7 +66,7 @@ export class Hunt implements Plan {
 
   utility(npc: Mob): number {
     const { passive_mobs, hungry_mobs, aggressive_mobs } =
-      Hunt.globalData.mob_aggro_behaviors;
+      globalData.mob_aggro_behaviors;
     if (!npc.position || passive_mobs.includes(npc.type)) return -Infinity;
 
     const visionMulitple = npc.action == this.type() ? 2 : 1;
@@ -116,7 +111,3 @@ export class Hunt implements Plan {
     return 'hunt';
   }
 }
-
-(async () => {
-  Hunt.globalData = await fetchWorldSpecificData(worldID, 'server', 'global');
-})();
