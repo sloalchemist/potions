@@ -277,7 +277,7 @@ export function getPhysicalInteractions(
           carried &&
           carried.itemType.name.localeCompare(
             item.attributes.templateType.toString()
-          )) ||
+          ) === 0) ||
         interaction.action != 'add_item'
       ) {
         interactions.push({

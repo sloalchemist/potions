@@ -5,7 +5,7 @@
   "type": "commonjs",
   "main": "src/generator.ts",
   "scripts": {
-    "generate": "ts-node src/generator.ts"
+    "generate": " tsc -p tsconfig.json && node dist/generator.js"
   },
   "keywords": [],
   "author": "",
