@@ -3,7 +3,7 @@ import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { Community } from '../../community/community';
 import { DB } from '../../services/database';
-import { fetchWorldSpecificData } from '../../util/githubPagesUtil';
+import { fetchWorldSpecificData } from '@rt-potion/common';
 import { worldID } from '../../services/setup';
 import { ServerWorldDescription } from '../../services/gameWorld/worldMetadata';
 
@@ -118,5 +118,5 @@ export class Hunt implements Plan {
 }
 
 (async () => {
-  Hunt.globalData = await fetchWorldSpecificData(worldID, 'global');
+  Hunt.globalData = await fetchWorldSpecificData(worldID, 'server', 'global');
 })();

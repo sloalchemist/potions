@@ -13,7 +13,7 @@ import {
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
 import { DataLogger } from '../grafana/dataLogger';
-import { fetchWorldSpecificData } from '../util/githubPagesUtil';
+import { fetchWorldSpecificData } from '@rt-potion/common';
 import { getEnv } from '@rt-potion/common';
 
 let lastUpdateTime = Date.now();
@@ -58,9 +58,10 @@ async function initializeAsync() {
 
     const worldSpecificData = await fetchWorldSpecificData(
       worldID,
+      'server',
       'world_specific'
     );
-    const globalData = await fetchWorldSpecificData(worldID, 'global');
+    const globalData = await fetchWorldSpecificData(worldID, 'server', 'global');
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
       worldSpecificData as Partial<ServerWorldDescription>;

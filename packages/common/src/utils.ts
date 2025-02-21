@@ -9,3 +9,13 @@ export function getEnv(name: string) {
   }
   return value;
 }
+
+export async function fetchWorldSpecificData(worldID: string, packageName: string, file: string) {
+  const response = await fetch(
+    `https://potions.gg/world_assets/${worldID}/${packageName}/${file}.json`
+  );
+  if (!response.ok) {
+    throw new Error('Failed to fetch world specific data');
+  }
+  return await response.json();
+}

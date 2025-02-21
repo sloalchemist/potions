@@ -2,7 +2,7 @@ import * as readline from 'readline';
 import { mobFactory } from '../src/mobs/mobFactory';
 import { itemGenerator } from '../src/items/itemGenerator';
 import { Coord } from '@rt-potion/common';
-import { fetchWorldSpecificData } from '../src/util/githubPagesUtil';
+import { fetchWorldSpecificData } from '@rt-potion/common';
 import { worldID } from '../src/services/setup';
 import {
   ItemType,
@@ -90,7 +90,7 @@ function parseCoordinates(
 export async function handleCliCommand(input: string) {
   const [command, entityType, name, ...args] = input.trim().split(' ');
 
-  const globalData = await fetchWorldSpecificData(worldID, 'global');
+  const globalData = await fetchWorldSpecificData(worldID, 'server', 'global');
   const itemTypes: Array<string> = globalData.item_types.map(
     (item: ItemType) => item.type
   );

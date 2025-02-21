@@ -16,7 +16,7 @@ import {
   initializeBucket,
   uploadLocalData
 } from '../services/supabaseStorage';
-import { fetchWorldSpecificData } from '../util/githubPagesUtil';
+import { fetchWorldSpecificData } from '@rt-potion/common';
 
 async function main() {
   // Build and save the knowledge graph
@@ -36,9 +36,10 @@ async function main() {
   // Load global data and parse
   const worldSpecificData = await fetchWorldSpecificData(
     worldID,
+    'server',
     'world_specific'
   );
-  const globalData = await fetchWorldSpecificData(worldID, 'global');
+  const globalData = await fetchWorldSpecificData(worldID, 'server', 'global');
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
     worldSpecificData as Partial<ServerWorldDescription>;
