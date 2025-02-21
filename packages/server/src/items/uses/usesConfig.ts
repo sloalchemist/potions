@@ -1,6 +1,8 @@
 // actionsConfig.ts
 import { Pickup } from './pickup';
 import { Drop } from './drop';
+import { Stash } from './stash';
+import { Unstash } from './unstash';
 import { Smash } from './smash';
 import { BottlePotion } from './cauldron/bottlePotion';
 import { Drink } from './drink';
@@ -20,10 +22,13 @@ import { Give } from './give';
 import { AddIngredient } from './cauldron/addIngredient';
 import { DumpCauldron } from './cauldron/dumpCauldron';
 import { Use } from './use';
+import { Read } from './read';
 
 const uses = [
   Pickup,
   Drop,
+  Stash,
+  Unstash,
   Smash,
   BottlePotion,
   Drink,
@@ -41,7 +46,8 @@ const uses = [
   GetItem,
   Give,
   AddIngredient,
-  DumpCauldron
+  DumpCauldron,
+  Read
 ] as const satisfies readonly (new () => Use)[];
 
 export default uses;

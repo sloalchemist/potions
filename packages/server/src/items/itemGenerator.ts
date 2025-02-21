@@ -37,6 +37,10 @@ export class ItemGenerator {
     }
   }
 
+  get _itemTypes() {
+    return this.itemTypes;
+  }
+
   public getItemType(type: string): ItemType {
     if (!this.itemTypes[type]) {
       throw new Error(

@@ -21,13 +21,14 @@ import {
   WorldDescription
 } from '../worldDescription';
 import { UxScene } from './uxScene';
-import { setGameState } from '../world/controller';
+import { setGameState, setInventoryCallback } from '../world/controller';
 import {
   restoreHealth,
   persistWorldData,
   speedUpCharacter
 } from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
+import { Item } from '../world/item';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -245,6 +246,12 @@ export class WorldScene extends Phaser.Scene {
     world = new World();
     world.load(globalData);
 
+    setInventoryCallback((items: Item[]) => {
+      console.log('Inventory callback called with items:', items);
+      const uxScene = this.scene.get('UxScene') as UxScene;
+      uxScene.setInventory(items);
+    });
+
     // Load globals
     if (needsAnimationsLoaded) {
       this.loadAnimations('global_sprites', 'global_atlas', globalData);
@@ -281,7 +288,7 @@ export class WorldScene extends Phaser.Scene {
     for (const terrainType of globalData.terrain_types) {
       terrainMap[terrainType.id] = terrainType;
     }
-    console.log('waterTypes', waterTypes, 'landTypes', landTypes);
+    // console.log('waterTypes', waterTypes, 'landTypes', landTypes);
     // Draw water layer
     this.drawTerrainLayer(
       globalData.tiles,
@@ -394,11 +401,21 @@ export class WorldScene extends Phaser.Scene {
         pointer.y >= cameraViewportY &&
         pointer.y <= cameraViewportY + cameraViewportHeight
       ) {
-        console.log(
-          'click',
-          pointer.worldX / TILE_SIZE,
-          pointer.worldY / TILE_SIZE
-        );
+        // console.log(
+        //   'click',
+        //   pointer.worldX / TILE_SIZE,
+        //   pointer.worldY / TILE_SIZE
+        // );
+
+        // Prevent player movement if the brew scene is active
+        if (this.scene.isActive('BrewScene')) {
+          return;
+        }
+
+        // Prevent player movement if the brew scene is active
+        if (this.scene.isActive('BrewScene')) {
+          return;
+        }
 
         publishPlayerPosition({
           x: pointer.worldX / TILE_SIZE,
@@ -426,7 +443,7 @@ export class WorldScene extends Phaser.Scene {
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
       }
-      if (event.shiftKey && event.code === 'KeyS') {
+      if (event.shiftKey && event.code === 'KeyG') {
         persistWorldData();
       }
       // Brings up chat box for user
@@ -545,7 +562,11 @@ export class WorldScene extends Phaser.Scene {
       return;
     }
 
-    if (this.scene.isActive('ChatOverlayScene')) {
+    // Prevent player movement if the chat overlay or brew scene is active
+    if (
+      this.scene.isActive('ChatOverlayScene') ||
+      this.scene.isActive('BrewScene')
+    ) {
       return;
     }
 
@@ -596,6 +617,9 @@ export class WorldScene extends Phaser.Scene {
       const path = world.generatePath(player.unlocks, player.position!, target);
       player.path = path;
     }
+
+    const movementKeys = ['a', 'w', 's', 'd'];
+    movementKeys.forEach((k) => (this.keys[k] = false));
   }
 
   showGameOver() {
