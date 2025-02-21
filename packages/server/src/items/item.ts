@@ -100,7 +100,6 @@ export class Item {
       },
       {} as Record<string, string | number>
     );
-
     const item = new Item({
       id: itemData.id,
       position: { x: itemData.position_x, y: itemData.position_y },
@@ -359,6 +358,25 @@ export class Item {
     return result.map((row) => row.id);
   }
 
+  /**
+   * Takes all item types possible from the itemGenerator class and
+   * generates a random CARRYABLE item. This function is intended to be used to
+   * generate a favorite item for a mob.
+   *
+   * @returns A single carryable item
+   */
+  static getRandomItem(): string {
+    const carryable_items = [];
+    for (const type in itemGenerator._itemTypes) {
+      if (itemGenerator._itemTypes[type].carryable == true) {
+        carryable_items.push(type);
+      }
+    }
+    const item =
+      carryable_items[Math.floor(Math.random() * carryable_items.length)];
+    return item;
+  }
+
   destroy(): void {
     DB.prepare(
       `
@@ -405,10 +423,11 @@ export class Item {
             type TEXT NOT NULL,
             subtype TEXT,
             position_x INTEGER,
-            position_y INTEGER,
+            position_y INTEGER, 
             lock TEXT,
             house_id TEXT REFERENCES houses (id) ON DELETE SET NULL,
             owned_by TEXT REFERENCES community (id) ON DELETE SET NULL,
+            stored_by TEXT REFERENCES mobs (id) ON DELETE SET NULL, 
             UNIQUE (position_x, position_y)
         );
 

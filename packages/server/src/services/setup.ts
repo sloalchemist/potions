@@ -12,6 +12,7 @@ import {
   uploadLocalData
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
+import { DataLogger } from '../grafana/dataLogger';
 import { fetchWorldSpecificData } from '../util/githubPagesUtil';
 import { getEnv } from '@rt-potion/common';
 
@@ -81,6 +82,8 @@ async function initializeAsync() {
 }
 
 initializeAsync();
+
+DataLogger.startMetricsServer();
 
 // Used for update on developer cheat
 export function setLastUploadTime(time: number) {

@@ -34,10 +34,6 @@ export class Item extends Physical {
 
   isWalkable(unlocks: string[]): boolean {
     if (this.lock) {
-      if (this.itemType.layout_type == 'opens' && this.itemType.open) {
-        return true;
-      }
-      //console.log('checking if walkable', mob.unlocks, this.lock);
       return unlocks.includes(this.lock);
     }
     return this.itemType.walkable ? true : false;
@@ -94,6 +90,29 @@ export class Item extends Physical {
     this.position = position;
     world.addItemToGrid(this);
     // place in position determined by server
+  }
+
+  stash(world: World, mob: Mob, position: Coord) {
+    if (!this.carried_by) {
+      throw new Error('Must carry item being stashed');
+    }
+    console.log('stashing item', this.key, this.carried_by);
+    mob.carrying = undefined;
+    this.position = position;
+    world.removeItemFromGrid(this);
+    this.position = null;
+    this.carried_by = undefined;
+    world.addStoredItem(this); // Add to stored items
+  }
+
+  unstash(world: World, mob: Mob, position: Coord) {
+    if (!mob.position) {
+      throw new Error('Mob has no position');
+    }
+    this.carried_by = undefined;
+    this.position = position;
+    world.addItemToGrid(this);
+    world.removeStoredItem(this); // Remove from stored items
   }
 
   tick(world: World, deltaTime: number) {
