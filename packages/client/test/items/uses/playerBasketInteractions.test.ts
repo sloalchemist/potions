@@ -1,6 +1,4 @@
-import {
-  getPhysicalInteractions
-} from '../../../src/world/controller';
+import { getPhysicalInteractions } from '../../../src/world/controller';
 import { Item } from '../../../src/world/item';
 import { World } from '../../../src/world/world';
 import { Mob } from '../../../src/world/mob';
@@ -53,29 +51,29 @@ describe('Community ownership based interactions', () => {
       templated: true,
       walkable: false,
       show_template_at: {
-            "x": 0,
-            "y": 7
-        },
+        x: 0,
+        y: 7
+      },
       interactions: [
         {
-          description: "Get $item_name",
-          action: "get_item",
+          description: 'Get $item_name',
+          action: 'get_item',
           while_carried: false,
           conditions: [
             {
-              attribute_name: "items",
+              attribute_name: 'items',
               value: 0,
-              comparison: "greater_than"
+              comparison: 'greater_than'
             }
           ]
         },
         {
-          description: "Add $item_name",
-          action: "add_item",
+          description: 'Add $item_name',
+          action: 'add_item',
           while_carried: false,
           permissions: {
-              "community": true,
-              "other": false
+            community: true,
+            other: false
           }
         }
       ],
@@ -90,46 +88,45 @@ describe('Community ownership based interactions', () => {
       basketItemType,
       'silverclaw'
     );
-    
+
     // Manually assign basket template type
-    basket.attributes.templateType = "Log";
+    basket.attributes.templateType = 'Log';
 
     // Create log ItemType
     const logItemType: ItemType = {
-        name: 'Log',
-        type: 'log',
-        item_group: 'fence',
-        layout_type: 'opens',
-        carryable: true,
-        smashable: true,
-        walkable: true,
-        flat: true,
-        attributes: [
-            {
-                name: "health",
-                value: 1
-            }
-        ],
-        interactions: [
-            {
-                description: "Start wall",
-                action: "start_wall",
-                while_carried: true
-            },
-            {
-                description: "Build wall",
-                action: "build_wall",
-                while_carried: true,
-                requires_item: "partial-wall"
-            }
-        ]
-      };
-  
-      // Instantiate log object
-      log = new Item(world!, 'log1', { x: 1, y: 2 }, logItemType);
+      name: 'Log',
+      type: 'log',
+      item_group: 'fence',
+      layout_type: 'opens',
+      carryable: true,
+      smashable: true,
+      walkable: true,
+      flat: true,
+      attributes: [
+        {
+          name: 'health',
+          value: 1
+        }
+      ],
+      interactions: [
+        {
+          description: 'Start wall',
+          action: 'start_wall',
+          while_carried: true
+        },
+        {
+          description: 'Build wall',
+          action: 'build_wall',
+          while_carried: true,
+          requires_item: 'partial-wall'
+        }
+      ]
+    };
+
+    // Instantiate log object
+    log = new Item(world!, 'log1', { x: 1, y: 2 }, logItemType);
   });
 
-  
   test('Should prevent community members from adding items to basket if not affiliated', () => {
     // Get interactions available for the basket
     const interactions = getPhysicalInteractions(
@@ -146,7 +143,7 @@ describe('Community ownership based interactions', () => {
 
   test('Should allow community members to add items to basket if affiliated', () => {
     // Get interactions available for the basket (now owned by alchemists to match the player)
-    basket.ownedBy = "alchemists"
+    basket.ownedBy = 'alchemists';
     const interactions = getPhysicalInteractions(
       basket,
       log,
