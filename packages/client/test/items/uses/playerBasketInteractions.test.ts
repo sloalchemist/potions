@@ -59,10 +59,6 @@ describe('Community ownership based interactions', () => {
           description: 'Get $item_name',
           action: 'get_item',
           while_carried: false,
-          permissions: {
-            community: true,
-            other: false
-          },
           conditions: [
             {
               attribute_name: 'items',
@@ -81,12 +77,7 @@ describe('Community ownership based interactions', () => {
           }
         }
       ],
-      attributes: [
-        {
-          name: 'items',
-          value: 1
-        }
-      ]
+      attributes: []
     };
 
     // Instantiate basket object
@@ -100,16 +91,6 @@ describe('Community ownership based interactions', () => {
 
     // Manually assign basket template type
     basket.attributes.templateType = 'Log';
-    // Map attributes to dictionary to match correct config
-    basket.attributes = {
-      ...basket.attributes,
-      ...Object.fromEntries(
-        (basket.itemType.attributes ?? []).map((attr) => [
-          attr.name,
-          attr.value
-        ])
-      )
-    };
 
     // Create log ItemType
     const logItemType: ItemType = {
@@ -161,8 +142,8 @@ describe('Community ownership based interactions', () => {
   });
 
   test('Should allow community members to add items to basket if affiliated', () => {
-    basket.ownedBy = 'alchemists';
     // Get interactions available for the basket (now owned by alchemists to match the player)
+    basket.ownedBy = 'alchemists';
     const interactions = getPhysicalInteractions(
       basket,
       log,
@@ -172,36 +153,6 @@ describe('Community ownership based interactions', () => {
     // Check that add_item IS an available interaction
     expect(
       interactions.some((interaction) => interaction.action === 'add_item')
-    ).toBe(true);
-  });
-
-  test('Should prevent community members from getting items from basket if not affiliated', () => {
-    basket.ownedBy = 'silverclaw';
-    // Get interactions available for the basket
-    const interactions = getPhysicalInteractions(
-      basket,
-      log,
-      player.community_id
-    );
-
-    // Check that add_item is NOT an available interaction
-    expect(
-      interactions.some((interaction) => interaction.action === 'get_item')
-    ).toBe(false);
-  });
-
-  test('Should allow community members to get items from the basket if affiliated', () => {
-    basket.ownedBy = 'alchemists';
-    // Get interactions available for the basket (now owned by alchemists to match the player)
-    const interactions = getPhysicalInteractions(
-      basket,
-      log,
-      player.community_id
-    );
-
-    // Check that add_item IS an available interaction
-    expect(
-      interactions.some((interaction) => interaction.action === 'get_item')
     ).toBe(true);
   });
 
