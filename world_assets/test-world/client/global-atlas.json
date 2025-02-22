@@ -544,6 +544,14 @@
         "h": 47
       }
     },
+    "market-stand": {
+            "frame": {
+                "x": 48,
+                "y": 49,
+                "w": 48,
+                "h": 47
+            }
+    },
     "cauldron": {
       "frame": {
         "x": 64,
@@ -1404,7 +1412,7 @@
   "meta": {
     "app": "https://www.codeandweb.com/texturepacker",
     "version": "1.0",
-    "image": "global.png",
+    "image": "test-world_background.png",
     "format": "RGBA8888",
     "size": {
       "w": 128,

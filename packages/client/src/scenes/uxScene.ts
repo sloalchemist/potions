@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { BUTTON_HEIGHT, BUTTON_WIDTH, Button } from '../components/button';
 import { world } from './worldScene';
-import { currentCharacter, addRefreshCallback } from '../worldMetadata';
+import { currentCharacter, addRefreshCallback, getWorldID } from '../worldMetadata';
 import {
   fantasyDate,
   Interactions,
@@ -30,7 +30,7 @@ import {
 } from '../services/playerToServer';
 import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
-import globalData from '../../static/global.json';
+import { InteractionType, parseWorldFromJson, WorldDescription } from '../worldDescription';
 export interface ChatOption {
   label: string;
   callback: () => void;
@@ -109,14 +109,30 @@ export class UxScene extends Phaser.Scene {
     this.load.audio('give', ['static/sounds/drop.mp3']);
     // item interaction sounds
     this.load.audio('pickupGold', ['static/sounds/jingle.mp3']);
-    const interactions = globalData.item_types.flatMap(
-      (item) => item.interactions as Interactions[]
-    );
-    interactions.forEach((interaction) => {
-      const soundPath = (interaction as { sound_path?: string }).sound_path;
-      if (soundPath) {
-        this.load.audio(interaction.action, [soundPath]);
-      }
+
+    let worldID = getWorldID();
+
+    this.load.json('global_data', `https://potions.gg/world_assets/${worldID}/client/global.json`);
+    this.load.json('world_specific_data', `https://potions.gg/world_assets/${worldID}/client/world_specific.json`);
+
+    this.load.once('complete', () => {
+      // Parse and use the data
+      let globalData = parseWorldFromJson(
+        this.cache.json.get('global_data'),
+        this.cache.json.get('world_specific_data')
+      );
+
+      console.log("Parsed World Description:", globalData);
+
+      const interactions = globalData.item_types.flatMap(
+        (item) => item.interactions as InteractionType[]
+      );
+      interactions.forEach((interaction) => {
+        const soundPath = (interaction as { sound_path?: string }).sound_path;
+        if (soundPath) {
+          this.load.audio(interaction.action, [soundPath]);
+        }
+      });
     });
   }
 
