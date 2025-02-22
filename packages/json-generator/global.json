@@ -1314,7 +1314,11 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ]
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         },
         {
           "description": "Add $item_name",
