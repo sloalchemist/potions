@@ -6,11 +6,6 @@ import {
 import { Mob } from '../../src/world/mob';
 import { World } from '../../src/world/world';
 
-// Helper function to mock distance calculation
-const calculateDistance = (pos1: { x: number; y: number; }, pos2: { x: number; y: number; }) => {
-  return Math.sqrt(Math.pow(pos2.x - pos1.x, 2) + Math.pow(pos2.y - pos1.y, 2));
-};
-
 describe('Chat UI updates based on chatting state', () => {
   let world: World | null = null;
   let mockChatCallback: jest.Mock;

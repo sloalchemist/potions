@@ -37,11 +37,6 @@ jest.mock('phaser', () => ({
 
 const mockFightCallback: jest.Mock = jest.fn();
 
-// Helper function to mock distance calculation
-const calculateDistance = (pos1: { x: number; y: number; }, pos2: { x: number; y: number; }) => {
-  return Math.sqrt(Math.pow(pos2.x - pos1.x, 2) + Math.pow(pos2.y - pos1.y, 2));
-};
-
 describe('Fight UI updates based on fighting state', () => {
   let world: World | null = null;
 
