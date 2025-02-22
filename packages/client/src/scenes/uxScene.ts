@@ -2,7 +2,11 @@ import Phaser from 'phaser';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { BUTTON_HEIGHT, BUTTON_WIDTH, Button } from '../components/button';
 import { world } from './worldScene';
-import { currentCharacter, addRefreshCallback, getWorldID } from '../worldMetadata';
+import {
+  currentCharacter,
+  addRefreshCallback,
+  getWorldID
+} from '../worldMetadata';
 import {
   fantasyDate,
   Interactions,
@@ -30,7 +34,7 @@ import {
 } from '../services/playerToServer';
 import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
-import { InteractionType, parseWorldFromJson, WorldDescription } from '../worldDescription';
+import { InteractionType, parseWorldFromJson } from '../worldDescription';
 export interface ChatOption {
   label: string;
   callback: () => void;
@@ -112,8 +116,14 @@ export class UxScene extends Phaser.Scene {
 
     let worldID = getWorldID();
 
-    this.load.json('global_data', `https://potions.gg/world_assets/${worldID}/client/global.json`);
-    this.load.json('world_specific_data', `https://potions.gg/world_assets/${worldID}/client/world_specific.json`);
+    this.load.json(
+      'global_data',
+      `https://potions.gg/world_assets/${worldID}/client/global.json`
+    );
+    this.load.json(
+      'world_specific_data',
+      `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
+    );
 
     this.load.once('complete', () => {
       // Parse and use the data
@@ -122,7 +132,7 @@ export class UxScene extends Phaser.Scene {
         this.cache.json.get('world_specific_data')
       );
 
-      console.log("Parsed World Description:", globalData);
+      console.log('Parsed World Description:', globalData);
 
       const interactions = globalData.item_types.flatMap(
         (item) => item.interactions as InteractionType[]
