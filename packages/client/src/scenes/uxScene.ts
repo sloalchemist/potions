@@ -34,11 +34,7 @@ import {
 } from '../services/playerToServer';
 import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
-import {
-  darkenColor,
-  hexStringToNumber,
-  numberToHexString
-} from '../utils/color';
+import { hexStringToNumber, numberToHexString } from '../utils/color';
 import globalData from '../../static/global.json';
 
 export interface ChatOption {
@@ -572,7 +568,9 @@ export class UxScene extends Phaser.Scene {
             (event.target as HTMLInputElement).value
           );
           if (currentCharacter) {
-            (currentCharacter as Record<string, any>)[colorKeys[index]] = color;
+            (currentCharacter as unknown as Record<string, number>)[
+              colorKeys[index]
+            ] = color;
             saveColors();
           }
         });
