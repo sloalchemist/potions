@@ -136,6 +136,10 @@ export function areListsEqual(list1: Mob[], list2: Mob[]): boolean {
 }
 
 export function mobRangeListener(mobs: Mob[]) {
+  if (!world || !world.mobs || !publicCharacterId) {
+    console.warn('World or player ID not initialized.');
+    return;
+  }
   const player = world.mobs[publicCharacterId] as SpriteMob;
   if (!player || !player.position) return;
 
