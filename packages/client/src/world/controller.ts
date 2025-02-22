@@ -146,7 +146,11 @@ export function mobRangeListener(mobs: Mob[]) {
 
     // Sort mobs by distance and get the 5 closest
     const closestChatCompanions = filteredMobs
-      .sort((a, b) => calculateDistance(a.position!, playerPos) - calculateDistance(b.position!, playerPos))
+      .sort(
+        (a, b) =>
+          calculateDistance(a.position!, playerPos) -
+          calculateDistance(b.position!, playerPos)
+      )
       .slice(0, 5);
 
     if (!areListsEqual(closestChatCompanions, lastChatCompanions)) {
@@ -161,7 +165,11 @@ export function mobRangeListener(mobs: Mob[]) {
 
     // Sort mobs by distance and get the 5 closest
     const closestFightOpponents = filteredMobs
-      .sort((a, b) => calculateDistance(a.position!, playerPos) - calculateDistance(b.position!, playerPos))
+      .sort(
+        (a, b) =>
+          calculateDistance(a.position!, playerPos) -
+          calculateDistance(b.position!, playerPos)
+      )
       .slice(0, 5);
 
     if (!areListsEqual(closestFightOpponents, lastFightOpponents)) {
@@ -172,20 +180,17 @@ export function mobRangeListener(mobs: Mob[]) {
   }
 }
 
-
-
-
 export function getClosestMob(mobs: Mob[], playerPos: Coord): Mob | null {
   if (mobs.length === 0) return null; // Handle empty list case
 
   return mobs.reduce((closest, current) => {
     if (!closest.position || !current.position) return closest;
-    return calculateDistance(current.position, playerPos) < calculateDistance(closest.position, playerPos)
+    return calculateDistance(current.position, playerPos) <
+      calculateDistance(closest.position, playerPos)
       ? current
       : closest;
   }, mobs[0]);
 }
-
 
 function prepInteraction(label: string, item: Item): string {
   if (!item.templateType) {
