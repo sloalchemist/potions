@@ -36,7 +36,6 @@ import {
 import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
 import { hexStringToNumber, numberToHexString } from '../utils/color';
-import globalData from '../../static/global.json';
 import { InteractionType, parseWorldFromJson } from '../worldDescription';
 export interface ChatOption {
   label: string;
