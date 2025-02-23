@@ -5,7 +5,8 @@ import { world } from './worldScene';
 import {
   currentCharacter,
   addRefreshCallback,
-  saveColors
+  saveColors,
+  getWorldID
 } from '../worldMetadata';
 import {
   fantasyDate,
@@ -36,7 +37,7 @@ import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
 import { hexStringToNumber, numberToHexString } from '../utils/color';
 import globalData from '../../static/global.json';
-
+import { InteractionType, parseWorldFromJson } from '../worldDescription';
 export interface ChatOption {
   label: string;
   callback: () => void;
@@ -118,14 +119,36 @@ export class UxScene extends Phaser.Scene {
     this.load.audio('give', ['static/sounds/drop.mp3']);
     // item interaction sounds
     this.load.audio('pickupGold', ['static/sounds/jingle.mp3']);
-    const interactions = globalData.item_types.flatMap(
-      (item) => item.interactions as Interactions[]
+
+    let worldID = getWorldID();
+
+    this.load.json(
+      'global_data',
+      `https://potions.gg/world_assets/${worldID}/client/global.json`
     );
-    interactions.forEach((interaction) => {
-      const soundPath = (interaction as { sound_path?: string }).sound_path;
-      if (soundPath) {
-        this.load.audio(interaction.action, [soundPath]);
-      }
+    this.load.json(
+      'world_specific_data',
+      `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
+    );
+
+    this.load.once('complete', () => {
+      // Parse and use the data
+      let globalData = parseWorldFromJson(
+        this.cache.json.get('global_data'),
+        this.cache.json.get('world_specific_data')
+      );
+
+      console.log('Parsed World Description:', globalData);
+
+      const interactions = globalData.item_types.flatMap(
+        (item) => item.interactions as InteractionType[]
+      );
+      interactions.forEach((interaction) => {
+        const soundPath = (interaction as { sound_path?: string }).sound_path;
+        if (soundPath) {
+          this.load.audio(interaction.action, [soundPath]);
+        }
+      });
     });
   }
 
