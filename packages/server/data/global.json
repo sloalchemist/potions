@@ -440,7 +440,7 @@
                 {
                     "action": "spawn_item",
                     "parameters": {
-                        "type": "gun-powder",
+                        "type": "bones",
                         "global_max": 10,
                         "local_max": 2,
                         "radius": 4,
@@ -826,26 +826,6 @@
                         "radius": 3,
                         "rate": 0.1
                     }
-                },
-                {
-                    "action": "spawn_item",
-                    "parameters": {
-                        "type": "bones",
-                        "global_max": 10,
-                        "local_max": 2,
-                        "radius": 4,
-                        "rate": 0.1
-                    }
-                },
-                {
-                    "action": "spawn_item",
-                    "parameters": {
-                        "type": "slime-blob",
-                        "global_max": 10,
-                        "local_max": 2,
-                        "radius": 4,
-                        "rate": 0.1
-                    }
                 }
             ],
             "description": "A red root vegetable known for its restorative properties."
@@ -890,26 +870,6 @@
                         "global_max": 10,
                         "local_max": 2,
                         "radius": 3,
-                        "rate": 0.1
-                    }
-                },
-                {
-                    "action": "spawn_item",
-                    "parameters": {
-                        "type": "tar",
-                        "global_max": 10,
-                        "local_max": 2,
-                        "radius": 4,
-                        "rate": 0.1
-                    }
-                },
-                {
-                    "action": "spawn_item",
-                    "parameters": {
-                        "type": "lightning-bloom",
-                        "global_max": 10,
-                        "local_max": 2,
-                        "radius": 4,
                         "rate": 0.1
                     }
                 }
