@@ -351,7 +351,7 @@
           "action": "spawn_item",
           "parameters": {
             "type": "log",
-            "global_max": 10,
+            "global_max": 10, 
             "local_max": 2,
             "radius": 3,
             "rate": 0.1
@@ -360,11 +360,11 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "sun-drop",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
+             "type": "sun-drop",
+             "global_max": 10,
+             "local_max": 2,
+             "radius": 4,
+             "rate": 0.1
           }
         },
         {
@@ -386,7 +386,7 @@
       "smashable": true,
       "walkable": true,
       "flat": true,
-      "attributes": [
+      "attributes":[
         {
           "name": "health",
           "value": 1
@@ -465,7 +465,7 @@
         }
       ]
     },
-
+    
     {
       "name": "Clam",
       "type": "clam",
