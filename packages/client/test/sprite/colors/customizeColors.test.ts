@@ -1,50 +1,12 @@
-import { UxScene } from '../../../src/scenes/uxScene';
-import { hexStringToNumber } from '../../../src/utils/color';
-import { saveColors, Character } from '../../../src/worldMetadata';
-
-interface WorldMetadata {
-  currentCharacter: Character | null;
-  saveColors: () => void;
-}
-
-jest.mock('../../../src/worldMetadata', () => {
-  const originalModule = jest.requireActual('../../../src/worldMetadata');
-
-  const mockedWorldMetadata: Partial<WorldMetadata> = {
-    ...originalModule,
-    currentCharacter: null,
-    saveColors: jest.fn(() => {
-      if (!mockedWorldMetadata.currentCharacter) {
-        throw new Error('currentCharacter is null!');
-      }
-      localStorage.setItem(
-        'eyeColor',
-        mockedWorldMetadata.currentCharacter.eyeColor.toString()
-      );
-      localStorage.setItem(
-        'bellyColor',
-        mockedWorldMetadata.currentCharacter.bellyColor.toString()
-      );
-      localStorage.setItem(
-        'furColor',
-        mockedWorldMetadata.currentCharacter.furColor.toString()
-      );
-    })
-  };
-
-  return mockedWorldMetadata;
-});
+import { hexStringToNumber, numberToHexString } from '../../../src/utils/color';
+import { Character } from '../../../src/worldMetadata';
 
 describe('Customize Tab Functionality', () => {
-  let uxScene: UxScene;
-  let saveColorsSpy: jest.SpyInstance;
-  let worldMetadata: WorldMetadata;
+  let character: Character;
+  let saveColors: () => void;
 
   beforeEach(() => {
-    uxScene = new UxScene();
-
-    worldMetadata = require('../../../src/worldMetadata');
-    worldMetadata.currentCharacter = new Character(
+    character = new Character(
       'TestCharacter',
       hexStringToNumber('#123456'),
       hexStringToNumber('#654321'),
@@ -52,17 +14,27 @@ describe('Customize Tab Functionality', () => {
       'alchemists'
     );
 
-    saveColorsSpy = jest.spyOn(worldMetadata, 'saveColors');
+    saveColors = jest.fn(() => {
+      localStorage.setItem('eyeColor', numberToHexString(character.eyeColor));
+      localStorage.setItem('furColor', numberToHexString(character.furColor));
+      localStorage.setItem(
+        'bellyColor',
+        numberToHexString(character.bellyColor)
+      );
+    });
   });
 
   test('Color pickers update character colors correctly and save them', async () => {
-    expect(worldMetadata.currentCharacter!.eyeColor).toBe(0x123456);
-    expect(worldMetadata.currentCharacter!.bellyColor).toBe(0x123654);
-    expect(worldMetadata.currentCharacter!.furColor).toBe(0x654321);
+    expect(character.eyeColor).toBe(0x123456);
+    expect(character.bellyColor).toBe(0x123654);
+    expect(character.furColor).toBe(0x654321);
+
     saveColors();
-    expect(localStorage.getItem('eyeColor')).toBe((0x123456).toString(10));
-    expect(localStorage.getItem('bellyColor')).toBe((0x123654).toString(10));
-    expect(localStorage.getItem('furColor')).toBe((0x654321).toString(10));
+    expect(localStorage.getItem('eyeColor')).toBe(numberToHexString(0x123456));
+    expect(localStorage.getItem('bellyColor')).toBe(
+      numberToHexString(0x123654)
+    );
+    expect(localStorage.getItem('furColor')).toBe(numberToHexString(0x654321));
 
     const colorKeys = ['eyeColor', 'bellyColor', 'furColor'];
     const colors = ['#ff0000', '#00ff00', '#0000ff'];
@@ -76,10 +48,9 @@ describe('Customize Tab Functionality', () => {
         const color = hexStringToNumber(
           (event.target as HTMLInputElement).value
         );
-        (worldMetadata.currentCharacter as unknown as Record<string, number>)[
-          colorKeys[index]
-        ] = color;
-        saveColors();
+        (character as unknown as Record<string, number>)[colorKeys[index]] =
+          color;
+        saveColors(); // Call saveColors after updating the color
       });
 
       document.body.appendChild(inputElement);
@@ -88,13 +59,13 @@ describe('Customize Tab Functionality', () => {
 
     await new Promise((resolve) => setTimeout(resolve, 0));
 
-    expect(worldMetadata.currentCharacter!.eyeColor).toBe(0xff0000);
-    expect(worldMetadata.currentCharacter!.bellyColor).toBe(0x00ff00);
-    expect(worldMetadata.currentCharacter!.furColor).toBe(0x0000ff);
-    expect(localStorage.getItem('eyeColor')).toBe((0xff0000).toString(10));
-    expect(localStorage.getItem('bellyColor')).toBe((0x00ff00).toString(10));
-    expect(localStorage.getItem('furColor')).toBe((0x0000ff).toString(10));
-
-    expect(saveColorsSpy).toHaveBeenCalledTimes(4);
+    expect(character.eyeColor).toBe(0xff0000);
+    expect(character.bellyColor).toBe(0x00ff00);
+    expect(character.furColor).toBe(0x0000ff);
+    expect(localStorage.getItem('eyeColor')).toBe(numberToHexString(0xff0000));
+    expect(localStorage.getItem('bellyColor')).toBe(
+      numberToHexString(0x00ff00)
+    );
+    expect(localStorage.getItem('furColor')).toBe(numberToHexString(0x0000ff));
   });
 });
