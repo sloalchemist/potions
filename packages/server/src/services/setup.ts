@@ -3,7 +3,6 @@ import { AblyService } from './clientCommunication/ablyService';
 import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
-import globalData from '../../data/global.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
@@ -15,11 +14,13 @@ import {
 import { shouldUploadDB } from '../util/dataUploadUtil';
 import { DataLogger } from '../grafana/dataLogger';
 import { getEnv } from '@rt-potion/common';
+import { fetchWorldSpecificData } from '../util/githubPagesUtil';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
 let world: ServerWorld;
 export let worldID: string = '';
+export let globalData: ServerWorldDescription;
 
 export const supabase = initializeSupabase();
 
@@ -40,7 +41,7 @@ async function initializeAsync() {
   }
 
   console.log(`loading world ${worldID}`);
-  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
+  const worldSpecificData = await fetchWorldSpecificData(worldID, 'world_specific');
 
   try {
     await downloadData(supabase, worldID);
@@ -56,6 +57,8 @@ async function initializeAsync() {
   try {
     initializeKnowledgeDB('data/knowledge-graph.db', false);
     initializeServerDatabase('data/server-data.db');
+
+    globalData = await fetchWorldSpecificData(worldID, 'global')
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
