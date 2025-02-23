@@ -574,6 +574,26 @@
       ]
     },
     {
+      "name": "Volcano",
+      "type": "volcano",
+      "description": "a volcano that will erupt",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "fire-ball",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
       "type": "heart-beet-plant",
       "name": "Heartbeet plant",
       "description": "A red root vegetable known for its restorative properties.",
