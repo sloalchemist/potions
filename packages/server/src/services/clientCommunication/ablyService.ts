@@ -68,8 +68,11 @@ export class AblyService implements PubSub {
     });
 
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
-      //if MAINTAIN_WORLD_OPTION is passed from client, do not change world
+      // if MAINTAIN_WORLD_OPTION is passed from client, do not change world;
+      // undefined will be recieved if the client unexpectedly disconnects (ex: refreshing page)
+      // we should also stay in the same world in this case
       const target_world_id =
+        presenceMsg.data.target_world_id == null ||
         presenceMsg.data.target_world_id === MAINTAIN_WORLD_OPTION
           ? this.worldID
           : presenceMsg.data.target_world_id;
@@ -486,6 +489,22 @@ export class AblyService implements PubSub {
     });
   }
 
+  public stashItem(item_key: string, mob_key: string, position: Coord): void {
+    this.addToBroadcast({
+      type: 'stash_item',
+      data: { item_key, mob_key, position }
+    });
+
+    console.log('stashing item', item_key, mob_key);
+  }
+
+  public unstashItem(item_key: string, mob_key: string, position: Coord): void {
+    this.addToBroadcast({
+      type: 'unstash_item',
+      data: { item_key, mob_key, position }
+    });
+  }
+
   public pickupItem(item_key: string, mob_key: string): void {
     this.addToBroadcast({
       type: 'pickup_item',
@@ -525,7 +544,6 @@ export class AblyService implements PubSub {
     if (player.health <= 0) {
       //get default health to reset
       health_for_update = mobFactory.getTemplate('player').health;
-      gold_for_update = 0; //reset gold to 0
       attack_for_update = mobFactory.getTemplate('player').attack;
     }
     console.log('\t Persist player health:', health_for_update);

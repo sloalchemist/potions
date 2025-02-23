@@ -1,0 +1,41 @@
+{
+  "name": "@rt-potion/llm",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "description": "",
+  "main": "dist/deepseek.js",
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint": "pnpm eslint .",
+    "format": "pnpm prettier --config ../../.prettierrc 'src/**/*.ts' --write",
+    "test": "jest --passWithNoTests",
+    "watch": "tsc --watch",
+    "dev": "npx ts-node src/redisWorker.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@rt-potion/deepseak": "link:",
+    "@supabase/supabase-js": "^2.44.2",
+    "ably": "^1.2.21",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "ioredis": "^5.5.0",
+    "ollama": "^0.5.13",
+    "redis": "^4.7.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.14.2",
+    "@types/uuid": "^10.0.0",
+    "cpy-cli": "^5.0.0",
+    "jest": "^29.7.0",
+    "nodemon": "^2.0.15",
+    "rimraf": "^5.0.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.4.5"
+  }
+}

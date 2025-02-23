@@ -53,18 +53,18 @@ export class Character {
     return world.mobs[publicCharacterId].attributes['attack'];
   }
 
+  get defense(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].attributes['defense'];
+  }
+
   get speed(): number {
     if (!world || !world.mobs[publicCharacterId]) {
       return 0;
     }
     return world.mobs[publicCharacterId].attributes['speed'];
-  }
-
-  get target_speed_tick(): number {
-    if (!world || !world.mobs[publicCharacterId]) {
-      return 0;
-    }
-    return world.mobs[publicCharacterId].attributes['target_speed_tick'];
   }
 
   get stubbornness(): number {
