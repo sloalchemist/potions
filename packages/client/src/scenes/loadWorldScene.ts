@@ -1,5 +1,10 @@
 import { PaletteSwapper } from '../sprite/palette_swapper';
-import { currentCharacter, changeName, saveColors } from '../worldMetadata';
+import {
+  currentCharacter,
+  changeName,
+  saveColors,
+  setWorldID
+} from '../worldMetadata';
 import {
   darkenColor,
   hexStringToNumber,
@@ -46,11 +51,6 @@ export class LoadWorldScene extends Phaser.Scene {
   preload() {
     this.load.image('frame', 'static/titleFrame.png');
     this.load.image('title', 'static/title.png');
-    this.load.atlas(
-      'global-atlas',
-      'static/global.png',
-      'static/global-atlas.json'
-    );
   }
 
   create() {
@@ -204,32 +204,45 @@ export class LoadWorldScene extends Phaser.Scene {
       }
     );
 
-    this.anims.create({
-      key: `test-idle`,
-      frames: this.anims.generateFrameNames('global-atlas', {
-        start: 1,
-        end: 4,
-        prefix: `player-idle-`
-        //suffix: '.png'
-      }),
-      frameRate: 5,
-      repeat: -1
-    });
-
-    // Remove the animation from the animation manager when the scene is stopped
-    // so that on revive there is no warning for creation with a duplicate key.
-    this.events.once('shutdown', () => {
-      this.anims.remove(`test-idle`);
-    });
-
-    // Position the character sprite
-    this.playerSprite = this.add
-      .sprite(panelContentX, panelY + 100, 'global-atlas')
-      .setScale(6);
-    this.playerSprite.setOrigin(0, 0);
-
     setupAbly()
-      .then(() => {
+      .then((worldID) => {
+        console.log('LOADWORLD: ', worldID);
+        setWorldID(worldID);
+
+        this.load.atlas(
+          'global-atlas',
+          `https://potions.gg/world_assets/${worldID}/client/global.png`,
+          `https://potions.gg/world_assets/${worldID}/client/global-atlas.json`
+        );
+
+        this.load.once('complete', () => {
+          this.anims.create({
+            key: `test-idle`,
+            frames: this.anims.generateFrameNames('global-atlas', {
+              start: 1,
+              end: 4,
+              prefix: `player-idle-`
+              //suffix: '.png'
+            }),
+            frameRate: 5,
+            repeat: -1
+          });
+
+          // Remove the animation from the animation manager when the scene is stopped
+          // so that on revive there is no warning for creation with a duplicate key.
+          this.events.once('shutdown', () => {
+            this.anims.remove(`test-idle`);
+          });
+
+          // Position the character sprite
+          this.playerSprite = this.add
+            .sprite(panelContentX, panelY + 100, 'global-atlas')
+            .setScale(6);
+          this.playerSprite.setOrigin(0, 0);
+        });
+
+        this.load.start();
+
         // Create 'START!' button
         loadingMessage.destroy();
         const startGame = this.add.text(

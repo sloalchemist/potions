@@ -8,7 +8,7 @@ import {
 import { bindAblyToWorldScene, setupAbly } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
 import { Coord } from '@rt-potion/common';
-import { publicCharacterId } from '../worldMetadata';
+import { publicCharacterId, getWorldID } from '../worldMetadata';
 import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
@@ -21,13 +21,14 @@ import {
   WorldDescription
 } from '../worldDescription';
 import { UxScene } from './uxScene';
-import { setGameState } from '../world/controller';
+import { setGameState, setInventoryCallback } from '../world/controller';
 import {
   restoreHealth,
   persistWorldData,
   speedUpCharacter
 } from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
+import { Item } from '../world/item';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -64,12 +65,16 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', 'static/background.png');
+    const worldID = getWorldID();
+    this.load.image(
+      'background',
+      `https://potions.gg/world_assets/${worldID}/client/background.png`
+    );
 
     this.load.atlas(
       'global_atlas',
-      'static/global.png',
-      'static/global-atlas.json'
+      `https://potions.gg/world_assets/${worldID}/client/global.png`,
+      `https://potions.gg/world_assets/${worldID}/client/global-atlas.json`
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -77,9 +82,16 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 100
     });
 
-    //this.load.json('world_data', currentWorld?.world_tile_map_url);
-    this.load.json('global_data', 'static/global.json');
-    this.load.json('world_specific_data', 'static/world_specific.json');
+    this.load.json(
+      'global_data',
+      `https://potions.gg/world_assets/${worldID}/client/global.json`
+    );
+    this.load.json(
+      'world_specific_data',
+      `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
+    );
+
+    this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
 
   loadAnimations(
@@ -239,10 +251,14 @@ export class WorldScene extends Phaser.Scene {
       this.cache.json.get('world_specific_data')
     );
 
-    console.log('setting up world', needsAnimationsLoaded);
-    //console.log(this.world_data);
     world = new World();
     world.load(globalData);
+
+    setInventoryCallback((items: Item[]) => {
+      console.log('Inventory callback called with items:', items);
+      const uxScene = this.scene.get('UxScene') as UxScene;
+      uxScene.setInventory(items);
+    });
 
     // Load globals
     if (needsAnimationsLoaded) {
@@ -280,7 +296,7 @@ export class WorldScene extends Phaser.Scene {
     for (const terrainType of globalData.terrain_types) {
       terrainMap[terrainType.id] = terrainType;
     }
-    console.log('waterTypes', waterTypes, 'landTypes', landTypes);
+    // console.log('waterTypes', waterTypes, 'landTypes', landTypes);
     // Draw water layer
     this.drawTerrainLayer(
       globalData.tiles,
@@ -393,11 +409,21 @@ export class WorldScene extends Phaser.Scene {
         pointer.y >= cameraViewportY &&
         pointer.y <= cameraViewportY + cameraViewportHeight
       ) {
-        console.log(
-          'click',
-          pointer.worldX / TILE_SIZE,
-          pointer.worldY / TILE_SIZE
-        );
+        // console.log(
+        //   'click',
+        //   pointer.worldX / TILE_SIZE,
+        //   pointer.worldY / TILE_SIZE
+        // );
+
+        // Prevent player movement if the brew scene is active
+        if (this.scene.isActive('BrewScene')) {
+          return;
+        }
+
+        // Prevent player movement if the brew scene is active
+        if (this.scene.isActive('BrewScene')) {
+          return;
+        }
 
         publishPlayerPosition({
           x: pointer.worldX / TILE_SIZE,
@@ -425,7 +451,7 @@ export class WorldScene extends Phaser.Scene {
       if (event.shiftKey && event.code === 'KeyH') {
         restoreHealth();
       }
-      if (event.shiftKey && event.code === 'KeyS') {
+      if (event.shiftKey && event.code === 'KeyG') {
         persistWorldData();
       }
       // Brings up chat box for user
@@ -478,8 +504,18 @@ export class WorldScene extends Phaser.Scene {
     }
     tick(this);
     if (this.cameraDolly && this.hero) {
-      this.cameraDolly.x = Math.floor(this.hero.x);
-      this.cameraDolly.y = Math.floor(this.hero.y);
+      const roundedX = Math.floor(this.hero.x);
+      const roundedY = Math.floor(this.hero.y);
+
+      if (roundedX !== this.cameraDolly.x || roundedY !== this.cameraDolly.y) {
+        if (!this.sound.isPlaying('walk')) {
+          this.sound.add('walk', { loop: true, volume: 0.6 }).play();
+        }
+      } else {
+        this.sound.removeByKey('walk');
+      }
+      this.cameraDolly.x = roundedX;
+      this.cameraDolly.y = roundedY;
     }
     if (this.hero) {
       const [x, y] = this.convertToTileXY({ x: this.hero.x, y: this.hero.y });
@@ -534,7 +570,11 @@ export class WorldScene extends Phaser.Scene {
       return;
     }
 
-    if (this.scene.isActive('ChatOverlayScene')) {
+    // Prevent player movement if the chat overlay or brew scene is active
+    if (
+      this.scene.isActive('ChatOverlayScene') ||
+      this.scene.isActive('BrewScene')
+    ) {
       return;
     }
 
@@ -585,6 +625,9 @@ export class WorldScene extends Phaser.Scene {
       const path = world.generatePath(player.unlocks, player.position!, target);
       player.path = path;
     }
+
+    const movementKeys = ['a', 'w', 's', 'd'];
+    movementKeys.forEach((k) => (this.keys[k] = false));
   }
 
   showGameOver() {

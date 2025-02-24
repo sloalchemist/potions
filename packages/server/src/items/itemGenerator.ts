@@ -37,9 +37,17 @@ export class ItemGenerator {
     }
   }
 
+  get _itemTypes() {
+    return this.itemTypes;
+  }
+
   public getItemType(type: string): ItemType {
     if (!this.itemTypes[type]) {
-      throw new Error(`Unknown item type: ${type}`);
+      throw new Error(
+        `Unknown item type: ${type}. 
+        Your database likely saved an item from a version your code currently doesn't support. 
+        Try emptying your supabase bucket`
+      );
     }
     return this.itemTypes[type];
   }
@@ -62,7 +70,11 @@ export class ItemGenerator {
     const key = uuidv4();
     const itemType = this.itemTypes[type];
     if (!itemType) {
-      throw new Error(`Unknown item type: ${type}`);
+      throw new Error(
+        `Unknown item type: ${type}. 
+        Your database likely saved an item from a version your code currently doesn't support. 
+        Try emptying your supabase bucket`
+      );
     }
 
     if (position) {

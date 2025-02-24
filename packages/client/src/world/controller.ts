@@ -29,13 +29,14 @@ export type Interactions = {
 let interactionCallback: (interactions: Interactions[]) => void;
 let chatCompanionCallback: (companions: Mob[]) => void;
 let fightOpponentCallback: (opponents: Mob[]) => void;
-let brewCallback: (interactions: Interactions[]) => void;
 let lastInteractions: Interactions[] = [];
 let lastChatCompanions: Mob[] = [];
 let lastFightOpponents: Mob[] = [];
 let chatting: boolean = false;
 let fighting: boolean = false;
+let inventoryCallback: (items: Item[]) => void;
 
+export let currentInteractions: Interactions[] = [];
 export let fantasyDate: FantasyDateI;
 
 let responseCallback: (responses: string[]) => void = () => {};
@@ -191,6 +192,12 @@ export function getCarriedItemInteractions(
     label: `Drop ${item.itemType.name}`
   });
 
+  interactions.push({
+    action: 'stash',
+    item: item as Item,
+    label: `Stash ${item.itemType.name}`
+  });
+
   // give to nearby mobs
   nearbyMobs.forEach((mob) => {
     if (mob.key !== playerId && !mob.carrying) {
@@ -228,12 +235,12 @@ export function getCarriedItemInteractions(
 
 export function getPhysicalInteractions(
   physical: Physical,
-  carried?: Item
+  carried?: Item,
+  ownerId?: string
 ): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
-  const player = world.mobs[publicCharacterId] as SpriteMob;
-  const isOwner = item.isOwnedBy(player.community_id);
+  const isOwner: boolean = ownerId ? item.isOwnedBy(ownerId) : true;
 
   // if the item can be picked up
   if (item.itemType.carryable) {
@@ -270,7 +277,7 @@ export function getPhysicalInteractions(
           carried &&
           carried.itemType.name.localeCompare(
             item.attributes.templateType.toString()
-          )) ||
+          ) === 0) ||
         interaction.action != 'add_item'
       ) {
         interactions.push({
@@ -286,12 +293,13 @@ export function getPhysicalInteractions(
 }
 
 export function getClosestPhysical(physicals: Item[], playerPos: Coord): Item {
-  return physicals.reduce((closest, current) => {
+  const a = physicals.reduce((closest, current) => {
     if (!closest.position || !current.position) return closest;
     const closestDistance = calculateDistance(closest.position, playerPos);
     const currentDistance = calculateDistance(current.position, playerPos);
     return currentDistance < closestDistance ? current : closest;
   });
+  return a;
 }
 
 function getItemsAtPosition(physicals: Item[], position: Coord): Item[] {
@@ -320,7 +328,17 @@ export function getInteractablePhysicals(
   }
 
   // nearby non-walkable items
-  let nearbyObjects = physicals.filter((p) => !p.itemType.walkable);
+  let nearbyObjects = physicals.filter(
+    (p) => !p.itemType.walkable && p.itemType.layout_type !== 'fence'
+  );
+
+  let fences = physicals.filter((p) => p.itemType.layout_type === 'fence');
+
+  let nearbyBaskets = physicals.filter((p) => p.itemType.type === 'basket');
+
+  if (fences.length > 1) {
+    fences = [getClosestPhysical(fences, playerPos)];
+  }
 
   // find distinct non-walkable objects next to player
   let unique_nearbyObjects = nearbyObjects.filter(
@@ -332,7 +350,9 @@ export function getInteractablePhysicals(
   let interactableObjects = [
     ...onTopObjects,
     ...unique_nearbyObjects,
-    ...nearbyOpenableObjects
+    ...nearbyOpenableObjects,
+    ...nearbyBaskets,
+    ...fences
   ];
   interactableObjects = interactableObjects.filter(
     (item, index, self) =>
@@ -368,18 +388,17 @@ function collisionListener(physicals: Item[]) {
   interactableObjects.forEach((physical) => {
     interactions = [
       ...interactions,
-      ...getPhysicalInteractions(physical, carriedItem)
+      ...getPhysicalInteractions(physical, carriedItem, player.community_id)
     ];
   });
   // updates client only if interactions changes
   if (
     !areInteractionsEqual(lastInteractions, interactions) &&
-    interactionCallback &&
-    brewCallback
+    interactionCallback
   ) {
     interactionCallback(interactions);
-    brewCallback(interactions);
     lastInteractions = interactions;
+    currentInteractions = interactions;
   }
 }
 
@@ -399,10 +418,15 @@ export function setFightOpponentCallback(callback: (opponents: Mob[]) => void) {
   fightOpponentCallback = callback;
 }
 
-export function setBrewCallback(
-  callback: (interactions: Interactions[]) => void
-) {
-  brewCallback = callback;
+export function setInventoryCallback(callback: (items: Item[]) => void) {
+  inventoryCallback = callback;
+}
+
+export function updateInventory() {
+  if (inventoryCallback) {
+    const storedItems = world.getStoredItems();
+    inventoryCallback(storedItems);
+  }
 }
 
 export function addNewHouse(scene: WorldScene, house: HouseI) {

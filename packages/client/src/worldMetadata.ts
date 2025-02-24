@@ -9,6 +9,7 @@ import { setupAbly } from './services/ablySetup';
 
 export let characterId: string;
 export let publicCharacterId: string;
+export let worldID: string;
 
 export class Character {
   name: string;
@@ -52,18 +53,18 @@ export class Character {
     return world.mobs[publicCharacterId].attributes['attack'];
   }
 
+  get defense(): number {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return 0;
+    }
+    return world.mobs[publicCharacterId].attributes['defense'];
+  }
+
   get speed(): number {
     if (!world || !world.mobs[publicCharacterId]) {
       return 0;
     }
     return world.mobs[publicCharacterId].attributes['speed'];
-  }
-
-  get target_speed_tick(): number {
-    if (!world || !world.mobs[publicCharacterId]) {
-      return 0;
-    }
-    return world.mobs[publicCharacterId].attributes['target_speed_tick'];
   }
 
   get stubbornness(): number {
@@ -163,6 +164,14 @@ export async function retrieveCharacter() {
   );
 
   saveColors();
+}
+
+export function getWorldID() {
+  return worldID;
+}
+
+export function setWorldID(worldName: string) {
+  worldID = worldName;
 }
 
 export async function saveColors() {

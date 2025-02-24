@@ -4,17 +4,17 @@ import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
 import globalData from '../../data/global.json';
-import worldSpecificData from '../../data/world_specific.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
 import {
   downloadData,
   initializeSupabase,
-  uploadLocalData,
-  initializeBucket
+  uploadLocalData
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
+import { DataLogger } from '../grafana/dataLogger';
+import { getEnv } from '@rt-potion/common';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
@@ -24,14 +24,11 @@ export let worldID: string = '';
 export const supabase = initializeSupabase();
 
 function initializeAbly(worldId: string): AblyService {
-  if (
-    !process.env.ABLY_API_KEY ||
-    process.env.ABLY_API_KEY.indexOf('INSERT') === 0
-  ) {
+  const apiKey = getEnv('ABLY_API_KEY');
+  if (apiKey.indexOf('INSERT') === 0) {
     throw new Error('Cannot run without an API key. Add your key to .env');
   }
-
-  return new AblyService(process.env.ABLY_API_KEY, worldId);
+  return new AblyService(apiKey, worldId);
 }
 
 async function initializeAsync() {
@@ -43,29 +40,17 @@ async function initializeAsync() {
   }
 
   console.log(`loading world ${worldID}`);
-
-  // Create bucket if it doesn't exist
-  try {
-    await initializeBucket(supabase);
-    console.log('Bucket creation handled successfully');
-  } catch (err) {
-    console.error('Error during bucket initialization:', err);
-    throw err;
-  }
+  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
 
   try {
     await downloadData(supabase, worldID);
-    console.log('Data successfully downloaded from Supabase');
-  } catch {
-    try {
-      console.log('Download failed, uploading local files instead');
-      await uploadLocalData(supabase, worldID);
-    } catch (error) {
-      console.log(
-        'Could not download data or upload data, cannot play the game'
-      );
-      throw error;
-    }
+    console.log('Server data successfully downloaded from Supabase');
+  } catch (error) {
+    console.log(`
+      Could not download data for ${worldID}. Ensure it exists by creating it. 
+      Otherwise, it could be a network error or something outside our control.
+    `);
+    throw error;
   }
 
   try {
@@ -75,7 +60,6 @@ async function initializeAsync() {
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
       worldSpecificData as Partial<ServerWorldDescription>;
-
     const worldDescription: ServerWorldDescription = {
       ...globalDescription,
       ...specificDescription
@@ -94,6 +78,8 @@ async function initializeAsync() {
 }
 
 initializeAsync();
+
+DataLogger.startMetricsServer();
 
 // Used for update on developer cheat
 export function setLastUploadTime(time: number) {

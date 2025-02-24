@@ -6,6 +6,9 @@ terraform {
     supabase = {
       source = "supabase/supabase"
     }
+    random = {
+      source = "hashicorp/random"
+    }
   }
 }
 
@@ -157,6 +160,12 @@ data "supabase_apikeys" "dev" {
   project_ref = supabase_project.potions.id
 }
 
+# Generate random string for AUTH_SERVER_SECRET
+resource "random_password" "auth_server_secret" {
+  length  = 32
+  special = true
+}
+
 # Create .env files for each package
 resource "local_file" "auth_server_env" {
   filename = "../packages/auth-server/.env"
@@ -164,6 +173,7 @@ resource "local_file" "auth_server_env" {
     ABLY_API_KEY=${ably_api_key.root.key}
     SUPABASE_URL=https://${supabase_project.potions.id}.supabase.co
     SUPABASE_SERVICE_KEY=${data.supabase_apikeys.dev.service_role_key}
+    AUTH_SERVER_SECRET=${random_password.auth_server_secret.result}
   EOT
 }
 
@@ -174,6 +184,7 @@ resource "local_file" "server_env" {
     AUTH_SERVER_URL=http://localhost:3000
     SUPABASE_URL=https://${supabase_project.potions.id}.supabase.co
     SUPABASE_SERVICE_KEY=${data.supabase_apikeys.dev.service_role_key}
+    AUTH_SERVER_SECRET=${random_password.auth_server_secret.result}
   EOT
   file_permission = "0600"
 }
@@ -181,6 +192,29 @@ resource "local_file" "server_env" {
 resource "local_file" "client_env" {
   filename        = "../packages/client/.env"
   content         = "SERVER_URL=http://localhost:3000/"
+  file_permission = "0600"
+}
+
+resource "local_file" "converse_env" {
+  filename        = "../packages/converse/.env"
+  content         = <<-EOT
+    SUPABASE_URL=https://${supabase_project.potions.id}.supabase.co
+    SUPABASE_SERVICE_KEY=${data.supabase_apikeys.dev.service_role_key}
+    llm_flag=${var.llm_flag}
+    redis_host=${var.redis_host}
+    redis_port=${var.redis_port}
+    redis_password=${var.redis_password}
+  EOT
+  file_permission = "0600"
+}
+
+resource "local_file" "llm_env" {
+  filename        = "../packages/llm/.env"
+  content         = <<-EOT
+    redis_host=${var.redis_host}
+    redis_port=${var.redis_port}
+    redis_password=${var.redis_password}
+  EOT
   file_permission = "0600"
 }
 

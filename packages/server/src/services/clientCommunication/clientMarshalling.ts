@@ -67,7 +67,8 @@ function mobDataToMob(mobData: MobData): MobI {
       health: mobData.health,
       gold: mobData.gold,
       speed: mobData.speed,
-      attack: mobData.attack
+      attack: mobData.attack,
+      defense: mobData.defense
     },
     unlocks: mobData.community_id ? [mobData.community_id] : [],
     doing: mobData.current_action
@@ -88,6 +89,7 @@ export function getMobsAbly(): MobI[] {
         maxHealth,
         attack,
         speed,
+        defense,
         position_x,
         position_y,
         path,
@@ -269,6 +271,7 @@ export function getItemsAbly(): ItemI[] {
             items.position_y,
             items.house_id,
             items.lock,
+            items.owned_by,
             mobs.id carrying_id
         FROM items
         LEFT JOIN mobs ON mobs.carrying_id = items.id;

@@ -1,4 +1,4 @@
-import { commonSetup, world } from '../testSetup';
+import { commonSetup, world, itemGenerator } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { Community } from '../../src/community/community';
 import { DB } from '../../src/services/database';
@@ -71,6 +71,69 @@ describe('Favorability Tests', () => {
     expect(testMob?._speed).toBeCloseTo(2.5);
     expect(testMob?._maxHealth).toBeCloseTo(100);
     expect(testMob?._attack).toBeCloseTo(5);
+  });
+
+  test('Favorability should decrease upon hitting mob', () => {
+    // initialize villager / player
+    const position: Coord = { x: 0, y: 0 };
+    const position2: Coord = { x: 1, y: 1 };
+    mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
+    mobFactory.makeMob('villager', position2, 'testVillager', 'villagertest');
+    var testplayer = Mob.getMob('testPlayer');
+    var testvillager = Mob.getMob('testVillager');
+
+    Community.makeFavor('alchemists', 'silverclaw', 100);
+    Community.makeFavor('alchemists', 'blobs', 100);
+    Community.makeFavor('alchemists', 'fighters', 100);
+
+    expect(testplayer).toBeDefined();
+
+    Favorability.updatePlayerStat(testplayer!);
+    expect(testplayer?._maxHealth).toBeCloseTo(176);
+
+    // player attacks villager once
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(Community.getFavor('alchemists', 'silverclaw')).toBe(80);
+
+    // player attacks villager five times
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(testplayer?.fightRequest(testvillager!)).toBeDefined();
+    expect(Community.getFavor('alchemists', 'silverclaw')).toBe(-20);
+    expect(testplayer?._maxHealth).toBeCloseTo(100);
+  });
+  test('Mob should have a favorite item', () => {
+    // initialize player
+    const position: Coord = { x: 0, y: 0 };
+    const possible_items = Object.keys(itemGenerator._itemTypes);
+
+    mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
+    var testplayer = Mob.getMob('testPlayer');
+    var testplayer_item = testplayer!._favorite_item!;
+
+    expect(testplayer).toBeDefined();
+    expect(testplayer_item).toBeDefined();
+    expect(testplayer_item).not.toBeNull();
+
+    // testing whether the item actually a possible item type that could be generated
+    expect(possible_items.includes(testplayer_item)).toBe(true);
+  });
+  test('Mobs favorite item should be carryable', () => {
+    // initialize player
+    const position: Coord = { x: 0, y: 0 };
+
+    mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
+    var testplayer = Mob.getMob('testPlayer');
+    var testplayer_item = testplayer!._favorite_item!;
+
+    expect(testplayer).toBeDefined();
+    expect(testplayer_item).toBeDefined();
+    expect(testplayer_item).not.toBeNull();
+
+    // testing whether the item actually a possible item type that could be generated
+    expect(itemGenerator._itemTypes[testplayer_item].carryable).toBe(true);
   });
 });
 
