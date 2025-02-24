@@ -5,7 +5,6 @@
     {
       "name": "Heartbeet",
       "type": "heart-beet",
-      "description": "A vibrant red vegetable that is both nutritious and restorative.",
       "attributes": [
         {
           "name": "brew_color",
@@ -31,7 +30,6 @@
     {
       "name": "Slimeblob",
       "type": "slime-blob",
-      "description": "blob",
       "attributes": [
         {
           "name": "brew_color",
@@ -51,7 +49,6 @@
     {
       "name": "Bones",
       "type": "bones",
-      "description": "bones",
       "attributes": [
         {
           "name": "brew_color",
@@ -71,7 +68,6 @@
     {
       "name": "Lightning Bloom",
       "type": "lightning-bloom",
-      "description": "bones",
       "attributes": [
         {
           "name": "brew_color",
@@ -91,7 +87,6 @@
     {
       "name": "Bomb",
       "type": "bomb",
-      "description": "bomb",
       "attributes": [
         {
           "name": "health",
@@ -107,7 +102,6 @@
     {
       "name": "Tar",
       "type": "tar",
-      "description": "tar",
       "attributes": [
         {
           "name": "brew_color",
@@ -127,7 +121,6 @@
     {
       "name": "Sun Drop",
       "type": "sun-drop",
-      "description": "sun drop",
       "attributes": [
         {
           "name": "brew_color",
@@ -140,13 +133,7 @@
       ],
       "walkable": true,
       "smashable": true,
-      "interactions": [
-        {
-          "description": "Eat",
-          "action": "eat",
-          "while_carried": true
-        }
-      ],
+      "interactions": [],
       "carryable": true,
       "on_tick": []
     },
@@ -208,35 +195,8 @@
       "on_tick": []
     },
     {
-      "name": "Starfish",
-      "type": "starfish",
-      "description": "A gorgeous teal starfish",
-      "attributes": [
-        {
-          "name": "brew_color",
-          "value": "#10BFBF"
-        },
-        {
-          "name": "health",
-          "value": 1
-        }
-      ],
-      "walkable": true,
-      "smashable": true,
-      "interactions": [
-        {
-          "description": "Eat",
-          "action": "eat",
-          "while_carried": true
-        }
-      ],
-      "carryable": true,
-      "on_tick": []
-    },
-    {
       "name": "Fireball",
       "type": "fire-ball",
-      "description": "A spicy and tangy bite that has quite a kick!",
       "attributes": [
         {
           "name": "brew_color",
@@ -262,7 +222,6 @@
     {
       "name": "Pearl",
       "type": "pearl",
-      "description": "A non-edible shiny treasure",
       "attributes": [
         {
           "name": "brew_color",
@@ -282,7 +241,8 @@
     {
       "name": "Wall",
       "type": "wall",
-      "description": "A sturdy structure that blocks movement and provides protection.",
+      "item_group": "wall",
+      "layout_type": "wall",
       "carryable": false,
       "smashable": true,
       "attributes": [
@@ -298,7 +258,6 @@
     {
       "name": "Partial Wall",
       "type": "partial-wall",
-      "description": "An incomplete wall, requiring additional materials to finish.",
       "carryable": false,
       "walkable": false,
       "smashable": true,
@@ -318,7 +277,8 @@
     {
       "name": "Fence",
       "type": "fence",
-      "description": "A simple barrier to mark boundaries or restrict movement.",
+      "item_group": "fence",
+      "layout_type": "fence",
       "carryable": false,
       "walkable": false,
       "smashable": true,
@@ -334,7 +294,8 @@
     {
       "name": "Gate",
       "type": "gate",
-      "description": "A movable barrier allowing controlled entry.",
+      "item_group": "fence",
+      "layout_type": "opens",
       "carryable": false,
       "walkable": true,
       "smashable": true,
@@ -344,12 +305,14 @@
           "value": 100
         }
       ],
-      "interactions": []
+      "interactions": [],
+      "open": false
     },
     {
       "name": "Door",
       "type": "door",
-      "description": "Just a door.",
+      "item_group": "wall",
+      "layout_type": "opens",
       "carryable": false,
       "smashable": true,
       "walkable": true,
@@ -372,20 +335,10 @@
           "action": "spawn_item",
           "parameters": {
             "type": "log",
-            "global_max": 10, 
+            "global_max": 10,
             "local_max": 2,
             "radius": 3,
             "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-             "type": "sun-drop",
-             "global_max": 10,
-             "local_max": 2,
-             "radius": 4,
-             "rate": 0.1
           }
         },
         {
@@ -401,13 +354,90 @@
       ]
     },
     {
+      "name": "Cloud",
+      "type": "cloud",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sands-of-time",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "lightning-bloom",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 1,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cannon",
+      "type": "cannon",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "tar",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "bones",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sun",
+      "type": "sun",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sun-drop",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
       "name": "Log",
       "type": "log",
       "carryable": true,
       "smashable": true,
       "walkable": true,
       "flat": true,
-      "attributes":[
+      "attributes": [
         {
           "name": "health",
           "value": 1
@@ -430,7 +460,6 @@
     {
       "name": "Seaweed",
       "type": "seaweed",
-      "description": "A flowy plant, that occasionally drops leaves",
       "carryable": false,
       "walkable": false,
       "interactions": [],
@@ -487,7 +516,7 @@
         }
       ]
     },
-    
+
     {
       "name": "Clam",
       "type": "clam",
@@ -509,7 +538,7 @@
       ]
     },
     {
-      "name": "Message-In-Bottle",
+      "name": "Message in a Bottle",
       "type": "message-in-bottle",
       "description": "A bottle that contains a message... wonder what could be inside",
       "carryable": true,
@@ -526,6 +555,26 @@
           "action": "spawn_item",
           "parameters": {
             "type": "message-in-bottle",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Starfish",
+      "type": "starfish",
+      "description": "A starfish",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "starfish",
             "global_max": 10,
             "local_max": 1,
             "radius": 3,
@@ -577,7 +626,6 @@
     {
       "type": "heart-beet-plant",
       "name": "Heartbeet plant",
-      "description": "A red root vegetable known for its restorative properties.",
       "carryable": false,
       "walkable": true,
       "smashable": false,
@@ -593,33 +641,12 @@
             "radius": 3,
             "rate": 0.1
           }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "bones",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "slime-blob",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
         }
       ]
     },
     {
       "type": "blueberry",
       "name": "Blueberry",
-      "description": "A small, round fruit that grows in clusters on bushes.",
       "carryable": true,
       "walkable": true,
       "smashable": true,
@@ -644,7 +671,6 @@
     {
       "type": "blueberry-bush",
       "name": "Blueberry bush",
-      "description": "A shrub that produces small, sweet blueberries.",
       "carryable": false,
       "walkable": false,
       "smashable": false,
@@ -657,26 +683,6 @@
             "global_max": 10,
             "local_max": 2,
             "radius": 3,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "tar",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "lightning-bloom",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
             "rate": 0.1
           }
         }
@@ -712,17 +718,22 @@
     {
       "name": "Portal",
       "type": "portal",
-      "description": "A magical gateway that spawns mobs and allows travel between locations.",
       "carryable": false,
       "walkable": true,
       "flat": true,
-      "interactions": [],
+      "interactions": [
+        {
+          "description": "Enter portal",
+          "action": "enter",
+          "while_carried": false
+        }
+      ],
       "on_tick": [
         {
           "action": "spawn_mob",
           "parameters": {
             "type": "blob",
-            "max": 10,
+            "max": 1,
             "rate": 0.1
           }
         },
@@ -730,7 +741,7 @@
           "action": "spawn_mob",
           "parameters": {
             "type": "fighter",
-            "max": 10,
+            "max": 1,
             "rate": 0.1
           }
         },
@@ -738,37 +749,7 @@
           "action": "spawn_mob",
           "parameters": {
             "type": "villager",
-            "max": 12,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sands-of-time",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "gun-powder",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "bomb",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
+            "max": 15,
             "rate": 0.1
           }
         }
@@ -776,7 +757,6 @@
     },
     {
       "name": "Potion stand",
-      "description": "A stand that sells health potions.",
       "type": "potion-stand",
       "carryable": false,
       "smashable": true,
@@ -803,7 +783,27 @@
         {
           "description": "Add $item_name",
           "action": "add_item",
-          "while_carried": false
+          "while_carried": false,
+          "permissions": {
+            "community": true,
+            "other": false
+          }
+        },
+        {
+          "description": "Get $item_name",
+          "action": "get_item",
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "items",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         },
         {
           "description": "Raise price",
@@ -815,7 +815,11 @@
               "value": 99,
               "comparison": "less_than"
             }
-          ]
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         },
         {
           "description": "Lower price",
@@ -827,7 +831,11 @@
               "value": 1,
               "comparison": "greater_than"
             }
-          ]
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         },
         {
           "description": "Collect gold",
@@ -839,7 +847,11 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ]
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         },
         {
           "description": "Purchase potion",
@@ -852,18 +864,6 @@
               "comparison": "greater_than"
             }
           ]
-        },
-        {
-          "description": "Destroy stand",
-          "action": "destroy_stand",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "items",
-              "value": 0,
-              "comparison": "equals"
-            }
-          ]
         }
       ],
       "show_price_at": {
@@ -873,7 +873,6 @@
     },
     {
       "name": "Potion",
-      "description": "A magical concotion",
       "type": "potion",
       "carryable": true,
       "smashable": true,
@@ -899,7 +898,6 @@
     },
     {
       "name": "Basket",
-      "description": "Stores items for the community.",
       "type": "basket",
       "carryable": false,
       "templated": true,
@@ -947,10 +945,6 @@
         {
           "name": "potion_subtype",
           "value": 0
-        },
-        {
-          "name": "color_weight",
-          "value": 1
         }
       ],
       "interactions": [
@@ -994,7 +988,6 @@
     },
     {
       "name": "Gold",
-      "description": "money!!!",
       "type": "gold",
       "walkable": true,
       "smashable": false,
