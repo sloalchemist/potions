@@ -22,7 +22,9 @@ export class SpriteItem extends Item {
   constructor(scene: WorldScene, item: ItemI) {
     const itemType = scene.itemTypes[item.type];
     if (!itemType) {
-      throw new Error(`Item type '${item.type}' does not exist in global item configuration.`);
+      throw new Error(
+        `Item type '${item.type}' does not exist in global item configuration.`
+      );
     }
     super(world, item.id, item.position, itemType);
     this.flat = this.itemType.flat == true;
