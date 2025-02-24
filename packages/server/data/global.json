@@ -1294,44 +1294,48 @@
     },
     {
       "name": "Basket",
-      "type": "basket",
-      "carryable": false,
-      "templated": true,
-      "walkable": false,
-      "show_template_at": {
-        "x": 0,
-        "y": 7
-      },
-      "attributes": [
-        {
-          "name": "items",
-          "value": 0
-        }
-      ],
-      "interactions": [
-        {
-          "description": "Get $item_name",
-          "action": "get_item",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "items",
-              "value": 0,
-              "comparison": "greater_than"
-            }
-          ]
-        },
-        {
-          "description": "Add $item_name",
-          "action": "add_item",
-          "while_carried": false,
-          "permissions": {
-            "community": true,
-            "other": false
-          }
-        }
-      ],
-      "description": "Stores items for the community."
+            "type": "basket",
+            "carryable": false,
+            "templated": true,
+            "walkable": false,
+            "show_template_at": {
+                "x": 0,
+                "y": 7
+            },
+            "attributes": [
+                {
+                    "name": "items",
+                    "value": 0
+                }
+            ],
+            "interactions": [
+                {
+                    "description": "Get $item_name",
+                    "action": "get_item",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "items",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Add $item_name",
+                    "action": "add_item",
+                    "while_carried": false,
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                }
+            ],
+            "description": "Stores items for the community."
     },
     {
       "name": "Cauldron",
