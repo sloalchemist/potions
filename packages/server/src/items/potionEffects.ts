@@ -144,11 +144,11 @@ function giveRandomEffect(mob: Mob) {
     case 4:
       console.log('Random Effect: Permanently Reduce Player Health');
       // reduce player health by 5 or to 1
-      if (mob.health > 5) {
-        mob.changeHealth(-5);
+      if (mob._maxHealth > 5) {
+        mob.changeMaxHealth(mob._maxHealth - 5);
       }
       else {
-        mob.changeHealth(-mob.health + 1);
+        mob.changeMaxHealth(1);
       }
       return true;
     case 5:
@@ -172,7 +172,7 @@ function closeToBlack(potionStr: string, mob: Mob): boolean {
 
   if (potionRgb.r < thresholdBlack && potionRgb.g < thresholdBlack && potionRgb.b < thresholdBlack) {
     console.log('Potion is close to black.');
-    mob.changeHealth(-Infinity)
+    mob.changeHealth(-mob.health);
     return true;
   }
   return false;
