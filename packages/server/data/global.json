@@ -140,13 +140,7 @@
             ],
             "walkable": true,
             "smashable": true,
-            "interactions": [
-                {
-                    "description": "Eat",
-                    "action": "eat",
-                    "while_carried": true
-                }
-            ],
+            "interactions": [],
             "carryable": true,
             "on_tick": []
         },
@@ -602,6 +596,26 @@
                         "type": "anemone",
                         "global_max": 10,
                         "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Volcano",
+            "type": "volcano",
+            "description": "a volcano that will erupt",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "fire-ball",
+                        "global_max": 10,
+                        "local_max": 2,
                         "radius": 3,
                         "rate": 0.1
                     }
