@@ -20,7 +20,11 @@ export class SpriteItem extends Item {
   ownedBy?: string;
 
   constructor(scene: WorldScene, item: ItemI) {
-    super(world, item.id, item.position, scene.itemTypes[item.type]);
+    const itemType = scene.itemTypes[item.type];
+    if (!itemType) {
+      throw new Error(`Item type '${item.type}' does not exist in global item configuration.`);
+    }
+    super(world, item.id, item.position, itemType);
     this.flat = this.itemType.flat == true;
     this.name = item.name;
     this.subtype = item.subtype;
