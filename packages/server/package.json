@@ -24,9 +24,13 @@
     "@rt-potion/common": "workspace:*",
     "@rt-potion/converse": "workspace:*",
     "@supabase/supabase-js": "^2.44.2",
+    "@types/color": "^4.2.0",
+    "@types/delta-e": "^0.0.2",
     "ably": "^1.2.21",
     "better-sqlite3": "^11.5.0",
+    "color": "4.2.3",
     "cookie-parser": "^1.4.6",
+    "delta-e": "^0.0.8",
     "dotenv": "^16.4.5",
     "redis": "^4.7.0",
     "uuid": "^11.0.3"
