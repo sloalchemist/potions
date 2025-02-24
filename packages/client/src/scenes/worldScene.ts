@@ -70,7 +70,6 @@ export class WorldScene extends Phaser.Scene {
       'background',
       `https://potions.gg/world_assets/${worldID}/client/background.png`
     );
-    
     this.load.atlas(
       'global_atlas',
       `https://potions.gg/world_assets/${worldID}/client/global.png`,
@@ -86,7 +85,7 @@ export class WorldScene extends Phaser.Scene {
     this.load.json(
       'world_specific_data',
       `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
-    )
+    );
 
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
