@@ -116,7 +116,7 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
 }
 
 function giveRandomEffect(mob: Mob) {
-  const randomNum = Math.floor(Math.random() * 6); // 0 to colordictLength - 1
+  const randomNum = Math.floor(Math.random() * 7); // amount of current effects
 
   switch (randomNum) {
     case 0:
@@ -158,6 +158,10 @@ function giveRandomEffect(mob: Mob) {
       mob.changeEffect(mob._attack*0.15 , 60, 'attack');
       mob.changeEffect(mob._defense*0.15, 60, 'defense');
       mob.changeMaxHealth(5, false);
+      return true;
+    case 6:
+      console.log("Random Effect: *Stun* Greatly Decrease Player Movement");
+      mob.changeEffect(mob._speed*-0.80, 10, 'speed');
       return true;
     default:
       console.log('Random Effect: No Effect');
