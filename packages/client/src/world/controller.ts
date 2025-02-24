@@ -136,24 +136,62 @@ export function areListsEqual(list1: Mob[], list2: Mob[]): boolean {
 }
 
 export function mobRangeListener(mobs: Mob[]) {
+  if (!world || !world.mobs || !publicCharacterId) {
+    console.warn('World or player ID not initialized.');
+    return;
+  }
+  const player = world.mobs[publicCharacterId] as SpriteMob;
+  if (!player || !player.position) return;
+
+  const playerPos = floor(player.position); // Get the player's position
+
   if (chatCompanionCallback && !chatting) {
     const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
-    filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
-    if (!areListsEqual(filteredMobs, lastChatCompanions)) {
-      console.log('filter: ', filteredMobs, 'last:', lastChatCompanions);
-      chatCompanionCallback(filteredMobs);
-      lastChatCompanions = filteredMobs;
+
+    const closestChatCompanions = filteredMobs
+      .sort(
+        (a, b) =>
+          calculateDistance(a.position!, playerPos) -
+          calculateDistance(b.position!, playerPos)
+      )
+      .slice(0, 5);
+
+    if (!areListsEqual(closestChatCompanions, lastChatCompanions)) {
+      console.log('closest chat companions:', closestChatCompanions);
+      chatCompanionCallback(closestChatCompanions);
+      lastChatCompanions = closestChatCompanions;
     }
   }
+
   if (fightOpponentCallback && !fighting) {
     const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
-    filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
-    if (!areListsEqual(filteredMobs, lastFightOpponents)) {
-      console.log('filter: ', filteredMobs, 'last:', lastFightOpponents);
-      fightOpponentCallback(filteredMobs);
-      lastFightOpponents = filteredMobs;
+
+    const closestFightOpponents = filteredMobs
+      .sort(
+        (a, b) =>
+          calculateDistance(a.position!, playerPos) -
+          calculateDistance(b.position!, playerPos)
+      )
+      .slice(0, 5);
+
+    if (!areListsEqual(closestFightOpponents, lastFightOpponents)) {
+      console.log('closest fight opponents:', closestFightOpponents);
+      fightOpponentCallback(closestFightOpponents);
+      lastFightOpponents = closestFightOpponents;
     }
   }
+}
+
+export function getClosestMob(mobs: Mob[], playerPos: Coord): Mob | null {
+  if (mobs.length === 0) return null; // Handle empty list case
+
+  return mobs.reduce((closest, current) => {
+    if (!closest.position || !current.position) return closest;
+    return calculateDistance(current.position, playerPos) <
+      calculateDistance(closest.position, playerPos)
+      ? current
+      : closest;
+  }, mobs[0]);
 }
 
 function prepInteraction(label: string, item: Item): string {
