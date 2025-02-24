@@ -25,6 +25,12 @@ export class Hunt implements Plan {
         npcDamage * (0.3 + 0.7 * Math.exp(-npc._defense / 40))
       );
 
+      if (npc.damageOverTime == 1) {
+        const poisonDelta = 1
+        const poisonDuration = 10;
+        this.enemy!.changeEffect(poisonDelta, poisonDuration, "poisoned")
+      }
+
       // attack/fight each other
       this.enemy!.changeHealth(adjustedEnemyDamage);
       npc.changeHealth(adjustedNpcDamage);

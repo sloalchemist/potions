@@ -185,6 +185,26 @@ export class Mob {
     return mob.health;
   }
 
+  get poisoned(): number {
+    const mob = DB.prepare(
+      `
+      SELECT poisoned FROM mobView WHERE id = :id
+      `
+    ).get({ id: this.id }) as { poisoned: number };
+
+    return mob.poisoned;
+  }
+
+  get damageOverTime(): number {
+    const mob = DB.prepare(
+      `
+      SELECT damageOverTime FROM mobView WHERE id = :id
+      `
+    ).get({ id: this.id }) as { damageOverTime: number };
+
+    return mob.damageOverTime;
+  }
+
   get _speed(): number {
     const mob = DB.prepare(
       `
@@ -588,6 +608,25 @@ export class Mob {
     }
   }
 
+  private checkPoison(): void {
+
+    const result = DB.prepare(
+      `SELECT poisoned
+      FROM mobview
+      WHERE id = :id AND targetTick > :currentTick`
+    ).get({
+      id: this.id,
+      currentTick: this.current_tick
+    }) as {poisoned : number}
+
+    if (result.poisoned == 1){
+      const deltaDamage = Math.random() * 10
+
+      this.changeHealth(deltaDamage)
+    }
+
+  }
+
   private checkTickReset(): void {
     type QueryResult = {
       attribute: string;
@@ -935,6 +974,7 @@ export class Mob {
     }
 
     this.checkTickReset();
+    this.checkPoison();
     this.needs.tick();
   }
 
@@ -949,6 +989,7 @@ export class Mob {
             maxHealth INTEGER NOT NULL,
             goldPotionsUsed INTEGER DEFAULT 0,
             damageOverTime INTEGER DEFAULT 0,
+            poisoned INTEGER DEFAULT 0,
             slowEnemy INTEGER DEFAULT 0,
             attack INTEGER NOT NULL,
             defense INTEGER NOT NULL,
@@ -997,6 +1038,9 @@ export class Mob {
           m.damageOverTime + COALESCE(
             (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'damageOverTime' ORDER BY e.targetTick DESC LIMIT 1)
             , 0) AS damageOverTime,
+          m.poisoned + COALESCE(
+            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'poisoned' ORDER BY e.targetTick DESC LIMIT 1)
+            , 0) AS poisoned,
           m.slowEnemy,
           m.defense + COALESCE(
             (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'defense' ORDER BY e.targetTick DESC LIMIT 1)
