@@ -1,3 +1,6 @@
+import Color from 'color';
+import DeltaE from 'delta-e';
+
 export function hexStringToNumber(hexString: string): number {
   // Remove the '#' if it exists
   if (hexString.startsWith('#')) {
@@ -7,14 +10,8 @@ export function hexStringToNumber(hexString: string): number {
   return parseInt(hexString, 16);
 }
 
-export function combineHexColors(
-  hex1: string,
-  hex2: string,
-  weight1: number,
-  weight2: number
-): string {
   // Convert hex to RGB
-  const hexToRgb = (hex: string): { r: number; g: number; b: number } => {
+  export const hexToRgb = (hex: string): { r: number; g: number; b: number } => {
     if (hex.startsWith('#')) {
       hex = hex.slice(1);
     }
@@ -26,12 +23,29 @@ export function combineHexColors(
     };
   };
 
-  // Convert RGB to hex
-  const rgbToHex = (r: number, g: number, b: number): string =>
-    `#${((1 << 24) + (r << 16) + (g << 8) + b)
-      .toString(16)
-      .slice(1)
-      .toUpperCase()}`;
+export const rgbToHex = (r: number, g: number, b: number): string =>
+  `#${((1 << 24) + (r << 16) + (g << 8) + b)
+    .toString(16)
+    .slice(1)
+    .toUpperCase()}`;
+
+export function hexToLab(hex: string): DeltaE.LAB {
+  const [L, A, B] = Color(hex).lab().array();
+  return { L, A, B };
+}
+
+export function perceptualColorDistance(hex1: string, hex2: string): number {
+  const labA = hexToLab(hex1);
+  const labB = hexToLab(hex2);
+  return DeltaE.getDeltaE00(labA, labB);
+}
+
+export function combineHexColors(
+  hex1: string,
+  hex2: string,
+  weight1: number,
+  weight2: number
+): string {
 
   // Parse the two colors
   const rgb1 = hexToRgb(hex1);
@@ -41,9 +55,6 @@ export function combineHexColors(
   const totalWeight = weight1 + weight2;
   const w1 = weight1 / totalWeight;
   const w2 = weight2 / totalWeight;
-
-  console.log('w1', w1);
-  console.log('w2', w2);
 
   // Apply gamma correction
   const gamma = 1.8;
