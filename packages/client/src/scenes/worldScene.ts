@@ -70,7 +70,6 @@ export class WorldScene extends Phaser.Scene {
       'background',
       `https://potions.gg/world_assets/${worldID}/client/background.png`
     );
-
     this.load.atlas(
       'global_atlas',
       `https://potions.gg/world_assets/${worldID}/client/global.png`,
