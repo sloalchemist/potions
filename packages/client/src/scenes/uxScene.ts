@@ -121,15 +121,13 @@ export class UxScene extends Phaser.Scene {
 
     let worldID = getWorldID();
 
-    this.load.json(
-      'global_data',
-      `https://potions.gg/world_assets/${worldID}/client/global.json`
-    );
+    this.load.json('global_data', 'static/global.json');
+
     this.load.json(
       'world_specific_data',
       `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
-    );
-
+    )
+    
     this.load.once('complete', () => {
       // Parse and use the data
       let globalData = parseWorldFromJson(
