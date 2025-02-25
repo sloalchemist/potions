@@ -81,7 +81,10 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 100
     });
 
-    this.load.json('global_data', 'static/global.json');
+    this.load.json(
+      'global_data',
+      'https://potions.gg/world_assets/global.json'
+    );
     this.load.json(
       'world_specific_data',
       `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
