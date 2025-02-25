@@ -14,7 +14,8 @@
 
 ## Impact
 <!--- Does this change break anything or require documentation updates? -->
-<!--- How will this change affect other developers? Should they be notified (e.g., via Slack)? -->
+<!--- How will this change affect other developers? Can that burden be minimized? --> 
+<!--- Should they be notified (e.g., via Slack)? -->
 
 ## Testing
 <!--- Describe how you tested the changes -->
