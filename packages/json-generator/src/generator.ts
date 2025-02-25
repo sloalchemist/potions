@@ -181,7 +181,7 @@ process.argv.forEach(function (val: string) {
     const json_client = JSON.parse(rawJson);
     client_breakup(json_client);
     writeFileSync(
-      'https://potions.gg/world_assets/global.json',
+      '../../world_assets/global.json',
       JSON.stringify(json_client, null, 4)
     );
     ran = true;
