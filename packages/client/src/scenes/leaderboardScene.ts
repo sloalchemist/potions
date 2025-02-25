@@ -53,7 +53,7 @@ export class LeaderboardScene extends Phaser.Scene {
     const startY = titleText.y + 30;
     const lineHeight = 25;
 
-    // Show loading message if leaderboard is empty
+    // Show "no gold acquired" message if leaderboard is empty
     if (leaderboardData.length === 0) {
       const text = this.add.text(
         background.x + 10,
