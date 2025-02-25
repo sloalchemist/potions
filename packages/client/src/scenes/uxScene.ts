@@ -981,7 +981,7 @@ export class UxScene extends Phaser.Scene {
         toggleX,
         toggleY,
         true,
-        'Toggle Menu',
+        'Craft Potion',
         () => {
           // Toggle the Brew menu.
           if (this.scene.isActive('BrewScene')) {
