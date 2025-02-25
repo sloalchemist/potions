@@ -141,11 +141,6 @@
       "walkable": true,
       "smashable": true,
       "interactions": [
-        {
-          "description": "Eat",
-          "action": "eat",
-          "while_carried": true
-        }
       ],
       "carryable": true,
       "on_tick": []
@@ -390,9 +385,28 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "sun-drop",
+            "type": "sunflower",
             "global_max": 10,
             "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cloud",
+      "type": "cloud",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sands-of-time",
+            "global_max": 10,
+            "local_max": 1,
             "radius": 4,
             "rate": 0.1
           }
@@ -400,7 +414,55 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "sunflower",
+            "type": "lightning-bloom",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 1,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cannon",
+      "type": "cannon",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "tar",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "bones",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sun",
+      "type": "sun",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sun-drop",
             "global_max": 10,
             "local_max": 2,
             "radius": 4,
@@ -550,6 +612,26 @@
       ]
     },
     {
+      "name": "Volcano",
+      "type": "volcano",
+      "description": "a volcano that will erupt",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "fire-ball",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
       "name": "Fire-Flower",
       "type": "fire-flower",
       "description": "An fire flower",
@@ -589,6 +671,7 @@
         }
       ]
     },
+
     {
       "name": "Coral",
       "type": "coral",
@@ -767,26 +850,6 @@
             "radius": 3,
             "rate": 0.1
           }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "bones",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "slime-blob",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
         }
       ],
       "description": "A red root vegetable known for its restorative properties."
@@ -831,26 +894,6 @@
             "global_max": 10,
             "local_max": 2,
             "radius": 3,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "tar",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "lightning-bloom",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
             "rate": 0.1
           }
         }
@@ -913,36 +956,6 @@
           "parameters": {
             "type": "villager",
             "max": 15,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sands-of-time",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "gun-powder",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "bomb",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
             "rate": 0.1
           }
         }
@@ -1314,12 +1327,20 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ]
+          ],
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         },
         {
           "description": "Add $item_name",
           "action": "add_item",
-          "while_carried": false
+          "while_carried": false,
+          "permissions": {
+            "community": true,
+            "other": false
+          }
         }
       ],
       "description": "Stores items for the community."

@@ -211,8 +211,8 @@ export class LoadWorldScene extends Phaser.Scene {
 
         this.load.atlas(
           'global-atlas',
-          `static/${worldID}_assets.png`,
-          `static/${worldID}_atlas.json`
+          `https://potions.gg/world_assets/${worldID}/client/global.png`,
+          `https://potions.gg/world_assets/${worldID}/client/global-atlas.json`
         );
 
         this.load.once('complete', () => {

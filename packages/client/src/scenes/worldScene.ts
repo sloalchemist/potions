@@ -21,13 +21,14 @@ import {
   WorldDescription
 } from '../worldDescription';
 import { UxScene } from './uxScene';
-import { setGameState } from '../world/controller';
+import { setGameState, setInventoryCallback } from '../world/controller';
 import {
   restoreHealth,
   persistWorldData,
   speedUpCharacter
 } from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
+import { Item } from '../world/item';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -65,12 +66,14 @@ export class WorldScene extends Phaser.Scene {
 
   preload() {
     const worldID = getWorldID();
-    this.load.image('background', `static/${worldID}_background.png`);
-
+    this.load.image(
+      'background',
+      `https://potions.gg/world_assets/${worldID}/client/background.png`
+    );
     this.load.atlas(
       'global_atlas',
-      `static/${worldID}_assets.png`,
-      `static/${worldID}_atlas.json`
+      `https://potions.gg/world_assets/${worldID}/client/global.png`,
+      `https://potions.gg/world_assets/${worldID}/client/global-atlas.json`
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -78,9 +81,11 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 100
     });
 
-    //this.load.json('world_data', currentWorld?.world_tile_map_url);
     this.load.json('global_data', 'static/global.json');
-    this.load.json('world_specific_data', `static/${worldID}_specific.json`);
+    this.load.json(
+      'world_specific_data',
+      `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
+    );
 
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
@@ -245,6 +250,12 @@ export class WorldScene extends Phaser.Scene {
     world = new World();
     world.load(globalData);
 
+    setInventoryCallback((items: Item[]) => {
+      console.log('Inventory callback called with items:', items);
+      const uxScene = this.scene.get('UxScene') as UxScene;
+      uxScene.setInventory(items);
+    });
+
     // Load globals
     if (needsAnimationsLoaded) {
       this.loadAnimations('global_sprites', 'global_atlas', globalData);
@@ -281,7 +292,7 @@ export class WorldScene extends Phaser.Scene {
     for (const terrainType of globalData.terrain_types) {
       terrainMap[terrainType.id] = terrainType;
     }
-    console.log('waterTypes', waterTypes, 'landTypes', landTypes);
+    // console.log('waterTypes', waterTypes, 'landTypes', landTypes);
     // Draw water layer
     this.drawTerrainLayer(
       globalData.tiles,
@@ -394,11 +405,16 @@ export class WorldScene extends Phaser.Scene {
         pointer.y >= cameraViewportY &&
         pointer.y <= cameraViewportY + cameraViewportHeight
       ) {
-        console.log(
-          'click',
-          pointer.worldX / TILE_SIZE,
-          pointer.worldY / TILE_SIZE
-        );
+        // console.log(
+        //   'click',
+        //   pointer.worldX / TILE_SIZE,
+        //   pointer.worldY / TILE_SIZE
+        // );
+
+        // Prevent player movement if the brew scene is active
+        if (this.scene.isActive('BrewScene')) {
+          return;
+        }
 
         // Prevent player movement if the brew scene is active
         if (this.scene.isActive('BrewScene')) {

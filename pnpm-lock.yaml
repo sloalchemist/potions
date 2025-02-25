@@ -4197,10 +4197,6 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-onlyBuiltDependencies:
-  - better-sqlite3
-  - canvas
-
 snapshots:
 
   '@ably/msgpack-js@0.4.0':
