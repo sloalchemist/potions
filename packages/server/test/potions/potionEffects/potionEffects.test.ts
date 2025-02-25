@@ -1,13 +1,13 @@
-import { commonSetup, world, itemGenerator } from '../testSetup';
-import { DB } from '../../src/services/database';
-import { mobFactory } from '../../src/mobs/mobFactory';
-import { Community } from '../../src/community/community';
-import { Item } from '../../src/items/item';
-import { Mob } from '../../src/mobs/mob';
-import { Drink } from '../../src/items/uses/drink';
-import { FantasyDate } from '../../src/date/fantasyDate';
+import { commonSetup, world, itemGenerator } from '../../testSetup';
+import { DB } from '../../../src/services/database';
+import { mobFactory } from '../../../src/mobs/mobFactory';
+import { Community } from '../../../src/community/community';
+import { Item } from '../../../src/items/item';
+import { Mob } from '../../../src/mobs/mob';
+import { Drink } from '../../../src/items/uses/drink';
+import { FantasyDate } from '../../../src/date/fantasyDate';
 import { Coord } from '@rt-potion/common';
-import { hexStringToNumber } from '../../src/util/colorUtil';
+import { hexStringToNumber } from '../../../src/util/colorUtil';
 
 beforeEach(() => {
   commonSetup();
@@ -759,6 +759,7 @@ describe('Try to consume purple potion in various cases', () => {
     // allow attack for a tick
     testAttacker?.tick(500);
     testEnemy?.tick(500);
+    // breaks?
 
     // grab health of enemy after defense pot and damage taken
     const healthWithMoreDefense = testEnemy!.health;
