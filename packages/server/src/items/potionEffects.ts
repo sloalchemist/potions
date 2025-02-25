@@ -116,7 +116,7 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
 }
 
 function giveRandomEffect(mob: Mob) {
-  const randomNum = Math.floor(Math.random() * 7); // amount of current effects
+  const randomNum = Math.floor(Math.random() * 8); // amount of current effects
 
   switch (randomNum) {
     case 0:
@@ -163,7 +163,13 @@ function giveRandomEffect(mob: Mob) {
       console.log("Random Effect: *Stun* Greatly Decrease Player Movement");
       mob.changeEffect(mob._speed*-0.80, 10, 'speed');
       return true;
-    
+    case 7:
+      console.log("Random Effect: Reduce Player Gold");
+      if (mob.gold >= 5) {
+        mob.changeGold(-5);
+      } else {
+        mob.changeGold(-mob.gold);
+      }
   }
 }
 
