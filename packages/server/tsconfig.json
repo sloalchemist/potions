@@ -16,10 +16,10 @@
   "include": [
     "src/**/*.ts",
     "test/**/*.ts",
-    "data/global.json",
-    "data/test-world_specific.json",
-    "data/water-world_specific.json",
-    "data/fire-world_specific.json"
+    "global.json",
+    "../../world_assets/test-world/server/world_specific.json",
+    "../../world_assets/water-world/server/world_specific.json",
+    "../../world_assets/fire-world/server/world_specific.json"
   ],
   "exclude": ["node_modules"]
 }
