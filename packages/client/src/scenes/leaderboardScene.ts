@@ -14,7 +14,7 @@ export class LeaderboardScene extends Phaser.Scene {
 
   create() {
     // Create a background for the leaderboard
-    this.background = this.add.rectangle(18, 15, 220, 100, 0x000000, 0.7);
+    this.background = this.add.rectangle(18, 15, 220, 70, 0x000000, 0.7);
     this.background.setOrigin(0, 0);
     this.background.setDepth(DEPTH_BASE);
 
@@ -49,9 +49,18 @@ export class LeaderboardScene extends Phaser.Scene {
     this.leaderboardTexts.forEach((text) => text.destroy());
     this.leaderboardTexts = [];
 
-    // Create new leaderboard users and gold amounts
     const startY = titleText.y + 30;
     const lineHeight = 25;
+
+    // Show loading message if leaderboard is empty
+    if (leaderboardData.length === 0) {
+      const text = this.add.text(background.x + 10, startY, 'Loading...', {
+        fontSize: '16px',
+        color: '#ffffff'
+      });
+      text.setDepth(DEPTH_BASE + 1);
+      return;
+    }
 
     // Take only the top MAX_ROWS if there are too many
     const visibleRows = leaderboardData.slice(0, MAX_ROWS);
@@ -63,7 +72,7 @@ export class LeaderboardScene extends Phaser.Scene {
 
       // Create the rank and name text
       const text = this.add.text(
-        background.x + 15,
+        background.x + 10,
         startY + index * lineHeight,
         `${rank}. ${username}`,
         {
@@ -75,7 +84,7 @@ export class LeaderboardScene extends Phaser.Scene {
 
       // Create the amount text (right-aligned)
       const amountText = this.add.text(
-        background.x + background.width - 15,
+        background.x + background.width - 10,
         startY + index * lineHeight,
         `${amount} gold`,
         {
