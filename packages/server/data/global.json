@@ -40,6 +40,10 @@
                 {
                     "name": "health",
                     "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "blobs"
                 }
             ],
             "walkable": true,
@@ -80,6 +84,10 @@
                 {
                     "name": "health",
                     "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "fighters"
                 }
             ],
             "walkable": true,
@@ -116,6 +124,10 @@
                 {
                     "name": "health",
                     "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "fighters"
                 }
             ],
             "walkable": true,
@@ -136,6 +148,10 @@
                 {
                     "name": "health",
                     "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "silverclaw"
                 }
             ],
             "walkable": true,
@@ -155,6 +171,10 @@
                 {
                     "name": "health",
                     "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "silverclaw"
                 }
             ],
             "walkable": true,
@@ -174,6 +194,10 @@
                 {
                     "name": "health",
                     "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "silverclaw"
                 }
             ],
             "walkable": true,
@@ -193,6 +217,10 @@
                 {
                     "name": "health",
                     "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "fighters"
                 }
             ],
             "walkable": true,
@@ -213,6 +241,10 @@
                 {
                     "name": "health",
                     "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "blobs"
                 }
             ],
             "walkable": true,
@@ -239,6 +271,10 @@
                 {
                     "name": "health",
                     "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "blobs"
                 }
             ],
             "walkable": true,
@@ -265,6 +301,10 @@
                 {
                     "name": "health",
                     "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "blobs"
                 }
             ],
             "walkable": true,
