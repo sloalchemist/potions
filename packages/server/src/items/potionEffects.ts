@@ -1,5 +1,5 @@
 import { Mob } from '../mobs/mob';
-import { numberToHexString, hexToRgb, perceptualColorDistance } from '../util/colorUtil';
+import { numberToHexString, hexToRgb, perceptualColorDistance, hexStringToNumber } from '../util/colorUtil';
 
 interface ColorDict {
   [key: string]: string;
@@ -86,7 +86,7 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
       let closestColor: string | null = null;
       let minDistance = Infinity;
       const upperThreshold = 20; // 20 is very similar
-      const lowerThreshold = 35; // 35 is similar but not exact
+      const lowerThreshold = 30; // 35 is similar but not exact
 
       // Find the closest color in the dictionary
       for (const definedColor in colordict) {
@@ -96,14 +96,14 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
           closestColor = definedColor;
         }
       }
-      console.log('Distance:', minDistance);
+      console.log('Distance:', minDistance, 'Color:', closestColor);
 
       // If the closest color is within the threshold, give weak potion effect
       if (closestColor && minDistance <= upperThreshold) {
-        return drinkPotion(mob, closestColor, 0.7);
+        return drinkPotion(mob, String(hexStringToNumber(closestColor)), 0.7);
       }
       else if(closestColor && minDistance <= lowerThreshold){
-        return drinkPotion(mob, closestColor, 0.5);
+        return drinkPotion(mob, String(hexStringToNumber(closestColor)), 0.5);
       }
 
       // otherwise, given random effect
@@ -145,10 +145,10 @@ function giveRandomEffect(mob: Mob) {
       console.log('Random Effect: Permanently Reduce Player Health');
       // reduce player health by 5 or to 1
       if (mob._maxHealth > 5) {
-        mob.changeMaxHealth(mob._maxHealth - 5);
+        mob.changeMaxHealth(-5);
       }
       else {
-        mob.changeMaxHealth(1);
+        mob.changeMaxHealth(-mob._maxHealth + 1);
       }
       return true;
     case 5:
@@ -163,10 +163,7 @@ function giveRandomEffect(mob: Mob) {
       console.log("Random Effect: *Stun* Greatly Decrease Player Movement");
       mob.changeEffect(mob._speed*-0.80, 10, 'speed');
       return true;
-    default:
-      console.log('Random Effect: No Effect');
-      return true;
-
+    
   }
 }
 
