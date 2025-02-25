@@ -16,7 +16,8 @@ import {
   PortalData,
   SetDatetimeData,
   SpeakData,
-  ShowPortalMenuData
+  ShowPortalMenuData,
+  ScoreboardData
 } from '@rt-potion/common';
 import { Types } from 'ably';
 import { focused } from '../main';
@@ -192,6 +193,11 @@ export function setupBroadcast(
     }
   }
 
+  function handleScoreboard(data: ScoreboardData) {
+    console.log('scoreboard scores are:', data.scores);
+    //scene.updateScoreboard(data.scores);
+  }
+
   // Subscribe to broadcast and dispatch events using switch
   broadcast_channel.subscribe('tick', (message: Types.Message) => {
     if (gameState !== 'stateInitialized') return;
@@ -256,6 +262,9 @@ export function setupBroadcast(
           break;
         case 'show_portal_menu':
           handleShowPortalMenu(broadcastItem.data);
+          break;
+        case 'scoreboard':
+          handleScoreboard(broadcastItem.data as ScoreboardData);
           break;
         default:
           console.error(

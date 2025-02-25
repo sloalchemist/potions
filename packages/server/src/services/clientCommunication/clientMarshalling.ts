@@ -1,4 +1,10 @@
-import { FantasyDateI, HouseI, ItemI, MobI } from '@rt-potion/common';
+import {
+  FantasyDateI,
+  HouseI,
+  ItemI,
+  MobI,
+  ScoreboardData
+} from '@rt-potion/common';
 import { DB } from '../database';
 import { HouseData } from '../../community/house';
 import { ItemAttributeData, ItemData } from '../../items/item';
@@ -294,4 +300,23 @@ export function getItemsAbly(): ItemI[] {
   }
 
   return items;
+}
+
+export function getScoreboardData(): ScoreboardData {
+  const topMobs = [
+    {
+      mobId: '1',
+      name: 'Mob 1',
+      gold: 100
+    },
+    {
+      mobId: '2',
+      name: 'Mob 2',
+      gold: 90
+    }
+  ];
+
+  return {
+    scores: topMobs
+  };
 }
