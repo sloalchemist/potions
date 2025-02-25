@@ -560,7 +560,7 @@ export class UxScene extends Phaser.Scene {
           color: '#ffffff'
         })
       );
-  
+
       this.inventoryText = this.add.text(140, 35, 'ITEM COUNT: ' + world.getStoredItems().length + '/12')
       this.inventoryContainer.add(this.inventoryText)
 
@@ -628,7 +628,6 @@ export class UxScene extends Phaser.Scene {
       });
 
       addRefreshCallback(() => this.refreshCharacterStats());
-      addRefreshCallback(() => this.refreshInventoryStats());
       setResponseCallback((responses: string[]) => {
         console.log('response setting', responses);
         this.setChatOptions(
@@ -638,6 +637,7 @@ export class UxScene extends Phaser.Scene {
           }))
         );
       });
+      //addRefreshCallback(() => this.refreshInventoryStats());
       setAttackCallback((attacks: string[]) => {
         console.log('attack setting', attacks);
         this.setFightOptions(
@@ -720,6 +720,8 @@ export class UxScene extends Phaser.Scene {
 
   refreshInventoryStats() {
       this.inventoryText?.setText('ITEM COUNT: ' + world.getStoredItems().length + '/12');
+      console.log("refresh Inventory Called");
+      console.log("LENGTH: " +  world.getStoredItems().length);
   };
 
   showStatsTab() {
@@ -815,6 +817,7 @@ export class UxScene extends Phaser.Scene {
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(true);
     this.customizeContainer?.setVisible(false);
+    this.inventoryContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(true);
     this.setInteractions(currentInteractions);
@@ -1031,7 +1034,7 @@ export class UxScene extends Phaser.Scene {
     this.chatButtons?.clearButtonOptions();
 
     companions.forEach((companion, i) => {
-      const y = 120 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
       const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
       const button = new Button(this, x, y, true, `${companion.name}`, () =>
         this.sendRequestChat(world, companion)
@@ -1117,10 +1120,13 @@ export class UxScene extends Phaser.Scene {
 
   // Method to set inventory
   setInventory(inventory: Item[]) {
+
+    this.refreshInventoryStats();
+
     this.inventoryButtons?.clearButtonOptions();
 
     inventory.forEach((item, i) => {
-      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+      const y = 80 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
       const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
 
       const button = new Button(this, x, y, true, `${item.itemType.name}`, () =>
