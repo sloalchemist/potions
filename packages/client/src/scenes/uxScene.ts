@@ -976,12 +976,13 @@ export class UxScene extends Phaser.Scene {
       interactions.some((interaction) => interaction.item.type === 'cauldron')
     ) {
       // Create the toggle button at a fixed position
+      const status = this.scene.isActive('BrewScene') ? 'Finish Crafting' : 'Craft Potion';
       const toggleButton = new Button(
         this,
         toggleX,
         toggleY,
         true,
-        'Craft Potion',
+        `${status}`,
         () => {
           // Toggle the Brew menu.
           if (this.scene.isActive('BrewScene')) {
@@ -995,8 +996,8 @@ export class UxScene extends Phaser.Scene {
           }, 20);
         }
       );
-
       this.interactButtons.push(toggleButton);
+      console.log(toggleButton)
       this.itemsContainer?.add(toggleButton);
     } else {
       this.scene.stop('BrewScene');
