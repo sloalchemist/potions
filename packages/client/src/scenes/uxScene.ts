@@ -720,8 +720,6 @@ export class UxScene extends Phaser.Scene {
 
   refreshInventoryStats() {
       this.inventoryText?.setText('ITEM COUNT: ' + world.getStoredItems().length + '/12');
-      console.log("refresh Inventory Called");
-      console.log("LENGTH: " +  world.getStoredItems().length);
   };
 
   showStatsTab() {
