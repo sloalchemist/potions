@@ -30,10 +30,12 @@ import {
   gameState,
   setAvailableWorlds,
   setDate,
+  setLeaderboardData,
   updateInventory
 } from '../world/controller';
 import { publicCharacterId } from '../worldMetadata';
 import { leaveWorld } from './playerToServer';
+import { LeaderboardScene } from '../scenes/leaderboardScene';
 
 export let playerDead = false;
 
@@ -194,8 +196,13 @@ export function setupBroadcast(
   }
 
   function handleScoreboard(data: ScoreboardData) {
-    console.log('scoreboard scores are:', data.scores);
-    //scene.updateScoreboard(data.scores);
+    setLeaderboardData(data.scores);
+    const leaderboardScene = scene.scene.get('LeaderboardScene');
+    if (leaderboardScene instanceof LeaderboardScene) {
+      leaderboardScene.renderLeaderboard();
+    } else {
+      throw new Error('Leaderboard scene not found');
+    }
   }
 
   // Subscribe to broadcast and dispatch events using switch

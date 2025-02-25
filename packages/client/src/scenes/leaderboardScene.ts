@@ -2,6 +2,7 @@ import { leaderboardData } from '../world/controller';
 
 const DEPTH_BASE = 100;
 const MAX_ROWS = 3;
+const MAX_USERNAME_LENGTH = 10;
 
 export class LeaderboardScene extends Phaser.Scene {
   private leaderboardTexts: Phaser.GameObjects.Text[] = [];
@@ -54,11 +55,17 @@ export class LeaderboardScene extends Phaser.Scene {
 
     // Show loading message if leaderboard is empty
     if (leaderboardData.length === 0) {
-      const text = this.add.text(background.x + 10, startY, 'Loading...', {
-        fontSize: '16px',
-        color: '#ffffff'
-      });
+      const text = this.add.text(
+        background.x + 10,
+        startY,
+        'No Gold Acquired',
+        {
+          fontSize: '14px',
+          color: '#ffffff'
+        }
+      );
       text.setDepth(DEPTH_BASE + 1);
+      this.leaderboardTexts.push(text); // Add to leaderboardTexts
       return;
     }
 
@@ -70,13 +77,18 @@ export class LeaderboardScene extends Phaser.Scene {
       const [username, amount] = row;
       const rank = index + 1;
 
-      // Create the rank and name text
+      // If username too long, truncate it with ellipsis
+      const truncatedUsername =
+        username.length > MAX_USERNAME_LENGTH
+          ? username.slice(0, MAX_USERNAME_LENGTH - 3) + '...'
+          : username;
+
       const text = this.add.text(
         background.x + 10,
         startY + index * lineHeight,
-        `${rank}. ${username}`,
+        `${rank}. ${truncatedUsername}`,
         {
-          fontSize: '16px',
+          fontSize: '14px',
           color: '#ffffff'
         }
       );
@@ -88,7 +100,7 @@ export class LeaderboardScene extends Phaser.Scene {
         startY + index * lineHeight,
         `${amount} gold`,
         {
-          fontSize: '16px',
+          fontSize: '14px',
           color: '#efbf04'
         }
       );
