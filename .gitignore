@@ -20,7 +20,7 @@ packages/server/data/*.db-shm
 packages/server/data/*.db-wal
 
 # Ignore global json build data
-# packages/server/data/global.json
+packages/server/data/global.json
 packages/client/static/global.json
 
 # Exclude native npm lock in favor of pnpm lock
