@@ -1,6 +1,3 @@
-## Summary
-<!--- A brief, one-sentence summary of the changes -->
-
 ## Description
 <!--- Describe your changes in detail -->
 
