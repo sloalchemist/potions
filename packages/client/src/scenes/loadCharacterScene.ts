@@ -5,6 +5,17 @@ export class LoadCharacterScene extends Phaser.Scene {
     super({ key: 'LoadCharacterScene' });
   }
 
+  autoStart: boolean = false;
+
+  init(data: { autoStart?: boolean } = {}) {
+    if (data.autoStart) {
+      this.autoStart = true;
+    }
+    else {
+      this.autoStart = false;
+    }
+  }
+
   preload() {}
 
   create() {
@@ -12,7 +23,7 @@ export class LoadCharacterScene extends Phaser.Scene {
 
     retrieveCharacter().then(() => {
       console.log('character retrieved', currentCharacter);
-      this.scene.start('LoadWorldScene');
+      this.scene.start('LoadWorldScene', {autoStart: this.autoStart});
     });
   }
 }
