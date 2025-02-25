@@ -43,10 +43,13 @@ let responseCallback: (responses: string[]) => void = () => {};
 let attackCallback: (attacks: string[]) => void = () => {};
 
 type GameState = 'uninitialized' | 'worldLoaded' | 'stateInitialized';
+type LeaderboardData = [string, number][];
 
 export let gameState: GameState = 'uninitialized';
 
 export let availableWorlds: WorldMetadata[] = [];
+
+export let leaderboardData: LeaderboardData = [];
 
 export function setAvailableWorlds(worlds: WorldMetadata[]) {
   availableWorlds = worlds;
@@ -55,6 +58,10 @@ export function setAvailableWorlds(worlds: WorldMetadata[]) {
 export function setGameState(state: GameState) {
   console.log('Setting game state to:', state);
   gameState = state;
+}
+
+export function setLeaderboardData(data: LeaderboardData) {
+  leaderboardData = data;
 }
 
 export function setChatting(chat: boolean) {

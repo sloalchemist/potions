@@ -52,6 +52,10 @@ export type ShowPortalMenuData = {
   worlds: WorldMetadata[];
 };
 
+export type ScoreboardData = {
+  scores: [string, number][];
+};
+
 export type BroadcastData =
   | { type: 'add_mob'; data: AddMobData }
   | { type: 'add_item'; data: AddItemData }
@@ -78,7 +82,8 @@ export type BroadcastData =
       data: ItemChangeData;
     }
   | { type: 'set_datetime'; data: SetDatetimeData }
-  | { type: 'show_portal_menu'; data: ShowPortalMenuData };
+  | { type: 'show_portal_menu'; data: ShowPortalMenuData }
+  | { type: 'scoreboard'; data: ScoreboardData };
 
 export type ServerToBroadcastMessageMap = {
   tick: BroadcastData[];

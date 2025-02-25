@@ -267,6 +267,7 @@ export class LoadWorldScene extends Phaser.Scene {
           this.scene.start('WorldScene');
           this.scene.start('UxScene');
           this.scene.start('FrameScene');
+          this.scene.start('LeaderboardScene');
           setGameState('worldLoaded');
         });
       })
