@@ -1,21 +1,24 @@
-
-<!--- Provide a general summary of your changes in the Title above -->
+## Summary
+<!--- A brief, one-sentence summary of the changes -->
 
 ## Description
 <!--- Describe your changes in detail -->
 
 ## Problem
 <!--- Why is this change required? What problem does it solve? -->
-<!--- If it fixes an open issue, please link to the issue here. -->
+<!--- You can just link to the issue if applicable with "Closes #XYZ" -->
 
-## Solution
-<!--- How did you fix or improve the issue? -->
-<!--- Did you consider any alternatives? -->
+## Context
+<!--- What alternatives were considered, and why was this approach chosen? -->
+<!--- Mention any design decisions or trade-offs. -->
 
-## How Has This Been Tested?
-<!--- Please describe in detail how you tested your changes. -->
-<!--- Or why some areas of code aren't being tested -->
+## Impact
+<!--- Does this change break anything or require documentation updates? -->
+<!--- How will this change affect other developers? Should they be notified (e.g., via Slack)? -->
 
-## Screenshots (if appropriate):
+## Testing
+<!--- Describe how you tested the changes -->
+<!--- Mention automated tests, manual testing, or reasons for not testing -->
+
+## Screenshots (if appropriate)
 <!--- Remove this section if not appropriate -->
-
