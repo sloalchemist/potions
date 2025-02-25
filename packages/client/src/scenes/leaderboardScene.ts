@@ -1,7 +1,7 @@
+import { leaderboardData } from '../world/controller';
+
 const DEPTH_BASE = 100;
 const MAX_ROWS = 3;
-
-type LeaderboardData = [string, number][];
 
 export class LeaderboardScene extends Phaser.Scene {
   private leaderboardTexts: Phaser.GameObjects.Text[] = [];
@@ -31,22 +31,10 @@ export class LeaderboardScene extends Phaser.Scene {
     );
     this.titleText.setDepth(DEPTH_BASE + 1);
 
-    // Render the leaderboard
-    this.renderLeaderboard([
-      ['Player1', 10],
-      ['Player2', 20],
-      ['Player3', 30],
-      ['Player4', 40],
-      ['Player5', 50],
-      ['Player6', 60],
-      ['Player7', 70],
-      ['Player8', 80],
-      ['Player9', 90],
-      ['Player10', 100]
-    ]);
+    this.renderLeaderboard();
   }
 
-  renderLeaderboard(leaderboardData: LeaderboardData) {
+  renderLeaderboard() {
     const { titleText, background } = this;
 
     if (!titleText) {
