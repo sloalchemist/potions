@@ -53,11 +53,7 @@ export type ShowPortalMenuData = {
 };
 
 export type ScoreboardData = {
-  scores: Array<{
-    mobId: string;
-    gold: number;
-    name: string;
-  }>;
+  scores: [string, number][];
 };
 
 export type BroadcastData =

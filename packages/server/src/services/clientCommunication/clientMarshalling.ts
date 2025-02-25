@@ -303,20 +303,12 @@ export function getItemsAbly(): ItemI[] {
 }
 
 export function getScoreboardData(): ScoreboardData {
-  const topMobs = [
-    {
-      mobId: '1',
-      name: 'Mob 1',
-      gold: 100
-    },
-    {
-      mobId: '2',
-      name: 'Mob 2',
-      gold: 90
-    }
-  ];
+  const query = DB.prepare(
+    'SELECT name, gold FROM mobs ORDER BY gold DESC LIMIT 3'
+  );
+  const results = query.all() as Array<{ name: string; gold: number }>;
 
   return {
-    scores: topMobs
+    scores: results.map((row) => [row.name, row.gold] as [string, number])
   };
 }
