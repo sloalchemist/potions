@@ -61,46 +61,7 @@ export class SpriteMob extends Mob {
     this.community_id = mob.community_id;
     this.id = mob.id;
 
-    if (this.subtype) {
-      const parts = this.subtype.split('-');
-
-      const eyeColor = Number(parts[0]);
-      const bellyColor = Number(parts[1]);
-      const furColor = Number(parts[2]);
-      const idleKey = `${this.type}-${this.subtype}-idle`;
-      const walkKey = `${this.type}-${this.subtype}-walk`;
-
-      const furShade1Color = darkenColor(furColor, 25);
-      const furShade2Color = darkenColor(furColor, 50);
-      const paletteSwapper = PaletteSwapper.getInstance();
-      paletteSwapper.swapAnimationPalette(
-        scene,
-        `${this.type}-idle`,
-        idleKey,
-        scene.mobSource[this.type],
-        {
-          COLOR_1: eyeColor,
-          COLOR_2: bellyColor,
-          COLOR_3: furColor,
-          COLOR_3_DARK: furShade1Color,
-          COLOR_3_DARKER: furShade2Color
-        }
-      );
-
-      paletteSwapper.swapAnimationPalette(
-        scene,
-        `${this.type}-walk`,
-        walkKey,
-        scene.mobSource[this.type],
-        {
-          COLOR_1: eyeColor,
-          COLOR_2: bellyColor,
-          COLOR_3: furColor,
-          COLOR_3_DARK: furShade1Color,
-          COLOR_3_DARKER: furShade2Color
-        }
-      );
-    }
+    this.updateAnimation();
 
     this.sprite = scene.add.sprite(
       ...scene.convertToWorldXY(this.position!),
@@ -200,6 +161,51 @@ export class SpriteMob extends Mob {
         }
       });
     });
+  }
+
+  updateAnimation() {
+    if (!this.subtype) {
+      return;
+    }
+
+    const parts = this.subtype.split('-');
+
+    const eyeColor = Number(parts[0]);
+    const bellyColor = Number(parts[1]);
+    const furColor = Number(parts[2]);
+    const idleKey = `${this.type}-${this.subtype}-idle`;
+    const walkKey = `${this.type}-${this.subtype}-walk`;
+
+    const furShade1Color = darkenColor(furColor, 25);
+    const furShade2Color = darkenColor(furColor, 50);
+    const paletteSwapper = PaletteSwapper.getInstance();
+    paletteSwapper.swapAnimationPalette(
+      this.scene,
+      `${this.type}-idle`,
+      idleKey,
+      this.scene.mobSource[this.type],
+      {
+        COLOR_1: eyeColor,
+        COLOR_2: bellyColor,
+        COLOR_3: furColor,
+        COLOR_3_DARK: furShade1Color,
+        COLOR_3_DARKER: furShade2Color
+      }
+    );
+
+    paletteSwapper.swapAnimationPalette(
+      this.scene,
+      `${this.type}-walk`,
+      walkKey,
+      this.scene.mobSource[this.type],
+      {
+        COLOR_1: eyeColor,
+        COLOR_2: bellyColor,
+        COLOR_3: furColor,
+        COLOR_3_DARK: furShade1Color,
+        COLOR_3_DARKER: furShade2Color
+      }
+    );
   }
 
   showSpeechBubble(

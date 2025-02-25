@@ -6,7 +6,8 @@ import {
   currentCharacter,
   addRefreshCallback,
   saveColors,
-  getWorldID
+  getWorldID,
+  publicCharacterId
 } from '../worldMetadata';
 import {
   fantasyDate,
@@ -37,6 +38,7 @@ import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
 import { hexStringToNumber, numberToHexString } from '../utils/color';
 import { InteractionType, parseWorldFromJson } from '../worldDescription';
+import { SpriteMob } from '../sprite/sprite_mob';
 export interface ChatOption {
   label: string;
   callback: () => void;
@@ -582,15 +584,26 @@ export class UxScene extends Phaser.Scene {
         inputElement.style.height = '30px';
 
         inputElement.addEventListener('input', (event: Event) => {
+          if (!currentCharacter) {
+            return;
+          }
+
           const color = hexStringToNumber(
             (event.target as HTMLInputElement).value
           );
-          if (currentCharacter) {
-            (currentCharacter as unknown as Record<string, number>)[
-              colorKeys[index]
-            ] = color;
-            saveColors();
+
+          const currCharTyped = currentCharacter as unknown as Record<
+            string,
+            number
+          >;
+          currCharTyped[colorKeys[index]] = color;
+          const player = world.mobs[publicCharacterId] as SpriteMob;
+          if (player) {
+            player.subtype = `${currCharTyped[colorKeys[0]]}-${currCharTyped[colorKeys[1]]}-${currCharTyped[colorKeys[2]]}`;
+            player.updateAnimation();
           }
+
+          saveColors();
         });
 
         this.customizeContainer?.add(colorPicker);
