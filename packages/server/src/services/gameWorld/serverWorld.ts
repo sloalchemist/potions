@@ -91,7 +91,7 @@ export class ServerWorld implements GameWorld {
     FantasyDate.runTick();
 
     // log data for Prometheus
-    DataLogger.logData();
+    DataLogger.logTick();
 
     //const totalTime = Date.now() - startTime;
     //console.log('time to tick', totalTime);
