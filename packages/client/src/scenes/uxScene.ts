@@ -70,6 +70,7 @@ export class UxScene extends Phaser.Scene {
   recipeText: Phaser.GameObjects.Text | null = null;
   effectText: Phaser.GameObjects.Text | null = null;
   sideEffectsText: Phaser.GameObjects.Text | null = null;
+  inventoryText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
   fightButtons: ButtonManager = new ButtonManager([]);
   fightRequested: boolean = false;
@@ -554,6 +555,9 @@ export class UxScene extends Phaser.Scene {
           color: '#ffffff'
         })
       );
+  
+      this.inventoryText = this.add.text(140, 35, 'ITEM COUNT: ' + world.getStoredItems().length + '/12')
+      this.inventoryContainer.add(this.inventoryText)
 
       // Color pickers
       const colors = ['Eye Color', 'Belly Color', 'Fur Color'];
@@ -608,6 +612,7 @@ export class UxScene extends Phaser.Scene {
       });
 
       addRefreshCallback(() => this.refreshCharacterStats());
+      addRefreshCallback(() => this.refreshInventoryStats());
       setResponseCallback((responses: string[]) => {
         console.log('response setting', responses);
         this.setChatOptions(
@@ -691,6 +696,10 @@ export class UxScene extends Phaser.Scene {
       );
     }
   }
+
+  refreshInventoryStats() {
+      this.inventoryText?.setText('ITEM COUNT: ' + world.getStoredItems().length + '/12');
+  };
 
   showStatsTab() {
     this.statsContainer?.setVisible(true);
@@ -986,7 +995,7 @@ export class UxScene extends Phaser.Scene {
     this.chatButtons?.clearButtonOptions();
 
     companions.forEach((companion, i) => {
-      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+      const y = 120 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
       const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
       const button = new Button(this, x, y, true, `${companion.name}`, () =>
         this.sendRequestChat(world, companion)
