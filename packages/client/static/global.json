@@ -36,10 +36,13 @@
                 {
                     "name": "health",
                     "value": 1
+<<<<<<< HEAD
                 },
                 {
                     "name": "specialized_resource",
                     "value": "blobs"
+=======
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ],
             "walkable": true,
@@ -78,10 +81,13 @@
                 {
                     "name": "health",
                     "value": 1
+<<<<<<< HEAD
                 },
                 {
                     "name": "specialized_resource",
                     "value": "fighters"
+=======
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ],
             "walkable": true,
@@ -116,10 +122,13 @@
                 {
                     "name": "health",
                     "value": 1
+<<<<<<< HEAD
                 },
                 {
                     "name": "specialized_resource",
                     "value": "fighters"
+=======
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ],
             "walkable": true,
@@ -139,15 +148,28 @@
                 {
                     "name": "health",
                     "value": 1
+<<<<<<< HEAD
                 },
                 {
                     "name": "specialized_resource",
                     "value": "silverclaw"
+=======
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ],
             "walkable": true,
             "smashable": true,
+<<<<<<< HEAD
             "interactions": [],
+=======
+            "interactions": [
+                {
+                    "description": "Eat",
+                    "action": "eat",
+                    "while_carried": true
+                }
+            ],
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
             "carryable": true,
             "on_tick": []
         },
@@ -162,10 +184,13 @@
                 {
                     "name": "health",
                     "value": 1
+<<<<<<< HEAD
                 },
                 {
                     "name": "specialized_resource",
                     "value": "silverclaw"
+=======
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ],
             "walkable": true,
@@ -185,10 +210,13 @@
                 {
                     "name": "health",
                     "value": 1
+<<<<<<< HEAD
                 },
                 {
                     "name": "specialized_resource",
                     "value": "silverclaw"
+=======
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ],
             "walkable": true,
@@ -208,10 +236,13 @@
                 {
                     "name": "health",
                     "value": 1
+<<<<<<< HEAD
                 },
                 {
                     "name": "specialized_resource",
                     "value": "fighters"
+=======
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ],
             "walkable": true,
@@ -231,10 +262,13 @@
                 {
                     "name": "health",
                     "value": 1
+<<<<<<< HEAD
                 },
                 {
                     "name": "specialized_resource",
                     "value": "blobs"
+=======
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ],
             "walkable": true,
@@ -260,10 +294,13 @@
                 {
                     "name": "health",
                     "value": 1
+<<<<<<< HEAD
                 },
                 {
                     "name": "specialized_resource",
                     "value": "blobs"
+=======
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ],
             "walkable": true,
@@ -289,10 +326,13 @@
                 {
                     "name": "health",
                     "value": 1
+<<<<<<< HEAD
                 },
                 {
                     "name": "specialized_resource",
                     "value": "blobs"
+=======
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ],
             "walkable": true,
@@ -407,6 +447,7 @@
                 {
                     "action": "spawn_item",
                     "parameters": {
+<<<<<<< HEAD
                         "type": "sunflower",
                         "global_max": 10,
                         "local_max": 2,
@@ -484,12 +525,27 @@
                 {
                     "action": "spawn_item",
                     "parameters": {
+=======
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                         "type": "sun-drop",
                         "global_max": 10,
                         "local_max": 2,
                         "radius": 4,
                         "rate": 0.1
                     }
+<<<<<<< HEAD
+=======
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "sunflower",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ]
         },
@@ -857,6 +913,29 @@
                         "radius": 3,
                         "rate": 0.1
                     }
+<<<<<<< HEAD
+=======
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "bones",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "slime-blob",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ]
         },
@@ -901,6 +980,29 @@
                         "radius": 3,
                         "rate": 0.1
                     }
+<<<<<<< HEAD
+=======
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "tar",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "lightning-bloom",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ]
         },
@@ -962,6 +1064,39 @@
                         "max": 15,
                         "rate": 0.1
                     }
+<<<<<<< HEAD
+=======
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "sands-of-time",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "gun-powder",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "bomb",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 }
             ]
         },
@@ -1318,11 +1453,15 @@
                             "value": 0,
                             "comparison": "greater_than"
                         }
+<<<<<<< HEAD
                     ],
                     "permissions": {
                         "community": true,
                         "other": false
                     }
+=======
+                    ]
+>>>>>>> ae3e1e87 (finished atlas changes for carryable items)
                 },
                 {
                     "description": "Add $item_name",
