@@ -8,7 +8,7 @@ import { createTables, loadDefaults } from './generateWorld';
 import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
-import globalData from '../../data/global.json';
+import globalData from '../../global.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
@@ -33,7 +33,10 @@ async function main() {
 
   logger.log(`Loading world ${worldID}`);
 
-  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
+  // const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
+  const worldSpecificData = await import(
+    `../../../../world_assets/${worldID}/server/world_specific.json`
+  );
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse

@@ -17,7 +17,8 @@ import {
   getItemAbly,
   getItemsAbly,
   getMobAbly,
-  getMobsAbly
+  getMobsAbly,
+  getScoreboardData
 } from './clientMarshalling';
 import { Mob } from '../../mobs/mob';
 import { mobFactory } from '../../mobs/mobFactory';
@@ -418,6 +419,7 @@ export class AblyService implements PubSub {
         new_value: newValue
       }
     });
+    this.broadcastScoreboard(); // we only need to update the scoreboard when the gold changes
   }
 
   public changeItemAttribute(
@@ -685,6 +687,15 @@ export class AblyService implements PubSub {
         throw new Error('no player found ' + username);
       }
       applyCheat(player, data.action);
+    });
+  }
+
+  public broadcastScoreboard(): void {
+    const scoreboardData = getScoreboardData();
+    console.log('broadcasting scoreboard data', scoreboardData);
+    this.addToBroadcast({
+      type: 'scoreboard',
+      data: scoreboardData
     });
   }
 }

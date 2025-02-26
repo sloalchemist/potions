@@ -3,7 +3,7 @@ import { AblyService } from './clientCommunication/ablyService';
 import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
-import globalData from '../../data/global.json';
+import globalData from '../../global.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
