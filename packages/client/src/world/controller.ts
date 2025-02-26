@@ -249,14 +249,18 @@ export function getPhysicalInteractions(
   const item = physical as Item;
   const isOwner: boolean = ownerId ? item.isOwnedBy(ownerId) : true;
 
-  // if the item can be picked up
-  if (item.itemType.carryable) {
+  // if the item can be picked up and the owner's affiliation is the same as the item's affiliation
+  
+  if (item.itemType.carryable && item.attributes["specialized_resource"] == ownerId) {
     interactions.push({
       action: 'pickup',
       item: item,
       label: `Pick up ${item.itemType.name}`
     });
   }
+
+  console.log(item.attributes["specialized_resource"]);
+  console.log(ownerId);
 
   // if the item can be smashed
   if (item.itemType.smashable) {
