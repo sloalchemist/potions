@@ -53,8 +53,6 @@ export class LoadWorldScene extends Phaser.Scene {
     this.load.image('title', 'static/title.png');
 
     // Load menu music
-    // this.load.audio('menu_music', ['static/music/medieval_background_music.mp3']);
-
     this.load.audio('menu_music', 'static/music/menu_music.mp3');
   }
 
@@ -65,9 +63,6 @@ export class LoadWorldScene extends Phaser.Scene {
     if (!this.sound.isPlaying('menu_music')) {
       // fairy music
       this.sound.add('menu_music', { loop: true, volume: 0.2 }).play();
-
-      // medieval music
-      // this.sound.add('menu_music', { loop: true }).play();
     }
 
     // Add background image
@@ -286,7 +281,6 @@ export class LoadWorldScene extends Phaser.Scene {
           this.scene.start('FrameScene');
           this.scene.start('LeaderboardScene');
           setGameState('worldLoaded');
-          // this.sound.removeByKey('menu_music'); // Stop the music when the game starts
         });
       })
       .catch((_error) => {
