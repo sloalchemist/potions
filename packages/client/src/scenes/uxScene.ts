@@ -742,10 +742,6 @@ export class UxScene extends Phaser.Scene {
   }
 
   callFight(attack: string, i: number) {
-<<<<<<< HEAD
-=======
-
->>>>>>> 67af1102 (Basis for fight scene ig)
     if (this.scene.isActive('FightScene')) {
       this.scene.stop('FightScene');
     } else {
