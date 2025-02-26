@@ -5,6 +5,7 @@ import {
   perceptualColorDistance,
   hexStringToNumber
 } from '../util/colorUtil';
+import { logger } from '../util/Logger';
 
 interface ColorDict {
   [key: string]: string;
@@ -28,14 +29,14 @@ export function drinkPotion(
 
   switch (potionStr) {
     case '#ff0000':
-      console.log('Drinking red potion');
+      logger.log('Drinking red potion');
       let healthValue = 50;
       if (effectModifier) healthValue = healthValue * effectModifier;
       mob.changeHealth(healthValue);
       return true;
     case '#0000ff':
-      console.log('Drinking blue potion');
-      console.log(mob._speed);
+      logger.log('Drinking blue potion');
+      logger.log(mob._speed);
       let speedMultiplier = 0.5;
       let speedDuration = 30;
       if (effectModifier) {
@@ -46,7 +47,7 @@ export function drinkPotion(
       mob.changeEffect(speedDelta, speedDuration, 'speed');
       return true;
     case '#e79600':
-      console.log('Drinking orange potion');
+      logger.log('Drinking orange potion');
       let attackMultiplier = 0.5;
       let attackDuration = 240;
       if (effectModifier) {
@@ -57,7 +58,7 @@ export function drinkPotion(
       mob.changeEffect(attackDelta, attackDuration, 'attack');
       return true;
     case '#ef7d55':
-      console.log('Drinking gold potion');
+      logger.log('Drinking gold potion');
       let healthIncrease = 20;
       if (effectModifier) healthIncrease = healthIncrease * effectModifier;
       mob.changeMaxHealth(healthIncrease, true);
@@ -67,7 +68,7 @@ export function drinkPotion(
       mob.changeSlowEnemy(1);
       return true;
     case '#ab00e7':
-      console.log('Drinking purple potion');
+      logger.log('Drinking purple potion');
       let defenseMultiplier = 0.5;
       let defenseDuration = 240;
       if (effectModifier) {
