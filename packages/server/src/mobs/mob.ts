@@ -609,20 +609,8 @@ export class Mob {
   }
 
   private checkPoison(): void {
-
-    // const result = DB.prepare(
-    //   `SELECT delta
-    //   FROM mobEffects
-    //   WHERE id = :id AND attribute = 'poisoned' AND targetTick > :currentTick`
-    // ).get({
-    //   id: this.id,
-    //   currentTick: this.current_tick
-    // }) as {poisoned : number}
-
     if (this.poisoned == 1){
       const deltaDamage = Math.floor(Math.random() * -10);
-      console.log("DELTA DAMAGE FOR POISON *************");
-      console.log(deltaDamage);
 
       this.changeHealth(deltaDamage);
     }
