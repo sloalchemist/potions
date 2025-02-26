@@ -8,7 +8,7 @@ import { createTables, loadDefaults } from './generateWorld';
 import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
-import globalData from '../../data/global.json';
+import globalData from '../../global.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
@@ -21,7 +21,6 @@ import {
 async function main() {
   // Build and save the knowledge graph
   // Initialize the server database
-  await initializeServerDatabase('data/server-data.db', true);
 
   const args = process.argv.slice(2);
   const worldID = args[0];
@@ -29,10 +28,14 @@ async function main() {
   if (!worldID) {
     throw new Error('No world ID provided, provide a world ID as an argument');
   }
+  await initializeServerDatabase(`data/${worldID}-server-data.db`, true);
 
   console.log(`Loading world ${worldID}`);
 
-  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
+  // const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
+  const worldSpecificData = await import(
+    `../../../../world_assets/${worldID}/server/world_specific.json`
+  );
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
@@ -49,7 +52,7 @@ async function main() {
 
   const socialWorld = buildGraphFromWorld(worldDescription);
   const graph = constructGraph(socialWorld);
-  initializeKnowledgeDB('data/knowledge-graph.db', true);
+  initializeKnowledgeDB(`data/${worldID}-knowledge-graph.db`, true);
   await buildGraph(graph);
 
   // Create tables and load defaults
