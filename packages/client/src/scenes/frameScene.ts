@@ -14,7 +14,6 @@ export class FrameScene extends Phaser.Scene {
 
   create() {
     console.log("creating frame");
-
     const overlayImage = this.add.image(
       SCREEN_WIDTH / 2,
       SCREEN_HEIGHT / 2,
