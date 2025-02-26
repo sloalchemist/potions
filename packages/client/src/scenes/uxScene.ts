@@ -879,26 +879,40 @@ export class UxScene extends Phaser.Scene {
       (interaction) => interaction.item.type === 'cauldron'
     );
     if (hasCauldron) {
-      i = 1; // Set i to 1 if there are cauldron interactions
+      i = 1; // Set i to 1 if there are cauldron interactions (button spacing)
     }
     if (this.scene.isActive('BrewScene')) {
       interactions.forEach((interaction) => {
         if (interaction.item.type === 'cauldron') {
-          const x = toggleX + (i % 3) * (BUTTON_WIDTH + 10);
-          const y = toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + 10);
+          if (
+            (interaction.label === 'Add Ingredient' &&
+              currentCharacter?.isCarrying) ||
+            interaction.label !== 'Add Ingredient'
+          ) {
+            const x = toggleX + (i % 3) * (BUTTON_WIDTH + 10);
+            const y = toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + 10);
 
-          const button = new Button(this, x, y, true, interaction.label, () => {
-            interact(
-              interaction.item.key,
-              interaction.action,
-              interaction.give_to ? interaction.give_to : null
+            const button = new Button(
+              this,
+              x,
+              y,
+              true,
+              interaction.label,
+              () => {
+                interact(
+                  interaction.item.key,
+                  interaction.action,
+                  interaction.give_to ? interaction.give_to : null
+                );
+                // Refresh the buttons in case the interaction state has changed
+                this.setInteractions(interactions);
+              }
             );
-            // Refresh the buttons in case the interaction state has changed
-            this.setInteractions(interactions);
-          });
 
-          this.interactButtons.push(button);
-          this.itemsContainer?.add(button);
+            this.interactButtons.push(button);
+            this.itemsContainer?.add(button);
+            i++;
+          }
 
           // Update BrewScene based on the cauldron's attributes
           const attributesRecord: Record<string, string | number> =
@@ -928,8 +942,6 @@ export class UxScene extends Phaser.Scene {
           brewScene.setNumIngredients(
             parseInt(ingredientsAttr?.value.toString() || '0') || 0
           );
-
-          i++;
         }
       });
     } else {
