@@ -375,10 +375,6 @@ export class WorldScene extends Phaser.Scene {
     this.terrainWidth = globalData.tiles[0].length;
     this.terrainHeight = globalData.tiles.length;
 
-    console.log('gobalData.tiles: ', globalData.tiles);
-    console.log('terrainWidth: ', this.terrainWidth);
-    console.log('terrain heigh: ', this.terrainHeight);
-
     const background = this.add.image(0, 0, 'background');
     background.setOrigin(0, 0);
     background.setScrollFactor(0); // Make it stay static
@@ -387,7 +383,6 @@ export class WorldScene extends Phaser.Scene {
 
     // Create a night overlay with lower depth
     this.nightOverlay = this.add.graphics();
-
     this.nightOverlay.fillRect(
       0,
       0,
@@ -540,7 +535,6 @@ export class WorldScene extends Phaser.Scene {
       this.nightOverlay.clear();
       // Dark blue with max 50% opacity
       this.nightOverlay.fillStyle(0x000033, this.nightOpacity);
-
       this.nightOverlay.fillRect(
         0,
         0,
