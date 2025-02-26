@@ -7,10 +7,10 @@ import { gameWorld } from '../../services/gameWorld/gameWorld';
 
 export class Sleep implements Plan {
   execute(npc: Mob): boolean {
-    //console.log('Sleeping', this.sleepTurns, world.fantasyDate.hour, world.fantasyDate.description());
+    //logger.log('Sleeping', this.sleepTurns, world.fantasyDate.hour, world.fantasyDate.description());
     const house = npc.getHouse();
     if (house) {
-      //console.log(`${npc.name} sleeping, moving to house ${house.id} at ${house.center().x}, ${house.center().y}`);
+      //logger.log(`${npc.name} sleeping, moving to house ${house.id} at ${house.center().x}, ${house.center().y}`);
       npc.setMoveTarget(house.center());
     } else {
       const portal = gameWorld.getPortal();
@@ -48,7 +48,7 @@ export class Sleep implements Plan {
       sleepPull *
       (1 - npc.needs.getNeed('max_energy') / 100) *
       npc.personality.traits[PersonalityTraits.Sleepy];
-    //console.log('Sleep pull:', sleepPull, 'Distance from midnight: ', distanceFromMidnight, 'Sleep utility:', sleepUtility, 'Hour:', hour, 'Sleep:', npc.personality.traits[PersonalityTraits.Sleepy]);
+    //logger.log('Sleep pull:', sleepPull, 'Distance from midnight: ', distanceFromMidnight, 'Sleep utility:', sleepUtility, 'Hour:', hour, 'Sleep:', npc.personality.traits[PersonalityTraits.Sleepy]);
     return sleepUtility;
   }
   /*

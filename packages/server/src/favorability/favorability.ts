@@ -1,5 +1,6 @@
 import { Community } from '../community/community';
 import { Mob } from '../mobs/mob';
+import { logger } from '../util/Logger';
 
 export class Favorability {
   /**
@@ -91,7 +92,7 @@ export class Favorability {
       ) *
         5 -
       player._attack;
-    console.log(
+    logger.log(
       this.modifiedLogistic(
         Community.getFavor('alchemists', 'silverclaw') / 100,
         200

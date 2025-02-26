@@ -3,6 +3,7 @@ import { Item } from '../items/item';
 import { DB } from '../services/database';
 import { collectDefaultMetrics, Registry, Counter, Gauge } from 'prom-client';
 import { createServer } from 'http';
+import { logger } from '../util/Logger';
 
 export class DataLogger {
   private static register = new Registry();
@@ -65,7 +66,7 @@ export class DataLogger {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
       }
     }).listen(port, () => {
-      console.log(
+      logger.log(
         `Prometheus metrics available at http://localhost:${port}/metrics`
       );
     });

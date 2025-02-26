@@ -7,6 +7,7 @@ import { FantasyDate } from '../date/fantasyDate';
 import { Item } from '../items/item';
 import { Personality } from '../mobs/traits/personality';
 import { Mob } from '../mobs/mob';
+import { logger } from '../util/Logger';
 
 import {
   ItemConfig,
@@ -80,7 +81,7 @@ export function loadDefaults(global: ServerWorldDescription) {
       height: number;
       community: string;
     }) => {
-      console.log(`Creating house at ${house.location}`);
+      logger.log(`Creating house at ${house.location}`);
       House.makeHouse(
         house.location,
         house.width,
@@ -92,7 +93,7 @@ export function loadDefaults(global: ServerWorldDescription) {
 
   // Create items
   items.forEach((item: ItemConfig) => {
-    console.log(`Creating item ${item.type} at ${JSON.stringify(item.coord)}`);
+    logger.log(`Creating item ${item.type} at ${JSON.stringify(item.coord)}`);
     itemGenerator.createItem({
       type: item.type,
       position: item.coord,
@@ -112,7 +113,7 @@ export function loadDefaults(global: ServerWorldDescription) {
       count: number;
       capacity: number;
     }) => {
-      console.log(
+      logger.log(
         `Creating container ${container.type} at ${JSON.stringify(container.coord)}`
       );
       itemGenerator.createItem({

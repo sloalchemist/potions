@@ -1,3 +1,5 @@
+import { logger } from './Logger';
+
 export function hexStringToNumber(hexString: string): number {
   // Remove the '#' if it exists
   if (hexString.startsWith('#')) {
@@ -42,8 +44,8 @@ export function combineHexColors(
   const w1 = weight1 / totalWeight;
   const w2 = weight2 / totalWeight;
 
-  console.log('w1', w1);
-  console.log('w2', w2);
+  logger.log('w1', w1);
+  logger.log('w2', w2);
 
   // Apply gamma correction
   const gamma = 1.8;

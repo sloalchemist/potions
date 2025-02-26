@@ -94,7 +94,7 @@ export class ServerWorld implements GameWorld {
     DataLogger.logData();
 
     //const totalTime = Date.now() - startTime;
-    //console.log('time to tick', totalTime);
+    //logger.log('time to tick', totalTime);
   }
 
   getPortalLocation(): Coord {

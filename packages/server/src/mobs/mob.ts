@@ -17,6 +17,7 @@ import { Carryable } from '../items/carryable';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 import { Favorability } from '../favorability/favorability';
+import { logger } from '../util/Logger';
 
 export type MobData = {
   personalities: Personality;
@@ -155,7 +156,7 @@ export class Mob {
   }
 
   sendMessage(message: string) {
-    console.log(`${this.name} reads: "${message}"`);
+    logger.log(`${this.name} reads: "${message}"`);
     pubSub.speak(this.id, message);
   }
 
@@ -756,7 +757,7 @@ export class Mob {
   }
 
   fightRequest(mob: Mob): boolean {
-    console.log('fight request from ' + mob.name);
+    logger.log('fight request from ' + mob.name);
     // TODO: replace with FightTracker class
     pubSub.playerAttacks(mob.id, ['Test Attack']);
     // fightTracker.startFight(mob, this);
@@ -930,7 +931,7 @@ export class Mob {
     if (this.type !== 'player') {
       const action = selectAction(this);
       const finished = action.execute(this);
-      //console.log(`${this.name} action: ${action.type()} finished: ${finished}`);
+      //logger.log(`${this.name} action: ${action.type()} finished: ${finished}`);
       this.setAction(action.type(), finished);
     }
 
