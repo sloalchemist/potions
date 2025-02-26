@@ -195,7 +195,7 @@ export class UxScene extends Phaser.Scene {
       tabX + tabWidth / 2,
       tabY,
       'Info',
-      () => this.showStatsTab(),
+      () => this.showInfoTab(),
       tabWidth,
       tabHeight
     );
@@ -261,15 +261,6 @@ export class UxScene extends Phaser.Scene {
       tabY,
       'Pack',
       () => this.showInventoryTab(),
-      tabWidth,
-      tabHeight
-    );
-    this.customizeTabButton = new TabButton(
-      this,
-      tabX + 6 * (tabWidth + tabSpacing) + tabWidth / 2,
-      tabY,
-      'Customize',
-      () => this.showCustomizeTab(),
       tabWidth,
       tabHeight
     );
@@ -548,27 +539,19 @@ export class UxScene extends Phaser.Scene {
         })
       );
 
-      // Add a title
-      this.customizeContainer.add(
-        this.add.text(100, 35, 'Character Customization', {
-          fontSize: '18px',
-          color: '#ffffff'
-        })
-      );
-
       // Color pickers
       const colors = ['Eye Color', 'Belly Color', 'Fur Color'];
       const colorKeys = ['eyeColor', 'bellyColor', 'furColor'];
       let yOffset = 90;
 
       colors.forEach((colorLabel, index) => {
-        const label = this.add.text(15, yOffset, colorLabel, {
+        const label = this.add.text(SCREEN_WIDTH / 2 + 40, yOffset, colorLabel, {
           fontSize: '14px',
           color: '#ffffff'
         });
         this.customizeContainer?.add(label);
 
-        const colorPicker = this.add.dom(225, yOffset, 'input');
+        const colorPicker = this.add.dom(SCREEN_WIDTH / 2 + 250, yOffset, 'input');
         const inputElement = colorPicker.node as HTMLInputElement;
         inputElement.type = 'color';
         inputElement.value = numberToHexString(
@@ -693,20 +676,20 @@ export class UxScene extends Phaser.Scene {
     }
   }
 
-  showStatsTab() {
+  showInfoTab() {
     this.statsContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
     this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
-    this.customizeContainer?.setVisible(false);
+    this.customizeContainer?.setVisible(true);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
-    this.updateTabStyles('stats');
+    this.updateTabStyles('info');
   }
 
   // Method to show the Items tab
@@ -805,32 +788,32 @@ export class UxScene extends Phaser.Scene {
     this.updateTabStyles('pack');
   }
 
-  showCustomizeTab() {
-    this.statsContainer?.setVisible(false);
-    this.itemsContainer?.setVisible(false);
-    this.chatContainer?.setVisible(false);
-    this.fightContainer?.setVisible(false);
-    this.recipeContainer?.setVisible(false);
-    this.effectsContainer?.setVisible(false);
-    this.nextButton?.setVisible(false);
-    this.backButton?.setVisible(false);
-    this.setInteractions(currentInteractions);
-    this.scene.stop('BrewScene');
-    this.inventoryContainer?.setVisible(false);
-    this.customizeContainer?.setVisible(true);
-    this.updateTabStyles('customize');
-  }
+  // showCustomizeTab() {
+  //   this.statsContainer?.setVisible(false);
+  //   this.itemsContainer?.setVisible(false);
+  //   this.chatContainer?.setVisible(false);
+  //   this.fightContainer?.setVisible(false);
+  //   this.recipeContainer?.setVisible(false);
+  //   this.effectsContainer?.setVisible(false);
+  //   this.nextButton?.setVisible(false);
+  //   this.backButton?.setVisible(false);
+  //   this.setInteractions(currentInteractions);
+  //   this.scene.stop('BrewScene');
+  //   this.inventoryContainer?.setVisible(false);
+  //   this.customizeContainer?.setVisible(true);
+  //   this.updateTabStyles('customize');
+  // }
 
   // Update the styles of the tab buttons based on the active tab
   updateTabStyles(
     activeTab:
       | 'items'
       | 'chat'
-      | 'stats'
+      | 'info'
       | 'pack'
       | 'fight'
       | 'handbook'
-      | 'customize'
+      // | 'customize'
   ) {
     if (
       this.itemsTabButton &&
@@ -843,11 +826,11 @@ export class UxScene extends Phaser.Scene {
     ) {
       this.itemsTabButton.setTabActive(activeTab === 'items');
       this.chatTabButton.setTabActive(activeTab === 'chat');
-      this.statsTabButton.setTabActive(activeTab === 'stats');
+      this.statsTabButton.setTabActive(activeTab === 'info');
       this.fightTabButton.setTabActive(activeTab === 'fight');
       this.potionTabButton.setTabActive(activeTab == 'handbook');
       this.inventoryTabButton.setTabActive(activeTab === 'pack');
-      this.customizeTabButton.setTabActive(activeTab === 'customize');
+      // this.customizeTabButton.setTabActive(activeTab === 'customize');
     }
   }
 
