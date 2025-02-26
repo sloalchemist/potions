@@ -33,12 +33,17 @@ export class Chat implements Plan {
       const nearbyMobIDs = npc.findNearbyMobIDs(6);
 
       for (const mobID of nearbyMobIDs) {
-        const mob = Mob.getMob(mobID)!;
-        if (!conversationTracker.hasConversation(mob)) {
-          this.startConversationWith = mob;
-          //conversationTracker.startConversation(npc, mob);
-          break;
+        const mob = Mob.getMob(mobID);
+        // Skip if mob doesn't exist, is self, or is already in conversation
+        if (
+          !mob ||
+          mob.id === npc.id ||
+          conversationTracker.hasConversation(mob)
+        ) {
+          continue;
         }
+        this.startConversationWith = mob;
+        break;
       }
     }
 

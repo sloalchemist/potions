@@ -208,7 +208,11 @@ export class Mob {
       `
       SELECT attack FROM mobView WHERE id = :id
       `
-    ).get({ id: this.id }) as { attack: number };
+    ).get({ id: this.id }) as { attack: number } | undefined;
+
+    if (!mob) {
+      throw new Error(`Mob ${this.id} not found in database`);
+    }
 
     return mob.attack;
   }
@@ -719,35 +723,52 @@ export class Mob {
     if (this.path.length === 0) {
       return;
     }
-    this._position = followPath(
+
+    const [newPosition] = followPath(
       this.position,
       this.path,
       this.speed,
       deltaTime
-    )[0]; // retrieve just the position
+    );
+
+    // Only update database if significant position change (> 0.1 units)
+    const significantChange =
+      Math.abs(newPosition.x - this._position.x) > 0.1 ||
+      Math.abs(newPosition.y - this._position.y) > 0.1;
+
+    this._position = newPosition;
 
     if (
       this.path.length === 0 &&
       this.target &&
-      this.target.x == this.position.x &&
-      this.target.y == this.position.y
+      this.target.x === this.position.x &&
+      this.target.y === this.position.y
     ) {
       this.target = undefined;
     }
-    DB.prepare(
-      `
-            UPDATE mobs
-            SET position_x = :position_x, position_y = :position_y, path = :path, target_x = :target_x, target_y = :target_y
-            WHERE id = :id
+
+    // Only write to database if position changed significantly
+    if (significantChange) {
+      DB.prepare(
         `
-    ).run({
-      position_x: this._position.x,
-      position_y: this._position.y,
-      id: this.id,
-      path: JSON.stringify(this.path),
-      target_x: this.target ? this.target?.x : null,
-      target_y: this.target ? this.target?.y : null
-    });
+        UPDATE mobs
+        SET 
+          position_x = :position_x,
+          position_y = :position_y,
+          path = :path,
+          target_x = :target_x,
+          target_y = :target_y
+        WHERE id = :id
+      `
+      ).run({
+        position_x: this._position.x,
+        position_y: this._position.y,
+        id: this.id,
+        path: JSON.stringify(this.path),
+        target_x: this.target?.x ?? null,
+        target_y: this.target?.y ?? null
+      });
+    }
   }
 
   chatRequest(mob: Mob): boolean {
@@ -927,15 +948,19 @@ export class Mob {
   tick(deltaTime: number) {
     this.updatePosition(deltaTime);
 
-    if (this.type !== 'player') {
+    // Only update actions and needs every few ticks
+    const currentTick = this.current_tick;
+    if (currentTick % 3 === 0 && this.type !== 'player') {
       const action = selectAction(this);
       const finished = action.execute(this);
-      //console.log(`${this.name} action: ${action.type()} finished: ${finished}`);
       this.setAction(action.type(), finished);
     }
 
-    this.checkTickReset();
-    this.needs.tick();
+    // Update needs and effects less frequently
+    if (currentTick % 5 === 0) {
+      this.checkTickReset();
+      this.needs.tick();
+    }
   }
 
   static SQL = `
