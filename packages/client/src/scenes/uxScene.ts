@@ -72,6 +72,7 @@ export class UxScene extends Phaser.Scene {
   recipeText: Phaser.GameObjects.Text | null = null;
   effectText: Phaser.GameObjects.Text | null = null;
   sideEffectsText: Phaser.GameObjects.Text | null = null;
+  inventoryText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
   fightButtons: ButtonManager = new ButtonManager([]);
   fightRequested: boolean = false;
@@ -560,6 +561,13 @@ export class UxScene extends Phaser.Scene {
         })
       );
 
+      this.inventoryText = this.add.text(
+        140,
+        35,
+        'ITEM COUNT: ' + world.getStoredItems().length + '/12'
+      );
+      this.inventoryContainer.add(this.inventoryText);
+
       // Color pickers
       const colors = ['Eye Color', 'Belly Color', 'Fur Color'];
       const colorKeys = ['eyeColor', 'bellyColor', 'furColor'];
@@ -633,6 +641,7 @@ export class UxScene extends Phaser.Scene {
           }))
         );
       });
+      //addRefreshCallback(() => this.refreshInventoryStats());
       setAttackCallback((attacks: string[]) => {
         console.log('attack setting', attacks);
         this.setFightOptions(
@@ -706,6 +715,12 @@ export class UxScene extends Phaser.Scene {
         'Extroversion: ' + currentCharacter.extroversion
       );
     }
+  }
+
+  refreshInventoryStats() {
+    this.inventoryText?.setText(
+      'ITEM COUNT: ' + world.getStoredItems().length + '/12'
+    );
   }
 
   showStatsTab() {
@@ -801,6 +816,7 @@ export class UxScene extends Phaser.Scene {
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(true);
     this.customizeContainer?.setVisible(false);
+    this.inventoryContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(true);
     this.setInteractions(currentInteractions);
@@ -1102,10 +1118,12 @@ export class UxScene extends Phaser.Scene {
 
   // Method to set inventory
   setInventory(inventory: Item[]) {
+    this.refreshInventoryStats();
+
     this.inventoryButtons?.clearButtonOptions();
 
     inventory.forEach((item, i) => {
-      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+      const y = 80 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
       const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
 
       const button = new Button(this, x, y, true, `${item.itemType.name}`, () =>
