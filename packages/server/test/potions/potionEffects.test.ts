@@ -779,7 +779,7 @@ test('Spawn a monster with a black potion', () => {
   // create a fight initiator (blob -> hunt)
   mobFactory.makeMob('player', playerPosition, 'TestingID', 'MonsterSpawner');
   const testMob = Mob.getMob('TestingID');
-  expect(testAttacker).not.toBeNull();
+  expect(testMob).not.toBeNull();
 
   // create a potion
   itemGenerator.createItem({
@@ -808,9 +808,6 @@ test('Spawn a monster with a black potion', () => {
 
   // check to make sure potion is not being carried
   expect(testMob!.carrying).toBeUndefined();
-
-  // run ticks
-  testMob?.tick(500);
 
   // check that monster exists
   const monster = Mob.getMob('Monster');

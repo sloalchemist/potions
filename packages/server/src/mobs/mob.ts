@@ -17,7 +17,7 @@ import { Carryable } from '../items/carryable';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 import { Favorability } from '../favorability/favorability';
-import { mobFactory } from '../mobFactory';
+import { mobFactory } from './mobFactory';
 
 export type MobData = {
   personalities: Personality;
