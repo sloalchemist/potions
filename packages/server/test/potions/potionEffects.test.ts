@@ -741,12 +741,6 @@ describe('Try to consume purple potion in various cases', () => {
     testEnemy?.tick(500);
     expect(testAttacker!.action).toBe('hunt');
 
-    // attack a couple times
-    testAttacker?.tick(500);
-    testEnemy?.tick(500);
-    testAttacker?.tick(500);
-    testEnemy?.tick(500);
-
     // grab health of enemy, make sure it has changed
     const healthWithBaseDefense = testEnemy!.health;
     expect(healthWithBaseDefense).toBeLessThan(testEnemy!._maxHealth);
@@ -760,10 +754,6 @@ describe('Try to consume purple potion in various cases', () => {
     expect(test).toBe(true);
 
     // attack a few times
-    testAttacker?.tick(500);
-    testEnemy?.tick(500);
-    testAttacker?.tick(500);
-    testEnemy?.tick(500);
     testAttacker?.tick(500);
     testEnemy?.tick(500);
 
@@ -907,6 +897,121 @@ describe('Try to consume green potion in various cases', () => {
     // grab health of enemy, make sure it has changed
     const firstEnemyHealth = testEnemy!.health;
     expect(firstEnemyHealth).toBeLessThan(testEnemy!._maxHealth);
+    
+    // run a tick
+    testEnemy?.tick(500);
+    FantasyDate.runTick();
+
+    // health should have decreased again
+    const secondEnemyHealth = testEnemy!.health;
+    expect(secondEnemyHealth).toBeLessThan(firstEnemyHealth);
+
+    // run a tick
+    testEnemy?.tick(500);
+    FantasyDate.runTick();
+
+    // health should have decreased again
+    const thirdEnemyHealth = testEnemy!.health;
+    expect(thirdEnemyHealth).toBeLessThan(secondEnemyHealth);
+
+    // run a tick
+    testEnemy?.tick(500);
+    FantasyDate.runTick();
+
+    // health should have decreased again
+    const fourthEnemyHealth = testEnemy!.health;
+    expect(fourthEnemyHealth).toBeLessThan(thirdEnemyHealth);
+
+    // run a tick
+    testEnemy?.tick(500);
+    FantasyDate.runTick();
+
+    // health should have decreased again
+    const fifthEnemyHealth = testEnemy!.health;
+    expect(fifthEnemyHealth).toBeLessThan(fourthEnemyHealth);
+
+    // run a tick
+    testEnemy?.tick(500);
+    FantasyDate.runTick();
+    
+    // health should be the same (effect ran out)
+    const sixthEnemyHealth = testEnemy!.health;
+    expect(sixthEnemyHealth).toBe(fifthEnemyHealth);
+
+    // should have run out now
+    expect(testEnemy!.poisoned).toBe(0);
+  });
+
+  test('Test green potion in combat (2 attacks, 6 ticks total)', () => {
+    FantasyDate.initialDate();
+
+    const playerPosition: Coord = { x: 0, y: 0 };
+    const enemyPosition: Coord = { x: 0, y: 1 };
+    const potionLocation: Coord = { x: 1, y: 0 };
+
+    // create a fight initiator (blob -> hunt)
+    mobFactory.makeMob('blob', playerPosition, 'TestingID', 'TestAttacker');
+    const testAttacker = Mob.getMob('TestingID');
+    expect(testAttacker).not.toBeNull();
+
+    // create a enemy (player)
+    mobFactory.makeMob('player', enemyPosition, 'TestEnemyID', 'TestEnemy');
+    const testEnemy = Mob.getMob('TestEnemyID');
+    expect(testEnemy).not.toBeNull();
+
+    // make the blob fight the player (due to low favorability)
+    Community.makeFavor('alchemists', 'blobs', -100);
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: String(hexStringToNumber('#00ff00')),
+      position: potionLocation,
+      carriedBy: testAttacker
+    });
+    const potion = Item.getItemIDAt(potionLocation);
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
+
+    // have the attacker drink the potion
+    const testDrink = new Drink();
+    const test = testDrink.interact(testAttacker!, potionItem!);
+    expect(test).toBe(true);
+
+    // grab health of enemy, see if it has started yet or we need one more tick
+    const initEnemyHealth = testEnemy!.health;
+    expect(initEnemyHealth).toBe(testEnemy!._maxHealth);
+
+    // go through ticks to ensure attacker is in range and attacking
+    testAttacker?.tick(500);
+    testEnemy?.tick(500);
+    FantasyDate.runTick();
+    expect(testAttacker!.action).toBe('hunt');
+
+    // check effects
+    expect(testAttacker!.damageOverTime).toBe(1);
+    expect(testEnemy!.poisoned).toBe(1);
+
+    // one tick of attacking should have ben registered
+    const init2EnemyHealth = testEnemy!.health;
+    expect(init2EnemyHealth).toBeLessThan(testEnemy!._maxHealth);
+
+    // go through ticks to ensure attacker is in range and attacking
+    testAttacker?.tick(500);
+    testEnemy?.tick(500);
+    FantasyDate.runTick();
+
+    // check effects (should still be 1)
+    expect(testAttacker!.damageOverTime).toBe(1);
+    expect(testEnemy!.poisoned).toBe(1);
+
+    // kill attacker so poison is the only thing doing damage
+    testAttacker?.destroy();
+
+    // grab health of enemy, make sure it has changed
+    const firstEnemyHealth = testEnemy!.health;
+    expect(firstEnemyHealth).toBeLessThan(init2EnemyHealth);
     
     // run a tick
     testEnemy?.tick(500);
