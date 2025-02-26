@@ -10,7 +10,7 @@ export class Create {
       type: type,
       subtype: createItem.subtype,
       position: creator.position,
-      ownedBy: creatorCommunity,
+      ownedByCommunity: creatorCommunity,
       attributes: {
         templateType: createItem.type,
         items: 1,

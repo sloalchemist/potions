@@ -11,5 +11,5 @@ export type ItemI = {
   house?: string;
   lock?: string;
   carried_by?: string;
-  ownedBy?: string;
+  ownedByCommunity?: string;
 };
