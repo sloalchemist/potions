@@ -299,7 +299,7 @@ describe('BrewScene actions based on state', () => {
 
     // Confirm the texture of the button is 'Toggle Menu'
     const toggleButton = uxScene.interactButtons.buttons[0];
-    expect(toggleButton.texture).toEqual('Toggle Menu');
+    expect(toggleButton.texture).toEqual('Craft Potion');
   });
 
   test('Toggle button opens the brew scene', () => {
@@ -445,7 +445,7 @@ describe('Buttons shown when BrewScene is and is not active', () => {
 
     // Confirm the texture of the second button is 'Toggle Menu'
     const toggleButton = uxScene.interactButtons.buttons[1];
-    expect(toggleButton.texture).toEqual('Toggle Menu');
+    expect(toggleButton.texture).toEqual('Finish Crafting');
 
     // Advance timers so that the setTimeout callback is executed
     jest.runAllTimers();
@@ -508,7 +508,7 @@ describe('Buttons shown when BrewScene is and is not active', () => {
 
     // Confirm the texture of the second button is 'Toggle Menu'
     const toggleButton = uxScene.interactButtons.buttons[1];
-    expect(toggleButton.texture).toEqual('Toggle Menu');
+    expect(toggleButton.texture).toEqual('Craft Potion');
   });
 });
 
