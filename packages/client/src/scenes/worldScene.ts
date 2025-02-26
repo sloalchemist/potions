@@ -5,7 +5,7 @@ import {
   initializePlayer,
   tick
 } from '../world/controller';
-import { bindAblyToWorldScene, setupAbly } from '../services/ablySetup';
+import { bindAblyToWorldScene } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
 import { Coord } from '@rt-potion/common';
 import { publicCharacterId, getWorldID } from '../worldMetadata';
@@ -690,20 +690,20 @@ export class WorldScene extends Phaser.Scene {
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
     this.stopScenes();
-    this.scene.start('LoadCharacterScene', {autoStart: false});
+    this.scene.start('LoadCharacterScene', { autoStart: false });
   }
 
   /* Stop all scenes related to game play and automatically restart game.*/
   resetToRespawn() {
     this.stopScenes();
-    this.scene.start('LoadCharacterScene', {autoStart: true});
+    this.scene.start('LoadCharacterScene', { autoStart: true });
   }
 
   /* Stop all scenes related to game play */
   stopScenes() {
     setGameState('uninitialized');
     const allScenes = this.scene.manager.getScenes();
-    allScenes.forEach(scene => {
+    allScenes.forEach((scene) => {
       const key = scene.sys.settings.key;
       this.scene.stop(key);
     });
