@@ -11,7 +11,7 @@ export class PortalLoadingScene extends Phaser.Scene {
       0,
       0,
       SCREEN_WIDTH,
-      SCREEN_HEIGHT,
+      SCREEN_HEIGHT / 2,
       0x000000,
       0.7
     );
@@ -20,7 +20,7 @@ export class PortalLoadingScene extends Phaser.Scene {
     // Add loading text
     const loadingText = this.add.text(
       SCREEN_WIDTH / 2,
-      SCREEN_HEIGHT / 2,
+      SCREEN_HEIGHT / 4,
       'Loading World...',
       {
         fontSize: '32px',
