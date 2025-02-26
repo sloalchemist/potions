@@ -194,7 +194,7 @@ export class UxScene extends Phaser.Scene {
       this,
       tabX + tabWidth / 2,
       tabY,
-      'Info',
+      'player',
       () => this.showInfoTab(),
       tabWidth,
       tabHeight
@@ -699,7 +699,7 @@ export class UxScene extends Phaser.Scene {
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
-    this.updateTabStyles('info');
+    this.updateTabStyles('player');
   }
 
   // Method to show the Items tab
@@ -810,9 +810,9 @@ export class UxScene extends Phaser.Scene {
   // Update the styles of the tab buttons based on the active tab
   updateTabStyles(
     activeTab:
+      | 'player'
       | 'items'
       | 'chat'
-      | 'info'
       | 'pack'
       | 'fight'
       | 'handbook'
@@ -827,7 +827,7 @@ export class UxScene extends Phaser.Scene {
     ) {
       this.itemsTabButton.setTabActive(activeTab === 'items');
       this.chatTabButton.setTabActive(activeTab === 'chat');
-      this.infoTabButton.setTabActive(activeTab === 'info');
+      this.infoTabButton.setTabActive(activeTab === 'player');
       this.fightTabButton.setTabActive(activeTab === 'fight');
       this.potionTabButton.setTabActive(activeTab == 'handbook');
       this.inventoryTabButton.setTabActive(activeTab === 'pack');
