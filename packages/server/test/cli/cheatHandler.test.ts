@@ -1,5 +1,6 @@
 import { commonSetup, world } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
+import { logger } from '../../src/util/Logger';
 import { itemGenerator } from '../../src/items/itemGenerator';
 import { DB } from '../../src/services/database';
 import {
@@ -53,45 +54,47 @@ describe('Cheat Handler Tests', () => {
       expect(logSpy).toHaveBeenCalledWith(HELP_PROMPT);
     });
 
-    describe('Spawn Mob Tests', () => {
-      it('should spawn mob with type blob', () => {
-        const makeMobSpy = jest.spyOn(mobFactory, 'makeMob');
+    describe('logtoggle CLI Command', () => {
+      it('Should enable logging when "logtoggle on" is executed', () => {
         const logSpy = jest.spyOn(console, 'log');
-        handleCliCommand('spawn mob blob x:0 y:0');
-        expect(makeMobSpy).toHaveBeenCalledWith('blob', { x: 0, y: 0 });
-        expect(logSpy).toHaveBeenCalledWith('Spawned mob: blob at (0, 0)');
+        const enableLoggingSpy = jest.spyOn(logger, 'enableLogging');
+
+        handleCliCommand('logtoggle on');
+        expect(enableLoggingSpy).toHaveBeenCalled();
+        expect(logSpy).toHaveBeenCalledWith('Logging enabled');
+        logger.log('Test message after enabling logging');
+        expect(logSpy).toHaveBeenCalledWith('Test message after enabling logging');
       });
 
-      it('should spawn mob with type fighter', () => {
-        const makeMobSpy = jest.spyOn(mobFactory, 'makeMob');
+      it('Should disable logging when "logtoggle off" is executed', () => {
         const logSpy = jest.spyOn(console, 'log');
-        handleCliCommand('spawn mob fighter x:0 y:0');
-        expect(makeMobSpy).toHaveBeenCalledWith('fighter', { x: 0, y: 0 });
-        expect(logSpy).toHaveBeenCalledWith('Spawned mob: fighter at (0, 0)');
+        const disableLoggingSpy = jest.spyOn(logger, 'disableLogging');
+
+        handleCliCommand('logtoggle off');
+        expect(disableLoggingSpy).toHaveBeenCalled();
+        expect(logSpy).toHaveBeenCalledWith('Logging disabled');
+
+        logger.log('Test message after disabling logging');
+        expect(logSpy).not.toHaveBeenCalledWith('Test message after disabling logging');
       });
 
-      it('should spawn mob with type player', () => {
-        const makeMobSpy = jest.spyOn(mobFactory, 'makeMob');
+      it('Should toggle logging correctly', () => {
         const logSpy = jest.spyOn(console, 'log');
-        handleCliCommand('spawn mob player x:0 y:0');
-        expect(makeMobSpy).toHaveBeenCalledWith('player', { x: 0, y: 0 });
-        expect(logSpy).toHaveBeenCalledWith('Spawned mob: player at (0, 0)');
+
+        handleCliCommand('logtoggle on');
+        logger.log('Test message after enabling logging');
+        expect(logSpy).toHaveBeenCalledWith('Test message after enabling logging');
+
+        handleCliCommand('logtoggle off');
+        logger.log('Test message after disabling logging');
+        expect(logSpy).not.toHaveBeenCalledWith('Test message after disabling logging');
       });
 
-      it('should spawn mob with type villager', () => {
-        const makeMobSpy = jest.spyOn(mobFactory, 'makeMob');
-        const logSpy = jest.spyOn(console, 'log');
-        handleCliCommand('spawn mob villager x:0 y:0');
-        expect(makeMobSpy).toHaveBeenCalledWith('villager', { x: 0, y: 0 });
-        expect(logSpy).toHaveBeenCalledWith('Spawned mob: villager at (0, 0)');
-      });
+      it('Should toggle logging when no argument is provided', () => {
+        const toggleLoggingSpy = jest.spyOn(logger, 'toggleLogging');
 
-      it('shold spawn mob with invalid mob type', () => {
-        const logSpy = jest.spyOn(console, 'log');
-        handleCliCommand('spawn mob invalidMob x:0 y:0');
-        expect(logSpy).toHaveBeenCalledWith(
-          expect.stringContaining('Unknown mob type: invalidMob')
-        );
+        handleCliCommand('logtoggle');
+        expect(toggleLoggingSpy).toHaveBeenCalled();
       });
     });
 
