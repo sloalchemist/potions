@@ -26,8 +26,6 @@ export function drinkPotion(
 ): boolean {
   const potionStr = numberToHexString(Number(potionType));
 
-  console.log('Drinking potion of type:', potionStr);
-
   switch (potionStr) {
     case '#ff0000':
       console.log('Drinking red potion');
@@ -81,18 +79,17 @@ export function drinkPotion(
       return true;
     default:
       // handle cases where potionStr doesn't match any known potion
-      console.log('Unknown potion color');
 
-      //check if potion is close to black
+      // check if potion is close to black
       if (closeToBlack(potionStr, mob)) {
         return true;
       }
 
-      //check if potion string is close to another color
+      // check if potion string is close to another color
       let closestColor: string | null = null;
       let minDistance = Infinity;
-      const upperThreshold = 20; // 20 is very similar
-      const lowerThreshold = 30; // 35 is similar but not exact
+      const upperThreshold = 9; // very similar
+      const lowerThreshold = 20; // similar but not exact
 
       // Find the closest color in the dictionary
       for (const definedColor in colordict) {
@@ -102,13 +99,12 @@ export function drinkPotion(
           closestColor = definedColor;
         }
       }
-      console.log('Distance:', minDistance, 'Color:', closestColor);
 
       // If the closest color is within the threshold, give weak potion effect
       if (closestColor && minDistance <= upperThreshold) {
-        return drinkPotion(mob, String(hexStringToNumber(closestColor)), 0.7);
-      } else if (closestColor && minDistance <= lowerThreshold) {
         return drinkPotion(mob, String(hexStringToNumber(closestColor)), 0.5);
+      } else if (closestColor && minDistance <= lowerThreshold) {
+        return drinkPotion(mob, String(hexStringToNumber(closestColor)), 0.3);
       }
 
       // otherwise, given random effect
@@ -125,12 +121,11 @@ function giveRandomEffect(mob: Mob) {
 
   switch (randomNum) {
     case 0:
-      console.log('Random Effect: Reduce Player Speed');
-      mob.changeEffect(mob._speed * -0.25, 60, 'speed');
+      // Random Effect: Reduce Speed
+      mob.changeEffect(mob._speed * -0.25, 20, 'speed');
       return true;
     case 1:
-      console.log('Random Effect: Reduce Player Health');
-      // reduce player health by 20 or to 1
+      // Reduce Health by 20 or to 1
       if (mob.health > 20) {
         mob.changeHealth(-20);
       } else {
@@ -138,15 +133,15 @@ function giveRandomEffect(mob: Mob) {
       }
       return true;
     case 2:
-      console.log('Random Effect: Reduce Play Defense');
+      // Random Effect: Reduce Defense
       mob.changeEffect(mob._defense * -0.25, 60, 'defense');
       return true;
     case 3:
-      console.log('Random Effect: Reduce Player Attack');
+      // Random Effect: Reduce Attack
       mob.changeEffect(mob._attack * -0.25, 60, 'attack');
       return true;
     case 4:
-      console.log('Random Effect: Permanently Reduce Player Health');
+      // Random Effect: Permanently Reduce Player Health
       // reduce player health by 5 or to 1
       if (mob._maxHealth > 5) {
         mob.changeMaxHealth(-5);
@@ -155,7 +150,7 @@ function giveRandomEffect(mob: Mob) {
       }
       return true;
     case 5:
-      console.log('Random Effect: Boost All Player Stats Slightly');
+      // Random Effect: Boost All Stats Slightly');
       mob.changeHealth(50);
       mob.changeEffect(mob._speed * 0.15, 60, 'speed');
       mob.changeEffect(mob._attack * 0.15, 60, 'attack');
@@ -163,11 +158,11 @@ function giveRandomEffect(mob: Mob) {
       mob.changeMaxHealth(5, false);
       return true;
     case 6:
-      console.log('Random Effect: *Stun* Greatly Decrease Player Movement');
+      // *Stun* Greatly Decrease Movement
       mob.changeEffect(mob._speed * -0.8, 10, 'speed');
       return true;
     case 7:
-      console.log('Random Effect: Reduce Player Gold');
+      // Random Effect: Reduce Gold
       if (mob.gold >= 5) {
         mob.changeGold(-5);
       } else {
@@ -185,7 +180,7 @@ function closeToBlack(potionStr: string, mob: Mob): boolean {
     potionRgb.g < thresholdBlack &&
     potionRgb.b < thresholdBlack
   ) {
-    console.log('Potion is close to black.');
+    // Potion is black, mob dies
     mob.changeHealth(-mob.health);
     return true;
   }
