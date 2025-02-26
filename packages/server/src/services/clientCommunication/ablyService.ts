@@ -336,9 +336,7 @@ export class AblyService implements PubSub {
 
   public changeFavoriteItem(key: string, item: string): void {
     if (key == undefined || item == undefined) {
-      throw new Error(
-        `Sending invalid changeSpeed message ${key}, ${item}`
-      );
+      throw new Error(`Sending invalid changeSpeed message ${key}, ${item}`);
     }
     this.addToBroadcast({
       type: 'mob_change_fav_item',
