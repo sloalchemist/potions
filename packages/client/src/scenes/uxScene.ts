@@ -217,7 +217,7 @@ export class UxScene extends Phaser.Scene {
       tabWidth,
       tabHeight
     );
-    //These buttons are for paginating 'items' and 'fight' within actions tab 
+    //These buttons are for paginating 'items' and 'fight' within actions tab
     this.actionNextButton = new SlideButton(
       this,
       400,
@@ -323,13 +323,22 @@ export class UxScene extends Phaser.Scene {
       let yOffset = 90;
 
       colors.forEach((colorLabel, index) => {
-        const label = this.add.text(SCREEN_WIDTH / 2 + 40, yOffset, colorLabel, {
-          fontSize: '14px',
-          color: '#ffffff'
-        });
+        const label = this.add.text(
+          SCREEN_WIDTH / 2 + 40,
+          yOffset,
+          colorLabel,
+          {
+            fontSize: '14px',
+            color: '#ffffff'
+          }
+        );
         this.infoContainer?.add(label);
 
-        const colorPicker = this.add.dom(SCREEN_WIDTH / 2 + 250, yOffset, 'input');
+        const colorPicker = this.add.dom(
+          SCREEN_WIDTH / 2 + 250,
+          yOffset,
+          'input'
+        );
         const inputElement = colorPicker.node as HTMLInputElement;
         inputElement.type = 'color';
         inputElement.value = numberToHexString(
@@ -753,13 +762,7 @@ export class UxScene extends Phaser.Scene {
   }
 
   // Update the styles of the tab buttons based on the active tab
-  updateTabStyles(
-    activeTab:
-      | 'player'
-      | 'items'
-      | 'chat'
-      | 'pack'
-  ) {
+  updateTabStyles(activeTab: 'player' | 'items' | 'chat' | 'pack') {
     if (
       this.itemsTabButton &&
       this.chatTabButton &&
