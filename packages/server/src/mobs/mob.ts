@@ -682,6 +682,22 @@ export class Mob {
     pubSub.changeGold(this.id, amount, this._gold);
   }
 
+  /**
+   * Randomly chooses the favorite item of a mob, NOT including the mobs' current favorite item
+   */
+  changeFavoriteItem() {
+    const item = Item.diffRandomItem(this.favorite_item);
+    DB.prepare(
+      `
+        UPDATE mobs
+        SET favorite_item = :favorite_item
+        WHERE id = :id
+      `
+    ).run({ favorite_item: item, id: this.id })
+    this.favorite_item = item;
+    pubSub.changeFavoriteItem(this.id, item);
+  }
+
   destroy() {
     if (this.gold > 0 && this.position) {
       const position = Item.findEmptyPosition(this.position);

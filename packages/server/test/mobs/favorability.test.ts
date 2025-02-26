@@ -135,6 +135,18 @@ describe('Favorability Tests', () => {
     // testing whether the item actually a possible item type that could be generated
     expect(itemGenerator._itemTypes[testplayer_item].carryable).toBe(true);
   });
+  test('Update mob favorite item', () => {
+    // initialize player
+    const position: Coord = { x: 0, y: 0 };
+
+    mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
+    var testplayer = Mob.getMob('testPlayer');
+    var fav_item_1 = testplayer?._favorite_item
+
+    testplayer?.changeFavoriteItem();
+    var fav_item_2 = testplayer?._favorite_item
+    expect(fav_item_1 === fav_item_2).toBe(false);
+  });
 });
 
 afterEach(() => {
