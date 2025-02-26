@@ -17,6 +17,7 @@ import { Carryable } from '../items/carryable';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 import { Favorability } from '../favorability/favorability';
+import { mobFactory } from './mobFactory';
 
 export type MobData = {
   personalities: Personality;
@@ -554,6 +555,34 @@ export class Mob {
     pubSub.changePersonality(this.id, trait, amount);
   }
 
+  spawnMonster(): void {
+    // spawn blob with low favorability, then kill it off after some time
+    // get player position
+    const playerPosition = this.position;
+
+    // randomize monster position based off of player position
+    const monsterPosition = playerPosition;
+
+    // spawn a monster (blob)
+    mobFactory.makeMob('blob', monsterPosition, 'Monster', 'TestAttacker');
+    const monster = Mob.getMob('Monster');
+
+    // make the blob fight everyone (set satiation super low, hunt)
+    DB.prepare(
+      `
+              UPDATE mobs
+              SET satiation = 0
+              WHERE id = :id
+          `
+    ).run({ id: monster!.id });
+
+    monster!.setAction('hunt');
+
+    // somehow make it time out/die after some time
+    // add row to change effect for monster
+    monster!.changeEffect(1, 120, 'monster');
+  }
+
   changeEffect(delta: number, duration: number, attribute: string): void {
     // only responsible for inserting rows and broadcasting changes
     const targetTick = this.current_tick + duration;
@@ -609,12 +638,11 @@ export class Mob {
   }
 
   private checkPoison(): void {
-    if (this.poisoned == 1){
+    if (this.poisoned == 1) {
       const deltaDamage = Math.floor(Math.random() * -10);
 
       this.changeHealth(deltaDamage);
     }
-
   }
 
   private checkTickReset(): void {
@@ -661,6 +689,12 @@ export class Mob {
     );
 
     for (const row of uniqueRes) {
+      // kill monster if attribute is monster
+      if (row.attribute == 'monster') {
+        this.destroy();
+        return;
+      }
+
       // get the new value for the attribute and broadcast it
       const value = DB.prepare(
         `
