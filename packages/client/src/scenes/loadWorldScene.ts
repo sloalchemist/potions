@@ -51,9 +51,17 @@ export class LoadWorldScene extends Phaser.Scene {
   preload() {
     this.load.image('frame', 'static/titleFrame.png');
     this.load.image('title', 'static/title.png');
+
+    // Load menu music
+    // this.load.audio('menu_music', ['static/music/medieval_background_music.mp3']);
   }
 
   create() {
+    // Play menu music
+    // if (!this.sound.isPlaying('menu_music')) {
+    //   this.sound.add('menu_music', { loop: true }).play();
+    // }
+
     // Add background image
     const background = this.add.image(0, 0, 'title');
     background.setOrigin(0, 0);
@@ -269,6 +277,7 @@ export class LoadWorldScene extends Phaser.Scene {
           this.scene.start('FrameScene');
           this.scene.start('LeaderboardScene');
           setGameState('worldLoaded');
+          // this.sound.removeByKey('menu_music'); // Stop the music when the game starts
         });
       })
       .catch((_error) => {
