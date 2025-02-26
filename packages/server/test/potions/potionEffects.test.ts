@@ -769,6 +769,61 @@ describe('Try to consume purple potion in various cases', () => {
   });
 });
 
+// BLACK POTION TEST
+test('Spawn a monster with a black potion', () => {
+  FantasyDate.initialDate();
+
+  const playerPosition: Coord = { x: 0, y: 0 };
+  const potionLocation: Coord = { x: 1, y: 0 };
+
+  // create a fight initiator (blob -> hunt)
+  mobFactory.makeMob('player', playerPosition, 'TestingID', 'MonsterSpawner');
+  const testMob = Mob.getMob('TestingID');
+  expect(testAttacker).not.toBeNull();
+
+  // create a potion
+  itemGenerator.createItem({
+    type: 'potion',
+    subtype: String(hexStringToNumber('#166060')),
+    position: potionLocation,
+    carriedBy: testMob
+  });
+  const potion = Item.getItemIDAt(potionLocation);
+  expect(potion).not.toBeNull();
+  const potionItem = Item.getItem(potion!);
+  expect(potionItem).not.toBeNull();
+
+  // ensure the initiator is carrying the potion
+  expect(testMob!.carrying).not.toBeNull();
+  expect(testMob!.carrying!.type).toBe('potion');
+  expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#166060')));
+
+  // have the attacker drink the potion
+  const testDrink = new Drink();
+  const test = testDrink.interact(testMob!, potionItem!);
+  expect(test).toBe(true);
+
+  // run ticks
+  testMob?.tick(500);
+
+  // check to make sure potion is not being carried
+  expect(testMob!.carrying).toBeUndefined();
+
+  // run ticks
+  testMob?.tick(500);
+
+  // check that monster exists
+  const monster = Mob.getMob('Monster');
+  expect(monster).not.toBeNull();
+
+  // wait to make the monster time out
+  monster?.tick(500);
+
+  // check to make sure monster is dead
+  const deadMonster = Mob.getMob('Monster');
+  expect(deadMonster).toBeNull();
+});
+
 afterAll(() => {
   DB.close();
 });

@@ -38,6 +38,10 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
       const defenseDuration = 240;
       mob.changeEffect(defenseDelta, defenseDuration, 'defense');
       return true;
+    case '#166060':
+      console.log('Drinking black potion');
+      mob.spawnMonster();
+      return true;
     default:
       // handle cases where potionStr doesn't match any known potion
       console.log('Unknown potion color');

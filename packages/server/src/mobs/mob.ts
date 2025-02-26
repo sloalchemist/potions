@@ -17,6 +17,7 @@ import { Carryable } from '../items/carryable';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 import { Favorability } from '../favorability/favorability';
+import { mobFactory } from '../mobFactory';
 
 export type MobData = {
   personalities: Personality;
@@ -588,6 +589,34 @@ export class Mob {
     }
   }
 
+  spawnMonster(): void {
+    // spawn blob with low favorability, then kill it off after some time
+    // get player position
+    const playerPosition = this.position;
+
+    // randomize monster position based off of player position
+    const monsterPosition = playerPosition;
+
+    // spawn a monster (blob)
+    mobFactory.makeMob('blob', monsterPosition, 'Monster', 'TestAttacker');
+    const monster = Mob.getMob('Monster');
+
+    // make the blob fight everyone (set satiation super low, hunt)
+    DB.prepare(
+      `
+              UPDATE mobs
+              SET satiation = 0
+              WHERE id = :id
+          `
+    ).run({ id: monster!.id });
+
+    monster!.setAction('hunt');
+
+    // somehow make it time out/die after some time
+    // add row to change effect for monster
+    monster!.changeEffect(1, 120, 'monster');
+  }
+
   private checkTickReset(): void {
     type QueryResult = {
       attribute: string;
@@ -632,6 +661,12 @@ export class Mob {
     );
 
     for (const row of uniqueRes) {
+      // kill monster if attribute is monster
+      if (row.attribute == 'monster') {
+        this.destroy();
+        return;
+      }
+
       // get the new value for the attribute and broadcast it
       const value = DB.prepare(
         `
