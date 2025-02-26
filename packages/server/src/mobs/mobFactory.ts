@@ -44,7 +44,6 @@ class MobFactory {
     //Adding fields that can now be from the auth-server  (health gold appearance)
     health_from_auth?: number,
     gold_from_auth?: number,
-    speed_from_auth?: number,
     attack_from_auth?: number
   ): void {
     if (id == undefined) {
@@ -64,7 +63,7 @@ class MobFactory {
     if (name == undefined) {
       name = nameGeneratorFactory.generateName(mobType.name_style);
     }
-    const speed = speed_from_auth ?? mobType.speed;
+    const speed = mobType.speed;
     const attack = attack_from_auth ?? mobType.attack;
     const defense = mobType.defense;
     const favorite_item = Item.getRandomItem();
