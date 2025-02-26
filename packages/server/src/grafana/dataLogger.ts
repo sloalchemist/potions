@@ -11,7 +11,7 @@ import {
 } from 'prom-client';
 import 'dotenv/config';
 import { getEnv } from '@rt-potion/common';
-import { worldID } from '../services/setup';
+//import { worldID } from '../services/setup';
 
 export class DataLogger {
   private static register = new Registry();
@@ -123,13 +123,13 @@ export function pushMetrics() {
 
   // Load metrics under World Name 'Metric'
   gateway
-    .pushAdd({ jobName: `${worldID} Metrics` })
+    .pushAdd({ jobName: `Metrics` })
     .then()
     .catch((e) => console.log(e));
 
   function pushData() {
     gateway
-      .push({ jobName: `${worldID} Metrics` })
+      .push({ jobName: `Metrics` })
       .then()
       .catch((e) => console.log(e));
   }
