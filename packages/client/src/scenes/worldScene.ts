@@ -545,7 +545,7 @@ export class WorldScene extends Phaser.Scene {
 
     const now = Date.now();
     let publish = false;
-    if (now - this.lastPublishTime >= 100) {
+    if (now - this.lastPublishTime >= 400) {
       publish = true;
       this.lastPublishTime = now;
     } 
