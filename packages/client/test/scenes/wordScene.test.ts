@@ -15,7 +15,12 @@ describe('Check WorldScene resetToLoadWorldScene interactions', () => {
         chatButtons: {
           clearButtonOptions: jest.fn()
         }
-      })
+      }),
+      manager: {
+        getScenes: jest.fn().mockReturnValue([
+          { sys: { settings: { key: "BrewScene" } } }
+        ])
+      }
     } as any;
   });
 
