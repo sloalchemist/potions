@@ -564,7 +564,7 @@ export class Mob {
     const monsterPosition = playerPosition;
 
     // spawn a monster (blob)
-    mobFactory.makeMob('blob', monsterPosition, 'Monster', 'TestAttacker');
+    mobFactory.makeMob('blob', monsterPosition, 'Monster', 'Monster');
     const monster = Mob.getMob('Monster');
 
     // make the blob fight everyone (set satiation super low, hunt)
@@ -580,7 +580,7 @@ export class Mob {
 
     // somehow make it time out/die after some time
     // add row to change effect for monster
-    monster!.changeEffect(1, 120, 'monster');
+    monster!.changeEffect(1, 15, 'monster');
   }
 
   changeEffect(delta: number, duration: number, attribute: string): void {
@@ -620,6 +620,10 @@ export class Mob {
       delta: finalDelta,
       targetTick: targetTick
     });
+
+    if (attribute == 'monster') {
+      return;
+    }
 
     // grab updated value
     const value = DB.prepare(
