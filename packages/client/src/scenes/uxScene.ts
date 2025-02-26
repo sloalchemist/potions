@@ -81,10 +81,6 @@ export class UxScene extends Phaser.Scene {
   itemsTabButton: TabButton | null = null;
   chatTabButton: TabButton | null = null;
   infoTabButton: TabButton | null = null;
-  fightTabButton: TabButton | null = null;
-  potionTabButton: TabButton | null = null;
-  nextButton: SlideButton | null = null;
-  backButton: SlideButton | null = null;
   actionNextButton: SlideButton | null = null;
   actionBackButton: SlideButton | null = null;
   inventoryTabButton: TabButton | null = null;
@@ -170,7 +166,7 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer = this.add.container(0, 40);
     this.inventoryContainer = this.add.container(0, 40);
 
-    const tabWidth = 58;
+    const tabWidth = 104;
     const tabHeight = 40;
     const tabSpacing = 5;
 
@@ -198,7 +194,7 @@ export class UxScene extends Phaser.Scene {
       this,
       tabX + tabWidth / 2,
       tabY,
-      'player',
+      'Player',
       () => this.showInfoTab(),
       tabWidth,
       tabHeight
@@ -220,44 +216,6 @@ export class UxScene extends Phaser.Scene {
       () => this.showChatTab(),
       tabWidth,
       tabHeight
-    );
-    this.fightTabButton = new TabButton(
-      this,
-      tabX + 3 * (tabWidth + tabSpacing) + tabWidth / 2,
-      tabY,
-      'Fight',
-      () => this.showFightTab(),
-      tabWidth,
-      tabHeight
-    );
-    this.potionTabButton = new TabButton(
-      this,
-      tabX + 4 * (tabWidth + tabSpacing) + tabWidth / 2,
-      tabY,
-      'HandBook',
-      () => this.showPotionsTab(),
-      tabWidth,
-      tabHeight
-    );
-    this.nextButton = new SlideButton(
-      this,
-      400,
-      83,
-      '',
-      () => this.showNextTab(),
-      50,
-      30,
-      'right'
-    );
-    this.backButton = new SlideButton(
-      this,
-      60,
-      83,
-      '',
-      () => this.showPotionsTab(),
-      50,
-      30,
-      'left'
     );
     //These buttons are for paginating 'items' and 'fight' within actions tab 
     this.actionNextButton = new SlideButton(
@@ -282,14 +240,13 @@ export class UxScene extends Phaser.Scene {
     );
     this.inventoryTabButton = new TabButton(
       this,
-      tabX + 5 * (tabWidth + tabSpacing) + tabWidth / 2,
+      tabX + 3 * (tabWidth + tabSpacing) + tabWidth / 2,
       tabY,
       'Pack',
       () => this.showInventoryTab(),
       tabWidth,
       tabHeight
     );
-    this.potionTabButton.text.setFontSize(20);
 
     const backgroundTabs = this.add.graphics();
     const strokeColor = 0xffffff;
@@ -726,8 +683,6 @@ export class UxScene extends Phaser.Scene {
     this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
-    this.nextButton?.setVisible(false);
-    this.backButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
@@ -744,8 +699,6 @@ export class UxScene extends Phaser.Scene {
     this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
-    this.nextButton?.setVisible(false);
-    this.backButton?.setVisible(false);
     this.actionNextButton?.setVisible(true);
     this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
@@ -762,8 +715,6 @@ export class UxScene extends Phaser.Scene {
     this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
-    this.nextButton?.setVisible(false);
-    this.backButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
@@ -780,47 +731,12 @@ export class UxScene extends Phaser.Scene {
     this.fightContainer?.setVisible(true);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
-    this.nextButton?.setVisible(false);
-    this.backButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(true);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
-    this.updateTabStyles('fight');
-  }
-
-  // Method to show the Potions tab
-  showPotionsTab() {
-    this.infoContainer?.setVisible(false);
-    this.itemsContainer?.setVisible(false);
-    this.chatContainer?.setVisible(false);
-    this.fightContainer?.setVisible(false);
-    this.recipeContainer?.setVisible(true);
-    this.effectsContainer?.setVisible(false);
-    this.nextButton?.setVisible(true);
-    this.backButton?.setVisible(false);
-    this.actionNextButton?.setVisible(false);
-    this.actionBackButton?.setVisible(false);
-    this.setInteractions(currentInteractions);
-    this.inventoryContainer?.setVisible(false);
-    this.scene.stop('BrewScene');
-    this.updateTabStyles('handbook');
-  }
-
-  // Method to show the Page Flips
-  showNextTab() {
-    this.infoContainer?.setVisible(false);
-    this.itemsContainer?.setVisible(false);
-    this.chatContainer?.setVisible(false);
-    this.fightContainer?.setVisible(false);
-    this.recipeContainer?.setVisible(false);
-    this.effectsContainer?.setVisible(true);
-    this.nextButton?.setVisible(false);
-    this.backButton?.setVisible(true);
-    this.actionNextButton?.setVisible(false);
-    this.actionBackButton?.setVisible(false);
-    this.setInteractions(currentInteractions);
+    // this.updateTabStyles('fight');
   }
 
   showInventoryTab() {
@@ -831,27 +747,10 @@ export class UxScene extends Phaser.Scene {
     this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
-    this.nextButton?.setVisible(false);
-    this.backButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
     this.updateTabStyles('pack');
   }
-
-  // showCustomizeTab() {
-  //   this.infoContainer?.setVisible(false);
-  //   this.itemsContainer?.setVisible(false);
-  //   this.chatContainer?.setVisible(false);
-  //   this.fightContainer?.setVisible(false);
-  //   this.recipeContainer?.setVisible(false);
-  //   this.effectsContainer?.setVisible(false);
-  //   this.nextButton?.setVisible(false);
-  //   this.backButton?.setVisible(false);
-  //   this.setInteractions(currentInteractions);
-  //   this.scene.stop('BrewScene');
-  //   this.inventoryContainer?.setVisible(false);
-  //   this.updateTabStyles('customize');
-  // }
 
   // Update the styles of the tab buttons based on the active tab
   updateTabStyles(
@@ -860,22 +759,16 @@ export class UxScene extends Phaser.Scene {
       | 'items'
       | 'chat'
       | 'pack'
-      | 'fight'
-      | 'handbook'
   ) {
     if (
       this.itemsTabButton &&
       this.chatTabButton &&
       this.infoTabButton &&
-      this.fightTabButton &&
-      this.potionTabButton &&
       this.inventoryTabButton
     ) {
       this.itemsTabButton.setTabActive(activeTab === 'items');
       this.chatTabButton.setTabActive(activeTab === 'chat');
       this.infoTabButton.setTabActive(activeTab === 'player');
-      this.fightTabButton.setTabActive(activeTab === 'fight');
-      this.potionTabButton.setTabActive(activeTab == 'handbook');
       this.inventoryTabButton.setTabActive(activeTab === 'pack');
     }
   }
