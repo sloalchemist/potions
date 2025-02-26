@@ -693,12 +693,6 @@ export class UxScene extends Phaser.Scene {
     );
   }
 
-  refreshInventoryStats() {
-    this.inventoryText?.setText(
-      'ITEM COUNT: ' + world.getStoredItems().length + '/12'
-    );
-  }
-
   showInfoTab() {
     this.infoContainer?.setVisible(true);
     this.itemsContainer?.setVisible(false);
@@ -759,38 +753,17 @@ export class UxScene extends Phaser.Scene {
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
-    this.updateTabStyles('fight');
-  }
-
-  // Method to show the Potions tab
-  showPotionsTab() {
-    this.statsContainer?.setVisible(false);
-    this.itemsContainer?.setVisible(false);
-    this.chatContainer?.setVisible(false);
-    this.fightContainer?.setVisible(false);
-    this.recipeContainer?.setVisible(true);
-    this.effectsContainer?.setVisible(false);
-    this.customizeContainer?.setVisible(false);
-    this.nextButton?.setVisible(true);
-    this.backButton?.setVisible(false);
-    this.setInteractions(currentInteractions);
-    this.inventoryContainer?.setVisible(false);
-    this.scene.stop('BrewScene');
-    this.updateTabStyles('handbook');
   }
 
   // Method to show the Page Flips
   showNextTab() {
-    this.statsContainer?.setVisible(false);
+    this.infoContainer?.setVisible(false);
     this.itemsContainer?.setVisible(false);
     this.chatContainer?.setVisible(false);
     this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(true);
-    this.customizeContainer?.setVisible(false);
     this.inventoryContainer?.setVisible(false);
-    this.nextButton?.setVisible(false);
-    this.backButton?.setVisible(true);
     this.setInteractions(currentInteractions);
   }
 
