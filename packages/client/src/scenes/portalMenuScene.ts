@@ -2,24 +2,15 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { availableWorlds } from '../world/controller';
 import { leaveWorld } from '../services/playerToServer';
-import { setupAbly } from '../services/ablySetup';
 
 export class PortalMenuScene extends Phaser.Scene {
   constructor() {
     super({ key: 'PortalMenuScene' });
   }
   
-    changeWorld(world_id: string) {
-        leaveWorld(world_id);
-        this.scene.stop('WorldScene');
-
-        setupAbly()
-        .then(() => {
-            this.scene.start('WorldScene');
-        })
-        .catch((_error) => {
-            console.error('Error setting up Ably');
-        });
+  changeWorld(world_id: string) {
+      leaveWorld(world_id);
+      window.location.reload();
   }
 
   create() {
@@ -87,6 +78,7 @@ export class PortalMenuScene extends Phaser.Scene {
       button.on('pointerdown', () => {
         // TODO: Implement world transition
         console.log(`Selected world: ${world.name} with id ${world.id}`);
+        this.changeWorld(world.name);
         this.scene.stop('PortalMenuScene');
       });
     });
