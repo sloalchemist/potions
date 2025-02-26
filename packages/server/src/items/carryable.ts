@@ -3,6 +3,7 @@ import { Community } from '../community/community';
 import { pubSub } from '../services/clientCommunication/pubsub';
 import { DB } from '../services/database';
 import { Item } from './item';
+import { Favorability } from '../favorability/favorability';
 
 export class Carryable {
   private item: Item;
@@ -43,7 +44,16 @@ export class Carryable {
     to.carrying = this.item;
 
     // Perform favorite item check
-    
+    if (this.item.type === to._favorite_item) {
+      var community_1 = from.community_id
+      var community_2 = to.community_id
+
+      // If the mob is given their favorite item, increase favorability by 25
+      Community.adjustFavor(community_1, community_2, 25);
+
+      // Randomize their next favorite item afterwards
+      to.changeFavoriteItem();
+    }
 
     // Publish the item transfer event
     pubSub.giveItem(this.item.id, from.id, to.id);
