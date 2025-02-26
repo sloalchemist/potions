@@ -29,6 +29,7 @@ import {
 } from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { Item } from '../world/item';
+import { setGame } from '../main';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -455,11 +456,12 @@ export class WorldScene extends Phaser.Scene {
         persistWorldData();
       }
       if (event.code === 'KeyP') {
-        leaveWorld('10'); // go to fireworld (10)
+        leaveWorld('fire-world'); // go to fireworld (10)
         console.log("LEAVE WORLD");
       }
 
       if (event.code === 'KeyO') {
+        setGame();
         this.resetToRespawn();
         console.log("RESET WIRLD");
       }
