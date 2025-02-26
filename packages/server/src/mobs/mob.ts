@@ -931,7 +931,6 @@ export class Mob {
     if (this.type !== 'player') {
       const action = selectAction(this);
       const finished = action.execute(this);
-      //logger.log(`${this.name} action: ${action.type()} finished: ${finished}`);
       this.setAction(action.type(), finished);
     }
 
