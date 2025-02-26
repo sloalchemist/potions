@@ -22,7 +22,7 @@ export class Hunt implements Plan {
         let targetAttack: number;
         let targetDefense: number;
         let npcDefense: number;
-        
+
         try {
           npcAttack = npc._attack;
           targetAttack = target._attack;
@@ -107,7 +107,10 @@ export class Hunt implements Plan {
         npc.personality.traits[PersonalityTraits.Aggression] *
         (npc._attack / this.enemy._attack);
 
-      if (hungry_mobs.includes(npc.type) && npc.needs.getNeed('satiation') < 10) {
+      if (
+        hungry_mobs.includes(npc.type) &&
+        npc.needs.getNeed('satiation') < 10
+      ) {
         return 100;
       }
       if (Community.getFavor(npc.community_id, this.enemy.community_id) < 0) {
