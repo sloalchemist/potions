@@ -693,7 +693,6 @@ export class Mob {
     );
 
     for (const row of uniqueRes) {
-      
       // kill monster if attribute is monster
       if (row.attribute == 'monster') {
         this.destroy();

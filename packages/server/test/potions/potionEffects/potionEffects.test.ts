@@ -1114,7 +1114,9 @@ describe('Try to consume black potion in various cases', () => {
     // ensure the initiator is carrying the potion
     expect(testMob!.carrying).not.toBeNull();
     expect(testMob!.carrying!.type).toBe('potion');
-    expect(testMob!.carrying!.subtype).toBe(String(hexStringToNumber('#166060')));
+    expect(testMob!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#166060'))
+    );
 
     // have the attacker drink the potion
     const testDrink = new Drink();
