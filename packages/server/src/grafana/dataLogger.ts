@@ -57,17 +57,17 @@ export class DataLogger {
   }
 
   static startMetricsServer(port: number = 3030) {
-    // createServer(async (req, res) => {
-    //   if (req.url === '/metrics') {
-    //     res.writeHead(200, { 'Content-Type': this.register.contentType });
-    //     res.end(await this.getMetrics());
-    //   } else {
-    //     res.writeHead(404, { 'Content-Type': 'text/plain' });
-    //   }
-    // }).listen(port, () => {
-    //   console.log(
-    //     `Prometheus metrics available at http://localhost:${port}/metrics`
-    //   );
-    // });
+    createServer(async (req, res) => {
+      if (req.url === '/metrics') {
+        res.writeHead(200, { 'Content-Type': this.register.contentType });
+        res.end(await this.getMetrics());
+      } else {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+      }
+    }).listen(port, () => {
+      console.log(
+        `Prometheus metrics available at http://localhost:${port}/metrics`
+      );
+    });
   }
 }
