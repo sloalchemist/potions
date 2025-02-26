@@ -10,18 +10,18 @@ export function hexStringToNumber(hexString: string): number {
   return parseInt(hexString, 16);
 }
 
-  // Convert hex to RGB
-  export const hexToRgb = (hex: string): { r: number; g: number; b: number } => {
-    if (hex.startsWith('#')) {
-      hex = hex.slice(1);
-    }
-    const bigint = parseInt(hex, 16);
-    return {
-      r: (bigint >> 16) & 255,
-      g: (bigint >> 8) & 255,
-      b: bigint & 255
-    };
+// Convert hex to RGB
+export const hexToRgb = (hex: string): { r: number; g: number; b: number } => {
+  if (hex.startsWith('#')) {
+    hex = hex.slice(1);
+  }
+  const bigint = parseInt(hex, 16);
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255
   };
+};
 
 export const rgbToHex = (r: number, g: number, b: number): string =>
   `#${((1 << 24) + (r << 16) + (g << 8) + b)
@@ -46,7 +46,6 @@ export function combineHexColors(
   weight1: number,
   weight2: number
 ): string {
-
   // Parse the two colors
   const rgb1 = hexToRgb(hex1);
   const rgb2 = hexToRgb(hex2);

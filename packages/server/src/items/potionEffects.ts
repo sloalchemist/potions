@@ -1,5 +1,10 @@
 import { Mob } from '../mobs/mob';
-import { numberToHexString, hexToRgb, perceptualColorDistance, hexStringToNumber } from '../util/colorUtil';
+import {
+  numberToHexString,
+  hexToRgb,
+  perceptualColorDistance,
+  hexStringToNumber
+} from '../util/colorUtil';
 
 interface ColorDict {
   [key: string]: string;
@@ -11,11 +16,14 @@ const colordict: ColorDict = {
   '#e79600': 'orange',
   '#ef7d55': 'gold',
   '#8b7f6e': 'grey',
-  '#ab00e7': 'purple',
-}
+  '#ab00e7': 'purple'
+};
 
-export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number): boolean {
-
+export function drinkPotion(
+  mob: Mob,
+  potionType: string,
+  effectModifier?: number
+): boolean {
   const potionStr = numberToHexString(Number(potionType));
 
   console.log('Drinking potion of type:', potionStr);
@@ -24,8 +32,7 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
     case '#ff0000':
       console.log('Drinking red potion');
       let healthValue = 50;
-      if(effectModifier)
-        healthValue = healthValue * effectModifier;
+      if (effectModifier) healthValue = healthValue * effectModifier;
       mob.changeHealth(healthValue);
       return true;
     case '#0000ff':
@@ -33,7 +40,7 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
       console.log(mob._speed);
       let speedMultiplier = 0.5;
       let speedDuration = 30;
-      if(effectModifier){
+      if (effectModifier) {
         speedMultiplier = speedMultiplier * effectModifier;
         speedDuration = speedDuration * effectModifier;
       }
@@ -44,9 +51,9 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
       console.log('Drinking orange potion');
       let attackMultiplier = 0.5;
       let attackDuration = 240;
-      if(effectModifier){
+      if (effectModifier) {
         attackMultiplier = attackMultiplier * effectModifier;
-        attackDuration = attackDuration * effectModifier
+        attackDuration = attackDuration * effectModifier;
       }
       const attackDelta = mob._attack * attackMultiplier;
       mob.changeEffect(attackDelta, attackDuration, 'attack');
@@ -54,8 +61,7 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
     case '#ef7d55':
       console.log('Drinking gold potion');
       let healthIncrease = 20;
-      if(effectModifier)
-        healthIncrease = healthIncrease * effectModifier;
+      if (effectModifier) healthIncrease = healthIncrease * effectModifier;
       mob.changeMaxHealth(healthIncrease, true);
       return true;
     case '#8b7f6e':
@@ -66,11 +72,11 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
       console.log('Drinking purple potion');
       let defenseMultiplier = 0.5;
       let defenseDuration = 240;
-      if(effectModifier){
+      if (effectModifier) {
         defenseMultiplier = defenseMultiplier * effectModifier;
         defenseDuration = defenseDuration * effectModifier;
       }
-      const defenseDelta = mob._defense * 0.5;
+      const defenseDelta = mob._defense * defenseMultiplier;
       mob.changeEffect(defenseDelta, defenseDuration, 'defense');
       return true;
     default:
@@ -78,7 +84,7 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
       console.log('Unknown potion color');
 
       //check if potion is close to black
-      if(closeToBlack(potionStr, mob)){
+      if (closeToBlack(potionStr, mob)) {
         return true;
       }
 
@@ -101,8 +107,7 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
       // If the closest color is within the threshold, give weak potion effect
       if (closestColor && minDistance <= upperThreshold) {
         return drinkPotion(mob, String(hexStringToNumber(closestColor)), 0.7);
-      }
-      else if(closestColor && minDistance <= lowerThreshold){
+      } else if (closestColor && minDistance <= lowerThreshold) {
         return drinkPotion(mob, String(hexStringToNumber(closestColor)), 0.5);
       }
 
@@ -110,7 +115,7 @@ export function drinkPotion(mob: Mob, potionType: string, effectModifier?:number
       else {
         giveRandomEffect(mob);
       }
-          
+
       return true;
   }
 }
@@ -121,50 +126,48 @@ function giveRandomEffect(mob: Mob) {
   switch (randomNum) {
     case 0:
       console.log('Random Effect: Reduce Player Speed');
-      mob.changeEffect(mob._speed*-0.25, 60, 'speed');
+      mob.changeEffect(mob._speed * -0.25, 60, 'speed');
       return true;
     case 1:
       console.log('Random Effect: Reduce Player Health');
       // reduce player health by 20 or to 1
       if (mob.health > 20) {
         mob.changeHealth(-20);
-      }
-      else {
+      } else {
         mob.changeHealth(-mob.health + 1);
       }
       return true;
     case 2:
       console.log('Random Effect: Reduce Play Defense');
-      mob.changeEffect(mob._defense*-0.25, 60, 'defense');
+      mob.changeEffect(mob._defense * -0.25, 60, 'defense');
       return true;
     case 3:
       console.log('Random Effect: Reduce Player Attack');
-      mob.changeEffect(mob._attack*-0.25, 60, 'attack');
+      mob.changeEffect(mob._attack * -0.25, 60, 'attack');
       return true;
     case 4:
       console.log('Random Effect: Permanently Reduce Player Health');
       // reduce player health by 5 or to 1
       if (mob._maxHealth > 5) {
         mob.changeMaxHealth(-5);
-      }
-      else {
+      } else {
         mob.changeMaxHealth(-mob._maxHealth + 1);
       }
       return true;
     case 5:
       console.log('Random Effect: Boost All Player Stats Slightly');
       mob.changeHealth(50);
-      mob.changeEffect(mob._speed*0.15, 60, 'speed');
-      mob.changeEffect(mob._attack*0.15 , 60, 'attack');
-      mob.changeEffect(mob._defense*0.15, 60, 'defense');
+      mob.changeEffect(mob._speed * 0.15, 60, 'speed');
+      mob.changeEffect(mob._attack * 0.15, 60, 'attack');
+      mob.changeEffect(mob._defense * 0.15, 60, 'defense');
       mob.changeMaxHealth(5, false);
       return true;
     case 6:
-      console.log("Random Effect: *Stun* Greatly Decrease Player Movement");
-      mob.changeEffect(mob._speed*-0.80, 10, 'speed');
+      console.log('Random Effect: *Stun* Greatly Decrease Player Movement');
+      mob.changeEffect(mob._speed * -0.8, 10, 'speed');
       return true;
     case 7:
-      console.log("Random Effect: Reduce Player Gold");
+      console.log('Random Effect: Reduce Player Gold');
       if (mob.gold >= 5) {
         mob.changeGold(-5);
       } else {
@@ -177,7 +180,11 @@ function closeToBlack(potionStr: string, mob: Mob): boolean {
   const thresholdBlack = 28; // 11% of 255 ~ 28
   const potionRgb = hexToRgb(potionStr);
 
-  if (potionRgb.r < thresholdBlack && potionRgb.g < thresholdBlack && potionRgb.b < thresholdBlack) {
+  if (
+    potionRgb.r < thresholdBlack &&
+    potionRgb.g < thresholdBlack &&
+    potionRgb.b < thresholdBlack
+  ) {
     console.log('Potion is close to black.');
     mob.changeHealth(-mob.health);
     return true;
