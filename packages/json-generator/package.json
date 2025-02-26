@@ -13,5 +13,8 @@
   "devDependencies": {
     "@types/node": "^22.13.4",
     "ts-node": "^10.0.0"
+  },
+  "dependencies": {
+    "@rt-potion/json-generator": "file:"
   }
 }
