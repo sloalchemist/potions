@@ -3,7 +3,7 @@ import { Item } from '../items/item';
 import { DB } from '../services/database';
 import { collectDefaultMetrics, Registry, Counter, Gauge } from 'prom-client';
 import { createServer } from 'http';
-import { logger } from '../util/Logger';
+import { logger } from '../util/logger';
 
 export class DataLogger {
   private static register = new Registry();

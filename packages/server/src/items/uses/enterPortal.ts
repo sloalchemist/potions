@@ -4,7 +4,7 @@ import { getWorlds } from '../../services/authMarshalling';
 import { pubSub } from '../../services/clientCommunication/pubsub';
 import { Item } from '../item';
 import { Use } from './use';
-import { logger } from '../../util/Logger';
+import { logger } from '../../util/logger';
 
 export class EnterPortal implements Use {
   key: string;

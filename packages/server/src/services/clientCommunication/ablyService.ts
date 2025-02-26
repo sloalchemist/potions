@@ -29,7 +29,7 @@ import {
   updateCharacterData
 } from '../authMarshalling';
 import { applyCheat } from '../developerCheats';
-import { logger } from '../../util/Logger';
+import { logger } from '../../util/logger';
 
 //must match MAINTAIN_WORLD_OPTION in client/src/services/serverToBroadcast.ts
 const MAINTAIN_WORLD_OPTION = 'NO_CHANGE';

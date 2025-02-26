@@ -1,6 +1,6 @@
 import { commonSetup, world } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
-import { logger } from '../../src/util/Logger';
+import { logger } from '../../src/util/logger';
 import { itemGenerator } from '../../src/items/itemGenerator';
 import { DB } from '../../src/services/database';
 import {

@@ -15,7 +15,7 @@ import {
 import { shouldUploadDB } from '../util/dataUploadUtil';
 import { DataLogger } from '../grafana/dataLogger';
 import { getEnv } from '@rt-potion/common';
-import { logger } from '../util/Logger';
+import { logger } from '../util/logger';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();

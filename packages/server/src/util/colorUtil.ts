@@ -1,4 +1,4 @@
-import { logger } from './Logger';
+import { logger } from './logger';
 
 import Color from 'color';
 import DeltaE from 'delta-e';

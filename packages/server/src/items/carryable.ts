@@ -3,7 +3,7 @@ import { Community } from '../community/community';
 import { pubSub } from '../services/clientCommunication/pubsub';
 import { DB } from '../services/database';
 import { Item } from './item';
-import { logger } from '../util/Logger';
+import { logger } from '../util/logger';
 
 export class Carryable {
   private item: Item;

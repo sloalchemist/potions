@@ -3,7 +3,7 @@ import { mobFactory } from '../src/mobs/mobFactory';
 import globalData from '../global.json';
 import { itemGenerator } from '../src/items/itemGenerator';
 import { Coord } from '@rt-potion/common';
-import { logger } from '../src/util/Logger';
+import { logger } from '../src/util/logger';
 
 const itemTypes: Array<string> = globalData.item_types.map((item) => item.type);
 const mobTypes: Array<string> = globalData.mob_types.map((mob) => mob.type);

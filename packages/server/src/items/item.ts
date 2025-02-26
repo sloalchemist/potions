@@ -9,7 +9,7 @@ import { House } from '../community/house';
 import { pubSub } from '../services/clientCommunication/pubsub';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { ItemType } from '../services/gameWorld/worldMetadata';
-import { logger } from '../util/Logger';
+import { logger } from '../util/logger';
 
 function shuffleArray(array: Coord[]): Coord[] {
   for (let i = array.length - 1; i > 0; i--) {

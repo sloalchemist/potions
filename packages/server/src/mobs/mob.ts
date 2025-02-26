@@ -17,7 +17,7 @@ import { Carryable } from '../items/carryable';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 import { Favorability } from '../favorability/favorability';
-import { logger } from '../util/Logger';
+import { logger } from '../util/logger';
 
 export type MobData = {
   personalities: Personality;

@@ -4,7 +4,7 @@ import { Plan } from './plan';
 import { Community } from '../../community/community';
 import { DB } from '../../services/database';
 import globalData from '../../../global.json';
-import { logger } from '../../util/Logger';
+import { logger } from '../../util/logger';
 
 export class Hunt implements Plan {
   enemy: Mob | null = null;

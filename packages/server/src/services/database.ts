@@ -3,7 +3,7 @@ import DatabaseConstructor from 'better-sqlite3';
 import * as dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
-import { logger } from '../util/Logger';
+import { logger } from '../util/logger';
 
 // Load environment variables from .env file
 dotenv.config();

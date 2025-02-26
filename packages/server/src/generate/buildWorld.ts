@@ -17,7 +17,7 @@ import {
   initializeBucket,
   uploadLocalData
 } from '../services/supabaseStorage';
-import { logger } from '../util/Logger';
+import { logger } from '../util/logger';
 
 async function main() {
   // Build and save the knowledge graph

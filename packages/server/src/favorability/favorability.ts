@@ -1,6 +1,6 @@
 import { Community } from '../community/community';
 import { Mob } from '../mobs/mob';
-import { logger } from '../util/Logger';
+import { logger } from '../util/logger';
 
 export class Favorability {
   /**

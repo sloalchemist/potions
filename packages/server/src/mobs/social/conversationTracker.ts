@@ -7,7 +7,7 @@ import {
 } from '@rt-potion/converse';
 import { pubSub } from '../../services/clientCommunication/pubsub';
 import { calculateDistance } from '@rt-potion/common';
-import { logger } from '../../util/Logger';
+import { logger } from '../../util/logger';
 
 export class ConversationTracker implements SpeakerService {
   private responses: Record<string, string[]> = {};

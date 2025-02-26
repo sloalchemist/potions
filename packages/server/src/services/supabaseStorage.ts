@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import path from 'path';
 import Database from 'better-sqlite3';
 import { getEnv } from '@rt-potion/common';
-import { logger } from '../util/Logger';
+import { logger } from '../util/logger';
 
 // Load environment variables from .env file
 dotenv.config();

@@ -5,7 +5,7 @@ import {
   perceptualColorDistance,
   hexStringToNumber
 } from '../util/colorUtil';
-import { logger } from '../util/Logger';
+import { logger } from '../util/logger';
 
 interface ColorDict {
   [key: string]: string;

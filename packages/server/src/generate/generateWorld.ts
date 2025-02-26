@@ -7,7 +7,7 @@ import { FantasyDate } from '../date/fantasyDate';
 import { Item } from '../items/item';
 import { Personality } from '../mobs/traits/personality';
 import { Mob } from '../mobs/mob';
-import { logger } from '../util/Logger';
+import { logger } from '../util/logger';
 
 import {
   ItemConfig,
