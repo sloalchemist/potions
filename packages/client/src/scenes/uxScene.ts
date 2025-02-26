@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
-import { BUTTON_HEIGHT, BUTTON_WIDTH, Button } from '../components/button';
+import { BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_SPACING, SUBHEADING_OFFSET, Button } from '../components/button';
 import { world } from './worldScene';
 import {
   currentCharacter,
@@ -78,7 +78,7 @@ export class UxScene extends Phaser.Scene {
   fightRequested: boolean = false;
 
   // Variables for tab buttons and containers
-  itemsTabButton: TabButton | null = null;
+  actionsTabButton: TabButton | null = null;
   chatTabButton: TabButton | null = null;
   infoTabButton: TabButton | null = null;
   actionNextButton: SlideButton | null = null;
@@ -199,11 +199,11 @@ export class UxScene extends Phaser.Scene {
       tabWidth,
       tabHeight
     );
-    this.itemsTabButton = new TabButton(
+    this.actionsTabButton = new TabButton(
       this,
       tabX + tabWidth + tabWidth / 2 + tabSpacing,
       tabY,
-      'Items',
+      'Actions',
       () => this.showItemsTab(),
       tabWidth,
       tabHeight
@@ -242,7 +242,7 @@ export class UxScene extends Phaser.Scene {
       this,
       tabX + 3 * (tabWidth + tabSpacing) + tabWidth / 2,
       tabY,
-      'Pack',
+      'Inventory',
       () => this.showInventoryTab(),
       tabWidth,
       tabHeight
@@ -713,7 +713,7 @@ export class UxScene extends Phaser.Scene {
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
-    this.updateTabStyles('items');
+    this.updateTabStyles('actions');
   }
 
   // Method to show the Chat tab
@@ -745,7 +745,6 @@ export class UxScene extends Phaser.Scene {
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
-    // this.updateTabStyles('fight');
   }
 
   showInventoryTab() {
@@ -758,21 +757,21 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
-    this.updateTabStyles('pack');
+    this.updateTabStyles('inventory');
   }
 
   // Update the styles of the tab buttons based on the active tab
-  updateTabStyles(activeTab: 'player' | 'items' | 'chat' | 'pack') {
+  updateTabStyles(activeTab: 'player' | 'actions' | 'chat' | 'inventory') {
     if (
-      this.itemsTabButton &&
+      this.actionsTabButton &&
       this.chatTabButton &&
       this.infoTabButton &&
       this.inventoryTabButton
     ) {
-      this.itemsTabButton.setTabActive(activeTab === 'items');
+      this.actionsTabButton.setTabActive(activeTab === 'actions');
       this.chatTabButton.setTabActive(activeTab === 'chat');
       this.infoTabButton.setTabActive(activeTab === 'player');
-      this.inventoryTabButton.setTabActive(activeTab === 'pack');
+      this.inventoryTabButton.setTabActive(activeTab === 'inventory');
     }
   }
 
@@ -794,8 +793,8 @@ export class UxScene extends Phaser.Scene {
     if (this.scene.isActive('BrewScene')) {
       interactions.forEach((interaction) => {
         if (interaction.item.type === 'cauldron') {
-          const x = toggleX + (i % 3) * (BUTTON_WIDTH + 10);
-          const y = toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + 10);
+          const x = toggleX + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
+          const y = 25 + toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + BUTTON_SPACING);
 
           const button = new Button(this, x, y, true, interaction.label, () => {
             interact(
@@ -845,9 +844,8 @@ export class UxScene extends Phaser.Scene {
     } else {
       interactions.forEach((interaction) => {
         if (interaction.item.type != 'cauldron') {
-          /* Moved down 25 after adding Subheading for items/fight pagination of actions tab */
-          const y = 25 + 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
-          const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+          const y = SUBHEADING_OFFSET + 60 + (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
+          const x = 85 + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
 
           const interactionAction =
             interaction.item.type === 'gold'
@@ -913,8 +911,8 @@ export class UxScene extends Phaser.Scene {
     this.chatButtons?.clearButtonOptions();
 
     companions.forEach((companion, i) => {
-      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
-      const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+      const y = 60 + (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
+      const x = 85 + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
       const button = new Button(this, x, y, true, `${companion.name}`, () =>
         this.sendRequestChat(world, companion)
       );
@@ -936,7 +934,7 @@ export class UxScene extends Phaser.Scene {
     this.chatButtons?.clearButtonOptions();
 
     chatOptions.forEach((chatOption, i) => {
-      const y = 70 + (80 + 10) * i;
+      const y = 70 + (80 + BUTTON_SPACING) * i;
       const x = 220;
       const button = new Button(
         this,
@@ -957,9 +955,8 @@ export class UxScene extends Phaser.Scene {
     this.fightButtons?.clearButtonOptions();
 
     opponents.forEach((opponent, i) => {
-      /* Moved down 25 after adding Subheading for items/fight pagination of actions tab */
-      const y = 25 + 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
-      const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+      const y = SUBHEADING_OFFSET + 60 + (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
+      const x = 85 + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
       const button = new Button(this, x, y, true, `${opponent.name}`, () =>
         this.sendRequestFight(world, opponent)
       );
@@ -981,7 +978,7 @@ export class UxScene extends Phaser.Scene {
 
     fightOptions.forEach((fightOption, i) => {
       /* Moved down 40 after adding Subheading for items/fight pagination of actions tab */
-      const y = 40 + 70 + (BUTTON_HEIGHT + 10) * i;
+      const y = 40 + 70 + (BUTTON_HEIGHT + BUTTON_SPACING) * i;
       const x = 220;
       const button = new Button(
         this,
@@ -1003,8 +1000,8 @@ export class UxScene extends Phaser.Scene {
     this.inventoryButtons?.clearButtonOptions();
 
     inventory.forEach((item, i) => {
-      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
-      const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
+      const y = 60 + (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
+      const x = 85 + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
 
       const button = new Button(this, x, y, true, `${item.itemType.name}`, () =>
         interact(item.key, 'unstash', null)
