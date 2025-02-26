@@ -4,7 +4,7 @@ import { Plan } from './plan';
 import { Community } from '../../community/community';
 import { DB } from '../../services/database';
 import { pubSub } from '../../services/clientCommunication/pubsub';
-import globalData from '../../../data/global.json';
+import globalData from '../../../dist/data/global.json';
 
 export class Hunt implements Plan {
   enemy: Mob | null = null;
