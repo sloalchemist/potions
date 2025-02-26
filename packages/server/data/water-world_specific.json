@@ -125,7 +125,7 @@
               { "type": "coral", "coord": { "x": 29, "y": 25 } },
               { "type": "coral", "coord": { "x": 22, "y": 30 } },
               { "type": "coral", "coord": { "x": 27, "y": 28 } },
-
+              { "type": "message-in-bottle", "coord": {"x": 19, "y": 14}},
               { "type": "seaweed", "coord": { "x": 4, "y": 35 } },
 
               { "type": "seaweed", "coord": { "x": 11, "y": 36 } },
