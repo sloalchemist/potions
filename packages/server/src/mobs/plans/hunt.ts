@@ -28,7 +28,7 @@ export class Hunt implements Plan {
           targetAttack = target._attack;
           targetDefense = target._defense;
           npcDefense = npc._defense;
-        } catch (e) {
+        } catch {
           // If we can't get stats, abandon the fight
           return true;
         }
@@ -70,7 +70,7 @@ export class Hunt implements Plan {
         }
 
         return false;
-      } catch (e) {
+      } catch {
         // If anything goes wrong, abandon the fight
         return true;
       }
@@ -121,7 +121,7 @@ export class Hunt implements Plan {
       }
 
       return utility;
-    } catch (e) {
+    } catch {
       // If we can't get stats, don't do this action
       return -Infinity;
     }
