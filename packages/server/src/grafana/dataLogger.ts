@@ -12,7 +12,6 @@ import {
 import 'dotenv/config';
 import { getEnv } from '@rt-potion/common';
 import { worldID } from '../services/setup';
-import { requestClock } from './request';
 
 export class DataLogger {
   private static register = new Registry();
@@ -106,7 +105,7 @@ export class DataLogger {
 }
 
 // Setup Connection To Pushgateway
-function pushMetrics() {
+export function pushMetrics() {
   let gatewayURL: string;
   try {
     gatewayURL = getEnv('METRIC_URL');
@@ -142,6 +141,3 @@ function pushMetrics() {
 
   setInterval(pusherTimer, 10000);
 }
-
-pushMetrics();
-requestClock();
