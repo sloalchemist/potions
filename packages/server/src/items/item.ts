@@ -408,7 +408,11 @@ export class Item {
   validateOwnership(mob: Mob, interaction: string): boolean {
     // console.log(`${item.type} belongs to ${item.owned_by}`);
     // if no one owns the item or if the mob owns it, return true
-    if (!this.owned_by_community || mob.community_id === this.owned_by_community) return true;
+    if (
+      !this.owned_by_community ||
+      mob.community_id === this.owned_by_community
+    )
+      return true;
 
     console.warn(
       `Mob ${mob.name} (${mob.id}) from ${mob.community_id} community ` +

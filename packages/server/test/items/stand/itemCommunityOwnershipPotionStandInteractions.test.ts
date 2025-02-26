@@ -30,7 +30,10 @@ describe('Potion Stand Ownership Tests', () => {
         type: 'potion-stand',
         subtype: '255',
         position: standPosition,
-        ownedByCommunity: new Community('silverclaw', 'Village of the Silverclaw'),
+        ownedByCommunity: new Community(
+          'silverclaw',
+          'Village of the Silverclaw'
+        ),
         attributes: {
           templateType: 'potion',
           items: 0,

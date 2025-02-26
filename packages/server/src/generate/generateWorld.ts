@@ -96,7 +96,9 @@ export function loadDefaults(global: ServerWorldDescription) {
     itemGenerator.createItem({
       type: item.type,
       position: item.coord,
-      ownedByCommunity: item.community ? communityMap[item.community] : undefined,
+      ownedByCommunity: item.community
+        ? communityMap[item.community]
+        : undefined,
       lock: item.lock,
       attributes: item.options
     });
