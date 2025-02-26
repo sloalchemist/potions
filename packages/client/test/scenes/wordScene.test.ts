@@ -20,7 +20,7 @@ describe('Check WorldScene resetToLoadWorldScene interactions', () => {
         getScenes: jest
           .fn()
           .mockReturnValue([{ sys: { settings: { key: 'BrewScene' } } }])
-      },
+      }
     } as any;
 
     scene.sound = {
