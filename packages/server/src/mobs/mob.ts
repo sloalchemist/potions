@@ -676,8 +676,6 @@ export class Mob {
       return;
     }
 
-    console.log('Expired effects:', result);
-
     // reduce the list to only unique attr's so we don't broadcast multiple deletions
     const uniqueRes: QueryResult[] = Object.values(
       result.reduce((acc: Record<string, QueryResult>, item: QueryResult) => {
@@ -694,13 +692,10 @@ export class Mob {
       }, {})
     );
 
-    console.log('Unique expired effects:', uniqueRes);
-
     for (const row of uniqueRes) {
       
       // kill monster if attribute is monster
       if (row.attribute == 'monster') {
-        console.log(`Destroying mob ${this.id} because of expired monster effect`);
         this.destroy();
         return;
       }
@@ -831,7 +826,6 @@ export class Mob {
   }
 
   fightRequest(mob: Mob): boolean {
-    console.log('fight request from ' + mob.name);
     // TODO: replace with FightTracker class
     pubSub.playerAttacks(mob.id, ['Test Attack']);
     // fightTracker.startFight(mob, this);
@@ -1005,7 +999,6 @@ export class Mob {
     if (this.type !== 'player') {
       const action = selectAction(this);
       const finished = action.execute(this);
-      //console.log(`${this.name} action: ${action.type()} finished: ${finished}`);
       this.setAction(action.type(), finished);
     }
 
