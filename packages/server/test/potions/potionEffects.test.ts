@@ -489,12 +489,6 @@ describe('Try to consume grey potion in various cases', () => {
     const test = testDrink.interact(testMob!, potionItem!);
     expect(test).toBe(true);
 
-    for (let i = 0; i < 15; i++) {
-      // 15 ticks to check stacking
-      FantasyDate.runTick();
-    }
-    testMob?.tick(500);
-
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
 
@@ -532,12 +526,6 @@ describe('Try to consume grey potion in various cases', () => {
     const test2 = testDrink2.interact(testMob!, potionItem2!);
     expect(test2).toBe(true);
 
-    for (let i = 0; i < 15; i++) {
-      // 15 ticks to check stacking
-      FantasyDate.runTick();
-    }
-    testMob?.tick(500);
-
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
 
@@ -548,7 +536,7 @@ describe('Try to consume grey potion in various cases', () => {
         `
     ).get({ id: testMob!.id }) as { slowEnemy: number };
 
-    // check attributes on player
+    // check attributes on player (should be same as before)
     expect(slowEnemy_stacked.slowEnemy).toBe(slowEnemy_boosted.slowEnemy + 1);
   });
 
@@ -602,7 +590,6 @@ describe('Try to consume grey potion in various cases', () => {
     const test = testDrink.interact(testAttacker!, potionItem!);
     expect(test).toBe(true);
 
-    // run ticks
     testAttacker?.tick(500);
     testEnemy?.tick(500);
 
@@ -612,7 +599,6 @@ describe('Try to consume grey potion in various cases', () => {
     // make sure the fight initiator is attacking
     expect(testAttacker!.action).toBe('hunt');
 
-    // run ticks
     testAttacker?.tick(500);
     testEnemy?.tick(500);
 
@@ -1092,9 +1078,6 @@ test('Spawn a monster with a black potion', () => {
   const test = testDrink.interact(testMob!, potionItem!);
   expect(test).toBe(true);
 
-  // run ticks
-  testMob?.tick(500);
-
   // check to make sure potion is not being carried
   expect(testMob!.carrying).toBeUndefined();
 
@@ -1102,12 +1085,16 @@ test('Spawn a monster with a black potion', () => {
   const monster = Mob.getMob('Monster');
   expect(monster).not.toBeNull();
 
-  // wait to make the monster time out
-  // monster?.tick(500);
+  //wait to make the monster time out
+  // run ticks
+  for (let i = 0; i < 120; i++) {
+    FantasyDate.runTick();
+  }
+  monster?.tick(500);
 
   // check to make sure monster is dead
-  // const deadMonster = Mob.getMob('Monster');
-  // expect(deadMonster).toBeNull();
+  const deadMonster = Mob.getMob('Monster');
+  expect(deadMonster?.action).toBe('destroyed');
 });
 
 afterAll(() => {

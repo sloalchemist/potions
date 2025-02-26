@@ -46,7 +46,8 @@ export function drinkPotion(mob: Mob, potionType: string): boolean {
       return true;
     case '#166060':
       console.log('Drinking black potion');
-      mob.spawnMonster();
+      const monsterDuration = 120;
+      mob.spawnMonster(monsterDuration);
       return true;
     default:
       // handle cases where potionStr doesn't match any known potion

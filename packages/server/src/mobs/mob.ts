@@ -555,7 +555,7 @@ export class Mob {
     pubSub.changePersonality(this.id, trait, amount);
   }
 
-  spawnMonster(): void {
+  spawnMonster(duration: number): void {
     // spawn blob with low favorability, then kill it off after some time
     // get player position
     const playerPosition = this.position;
@@ -580,7 +580,7 @@ export class Mob {
 
     // somehow make it time out/die after some time
     // add row to change effect for monster
-    monster!.changeEffect(1, 15, 'monster');
+    monster!.changeEffect(1, duration, 'monster');
   }
 
   changeEffect(delta: number, duration: number, attribute: string): void {
@@ -676,6 +676,8 @@ export class Mob {
       return;
     }
 
+    console.log('Expired effects:', result);
+
     // reduce the list to only unique attr's so we don't broadcast multiple deletions
     const uniqueRes: QueryResult[] = Object.values(
       result.reduce((acc: Record<string, QueryResult>, item: QueryResult) => {
@@ -692,9 +694,13 @@ export class Mob {
       }, {})
     );
 
+    console.log('Unique expired effects:', uniqueRes);
+
     for (const row of uniqueRes) {
+      
       // kill monster if attribute is monster
       if (row.attribute == 'monster') {
+        console.log(`Destroying mob ${this.id} because of expired monster effect`);
         this.destroy();
         return;
       }
@@ -780,6 +786,8 @@ export class Mob {
       Carryable.fromItem(carriedItem)!.dropAtFeet(this);
     }
     pubSub.kill(this.id);
+
+    this.setAction('destroyed');
   }
 
   private updatePosition(deltaTime: number) {
