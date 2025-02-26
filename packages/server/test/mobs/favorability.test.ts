@@ -10,10 +10,11 @@ import { Carryable } from '../../src/items/carryable';
 
 beforeEach(() => {
   commonSetup();
-  Community.makeVillage('alchemists', 'Alchemists guild');
+  var alchemists = Community.makeVillage('alchemists', 'Alchemists guild');
   Community.makeVillage('blobs', 'Blobs');
-  Community.makeVillage('silverclaw', 'Village of Silverclaw');
+  var silverclaw = Community.makeVillage('silverclaw', 'Village of Silverclaw');
   Community.makeVillage('fighters', 'Village of Silverclaw');
+  Community.makeAlliance(alchemists, silverclaw);
   mobFactory.loadTemplates(world.mobTypes);
 });
 
@@ -160,6 +161,7 @@ describe('Favorability Tests', () => {
     mobFactory.makeMob('villager', position2, 'testVillager', 'villagertest');
     var testplayer = Mob.getMob('testPlayer');
     var testvillager = Mob.getMob('testVillager');
+
     Community.makeFavor('alchemists', 'silverclaw', 100);
 
     var fav_item = testvillager?._favorite_item
@@ -176,8 +178,6 @@ describe('Favorability Tests', () => {
 
     expect(is_given).toBe(true);
     expect(Community.getFavor("alchemists", "silverclaw")).toBe(125);
-
-
   });
 
 });
