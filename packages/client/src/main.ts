@@ -2,14 +2,9 @@ import * as Phaser from 'phaser';
 import config from './config';
 import { gameState, setGameState } from './world/controller';
 import { playerDead } from './services/serverToBroadcast';
-import { createNewConfig } from './config';
 
 
-var game = new Phaser.Game(config);
-
-export function setGame() {
-  game = new Phaser.Game(createNewConfig());
-}
+const game = new Phaser.Game(config);
 
 export let focused = true;
 
