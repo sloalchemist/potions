@@ -10,7 +10,8 @@ export class PortalMenuScene extends Phaser.Scene {
   
   changeWorld(world_id: string) {
       leaveWorld(world_id);
-      sessionStorage.setItem("reloaded", "true"); // set reload flag to skip start screen after reload
+      sessionStorage.setItem("traveling_through_portal", "true");
+      sessionStorage.setItem("traveling_to", world_id);
       window.location.reload();
   }
 

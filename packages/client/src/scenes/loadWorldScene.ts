@@ -207,7 +207,21 @@ export class LoadWorldScene extends Phaser.Scene {
     setupAbly()
       .then((worldID) => {
         console.log('LOADWORLD: ', worldID);
+        
+
+        const traveling: boolean = sessionStorage.getItem("traveling_through_portal") === "true" ? true : false;
+        // If traveling through portal, set the worldID, because Supabase might not have been updated yet
+        if (traveling) {
+          sessionStorage.getItem("traveling_through_portal") === "false";
+          const traveling_to = sessionStorage.getItem("traveling_to")
+          if (traveling_to) {
+            worldID = traveling_to;
+          }
+        }
+
         setWorldID(worldID);
+
+        console.log('LOADWORLD: ', worldID);
 
         this.load.atlas(
           'global-atlas',
@@ -243,7 +257,8 @@ export class LoadWorldScene extends Phaser.Scene {
 
         this.load.start();
         
-        if (sessionStorage.getItem("reloaded") === "true") {
+        // Skip the start button if traveling through a portal
+        if (traveling) {
           this.scene.start('PauseScene');
           this.scene.start('WorldScene');
           this.scene.start('UxScene');
