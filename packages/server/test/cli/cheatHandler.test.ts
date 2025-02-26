@@ -63,7 +63,9 @@ describe('Cheat Handler Tests', () => {
         expect(enableLoggingSpy).toHaveBeenCalled();
         expect(logSpy).toHaveBeenCalledWith('Logging enabled');
         logger.log('Test message after enabling logging');
-        expect(logSpy).toHaveBeenCalledWith('Test message after enabling logging');
+        expect(logSpy).toHaveBeenCalledWith(
+          'Test message after enabling logging'
+        );
       });
 
       it('Should disable logging when "logtoggle off" is executed', () => {
@@ -75,7 +77,9 @@ describe('Cheat Handler Tests', () => {
         expect(logSpy).toHaveBeenCalledWith('Logging disabled');
 
         logger.log('Test message after disabling logging');
-        expect(logSpy).not.toHaveBeenCalledWith('Test message after disabling logging');
+        expect(logSpy).not.toHaveBeenCalledWith(
+          'Test message after disabling logging'
+        );
       });
 
       it('Should toggle logging correctly', () => {
@@ -83,11 +87,15 @@ describe('Cheat Handler Tests', () => {
 
         handleCliCommand('logtoggle on');
         logger.log('Test message after enabling logging');
-        expect(logSpy).toHaveBeenCalledWith('Test message after enabling logging');
+        expect(logSpy).toHaveBeenCalledWith(
+          'Test message after enabling logging'
+        );
 
         handleCliCommand('logtoggle off');
         logger.log('Test message after disabling logging');
-        expect(logSpy).not.toHaveBeenCalledWith('Test message after disabling logging');
+        expect(logSpy).not.toHaveBeenCalledWith(
+          'Test message after disabling logging'
+        );
       });
 
       it('Should toggle logging when no argument is provided', () => {

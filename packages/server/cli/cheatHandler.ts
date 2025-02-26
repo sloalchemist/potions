@@ -88,7 +88,7 @@ function parseCoordinates(
  */
 export function handleCliCommand(input: string) {
   const [command, entityType, name, ...args] = input.trim().split(' ');
-  const [_, arg] = input.trim().split(' ');
+  const arg = entityType;
 
   if (command === 'logtoggle') {
     if (arg === 'on') {

@@ -692,7 +692,7 @@ export class AblyService implements PubSub {
 
   public broadcastScoreboard(): void {
     const scoreboardData = getScoreboardData();
-    console.log('broadcasting scoreboard data', scoreboardData);
+    logger.log('broadcasting scoreboard data', scoreboardData);
     this.addToBroadcast({
       type: 'scoreboard',
       data: scoreboardData
