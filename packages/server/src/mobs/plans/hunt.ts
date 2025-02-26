@@ -12,44 +12,68 @@ export class Hunt implements Plan {
     if (!this.enemy || !this.enemy.position || !npc.position) return true;
 
     const success = npc.moveToOrExecute(this.enemy.position, 1, () => {
-      // create damage values
-      const enemyDamage = Math.floor(Math.random() * -1 * npc._attack);
-      const npcDamage = Math.floor(Math.random() * -1 * this.enemy!._attack);
-
-      // this formula means 100 armor gives ~30% damage reduction
-      const adjustedEnemyDamage = Math.floor(
-        enemyDamage * (0.3 + 0.7 * Math.exp(-this.enemy!._defense / 40))
-      );
-
-      const adjustedNpcDamage = Math.floor(
-        npcDamage * (0.3 + 0.7 * Math.exp(-npc._defense / 40))
-      );
-
-      // attack/fight each other
-      this.enemy!.changeHealth(adjustedEnemyDamage);
-      npc.changeHealth(adjustedNpcDamage);
-
-      // get slowEnemy debuff count
       try {
-        const mobDebuffs = DB.prepare(
-          `SELECT slowEnemy FROM mobs WHERE id = :id`
-        ).get({ id: npc.id }) as { slowEnemy: number };
+        // Verify enemy still exists
+        const target = Mob.getMob(this.enemy!.id);
+        if (!target) return true;
 
-        const slowEnemyCounter = mobDebuffs.slowEnemy;
-        if (slowEnemyCounter > 0) {
-          // decrement slowEnemy count (1 usage)
-          npc.changeSlowEnemy(-1);
-          // decrease targeted enemy's speed
-          console.log(this.enemy!._speed);
-          const speedDelta = this.enemy!._speed * -0.5;
-          const speedDuration = 15;
-          this.enemy!.changeEffect(speedDelta, speedDuration, 'speed');
+        // Get stats safely
+        let npcAttack: number;
+        let targetAttack: number;
+        let targetDefense: number;
+        let npcDefense: number;
+        
+        try {
+          npcAttack = npc._attack;
+          targetAttack = target._attack;
+          targetDefense = target._defense;
+          npcDefense = npc._defense;
+        } catch (e) {
+          // If we can't get stats, abandon the fight
+          return true;
         }
-      } catch {
-        console.log('Could not get slowEnemy in hunt');
-      }
 
-      return false;
+        // create damage values
+        const enemyDamage = Math.floor(Math.random() * -1 * npcAttack);
+        const npcDamage = Math.floor(Math.random() * -1 * targetAttack);
+
+        // this formula means 100 armor gives ~30% damage reduction
+        const adjustedEnemyDamage = Math.floor(
+          enemyDamage * (0.3 + 0.7 * Math.exp(-targetDefense / 40))
+        );
+
+        const adjustedNpcDamage = Math.floor(
+          npcDamage * (0.3 + 0.7 * Math.exp(-npcDefense / 40))
+        );
+
+        // attack/fight each other
+        target.changeHealth(adjustedEnemyDamage);
+        npc.changeHealth(adjustedNpcDamage);
+
+        // get slowEnemy debuff count
+        try {
+          const mobDebuffs = DB.prepare(
+            `SELECT slowEnemy FROM mobs WHERE id = :id`
+          ).get({ id: npc.id }) as { slowEnemy: number };
+
+          const slowEnemyCounter = mobDebuffs.slowEnemy;
+          if (slowEnemyCounter > 0) {
+            // decrement slowEnemy count (1 usage)
+            npc.changeSlowEnemy(-1);
+            // decrease targeted enemy's speed
+            const speedDelta = target._speed * -0.5;
+            const speedDuration = 15;
+            target.changeEffect(speedDelta, speedDuration, 'speed');
+          }
+        } catch {
+          console.log('Could not get slowEnemy in hunt');
+        }
+
+        return false;
+      } catch (e) {
+        // If anything goes wrong, abandon the fight
+        return true;
+      }
     });
 
     if (success) {
@@ -73,26 +97,31 @@ export class Hunt implements Plan {
 
     if (!closerEnemyID) return -Infinity;
 
-    this.enemy = Mob.getMob(closerEnemyID)!;
+    const potentialEnemy = Mob.getMob(closerEnemyID);
+    if (!potentialEnemy) return -Infinity;
 
-    var utility =
-      npc.personality.traits[PersonalityTraits.Aggression] *
-      (npc._attack / this.enemy._attack);
+    this.enemy = potentialEnemy;
 
-    if (hungry_mobs.includes(npc.type) && npc.needs.getNeed('satiation') < 10) {
-      utility = 100;
-      return utility;
-    }
-    if (Community.getFavor(npc.community_id, this.enemy.community_id) < 0) {
-      utility = 100;
-      return utility;
-    }
-    if (aggressive_mobs.includes(npc.type)) {
-      utility = 100;
-      return utility;
-    }
+    try {
+      const utility =
+        npc.personality.traits[PersonalityTraits.Aggression] *
+        (npc._attack / this.enemy._attack);
 
-    return utility;
+      if (hungry_mobs.includes(npc.type) && npc.needs.getNeed('satiation') < 10) {
+        return 100;
+      }
+      if (Community.getFavor(npc.community_id, this.enemy.community_id) < 0) {
+        return 100;
+      }
+      if (aggressive_mobs.includes(npc.type)) {
+        return 100;
+      }
+
+      return utility;
+    } catch (e) {
+      // If we can't get stats, don't do this action
+      return -Infinity;
+    }
   }
 
   description(): string {
