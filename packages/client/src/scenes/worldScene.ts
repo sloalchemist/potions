@@ -694,6 +694,7 @@ export class WorldScene extends Phaser.Scene {
     this.scene.stop('WorldScene');
     this.scene.stop('UxScene');
     this.scene.stop('FrameScene');
+    this.scene.stop('FightScene');
     this.scene.stop('ChatOverlayScene');
     this.scene.start('LoadWorldScene');
   }
