@@ -68,6 +68,21 @@ export class AblyService implements PubSub {
       );
     });
 
+    this.broadcastChannel.presence.subscribe('update', (presenceMsg) => {
+      const target_world_id =
+        presenceMsg.data.target_world_id == null
+          ? this.worldID
+          : presenceMsg.data.target_world_id;
+
+        console.log("Updating to ", target_world_id);
+
+        this.sendPersistenceRequest(
+          presenceMsg.clientId,
+          this.userDict.get(presenceMsg.clientId),
+          target_world_id
+        );
+    });
+
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
       // if MAINTAIN_WORLD_OPTION is passed from client, do not change world;
       // undefined will be recieved if the client unexpectedly disconnects (ex: refreshing page)
@@ -687,6 +702,11 @@ export class AblyService implements PubSub {
       }
       applyCheat(player, data.action);
     });
+
+    subscribeToPlayerChannel('update_world', (data) => {
+      console.log("Received player world to update");
+      
+    })
   }
 
   public broadcastScoreboard(): void {

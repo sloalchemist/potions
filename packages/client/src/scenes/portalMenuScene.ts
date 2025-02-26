@@ -1,7 +1,7 @@
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { availableWorlds } from '../world/controller';
-import { leaveWorld } from '../services/playerToServer';
+import { leaveWorld, updateWorld } from '../services/playerToServer';
 
 export class PortalMenuScene extends Phaser.Scene {
   constructor() {
@@ -9,7 +9,7 @@ export class PortalMenuScene extends Phaser.Scene {
   }
   
   changeWorld(world_id: string) {
-      leaveWorld(world_id);
+      updateWorld(world_id);
       sessionStorage.setItem("traveling_through_portal", "true");
       sessionStorage.setItem("traveling_to", world_id);
       window.location.reload();
