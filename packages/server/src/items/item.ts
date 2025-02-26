@@ -384,7 +384,10 @@ export class Item {
   static diffRandomItem(item_type: string): string {
     const carryable_items = [];
     for (const type in itemGenerator._itemTypes) {
-      if (itemGenerator._itemTypes[type].carryable == true && type != item_type) {
+      if (
+        itemGenerator._itemTypes[type].carryable == true &&
+        type != item_type
+      ) {
         carryable_items.push(type);
       }
     }

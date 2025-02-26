@@ -144,10 +144,10 @@ describe('Favorability Tests', () => {
 
     mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
     var testplayer = Mob.getMob('testPlayer');
-    var fav_item_1 = testplayer?._favorite_item
+    var fav_item_1 = testplayer?._favorite_item;
 
     testplayer?.changeFavoriteItem();
-    var fav_item_2 = testplayer?._favorite_item
+    var fav_item_2 = testplayer?._favorite_item;
     expect(fav_item_1 === fav_item_2).toBe(false);
   });
 
@@ -164,7 +164,7 @@ describe('Favorability Tests', () => {
 
     Community.makeFavor('alchemists', 'silverclaw', 100);
 
-    var fav_item = testvillager?._favorite_item
+    var fav_item = testvillager?._favorite_item;
 
     itemGenerator.createItem({ type: fav_item!, position: position3 });
     var fav_item_id = Item.getItemIDAt(position3);
@@ -177,9 +177,8 @@ describe('Favorability Tests', () => {
     var is_given = the_carryable_item!.giveItem(testplayer!, testvillager!);
 
     expect(is_given).toBe(true);
-    expect(Community.getFavor("alchemists", "silverclaw")).toBe(125);
+    expect(Community.getFavor('alchemists', 'silverclaw')).toBe(125);
   });
-
 });
 
 afterEach(() => {

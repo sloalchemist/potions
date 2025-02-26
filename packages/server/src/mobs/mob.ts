@@ -693,7 +693,7 @@ export class Mob {
         SET favorite_item = :favorite_item
         WHERE id = :id
       `
-    ).run({ favorite_item: item, id: this.id })
+    ).run({ favorite_item: item, id: this.id });
     this.favorite_item = item;
     pubSub.changeFavoriteItem(this.id, item);
   }
