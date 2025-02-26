@@ -10,8 +10,7 @@ export class LoadCharacterScene extends Phaser.Scene {
   init(data: { autoStart?: boolean } = {}) {
     if (data.autoStart) {
       this.autoStart = true;
-    }
-    else {
+    } else {
       this.autoStart = false;
     }
   }
@@ -23,7 +22,7 @@ export class LoadCharacterScene extends Phaser.Scene {
 
     retrieveCharacter().then(() => {
       console.log('character retrieved', currentCharacter);
-      this.scene.start('LoadWorldScene', {autoStart: this.autoStart});
+      this.scene.start('LoadWorldScene', { autoStart: this.autoStart });
     });
   }
 }
