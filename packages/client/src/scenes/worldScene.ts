@@ -13,7 +13,7 @@ import { PaletteSwapper } from '../sprite/palette_swapper';
 import { SpriteHouse } from '../sprite/sprite_house';
 import { World } from '../world/world';
 import { GRAY } from './pauseScene';
-import { publishPlayerPosition } from '../services/playerToServer';
+import { leaveWorld, publishPlayerPosition } from '../services/playerToServer';
 import { getNightSkyOpacity } from '../utils/nightOverlayHandler';
 import {
   ItemType,
@@ -66,6 +66,7 @@ export class WorldScene extends Phaser.Scene {
 
   preload() {
     const worldID = getWorldID();
+    console.log("PRELOADING WORLD: ", worldID);
     this.load.image(
       'background',
       `https://potions.gg/world_assets/${worldID}/client/background.png`
@@ -450,6 +451,16 @@ export class WorldScene extends Phaser.Scene {
       if (event.shiftKey && event.code === 'KeyG') {
         persistWorldData();
       }
+      if (event.code === 'KeyP') {
+        leaveWorld('10'); // go to fireworld (10)
+        console.log("LEAVE WORLD");
+      }
+
+      if (event.code === 'KeyO') {
+        this.resetToRespawn();
+        console.log("RESET WIRLD");
+      }
+
       // Brings up chat box for user
       if (event.code === 'Slash') {
         if (!this.scene.isActive('ChatOverlayScene')) {
