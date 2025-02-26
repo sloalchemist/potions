@@ -3,7 +3,7 @@ import { AblyService } from './clientCommunication/ablyService';
 import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
-import globalData from '../../data/global.json';
+import globalData from '../../global.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
@@ -40,7 +40,10 @@ async function initializeAsync() {
   }
 
   console.log(`loading world ${worldID}`);
-  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
+  // const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
+  const worldSpecificData = await import(
+    `../../../../world_assets/${worldID}/server/world_specific.json`
+  );
 
   try {
     await downloadData(supabase, worldID);
@@ -54,8 +57,8 @@ async function initializeAsync() {
   }
 
   try {
-    initializeKnowledgeDB('data/knowledge-graph.db', false);
-    initializeServerDatabase('data/server-data.db');
+    initializeKnowledgeDB(`data/${worldID}-knowledge-graph.db`, false);
+    initializeServerDatabase(`data/${worldID}-server-data.db`);
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
