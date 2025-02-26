@@ -561,7 +561,12 @@ export class UxScene extends Phaser.Scene {
         })
       );
 
-      this.inventoryText = this.add.text(140, 35, 'ITEM COUNT: ' + world.getStoredItems().length + '/12')
+      this.inventoryText = this.add.text(
+        140,
+        35, 
+        'ITEM COUNT: '
+        + world.getStoredItems().length + '/12'
+      );
       this.inventoryContainer.add(this.inventoryText)
 
       // Color pickers
@@ -714,8 +719,10 @@ export class UxScene extends Phaser.Scene {
   }
 
   refreshInventoryStats() {
-      this.inventoryText?.setText('ITEM COUNT: ' + world.getStoredItems().length + '/12');
-  };
+      this.inventoryText?.setText(
+        'ITEM COUNT: ' + world.getStoredItems().length + '/12'
+      );
+  }
 
   showStatsTab() {
     this.statsContainer?.setVisible(true);
@@ -1097,7 +1104,6 @@ export class UxScene extends Phaser.Scene {
 
   // Method to set inventory
   setInventory(inventory: Item[]) {
-
     this.refreshInventoryStats();
 
     this.inventoryButtons?.clearButtonOptions();
