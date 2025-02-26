@@ -6,6 +6,8 @@ import {
   DestroyMobData,
   DoingData,
   DropItemData,
+  StashItemData,
+  UnstashItemData,
   GiveItemData,
   ItemChangeData,
   MobChangeData,
@@ -14,7 +16,8 @@ import {
   PortalData,
   SetDatetimeData,
   SpeakData,
-  ShowPortalMenuData
+  ShowPortalMenuData,
+  ScoreboardData
 } from '@rt-potion/common';
 import { Types } from 'ably';
 import { focused } from '../main';
@@ -26,10 +29,13 @@ import {
   addNewMob,
   gameState,
   setAvailableWorlds,
-  setDate
+  setDate,
+  setLeaderboardData,
+  updateInventory
 } from '../world/controller';
 import { publicCharacterId } from '../worldMetadata';
 import { leaveWorld } from './playerToServer';
+import { LeaderboardScene } from '../scenes/leaderboardScene';
 
 export let playerDead = false;
 
@@ -82,6 +88,22 @@ export function setupBroadcast(
     item.drop(world, mob, data.position);
   }
 
+  function handleStashItem(data: StashItemData) {
+    const item = world.items[data.item_key];
+    const mob = world.mobs[data.mob_key];
+    item.stash(world, mob, data.position);
+    world.addStoredItem(item);
+    updateInventory();
+  }
+
+  function handleUnstashItem(data: UnstashItemData) {
+    const item = world.items[data.item_key];
+    const mob = world.mobs[data.mob_key];
+    item.unstash(world, mob, data.position);
+    world.removeStoredItem(item);
+    updateInventory();
+  }
+
   function handleDoing(data: DoingData) {
     const mob = world.mobs[data.id] as SpriteMob;
     mob.doing = data.action;
@@ -123,10 +145,9 @@ export function setupBroadcast(
 
         // once game focused, leave the world and display game over
         waitUntilFocused.then(() => {
-          scene.showGameOver();
           // in cases where player should stay in the same world, pass MAINTAIN_WORLD_OPTION
           leaveWorld(MAINTAIN_WORLD_OPTION);
-          scene.resetToLoadWorldScene();
+          scene.showGameOver();
         });
       }
     }
@@ -173,6 +194,16 @@ export function setupBroadcast(
     }
   }
 
+  function handleScoreboard(data: ScoreboardData) {
+    setLeaderboardData(data.scores);
+    const leaderboardScene = scene.scene.get('LeaderboardScene');
+    if (leaderboardScene instanceof LeaderboardScene) {
+      leaderboardScene.renderLeaderboard();
+    } else {
+      throw new Error('Leaderboard scene not found');
+    }
+  }
+
   // Subscribe to broadcast and dispatch events using switch
   broadcast_channel.subscribe('tick', (message: Types.Message) => {
     if (gameState !== 'stateInitialized') return;
@@ -198,6 +229,19 @@ export function setupBroadcast(
         case 'drop_item':
           handleDropItem(broadcastItem.data as DropItemData);
           break;
+        case 'stash_item':
+          console.log(
+            broadcastItem.data as StashItemData,
+            'BROADCAST STASH ITEM'
+          );
+          handleStashItem(broadcastItem.data as StashItemData);
+          break;
+        case 'unstash_item':
+          console.log(
+            broadcastItem.data as StashItemData,
+            'BROADCAST UNSTASH ITEM'
+          );
+          handleUnstashItem(broadcastItem.data as UnstashItemData);
         case 'doing':
           handleDoing(broadcastItem.data as DoingData);
           break;
@@ -224,6 +268,9 @@ export function setupBroadcast(
           break;
         case 'show_portal_menu':
           handleShowPortalMenu(broadcastItem.data);
+          break;
+        case 'scoreboard':
+          handleScoreboard(broadcastItem.data as ScoreboardData);
           break;
         default:
           console.error(

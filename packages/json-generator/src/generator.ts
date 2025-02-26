@@ -136,6 +136,7 @@ const server_breakup = (json: JsonData) => {
         'speed',
         'attack',
         'gold',
+        'defense',
         'community',
         'stubbornness',
         'bravery',
@@ -180,7 +181,7 @@ process.argv.forEach(function (val: string) {
     const json_client = JSON.parse(rawJson);
     client_breakup(json_client);
     writeFileSync(
-      '../client/static/global.json',
+      '../../world_assets/global.json',
       JSON.stringify(json_client, null, 4)
     );
     ran = true;
@@ -189,7 +190,7 @@ process.argv.forEach(function (val: string) {
     const json_server = JSON.parse(rawJson);
     server_breakup(json_server);
     writeFileSync(
-      '../server/data/global.json',
+      '../server/global.json',
       JSON.stringify(json_server, null, 4)
     );
     ran = true;

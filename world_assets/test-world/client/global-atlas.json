@@ -544,6 +544,14 @@
         "h": 47
       }
     },
+    "market-stand": {
+            "frame": {
+                "x": 48,
+                "y": 49,
+                "w": 48,
+                "h": 47
+            }
+    },
     "cauldron": {
       "frame": {
         "x": 64,
@@ -1399,12 +1407,84 @@
         "w": 16,
         "h": 16
       }
+    },
+    "cloud": {
+      "frame": {
+        "x": 66,
+        "y": 842,
+        "w": 50,
+        "h": 32
+      }
+    },
+    "sun": {
+      "frame": {
+        "x": 118,
+        "y": 839,
+        "w": 45,
+        "h": 42
+      }
+    },
+    "cannon": {
+      "frame": {
+        "x": 163,
+        "y": 837,
+        "w": 50,
+        "h": 37
+      }
+    },
+    "starfish": {
+      "frame": {
+        "x": 386,
+        "y": 481,
+        "w": 22,
+        "h": 23
+      }
+    },
+    "fire-ball": {
+      "frame": {
+        "x": 313,
+        "y": 486,
+        "w": 16,
+        "h": 17
+      }
+    },
+    "pearl": {
+      "frame": {
+        "x": 339,
+        "y": 489,
+        "w": 13,
+        "h": 13
+      }
+    },
+    "seaweed-piece": {
+      "frame": {
+        "x": 360,
+        "y": 482,
+        "w": 16,
+        "h": 26
+      }
+    },
+    "message-in-bottle": {
+      "frame": {
+        "x": 265,
+        "y": 486,
+        "w": 43,
+        "h": 20
+      }
+    },
+    "obsidian-shard": {
+      "frame": {
+        "x": 270,
+        "y": 513,
+        "w": 19,
+        "h": 12
+      }
     }
   },
   "meta": {
     "app": "https://www.codeandweb.com/texturepacker",
     "version": "1.0",
-    "image": "global.png",
+    "image": "test-world_background.png",
     "format": "RGBA8888",
     "size": {
       "w": 128,

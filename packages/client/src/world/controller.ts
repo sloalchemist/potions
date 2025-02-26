@@ -34,6 +34,7 @@ let lastChatCompanions: Mob[] = [];
 let lastFightOpponents: Mob[] = [];
 let chatting: boolean = false;
 let fighting: boolean = false;
+let inventoryCallback: (items: Item[]) => void;
 
 export let currentInteractions: Interactions[] = [];
 export let fantasyDate: FantasyDateI;
@@ -42,10 +43,13 @@ let responseCallback: (responses: string[]) => void = () => {};
 let attackCallback: (attacks: string[]) => void = () => {};
 
 type GameState = 'uninitialized' | 'worldLoaded' | 'stateInitialized';
+type LeaderboardData = [string, number][];
 
 export let gameState: GameState = 'uninitialized';
 
 export let availableWorlds: WorldMetadata[] = [];
+
+export let leaderboardData: LeaderboardData = [];
 
 export function setAvailableWorlds(worlds: WorldMetadata[]) {
   availableWorlds = worlds;
@@ -54,6 +58,10 @@ export function setAvailableWorlds(worlds: WorldMetadata[]) {
 export function setGameState(state: GameState) {
   console.log('Setting game state to:', state);
   gameState = state;
+}
+
+export function setLeaderboardData(data: LeaderboardData) {
+  leaderboardData = data;
 }
 
 export function setChatting(chat: boolean) {
@@ -191,6 +199,12 @@ export function getCarriedItemInteractions(
     label: `Drop ${item.itemType.name}`
   });
 
+  interactions.push({
+    action: 'stash',
+    item: item as Item,
+    label: `Stash ${item.itemType.name}`
+  });
+
   // give to nearby mobs
   nearbyMobs.forEach((mob) => {
     if (mob.key !== playerId && !mob.carrying) {
@@ -270,7 +284,7 @@ export function getPhysicalInteractions(
           carried &&
           carried.itemType.name.localeCompare(
             item.attributes.templateType.toString()
-          )) ||
+          ) === 0) ||
         interaction.action != 'add_item'
       ) {
         interactions.push({
@@ -409,6 +423,17 @@ export function setInteractionCallback(
 
 export function setFightOpponentCallback(callback: (opponents: Mob[]) => void) {
   fightOpponentCallback = callback;
+}
+
+export function setInventoryCallback(callback: (items: Item[]) => void) {
+  inventoryCallback = callback;
+}
+
+export function updateInventory() {
+  if (inventoryCallback) {
+    const storedItems = world.getStoredItems();
+    inventoryCallback(storedItems);
+  }
 }
 
 export function addNewHouse(scene: WorldScene, house: HouseI) {

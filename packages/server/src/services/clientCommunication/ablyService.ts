@@ -17,7 +17,8 @@ import {
   getItemAbly,
   getItemsAbly,
   getMobAbly,
-  getMobsAbly
+  getMobsAbly,
+  getScoreboardData
 } from './clientMarshalling';
 import { Mob } from '../../mobs/mob';
 import { mobFactory } from '../../mobs/mobFactory';
@@ -417,6 +418,7 @@ export class AblyService implements PubSub {
         new_value: newValue
       }
     });
+    this.broadcastScoreboard(); // we only need to update the scoreboard when the gold changes
   }
 
   public changeItemAttribute(
@@ -485,6 +487,22 @@ export class AblyService implements PubSub {
   public dropItem(item_key: string, mob_key: string, position: Coord): void {
     this.addToBroadcast({
       type: 'drop_item',
+      data: { item_key, mob_key, position }
+    });
+  }
+
+  public stashItem(item_key: string, mob_key: string, position: Coord): void {
+    this.addToBroadcast({
+      type: 'stash_item',
+      data: { item_key, mob_key, position }
+    });
+
+    console.log('stashing item', item_key, mob_key);
+  }
+
+  public unstashItem(item_key: string, mob_key: string, position: Coord): void {
+    this.addToBroadcast({
+      type: 'unstash_item',
       data: { item_key, mob_key, position }
     });
   }
@@ -668,6 +686,15 @@ export class AblyService implements PubSub {
         throw new Error('no player found ' + username);
       }
       applyCheat(player, data.action);
+    });
+  }
+
+  public broadcastScoreboard(): void {
+    const scoreboardData = getScoreboardData();
+    console.log('broadcasting scoreboard data', scoreboardData);
+    this.addToBroadcast({
+      type: 'scoreboard',
+      data: scoreboardData
     });
   }
 }
