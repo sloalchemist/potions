@@ -582,41 +582,45 @@ export class WorldScene extends Phaser.Scene {
     let moveY = player.position.y;
 
     let moved = false;
+    let newX = moveX;
+    let newY = moveY;
+
     if (this.keys['w']) {
-      moveY--;
-      moved = true;
+      newY--;
     }
     if (this.keys['s']) {
-      moveY++;
-      moved = true;
+      newY++;
     }
     if (this.keys['a']) {
-      moveX--;
-      moved = true;
+      newX--;
     }
     if (this.keys['d']) {
-      moveX++;
-      moved = true;
+      newX++;
     }
 
+    // Check if the next step is blocked
+    const nextItem = world.getItemAt(newX, newY);
+    if (!!nextItem && !nextItem.isWalkable(player.unlocks)) {
+      return;
+    }
+
+    // Check if your position has changed
+    moved = newX !== moveX || newY !== moveY;
     if (!moved) return;
 
     let roundedX;
     let roundedY;
     const negKeys = ['w', 'a'];
     if (negKeys.includes(this.lastKeyUp)) {
-      roundedX = Math.floor(moveX);
-      roundedY = Math.floor(moveY);
+      roundedX = Math.floor(newX);
+      roundedY = Math.floor(newY);
     } else {
-      roundedX = Math.ceil(moveX);
-      roundedY = Math.ceil(moveY);
+      roundedX = Math.ceil(newX);
+      roundedY = Math.ceil(newY);
     }
 
     const target = { x: roundedX, y: roundedY };
 
-    // NOTE: the code in the 'else' block moves the player on the client side
-    //       publishPlayerPosition() calls that code itself, so player will
-    //       move on the client side for whichever case
     if (publish) {
       this.prevKeys = { ...this.keys };
       publishPlayerPosition(target);
