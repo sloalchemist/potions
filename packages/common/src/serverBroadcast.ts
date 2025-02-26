@@ -56,6 +56,8 @@ export type ScoreboardData = {
   scores: [string, number][];
 };
 
+export type ReloadPageData = {}
+
 export type BroadcastData =
   | { type: 'add_mob'; data: AddMobData }
   | { type: 'add_item'; data: AddItemData }
@@ -83,7 +85,8 @@ export type BroadcastData =
     }
   | { type: 'set_datetime'; data: SetDatetimeData }
   | { type: 'show_portal_menu'; data: ShowPortalMenuData }
-  | { type: 'scoreboard'; data: ScoreboardData };
+  | { type: 'scoreboard'; data: ScoreboardData }
+  | { type: 'reload_page'; data: ReloadPageData };
 
 export type ServerToBroadcastMessageMap = {
   tick: BroadcastData[];

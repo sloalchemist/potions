@@ -702,11 +702,6 @@ export class AblyService implements PubSub {
       }
       applyCheat(player, data.action);
     });
-
-    subscribeToPlayerChannel('update_world', (data) => {
-      console.log("Received player world to update");
-      
-    })
   }
 
   public broadcastScoreboard(): void {

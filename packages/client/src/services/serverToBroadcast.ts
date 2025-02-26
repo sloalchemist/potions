@@ -205,6 +205,12 @@ export function setupBroadcast(
     }
   }
 
+  function handleReloadPage() {
+    sessionStorage.setItem("traveling_through_portal", "true"); 
+    sessionStorage.setItem("traveling_to", 'fire-world');
+    window.location.reload();
+  }
+
   // Subscribe to broadcast and dispatch events using switch
   broadcast_channel.subscribe('tick', (message: Types.Message) => {
     if (gameState !== 'stateInitialized') return;
@@ -272,6 +278,9 @@ export function setupBroadcast(
           break;
         case 'scoreboard':
           handleScoreboard(broadcastItem.data as ScoreboardData);
+          break;
+        case 'reload_page':
+          handleReloadPage();
           break;
         default:
           console.error(
