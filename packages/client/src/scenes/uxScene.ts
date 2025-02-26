@@ -6,7 +6,8 @@ import {
   currentCharacter,
   addRefreshCallback,
   saveColors,
-  getWorldID
+  getWorldID,
+  publicCharacterId
 } from '../worldMetadata';
 import {
   fantasyDate,
@@ -37,6 +38,7 @@ import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
 import { hexStringToNumber, numberToHexString } from '../utils/color';
 import { InteractionType, parseWorldFromJson } from '../worldDescription';
+import { SpriteMob } from '../sprite/sprite_mob';
 export interface ChatOption {
   label: string;
   callback: () => void;
@@ -118,12 +120,14 @@ export class UxScene extends Phaser.Scene {
 
     let worldID = getWorldID();
 
-    this.load.json('global_data', 'static/global.json');
+    this.load.json(
+      'global_data',
+      'https://potions.gg/world_assets/global.json'
+    );
     this.load.json(
       'world_specific_data',
       `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
     );
-
     this.load.once('complete', () => {
       // Parse and use the data
       let globalData = parseWorldFromJson(
@@ -576,6 +580,67 @@ export class UxScene extends Phaser.Scene {
           color: '#FFFFFF'
         })
       );
+
+      // Add a title
+      this.customizeContainer.add(
+        this.add.text(100, 35, 'Character Customization', {
+          fontSize: '18px',
+          color: '#ffffff'
+        })
+      );
+
+      // Color pickers
+      const colors = ['Eye Color', 'Belly Color', 'Fur Color'];
+      const colorKeys = ['eyeColor', 'bellyColor', 'furColor'];
+      let yOffset = 90;
+
+      colors.forEach((colorLabel, index) => {
+        const label = this.add.text(15, yOffset, colorLabel, {
+          fontSize: '14px',
+          color: '#ffffff'
+        });
+        this.customizeContainer?.add(label);
+
+        const colorPicker = this.add.dom(225, yOffset, 'input');
+        const inputElement = colorPicker.node as HTMLInputElement;
+        inputElement.type = 'color';
+        inputElement.value = numberToHexString(
+          Number(
+            currentCharacter?.[
+              colorKeys[index] as keyof typeof currentCharacter
+            ]
+          ) || 0
+        );
+        inputElement.classList.add('phaser-color-input');
+        inputElement.style.width = '30px';
+        inputElement.style.height = '30px';
+
+        inputElement.addEventListener('input', (event: Event) => {
+          if (!currentCharacter) {
+            return;
+          }
+
+          const color = hexStringToNumber(
+            (event.target as HTMLInputElement).value
+          );
+
+          const currCharTyped = currentCharacter as unknown as Record<
+            string,
+            number
+          >;
+          currCharTyped[colorKeys[index]] = color;
+          const player = world.mobs[publicCharacterId] as SpriteMob;
+          if (player) {
+            player.subtype = `${currCharTyped[colorKeys[0]]}-${currCharTyped[colorKeys[1]]}-${currCharTyped[colorKeys[2]]}`;
+            player.updateAnimation();
+          }
+
+          saveColors();
+        });
+
+        this.customizeContainer?.add(colorPicker);
+        yOffset += 30;
+      });
 
       this.time.addEvent({
         delay: 1000,
