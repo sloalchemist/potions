@@ -794,7 +794,7 @@ export class UxScene extends Phaser.Scene {
       interactions.forEach((interaction) => {
         if (interaction.item.type === 'cauldron') {
           const x = toggleX + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
-          const y = 25 + toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + BUTTON_SPACING);
+          const y = SUBHEADING_OFFSET + toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + BUTTON_SPACING);
 
           const button = new Button(this, x, y, true, interaction.label, () => {
             interact(
@@ -883,7 +883,7 @@ export class UxScene extends Phaser.Scene {
       const toggleButton = new Button(
         this,
         toggleX,
-        toggleY,
+        SUBHEADING_OFFSET + toggleY,
         true,
         'Toggle Menu',
         () => {
