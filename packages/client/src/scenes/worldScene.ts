@@ -456,14 +456,16 @@ export class WorldScene extends Phaser.Scene {
       }
       if (event.code === 'KeyP') {
         leaveWorld('fire-world');
+        sessionStorage.setItem("reloaded", "true"); // set reload flag to skip start screen after reload
         window.location.reload();
       }
 
       if (event.code === 'KeyL') {
         leaveWorld('test-world'); 
+        sessionStorage.setItem("reloaded", "true"); // set reload flag to skip start screen after reload
         window.location.reload();
       }
-      
+
       // Brings up chat box for user
       if (event.code === 'Slash') {
         if (!this.scene.isActive('ChatOverlayScene')) {

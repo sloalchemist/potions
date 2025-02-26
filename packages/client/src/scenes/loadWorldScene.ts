@@ -242,7 +242,16 @@ export class LoadWorldScene extends Phaser.Scene {
         });
 
         this.load.start();
-
+        
+        if (sessionStorage.getItem("reloaded") === "true") {
+          this.scene.start('PauseScene');
+          this.scene.start('WorldScene');
+          this.scene.start('UxScene');
+          this.scene.start('FrameScene');
+          this.scene.start('LeaderboardScene');
+          setGameState('worldLoaded');
+        }
+      
         // Create 'START!' button
         loadingMessage.destroy();
         const startGame = this.add.text(
