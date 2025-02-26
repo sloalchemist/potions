@@ -721,7 +721,7 @@ export class WorldScene extends Phaser.Scene {
     this.sound.removeByKey('walk');
     this.sound.removeByKey('background_music');
     this.sound.removeByKey('background_music_layer');
-    
+
     this.stopScenes();
     this.scene.start('LoadCharacterScene', { autoStart: true });
   }
