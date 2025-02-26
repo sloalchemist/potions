@@ -400,7 +400,7 @@ export class WorldScene extends Phaser.Scene {
     }
     if (!this.sound.isPlaying('background_music_layer')) {
       this.sound
-        .add('background_music_layer', { loop: true, volume: 0.8 })
+        .add('background_music_layer', { loop: true, volume: 0.3 })
         .play();
     }
 
