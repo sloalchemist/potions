@@ -68,6 +68,8 @@ export class UxScene extends Phaser.Scene {
   sleepyText: Phaser.GameObjects.Text | null = null;
   extroversionText: Phaser.GameObjects.Text | null = null;
   dateText: Phaser.GameObjects.Text | null = null;
+  itemsText: Phaser.GameObjects.Text | null = null;
+  fightText: Phaser.GameObjects.Text | null = null;
   recipeText: Phaser.GameObjects.Text | null = null;
   effectText: Phaser.GameObjects.Text | null = null;
   sideEffectsText: Phaser.GameObjects.Text | null = null;
@@ -83,6 +85,8 @@ export class UxScene extends Phaser.Scene {
   potionTabButton: TabButton | null = null;
   nextButton: SlideButton | null = null;
   backButton: SlideButton | null = null;
+  actionNextButton: SlideButton | null = null;
+  actionBackButton: SlideButton | null = null;
   inventoryTabButton: TabButton | null = null;
 
   itemsContainer: Phaser.GameObjects.Container | null = null;
@@ -255,6 +259,27 @@ export class UxScene extends Phaser.Scene {
       30,
       'left'
     );
+    //These buttons are for paginating 'items' and 'fight' within actions tab 
+    this.actionNextButton = new SlideButton(
+      this,
+      400,
+      83,
+      '',
+      () => this.showFightTab(),
+      50,
+      30,
+      'right'
+    );
+    this.actionBackButton = new SlideButton(
+      this,
+      60,
+      83,
+      '',
+      () => this.showItemsTab(),
+      50,
+      30,
+      'left'
+    );
     this.inventoryTabButton = new TabButton(
       this,
       tabX + 5 * (tabWidth + tabSpacing) + tabWidth / 2,
@@ -387,6 +412,13 @@ export class UxScene extends Phaser.Scene {
         this.infoContainer?.add(colorPicker);
         yOffset += 30;
       });
+
+      // action tab texts
+      this.itemsText = this.add.text(160, 35, 'ITEMS / Fight');
+      this.itemsContainer.add(this.itemsText);
+
+      this.fightText = this.add.text(160, 35, 'Items / FIGHT');
+      this.fightContainer.add(this.fightText);
 
       // recipe text
       this.recipeText = this.add.text(160, 35, 'POTION RECIPES');
@@ -696,6 +728,8 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.actionNextButton?.setVisible(false);
+    this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -712,6 +746,8 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.actionNextButton?.setVisible(true);
+    this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -728,6 +764,8 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.actionNextButton?.setVisible(false);
+    this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -744,6 +782,8 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.actionNextButton?.setVisible(false);
+    this.actionBackButton?.setVisible(true);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -760,6 +800,8 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(true);
     this.backButton?.setVisible(false);
+    this.actionNextButton?.setVisible(false);
+    this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.inventoryContainer?.setVisible(false);
     this.scene.stop('BrewScene');
@@ -776,6 +818,8 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(true);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(true);
+    this.actionNextButton?.setVisible(false);
+    this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
   }
 
@@ -789,6 +833,8 @@ export class UxScene extends Phaser.Scene {
     this.effectsContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(false);
+    this.actionNextButton?.setVisible(false);
+    this.actionBackButton?.setVisible(false);
     this.updateTabStyles('pack');
   }
 
