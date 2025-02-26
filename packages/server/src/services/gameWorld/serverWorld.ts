@@ -16,7 +16,7 @@ import fs from 'fs';
 import path from 'path';
 
 const DEBUG_TO_CONSOLE = false;
-const DEBUG_TO_FILE = true;
+const DEBUG_TO_FILE = false;
 const DEBUG_FILE_PATH = path.join(__dirname, 'debug.log');
 
 function debugLog(message: string) {
