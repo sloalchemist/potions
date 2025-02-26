@@ -89,7 +89,9 @@ export class WorldScene extends Phaser.Scene {
       'world_specific_data',
       `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
     );
-
+    this.load.audio('background_music_layer', [
+      `static/music/${worldID}_layer.mp3`
+    ]);
     this.load.audio('background_music', ['static/music/cosmic_ambient.mp3']);
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
@@ -396,6 +398,11 @@ export class WorldScene extends Phaser.Scene {
     if (!this.sound.isPlaying('background_music')) {
       this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
     }
+    if (!this.sound.isPlaying('background_music_layer')) {
+      this.sound
+        .add('background_music_layer', { loop: true, volume: 0.8 })
+        .play();
+    }
 
     bindAblyToWorldScene(this);
     initializePlayer();
@@ -695,6 +702,7 @@ export class WorldScene extends Phaser.Scene {
   resetToLoadWorldScene() {
     this.sound.removeByKey('walk');
     this.sound.removeByKey('background_music');
+    this.sound.removeByKey('background_music_layer');
 
     setGameState('uninitialized');
     this.scene.stop('BrewScene');
@@ -713,6 +721,7 @@ export class WorldScene extends Phaser.Scene {
   resetToRespawn() {
     this.sound.removeByKey('walk');
     this.sound.removeByKey('background_music');
+    this.sound.removeByKey('background_music_layer');
 
     this.scene.stop('WorldScene');
 
