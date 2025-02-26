@@ -787,7 +787,6 @@ export class UxScene extends Phaser.Scene {
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
-    this.updateTabStyles('fight');
   }
 
   // Method to show the Potions tab
@@ -949,7 +948,8 @@ export class UxScene extends Phaser.Scene {
     } else {
       interactions.forEach((interaction) => {
         if (interaction.item.type != 'cauldron') {
-          const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+          /* Moved down 25 after adding Subheading for items/fight pagination of actions tab */
+          const y = 25 + 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
           const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
 
           const interactionAction =
@@ -1060,7 +1060,8 @@ export class UxScene extends Phaser.Scene {
     this.fightButtons?.clearButtonOptions();
 
     opponents.forEach((opponent, i) => {
-      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+      /* Moved down 25 after adding Subheading for items/fight pagination of actions tab */
+      const y = 25 + 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
       const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
       const button = new Button(this, x, y, true, `${opponent.name}`, () =>
         this.sendRequestFight(world, opponent)
@@ -1082,7 +1083,8 @@ export class UxScene extends Phaser.Scene {
     this.fightButtons?.clearButtonOptions();
 
     fightOptions.forEach((fightOption, i) => {
-      const y = 70 + (80 + 10) * i;
+      /* Moved down 40 after adding Subheading for items/fight pagination of actions tab */
+      const y = 40 + 70 + (BUTTON_HEIGHT + 10) * i;
       const x = 220;
       const button = new Button(
         this,
