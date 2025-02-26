@@ -14,8 +14,8 @@ export class Hunt implements Plan {
 
     const success = npc.moveToOrExecute(this.enemy.position, 1, () => {
       // create damage values
-      const enemyDamage = Math.floor(Math.random() * -1 * npc._attack);
-      const npcDamage = Math.floor(Math.random() * -1 * this.enemy!._attack);
+      const enemyDamage = Math.floor(.33 * -1 * npc._attack);
+      const npcDamage = Math.floor(.33 * -1 * this.enemy!._attack);
 
       // this formula means 100 armor gives ~30% damage reduction
       const adjustedEnemyDamage = Math.floor(
