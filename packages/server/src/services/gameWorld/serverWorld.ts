@@ -13,6 +13,16 @@ import { OnTickRegistry } from '../../items/on_ticks/onTickRegistry';
 import { DB } from '../database';
 import { DataLogger } from '../../grafana/dataLogger';
 
+// Performance logging helper
+function measureTime(label: string, fn: () => void): number {
+  const start = performance.now();
+  fn();
+  const end = performance.now();
+  const duration = end - start;
+  console.log(`[PERF] ${label}: ${duration.toFixed(2)}ms`);
+  return duration;
+}
+
 export class ServerWorld implements GameWorld {
   private pathFinder: PathFinder;
   // export mobTypes and itemTypes as attributes to use in tests
@@ -51,50 +61,71 @@ export class ServerWorld implements GameWorld {
   }
 
   private runItemTicks(): void {
-    const ids = Item.getAllItemIDs();
-    this.pathFinder.clearBlockingItems();
-    for (const id of ids) {
-      const item = Item.getItem(id);
-      if (!item) {
-        continue;
-      }
+    measureTime('Getting all item IDs', () => {
+      const ids = Item.getAllItemIDs();
+      console.log(`[DEBUG] Processing ${ids.length} items`);
+      
+      measureTime('Clearing blocking items', () => {
+        this.pathFinder.clearBlockingItems();
+      });
 
-      if ((!item.itemType.walkable || item.lock) && item.position) {
-        this.pathFinder.setBlockingItem(
-          item.position.x,
-          item.position.y,
-          item.lock ? item.lock : 'block'
-        );
-      }
-      item.tick();
-    }
-    Carryable.validateNoOrphanedItems();
+      let blockingItems = 0;
+      measureTime('Processing items', () => {
+        for (const id of ids) {
+          const item = Item.getItem(id);
+          if (!item) {
+            continue;
+          }
+
+          if ((!item.itemType.walkable || item.lock) && item.position) {
+            blockingItems++;
+            this.pathFinder.setBlockingItem(
+              item.position.x,
+              item.position.y,
+              item.lock ? item.lock : 'block'
+            );
+          }
+          item.tick();
+        }
+      });
+      console.log(`[DEBUG] Processed ${blockingItems} blocking items`);
+    });
+
+    measureTime('Validating items', () => {
+      Carryable.validateNoOrphanedItems();
+    });
   }
 
   private runMobTicks(deltaTime: number): void {
-    const mob_ids = Mob.getAllMobIDs();
-
-    for (const mob_id of mob_ids) {
-      const mob = Mob.getMob(mob_id);
-      if (mob) {
-        mob.tick(deltaTime);
+    measureTime('Mob ticks', () => {
+      const mob_ids = Mob.getAllMobIDs();
+      console.log(`[DEBUG] Processing ${mob_ids.length} mobs`);
+      
+      let processedMobs = 0;
+      for (const mob_id of mob_ids) {
+        const mob = Mob.getMob(mob_id);
+        if (mob) {
+          processedMobs++;
+          mob.tick(deltaTime);
+        }
       }
-    }
+      console.log(`[DEBUG] Successfully processed ${processedMobs} mobs`);
+    });
   }
 
   tick(deltaTime: number) {
-    //const startTime = Date.now();
-    this.runItemTicks();
-    this.runMobTicks(deltaTime);
+    const totalStart = performance.now();
+    console.log('\n[TICK] Starting new tick cycle ========================');
+    
+    measureTime('Item ticks', () => this.runItemTicks());
+    measureTime('Mob ticks', () => this.runMobTicks(deltaTime));
+    measureTime('Conversation tracker', () => conversationTracker.tick());
+    measureTime('Fantasy date', () => FantasyDate.runTick());
+    measureTime('Data logging', () => DataLogger.logData());
 
-    conversationTracker.tick();
-    FantasyDate.runTick();
-
-    // log data for Prometheus
-    DataLogger.logData();
-
-    //const totalTime = Date.now() - startTime;
-    //console.log('time to tick', totalTime);
+    const totalTime = performance.now() - totalStart;
+    console.log(`[TICK] Total tick cycle time: ${totalTime.toFixed(2)}ms`);
+    console.log('[TICK] End tick cycle ================================\n');
   }
 
   getPortalLocation(): Coord {
