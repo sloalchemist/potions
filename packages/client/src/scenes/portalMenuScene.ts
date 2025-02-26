@@ -1,18 +1,12 @@
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { availableWorlds } from '../world/controller';
-import { leaveWorld, updateWorld } from '../services/playerToServer';
+import { updateWorld } from '../services/playerToServer';
+import { getWorldID } from '../worldMetadata';
 
 export class PortalMenuScene extends Phaser.Scene {
   constructor() {
     super({ key: 'PortalMenuScene' });
-  }
-  
-  changeWorld(world_id: string) {
-      updateWorld(world_id);
-      sessionStorage.setItem("traveling_through_portal", "true");
-      sessionStorage.setItem("traveling_to", world_id);
-      window.location.reload();
   }
 
   create() {
@@ -80,7 +74,9 @@ export class PortalMenuScene extends Phaser.Scene {
       button.on('pointerdown', () => {
         // TODO: Implement world transition
         console.log(`Selected world: ${world.name} with id ${world.id}`);
-        this.changeWorld(world.name);
+        if (world.name !== getWorldID()) { // only switch if going to a new world
+          updateWorld(world.name);
+        }
         this.scene.stop('PortalMenuScene');
       });
     });

@@ -454,20 +454,6 @@ export class WorldScene extends Phaser.Scene {
       if (event.shiftKey && event.code === 'KeyG') {
         persistWorldData();
       }
-      if (event.code === 'KeyP') {
-        updateWorld('fire-world');
-        // sessionStorage.setItem("traveling_through_portal", "true"); 
-        // sessionStorage.setItem("traveling_to", 'fire-world');
-        // window.location.reload();
-      }
-
-      if (event.code === 'KeyL') {
-        updateWorld('test-world'); 
-        // sessionStorage.setItem("traveling_through_portal", "true"); 
-        // sessionStorage.setItem("traveling_to", 'test-world');
-        // window.location.reload();
-      }
-
       // Brings up chat box for user
       if (event.code === 'Slash') {
         if (!this.scene.isActive('ChatOverlayScene')) {

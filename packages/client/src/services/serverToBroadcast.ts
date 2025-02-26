@@ -207,7 +207,6 @@ export function setupBroadcast(
 
   function handleReloadPage() {
     sessionStorage.setItem("traveling_through_portal", "true"); 
-    sessionStorage.setItem("traveling_to", 'fire-world');
     window.location.reload();
   }
 
