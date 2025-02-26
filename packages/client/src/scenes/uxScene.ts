@@ -1,6 +1,12 @@
 import Phaser from 'phaser';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
-import { BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_SPACING, SUBHEADING_OFFSET, Button } from '../components/button';
+import {
+  BUTTON_HEIGHT,
+  BUTTON_WIDTH,
+  BUTTON_SPACING,
+  SUBHEADING_OFFSET,
+  Button
+} from '../components/button';
 import { world } from './worldScene';
 import {
   currentCharacter,
@@ -819,7 +825,10 @@ export class UxScene extends Phaser.Scene {
             interaction.label !== 'Add Ingredient'
           ) {
             const x = toggleX + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
-            const y = SUBHEADING_OFFSET + toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + BUTTON_SPACING);
+            const y =
+              SUBHEADING_OFFSET +
+              toggleY +
+              Math.floor(i / 3) * (BUTTON_HEIGHT + BUTTON_SPACING);
 
             const button = new Button(
               this,
@@ -876,7 +885,10 @@ export class UxScene extends Phaser.Scene {
     } else {
       interactions.forEach((interaction) => {
         if (interaction.item.type != 'cauldron') {
-          const y = SUBHEADING_OFFSET + 60 + (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
+          const y =
+            SUBHEADING_OFFSET +
+            60 +
+            (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
           const x = 85 + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
 
           const interactionAction =
@@ -990,7 +1002,10 @@ export class UxScene extends Phaser.Scene {
     this.fightButtons?.clearButtonOptions();
 
     opponents.forEach((opponent, i) => {
-      const y = SUBHEADING_OFFSET + 60 + (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
+      const y =
+        SUBHEADING_OFFSET +
+        60 +
+        (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
       const x = 85 + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
       const button = new Button(this, x, y, true, `${opponent.name}`, () =>
         this.sendRequestFight(world, opponent)
