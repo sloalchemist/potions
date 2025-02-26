@@ -78,7 +78,7 @@ export function updateWorld(target_world_id: string) {
     publicCharacterId: publicCharacterId,
     target_world_id: target_world_id
   };
-  broadcastChannel.presence.update(updateData, (err) =>  {
+  broadcastChannel.presence.update(updateData, (err) => {
     if (err) {
       console.error('Error updating world:', err);
     } else {
@@ -95,7 +95,7 @@ export function updateWorld(target_world_id: string) {
  */
 export function leaveWorld(target_world_id: string) {
   // Do not both updating when you are not changing worlds
-  if (!target_world_id || "MAINTAIN_WORLD_OPTION" === target_world_id) {
+  if (!target_world_id || 'MAINTAIN_WORLD_OPTION' === target_world_id) {
     return;
   }
 

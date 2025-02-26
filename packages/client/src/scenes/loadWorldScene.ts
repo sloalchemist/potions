@@ -206,11 +206,7 @@ export class LoadWorldScene extends Phaser.Scene {
 
     setupAbly()
       .then((worldID) => {
-        console.log('LOADWORLD: ', worldID);
-      
         setWorldID(worldID);
-
-        console.log('LOADWORLD: ', worldID);
 
         this.load.atlas(
           'global-atlas',
@@ -245,10 +241,11 @@ export class LoadWorldScene extends Phaser.Scene {
         });
 
         this.load.start();
-        
+
         // Skip the start button if traveling through a portal
-        const traveling = sessionStorage.getItem("traveling_through_portal") === "true"
-        sessionStorage.setItem("traveling_through_portal", "false");
+        const traveling =
+          sessionStorage.getItem('traveling_through_portal') === 'true';
+        sessionStorage.setItem('traveling_through_portal', 'false');
         if (traveling) {
           this.scene.start('PauseScene');
           this.scene.start('WorldScene');
@@ -257,7 +254,7 @@ export class LoadWorldScene extends Phaser.Scene {
           this.scene.start('LeaderboardScene');
           setGameState('worldLoaded');
         }
-      
+
         // Create 'START!' button
         loadingMessage.destroy();
         const startGame = this.add.text(

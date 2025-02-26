@@ -3,7 +3,6 @@ import config from './config';
 import { gameState, setGameState } from './world/controller';
 import { playerDead } from './services/serverToBroadcast';
 
-
 const game = new Phaser.Game(config);
 
 export let focused = true;

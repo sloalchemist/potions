@@ -74,9 +74,9 @@ export class AblyService implements PubSub {
           ? this.worldID
           : presenceMsg.data.target_world_id;
 
-      console.log("Updating to ", target_world_id);
+      console.log('Updating to ', target_world_id);
 
-      // Await this, because the client needs to reload the page after the world is 
+      // Await this, because the client needs to reload the page after the world is
       // updated in order for portals to work
       await this.sendPersistenceRequest(
         presenceMsg.clientId,
@@ -717,9 +717,6 @@ export class AblyService implements PubSub {
   }
 
   public broadcastReloadPageTrigger(): void {
-    this.addToBroadcast({
-      type: 'reload_page',
-      data: {}
-    })
+    this.addToBroadcast({ type: 'reload_page' });
   }
 }

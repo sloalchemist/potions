@@ -74,14 +74,14 @@ export class PortalMenuScene extends Phaser.Scene {
         // TODO: Implement world transition
         console.log(`Selected world: ${world.name} with id ${world.id}`);
 
-        if (world.name === getWorldID()) { // only switch if going to a new world
+        if (world.name === getWorldID()) {
+          // only switch if going to a new world
           this.scene.stop('PortalMenuScene');
         } else {
           updateWorld(world.name);
           this.scene.stop('PortalMenuScene');
-          this.scene.start('PortalLoadingScene')
+          this.scene.start('PortalLoadingScene');
         }
-        
       });
     });
 
