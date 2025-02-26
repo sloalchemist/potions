@@ -90,6 +90,7 @@ export class WorldScene extends Phaser.Scene {
       `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
     );
 
+    this.load.audio('background_music', ['static/music/cosmic_ambient.mp3']);
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
 
@@ -392,6 +393,10 @@ export class WorldScene extends Phaser.Scene {
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
     this.hideWorld();
 
+    if (!this.sound.isPlaying('background_music')) {
+      this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
+    }
+
     bindAblyToWorldScene(this);
     initializePlayer();
 
@@ -688,6 +693,9 @@ export class WorldScene extends Phaser.Scene {
   /* Stop all scenes related to game play and go back to the LoadWordScene 
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
+    this.sound.removeByKey('walk');
+    this.sound.removeByKey('background_music');
+
     setGameState('uninitialized');
     this.scene.stop('BrewScene');
     this.scene.stop('PauseScene');
@@ -703,6 +711,9 @@ export class WorldScene extends Phaser.Scene {
    * the server, then restart the world scene
    */
   resetToRespawn() {
+    this.sound.removeByKey('walk');
+    this.sound.removeByKey('background_music');
+
     this.scene.stop('WorldScene');
 
     setupAbly()
