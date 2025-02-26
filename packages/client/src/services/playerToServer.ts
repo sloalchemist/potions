@@ -79,6 +79,11 @@ export function startWorld() {
  * @throws {Error} When there's an error leaving the presence channel
  */
 export function leaveWorld(target_world_id: string) {
+  // Do not both updating when you are not changing worlds
+  if (!target_world_id || "MAINTAIN_WORLD_OPTION" === target_world_id) {
+    return;
+  }
+
   const leaveData = {
     publicCharacterId: publicCharacterId,
     target_world_id: target_world_id

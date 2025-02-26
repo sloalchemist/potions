@@ -29,7 +29,6 @@ import {
 } from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { Item } from '../world/item';
-import { setGame } from '../main';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -456,16 +455,15 @@ export class WorldScene extends Phaser.Scene {
         persistWorldData();
       }
       if (event.code === 'KeyP') {
-        leaveWorld('fire-world'); // go to fireworld (10)
-        console.log("LEAVE WORLD");
+        leaveWorld('fire-world');
+        window.location.reload();
       }
 
-      if (event.code === 'KeyO') {
-        setGame();
-        this.resetToRespawn();
-        console.log("RESET WIRLD");
+      if (event.code === 'KeyL') {
+        leaveWorld('test-world'); 
+        window.location.reload();
       }
-
+      
       // Brings up chat box for user
       if (event.code === 'Slash') {
         if (!this.scene.isActive('ChatOverlayScene')) {
