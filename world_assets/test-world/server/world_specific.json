@@ -445,6 +445,38 @@
       "itemType": "heart-beet",
       "count": 0,
       "capacity": 20
+    },
+    {
+      "type": "basket",
+      "coord": { "x": 40, "y": 12 },
+      "community": "silverclaw",
+      "itemType": "bones",
+      "count": 0,
+      "capacity": 20
+    },
+    {
+      "type": "basket",
+      "coord": { "x": 41, "y": 13 },
+      "community": "silverclaw",
+      "itemType": "sunflower",
+      "count": 0,
+      "capacity": 20
+    },
+    {
+      "type": "basket",
+      "coord": { "x": 39, "y": 12 },
+      "community": "silverclaw",
+      "itemType": "sun-drop",
+      "count": 0,
+      "capacity": 20
+    },
+    {
+      "type": "basket",
+      "coord": { "x": 39, "y": 14 },
+      "community": "silverclaw",
+      "itemType": "sands-of-time",
+      "count": 0,
+      "capacity": 20
     }
   ],
   "regions": [
