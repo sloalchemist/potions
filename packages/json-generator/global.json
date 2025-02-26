@@ -40,6 +40,10 @@
         {
           "name": "health",
           "value": 1
+        },
+        {
+          "name": "specialized_resource",
+          "value": "blobs"
         }
       ],
       "walkable": true,
@@ -80,6 +84,10 @@
         {
           "name": "health",
           "value": 1
+        },
+        {
+          "name": "specialized_resource",
+          "value": "fighters"
         }
       ],
       "walkable": true,
@@ -116,6 +124,10 @@
         {
           "name": "health",
           "value": 1
+        },
+        {
+          "name": "specialized_resource",
+          "value": "fighters"
         }
       ],
       "walkable": true,
@@ -136,6 +148,10 @@
         {
           "name": "health",
           "value": 1
+        },
+        {
+          "name": "specialized_resource",
+          "value": "silverclaw"
         }
       ],
       "walkable": true,
@@ -156,6 +172,10 @@
         {
           "name": "health",
           "value": 1
+        },
+        {
+          "name": "specialized_resource",
+          "value": "silverclaw"
         }
       ],
       "walkable": true,
@@ -175,6 +195,10 @@
         {
           "name": "health",
           "value": 1
+        },
+        {
+          "name": "specialized_resource",
+          "value": "silverclaw"
         }
       ],
       "walkable": true,
@@ -194,6 +218,10 @@
         {
           "name": "health",
           "value": 1
+        },
+        {
+          "name": "specialized_resource",
+          "value": "fighters"
         }
       ],
       "walkable": true,
@@ -214,6 +242,10 @@
         {
           "name": "health",
           "value": 1
+        },
+        {
+          "name": "specialized_resource",
+          "value": "blobs"
         }
       ],
       "walkable": true,
@@ -240,6 +272,10 @@
         {
           "name": "health",
           "value": 1
+        },
+        {
+          "name": "specialized_resource",
+          "value": "blobs"
         }
       ],
       "walkable": true,
@@ -266,6 +302,10 @@
         {
           "name": "health",
           "value": 1
+        },
+        {
+          "name": "specialized_resource",
+          "value": "blobs"
         }
       ],
       "walkable": true,
@@ -933,7 +973,13 @@
       "carryable": false,
       "walkable": true,
       "flat": true,
-      "interactions": [],
+      "interactions": [
+        {
+            "description": "Enter portal",
+            "action": "enter",
+            "while_carried": false
+        }
+      ],
       "on_tick": [
         {
           "action": "spawn_mob",
