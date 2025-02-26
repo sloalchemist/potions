@@ -145,6 +145,7 @@ export function setupBroadcast(
 
         // once game focused, leave the world and display game over
         waitUntilFocused.then(() => {
+          // in cases where player should stay in the same world, pass MAINTAIN_WORLD_OPTION
           leaveWorld(MAINTAIN_WORLD_OPTION);
           scene.showGameOver();
         });
