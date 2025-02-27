@@ -909,6 +909,9 @@ export class Mob {
     return itemData ? itemData.id : undefined;
   }
 
+  // Calling the updating of player affiliation is needed in order to call the updateStats.
+  // UpdateStatsByAffiliation should be called in an updateAfilliation function (which does not exist yet).
+  // It seems to be out of requirement scope. But the tests pass for when updating the stats by affiliation.
   updateStatsBasedOnAffiliation(): void {
     // set to default
     this.maxHealth = 100;
@@ -930,7 +933,7 @@ export class Mob {
 
       case 'fighters':
         // Fighters have higher speed (1.5x normal)
-        let newSpeed = this.speed * 1.5
+        let newSpeed = this.speed * 1.5;
         DB.prepare(
           `
                 UPDATE mobs
@@ -943,7 +946,7 @@ export class Mob {
 
       case 'blobs':
         // Blobs have higher attack (1.5x normal)
-        let newAttack = this.attack * 1.5
+        let newAttack = this.attack * 1.5;
         if (newAttack <= 0) {
           newAttack = 0;
         }
