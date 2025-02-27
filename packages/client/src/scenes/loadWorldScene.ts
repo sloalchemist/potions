@@ -53,9 +53,20 @@ export class LoadWorldScene extends Phaser.Scene {
   preload() {
     this.load.image('frame', 'static/titleFrame.png');
     this.load.image('title', 'static/title.png');
+
+    // Load menu music
+    this.load.audio('menu_music', 'static/music/menu_music.mp3');
   }
 
   create() {
+    this.sound.add('menu_music', { loop: true, volume: 0.2 }).play();
+
+    // Play menu music
+    if (!this.sound.isPlaying('menu_music')) {
+      // fairy music
+      this.sound.add('menu_music', { loop: true, volume: 0.2 }).play();
+    }
+
     // Add background image
     const background = this.add.image(0, 0, 'title');
     background.setOrigin(0, 0);
@@ -279,6 +290,7 @@ export class LoadWorldScene extends Phaser.Scene {
           });
 
           startGame.on('pointerdown', () => {
+            this.sound.stopByKey('menu_music');
             this.startGame();
           });
         }

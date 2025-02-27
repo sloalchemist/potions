@@ -89,7 +89,10 @@ export class WorldScene extends Phaser.Scene {
       'world_specific_data',
       `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
     );
-
+    this.load.audio('background_music_layer', [
+      `static/music/${worldID}_layer.mp3`
+    ]);
+    this.load.audio('background_music', ['static/music/cosmic_ambient.mp3']);
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
 
@@ -391,6 +394,15 @@ export class WorldScene extends Phaser.Scene {
     );
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
     this.hideWorld();
+
+    if (!this.sound.isPlaying('background_music')) {
+      this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
+    }
+    if (!this.sound.isPlaying('background_music_layer')) {
+      this.sound
+        .add('background_music_layer', { loop: true, volume: 0.3 })
+        .play();
+    }
 
     bindAblyToWorldScene(this);
     initializePlayer();
@@ -697,12 +709,20 @@ export class WorldScene extends Phaser.Scene {
   /* Stop all scenes related to game play and go back to the LoadWordScene 
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
+    this.sound.removeByKey('walk');
+    this.sound.removeByKey('background_music');
+    this.sound.removeByKey('background_music_layer');
+
     this.stopScenes();
     this.scene.start('LoadCharacterScene', { autoStart: false });
   }
 
   /* Stop all scenes related to game play and automatically restart game.*/
   resetToRespawn() {
+    this.sound.removeByKey('walk');
+    this.sound.removeByKey('background_music');
+    this.sound.removeByKey('background_music_layer');
+
     this.stopScenes();
     this.scene.start('LoadCharacterScene', { autoStart: true });
   }
