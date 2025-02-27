@@ -5,13 +5,16 @@ import { DB } from '../../src/services/database';
 import { Coord } from '@rt-potion/common';
 import { Favorability } from '../../src/favorability/favorability';
 import { Mob } from '../../src/mobs/mob';
+import { Item } from '../../src/items/item';
+import { Carryable } from '../../src/items/carryable';
 
 beforeEach(() => {
   commonSetup();
-  Community.makeVillage('alchemists', 'Alchemists guild');
+  var alchemists = Community.makeVillage('alchemists', 'Alchemists guild');
   Community.makeVillage('blobs', 'Blobs');
-  Community.makeVillage('silverclaw', 'Village of Silverclaw');
+  var silverclaw = Community.makeVillage('silverclaw', 'Village of Silverclaw');
   Community.makeVillage('fighters', 'Village of Silverclaw');
+  Community.makeAlliance(alchemists, silverclaw);
   mobFactory.loadTemplates(world.mobTypes);
 });
 
@@ -134,6 +137,47 @@ describe('Favorability Tests', () => {
 
     // testing whether the item actually a possible item type that could be generated
     expect(itemGenerator._itemTypes[testplayer_item].carryable).toBe(true);
+  });
+  test('Update mob favorite item', () => {
+    // initialize player
+    const position: Coord = { x: 0, y: 0 };
+
+    mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
+    var testplayer = Mob.getMob('testPlayer');
+    var fav_item_1 = testplayer?._favorite_item;
+
+    testplayer?.changeFavoriteItem();
+    var fav_item_2 = testplayer?._favorite_item;
+    expect(fav_item_1 === fav_item_2).toBe(false);
+  });
+
+  test('Make sure favorability changes based on favorite item given', () => {
+    // initialize villager / player
+    const position: Coord = { x: 0, y: 0 };
+    const position2: Coord = { x: 1, y: 1 };
+    const position3: Coord = { x: 1, y: 0 };
+
+    mobFactory.makeMob('player', position, 'testPlayer', 'playertest');
+    mobFactory.makeMob('villager', position2, 'testVillager', 'villagertest');
+    var testplayer = Mob.getMob('testPlayer');
+    var testvillager = Mob.getMob('testVillager');
+
+    Community.makeFavor('alchemists', 'silverclaw', 100);
+
+    var fav_item = testvillager?._favorite_item;
+
+    itemGenerator.createItem({ type: fav_item!, position: position3 });
+    var fav_item_id = Item.getItemIDAt(position3);
+    var the_item = Item.getItem(fav_item_id!);
+    var the_carryable_item = Carryable.fromItem(the_item!);
+    the_carryable_item!.pickup(testplayer!);
+
+    console.log(fav_item);
+
+    var is_given = the_carryable_item!.giveItem(testplayer!, testvillager!);
+
+    expect(is_given).toBe(true);
+    expect(Community.getFavor('alchemists', 'silverclaw')).toBe(125);
   });
 });
 

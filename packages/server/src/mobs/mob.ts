@@ -683,6 +683,22 @@ export class Mob {
     pubSub.changeGold(this.id, amount, this._gold);
   }
 
+  /**
+   * Randomly chooses the favorite item of a mob, NOT including the mobs' current favorite item
+   */
+  changeFavoriteItem() {
+    const item = Item.diffRandomItem(this.favorite_item);
+    DB.prepare(
+      `
+        UPDATE mobs
+        SET favorite_item = :favorite_item
+        WHERE id = :id
+      `
+    ).run({ favorite_item: item, id: this.id });
+    this.favorite_item = item;
+    pubSub.changeFavoriteItem(this.id, item);
+  }
+
   destroy() {
     if (this.gold > 0 && this.position) {
       const position = Item.findEmptyPosition(this.position);
@@ -889,7 +905,7 @@ export class Mob {
             SELECT items.id
             FROM item_attributes
             JOIN items ON item_attributes.item_id = items.id
-            JOIN mobView ON mobView.community_id = items.owned_by
+            JOIN mobView ON mobView.community_id = items.owned_by_community
             WHERE mobView.id = :id and item_attributes.attribute = 'items'
         `
     ).all({ id: this.id }) as { id: string }[];
@@ -903,7 +919,7 @@ export class Mob {
             SELECT items.id
             FROM item_attributes
             JOIN items ON item_attributes.item_id = items.id
-            JOIN mobView ON mobView.community_id = items.owned_by
+            JOIN mobView ON mobView.community_id = items.owned_by_community
             WHERE item_attributes.attribute = 'items' AND mobView.id = :id
         `
     ).get({ type, id: this.id }) as { id: string };
