@@ -453,7 +453,10 @@ export class AblyService implements PubSub {
   }
 
   public speak(key: string, message: string): void {
-    this.addToBroadcast({ type: 'speak', data: { id: key, message } });
+    this.addToBroadcast({
+      type: 'speak',
+      data: { id: key, message }
+    });
   }
 
   public setDateTime(fantasyDate: FantasyDate): void {
