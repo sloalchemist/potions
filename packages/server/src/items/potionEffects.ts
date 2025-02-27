@@ -88,7 +88,7 @@ export function drinkPotion(
         dotDuration = dotDuration * effectModifier;
       }
       mob.changeEffect(dotDelta, dotDuration, 'damageOverTime');
-      return true;  
+      return true;
     case '#166060':
       console.log('Drinking black potion');
       let monsterDuration = 120;
