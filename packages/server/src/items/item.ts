@@ -377,6 +377,25 @@ export class Item {
     return item;
   }
 
+  /**
+   * Function returns a random item not including the item passed in.
+   * @returns A single carryable item, NOT including the item passed in.
+   */
+  static diffRandomItem(item_type: string): string {
+    const carryable_items = [];
+    for (const type in itemGenerator._itemTypes) {
+      if (
+        itemGenerator._itemTypes[type].carryable == true &&
+        type != item_type
+      ) {
+        carryable_items.push(type);
+      }
+    }
+    const item =
+      carryable_items[Math.floor(Math.random() * carryable_items.length)];
+    return item;
+  }
+
   destroy(): void {
     DB.prepare(
       `
