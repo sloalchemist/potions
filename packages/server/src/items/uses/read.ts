@@ -18,8 +18,8 @@ export class Read implements Use {
       return false;
     }
 
-    const message = 'some·message·here·(replace)';
-    mob.sendMessage(`You read the message: "${message}"`);
+    const message = `Greetings from the Deep… The sea whispers of forgotten treasures and ancient secrets hidden in the abyss. As you drift through the waters of Oozon, keep your eyes sharp. May the waves guide you.`;
+    mob.sendMessage(`${message}`);
 
     return true;
   }
