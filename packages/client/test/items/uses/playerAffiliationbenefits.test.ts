@@ -149,6 +149,7 @@ describe('Community ownership based interactions', () => {
         player.community_id
       );
       console.log(interactions)
+      console.log(lightning_bolt)
       console.log("HELLLO")
       // Check that pickup IS an available interaction
       expect(
