@@ -89,7 +89,8 @@ export type BroadcastData =
     }
   | { type: 'set_datetime'; data: SetDatetimeData }
   | { type: 'show_portal_menu'; data: ShowPortalMenuData }
-  | { type: 'scoreboard'; data: ScoreboardData };
+  | { type: 'scoreboard'; data: ScoreboardData }
+  | { type: 'reload_page' };
 
 export type ServerToBroadcastMessageMap = {
   tick: BroadcastData[];
