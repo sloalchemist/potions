@@ -23,4 +23,9 @@ describe('Check WorldScene resetToLoadWorldScene interactions', () => {
     scene.resetToLoadWorldScene();
     expect(scene.scene.stop).toHaveBeenCalledWith('BrewScene');
   });
+
+  test('stop FightScene if active when resetting to LoadWorldScene', () => {
+    scene.resetToLoadWorldScene();
+    expect(scene.scene.stop).toHaveBeenCalledWith('FightScene');
+  });
 });
