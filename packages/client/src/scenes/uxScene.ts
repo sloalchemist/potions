@@ -88,6 +88,8 @@ export class UxScene extends Phaser.Scene {
   actionsTabButton: TabButton | null = null;
   chatTabButton: TabButton | null = null;
   infoTabButton: TabButton | null = null;
+  handbookNextButton: SlideButton | null = null;
+  handbookBackButton: SlideButton | null = null;
   actionNextButton: SlideButton | null = null;
   actionBackButton: SlideButton | null = null;
   inventoryTabButton: TabButton | null = null;
@@ -224,6 +226,29 @@ export class UxScene extends Phaser.Scene {
       tabWidth,
       tabHeight
     );
+
+    //These buttons are for paginating 'items' and 'fight' within actions tab
+    this.handbookNextButton = new SlideButton(
+      this,
+      400,
+      83,
+      '',
+      () => this.showNextTab(),
+      50,
+      30,
+      'right'
+    );
+    this.handbookBackButton = new SlideButton(
+      this,
+      60,
+      83,
+      '',
+      () => this.showRecipeTab(),
+      50,
+      30,
+      'left'
+    );
+
     //These buttons are for paginating 'items' and 'fight' within actions tab
     this.actionNextButton = new SlideButton(
       this,
@@ -645,34 +670,54 @@ export class UxScene extends Phaser.Scene {
             ]);*/
     }
 
-    const menuKeys = ['1', '2', '3', '4', 'r'];
+    const menuKeys = ['1', '2', '3', '4', 'r', '@'];
 
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       const curKey = event.key.toLowerCase();
+
       if (menuKeys.includes(curKey)) {
-        switch (curKey) {
-          case '1':
-            this.showInfoTab();
-            console.log('Pressed 1');
-            break;
-          case '2':
-            this.showItemsTab();
-            console.log('Pressed 2');
-            break;
-          case '3':
-            this.showChatTab();
-            console.log('Pressed 3');
-            break;
-          case '4':
-            this.showInventoryTab();
-            console.log('Pressed 4');
-            break;
-          case 'r':
-            console.log('Pressed R');
-            break;
-          default:
-            console.log('Other key pressed');
-            break;
+        if (event.shiftKey) {
+          console.log('Shift');
+
+          switch (curKey) {
+            case '@':
+              this.showFightTab();
+              console.log('Pressed shift + 2');
+              break;
+            case 'r':
+              this.showNextTab();
+              console.log('Pressed shift + R');
+              break;
+            default:
+              console.log('Shift and other key pressed');
+              break;
+          }
+        } else {
+          switch (curKey) {
+            case '1':
+              this.showInfoTab();
+              console.log('Pressed 1');
+              break;
+            case '2':
+              this.showItemsTab();
+              console.log('Pressed 2');
+              break;
+            case '3':
+              this.showChatTab();
+              console.log('Pressed 3');
+              break;
+            case '4':
+              this.showInventoryTab();
+              console.log('Pressed 4');
+              break;
+            case 'r':
+              this.showRecipeTab();
+              console.log('Pressed R');
+              break;
+            default:
+              console.log('Other key pressed');
+              break;
+          }
         }
       }
 
@@ -745,6 +790,8 @@ export class UxScene extends Phaser.Scene {
     this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
+    this.handbookNextButton?.setVisible(false);
+    this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
@@ -761,6 +808,8 @@ export class UxScene extends Phaser.Scene {
     this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
+    this.handbookNextButton?.setVisible(false);
+    this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(true);
     this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
@@ -777,6 +826,8 @@ export class UxScene extends Phaser.Scene {
     this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
+    this.handbookNextButton?.setVisible(false);
+    this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
@@ -793,11 +844,30 @@ export class UxScene extends Phaser.Scene {
     this.fightContainer?.setVisible(true);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
+    this.handbookNextButton?.setVisible(false);
+    this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(true);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
+    this.updateTabStyles('actions');
+  }
+
+  showRecipeTab() {
+    this.infoContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(true);
+    this.effectsContainer?.setVisible(false);
+    this.inventoryContainer?.setVisible(false);
+    this.handbookNextButton?.setVisible(true);
+    this.handbookBackButton?.setVisible(false);
+    this.actionNextButton?.setVisible(false);
+    this.actionBackButton?.setVisible(false);
+    this.setInteractions(currentInteractions);
+    this.updateTabStyles('handbook');
   }
 
   // Method to show the Page Flips
@@ -809,7 +879,12 @@ export class UxScene extends Phaser.Scene {
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(true);
     this.inventoryContainer?.setVisible(false);
+    this.handbookNextButton?.setVisible(false);
+    this.handbookBackButton?.setVisible(true);
+    this.actionNextButton?.setVisible(false);
+    this.actionBackButton?.setVisible(false);
     this.setInteractions(currentInteractions);
+    this.updateTabStyles('handbook');
   }
 
   showInventoryTab() {
@@ -820,13 +895,17 @@ export class UxScene extends Phaser.Scene {
     this.fightContainer?.setVisible(false);
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(false);
+    this.handbookNextButton?.setVisible(false);
+    this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
     this.updateTabStyles('inventory');
   }
 
   // Update the styles of the tab buttons based on the active tab
-  updateTabStyles(activeTab: 'player' | 'actions' | 'chat' | 'inventory') {
+  updateTabStyles(
+    activeTab: 'player' | 'actions' | 'chat' | 'inventory' | 'handbook'
+  ) {
     if (
       this.actionsTabButton &&
       this.chatTabButton &&
