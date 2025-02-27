@@ -138,7 +138,7 @@
               { "type": "coral", "coord": { "x": 9, "y": 8 } },
               { "type": "clam", "coord": { "x": 6, "y": 8 } },
               { "type": "clam", "coord": { "x": 4, "y": 12 } },
-              { "type": "starfish", "coord": { "x": 12, "y": 3 } },
+              { "type": "starfish", "coord": { "x": 11, "y": 8 } },
               { "type": "starfish", "coord": { "x": 13, "y": 5 } },
               { "type": "starfish", "coord": { "x": 15, "y": 4 } },
               { "type": "starfish", "coord": { "x": 20, "y": 2 } },
