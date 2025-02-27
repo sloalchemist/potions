@@ -7,11 +7,8 @@ import { Coord } from '@rt-potion/common';
 
 describe('Community ownership based interactions', () => {
   let world: World | null = null;
-  let basket: Item;
-  let slime_blob: Item;
   let lightning_bolt: Item;
   let player: Mob;
-  let sun_drop: Item;
   let playerPos: Coord;
 
   beforeAll(() => {
@@ -42,32 +39,6 @@ describe('Community ownership based interactions', () => {
     );
     world.mobs[publicCharacterId] = player;
     world.addMobToGrid(player);
-
-    // Instantiate slime blob
-    const slimeItemType: ItemType = {
-      name: 'Slimeblob',
-      type: 'slime-blob',
-      attributes: [
-        {
-          name: 'brew_color',
-          value: '#0000FF'
-        },
-        {
-          name: 'health',
-          value: 1
-        },
-        {
-          name: 'specialized_resource',
-          value: 'blobs'
-        }
-      ],
-      walkable: true,
-      smashable: true,
-      interactions: [],
-      carryable: true
-    };
-
-    slime_blob = new Item(world!, 'slimeblob1', { x: 1, y: 2 }, slimeItemType);
 
     // Instantiate lightning bloom
     const lightningItemType: ItemType = {
@@ -105,38 +76,6 @@ describe('Community ownership based interactions', () => {
       { x: 1, y: 3 },
       lightningItemType
     );
-
-    // Instantiate sun drop
-    const SunDropItemType: ItemType = {
-      name: 'Sun Drop',
-      type: 'sun-drop',
-      attributes: [
-        {
-          name: 'brew_color',
-          value: '#FF8800'
-        },
-        {
-          name: 'health',
-          value: 1
-        },
-        {
-          name: 'specialized_resource',
-          value: 'silverclaw'
-        }
-      ],
-      walkable: true,
-      smashable: true,
-      interactions: [
-        {
-          description: 'Eat',
-          action: 'eat',
-          while_carried: true
-        }
-      ],
-      carryable: true
-    };
-
-    sun_drop = new Item(world!, 'sundrop', { x: 1, y: 3 }, SunDropItemType);
   });
 
   test('Player should be able to pick up specialized resource based on affiliation', () => {
