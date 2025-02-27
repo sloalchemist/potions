@@ -16,7 +16,9 @@ const colordict: ColorDict = {
   '#e79600': 'orange',
   '#ef7d55': 'gold',
   '#8b7f6e': 'grey',
-  '#ab00e7': 'purple'
+  '#ab00e7': 'purple',
+  '#00ff00': 'green',
+  '#166060': 'black'
 };
 
 export function drinkPotion(
@@ -79,13 +81,20 @@ export function drinkPotion(
       return true;
     case '#00ff00':
       console.log('Drinking green potion');
-      const dotDelta = 1;
-      const dotDuration = 240;
+      let dotDelta = 1;
+      let dotDuration = 240;
+      if (effectModifier) {
+        dotDelta = dotDelta * effectModifier;
+        dotDuration = dotDuration * effectModifier;
+      }
       mob.changeEffect(dotDelta, dotDuration, 'damageOverTime');
-      return true;
+      return true;  
     case '#166060':
       console.log('Drinking black potion');
-      const monsterDuration = 120;
+      let monsterDuration = 120;
+      if (effectModifier) {
+        monsterDuration = monsterDuration * effectModifier;
+      }
       mob.spawnMonster(monsterDuration);
       return true;
     default:
