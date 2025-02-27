@@ -123,6 +123,13 @@ export class Character {
     return world.mobs[publicCharacterId].personalities['extroversion'];
   }
 
+  get isCarrying(): string | undefined {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return undefined;
+    }
+    return world.mobs[publicCharacterId].carrying;
+  }
+
   subtype(): string {
     return `${this.eyeColor}-${this.bellyColor}-${this.furColor}`;
   }
