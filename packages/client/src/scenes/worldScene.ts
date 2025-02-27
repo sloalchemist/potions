@@ -548,8 +548,8 @@ export class WorldScene extends Phaser.Scene {
     if (now - this.lastPublishTime >= 400) {
       publish = true;
       this.lastPublishTime = now;
-    } 
-    this.handlePlayerMovement(publish)
+    }
+    this.handlePlayerMovement(publish);
   }
 
   handlePlayerMovement(publish: boolean) {
@@ -592,8 +592,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     // If no movement, return
-    if (newX === moveX && newY === moveY)
-      return;
+    if (newX === moveX && newY === moveY) return;
 
     let roundedX;
     let roundedY;
