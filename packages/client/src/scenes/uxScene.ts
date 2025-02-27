@@ -714,6 +714,7 @@ export class UxScene extends Phaser.Scene {
       this.extroversionText?.setText(
         'Extroversion: ' + currentCharacter.extroversion
       );
+      this.refreshInventoryStats();
     }
   }
 
