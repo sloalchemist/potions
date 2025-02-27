@@ -5,7 +5,7 @@ import {
   initializePlayer,
   tick
 } from '../world/controller';
-import { bindAblyToWorldScene, setupAbly } from '../services/ablySetup';
+import { bindAblyToWorldScene } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
 import { Coord } from '@rt-potion/common';
 import { publicCharacterId, getWorldID } from '../worldMetadata';
@@ -81,7 +81,10 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 100
     });
 
-    this.load.json('global_data', 'static/global.json');
+    this.load.json(
+      'global_data',
+      'https://potions.gg/world_assets/global.json'
+    );
     this.load.json(
       'world_specific_data',
       `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
@@ -578,34 +581,41 @@ export class WorldScene extends Phaser.Scene {
     let moveY = player.position.y;
 
     let moved = false;
+    let newX = moveX;
+    let newY = moveY;
+
     if (this.keys['w']) {
-      moveY--;
-      moved = true;
+      newY--;
     }
     if (this.keys['s']) {
-      moveY++;
-      moved = true;
+      newY++;
     }
     if (this.keys['a']) {
-      moveX--;
-      moved = true;
+      newX--;
     }
     if (this.keys['d']) {
-      moveX++;
-      moved = true;
+      newX++;
     }
 
+    // Check if the next step is blocked
+    const nextItem = world.getItemAt(newX, newY);
+    if (!!nextItem && !nextItem.isWalkable(player.unlocks)) {
+      return;
+    }
+
+    // Check if your position has changed
+    moved = newX !== moveX || newY !== moveY;
     if (!moved) return;
 
     let roundedX;
     let roundedY;
     const negKeys = ['w', 'a'];
     if (negKeys.includes(this.lastKeyUp)) {
-      roundedX = Math.floor(moveX);
-      roundedY = Math.floor(moveY);
+      roundedX = Math.floor(newX);
+      roundedY = Math.floor(newY);
     } else {
-      roundedX = Math.ceil(moveX);
-      roundedY = Math.ceil(moveY);
+      roundedX = Math.ceil(newX);
+      roundedY = Math.ceil(newY);
     }
 
     const target = { x: roundedX, y: roundedY };
@@ -613,6 +623,7 @@ export class WorldScene extends Phaser.Scene {
     // NOTE: the code in the 'else' block moves the player on the client side
     //       publishPlayerPosition() calls that code itself, so player will
     //       move on the client side for whichever case
+
     if (publish) {
       this.prevKeys = { ...this.keys };
       publishPlayerPosition(target);
@@ -685,29 +696,23 @@ export class WorldScene extends Phaser.Scene {
   /* Stop all scenes related to game play and go back to the LoadWordScene 
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
-    setGameState('uninitialized');
-    this.scene.stop('BrewScene');
-    this.scene.stop('PauseScene');
-    this.scene.stop('WorldScene');
-    this.scene.stop('UxScene');
-    this.scene.stop('FrameScene');
-    this.scene.stop('ChatOverlayScene');
-    this.scene.start('LoadWorldScene');
+    this.stopScenes();
+    this.scene.start('LoadCharacterScene', { autoStart: false });
   }
 
-  /**
-   * Stop the world scene, re-connect to Ably after being disconnected by
-   * the server, then restart the world scene
-   */
+  /* Stop all scenes related to game play and automatically restart game.*/
   resetToRespawn() {
-    this.scene.stop('WorldScene');
+    this.stopScenes();
+    this.scene.start('LoadCharacterScene', { autoStart: true });
+  }
 
-    setupAbly()
-      .then(() => {
-        this.scene.start('WorldScene');
-      })
-      .catch((_error) => {
-        console.error('Error setting up Ably');
-      });
+  /* Stop all scenes related to game play */
+  stopScenes() {
+    setGameState('uninitialized');
+    const allScenes = this.scene.manager.getScenes();
+    allScenes.forEach((scene) => {
+      const key = scene.sys.settings.key;
+      this.scene.stop(key);
+    });
   }
 }

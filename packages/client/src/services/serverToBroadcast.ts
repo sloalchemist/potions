@@ -16,7 +16,8 @@ import {
   PortalData,
   SetDatetimeData,
   SpeakData,
-  ShowPortalMenuData
+  ShowPortalMenuData,
+  ScoreboardData
 } from '@rt-potion/common';
 import { Types } from 'ably';
 import { focused } from '../main';
@@ -29,10 +30,12 @@ import {
   gameState,
   setAvailableWorlds,
   setDate,
+  setLeaderboardData,
   updateInventory
 } from '../world/controller';
 import { publicCharacterId } from '../worldMetadata';
 import { leaveWorld } from './playerToServer';
+import { LeaderboardScene } from '../scenes/leaderboardScene';
 
 export let playerDead = false;
 
@@ -142,10 +145,9 @@ export function setupBroadcast(
 
         // once game focused, leave the world and display game over
         waitUntilFocused.then(() => {
-          scene.showGameOver();
           // in cases where player should stay in the same world, pass MAINTAIN_WORLD_OPTION
           leaveWorld(MAINTAIN_WORLD_OPTION);
-          scene.resetToLoadWorldScene();
+          scene.showGameOver();
         });
       }
     }
@@ -189,6 +191,16 @@ export function setupBroadcast(
     if (data.mob_key === publicCharacterId) {
       setAvailableWorlds(data.worlds);
       scene.scene.launch('PortalMenuScene');
+    }
+  }
+
+  function handleScoreboard(data: ScoreboardData) {
+    setLeaderboardData(data.scores);
+    const leaderboardScene = scene.scene.get('LeaderboardScene');
+    if (leaderboardScene instanceof LeaderboardScene) {
+      leaderboardScene.renderLeaderboard();
+    } else {
+      throw new Error('Leaderboard scene not found');
     }
   }
 
@@ -256,6 +268,9 @@ export function setupBroadcast(
           break;
         case 'show_portal_menu':
           handleShowPortalMenu(broadcastItem.data);
+          break;
+        case 'scoreboard':
+          handleScoreboard(broadcastItem.data as ScoreboardData);
           break;
         default:
           console.error(

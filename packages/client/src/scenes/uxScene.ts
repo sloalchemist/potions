@@ -6,7 +6,8 @@ import {
   currentCharacter,
   addRefreshCallback,
   saveColors,
-  getWorldID
+  getWorldID,
+  publicCharacterId
 } from '../worldMetadata';
 import {
   fantasyDate,
@@ -37,6 +38,7 @@ import { ButtonManager } from '../components/buttonManager';
 import { BrewScene } from './brewScene';
 import { hexStringToNumber, numberToHexString } from '../utils/color';
 import { InteractionType, parseWorldFromJson } from '../worldDescription';
+import { SpriteMob } from '../sprite/sprite_mob';
 export interface ChatOption {
   label: string;
   callback: () => void;
@@ -70,6 +72,7 @@ export class UxScene extends Phaser.Scene {
   recipeText: Phaser.GameObjects.Text | null = null;
   effectText: Phaser.GameObjects.Text | null = null;
   sideEffectsText: Phaser.GameObjects.Text | null = null;
+  inventoryText: Phaser.GameObjects.Text | null = null;
   chatRequested: boolean = false;
   fightButtons: ButtonManager = new ButtonManager([]);
   fightRequested: boolean = false;
@@ -121,7 +124,10 @@ export class UxScene extends Phaser.Scene {
 
     let worldID = getWorldID();
 
-    this.load.json('global_data', 'static/global.json');
+    this.load.json(
+      'global_data',
+      'https://potions.gg/world_assets/global.json'
+    );
     this.load.json(
       'world_specific_data',
       `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
@@ -555,6 +561,13 @@ export class UxScene extends Phaser.Scene {
         })
       );
 
+      this.inventoryText = this.add.text(
+        140,
+        35,
+        'ITEM COUNT: ' + world.getStoredItems().length + '/12'
+      );
+      this.inventoryContainer.add(this.inventoryText);
+
       // Color pickers
       const colors = ['Eye Color', 'Belly Color', 'Fur Color'];
       const colorKeys = ['eyeColor', 'bellyColor', 'furColor'];
@@ -582,15 +595,26 @@ export class UxScene extends Phaser.Scene {
         inputElement.style.height = '30px';
 
         inputElement.addEventListener('input', (event: Event) => {
+          if (!currentCharacter) {
+            return;
+          }
+
           const color = hexStringToNumber(
             (event.target as HTMLInputElement).value
           );
-          if (currentCharacter) {
-            (currentCharacter as unknown as Record<string, number>)[
-              colorKeys[index]
-            ] = color;
-            saveColors();
+
+          const currCharTyped = currentCharacter as unknown as Record<
+            string,
+            number
+          >;
+          currCharTyped[colorKeys[index]] = color;
+          const player = world.mobs[publicCharacterId] as SpriteMob;
+          if (player) {
+            player.subtype = `${currCharTyped[colorKeys[0]]}-${currCharTyped[colorKeys[1]]}-${currCharTyped[colorKeys[2]]}`;
+            player.updateAnimation();
           }
+
+          saveColors();
         });
 
         this.customizeContainer?.add(colorPicker);
@@ -617,6 +641,7 @@ export class UxScene extends Phaser.Scene {
           }))
         );
       });
+      //addRefreshCallback(() => this.refreshInventoryStats());
       setAttackCallback((attacks: string[]) => {
         console.log('attack setting', attacks);
         this.setFightOptions(
@@ -690,6 +715,12 @@ export class UxScene extends Phaser.Scene {
         'Extroversion: ' + currentCharacter.extroversion
       );
     }
+  }
+
+  refreshInventoryStats() {
+    this.inventoryText?.setText(
+      'ITEM COUNT: ' + world.getStoredItems().length + '/12'
+    );
   }
 
   showStatsTab() {
@@ -785,6 +816,7 @@ export class UxScene extends Phaser.Scene {
     this.recipeContainer?.setVisible(false);
     this.effectsContainer?.setVisible(true);
     this.customizeContainer?.setVisible(false);
+    this.inventoryContainer?.setVisible(false);
     this.nextButton?.setVisible(false);
     this.backButton?.setVisible(true);
     this.setInteractions(currentInteractions);
@@ -863,26 +895,40 @@ export class UxScene extends Phaser.Scene {
       (interaction) => interaction.item.type === 'cauldron'
     );
     if (hasCauldron) {
-      i = 1; // Set i to 1 if there are cauldron interactions
+      i = 1; // Set i to 1 if there are cauldron interactions (button spacing)
     }
     if (this.scene.isActive('BrewScene')) {
       interactions.forEach((interaction) => {
         if (interaction.item.type === 'cauldron') {
-          const x = toggleX + (i % 3) * (BUTTON_WIDTH + 10);
-          const y = toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + 10);
+          if (
+            (interaction.label === 'Add Ingredient' &&
+              currentCharacter?.isCarrying) ||
+            interaction.label !== 'Add Ingredient'
+          ) {
+            const x = toggleX + (i % 3) * (BUTTON_WIDTH + 10);
+            const y = toggleY + Math.floor(i / 3) * (BUTTON_HEIGHT + 10);
 
-          const button = new Button(this, x, y, true, interaction.label, () => {
-            interact(
-              interaction.item.key,
-              interaction.action,
-              interaction.give_to ? interaction.give_to : null
+            const button = new Button(
+              this,
+              x,
+              y,
+              true,
+              interaction.label,
+              () => {
+                interact(
+                  interaction.item.key,
+                  interaction.action,
+                  interaction.give_to ? interaction.give_to : null
+                );
+                // Refresh the buttons in case the interaction state has changed
+                this.setInteractions(interactions);
+              }
             );
-            // Refresh the buttons in case the interaction state has changed
-            this.setInteractions(interactions);
-          });
 
-          this.interactButtons.push(button);
-          this.itemsContainer?.add(button);
+            this.interactButtons.push(button);
+            this.itemsContainer?.add(button);
+            i++;
+          }
 
           // Update BrewScene based on the cauldron's attributes
           const attributesRecord: Record<string, string | number> =
@@ -912,8 +958,6 @@ export class UxScene extends Phaser.Scene {
           brewScene.setNumIngredients(
             parseInt(ingredientsAttr?.value.toString() || '0') || 0
           );
-
-          i++;
         }
       });
     } else {
@@ -955,12 +999,15 @@ export class UxScene extends Phaser.Scene {
       interactions.some((interaction) => interaction.item.type === 'cauldron')
     ) {
       // Create the toggle button at a fixed position
+      const status = this.scene.isActive('BrewScene')
+        ? 'Finish Crafting'
+        : 'Craft Potion';
       const toggleButton = new Button(
         this,
         toggleX,
         toggleY,
         true,
-        'Toggle Menu',
+        `${status}`,
         () => {
           // Toggle the Brew menu.
           if (this.scene.isActive('BrewScene')) {
@@ -974,8 +1021,8 @@ export class UxScene extends Phaser.Scene {
           }, 20);
         }
       );
-
       this.interactButtons.push(toggleButton);
+      console.log(toggleButton);
       this.itemsContainer?.add(toggleButton);
     } else {
       this.scene.stop('BrewScene');
@@ -1071,10 +1118,12 @@ export class UxScene extends Phaser.Scene {
 
   // Method to set inventory
   setInventory(inventory: Item[]) {
+    this.refreshInventoryStats();
+
     this.inventoryButtons?.clearButtonOptions();
 
     inventory.forEach((item, i) => {
-      const y = 60 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
+      const y = 80 + (BUTTON_HEIGHT + 10) * Math.floor(i / 3);
       const x = 85 + (i % 3) * (BUTTON_WIDTH + 10);
 
       const button = new Button(this, x, y, true, `${item.itemType.name}`, () =>
