@@ -251,8 +251,7 @@ export function getPhysicalInteractions(
 
   // if the item can be picked up and the owner's affiliation is the same as the item's affiliation
   
-  if (item.itemType.carryable && item.attributes["specialized_resource"] == ownerId) {
-    interactions.push({
+  if (item.itemType.carryable && item.itemType.attributes?.find(attr => attr.name === "specialized_resource")?.value == ownerId) {    interactions.push({
       action: 'pickup',
       item: item,
       label: `Pick up ${item.itemType.name}`
