@@ -82,6 +82,21 @@ describe('Cheat Handler Tests', () => {
         );
       });
 
+      it('Should still log errors when "logtoggle off" is executed', () => {
+        const logSpy = jest.spyOn(console, 'log');
+        const logErrorSpy = jest.spyOn(console, 'error');
+        const disableLoggingSpy = jest.spyOn(logger, 'disableLogging');
+
+        handleCliCommand('logtoggle off');
+        expect(disableLoggingSpy).toHaveBeenCalled();
+        expect(logSpy).toHaveBeenCalledWith('Logging disabled');
+
+        logger.error('Test error after disabling logging');
+        expect(logErrorSpy).toHaveBeenCalledWith(
+          'Test error after disabling logging'
+        );
+      });
+
       it('Should toggle logging correctly', () => {
         const logSpy = jest.spyOn(console, 'log');
 

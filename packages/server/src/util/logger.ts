@@ -50,9 +50,7 @@ class Logger {
   }
 
   error(...args: unknown[]) {
-    if (this.loggingEnabled) {
       console.error(...args);
-    }
   }
 }
 
