@@ -910,11 +910,24 @@ export class Mob {
   }
 
   updateStatsBasedOnAffiliation(): void {
+    // set to default
+    this.maxHealth = 100;
+    this.attack = 5;
+    this.speed = 2.5;
+
     switch (this.community_id) {
       case 'silverclaw':
         // Villagers have higher max health (200)
+        DB.prepare(
+          `
+                UPDATE mobs
+                SET maxHealth = :maxHealth
+                WHERE id = :id
+            `
+        ).run({ maxHealth: 200, id: this.id });
         this.maxHealth = 200; 
         break;
+
       case 'fighters':
         // Fighters have higher speed (1.5x normal)
         let newSpeed = this.speed * 1.5
@@ -927,6 +940,7 @@ export class Mob {
         ).run({ speed: newSpeed, id: this.id });
         this.speed = newSpeed;
         break;
+
       case 'blobs':
         // Blobs have higher attack (1.5x normal)
         let newAttack = this.attack * 1.5
@@ -941,12 +955,6 @@ export class Mob {
             `
         ).run({ attack: newAttack, id: this.id });
         this.attack = newAttack;
-        break;
-      default:
-        // Default stats (fallback)
-        this.maxHealth = 100;
-        this.attack = 5;
-        this.speed = 2.5
         break;
     }
   }
