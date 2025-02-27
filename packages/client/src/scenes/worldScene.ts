@@ -690,7 +690,9 @@ export class WorldScene extends Phaser.Scene {
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
     setGameState('uninitialized');
-    this.scene.stop('FightScene');
+    if(this.scene.isActive('FightScene')) {
+      this.scene.stop('FightScene');
+    }
     this.scene.stop('BrewScene');
     this.scene.stop('PauseScene');
     this.scene.stop('WorldScene');
