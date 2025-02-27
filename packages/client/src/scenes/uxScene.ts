@@ -646,34 +646,33 @@ export class UxScene extends Phaser.Scene {
     }
 
     const menuKeys = ['1', '2', '3', '4', 'r'];
-    
-    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
 
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       const curKey = event.key.toLowerCase();
       if (menuKeys.includes(curKey)) {
         switch (curKey) {
-          case "1":
-              this.showInfoTab();
-              console.log("Pressed 1");
-              break;
-          case "2":
-              this.showItemsTab();
-              console.log("Pressed 2");
-              break;
-          case "3":
-              this.showChatTab();
-              console.log("Pressed 3");
-              break;
-          case "4":
-              this.showInventoryTab();
-              console.log("Pressed 4");
-              break;
-          case "r":
-              console.log("Pressed R");
-              break;
+          case '1':
+            this.showInfoTab();
+            console.log('Pressed 1');
+            break;
+          case '2':
+            this.showItemsTab();
+            console.log('Pressed 2');
+            break;
+          case '3':
+            this.showChatTab();
+            console.log('Pressed 3');
+            break;
+          case '4':
+            this.showInventoryTab();
+            console.log('Pressed 4');
+            break;
+          case 'r':
+            console.log('Pressed R');
+            break;
           default:
-              console.log("Other key pressed");
-              break;
+            console.log('Other key pressed');
+            break;
         }
       }
 
