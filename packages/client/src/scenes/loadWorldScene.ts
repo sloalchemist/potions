@@ -285,7 +285,7 @@ export class LoadWorldScene extends Phaser.Scene {
       const bellyColor = currentCharacter!.bellyColor;
       const furColor = currentCharacter!.furColor;
       const animationKey = `test-idle-${eyeColor}-${bellyColor}-${furColor}`;
-      if (this.lastAnimationKey === animationKey) {
+      if (this.lastAnimationKey === animationKey || this.playerSprite.anims == undefined) {
         return;
       }
 
