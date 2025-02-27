@@ -17,17 +17,20 @@ export class Item extends Physical {
   house?: string;
   lock?: string;
   ownedByCommunity?: string;
+  ownedByCharacter?: string;
 
   constructor(
     world: World,
     key: string,
     position: Coord | null,
     itemType: ItemType,
-    ownedByCommunity?: string
+    ownedByCommunity?: string,
+    ownedByCharacter?: string
   ) {
     super(world, key, itemType.type, position);
     this.itemType = itemType;
     this.ownedByCommunity = ownedByCommunity;
+    this.ownedByCharacter = ownedByCharacter;
 
     if (position) {
       world.addItemToGrid(this);

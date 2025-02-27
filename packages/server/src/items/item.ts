@@ -28,6 +28,7 @@ export interface ItemData {
   lock?: string;
   drops_item?: string; // i was here :3
   owned_by_community?: string;
+  owned_by_character?: string;
 }
 
 export interface ItemAttributeData {
@@ -44,6 +45,7 @@ interface ItemParams {
   subtype?: string;
   lock?: string;
   ownedByCommunity?: Community;
+  ownedByCharacter?: string;
   house?: House;
   attributes: Record<string, string | number>;
   carriedBy?: Mob;
@@ -59,6 +61,7 @@ export class Item {
   private attributes: ItemAttributes = {};
 
   public readonly owned_by_community?: string;
+  public readonly owned_by_character?: string;
 
   public readonly lock?: string;
   public readonly house?: string;
@@ -71,6 +74,7 @@ export class Item {
     subtype,
     lock,
     ownedByCommunity,
+    ownedByCharacter,
     house,
     attributes = {}
   }: ItemParams) {
@@ -82,6 +86,7 @@ export class Item {
     this.subtype = subtype;
     this.house = house?.id;
     this.owned_by_community = ownedByCommunity?.id;
+    this.owned_by_character = ownedByCharacter;
     this.drops_item = itemType.drops_item;
 
     for (const [key, value] of Object.entries(attributes)) {
@@ -109,6 +114,7 @@ export class Item {
       ownedByCommunity: itemData.owned_by_community
         ? Community.getVillage(itemData.owned_by_community)
         : undefined,
+      ownedByCharacter: itemData.owned_by_character,
       attributes: attributes
     });
 
@@ -119,8 +125,8 @@ export class Item {
     // console.log(`Inserting ${item.id} into DB with ownership: ${item.ownedByCommunity?.id}`);
     DB.prepare(
       `
-            INSERT INTO items (id, type, subtype, position_x, position_y, owned_by_community, house_id, lock)
-            VALUES (:id, :type, :subtype, :position_x, :position_y, :owned_by_community, :house_id, :lock);
+            INSERT INTO items (id, type, subtype, position_x, position_y, owned_by_community, owned_by_character, house_id, lock)
+            VALUES (:id, :type, :subtype, :position_x, :position_y, :owned_by_community, :owned_by_character, :house_id, :lock);
             `
     ).run({
       id: item.id,
@@ -129,6 +135,7 @@ export class Item {
       position_x: item.position ? item.position.x : null,
       position_y: item.position ? item.position.y : null,
       owned_by_community: item.ownedByCommunity?.id,
+      owned_by_character: item.ownedByCharacter,
       house_id: item.house?.id,
       lock: item.lock
     });
@@ -189,7 +196,8 @@ export class Item {
                 items.position_y,
                 mobs.id as carried_by,
                 items.lock,
-                items.owned_by_community
+                items.owned_by_community,
+                items.owned_by_character
             FROM items
             LEFT JOIN mobs ON mobs.carrying_id = items.id
             WHERE items.id = :id;
@@ -431,6 +439,7 @@ export class Item {
             lock TEXT,
             house_id TEXT REFERENCES houses (id) ON DELETE SET NULL,
             owned_by_community TEXT REFERENCES community (id) ON DELETE SET NULL,
+            owned_by_character TEXT REFERENCES mobs (id) ON DELETE SET NULL,
             stored_by TEXT REFERENCES mobs (id) ON DELETE SET NULL, 
             UNIQUE (position_x, position_y)
         );
