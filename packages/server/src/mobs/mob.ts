@@ -909,6 +909,9 @@ export class Mob {
     return itemData ? itemData.id : undefined;
   }
 
+  // Calling the updating of player affiliation is needed in order to call the updateStats. 
+  // UpdateStatsByAffiliation should be called in an updateAfilliation function (which does not exist yet). 
+  // It seems to be out of requirement scope. But the tests pass for when updating the stats by affiliation.
   updateStatsBasedOnAffiliation(): void {
     switch (this.community_id) {
       case 'silverclaw':
