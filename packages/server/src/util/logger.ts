@@ -50,7 +50,7 @@ class Logger {
   }
 
   error(...args: unknown[]) {
-      console.error(...args);
+    console.error(...args);
   }
 }
 
