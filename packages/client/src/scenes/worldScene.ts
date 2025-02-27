@@ -709,12 +709,26 @@ export class WorldScene extends Phaser.Scene {
   /* Stop all scenes related to game play and go back to the LoadWordScene 
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
+<<<<<<< HEAD
     this.sound.removeByKey('walk');
     this.sound.removeByKey('background_music');
     this.sound.removeByKey('background_music_layer');
 
     this.stopScenes();
     this.scene.start('LoadCharacterScene', { autoStart: false });
+=======
+    setGameState('uninitialized');
+    if(this.scene.isActive('FightScene')) {
+      this.scene.stop('FightScene');
+    }
+    this.scene.stop('BrewScene');
+    this.scene.stop('PauseScene');
+    this.scene.stop('WorldScene');
+    this.scene.stop('UxScene');
+    this.scene.stop('FrameScene');
+    this.scene.stop('ChatOverlayScene');
+    this.scene.start('LoadWorldScene');
+>>>>>>> 2a6b070e (fixing crash bug)
   }
 
   /* Stop all scenes related to game play and automatically restart game.*/
