@@ -928,7 +928,7 @@ export class Mob {
                 WHERE id = :id
             `
         ).run({ maxHealth: 200, id: this.id });
-        this.maxHealth = 200; 
+        this.maxHealth = 200;
         break;
 
       case 'fighters':
