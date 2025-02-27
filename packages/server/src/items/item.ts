@@ -27,7 +27,7 @@ export interface ItemData {
   house_id?: string;
   lock?: string;
   drops_item?: string; // i was here :3
-  owned_by?: string;
+  owned_by_community?: string;
 }
 
 export interface ItemAttributeData {
@@ -43,7 +43,7 @@ interface ItemParams {
   itemType: ItemType;
   subtype?: string;
   lock?: string;
-  ownedBy?: Community;
+  ownedByCommunity?: Community;
   house?: House;
   attributes: Record<string, string | number>;
   carriedBy?: Mob;
@@ -58,7 +58,7 @@ export class Item {
   public readonly drops_item;
   private attributes: ItemAttributes = {};
 
-  public readonly owned_by?: string;
+  public readonly owned_by_community?: string;
 
   public readonly lock?: string;
   public readonly house?: string;
@@ -70,7 +70,7 @@ export class Item {
     itemType,
     subtype,
     lock,
-    ownedBy,
+    ownedByCommunity,
     house,
     attributes = {}
   }: ItemParams) {
@@ -81,7 +81,7 @@ export class Item {
     this.lock = lock;
     this.subtype = subtype;
     this.house = house?.id;
-    this.owned_by = ownedBy?.id;
+    this.owned_by_community = ownedByCommunity?.id;
     this.drops_item = itemType.drops_item;
 
     for (const [key, value] of Object.entries(attributes)) {
@@ -106,8 +106,8 @@ export class Item {
       itemType: itemGenerator.getItemType(itemData.type),
       subtype: itemData.subtype,
       lock: itemData.lock,
-      ownedBy: itemData.owned_by
-        ? Community.getVillage(itemData.owned_by)
+      ownedByCommunity: itemData.owned_by_community
+        ? Community.getVillage(itemData.owned_by_community)
         : undefined,
       attributes: attributes
     });
@@ -116,11 +116,11 @@ export class Item {
   }
 
   static insertIntoDB(item: ItemParams) {
-    // console.log(`Inserting ${item.id} into DB with ownership: ${item.ownedBy?.id}`);
+    // console.log(`Inserting ${item.id} into DB with ownership: ${item.ownedByCommunity?.id}`);
     DB.prepare(
       `
-            INSERT INTO items (id, type, subtype, position_x, position_y, owned_by, house_id, lock)
-            VALUES (:id, :type, :subtype, :position_x, :position_y, :owned_by, :house_id, :lock);
+            INSERT INTO items (id, type, subtype, position_x, position_y, owned_by_community, house_id, lock)
+            VALUES (:id, :type, :subtype, :position_x, :position_y, :owned_by_community, :house_id, :lock);
             `
     ).run({
       id: item.id,
@@ -128,7 +128,7 @@ export class Item {
       subtype: item.subtype,
       position_x: item.position ? item.position.x : null,
       position_y: item.position ? item.position.y : null,
-      owned_by: item.ownedBy?.id,
+      owned_by_community: item.ownedByCommunity?.id,
       house_id: item.house?.id,
       lock: item.lock
     });
@@ -189,7 +189,7 @@ export class Item {
                 items.position_y,
                 mobs.id as carried_by,
                 items.lock,
-                items.owned_by
+                items.owned_by_community
             FROM items
             LEFT JOIN mobs ON mobs.carrying_id = items.id
             WHERE items.id = :id;
@@ -427,11 +427,15 @@ export class Item {
   validateOwnership(mob: Mob, interaction: string): boolean {
     // console.log(`${item.type} belongs to ${item.owned_by}`);
     // if no one owns the item or if the mob owns it, return true
-    if (!this.owned_by || mob.community_id === this.owned_by) return true;
+    if (
+      !this.owned_by_community ||
+      mob.community_id === this.owned_by_community
+    )
+      return true;
 
     console.warn(
       `Mob ${mob.name} (${mob.id}) from ${mob.community_id} community ` +
-        `is not authorized to ${interaction} from ${this.type} owned by ${this.owned_by}`
+        `is not authorized to ${interaction} from ${this.type} owned by ${this.owned_by_community}`
     );
     return false;
   }
@@ -445,7 +449,7 @@ export class Item {
             position_y INTEGER, 
             lock TEXT,
             house_id TEXT REFERENCES houses (id) ON DELETE SET NULL,
-            owned_by TEXT REFERENCES community (id) ON DELETE SET NULL,
+            owned_by_community TEXT REFERENCES community (id) ON DELETE SET NULL,
             stored_by TEXT REFERENCES mobs (id) ON DELETE SET NULL, 
             UNIQUE (position_x, position_y)
         );
