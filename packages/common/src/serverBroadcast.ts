@@ -40,6 +40,11 @@ export type MobChangeData = {
   delta: number;
   new_value: number;
 };
+export type MobChangeFavoriteData = {
+  id: string;
+  property: string;
+  new_value: string;
+};
 export type SpeakData = { id: string; message: string };
 export type ItemChangeData = { id: string; property: string; value: number };
 export type SetDatetimeData = { date: FantasyDateI };
@@ -76,6 +81,7 @@ export type BroadcastData =
       type: 'mob_change';
       data: MobChangeData;
     }
+  | { type: 'mob_change_fav_item'; data: MobChangeFavoriteData }
   | { type: 'speak'; data: SpeakData }
   | {
       type: 'item_change';
