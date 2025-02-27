@@ -14,6 +14,7 @@ export class FrameScene extends Phaser.Scene {
 
   create() {
     console.log("creating frame");
+
     const overlayImage = this.add.image(
       SCREEN_WIDTH / 2,
       SCREEN_HEIGHT / 2,
@@ -24,7 +25,6 @@ export class FrameScene extends Phaser.Scene {
     console.log('FrameScene created');
 
     this.messageStack = new MessageStack(this);
-
     // Add a sample message
     //this.messageStack.addMessage("Task completed!", 120); // 2 minutes
     //this.messageStack.addMessage("Starting soon...", 30); // 30 seconds

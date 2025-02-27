@@ -673,7 +673,6 @@ export class UxScene extends Phaser.Scene {
   }
 
   callFight(attack: string, i: number) {
-
     if (this.scene.isActive('FightScene')) {
       this.scene.stop('FightScene');
     } else {
