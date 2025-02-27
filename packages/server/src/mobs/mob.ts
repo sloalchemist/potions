@@ -642,6 +642,10 @@ export class Mob {
   }
 
   private checkPoison(): void {
+    if (!this.poisoned) {
+      return;
+    }
+
     if (this.poisoned == 1) {
       const deltaDamage = Math.floor(Math.random() * -10);
 

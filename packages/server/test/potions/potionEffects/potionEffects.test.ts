@@ -1087,6 +1087,7 @@ describe('Try to consume green potion in various cases', () => {
 });
 
 // BLACK POTION TEST
+
 describe('Try to consume black potion in various cases', () => {
   test('Spawn and kill monster with a black potion', () => {
     FantasyDate.initialDate();
