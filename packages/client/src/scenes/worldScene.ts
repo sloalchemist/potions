@@ -550,8 +550,8 @@ export class WorldScene extends Phaser.Scene {
       this.nightOverlay.fillRect(
         0,
         0,
-        this.terrainWidth * TILE_SIZE,
-        this.terrainHeight * TILE_SIZE
+        this.terrainHeight * TILE_SIZE,
+        this.terrainWidth * TILE_SIZE
       );
     }
 
