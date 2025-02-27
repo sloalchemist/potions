@@ -414,17 +414,23 @@ export class Item {
    * @returns True if the mob is authorized, false otherwise.
    */
   validateOwnership(mob: Mob, interaction: string): boolean {
-    // console.log(`${item.type} belongs to ${item.owned_by}`);
-    // if no one owns the item or if the mob owns it, return true
-    if (
-      !this.owned_by_community ||
-      mob.community_id === this.owned_by_community
-    )
-      return true;
+    const isOwnedByCommunity = this.owned_by_community === mob.community_id;
+    const isOwnedByCharacter = this.owned_by_character === mob.id;
 
+    // No ownership -- anyone can interact
+    if (!this.owned_by_community && !this.owned_by_character) {
+      return true;
+    }
+
+    // Mob is either the item’s owner or part of the owning community
+    if (isOwnedByCommunity || isOwnedByCharacter) {
+      return true;
+    }
     console.warn(
       `Mob ${mob.name} (${mob.id}) from ${mob.community_id} community ` +
-        `is not authorized to ${interaction} from ${this.type} owned by ${this.owned_by_community}`
+        `is not authorized to ${interaction} with ${this.type} owned by ` +
+        `${this.owned_by_community ? `community ${this.owned_by_community}` : ''} ` +
+        `${this.owned_by_character ? `character ${this.owned_by_character}` : ''}`
     );
     return false;
   }

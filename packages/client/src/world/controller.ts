@@ -243,11 +243,17 @@ export function getCarriedItemInteractions(
 export function getPhysicalInteractions(
   physical: Physical,
   carried?: Item,
-  ownerId?: string
+  community_id?: string,
+  character_id?: string
 ): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
-  const isOwner: boolean = ownerId ? item.isOwnedByCommunity(ownerId) : true;
+  const isOwnedByCharacter = item.isOwnedByCharacter(character_id);
+  const isOwnedByCommunity = item.isOwnedByCommunity(community_id);
+
+  console.log(
+    `commmunity: ${community_id}; character ${character_id}; item owned by community ${item.ownedByCommunity} and character ${item.ownedByCharacter}; isOwnedByCharacter? ${isOwnedByCharacter}; isOwnedByCommunity ${isOwnedByCommunity}`
+  );
 
   // if the item can be picked up
   if (item.itemType.carryable) {
@@ -271,8 +277,11 @@ export function getPhysicalInteractions(
   item.itemType.interactions.forEach((interaction) => {
     const hasPermission =
       !interaction.permissions || // Allow interaction if no permissions entry in global.json
-      (isOwner && interaction.permissions?.community) ||
-      (!isOwner && interaction.permissions?.other);
+      (isOwnedByCommunity && interaction.permissions?.community) ||
+      (isOwnedByCharacter && interaction.permissions?.character) ||
+      (!isOwnedByCharacter &&
+        !isOwnedByCommunity &&
+        interaction.permissions?.other); // Allowed only for non-owners
 
     if (
       hasPermission &&
@@ -374,6 +383,8 @@ function collisionListener(physicals: Item[]) {
   const player = world.mobs[publicCharacterId] as SpriteMob;
   const playerPos = floor(player.position!);
 
+  console.log(`player is near thing -- id: ${player.id}`);
+
   // retrieves a list of all of the nearby and on top of objects
   let interactableObjects = getInteractablePhysicals(physicals, playerPos);
   let interactions: Interactions[] = [];
@@ -395,7 +406,12 @@ function collisionListener(physicals: Item[]) {
   interactableObjects.forEach((physical) => {
     interactions = [
       ...interactions,
-      ...getPhysicalInteractions(physical, carriedItem, player.community_id)
+      ...getPhysicalInteractions(
+        physical,
+        carriedItem,
+        player.community_id,
+        player.id
+      )
     ];
   });
   // updates client only if interactions changes

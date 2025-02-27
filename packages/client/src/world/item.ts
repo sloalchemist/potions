@@ -48,6 +48,10 @@ export class Item extends Physical {
     return this.ownedByCommunity === community_id;
   }
 
+  isOwnedByCharacter(character_id?: string): boolean {
+    return this.ownedByCharacter === character_id;
+  }
+
   destroy(world: World) {
     if (this.position) {
       world.removeItemFromGrid(this);
