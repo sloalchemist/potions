@@ -148,6 +148,14 @@ export class ServerWorld implements GameWorld {
     measureTime('Fantasy date', () => FantasyDate.runTick());
     measureTime('Data logging', () => DataLogger.logData());
 
+    conversationTracker.tick();
+    FantasyDate.runTick();
+
+    // log data for Prometheus
+    DataLogger.logData();
+
+    //const totalTime = Date.now() - startTime;
+    //logger.log('time to tick', totalTime);
     const totalTime = performance.now() - totalStart;
     debugLog(`[TICK] Total tick cycle time: ${totalTime.toFixed(2)}ms`);
     debugLog('[TICK] End tick cycle ================================\n');

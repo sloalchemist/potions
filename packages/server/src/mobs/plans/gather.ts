@@ -40,7 +40,7 @@ export class Gather extends PlanMeans {
       percentFullAdjustment *
       this.bonus *
       npc.personality.traits[PersonalityTraits.Industriousness];
-    //console.log('gather benefit', utilityLevel, percentFull, percentFullAdjustment, this.bonus, npc.personality.traits[PersonalityTraits.Industriousness]);
+    //logger.log('gather benefit', utilityLevel, percentFull, percentFullAdjustment, this.bonus, npc.personality.traits[PersonalityTraits.Industriousness]);
     return utilityLevel;
   }
   /*

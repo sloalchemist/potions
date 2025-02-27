@@ -9,6 +9,7 @@ import { House } from '../community/house';
 import { pubSub } from '../services/clientCommunication/pubsub';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { ItemType } from '../services/gameWorld/worldMetadata';
+import { logger } from '../util/logger';
 
 function shuffleArray(array: Coord[]): Coord[] {
   for (let i = array.length - 1; i > 0; i--) {
@@ -116,7 +117,7 @@ export class Item {
   }
 
   static insertIntoDB(item: ItemParams) {
-    // console.log(`Inserting ${item.id} into DB with ownership: ${item.ownedByCommunity?.id}`);
+    // logger.log(`Inserting ${item.id} into DB with ownership: ${item.ownedByCommunity?.id}`);
     DB.prepare(
       `
             INSERT INTO items (id, type, subtype, position_x, position_y, owned_by_community, house_id, lock)
@@ -354,7 +355,7 @@ export class Item {
                 items;
                 `
     ).all() as { id: string }[];
-    //console.log('starting item ticks');
+    //logger.log('starting item ticks');
     return result.map((row) => row.id);
   }
 
@@ -425,7 +426,7 @@ export class Item {
    * @returns True if the mob is authorized, false otherwise.
    */
   validateOwnership(mob: Mob, interaction: string): boolean {
-    // console.log(`${item.type} belongs to ${item.owned_by}`);
+    // logger.log(`${item.type} belongs to ${item.owned_by}`);
     // if no one owns the item or if the mob owns it, return true
     if (
       !this.owned_by_community ||
@@ -433,7 +434,7 @@ export class Item {
     )
       return true;
 
-    console.warn(
+    logger.warn(
       `Mob ${mob.name} (${mob.id}) from ${mob.community_id} community ` +
         `is not authorized to ${interaction} from ${this.type} owned by ${this.owned_by_community}`
     );

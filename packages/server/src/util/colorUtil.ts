@@ -1,3 +1,5 @@
+import { logger } from './logger';
+
 import Color from 'color';
 import DeltaE from 'delta-e';
 
@@ -54,6 +56,9 @@ export function combineHexColors(
   const totalWeight = weight1 + weight2;
   const w1 = weight1 / totalWeight;
   const w2 = weight2 / totalWeight;
+
+  logger.log('w1', w1);
+  logger.log('w2', w2);
 
   // Apply gamma correction
   const gamma = 1.8;

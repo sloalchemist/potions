@@ -25,7 +25,7 @@ export abstract class PlanMeans implements Plan {
       return false;
     }
     const finished = this.selectedMeans.execute(npc);
-    //console.log(`Executing ${this.selectedMeans.constructor.name} for ${npc.name} finished: ${finished}`);
+    //logger.log(`Executing ${this.selectedMeans.constructor.name} for ${npc.name} finished: ${finished}`);
     return finished;
   }
 

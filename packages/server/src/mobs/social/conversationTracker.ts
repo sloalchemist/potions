@@ -7,6 +7,7 @@ import {
 } from '@rt-potion/converse';
 import { pubSub } from '../../services/clientCommunication/pubsub';
 import { calculateDistance } from '@rt-potion/common';
+import { logger } from '../../util/logger';
 
 export class ConversationTracker implements SpeakerService {
   private responses: Record<string, string[]> = {};
@@ -32,7 +33,7 @@ export class ConversationTracker implements SpeakerService {
 
   speak(speaker: Speaker, response: string): void {
     pubSub.speak(speaker.id, response);
-    console.log(`Speaker ${speaker.name} says: ${response}`);
+    logger.log(`Speaker ${speaker.name} says: ${response}`);
   }
 
   public startConversation(starter: Mob, responder: Mob) {
@@ -71,7 +72,7 @@ export class ConversationTracker implements SpeakerService {
 
     conversation.selectFromOptions(option);
     pubSub.speak(player.id, response[option]);
-    console.log(`Speaker ${player.name} says: ${response}`);
+    logger.log(`Speaker ${player.name} says: ${response}`);
   }
 
   private updateConversation(conversation: Conversation) {
