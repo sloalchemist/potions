@@ -26,20 +26,73 @@ export class FightScene extends Phaser.Scene {
     const enemy = this.add.image(100, 200, 'enemySlime');
 
     const player = this.add.image(SCREEN_WIDTH / 2 + 100, 330, 'player');
+    player.setDepth(1);
 
     background.setScrollFactor(0); // Prevent image from moving when scenes scroll
 
-    const barBackground = this.add.graphics();
-    barBackground.fillStyle(0x008000, 1);
-    barBackground.fillRect(
-      70,
-      150,
+    const enemyName = this.add.text(60, 120, 'Blob', {
+      font: '16px Arial',
+      color: '#000000'
+    });
+    enemyName.setDepth(2)
+
+    const enemyHealthBar = this.add.graphics();
+    enemyHealthBar.fillStyle(0x008000, 1);
+    enemyHealthBar.fillRect(
+      100,
+      140,
       this.game.scale.width * 0.3,
       this.game.scale.height * -0.03
     );
+    enemyHealthBar.setDepth(1);
+
+    const enemyHealthBackGround = this.add.graphics();
+    enemyHealthBackGround.fillStyle(0xD3D3D3, 1);
+    enemyHealthBackGround.fillRect(
+      50,
+      140,
+      this.game.scale.width * 0.43,
+      this.game.scale.height * -0.04
+    );
+    enemyHealthBackGround.setDepth(0);
+
+    const playerName = this.add.text(193, 220, 'Player', {
+      font: '16px Arial',
+      color: '#000000'
+    });
+    playerName.setDepth(2);
+
+    const playerHealthBar = this.add.graphics();
+    playerHealthBar.fillStyle(0x008000, 1);
+    playerHealthBar.fillRect(
+      240,
+      240,
+      this.game.scale.width * 0.3,
+      this.game.scale.height * -0.03
+    );
+    playerHealthBar.setDepth(1);
+
+    const playerHealthBackGround = this.add.graphics();
+    playerHealthBackGround.fillStyle(0xD3D3D3, 1);
+    playerHealthBackGround.fillRect(
+      190,
+      240,
+      this.game.scale.width * 0.43,
+      this.game.scale.height * -0.04
+    );
+    playerHealthBackGround.setDepth(0);
+
+    const playerShadow = this.add.graphics();
+    playerShadow.fillStyle(0x828C82, 1);
+    playerShadow.fillCircle(
+      SCREEN_WIDTH / 2 + 100,
+      350,
+      this.game.scale.width * 0.105,
+    )
+    playerShadow.setDepth(0);
 
     const xPos = this.game.scale.width/2 - 100;
-    const yPos = this.game.scale.height - 130;
+    const yPos = this.game.scale.height - 170;
 
     const fightButton = new Button(this, xPos, yPos, true, 'Attack', () => {
       console.log('Attack button clicked');
