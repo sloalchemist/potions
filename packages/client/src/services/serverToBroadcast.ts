@@ -170,7 +170,7 @@ export function setupBroadcast(
 
   function handleSpeak(data: SpeakData) {
     const mob = world.mobs[data.id] as SpriteMob;
-    if (mob && mob.key !== publicCharacterId) {
+    if (mob) {
       mob.showSpeechBubble(data.message, false);
     }
   }
