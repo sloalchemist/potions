@@ -31,7 +31,7 @@ export class MarketStand {
     if (!this.item.hasAttribute('price')) {
       return;
     }
-  
+
     const currentPrice = this.item.getAttribute<number>('price');
     const newPrice = Math.max(1, Math.min(99, currentPrice + amount)); // Ensure price stays between 1 and 99
     this.item.setAttribute<number>('price', newPrice);
@@ -44,20 +44,20 @@ export class MarketStand {
   addItem(mob: Mob): boolean {
     const carriedItem = mob.carrying;
     if (!carriedItem) return false;
-  
+
     const currentItemType = this.getItemType();
-  
+
     // If market stand is empty, set the new item type
     if (!currentItemType) {
       this.item.setAttribute('item_type', carriedItem.type);
     }
-  
+
     // Ensure that only the same item type can be added
     if (this.getItemType() !== carriedItem.type) return false;
-  
+
     this.item.changeAttributeBy('items', 1);
     carriedItem.destroy();
-  
+
     return true;
   }
 

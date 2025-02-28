@@ -5,7 +5,7 @@ import { MarketStand } from '../../marketStand';
 
 export class RaiseMarketPrice implements Use {
   key: string;
-  
+
   constructor() {
     this.key = 'raise_market_price';
   }
