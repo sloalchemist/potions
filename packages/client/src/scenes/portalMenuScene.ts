@@ -1,6 +1,7 @@
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { availableWorlds } from '../world/controller';
+import { getWorldID } from '../worldMetadata';
 
 export class PortalMenuScene extends Phaser.Scene {
   constructor() {
@@ -48,15 +49,20 @@ export class PortalMenuScene extends Phaser.Scene {
       }
     );
     title.setOrigin(0.5);
-
+      const worldName = getWorldID();
+      var count = 0;
     // Add world selection buttons
-    availableWorlds.forEach((world, index) => {
-      const button = this.add.text(
-        SCREEN_WIDTH / 2,
-        SCREEN_HEIGHT / 3 + index * 60,
-        world.name,
-        buttonStyle
+      availableWorlds.forEach((world) => {
+          if (worldName == world.name) {
+              return;
+        }
+          const button = this.add.text(
+              SCREEN_WIDTH / 2,
+              SCREEN_HEIGHT / 3 + count * 60,
+              world.name,
+              buttonStyle
       );
+      count += 1;
       button.setInteractive({ useHandCursor: true });
       button.setOrigin(0.5);
 
