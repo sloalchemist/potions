@@ -925,6 +925,59 @@ export class Mob {
     return itemData ? itemData.id : undefined;
   }
 
+  // Calling the updating of player affiliation is needed in order to call the updateStats.
+  // UpdateStatsByAffiliation should be called in an updateAfilliation function (which does not exist yet).
+  // It seems to be out of requirement scope. But the tests pass for when updating the stats by affiliation.
+  updateStatsBasedOnAffiliation(): void {
+    // set to default
+    this.maxHealth = 100;
+    this.attack = 5;
+    this.speed = 2.5;
+
+    switch (this.community_id) {
+      case 'silverclaw':
+        // Villagers have higher max health (200)
+        DB.prepare(
+          `
+                UPDATE mobs
+                SET maxHealth = :maxHealth
+                WHERE id = :id
+            `
+        ).run({ maxHealth: 200, id: this.id });
+        this.maxHealth = 200;
+        break;
+
+      case 'fighters':
+        // Fighters have higher speed (1.5x normal)
+        let newSpeed = this.speed * 1.5;
+        DB.prepare(
+          `
+                UPDATE mobs
+                SET speed = :speed
+                WHERE id = :id
+            `
+        ).run({ speed: newSpeed, id: this.id });
+        this.speed = newSpeed;
+        break;
+
+      case 'blobs':
+        // Blobs have higher attack (1.5x normal)
+        let newAttack = this.attack * 1.5;
+        if (newAttack <= 0) {
+          newAttack = 0;
+        }
+        DB.prepare(
+          `
+                UPDATE mobs
+                SET attack = :attack
+                WHERE id = :id
+            `
+        ).run({ attack: newAttack, id: this.id });
+        this.attack = newAttack;
+        break;
+    }
+  }
+
   get action(): string | undefined {
     return this._currentAction;
   }
