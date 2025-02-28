@@ -61,6 +61,11 @@ jobs:
           terraform_version: '1.10.4'
           # This ensures Terraform CLI can authenticate with Terraform Cloud
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      
+      # 3.0 Terraform Unlock
+      - name: Terraform Unlock (temp)
+        working-directory: ./.terraform-prod
+        run: terraform force-unlock 56e72079-ec04-343d-dc07-6514b39c338b
 
       # 3. Terraform Init
       - name: Terraform Init
