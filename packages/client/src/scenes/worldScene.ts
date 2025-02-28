@@ -68,7 +68,9 @@ export class WorldScene extends Phaser.Scene {
     const worldID = getWorldID();
     this.load.image(
       'background',
-      `https://potions.gg/world_assets/${worldID}/client/background.png`
+      // please revert after testing
+      // `https://potions.gg/world_assets/${worldID}/client/background.png`
+      `fire-world-assets/background.png`
     );
     this.load.atlas(
       'global_atlas',
