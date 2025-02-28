@@ -3,7 +3,7 @@ import { PathFinder } from '../src/pathFinder';
 describe('PathFinder', () => {
   let pathFinder: PathFinder;
   let pathFinder2: PathFinder;
-  let pathFinder3: PathFinder;  
+  let pathFinder3: PathFinder;
   let pathFinder4: PathFinder;
 
   const tiles = [

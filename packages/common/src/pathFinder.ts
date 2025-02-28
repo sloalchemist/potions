@@ -383,11 +383,13 @@ export class PathFinder {
 
       // Sort by proximity to player, allowing for closest neighbors to be looked at first
       neighbors.sort((coord1, coord2) => {
-        const dist1 = Math.pow(start.x - coord1.x, 2) + Math.pow(start.y - coord1.y, 2);
-        const dist2 = Math.pow(start.x - coord2.x, 2) + Math.pow(start.y - coord2.y, 2);
+        const dist1 =
+          Math.pow(start.x - coord1.x, 2) + Math.pow(start.y - coord1.y, 2);
+        const dist2 =
+          Math.pow(start.x - coord2.x, 2) + Math.pow(start.y - coord2.y, 2);
         return dist1 - dist2;
       });
-      
+
       for (const neighbor of neighbors) {
         const neighborKey = `${neighbor.x},${neighbor.y}`;
 
