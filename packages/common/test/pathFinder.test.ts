@@ -3,7 +3,8 @@ import { PathFinder } from '../src/pathFinder';
 describe('PathFinder', () => {
   let pathFinder: PathFinder;
   let pathFinder2: PathFinder;
-  let pathFinder3: PathFinder;
+  let pathFinder3: PathFinder;  
+  let pathFinder4: PathFinder;
 
   const tiles = [
     [0, 0, 0],
@@ -23,6 +24,12 @@ describe('PathFinder', () => {
     [-1, -1, -1]
   ];
 
+  const tiles4 = [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, -1, 0]
+  ];
+
   const terrain_types = [
     { id: 0, name: 'Ground', walkable: true },
     { id: -1, name: 'Wall', walkable: false }
@@ -32,6 +39,7 @@ describe('PathFinder', () => {
     pathFinder = new PathFinder(tiles, terrain_types);
     pathFinder2 = new PathFinder(tiles2, terrain_types);
     pathFinder3 = new PathFinder(tiles3, terrain_types);
+    pathFinder4 = new PathFinder(tiles4, terrain_types);
   });
 
   test('should initialize with correct walkable map', () => {
@@ -163,6 +171,16 @@ describe('PathFinder', () => {
     const end = { x: 2, y: 2 }; // unwalkable
     const walkableEnd = { x: 2, y: 1 }; // closest walkable tile
     const path = pathFinder2.generatePath([], start, end, false);
+    expect(path).not.toHaveLength(0);
+    expect(path).toContainEqual(walkableEnd);
+    expect(path).not.toContainEqual(end);
+  });
+
+  test('generatePath should return path to closest walkable tile if the goal is not walkable (#3)', () => {
+    const start = { x: 0, y: 1 };
+    const end = { x: 2, y: 1 }; // unwalkable
+    const walkableEnd = { x: 1, y: 1 }; // closest walkable tile
+    const path = pathFinder4.generatePath([], start, end, false);
     expect(path).not.toHaveLength(0);
     expect(path).toContainEqual(walkableEnd);
     expect(path).not.toContainEqual(end);
