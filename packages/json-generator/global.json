@@ -975,6 +975,13 @@
       "flat": true,
       "interactions": [
         {
+        "description": "Enter portal",
+        "action": "enter",
+        "while_carried": false
+        }
+      ],
+      "interactions": [
+        {
             "description": "Enter portal",
             "action": "enter",
             "while_carried": false

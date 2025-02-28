@@ -102,41 +102,20 @@ export class DataLogger {
   static getMetrics() {
     return this.register.metrics();
   }
-}
 
-// Setup Connection To Pushgateway
-export function pushMetrics() {
-  let gatewayURL: string;
-  try {
-    gatewayURL = getEnv('METRIC_URL');
-  } catch {
-    console.log('ENV for pushgateway server not set disabling pushing metrics');
-    return;
-  }
-
-  const gateway = new Pushgateway(gatewayURL, {
-    timeout: 5000, //Set the request timeout to 5000ms
-    agent: new Agent({
-      keepAlive: true
-    })
-  });
-
-  // Load metrics under World Name 'Metric'
-  gateway
-    .pushAdd({ jobName: `Metrics` })
-    .then()
-    .catch((e) => console.log(e));
-
-  function pushData() {
-    gateway
-      .push({ jobName: `Metrics` })
-      .then()
-      .catch((e) => console.log(e));
-  }
-
-  function pusherTimer() {
-    DataLogger.logData();
-    pushData();
+  static startMetricsServer(port: number = 3030) {
+    // createServer(async (req, res) => {
+    //   if (req.url === '/metrics') {
+    //     res.writeHead(200, { 'Content-Type': this.register.contentType });
+    //     res.end(await this.getMetrics());
+    //   } else {
+    //     res.writeHead(404, { 'Content-Type': 'text/plain' });
+    //   }
+    // }).listen(port, () => {
+    //   console.log(
+    //     `Prometheus metrics available at http://localhost:${port}/metrics`
+    //   );
+    // });
   }
 
   setInterval(pusherTimer, 10000);
