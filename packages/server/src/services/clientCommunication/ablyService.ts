@@ -68,6 +68,25 @@ export class AblyService implements PubSub {
       );
     });
 
+    this.broadcastChannel.presence.subscribe('update', async (presenceMsg) => {
+      const target_world_id =
+        presenceMsg.data.target_world_id == null
+          ? this.worldID
+          : presenceMsg.data.target_world_id;
+
+      console.log('Updating to ', target_world_id);
+
+      // Await this, because the client needs to reload the page after the world is
+      // updated in order for portals to work
+      await this.sendPersistenceRequest(
+        presenceMsg.clientId,
+        this.userDict.get(presenceMsg.clientId),
+        target_world_id
+      );
+
+      this.broadcastReloadPageTrigger();
+    });
+
     this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
       // if MAINTAIN_WORLD_OPTION is passed from client, do not change world;
       // undefined will be recieved if the client unexpectedly disconnects (ex: refreshing page)
@@ -547,7 +566,7 @@ export class AblyService implements PubSub {
     this.publishMessageToPlayer(mob_key, 'player_attacks', { attacks });
   }
 
-  public sendPersistenceRequest(
+  public async sendPersistenceRequest(
     username: string,
     char_id: number,
     target_world_id: number
@@ -577,7 +596,7 @@ export class AblyService implements PubSub {
       attack: attack_for_update,
       appearance: ''
     };
-    this.sendPlayerData(char_id, playerData);
+    await this.sendPlayerData(char_id, playerData);
   }
 
   public setupChannels(
@@ -708,10 +727,13 @@ export class AblyService implements PubSub {
 
   public broadcastScoreboard(): void {
     const scoreboardData = getScoreboardData();
-    console.log('broadcasting scoreboard data', scoreboardData);
     this.addToBroadcast({
       type: 'scoreboard',
       data: scoreboardData
     });
+  }
+
+  public broadcastReloadPageTrigger(): void {
+    this.addToBroadcast({ type: 'reload_page' });
   }
 }
