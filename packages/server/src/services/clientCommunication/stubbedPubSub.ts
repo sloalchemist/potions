@@ -64,6 +64,8 @@ export class StubbedPubSub implements PubSub {
 
   changeSpeed(_key: string, _speed: number, _newValue: number): void {}
 
+  changeFavoriteItem(_key: string, _item: string): void {}
+
   speak(_key: string, _message: string): void {}
 
   setDateTime(_fantasyDate: FantasyDate): void {}

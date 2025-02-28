@@ -248,9 +248,13 @@ export function getPhysicalInteractions(
 ): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
+<<<<<<< HEAD
   const isOwnedByCharacter = item.isOwnedByCharacter(character_id);
   const isOwnedByCommunity = item.isOwnedByCommunity(community_id);
 
+=======
+  const isOwner: boolean = ownerId ? item.isOwnedByCommunity(ownerId) : true;
+>>>>>>> main
 
   // if the item can be picked up
   if (item.itemType.carryable) {

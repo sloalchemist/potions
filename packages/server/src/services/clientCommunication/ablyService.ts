@@ -334,6 +334,20 @@ export class AblyService implements PubSub {
     });
   }
 
+  public changeFavoriteItem(key: string, item: string): void {
+    if (key == undefined || item == undefined) {
+      throw new Error(`Sending invalid changeSpeed message ${key}, ${item}`);
+    }
+    this.addToBroadcast({
+      type: 'mob_change_fav_item',
+      data: {
+        id: key,
+        property: 'favorite_item',
+        new_value: item
+      }
+    });
+  }
+
   public changeTargetTick(
     key: string,
     attribute: string,
@@ -438,7 +452,10 @@ export class AblyService implements PubSub {
   }
 
   public speak(key: string, message: string): void {
-    this.addToBroadcast({ type: 'speak', data: { id: key, message } });
+    this.addToBroadcast({
+      type: 'speak',
+      data: { id: key, message }
+    });
   }
 
   public setDateTime(fantasyDate: FantasyDate): void {

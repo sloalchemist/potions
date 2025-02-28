@@ -89,7 +89,10 @@ export class WorldScene extends Phaser.Scene {
       'world_specific_data',
       `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
     );
-
+    this.load.audio('background_music_layer', [
+      `static/music/${worldID}_layer.mp3`
+    ]);
+    this.load.audio('background_music', ['static/music/cosmic_ambient.mp3']);
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
 
@@ -392,6 +395,15 @@ export class WorldScene extends Phaser.Scene {
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
     this.hideWorld();
 
+    if (!this.sound.isPlaying('background_music')) {
+      this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
+    }
+    if (!this.sound.isPlaying('background_music_layer')) {
+      this.sound
+        .add('background_music_layer', { loop: true, volume: 0.3 })
+        .play();
+    }
+
     bindAblyToWorldScene(this);
     initializePlayer();
 
@@ -538,8 +550,8 @@ export class WorldScene extends Phaser.Scene {
       this.nightOverlay.fillRect(
         0,
         0,
-        this.terrainWidth * TILE_SIZE,
-        this.terrainHeight * TILE_SIZE
+        this.terrainHeight * TILE_SIZE,
+        this.terrainWidth * TILE_SIZE
       );
     }
 
@@ -581,34 +593,41 @@ export class WorldScene extends Phaser.Scene {
     let moveY = player.position.y;
 
     let moved = false;
+    let newX = moveX;
+    let newY = moveY;
+
     if (this.keys['w']) {
-      moveY--;
-      moved = true;
+      newY--;
     }
     if (this.keys['s']) {
-      moveY++;
-      moved = true;
+      newY++;
     }
     if (this.keys['a']) {
-      moveX--;
-      moved = true;
+      newX--;
     }
     if (this.keys['d']) {
-      moveX++;
-      moved = true;
+      newX++;
     }
 
+    // Check if the next step is blocked
+    const nextItem = world.getItemAt(newX, newY);
+    if (!!nextItem && !nextItem.isWalkable(player.unlocks)) {
+      return;
+    }
+
+    // Check if your position has changed
+    moved = newX !== moveX || newY !== moveY;
     if (!moved) return;
 
     let roundedX;
     let roundedY;
     const negKeys = ['w', 'a'];
     if (negKeys.includes(this.lastKeyUp)) {
-      roundedX = Math.floor(moveX);
-      roundedY = Math.floor(moveY);
+      roundedX = Math.floor(newX);
+      roundedY = Math.floor(newY);
     } else {
-      roundedX = Math.ceil(moveX);
-      roundedY = Math.ceil(moveY);
+      roundedX = Math.ceil(newX);
+      roundedY = Math.ceil(newY);
     }
 
     const target = { x: roundedX, y: roundedY };
@@ -616,6 +635,7 @@ export class WorldScene extends Phaser.Scene {
     // NOTE: the code in the 'else' block moves the player on the client side
     //       publishPlayerPosition() calls that code itself, so player will
     //       move on the client side for whichever case
+
     if (publish) {
       this.prevKeys = { ...this.keys };
       publishPlayerPosition(target);
@@ -688,12 +708,20 @@ export class WorldScene extends Phaser.Scene {
   /* Stop all scenes related to game play and go back to the LoadWordScene 
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
+    this.sound.removeByKey('walk');
+    this.sound.removeByKey('background_music');
+    this.sound.removeByKey('background_music_layer');
+
     this.stopScenes();
     this.scene.start('LoadCharacterScene', { autoStart: false });
   }
 
   /* Stop all scenes related to game play and automatically restart game.*/
   resetToRespawn() {
+    this.sound.removeByKey('walk');
+    this.sound.removeByKey('background_music');
+    this.sound.removeByKey('background_music_layer');
+
     this.stopScenes();
     this.scene.start('LoadCharacterScene', { autoStart: true });
   }
