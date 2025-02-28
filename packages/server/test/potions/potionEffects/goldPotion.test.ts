@@ -148,6 +148,106 @@ describe('Try to consume gold potion in various cases', () => {
       // should see no difference from last increase (capped at 5 effects)
       expect(testMob!._maxHealth).toBe(startMaxHealth + 20 * 5);
     });
+
+    test('Test weak gold potion effect', () => {
+      FantasyDate.initialDate();
+      const position: Coord = { x: 0, y: 0 };
+      const potionLocation: Coord = { x: 1, y: 0 };
+  
+      // create a player
+      mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+      const testMob = Mob.getMob('TestID');
+      expect(testMob).not.toBeNull();
+  
+      // create a potion
+      itemGenerator.createItem({
+        type: 'potion',
+        subtype: String(hexStringToNumber('#ef7d66')),
+        position: potionLocation,
+        carriedBy: testMob
+      });
+      const potion = Item.getItemIDAt(potionLocation);
+      expect(potion).not.toBeNull();
+      const potionItem = Item.getItem(potion!);
+      expect(potionItem).not.toBeNull();
+  
+      // ensure the player is carrying the potion
+      expect(testMob!.carrying).not.toBeNull();
+      expect(testMob!.carrying!.type).toBe('potion');
+      expect(testMob!.carrying!.subtype).toBe(
+        String(hexStringToNumber('#ef7d66'))
+      );
+  
+      // set initial max health
+      const startMaxHealth = testMob!._maxHealth;
+  
+      // have the player drink the potion
+      const testDrink = new Drink();
+      const test = testDrink.interact(testMob!, potionItem!);
+      expect(test).toBe(true);
+  
+      for (let i = 0; i < 15; i++) {
+        // 15 ticks to check stacking
+        FantasyDate.runTick();
+      }
+      testMob?.tick(500);
+  
+      // check to make sure potion is not being carried
+      expect(testMob!.carrying).toBeUndefined();
+  
+      // check attributes on player (should be boosted)
+      expect(testMob!._maxHealth).toBe(startMaxHealth + 20*0.5);
+    });
+
+    test('Test super weak gold potion effect', () => {
+      FantasyDate.initialDate();
+      const position: Coord = { x: 0, y: 0 };
+      const potionLocation: Coord = { x: 1, y: 0 };
+  
+      // create a player
+      mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+      const testMob = Mob.getMob('TestID');
+      expect(testMob).not.toBeNull();
+  
+      // create a potion
+      itemGenerator.createItem({
+        type: 'potion',
+        subtype: String(hexStringToNumber('#ab7d77')),
+        position: potionLocation,
+        carriedBy: testMob
+      });
+      const potion = Item.getItemIDAt(potionLocation);
+      expect(potion).not.toBeNull();
+      const potionItem = Item.getItem(potion!);
+      expect(potionItem).not.toBeNull();
+  
+      // ensure the player is carrying the potion
+      expect(testMob!.carrying).not.toBeNull();
+      expect(testMob!.carrying!.type).toBe('potion');
+      expect(testMob!.carrying!.subtype).toBe(
+        String(hexStringToNumber('#ab7d77'))
+      );
+  
+      // set initial max health
+      const startMaxHealth = testMob!._maxHealth;
+  
+      // have the player drink the potion
+      const testDrink = new Drink();
+      const test = testDrink.interact(testMob!, potionItem!);
+      expect(test).toBe(true);
+  
+      for (let i = 0; i < 15; i++) {
+        // 15 ticks to check stacking
+        FantasyDate.runTick();
+      }
+      testMob?.tick(500);
+  
+      // check to make sure potion is not being carried
+      expect(testMob!.carrying).toBeUndefined();
+  
+      // check attributes on player (should be boosted)
+      expect(testMob!._maxHealth).toBe(startMaxHealth + 20*0.3);
+    });
 });
   
   

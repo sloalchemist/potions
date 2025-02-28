@@ -15,7 +15,6 @@ const colordict: ColorDict = {
   '#0000ff': 'blue',
   '#e79600': 'orange',
   '#ef7d55': 'gold',
-  '#8b7f6e': 'grey',
   '#ab00e7': 'purple'
 };
 
@@ -99,7 +98,7 @@ export function drinkPotion(
           closestColor = definedColor;
         }
       }
-
+      
       // If the closest color is within the threshold, give weak potion effect
       if (closestColor && minDistance <= upperThreshold) {
         return drinkPotion(mob, String(hexStringToNumber(closestColor)), 0.5);

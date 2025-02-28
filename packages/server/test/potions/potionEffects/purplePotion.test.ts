@@ -143,7 +143,6 @@ describe('Try to consume purple potion in various cases', () => {
       // allow attack for a tick
       testAttacker?.tick(500);
       testEnemy?.tick(500);
-      // breaks?
   
       // grab health of enemy after defense pot and damage taken
       const healthWithMoreDefense = testEnemy!.health;
@@ -151,6 +150,94 @@ describe('Try to consume purple potion in various cases', () => {
   
       // check attributes on enemy
       expect(healthWithBaseDefense).toBeLessThan(healthWithMoreDefense);
+    });
+
+    test('Test weak purple potion effect', () => {
+      FantasyDate.initialDate();
+      const position: Coord = { x: 0, y: 0 };
+      const potionLocation: Coord = { x: 1, y: 0 };
+  
+      // create a player
+      mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+      const testMob = Mob.getMob('TestID');
+      expect(testMob).not.toBeNull();
+  
+      // create a potion
+      itemGenerator.createItem({
+        type: 'potion',
+        subtype: String(hexStringToNumber('#8900c5')),
+        position: potionLocation,
+        carriedBy: testMob
+      });
+      const potion = Item.getItemIDAt(potionLocation);
+      expect(potion).not.toBeNull();
+      const potionItem = Item.getItem(potion!);
+      expect(potionItem).not.toBeNull();
+  
+      // ensure the player is carrying the potion
+      expect(testMob!.carrying).not.toBeNull();
+      expect(testMob!.carrying!.type).toBe('potion');
+      expect(testMob!.carrying!.subtype).toBe(
+        String(hexStringToNumber('#8900c5'))
+      );
+  
+      // set initial defense
+      const startDefense = testMob!._defense;
+  
+      // have the player drink the potion
+      const testDrink = new Drink();
+      const test = testDrink.interact(testMob!, potionItem!);
+      expect(test).toBe(true);
+  
+      // check to make sure potion is not being carried
+      expect(testMob!.carrying).toBeUndefined();
+  
+      // check attributes on player (should be boosted)
+      expect(testMob!._defense).toBe(startDefense + startDefense * 0.5 * 0.5);
+    });
+
+    test('Test super weak purple potion effect', () => {
+      FantasyDate.initialDate();
+      const position: Coord = { x: 0, y: 0 };
+      const potionLocation: Coord = { x: 1, y: 0 };
+  
+      // create a player
+      mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+      const testMob = Mob.getMob('TestID');
+      expect(testMob).not.toBeNull();
+  
+      // create a potion
+      itemGenerator.createItem({
+        type: 'potion',
+        subtype: String(hexStringToNumber('#8966c5')),
+        position: potionLocation,
+        carriedBy: testMob
+      });
+      const potion = Item.getItemIDAt(potionLocation);
+      expect(potion).not.toBeNull();
+      const potionItem = Item.getItem(potion!);
+      expect(potionItem).not.toBeNull();
+  
+      // ensure the player is carrying the potion
+      expect(testMob!.carrying).not.toBeNull();
+      expect(testMob!.carrying!.type).toBe('potion');
+      expect(testMob!.carrying!.subtype).toBe(
+        String(hexStringToNumber('#8966c5'))
+      );
+  
+      // set initial defense
+      const startDefense = testMob!._defense;
+  
+      // have the player drink the potion
+      const testDrink = new Drink();
+      const test = testDrink.interact(testMob!, potionItem!);
+      expect(test).toBe(true);
+  
+      // check to make sure potion is not being carried
+      expect(testMob!.carrying).toBeUndefined();
+  
+      // check attributes on player (should be boosted)
+      expect(testMob!._defense).toBe(startDefense + startDefense * 0.5 * 0.3);
     });
 });  
   
