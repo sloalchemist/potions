@@ -13,25 +13,25 @@ beforeEach(() => {
   mobFactory.loadTemplates(world.mobTypes);
 });
 
-describe('Potion Stand Ownership Tests', () => {
+describe('Potion Stand Character Ownership Tests', () => {
   test('Owner can collect gold, non-owner cannot', () => {
     const ownerID: string = 'ownerID';
     const standPosition: Coord = { x: 0, y: 1 };
     const playerPosition: Coord = { x: 0, y: 0 };
 
-    // Create Owner character
+    // Create owner
     mobFactory.makeMob('player', playerPosition, ownerID, 'owner');
     const owner = Mob.getMob(ownerID);
     expect(owner).toBeDefined();
     expect(owner!.gold).toBe(0);
 
-    // Create Non-Owner character
+    // Create non-owner
     mobFactory.makeMob('player', playerPosition, 'notOwnerID', 'nonOwner');
     const nonOwner = Mob.getMob('notOwnerID');
     expect(nonOwner).toBeDefined();
     expect(nonOwner!.gold).toBe(0);
 
-    // Create potion stand owned by OwnerCharacter
+    // Create potion stand owned by owner
     itemGenerator.createItem({
       type: 'potion-stand',
       subtype: '255',
