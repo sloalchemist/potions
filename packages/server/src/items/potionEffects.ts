@@ -16,7 +16,9 @@ const colordict: ColorDict = {
   '#e79600': 'orange',
   '#ef7d55': 'gold',
   '#8b7f6e': 'grey',
-  '#ab00e7': 'purple'
+  '#ab00e7': 'purple',
+  '#00ff00': 'green',
+  '#166060': 'black'
 };
 
 export function drinkPotion(
@@ -76,6 +78,24 @@ export function drinkPotion(
       }
       const defenseDelta = mob._defense * defenseMultiplier;
       mob.changeEffect(defenseDelta, defenseDuration, 'defense');
+      return true;
+    case '#00ff00':
+      console.log('Drinking green potion');
+      let dotDelta = 1;
+      let dotDuration = 240;
+      if (effectModifier) {
+        dotDelta = dotDelta * effectModifier;
+        dotDuration = dotDuration * effectModifier;
+      }
+      mob.changeEffect(dotDelta, dotDuration, 'damageOverTime');
+      return true;
+    case '#166060':
+      console.log('Drinking black potion');
+      let monsterDuration = 120;
+      if (effectModifier) {
+        monsterDuration = monsterDuration * effectModifier;
+      }
+      mob.spawnMonster(monsterDuration);
       return true;
     default:
       // handle cases where potionStr doesn't match any known potion
