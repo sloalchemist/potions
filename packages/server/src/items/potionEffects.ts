@@ -97,6 +97,9 @@ export function drinkPotion(
       }
       mob.spawnMonster(monsterDuration);
       return true;
+    case '#614f79':
+      let close_ids = mob.findNClosestObjectIDs(['basket', 'potion-stand'], Infinity, 2)
+      return true
     default:
       // handle cases where potionStr doesn't match any known potion
 
