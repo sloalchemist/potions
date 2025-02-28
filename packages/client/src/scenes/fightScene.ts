@@ -3,7 +3,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { Button } from '../components/button';
 
 export class FightScene extends Phaser.Scene {
-  private messageStack!: MessageStack; 
+  private messageStack!: MessageStack;
 
   constructor() {
     super({ key: 'FightScene' });
@@ -16,14 +16,15 @@ export class FightScene extends Phaser.Scene {
   }
 
   create() {
-    // Add the fight screen image 
+    // Add the fight screen image
     const background = this.add.image(
       SCREEN_WIDTH / 2,
       SCREEN_HEIGHT / 2,
       'fightScreenImage'
     ); // Adjust x, y and texture as needed
 
-    const enemy = this.add.image(100, 200, 'enemySlime');
+    // enemy image
+    this.add.image(100, 200, 'enemySlime');
 
     const player = this.add.image(SCREEN_WIDTH / 2 + 100, 330, 'player');
     player.setDepth(1);
@@ -34,7 +35,7 @@ export class FightScene extends Phaser.Scene {
       font: '16px Arial',
       color: '#000000'
     });
-    enemyName.setDepth(2)
+    enemyName.setDepth(2);
 
     const enemyHealthBar = this.add.graphics();
     enemyHealthBar.fillStyle(0x008000, 1);
@@ -47,7 +48,7 @@ export class FightScene extends Phaser.Scene {
     enemyHealthBar.setDepth(1);
 
     const enemyHealthBackGround = this.add.graphics();
-    enemyHealthBackGround.fillStyle(0xD3D3D3, 1);
+    enemyHealthBackGround.fillStyle(0xd3d3d3, 1);
     enemyHealthBackGround.fillRect(
       50,
       140,
@@ -79,7 +80,7 @@ export class FightScene extends Phaser.Scene {
     playerHealthBar.setDepth(1);
 
     const playerHealthBackGround = this.add.graphics();
-    playerHealthBackGround.fillStyle(0xD3D3D3, 1);
+    playerHealthBackGround.fillStyle(0xd3d3d3, 1);
     playerHealthBackGround.fillRect(
       15,
       435,
@@ -89,30 +90,34 @@ export class FightScene extends Phaser.Scene {
     playerHealthBackGround.setDepth(0);
 
     const playerShadow = this.add.graphics();
-    playerShadow.fillStyle(0x828C82, 1);
+    playerShadow.fillStyle(0x828c82, 1);
     playerShadow.fillCircle(
       SCREEN_WIDTH / 2 + 100,
       365,
-      this.game.scale.width * 0.105,
-    )
+      this.game.scale.width * 0.105
+    );
     playerShadow.setDepth(0);
 
-    const xPos = this.game.scale.width/2 - 100;
+    const xPos = this.game.scale.width / 2 - 100;
     const yPos = this.game.scale.height - 170;
 
-    const fightButton = new Button(this, xPos, yPos, true, 'Attack', () => {
+    // fight button
+    new Button(this, xPos, yPos, true, 'Attack', () => {
       console.log('Attack button clicked');
     });
 
-    const potionButton = new Button(this, xPos + 200, yPos, true, 'Use Potion', () => {
+    // potion button
+    new Button(this, xPos + 200, yPos, true, 'Use Potion', () => {
       console.log('Potion button clicked');
     });
 
-    const hugButton = new Button(this, xPos, yPos + 80, true, 'Hug', () => {
+    // hug button
+    new Button(this, xPos, yPos + 80, true, 'Hug', () => {
       console.log('Hug button clicked');
     });
 
-    const runButton = new Button(this, xPos + 200, yPos + 80, true, 'Run', () => {
+    // run button
+    new Button(this, xPos + 200, yPos + 80, true, 'Run', () => {
       console.log('Run button clicked');
       this.scene.stop('FightScene');
     });
@@ -121,5 +126,4 @@ export class FightScene extends Phaser.Scene {
 
     this.messageStack = new MessageStack(this);
   }
-
 }
