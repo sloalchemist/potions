@@ -251,9 +251,6 @@ export function getPhysicalInteractions(
   const isOwnedByCharacter = item.isOwnedByCharacter(character_id);
   const isOwnedByCommunity = item.isOwnedByCommunity(community_id);
 
-  console.log(
-    `commmunity: ${community_id}; character ${character_id}; item owned by community ${item.ownedByCommunity} and character ${item.ownedByCharacter}; isOwnedByCharacter? ${isOwnedByCharacter}; isOwnedByCommunity ${isOwnedByCommunity}`
-  );
 
   // if the item can be picked up
   if (item.itemType.carryable) {
@@ -382,8 +379,6 @@ export function getInteractablePhysicals(
 function collisionListener(physicals: Item[]) {
   const player = world.mobs[publicCharacterId] as SpriteMob;
   const playerPos = floor(player.position!);
-
-  console.log(`player is near thing -- id: ${player.id}`);
 
   // retrieves a list of all of the nearby and on top of objects
   let interactableObjects = getInteractablePhysicals(physicals, playerPos);

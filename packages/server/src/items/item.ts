@@ -122,7 +122,6 @@ export class Item {
   }
 
   static insertIntoDB(item: ItemParams) {
-    // console.log(`Inserting ${item.id} into DB with ownership: ${item.ownedByCommunity?.id}`);
     DB.prepare(
       `
             INSERT INTO items (id, type, subtype, position_x, position_y, owned_by_community, owned_by_character, house_id, lock)

@@ -993,7 +993,7 @@
                 {
                     "description": "Add $item_name",
                     "action": "add_item",
-                    "while_carried": false,
+                    "while_carried": true,
                     "permissions": {
                         "community": false,
                         "character": true,
