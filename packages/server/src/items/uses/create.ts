@@ -11,6 +11,7 @@ export class Create {
       subtype: createItem.subtype,
       position: creator.position,
       ownedByCommunity: creatorCommunity,
+      ownedByCharacter: creator.id,
       attributes: {
         templateType: createItem.type,
         items: 1,

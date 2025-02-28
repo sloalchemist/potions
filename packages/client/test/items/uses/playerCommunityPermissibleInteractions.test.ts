@@ -59,6 +59,7 @@ describe('Community ownership based interactions', () => {
           while_carried: false,
           permissions: {
             community: true,
+            character: false,
             other: false
           }
         },
@@ -68,6 +69,7 @@ describe('Community ownership based interactions', () => {
           while_carried: false,
           permissions: {
             community: false,
+            character: false,
             other: true
           }
         }
