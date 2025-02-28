@@ -773,6 +773,25 @@
       ]
     },
     {
+      "name": "Cloud",
+      "type": "cloud",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+          {
+              "action": "spawn_item",
+              "parameters": {
+                  "type": "lightning-bloom",
+                  "global_max": 10,
+                  "local_max": 2,
+                  "radius": 1,
+                  "rate": 0.1
+              }
+          }
+      ]
+  },
+    {
       "name": "Mushroom-1",
       "type": "mushroom-1",
       "description": "A mushroom",
