@@ -12,4 +12,5 @@ export type ItemI = {
   lock?: string;
   carried_by?: string;
   ownedByCommunity?: string;
+  ownedByCharacter?: string;
 };

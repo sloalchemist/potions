@@ -163,6 +163,7 @@ function itemDataToItem(
     lock: itemData.lock,
     house: itemData.house_id,
     ownedByCommunity: itemData.owned_by_community,
+    ownedByCharacter: itemData.owned_by_character,
     carried_by: Mob.findCarryingMobID(itemData.id),
     attributes: itemAttributeData.reduce(
       (acc, attribute) => {
@@ -246,6 +247,7 @@ export function getItemAbly(key: string): ItemI {
             items.house_id,
             items.lock,
             items.owned_by_community,
+            items.owned_by_character,
             mobs.id carrying_id
         FROM items
         LEFT JOIN mobs ON mobs.carrying_id = items.id
@@ -278,6 +280,7 @@ export function getItemsAbly(): ItemI[] {
             items.house_id,
             items.lock,
             items.owned_by_community,
+            items.owned_by_character,
             mobs.id carrying_id
         FROM items
         LEFT JOIN mobs ON mobs.carrying_id = items.id;
