@@ -1142,7 +1142,6 @@ export class UxScene extends Phaser.Scene {
     this.fightButtons?.clearButtonOptions();
 
     this.fightRequested = true;
-
     setFighting(true);
     requestFight(opponent);
   }
