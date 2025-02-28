@@ -980,13 +980,6 @@
         "while_carried": false
         }
       ],
-      "interactions": [
-        {
-            "description": "Enter portal",
-            "action": "enter",
-            "while_carried": false
-        }
-      ],
       "on_tick": [
         {
           "action": "spawn_mob",
