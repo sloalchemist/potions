@@ -49,4 +49,29 @@ variable "github_token" {
   sensitive   = true
 }
 
+variable "test_uptime_server_url" {
+  description = "Test world uptime server URL from uptime kuma"
+}
 
+variable "test_uptime_server_msg" {
+  description = "Test world uptime server message"
+  type        = string
+}
+
+variable "fire_uptime_server_url" {
+  description = "Fire world uptime server URL from uptime kuma"
+}
+
+variable "fire_uptime_server_msg" {
+  description = "Fire world uptime server message"
+  type        = string
+}
+
+variable "water_uptime_server_url" {
+  description = "Water world uptime server URL from uptime kuma"
+}
+
+variable "water_uptime_server_msg" {
+  description = "Water world uptime server message"
+  type        = string
+}

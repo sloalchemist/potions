@@ -97,12 +97,12 @@ async function downloadData(supabase: SupabaseClient, worldID: string) {
   await Promise.all([
     downloadFile(
       `${worldID}-knowledge-graph-snapshot.db`,
-      'knowledge-graph.db',
+      `${worldID}-knowledge-graph.db`,
       supabase
     ),
     downloadFile(
       `${worldID}-server-data-snapshot.db`,
-      'server-data.db',
+      `${worldID}-server-data.db`,
       supabase
     )
   ]);
@@ -175,10 +175,10 @@ async function uploadLocalFile(path: string, supabase: SupabaseClient) {
 async function uploadLocalData(supabase: SupabaseClient, worldID: string) {
   try {
     // Take snapshot of current state, so upload can not interrupt the next tick
-    const serverDb = 'data/server-data.db';
+    const serverDb = `data/${worldID}-server-data.db`;
     const serverSnapshot = `data/${worldID}-server-data-snapshot.db`;
 
-    const knowledgeDb = 'data/knowledge-graph.db';
+    const knowledgeDb = `data/${worldID}-knowledge-graph.db`;
     const knowledgeSnapshot = `data/${worldID}-knowledge-graph-snapshot.db`;
 
     createDbSnapshot(serverDb, serverSnapshot);

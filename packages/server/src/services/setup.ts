@@ -54,8 +54,8 @@ async function initializeAsync() {
   }
 
   try {
-    initializeKnowledgeDB('data/knowledge-graph.db', false);
-    initializeServerDatabase('data/server-data.db');
+    initializeKnowledgeDB(`data/${worldID}-knowledge-graph.db`, false);
+    initializeServerDatabase(`data/${worldID}-server-data.db`);
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =

@@ -18,6 +18,7 @@ export class SpriteItem extends Item {
   healthBar?: Phaser.GameObjects.Graphics;
   maxHealth?: number;
   ownedByCommunity?: string;
+  ownedByCharacter?: string;
 
   constructor(scene: WorldScene, item: ItemI) {
     const itemType = scene.itemTypes[item.type];
@@ -35,6 +36,7 @@ export class SpriteItem extends Item {
     this.carried_by = item.carried_by;
     this.lock = item.lock;
     this.ownedByCommunity = item.ownedByCommunity;
+    this.ownedByCharacter = item.ownedByCharacter;
 
     // copy over all attributes
     for (const key in item.attributes) {

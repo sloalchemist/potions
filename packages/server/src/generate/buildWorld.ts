@@ -22,7 +22,6 @@ import { logger } from '../util/logger';
 async function main() {
   // Build and save the knowledge graph
   // Initialize the server database
-  await initializeServerDatabase('data/server-data.db', true);
 
   const args = process.argv.slice(2);
   const worldID = args[0];
@@ -30,6 +29,7 @@ async function main() {
   if (!worldID) {
     throw new Error('No world ID provided, provide a world ID as an argument');
   }
+  await initializeServerDatabase(`data/${worldID}-server-data.db`, true);
 
   logger.log(`Loading world ${worldID}`);
 
@@ -53,7 +53,7 @@ async function main() {
 
   const socialWorld = buildGraphFromWorld(worldDescription);
   const graph = constructGraph(socialWorld);
-  initializeKnowledgeDB('data/knowledge-graph.db', true);
+  initializeKnowledgeDB(`data/${worldID}-knowledge-graph.db`, true);
   await buildGraph(graph);
 
   // Create tables and load defaults
