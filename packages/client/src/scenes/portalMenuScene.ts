@@ -3,7 +3,7 @@ import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { availableWorlds } from '../world/controller';
 import { getWorldID } from '../worldMetadata';
 import { leaveWorld } from '../services/playerToServer';
-import { stat } from 'fs';
+
 export class PortalMenuScene extends Phaser.Scene {
   constructor() {
     super({ key: 'PortalMenuScene' });
@@ -66,7 +66,7 @@ export class PortalMenuScene extends Phaser.Scene {
     const worldName = getWorldID();
     let count = 0;
     // Add world selection buttons
-    availableWorlds.forEach((world, index) => {
+    availableWorlds.forEach((world) => {
       if (worldName == world.name) {
         return;
       }
