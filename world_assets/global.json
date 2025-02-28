@@ -792,9 +792,9 @@
                 {
                     "action": "spawn_item",
                     "parameters": {
-                        "type": "rock-columns",
+                        "type": "tar",
                         "global_max": 10,
-                        "local_max": 1,
+                        "local_max": 3,
                         "radius": 3,
                         "rate": 0.1
                     }
@@ -937,7 +937,13 @@
             "carryable": false,
             "walkable": true,
             "flat": true,
-            "interactions": [],
+            "interactions": [
+                {
+                    "description": "Enter portal",
+                    "action": "enter",
+                    "while_carried": false
+                }
+            ],
             "on_tick": [
                 {
                     "action": "spawn_mob",
