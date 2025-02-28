@@ -271,16 +271,6 @@ export class LoadWorldScene extends Phaser.Scene {
           startGame.setOrigin(0.5, 0);
           startGame.setInteractive({ useHandCursor: true });
 
-<<<<<<< HEAD
-        startGame.on('pointerdown', () => {
-          this.scene.start('PauseScene');
-          this.scene.start('WorldScene');
-          this.scene.start('UxScene');
-          this.scene.start('FrameScene');
-          this.scene.start('LeaderboardScene');
-          setGameState('worldLoaded');
-        });
-=======
           // Hover effects
           startGame.on('pointerover', () => {
             startGame.setStyle(nameButtonHoverStyle);
@@ -294,7 +284,6 @@ export class LoadWorldScene extends Phaser.Scene {
             this.startGame();
           });
         }
->>>>>>> 88196a92 (stop game from freezing on death)
       })
       .catch((_error) => {
         console.error('Error setting up Ably');
