@@ -29,7 +29,7 @@ describe('Favorability-Based Purchase Tests', () => {
       type: 'potion-stand',
       subtype: '255',
       position: standPosition,
-      ownedBy: Community.getVillage('alchemists'),
+      ownedByCommunity: Community.getVillage('alchemists'),
       attributes: {
         templateType: 'potion',
         subtype: '255',
@@ -81,7 +81,7 @@ describe('Favorability-Based Purchase Tests', () => {
       type: 'potion-stand',
       subtype: '255',
       position: standPosition,
-      ownedBy: Community.getVillage('alchemists'),
+      ownedByCommunity: Community.getVillage('alchemists'),
       attributes: {
         templateType: 'potion',
         subtype: '255',
@@ -133,7 +133,7 @@ describe('Favorability-Based Purchase Tests', () => {
       type: 'potion-stand',
       subtype: '255',
       position: standPosition,
-      ownedBy: Community.getVillage('alchemists'),
+      ownedByCommunity: Community.getVillage('alchemists'),
       attributes: {
         templateType: 'potion',
         subtype: '255',
@@ -185,7 +185,7 @@ describe('Favorability-Based Purchase Tests', () => {
       type: 'potion-stand',
       subtype: '255',
       position: standPosition,
-      ownedBy: Community.getVillage('alchemists'),
+      ownedByCommunity: Community.getVillage('alchemists'),
       attributes: {
         templateType: 'potion',
         subtype: '255',
@@ -237,7 +237,7 @@ describe('Favorability-Based Purchase Tests', () => {
       type: 'potion-stand',
       subtype: '255',
       position: standPosition,
-      ownedBy: Community.getVillage('alchemists'),
+      ownedByCommunity: Community.getVillage('alchemists'),
       attributes: {
         templateType: 'potion',
         subtype: '255',

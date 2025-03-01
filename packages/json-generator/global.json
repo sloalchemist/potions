@@ -994,9 +994,9 @@
       "flat": true,
       "interactions": [
         {
-            "description": "Enter portal",
-            "action": "enter",
-            "while_carried": false
+          "description": "Enter portal",
+          "action": "enter",
+          "while_carried": false
         }
       ],
       "on_tick": [
