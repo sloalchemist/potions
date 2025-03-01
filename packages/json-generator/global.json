@@ -872,8 +872,8 @@
       ]
     },
     {
-      "name": "Blaststone",
-      "type": "blaststone",
+      "name": "Rock Chunk 2-1",
+      "type": "rock-chunk-2-1",
       "description": "A stone with a high content of gunpowder",
       "carryable": false,
       "walkable": false,

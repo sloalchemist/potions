@@ -840,8 +840,8 @@
             ]
         },
         {
-            "name": "Blaststone",
-            "type": "blaststone",
+            "name": "Rock Chunk 2-1",
+            "type": "rock-chunk-2-1",
             "carryable": false,
             "walkable": false,
             "interactions": [],
