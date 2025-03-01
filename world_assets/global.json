@@ -631,6 +631,13 @@
             ]
         },
         {
+            "name": "Shipwreck",
+            "type": "shipwreck",
+            "carryable": false,
+            "walkable": false,
+            "interactions": []
+        },
+        {
             "name": "Volcano",
             "type": "volcano",
             "carryable": false,
