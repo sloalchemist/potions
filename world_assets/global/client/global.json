@@ -937,7 +937,13 @@
             "carryable": false,
             "walkable": true,
             "flat": true,
-            "interactions": [],
+            "interactions": [
+                {
+                    "description": "Enter portal",
+                    "action": "enter",
+                    "while_carried": false
+                }
+            ],
             "on_tick": [
                 {
                     "action": "spawn_mob",
@@ -993,10 +999,9 @@
                 {
                     "description": "Add $item_name",
                     "action": "add_item",
-                    "while_carried": true,
+                    "while_carried": false,
                     "permissions": {
-                        "community": false,
-                        "character": true,
+                        "community": true,
                         "other": false
                     }
                 },
@@ -1012,8 +1017,7 @@
                         }
                     ],
                     "permissions": {
-                        "community": false,
-                        "character": true,
+                        "community": true,
                         "other": false
                     }
                 },
@@ -1029,8 +1033,7 @@
                         }
                     ],
                     "permissions": {
-                        "community": false,
-                        "character": true,
+                        "community": true,
                         "other": false
                     }
                 },
@@ -1046,8 +1049,7 @@
                         }
                     ],
                     "permissions": {
-                        "community": false,
-                        "character": true,
+                        "community": true,
                         "other": false
                     }
                 },
@@ -1063,8 +1065,7 @@
                         }
                     ],
                     "permissions": {
-                        "community": false,
-                        "character": true,
+                        "community": true,
                         "other": false
                     }
                 },
@@ -1078,12 +1079,133 @@
                             "value": 0,
                             "comparison": "greater_than"
                         }
+                    ]
+                },
+                {
+                    "description": "Add $item_name",
+                    "action": "add_item",
+                    "while_carried": false,
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Get $item_name",
+                    "action": "get_item",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "items",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
                     ],
                     "permissions": {
                         "community": true,
-                        "character": false,
-                        "other": true
+                        "other": false
                     }
+                },
+                {
+                    "description": "Raise price",
+                    "action": "raise_price",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "price",
+                            "value": 99,
+                            "comparison": "less_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Lower price",
+                    "action": "lower_price",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "price",
+                            "value": 1,
+                            "comparison": "greater_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Collect gold",
+                    "action": "collect_gold",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "gold",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Purchase potion",
+                    "action": "purchase",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "items",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ]
+                },
+                {
+                    "description": "Add $item_name",
+                    "action": "add_item",
+                    "while_carried": false
+                },
+                {
+                    "description": "Raise price",
+                    "action": "raise_price",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "price",
+                            "value": 99,
+                            "comparison": "less_than"
+                        }
+                    ]
+                },
+                {
+                    "description": "Lower price",
+                    "action": "lower_price",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "price",
+                            "value": 1,
+                            "comparison": "greater_than"
+                        }
+                    ]
+                },
+                {
+                    "description": "Collect gold",
+                    "action": "collect_gold",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "gold",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ]
                 },
                 {
                     "description": "Destroy stand",
@@ -1205,7 +1327,6 @@
                     ],
                     "permissions": {
                         "community": true,
-                        "character": true,
                         "other": false
                     }
                 },
@@ -1215,7 +1336,6 @@
                     "while_carried": false,
                     "permissions": {
                         "community": true,
-                        "character": true,
                         "other": false
                     }
                 }

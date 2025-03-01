@@ -39,9 +39,10 @@ async function initializeAsync() {
   }
 
   console.log(`loading world ${worldID}`);
-  const worldSpecificData = await fetch(
+  const worldDataResponse = await fetch(
     `https://potions.gg/world_assets/${worldID}/server/world_specific.json`
   );
+  const worldSpecificData = await worldDataResponse.json();
 
   try {
     await downloadData(supabase, worldID);
