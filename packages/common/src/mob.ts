@@ -15,4 +15,5 @@ export type MobI = {
   attributes: Record<string, number>;
   unlocks: string[];
   doing: string;
+  favorabilities: Record<string, number>;
 };

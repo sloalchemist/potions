@@ -65,6 +65,7 @@ export class UxScene extends Phaser.Scene {
   defenseText: Phaser.GameObjects.Text | null = null;
   speedText: Phaser.GameObjects.Text | null = null;
   affiliationText: Phaser.GameObjects.Text | null = null;
+  favorabilitiesText: Phaser.GameObjects.Text | null = null;
   stubbornnessText: Phaser.GameObjects.Text | null = null;
   braveryText: Phaser.GameObjects.Text | null = null;
   aggressionText: Phaser.GameObjects.Text | null = null;
@@ -348,6 +349,17 @@ export class UxScene extends Phaser.Scene {
         'Date: reading position of sun and stars'
       );
       this.infoContainer.add(this.dateText);
+      console.log('Favorabilities:');
+      console.log(currentCharacter.favorabilities);
+      this.favorabilitiesText = this.add.text(
+        15,
+        250,
+        'Favorabilities:\n' +
+          Object.entries(currentCharacter.favorabilities)
+            .map(([community, value]) => `${community}: ${value}`)
+            .join('\n') // Formats each key-value pair on a new line
+      );
+      this.infoContainer.add(this.favorabilitiesText);
 
       // Color pickers
       const colors = ['Eye Color', 'Belly Color', 'Fur Color'];
@@ -773,6 +785,12 @@ export class UxScene extends Phaser.Scene {
       this.sleepyText?.setText('Sleepy: ' + currentCharacter.sleepy);
       this.extroversionText?.setText(
         'Extroversion: ' + currentCharacter.extroversion
+      );
+      this.favorabilitiesText?.setText(
+        'Favorabilities:\n' +
+          Object.entries(currentCharacter.favorabilities)
+            .map(([community, value]) => `${community}: ${value}`)
+            .join('\n')
       );
       this.refreshInventoryStats();
     }

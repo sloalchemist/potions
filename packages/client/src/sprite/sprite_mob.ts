@@ -49,6 +49,7 @@ export class SpriteMob extends Mob {
       mob.position,
       mob.attributes,
       mob.personalities,
+      mob.favorabilities,
       mob.community_id
     );
     this.scene = scene;
