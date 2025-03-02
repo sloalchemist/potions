@@ -40,6 +40,7 @@ describe('Community ownership based interactions', () => {
       playerPos,
       {},
       {},
+      {},
       'alchemists'
     );
     world.mobs[publicCharacterId] = player;

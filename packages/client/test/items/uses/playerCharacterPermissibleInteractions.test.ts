@@ -41,6 +41,7 @@ describe('Character ownership based interactions', () => {
       ownerPos,
       {},
       {},
+      {},
       ownerCommunity
     );
     world.mobs[ownerId] = owner;

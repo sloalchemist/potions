@@ -65,6 +65,7 @@ export class UxScene extends Phaser.Scene {
   defenseText: Phaser.GameObjects.Text | null = null;
   speedText: Phaser.GameObjects.Text | null = null;
   affiliationText: Phaser.GameObjects.Text | null = null;
+  favorabilitiesText: Phaser.GameObjects.Text | null = null;
   stubbornnessText: Phaser.GameObjects.Text | null = null;
   braveryText: Phaser.GameObjects.Text | null = null;
   aggressionText: Phaser.GameObjects.Text | null = null;
@@ -100,6 +101,7 @@ export class UxScene extends Phaser.Scene {
   fightContainer: Phaser.GameObjects.Container | null = null;
   recipeContainer: Phaser.GameObjects.Container | null = null;
   effectsContainer: Phaser.GameObjects.Container | null = null;
+  favorabilitiesContainer: Phaser.GameObjects.Container | null = null;
 
   chatSounds: Phaser.Sound.BaseSound[] = [];
   inventoryContainer: Phaser.GameObjects.Container | null = null;
@@ -174,6 +176,7 @@ export class UxScene extends Phaser.Scene {
     this.recipeContainer = this.add.container(0, 40);
     this.effectsContainer = this.add.container(0, 40);
     this.inventoryContainer = this.add.container(0, 40);
+    this.favorabilitiesContainer = this.add.container(0, 40);
 
     const tabWidth = 104;
     const tabHeight = 40;
@@ -417,6 +420,16 @@ export class UxScene extends Phaser.Scene {
 
       this.fightText = this.add.text(160, 35, 'Items / FIGHT');
       this.fightContainer.add(this.fightText);
+
+      this.favorabilitiesText = this.add.text(
+        15,
+        40,
+        'Favorabilities:\n' +
+          Object.entries(currentCharacter.favorabilities)
+            .map(([community, value]) => `${community}: ${value}`)
+            .join('\n') // Formats each key-value pair on a new line
+      );
+      this.favorabilitiesContainer.add(this.favorabilitiesText);
 
       // recipe text
       this.recipeText = this.add.text(160, 35, 'POTION RECIPES');
@@ -670,7 +683,7 @@ export class UxScene extends Phaser.Scene {
             ]);*/
     }
 
-    const menuKeys = ['1', '2', '3', '4', 'r', '@'];
+    const menuKeys = ['1', '2', '3', '4', 'r', 'f', '@'];
 
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       const curKey = event.key.toLowerCase();
@@ -713,6 +726,10 @@ export class UxScene extends Phaser.Scene {
             case 'r':
               this.showRecipeTab();
               console.log('Pressed R');
+              break;
+            case 'f':
+              this.showFavorabilitiesTab();
+              console.log('Pressed F');
               break;
             default:
               console.log('Other key pressed');
@@ -774,6 +791,12 @@ export class UxScene extends Phaser.Scene {
       this.extroversionText?.setText(
         'Extroversion: ' + currentCharacter.extroversion
       );
+      this.favorabilitiesText?.setText(
+        'Favorabilities:\n' +
+          Object.entries(currentCharacter.favorabilities)
+            .map(([community, value]) => `${community}: ${value}`)
+            .join('\n')
+      );
       this.refreshInventoryStats();
     }
   }
@@ -795,6 +818,7 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -813,6 +837,7 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(true);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -831,6 +856,7 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -849,6 +875,7 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(true);
+    this.favorabilitiesContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -867,8 +894,27 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.updateTabStyles('handbook');
+  }
+
+  showFavorabilitiesTab() {
+    this.infoContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.handbookNextButton?.setVisible(false);
+    this.handbookBackButton?.setVisible(false);
+    this.actionNextButton?.setVisible(false);
+    this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(true);
+    this.setInteractions(currentInteractions);
+    this.scene.stop('BrewScene');
+    this.inventoryContainer?.setVisible(false);
+    this.updateTabStyles('favorabilities');
   }
 
   // Method to show the Page Flips
@@ -884,6 +930,7 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(true);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.updateTabStyles('handbook');
   }
@@ -900,12 +947,19 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
     this.updateTabStyles('inventory');
   }
 
   // Update the styles of the tab buttons based on the active tab
   updateTabStyles(
-    activeTab: 'player' | 'actions' | 'chat' | 'inventory' | 'handbook'
+    activeTab:
+      | 'player'
+      | 'actions'
+      | 'chat'
+      | 'inventory'
+      | 'handbook'
+      | 'favorabilities'
   ) {
     if (
       this.actionsTabButton &&

@@ -11,6 +11,7 @@ import { ItemAttributeData, ItemData } from '../../items/item';
 import { Mob, MobData } from '../../mobs/mob';
 import { FantasyDate } from '../../date/fantasyDate';
 import { Personality, Personalities } from '../../mobs/traits/personality';
+import { Community } from '../../community/community';
 
 export function getHousesAbly(): HouseI[] {
   const houseDatas = DB.prepare(
@@ -76,6 +77,7 @@ function mobDataToMob(mobData: MobData): MobI {
       attack: mobData.attack,
       defense: mobData.defense
     },
+    favorabilities: mobData.favorabilities,
     unlocks: mobData.community_id ? [mobData.community_id] : [],
     doing: mobData.current_action
   };
@@ -143,6 +145,10 @@ export function getMobsAbly(): MobI[] {
       sleepy: personalityData?.sleepy ?? 0,
       extroversion: personalityData?.extroversion ?? 0
     });
+
+    mobData.favorabilities = Community.getAllFavorsForCommunity(
+      mobData.community_id
+    );
 
     return mobDataToMob(mobData);
   });
@@ -231,6 +237,10 @@ export function getMobAbly(key: string): MobI {
     sleepy: personalityData.sleepy ?? 0,
     extroversion: personalityData.extroversion ?? 0
   });
+
+  mobData.favorabilities = Community.getAllFavorsForCommunity(
+    mobData.community_id
+  );
 
   return mobDataToMob(mobData);
 }

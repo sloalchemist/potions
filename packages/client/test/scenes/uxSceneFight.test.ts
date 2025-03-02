@@ -66,6 +66,7 @@ describe('Fight UI updates based on fighting state', () => {
       100,
       { x: 1, y: 1 },
       {},
+      {},
       {}
     );
     const npc1 = new Mob(
@@ -75,6 +76,7 @@ describe('Fight UI updates based on fighting state', () => {
       'npc',
       100,
       { x: 2, y: 2 },
+      {},
       {},
       {}
     );
@@ -108,6 +110,7 @@ describe('Fight UI updates based on fighting state', () => {
       100,
       { x: 1, y: 1 },
       {},
+      {},
       {}
     );
     const npc = new Mob(
@@ -117,6 +120,7 @@ describe('Fight UI updates based on fighting state', () => {
       'npc',
       100,
       { x: 2, y: 2 },
+      {},
       {},
       {}
     );
@@ -144,6 +148,7 @@ describe('Fight UI updates based on fighting state', () => {
       100,
       { x: 1, y: 1 },
       {},
+      {},
       {}
     );
     const npc1 = new Mob(
@@ -153,6 +158,7 @@ describe('Fight UI updates based on fighting state', () => {
       'npc',
       100,
       { x: 2, y: 2 },
+      {},
       {},
       {}
     );
@@ -174,6 +180,7 @@ describe('Fight UI updates based on fighting state', () => {
       'npc',
       100,
       { x: 3, y: 3 },
+      {},
       {},
       {}
     );
