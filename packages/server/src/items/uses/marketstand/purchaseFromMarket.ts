@@ -18,14 +18,10 @@ export class PurchaseFromMarket implements Use {
     const marketStand = MarketStand.fromItem(item);
     if (!marketStand) return false;
 
-    // Example logic: Assume the player is buying the first available item type
-    const inventory = marketStand.getInventory();
-    const availableItemType = Object.keys(inventory).find(
-      (type) => inventory[type] > 0
-    );
+    // Get the item type from the stand (since it only stores one type at a time)
+    const itemType = marketStand.getItemType();
+    if (!itemType) return false;
 
-    if (!availableItemType) return false;
-
-    return marketStand.purchaseItem(mob, availableItemType);
+    return marketStand.purchaseItem(mob, itemType);
   }
 }
