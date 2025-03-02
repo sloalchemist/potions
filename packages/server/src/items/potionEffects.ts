@@ -5,6 +5,8 @@ import {
   perceptualColorDistance,
   hexStringToNumber
 } from '../util/colorUtil';
+import { Item } from './item';
+import { Smashable } from './smashable';
 
 interface ColorDict {
   [key: string]: string;
@@ -98,8 +100,37 @@ export function drinkPotion(
       mob.spawnMonster(monsterDuration);
       return true;
     case '#614f79':
-      let close_ids = mob.findNClosestObjectIDs(['basket', 'potion-stand'], Infinity, 2)
-      return true
+      console.log('Drinking bomb potion');
+      let nearbyObjects = mob.findNClosestObjectIDs([], Infinity, 3) || [];
+      let nearbyMobs = mob.findNearbyMobIDs(3) || [];
+  
+      // destroy all nearby objects
+      nearbyObjects.forEach(id => {
+          const item = Item.getItem(id);
+          if (item) {
+              const smashable = Smashable.fromItem(item);
+              if (smashable) { // if smashable item, function that has extra side effects (drops loot)
+                  smashable.destroySmashable();
+              }
+              item.destroy(); // either way, remove from game world
+          } else {
+              console.log(`Invalid item ID: ${id}`);
+          }
+      });
+  
+      // destroy all nearby mobs
+      nearbyMobs.forEach(mobID => {
+          const mobToDestroy = Mob.getMob(mobID);
+          if (mobToDestroy) {
+              mobToDestroy.destroy();
+          } else {
+              console.log(`Invalid mob ID: ${mobID}`);
+          }
+      });
+  
+      return true;
+  
+  
     default:
       // handle cases where potionStr doesn't match any known potion
 

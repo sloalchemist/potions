@@ -353,16 +353,25 @@ export class Mob {
     maxDistance: number = Infinity
   ): string[] | undefined {
     const maxDistanceSquared = maxDistance * maxDistance;
-    const typesList = types.map((type) => `'${type}'`).join(', ');
-    const query = `
-            SELECT 
-                id
-            FROM items
-            WHERE type IN (${typesList})
-            AND ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :maxDistanceSquared
-            ORDER BY ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) ASC
-            LIMIT :maxNum
-        `;
+
+    // base query
+    let query = `
+        SELECT id
+        FROM items
+        WHERE ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :maxDistanceSquared
+    `;
+
+    // add filter for types only if inputted
+    if (types.length > 0) {
+        const typesList = types.map((type) => `'${type}'`).join(', ');
+        query += ` AND type IN (${typesList})`;
+    }
+
+    // finish the query regardless of type filter
+    query += ` ORDER BY ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) ASC
+               LIMIT :maxNum`;
+
+    // execute the query
     const result = DB.prepare(query).all({
       x: this.position.x,
       y: this.position.y,
