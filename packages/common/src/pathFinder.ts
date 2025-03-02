@@ -349,7 +349,7 @@ export class PathFinder {
    *
    * @throws If no walkable tile is found.
    */
-  private findNearestWalkableTile(target: Coord): Coord {
+  private findNearestWalkableTile(start: Coord, target: Coord): Coord {
     const directions = [
       { x: 1, y: 0 },
       { x: -1, y: 0 },
@@ -371,11 +371,26 @@ export class PathFinder {
         return current;
       }
 
+      // Find all neighbors
+      const neighbors: Coord[] = [];
       for (const direction of directions) {
         const neighbor = {
           x: current.x + direction.x,
           y: current.y + direction.y
         };
+        neighbors.push(neighbor);
+      }
+
+      // Sort by proximity to player, allowing for closest neighbors to be looked at first
+      neighbors.sort((coord1, coord2) => {
+        const dist1 =
+          Math.pow(start.x - coord1.x, 2) + Math.pow(start.y - coord1.y, 2);
+        const dist2 =
+          Math.pow(start.x - coord2.x, 2) + Math.pow(start.y - coord2.y, 2);
+        return dist1 - dist2;
+      });
+
+      for (const neighbor of neighbors) {
         const neighborKey = `${neighbor.x},${neighbor.y}`;
 
         if (!visited.has(neighborKey)) {
@@ -425,7 +440,7 @@ export class PathFinder {
 
     if (!fuzzy && !this.isWalkable(unlocks, end.x, end.y)) {
       try {
-        end = this.findNearestWalkableTile(end);
+        end = this.findNearestWalkableTile(start, end);
       } catch {
         // Return an empty path if no walkable tile is found
         return [];
