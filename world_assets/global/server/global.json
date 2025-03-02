@@ -526,6 +526,11 @@
                     "action": "build_wall",
                     "while_carried": true,
                     "requires_item": "partial-wall"
+                },
+                {
+                    "description": "Create Market",
+                    "action": "create_market",
+                    "while_carried": true
                 }
             ]
         },
@@ -641,6 +646,13 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "Shipwreck",
+            "type": "shipwreck",
+            "carryable": false,
+            "walkable": false,
+            "interactions": []
         },
         {
             "name": "Volcano",
