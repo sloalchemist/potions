@@ -110,6 +110,7 @@
         { "type": "pebbles-1", "coord": { "x": 9, "y": 7 } },
         { "type": "pebbles-1", "coord": { "x": 7, "y": 10 } },
         { "type": "mushroom-1", "coord": { "x": 9, "y": 11 } },
+        { "type": "cloud", "coord": { "x": 19, "y": 40 } },
         { "type": "mushroom-1", "coord": { "x": 7, "y": 15 } },
         { "type": "pebbles-1", "coord": { "x": 17, "y": 29 } },
         { "type": "pebbles-1", "coord": { "x": 21, "y": 30 } },
