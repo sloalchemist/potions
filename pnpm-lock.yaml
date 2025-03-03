@@ -235,7 +235,7 @@ importers:
   packages/converse:
     dependencies:
       '@rt-potion/converse':
-        specifier: 'link:'
+        specifier: 'file:'
         version: 'link:'
       '@supabase/supabase-js':
         specifier: ^2.44.2
@@ -291,6 +291,10 @@ importers:
         version: 5.7.3
 
   packages/json-generator:
+    dependencies:
+      '@rt-potion/json-generator':
+        specifier: 'file:'
+        version: 'link:'
     devDependencies:
       '@types/node':
         specifier: ^22.13.4
