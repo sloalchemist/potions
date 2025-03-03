@@ -354,6 +354,23 @@ export class AblyService implements PubSub {
     });
   }
 
+  public changeFavorability(key: string, favor: number): void {
+    if (key == undefined || favor == undefined) {
+      throw new Error(
+        `Sending invalid changeFavorability message ${key}, ${favor}`
+      );
+    }
+    this.addToBroadcast({
+      type: 'mob_change',
+      data: {
+        id: key,
+        property: 'favorability',
+        delta: favor,
+        new_value: favor
+      }
+    });
+  }
+
   public changeFavoriteItem(key: string, item: string): void {
     if (key == undefined || item == undefined) {
       throw new Error(`Sending invalid changeSpeed message ${key}, ${item}`);

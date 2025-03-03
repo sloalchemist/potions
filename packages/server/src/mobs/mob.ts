@@ -41,6 +41,7 @@ export type MobData = {
   carrying_id: string;
   community_id: string;
   favorite_item: string;
+  favorabilities: Record<string, number>;
 };
 
 interface MobParams {
@@ -59,6 +60,7 @@ interface MobParams {
   subtype: string;
   currentAction?: string;
   carrying?: string;
+  favorabilities?: Record<string, number>;
   path: Coord[];
   target?: Coord;
 }
@@ -943,6 +945,7 @@ export class Mob {
       subtype: mob.subtype,
       currentAction: mob.current_action,
       carrying: mob.carrying_id,
+      favorabilities: mob.favorabilities,
       path: mob.path ? JSON.parse(mob.path) : [],
       target:
         mob.target_x && mob.target_y

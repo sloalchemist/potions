@@ -38,6 +38,7 @@ describe('Community ownership based interactions', () => {
       playerPos,
       {},
       {},
+      {},
       'alchemists'
     );
     world.mobs[publicCharacterId] = player;
@@ -140,6 +141,11 @@ describe('Community ownership based interactions', () => {
           action: 'build_wall',
           while_carried: true,
           requires_item: 'partial-wall'
+        },
+        {
+          description: 'Create Market',
+          action: 'create_market',
+          while_carried: true
         }
       ]
     };

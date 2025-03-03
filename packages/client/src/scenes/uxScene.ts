@@ -65,6 +65,9 @@ export class UxScene extends Phaser.Scene {
   defenseText: Phaser.GameObjects.Text | null = null;
   speedText: Phaser.GameObjects.Text | null = null;
   affiliationText: Phaser.GameObjects.Text | null = null;
+  favorabilitiesText: Phaser.GameObjects.Text | null = null;
+  keybindGuideText: Phaser.GameObjects.Text | null = null;
+  keybindManualText: Phaser.GameObjects.Text | null = null;
   stubbornnessText: Phaser.GameObjects.Text | null = null;
   braveryText: Phaser.GameObjects.Text | null = null;
   aggressionText: Phaser.GameObjects.Text | null = null;
@@ -100,6 +103,8 @@ export class UxScene extends Phaser.Scene {
   fightContainer: Phaser.GameObjects.Container | null = null;
   recipeContainer: Phaser.GameObjects.Container | null = null;
   effectsContainer: Phaser.GameObjects.Container | null = null;
+  favorabilitiesContainer: Phaser.GameObjects.Container | null = null;
+  keybindGuideContainer: Phaser.GameObjects.Container | null = null;
 
   chatSounds: Phaser.Sound.BaseSound[] = [];
   inventoryContainer: Phaser.GameObjects.Container | null = null;
@@ -174,6 +179,8 @@ export class UxScene extends Phaser.Scene {
     this.recipeContainer = this.add.container(0, 40);
     this.effectsContainer = this.add.container(0, 40);
     this.inventoryContainer = this.add.container(0, 40);
+    this.favorabilitiesContainer = this.add.container(0, 40);
+    this.keybindGuideContainer = this.add.container(0, 40);
 
     const tabWidth = 104;
     const tabHeight = 40;
@@ -349,6 +356,13 @@ export class UxScene extends Phaser.Scene {
       );
       this.infoContainer.add(this.dateText);
 
+      this.keybindManualText = this.add.text(
+        15,
+        265,
+        'Press "k" For Keybind Guide'
+      );
+      this.infoContainer.add(this.keybindManualText);
+
       // Color pickers
       const colors = ['Eye Color', 'Belly Color', 'Fur Color'];
       const colorKeys = ['eyeColor', 'bellyColor', 'furColor'];
@@ -417,6 +431,45 @@ export class UxScene extends Phaser.Scene {
 
       this.fightText = this.add.text(160, 35, 'Items / FIGHT');
       this.fightContainer.add(this.fightText);
+
+      this.favorabilitiesText = this.add.text(
+        15,
+        40,
+        'Favorabilities:\n' +
+          Object.entries(currentCharacter.favorabilities)
+            .map(([community, value]) => `${community}: ${value}`)
+            .join('\n') // Formats each key-value pair on a new line
+      );
+      this.favorabilitiesContainer.add(this.favorabilitiesText);
+
+      // keybind manual
+      this.keybindGuideText = this.add.text(160, 35, 'KeyBinds Manual');
+      this.keybindGuideContainer.add(this.keybindGuideText);
+      this.keybindGuideContainer.add(this.add.text(30, 70, 'W: Move Up'));
+      this.keybindGuideContainer.add(this.add.text(30, 95, 'A: Move Left'));
+      this.keybindGuideContainer.add(this.add.text(30, 120, 'S: Move Down'));
+      this.keybindGuideContainer.add(this.add.text(30, 145, 'D: Move Right'));
+      this.keybindGuideContainer.add(this.add.text(30, 170, '1: Info Tab'));
+      this.keybindGuideContainer.add(this.add.text(30, 195, '2: Items Tab'));
+      this.keybindGuideContainer.add(this.add.text(30, 220, '3: Chat Tab'));
+      this.keybindGuideContainer.add(
+        this.add.text(30, 245, '4: Inventory Tab')
+      );
+      this.keybindGuideContainer.add(
+        this.add.text(200, 70, 'Shift + 2: Fight Tab')
+      );
+      this.keybindGuideContainer.add(
+        this.add.text(200, 95, 'Shift + R: Next Tab Tab')
+      );
+      this.keybindGuideContainer.add(
+        this.add.text(200, 120, 'K: Keybind Manual')
+      );
+      this.keybindGuideContainer.add(
+        this.add.text(200, 145, 'R: Potion Recipe Handbook')
+      );
+      this.keybindGuideContainer.add(
+        this.add.text(200, 170, 'F: Favorability Stats')
+      );
 
       // recipe text
       this.recipeText = this.add.text(160, 35, 'POTION RECIPES');
@@ -670,7 +723,7 @@ export class UxScene extends Phaser.Scene {
             ]);*/
     }
 
-    const menuKeys = ['1', '2', '3', '4', 'r', '@'];
+    const menuKeys = ['1', '2', '3', '4', 'r', 'f', 'k', '@'];
 
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       const curKey = event.key.toLowerCase();
@@ -713,6 +766,14 @@ export class UxScene extends Phaser.Scene {
             case 'r':
               this.showRecipeTab();
               console.log('Pressed R');
+              break;
+            case 'f':
+              this.showFavorabilitiesTab();
+              console.log('Pressed F');
+              break;
+            case 'k':
+              this.showKeyBindGuideTab();
+              console.log('Pressed K');
               break;
             default:
               console.log('Other key pressed');
@@ -774,6 +835,13 @@ export class UxScene extends Phaser.Scene {
       this.extroversionText?.setText(
         'Extroversion: ' + currentCharacter.extroversion
       );
+      this.favorabilitiesText?.setText(
+        'Favorabilities:\n' +
+          Object.entries(currentCharacter.favorabilities)
+            .map(([community, value]) => `${community}: ${value}`)
+            .join('\n')
+      );
+      this.refreshInventoryStats();
     }
   }
 
@@ -794,6 +862,8 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
+    this.keybindGuideContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -812,6 +882,8 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(true);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
+    this.keybindGuideContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -830,6 +902,8 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
+    this.keybindGuideContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -848,6 +922,8 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(true);
+    this.favorabilitiesContainer?.setVisible(false);
+    this.keybindGuideContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.scene.stop('BrewScene');
     this.inventoryContainer?.setVisible(false);
@@ -866,8 +942,47 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
+    this.keybindGuideContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.updateTabStyles('handbook');
+  }
+
+  showFavorabilitiesTab() {
+    this.infoContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.handbookNextButton?.setVisible(false);
+    this.handbookBackButton?.setVisible(false);
+    this.actionNextButton?.setVisible(false);
+    this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(true);
+    this.keybindGuideContainer?.setVisible(false);
+    this.setInteractions(currentInteractions);
+    this.scene.stop('BrewScene');
+    this.inventoryContainer?.setVisible(false);
+    this.updateTabStyles('favorabilities');
+  }
+
+  showKeyBindGuideTab() {
+    this.infoContainer?.setVisible(false);
+    this.itemsContainer?.setVisible(false);
+    this.chatContainer?.setVisible(false);
+    this.fightContainer?.setVisible(false);
+    this.recipeContainer?.setVisible(false);
+    this.effectsContainer?.setVisible(false);
+    this.handbookNextButton?.setVisible(false);
+    this.handbookBackButton?.setVisible(false);
+    this.actionNextButton?.setVisible(false);
+    this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
+    this.keybindGuideContainer?.setVisible(true);
+    this.setInteractions(currentInteractions);
+    this.inventoryContainer?.setVisible(false);
+    this.updateTabStyles('key-manual');
   }
 
   // Method to show the Page Flips
@@ -883,6 +998,8 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(true);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
+    this.keybindGuideContainer?.setVisible(false);
     this.setInteractions(currentInteractions);
     this.updateTabStyles('handbook');
   }
@@ -899,12 +1016,21 @@ export class UxScene extends Phaser.Scene {
     this.handbookBackButton?.setVisible(false);
     this.actionNextButton?.setVisible(false);
     this.actionBackButton?.setVisible(false);
+    this.favorabilitiesContainer?.setVisible(false);
+    this.keybindGuideContainer?.setVisible(false);
     this.updateTabStyles('inventory');
   }
 
   // Update the styles of the tab buttons based on the active tab
   updateTabStyles(
-    activeTab: 'player' | 'actions' | 'chat' | 'inventory' | 'handbook'
+    activeTab:
+      | 'player'
+      | 'actions'
+      | 'chat'
+      | 'inventory'
+      | 'handbook'
+      | 'favorabilities'
+      | 'key-manual'
   ) {
     if (
       this.actionsTabButton &&
