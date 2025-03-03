@@ -197,7 +197,7 @@ export class Mob {
 
     if (!mob) {
       console.error(`Mob with id ${this.id} not found`);
-      return 0;  // Return a default value or handle it differently
+      return 0; // Return a default value or handle it differently
     }
     return mob.poisoned;
   }
