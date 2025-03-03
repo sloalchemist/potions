@@ -146,7 +146,7 @@
               { "type": "starfish", "coord": { "x": 20, "y": 2 } },
               { "type": "starfish", "coord": { "x": 22, "y": 3 } },
               { "type": "starfish", "coord": { "x": 26, "y": 2 } },
-              { "type": "volcano", "coord": { "x": 8, "y": 43 } }
+              { "type": "volcano", "coord": { "x": 16, "y": 24 } }
           ],
       "regions": [
         {
