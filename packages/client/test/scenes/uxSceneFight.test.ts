@@ -57,7 +57,7 @@ describe('Fight UI updates based on fighting state', () => {
     setFightOpponentCallback(mockFightCallback);
   });
 
-  test('triggers callback after chatting', () => {
+  test('triggers callback after fighting', () => {
     const player1 = new Mob(
       world!,
       'mob1',
@@ -81,11 +81,13 @@ describe('Fight UI updates based on fighting state', () => {
       {}
     );
     const mobs = [player1, npc1];
+
+    // Set the expected order based on distance
     const expectedFilteredMobs = [npc1];
 
     mobRangeListener(mobs);
 
-    // start chatting
+    // start fighting
     setFighting(true);
 
     // conversation ends
@@ -130,6 +132,7 @@ describe('Fight UI updates based on fighting state', () => {
 
     mobRangeListener(mobs);
 
+    // Expected closest mob (based on distance from player)
     const expectedFilteredMobs = [npc];
     expect(mockFightCallback).toHaveBeenCalledWith(expectedFilteredMobs);
 
@@ -167,6 +170,7 @@ describe('Fight UI updates based on fighting state', () => {
     setFighting(false);
     mobRangeListener(mobs);
 
+    // The expected order after sorting by distance (npc1 is closest)
     const expectedFilteredMobs = [npc1];
     expect(mockFightCallback).toHaveBeenCalledWith(expectedFilteredMobs);
 
@@ -187,6 +191,7 @@ describe('Fight UI updates based on fighting state', () => {
     mobs = [player1, npc1, npc2];
     mobRangeListener(mobs);
 
+    // Expected order: npc1, npc2 (sorted by distance)
     const updatedFilteredMobs = [npc1, npc2];
     expect(mockFightCallback).toHaveBeenCalledWith(updatedFilteredMobs);
   });

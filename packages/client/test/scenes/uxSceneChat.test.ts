@@ -11,7 +11,6 @@ describe('Chat UI updates based on chatting state', () => {
   let mockChatCallback: jest.Mock;
 
   beforeAll(() => {
-    // Initialize world
     world = new World();
     world.load({
       tiles: [
@@ -26,34 +25,6 @@ describe('Chat UI updates based on chatting state', () => {
   });
 
   beforeEach(() => {
-    jest.mock('../../src/scenes/pauseScene', () => ({
-      PauseScene: class MockPauseScene {}
-    }));
-
-    jest.mock('phaser', () => ({
-      Scene: class MockScene {
-        key: string;
-
-        constructor(config: { key: string }) {
-          this.key = config.key;
-        }
-
-        add = {
-          graphics: () => ({
-            fillStyle: jest.fn((e) => e).mockReturnThis(),
-            fillRect: jest.fn((e) => e)
-          })
-        };
-
-        game = {
-          scale: {
-            width: 800,
-            height: 600
-          }
-        };
-      }
-    }));
-
     mockChatCallback = jest.fn();
     setChatCompanionCallback(mockChatCallback);
   });
@@ -82,15 +53,15 @@ describe('Chat UI updates based on chatting state', () => {
       {}
     );
     const mobs = [player1, npc1];
+
+    // Set the expected order based on distance
     const expectedFilteredMobs = [npc1];
 
     mobRangeListener(mobs);
 
-    // start chatting
-    setChatting(true);
+    setChatting(true); // Start chatting
 
-    // conversation ends
-    setChatting(false);
+    setChatting(false); // Conversation ends
     mobRangeListener(mobs);
 
     setChatting(true);
@@ -98,6 +69,7 @@ describe('Chat UI updates based on chatting state', () => {
     setChatting(false);
     mobRangeListener(mobs);
 
+    // Expect callback to be called 3 times and check the closest mobs
     expect(mockChatCallback).toHaveBeenCalledTimes(3);
     expect(mockChatCallback).toHaveBeenCalledWith(expectedFilteredMobs);
   });
@@ -131,6 +103,7 @@ describe('Chat UI updates based on chatting state', () => {
 
     mobRangeListener(mobs);
 
+    // Expected closest mob (based on distance from player)
     const expectedFilteredMobs = [npc];
     expect(mockChatCallback).toHaveBeenCalledWith(expectedFilteredMobs);
 
@@ -168,6 +141,7 @@ describe('Chat UI updates based on chatting state', () => {
     setChatting(false);
     mobRangeListener(mobs);
 
+    // The expected order after sorting by distance (npc1 is closest)
     const expectedFilteredMobs = [npc1];
     expect(mockChatCallback).toHaveBeenCalledWith(expectedFilteredMobs);
 
@@ -188,6 +162,7 @@ describe('Chat UI updates based on chatting state', () => {
     mobs = [player1, npc1, npc2];
     mobRangeListener(mobs);
 
+    // Expected order: npc1, npc2 (sorted by distance)
     const updatedFilteredMobs = [npc1, npc2];
     expect(mockChatCallback).toHaveBeenCalledWith(updatedFilteredMobs);
   });
