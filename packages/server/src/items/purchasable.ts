@@ -58,8 +58,8 @@ export class Purchasable {
     }
 
     // Get favorability
-    const ownedBy = this.item.owned_by ?? '';
-    const favor = Community.getFavor(mob.community_id, ownedBy);
+    const ownedByCommunity = this.item.owned_by_community ?? '';
+    const favor = Community.getFavor(mob.community_id, ownedByCommunity);
 
     // Base price settings
     const baseMaxPrice = 20;

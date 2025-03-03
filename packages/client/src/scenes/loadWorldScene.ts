@@ -38,22 +38,35 @@ export class LoadWorldScene extends Phaser.Scene {
   playerSprite!: Phaser.GameObjects.Sprite;
   paletteSwapper: PaletteSwapper = PaletteSwapper.getInstance();
   lastAnimationKey: string = '';
+  autoStart: boolean = false;
 
   /* 
     Reset lastAnimationKey to the empty string to ensure that in the update function below
     the "if (this.lastAnimationKey === animationKey)" condition is not met.
     This ensures this character rerenders on the screen after game over and restart.
     */
-  init() {
+  init(data: { autoStart: boolean }) {
     this.lastAnimationKey = '';
+    this.autoStart = data.autoStart;
   }
 
   preload() {
     this.load.image('frame', 'static/titleFrame.png');
     this.load.image('title', 'static/title.png');
+
+    // Load menu music
+    this.load.audio('menu_music', 'static/music/menu_music.mp3');
   }
 
   create() {
+    this.sound.add('menu_music', { loop: true, volume: 0.2 }).play();
+
+    // Play menu music
+    if (!this.sound.isPlaying('menu_music')) {
+      // fairy music
+      this.sound.add('menu_music', { loop: true, volume: 0.2 }).play();
+    }
+
     // Add background image
     const background = this.add.image(0, 0, 'title');
     background.setOrigin(0, 0);
@@ -206,7 +219,6 @@ export class LoadWorldScene extends Phaser.Scene {
 
     setupAbly()
       .then((worldID) => {
-        console.log('LOADWORLD: ', worldID);
         setWorldID(worldID);
 
         this.load.atlas(
@@ -243,32 +255,47 @@ export class LoadWorldScene extends Phaser.Scene {
 
         this.load.start();
 
-        // Create 'START!' button
-        loadingMessage.destroy();
-        const startGame = this.add.text(
-          SCREEN_WIDTH / 2,
-          SCREEN_HEIGHT - 75,
-          'START!',
-          buttonStyle
-        );
-        startGame.setOrigin(0.5, 0);
-        startGame.setInteractive({ useHandCursor: true });
-
-        // Hover effects
-        startGame.on('pointerover', () => {
-          startGame.setStyle(nameButtonHoverStyle);
-        });
-        startGame.on('pointerout', () => {
-          startGame.setStyle(buttonStyle);
-        });
-
-        startGame.on('pointerdown', () => {
+        // Skip the start button if traveling through a portal
+        const traveling =
+          sessionStorage.getItem('traveling_through_portal') === 'true';
+        sessionStorage.setItem('traveling_through_portal', 'false');
+        if (traveling) {
           this.scene.start('PauseScene');
           this.scene.start('WorldScene');
           this.scene.start('UxScene');
           this.scene.start('FrameScene');
+          this.scene.start('LeaderboardScene');
           setGameState('worldLoaded');
-        });
+        }
+
+        // Create 'START!' button
+        loadingMessage.destroy();
+
+        if (this.autoStart) {
+          this.startGame();
+        } else {
+          const startGame = this.add.text(
+            SCREEN_WIDTH / 2,
+            SCREEN_HEIGHT - 75,
+            'START!',
+            buttonStyle
+          );
+          startGame.setOrigin(0.5, 0);
+          startGame.setInteractive({ useHandCursor: true });
+
+          // Hover effects
+          startGame.on('pointerover', () => {
+            startGame.setStyle(nameButtonHoverStyle);
+          });
+          startGame.on('pointerout', () => {
+            startGame.setStyle(buttonStyle);
+          });
+
+          startGame.on('pointerdown', () => {
+            this.sound.stopByKey('menu_music');
+            this.startGame();
+          });
+        }
       })
       .catch((_error) => {
         console.error('Error setting up Ably');
@@ -278,8 +305,17 @@ export class LoadWorldScene extends Phaser.Scene {
     //});
   }
 
+  startGame() {
+    this.scene.start('PauseScene');
+    this.scene.start('WorldScene');
+    this.scene.start('UxScene');
+    this.scene.start('FrameScene');
+    this.scene.start('LeaderboardScene');
+    setGameState('worldLoaded');
+  }
+
   update() {
-    if (this.playerSprite) {
+    if (this.playerSprite && this.playerSprite.anims) {
       const eyeColor = currentCharacter!.eyeColor;
       const bellyColor = currentCharacter!.bellyColor;
       const furColor = currentCharacter!.furColor;

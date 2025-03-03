@@ -67,6 +67,7 @@ describe('Chat UI updates based on chatting state', () => {
       100,
       { x: 1, y: 1 },
       {},
+      {},
       {}
     );
     const npc1 = new Mob(
@@ -76,6 +77,7 @@ describe('Chat UI updates based on chatting state', () => {
       'npc',
       100,
       { x: 2, y: 2 },
+      {},
       {},
       {}
     );
@@ -109,6 +111,7 @@ describe('Chat UI updates based on chatting state', () => {
       100,
       { x: 1, y: 1 },
       {},
+      {},
       {}
     );
     const npc = new Mob(
@@ -118,6 +121,7 @@ describe('Chat UI updates based on chatting state', () => {
       'npc',
       100,
       { x: 2, y: 2 },
+      {},
       {},
       {}
     );
@@ -145,6 +149,7 @@ describe('Chat UI updates based on chatting state', () => {
       100,
       { x: 1, y: 1 },
       {},
+      {},
       {}
     );
     const npc1 = new Mob(
@@ -154,6 +159,7 @@ describe('Chat UI updates based on chatting state', () => {
       'npc',
       100,
       { x: 2, y: 2 },
+      {},
       {},
       {}
     );
@@ -175,6 +181,7 @@ describe('Chat UI updates based on chatting state', () => {
       'npc',
       100,
       { x: 3, y: 3 },
+      {},
       {},
       {}
     );

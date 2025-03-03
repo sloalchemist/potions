@@ -1,0 +1,1556 @@
+{
+    "tiles": [],
+    "terrain_types": [],
+    "item_types": [
+        {
+            "name": "Heartbeet",
+            "type": "heart-beet",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#FF0000"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [
+                {
+                    "description": "Eat",
+                    "action": "eat",
+                    "while_carried": true
+                }
+            ],
+            "carryable": true,
+            "on_tick": [],
+            "description": "A vibrant red vegetable that is both nutritious and restorative."
+        },
+        {
+            "name": "Slimeblob",
+            "type": "slime-blob",
+            "description": "blob",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#0000FF"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "blobs"
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Bones",
+            "type": "bones",
+            "description": "bones",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#00FF00"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Lightning Bloom",
+            "type": "lightning-bloom",
+            "description": "bones",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#AA00FF"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "fighters"
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Bomb",
+            "type": "bomb",
+            "description": "bomb",
+            "attributes": [
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Tar",
+            "type": "tar",
+            "description": "tar",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#1B1212"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "fighters"
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Sun Drop",
+            "type": "sun-drop",
+            "description": "sun drop",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#FF8800"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "silverclaw"
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Sands of Time",
+            "type": "sands-of-time",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#808080"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "silverclaw"
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Sunflower",
+            "type": "sunflower",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#FF8800"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "silverclaw"
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Gun Powder",
+            "type": "gun-powder",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#555555"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "fighters"
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Starfish",
+            "type": "starfish",
+            "description": "A gorgeous teal starfish",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#10BFBF"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "blobs"
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [
+                {
+                    "description": "Eat",
+                    "action": "eat",
+                    "while_carried": true
+                }
+            ],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Fireball",
+            "type": "fire-ball",
+            "description": "A spicy and tangy bite that has quite a kick!",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#FF7509"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "blobs"
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [
+                {
+                    "description": "Eat",
+                    "action": "eat",
+                    "while_carried": true
+                }
+            ],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Pearl",
+            "type": "pearl",
+            "description": "A non-edible shiny treasure",
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#FFFFFF"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                },
+                {
+                    "name": "specialized_resource",
+                    "value": "blobs"
+                }
+            ],
+            "walkable": true,
+            "smashable": true,
+            "interactions": [],
+            "carryable": true,
+            "on_tick": []
+        },
+        {
+            "name": "Wall",
+            "type": "wall",
+            "carryable": false,
+            "smashable": true,
+            "attributes": [
+                {
+                    "name": "health",
+                    "value": 100
+                }
+            ],
+            "interactions": [],
+            "walkable": false,
+            "drops_item": "log",
+            "description": "A sturdy structure that blocks movement and provides protection."
+        },
+        {
+            "name": "Partial Wall",
+            "type": "partial-wall",
+            "carryable": false,
+            "walkable": false,
+            "smashable": true,
+            "attributes": [
+                {
+                    "name": "complete",
+                    "value": 3
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "interactions": [],
+            "drops_item": "log",
+            "description": "An incomplete wall, requiring additional materials to finish."
+        },
+        {
+            "name": "Fence",
+            "type": "fence",
+            "carryable": false,
+            "walkable": false,
+            "smashable": true,
+            "attributes": [
+                {
+                    "name": "health",
+                    "value": 100
+                }
+            ],
+            "interactions": [],
+            "drops_item": "log",
+            "description": "A simple barrier to mark boundaries or restrict movement."
+        },
+        {
+            "name": "Gate",
+            "type": "gate",
+            "carryable": false,
+            "walkable": true,
+            "smashable": true,
+            "attributes": [
+                {
+                    "name": "health",
+                    "value": 100
+                }
+            ],
+            "interactions": [],
+            "open": false,
+            "description": "A movable barrier allowing controlled entry."
+        },
+        {
+            "name": "Door",
+            "type": "door",
+            "carryable": false,
+            "smashable": true,
+            "walkable": true,
+            "attributes": [
+                {
+                    "name": "health",
+                    "value": 100
+                }
+            ],
+            "interactions": [],
+            "description": "Just a door."
+        },
+        {
+            "name": "Tree",
+            "type": "tree",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "log",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "sunflower",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cloud",
+            "type": "cloud",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "sands-of-time",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "lightning-bloom",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 1,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cannon",
+            "type": "cannon",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "tar",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "bones",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sun",
+            "type": "sun",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "sun-drop",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Log",
+            "type": "log",
+            "carryable": true,
+            "smashable": true,
+            "walkable": true,
+            "flat": true,
+            "attributes": [
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "interactions": [
+                {
+                    "description": "Start wall",
+                    "action": "start_wall",
+                    "while_carried": true
+                },
+                {
+                    "description": "Build wall",
+                    "action": "build_wall",
+                    "while_carried": true,
+                    "requires_item": "partial-wall"
+                },
+                {
+                    "description": "Create Market",
+                    "action": "create_market",
+                    "while_carried": true
+                }
+            ]
+        },
+        {
+            "name": "Obsidian Shard",
+            "type": "obsidian-shard",
+            "carryable": true,
+            "smashable": true,
+            "walkable": true,
+            "flat": true,
+            "attributes": [
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "interactions": [
+                {
+                    "description": "Start wall",
+                    "action": "start_wall",
+                    "while_carried": true
+                },
+                {
+                    "description": "Build wall",
+                    "action": "build_wall",
+                    "while_carried": true,
+                    "requires_item": "partial-wall"
+                }
+            ]
+        },
+        {
+            "name": "Seaweed",
+            "type": "seaweed",
+            "description": "A flowy plant, that occasionally drops leaves",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "seaweed-piece",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "sun-drop",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+                },
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "sunflower",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 4,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Message-In-Bottle",
+            "type": "message-in-bottle",
+            "description": "A bottle that contains a message... wonder what could be inside",
+            "carryable": true,
+            "walkable": false,
+            "interactions": [
+                {
+                    "description": "Read Message",
+                    "action": "read",
+                    "while_carried": true
+                }
+            ],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "message-in-bottle",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Anemone",
+            "type": "anemone",
+            "description": "An anemone",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "anemone",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Shipwreck",
+            "type": "shipwreck",
+            "carryable": false,
+            "walkable": false,
+            "interactions": []
+        },
+        {
+            "name": "Volcano",
+            "type": "volcano",
+            "description": "a volcano that will erupt",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "fire-ball",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Fire-Flower",
+            "type": "fire-flower",
+            "description": "An fire flower",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "fire-flower",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Clam",
+            "type": "clam",
+            "description": "A pink clam with a pearl",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "clam",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Coral",
+            "type": "coral",
+            "description": "A small pink plan on the ocean floor",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "coral",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Clam",
+            "type": "clam",
+            "description": "A pink clam with a pearl",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "clam",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Coral",
+            "type": "coral",
+            "description": "A small pink plan on the ocean floor",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "coral",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Mushroom-1",
+            "type": "mushroom-1",
+            "description": "A mushroom",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "mushroom-1",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Rock-Pile",
+            "type": "rock-pile",
+            "description": "A rock pile",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "rock-pile",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Rock-Columns",
+            "type": "rock-columns",
+            "description": "A rock column",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "rock-columns",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Pebbles-1",
+            "type": "pebbles-1",
+            "description": "Some Pebbles",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "pebbles-1",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Rock-Chunk-2-1",
+            "type": "rock-chunk-2-1",
+            "description": "Some Rock Chunks",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "rock-chunk-2-1",
+                        "global_max": 10,
+                        "local_max": 1,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
+            "type": "heart-beet-plant",
+            "name": "Heartbeet plant",
+            "carryable": false,
+            "walkable": true,
+            "smashable": false,
+            "flat": true,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "heart-beet",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ],
+            "description": "A red root vegetable known for its restorative properties."
+        },
+        {
+            "type": "blueberry",
+            "name": "Blueberry",
+            "carryable": true,
+            "walkable": true,
+            "smashable": true,
+            "attributes": [
+                {
+                    "name": "brew_color",
+                    "value": "#0000FF"
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "interactions": [
+                {
+                    "description": "Eat",
+                    "action": "eat",
+                    "while_carried": true
+                }
+            ],
+            "description": "A small, round fruit that grows in clusters on bushes."
+        },
+        {
+            "type": "blueberry-bush",
+            "name": "Blueberry bush",
+            "carryable": false,
+            "walkable": false,
+            "smashable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "blueberry",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 3,
+                        "rate": 0.1
+                    }
+                }
+            ],
+            "description": "A shrub that produces small, sweet blueberries."
+        },
+        {
+            "name": "Seaweed Piece",
+            "type": "seaweed-piece",
+            "carryable": true,
+            "smashable": true,
+            "walkable": true,
+            "flat": true,
+            "attributes": [
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "interactions": [
+                {
+                    "description": "Start wall",
+                    "action": "start_wall",
+                    "while_carried": true
+                },
+                {
+                    "description": "Build wall",
+                    "action": "build_wall",
+                    "while_carried": true,
+                    "requires_item": "partial-wall"
+                }
+            ]
+        },
+        {
+            "name": "Portal",
+            "type": "portal",
+            "carryable": false,
+            "walkable": true,
+            "flat": true,
+            "interactions": [
+                {
+                    "description": "Enter portal",
+                    "action": "enter",
+                    "while_carried": false
+                }
+            ],
+            "on_tick": [
+                {
+                    "action": "spawn_mob",
+                    "parameters": {
+                        "type": "blob",
+                        "max": 10,
+                        "rate": 0.1
+                    }
+                },
+                {
+                    "action": "spawn_mob",
+                    "parameters": {
+                        "type": "fighter",
+                        "max": 10,
+                        "rate": 0.1
+                    }
+                },
+                {
+                    "action": "spawn_mob",
+                    "parameters": {
+                        "type": "villager",
+                        "max": 15,
+                        "rate": 0.1
+                    }
+                }
+            ],
+            "description": "A magical gateway that spawns mobs and allows travel between locations."
+        },
+        {
+            "name": "Potion stand",
+            "type": "potion-stand",
+            "carryable": false,
+            "smashable": true,
+            "walkable": false,
+            "attributes": [
+                {
+                    "name": "items",
+                    "value": 0
+                },
+                {
+                    "name": "price",
+                    "value": 10
+                },
+                {
+                    "name": "gold",
+                    "value": 0
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "interactions": [
+                {
+                    "description": "Add $item_name",
+                    "action": "add_item",
+                    "while_carried": false,
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Get $item_name",
+                    "action": "get_item",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "items",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Raise price",
+                    "action": "raise_price",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "price",
+                            "value": 99,
+                            "comparison": "less_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Lower price",
+                    "action": "lower_price",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "price",
+                            "value": 1,
+                            "comparison": "greater_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Collect gold",
+                    "action": "collect_gold",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "gold",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Purchase potion",
+                    "action": "purchase",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "items",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ]
+                },
+                {
+                    "description": "Add $item_name",
+                    "action": "add_item",
+                    "while_carried": false,
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Get $item_name",
+                    "action": "get_item",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "items",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Raise price",
+                    "action": "raise_price",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "price",
+                            "value": 99,
+                            "comparison": "less_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Lower price",
+                    "action": "lower_price",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "price",
+                            "value": 1,
+                            "comparison": "greater_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Collect gold",
+                    "action": "collect_gold",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "gold",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Purchase potion",
+                    "action": "purchase",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "items",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ]
+                },
+                {
+                    "description": "Add $item_name",
+                    "action": "add_item",
+                    "while_carried": false
+                },
+                {
+                    "description": "Raise price",
+                    "action": "raise_price",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "price",
+                            "value": 99,
+                            "comparison": "less_than"
+                        }
+                    ]
+                },
+                {
+                    "description": "Lower price",
+                    "action": "lower_price",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "price",
+                            "value": 1,
+                            "comparison": "greater_than"
+                        }
+                    ]
+                },
+                {
+                    "description": "Collect gold",
+                    "action": "collect_gold",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "gold",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ]
+                },
+                {
+                    "description": "Destroy stand",
+                    "action": "destroy_stand",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "items",
+                            "value": 0,
+                            "comparison": "equals"
+                        }
+                    ]
+                }
+            ],
+            "description": "A stand that sells health potions."
+        },
+        {
+            "name": "Potion",
+            "description": "A magical concotion",
+            "type": "potion",
+            "carryable": true,
+            "smashable": true,
+            "walkable": true,
+            "attributes": [
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "interactions": [
+                {
+                    "description": "Quaff potion",
+                    "action": "drink",
+                    "while_carried": true
+                },
+                {
+                    "description": "Create stand",
+                    "action": "create_stand",
+                    "while_carried": true
+                }
+            ]
+        },
+        {
+            "name": "Market stand",
+            "description": "A stand that sells THINGS.",
+            "type": "market-stand",
+            "carryable": false,
+            "smashable": true,
+            "walkable": false,
+            "attributes": [
+                {
+                    "name": "items",
+                    "value": 0
+                },
+                {
+                    "name": "price",
+                    "value": 10
+                },
+                {
+                    "name": "gold",
+                    "value": 0
+                },
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "interactions": []
+        },
+        {
+            "name": "Potion",
+            "type": "potion",
+            "carryable": true,
+            "smashable": true,
+            "walkable": true,
+            "attributes": [
+                {
+                    "name": "health",
+                    "value": 1
+                }
+            ],
+            "interactions": [
+                {
+                    "description": "Quaff potion",
+                    "action": "drink",
+                    "while_carried": true
+                },
+                {
+                    "description": "Create stand",
+                    "action": "create_stand",
+                    "while_carried": true
+                }
+            ],
+            "description": "A magical concotion"
+        },
+        {
+            "name": "Basket",
+            "type": "basket",
+            "carryable": false,
+            "templated": true,
+            "walkable": false,
+            "show_template_at": {
+                "x": 0,
+                "y": 7
+            },
+            "attributes": [
+                {
+                    "name": "items",
+                    "value": 0
+                }
+            ],
+            "interactions": [
+                {
+                    "description": "Get $item_name",
+                    "action": "get_item",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "items",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ],
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                },
+                {
+                    "description": "Add $item_name",
+                    "action": "add_item",
+                    "while_carried": false,
+                    "permissions": {
+                        "community": true,
+                        "other": false
+                    }
+                }
+            ],
+            "description": "Stores items for the community."
+        },
+        {
+            "name": "Cauldron",
+            "type": "cauldron",
+            "carryable": false,
+            "walkable": false,
+            "attributes": [
+                {
+                    "name": "ingredients",
+                    "value": 0
+                },
+                {
+                    "name": "potion_subtype",
+                    "value": 0
+                },
+                {
+                    "name": "color_weight",
+                    "value": 1
+                }
+            ],
+            "interactions": [
+                {
+                    "description": "Add Ingredient",
+                    "action": "add_ingredient",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "ingredients",
+                            "value": 3,
+                            "comparison": "less_than"
+                        }
+                    ]
+                },
+                {
+                    "description": "Bottle Potion",
+                    "action": "bottle_potion",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "ingredients",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ]
+                },
+                {
+                    "description": "Dump Cauldron",
+                    "action": "dump_cauldron",
+                    "while_carried": false,
+                    "conditions": [
+                        {
+                            "attribute_name": "ingredients",
+                            "value": 0,
+                            "comparison": "greater_than"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Gold",
+            "type": "gold",
+            "walkable": true,
+            "smashable": false,
+            "carryable": true,
+            "interactions": [],
+            "description": "money!!!"
+        }
+    ],
+    "mob_types": [
+        {
+            "name": "Blob",
+            "type": "blob",
+            "name_style": "monstrous",
+            "description": "A slimy, aggressive creature known for its strong attacks.",
+            "health": 100,
+            "speed": 0.6,
+            "attack": 40,
+            "defense": 10,
+            "gold": 25,
+            "community": "blobs",
+            "stubbornness": 20,
+            "bravery": 60,
+            "aggression": 80,
+            "industriousness": 40,
+            "adventurousness": 20,
+            "gluttony": 10,
+            "sleepy": 10,
+            "extroversion": 50
+        },
+        {
+            "name": "Villager",
+            "type": "villager",
+            "name_style": "norse-english",
+            "description": "A friendly inhabitant of the silverclaw community.",
+            "health": 10,
+            "speed": 0.5,
+            "attack": 5,
+            "defense": 20,
+            "gold": 0,
+            "community": "silverclaw",
+            "stubbornness": 20,
+            "bravery": 5,
+            "aggression": 5,
+            "industriousness": 40,
+            "adventurousness": 10,
+            "gluttony": 50,
+            "sleepy": 80,
+            "extroversion": 50
+        },
+        {
+            "name": "Player",
+            "type": "player",
+            "description": "The player",
+            "name_style": "norse-english",
+            "health": 100,
+            "speed": 2.5,
+            "attack": 5,
+            "defense": 50,
+            "gold": 0,
+            "community": "alchemists",
+            "stubbornness": 20,
+            "bravery": 5,
+            "aggression": 5,
+            "industriousness": 40,
+            "adventurousness": 10,
+            "gluttony": 50,
+            "sleepy": 80,
+            "extroversion": 50
+        },
+        {
+            "name": "Fighter",
+            "type": "fighter",
+            "speaker": true,
+            "name_style": "french-roman",
+            "description": "A brave combatant, loyal to the fighters guild.",
+            "health": 100,
+            "speed": 0.75,
+            "attack": 100,
+            "defense": 50,
+            "gold": 0,
+            "community": "fighters",
+            "stubbornness": 20,
+            "bravery": 60,
+            "aggression": 80,
+            "industriousness": 40,
+            "adventurousness": 20,
+            "gluttony": 10,
+            "sleepy": 10,
+            "extroversion": 50
+        }
+    ],
+    "communities": [],
+    "alliances": [],
+    "houses": [],
+    "items": [],
+    "containers": [],
+    "regions": [],
+    "mob_aggro_behaviors": {
+        "passive_mobs": [
+            "villager"
+        ],
+        "hungry_mobs": [
+            "blob"
+        ],
+        "aggressive_mobs": [
+            "fighter"
+        ]
+    }
+}

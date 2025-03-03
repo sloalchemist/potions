@@ -40,6 +40,11 @@ export type MobChangeData = {
   delta: number;
   new_value: number;
 };
+export type MobChangeFavoriteData = {
+  id: string;
+  property: string;
+  new_value: string;
+};
 export type SpeakData = { id: string; message: string };
 export type ItemChangeData = { id: string; property: string; value: number };
 export type SetDatetimeData = { date: FantasyDateI };
@@ -50,6 +55,10 @@ export type WorldMetadata = {
 export type ShowPortalMenuData = {
   mob_key: string;
   worlds: WorldMetadata[];
+};
+
+export type ScoreboardData = {
+  scores: [string, number][];
 };
 
 export type BroadcastData =
@@ -72,13 +81,16 @@ export type BroadcastData =
       type: 'mob_change';
       data: MobChangeData;
     }
+  | { type: 'mob_change_fav_item'; data: MobChangeFavoriteData }
   | { type: 'speak'; data: SpeakData }
   | {
       type: 'item_change';
       data: ItemChangeData;
     }
   | { type: 'set_datetime'; data: SetDatetimeData }
-  | { type: 'show_portal_menu'; data: ShowPortalMenuData };
+  | { type: 'show_portal_menu'; data: ShowPortalMenuData }
+  | { type: 'scoreboard'; data: ScoreboardData }
+  | { type: 'reload_page' };
 
 export type ServerToBroadcastMessageMap = {
   tick: BroadcastData[];

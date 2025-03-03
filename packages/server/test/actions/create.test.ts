@@ -51,7 +51,7 @@ describe('Create', () => {
       type: type,
       subtype: mockItem.subtype,
       position: mockMob.position,
-      ownedBy: mockCommunity,
+      ownedByCommunity: mockCommunity,
       attributes: {
         templateType: mockItem.type,
         items: 1,
