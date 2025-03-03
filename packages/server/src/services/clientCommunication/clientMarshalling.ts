@@ -11,6 +11,7 @@ import { ItemAttributeData, ItemData } from '../../items/item';
 import { Mob, MobData } from '../../mobs/mob';
 import { FantasyDate } from '../../date/fantasyDate';
 import { Personality, Personalities } from '../../mobs/traits/personality';
+import { Community } from '../../community/community';
 
 export function getHousesAbly(): HouseI[] {
   const houseDatas = DB.prepare(
@@ -76,6 +77,7 @@ function mobDataToMob(mobData: MobData): MobI {
       attack: mobData.attack,
       defense: mobData.defense
     },
+    favorabilities: mobData.favorabilities,
     unlocks: mobData.community_id ? [mobData.community_id] : [],
     doing: mobData.current_action
   };
@@ -144,6 +146,10 @@ export function getMobsAbly(): MobI[] {
       extroversion: personalityData?.extroversion ?? 0
     });
 
+    mobData.favorabilities = Community.getAllFavorsForCommunity(
+      mobData.community_id
+    );
+
     return mobDataToMob(mobData);
   });
 
@@ -162,7 +168,8 @@ function itemDataToItem(
     position: { x: itemData.position_x, y: itemData.position_y },
     lock: itemData.lock,
     house: itemData.house_id,
-    ownedBy: itemData.owned_by,
+    ownedByCommunity: itemData.owned_by_community,
+    ownedByCharacter: itemData.owned_by_character,
     carried_by: Mob.findCarryingMobID(itemData.id),
     attributes: itemAttributeData.reduce(
       (acc, attribute) => {
@@ -231,6 +238,10 @@ export function getMobAbly(key: string): MobI {
     extroversion: personalityData.extroversion ?? 0
   });
 
+  mobData.favorabilities = Community.getAllFavorsForCommunity(
+    mobData.community_id
+  );
+
   return mobDataToMob(mobData);
 }
 
@@ -245,7 +256,8 @@ export function getItemAbly(key: string): ItemI {
             items.position_y,
             items.house_id,
             items.lock,
-            items.owned_by,
+            items.owned_by_community,
+            items.owned_by_character,
             mobs.id carrying_id
         FROM items
         LEFT JOIN mobs ON mobs.carrying_id = items.id
@@ -277,7 +289,8 @@ export function getItemsAbly(): ItemI[] {
             items.position_y,
             items.house_id,
             items.lock,
-            items.owned_by,
+            items.owned_by_community,
+            items.owned_by_character,
             mobs.id carrying_id
         FROM items
         LEFT JOIN mobs ON mobs.carrying_id = items.id;

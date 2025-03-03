@@ -27,6 +27,16 @@ export class MarketStand {
     return rawPrices ? JSON.parse(rawPrices) : {};
   }
 
+  changePrice(amount: number) {
+    if (!this.item.hasAttribute('price')) {
+      return;
+    }
+
+    const currentPrice = this.item.getAttribute<number>('price');
+    const newPrice = Math.max(1, Math.min(99, currentPrice + amount)); // Ensure price stays between 1 and 99
+    this.item.setAttribute<number>('price', newPrice);
+  }
+
   getGold(): number {
     return this.item.getAttribute<number>('gold') || 0;
   }
@@ -35,13 +45,26 @@ export class MarketStand {
     const carriedItem = mob.carrying;
     if (!carriedItem) return false;
 
-    const inventory = this.getInventory();
-    inventory[carriedItem.type] = (inventory[carriedItem.type] || 0) + 1;
+    const currentItemType = this.getItemType();
 
-    this.item.setAttribute('inventory', JSON.stringify(inventory));
+    // If market stand is empty, set the new item type
+    if (!currentItemType) {
+      this.item.setAttribute('item_type', carriedItem.type);
+    }
+
+    // Ensure that only the same item type can be added
+    if (this.getItemType() !== carriedItem.type) return false;
+
+    this.item.changeAttributeBy('items', 1);
     carriedItem.destroy();
 
     return true;
+  }
+
+  getItemType(): string | null {
+    return this.item.hasAttribute('item_type')
+      ? this.item.getAttribute<string>('item_type')
+      : null;
   }
 
   setPrice(itemType: string, price: number): void {

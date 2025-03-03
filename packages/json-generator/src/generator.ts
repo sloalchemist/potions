@@ -181,7 +181,7 @@ process.argv.forEach(function (val: string) {
     const json_client = JSON.parse(rawJson);
     client_breakup(json_client);
     writeFileSync(
-      '../../world_assets/global.json',
+      '../../world_assets/global/client/global.json',
       JSON.stringify(json_client, null, 4)
     );
     ran = true;
@@ -190,7 +190,7 @@ process.argv.forEach(function (val: string) {
     const json_server = JSON.parse(rawJson);
     server_breakup(json_server);
     writeFileSync(
-      '../server/global.json',
+      '../../world_assets/global/server/global.json',
       JSON.stringify(json_server, null, 4)
     );
     ran = true;
