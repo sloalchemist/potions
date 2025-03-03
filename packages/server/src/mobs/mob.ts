@@ -195,6 +195,9 @@ export class Mob {
       `
     ).get({ id: this.id }) as { poisoned: number };
 
+    if (!mob) {
+      return 0; // mob no longer exists, return 0
+    }
     return mob.poisoned;
   }
 
