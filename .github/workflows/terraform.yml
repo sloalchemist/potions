@@ -37,6 +37,13 @@ jobs:
       TF_VAR_render_api_key: ${{ secrets.RENDER_API_KEY }}
       TF_VAR_render_owner_id: ${{ secrets.RENDER_OWNER_ID }}
       TF_VAR_github_token: ${{ secrets.WRITE_GITHUB_ENV_VARS_TOKEN}}
+      TF_VAR_test_uptime_server_url: ${{vars.TEST_UPTIME_SERVER_URL}}
+      TF_VAR_test_uptime_server_msg: ${{vars.TEST_UPTIME_SERVER_MSG}}
+      TF_VAR_fire_uptime_server_url: ${{vars.FIRE_UPTIME_SERVER_URL}}
+      TF_VAR_fire_uptime_server_msg: ${{vars.FIRE_UPTIME_SERVER_MSG}}
+      TF_VAR_water_uptime_server_url: ${{vars.WATER_UPTIME_SERVER_URL}}
+      TF_VAR_water_uptime_server_msg: ${{vars.WATER_UPTIME_SERVER_MSG}}
+
 
     steps:
       # 1. Check out your repository code

@@ -4,6 +4,8 @@ import { Physical } from './physical';
 import { World } from './world';
 import { InteractionType, ItemType } from '../worldDescription';
 
+const MAX_STASH: number = 12;
+
 export class Item extends Physical {
   name?: string;
   carried_by?: string;
@@ -14,18 +16,21 @@ export class Item extends Physical {
   templateType?: string;
   house?: string;
   lock?: string;
-  ownedBy?: string;
+  ownedByCommunity?: string;
+  ownedByCharacter?: string;
 
   constructor(
     world: World,
     key: string,
     position: Coord | null,
     itemType: ItemType,
-    ownedBy?: string
+    ownedByCommunity?: string,
+    ownedByCharacter?: string
   ) {
     super(world, key, itemType.type, position);
     this.itemType = itemType;
-    this.ownedBy = ownedBy;
+    this.ownedByCommunity = ownedByCommunity;
+    this.ownedByCharacter = ownedByCharacter;
 
     if (position) {
       world.addItemToGrid(this);
@@ -39,8 +44,12 @@ export class Item extends Physical {
     return this.itemType.walkable ? true : false;
   }
 
-  isOwnedBy(community_id?: string): boolean {
-    return this.ownedBy === community_id;
+  isOwnedByCommunity(community_id?: string): boolean {
+    return this.ownedByCommunity === community_id;
+  }
+
+  isOwnedByCharacter(character_id?: string): boolean {
+    return this.ownedByCharacter === character_id;
   }
 
   destroy(world: World) {
@@ -94,7 +103,10 @@ export class Item extends Physical {
 
   stash(world: World, mob: Mob, position: Coord) {
     if (!this.carried_by) {
-      throw new Error('Must carry item being stashed');
+      throw new Error('Must carry item being stashed.');
+    }
+    if (world.getStoredItems().length >= MAX_STASH) {
+      throw new Error('Cannot stash more than 12 items.');
     }
     console.log('stashing item', this.key, this.carried_by);
     mob.carrying = undefined;

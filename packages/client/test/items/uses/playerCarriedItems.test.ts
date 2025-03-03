@@ -40,6 +40,7 @@ describe('"Give" action item interaction tests', () => {
       100,
       { x: 1, y: 1 },
       {},
+      {},
       {}
     );
   });

@@ -243,11 +243,13 @@ export function getCarriedItemInteractions(
 export function getPhysicalInteractions(
   physical: Physical,
   carried?: Item,
-  ownerId?: string
+  community_id?: string,
+  character_id?: string
 ): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
-  const isOwner: boolean = ownerId ? item.isOwnedBy(ownerId) : true;
+  const isOwnedByCharacter = item.isOwnedByCharacter(character_id);
+  const isOwnedByCommunity = item.isOwnedByCommunity(community_id);
 
   // if the item can be picked up and the owner's affiliation is the same as the item's affiliation
 
@@ -280,8 +282,11 @@ export function getPhysicalInteractions(
   item.itemType.interactions.forEach((interaction) => {
     const hasPermission =
       !interaction.permissions || // Allow interaction if no permissions entry in global.json
-      (isOwner && interaction.permissions?.community) ||
-      (!isOwner && interaction.permissions?.other);
+      (isOwnedByCommunity && interaction.permissions?.community) ||
+      (isOwnedByCharacter && interaction.permissions?.character) ||
+      (!isOwnedByCharacter &&
+        !isOwnedByCommunity &&
+        interaction.permissions?.other); // Allowed only for non-owners
 
     if (
       hasPermission &&
@@ -404,7 +409,12 @@ function collisionListener(physicals: Item[]) {
   interactableObjects.forEach((physical) => {
     interactions = [
       ...interactions,
-      ...getPhysicalInteractions(physical, carriedItem, player.community_id)
+      ...getPhysicalInteractions(
+        physical,
+        carriedItem,
+        player.community_id,
+        player.id
+      )
     ];
   });
   // updates client only if interactions changes

@@ -44,6 +44,8 @@ export interface PubSub {
   changeItemAttribute(itemKey: string, property: string, value: number): void;
   changeMaxHealth(key: string, maxHealth: number, newValue: number): void;
   changeSpeed(key: string, speed: number, newValue: number): void;
+  changeFavoriteItem(key: string, item: string): void;
+  changeFavorability(key: string, favor: number): void;
   speak(key: string, message: string): void;
   setDateTime(fantasyDate: FantasyDate): void;
   kill(key: string): void;

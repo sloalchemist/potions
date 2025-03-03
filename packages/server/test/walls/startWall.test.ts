@@ -32,7 +32,7 @@ describe('StartWall', () => {
       itemType: 'wall' as unknown as Item['itemType'],
       type: 'building',
       drops_item: 'partial-wall',
-      owned_by: 'mob1',
+      owned_by_community: 'mob1',
       destroy: jest.fn(),
       validateOwnership: jest.fn(),
       setAttribute: jest.fn(),
