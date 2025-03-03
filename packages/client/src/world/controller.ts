@@ -341,14 +341,18 @@ export function getInteractablePhysicals(
 
   // nearby non-walkable items
   let nearbyObjects = physicals.filter(
-    (p) => !p.itemType.walkable && 
-            p.itemType.layout_type !== 'fence' &&
-            p.itemType.layout_type !== 'wall'
+    (p) =>
+      !p.itemType.walkable &&
+      p.itemType.layout_type !== 'fence' &&
+      p.itemType.layout_type !== 'wall'
   );
 
-  let walls = physicals.filter((p) => p.itemType.layout_type === 'fence' ||
-                                      p.itemType.layout_type === 'wall' ||
-                                      p.itemType.type === 'partial-wall');
+  let walls = physicals.filter(
+    (p) =>
+      p.itemType.layout_type === 'fence' ||
+      p.itemType.layout_type === 'wall' ||
+      p.itemType.type === 'partial-wall'
+  );
 
   let nearbyBaskets = physicals.filter((p) => p.itemType.type === 'basket');
 
