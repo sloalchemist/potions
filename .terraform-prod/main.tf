@@ -281,6 +281,8 @@ resource "render_background_worker" "potions_test_world" {
     "SUPABASE_URL"         = { value : "${"https://${supabase_project.potions.id}.supabase.co"}" },
     "SUPABASE_SERVICE_KEY" = { value : "${data.supabase_apikeys.dev.service_role_key}" },
     "AUTH_SERVER_SECRET"   = { value : "${random_password.auth_server_secret.result}" }
+    "SERVER_URL"           = { value : "${var.test_uptime_server_url}" }
+    "UPTIME_MSG"           = { value : "${var.test_uptime_server_msg}" }
   }
 }
 
@@ -312,6 +314,8 @@ resource "render_background_worker" "potions_fire_world" {
     "SUPABASE_URL"         = { value : "${"https://${supabase_project.potions.id}.supabase.co"}" },
     "SUPABASE_SERVICE_KEY" = { value : "${data.supabase_apikeys.dev.service_role_key}" },
     "AUTH_SERVER_SECRET"   = { value : "${random_password.auth_server_secret.result}" }
+    "SERVER_URL"           = { value : "${var.fire_uptime_server_url}" }
+    "UPTIME_MSG"           = { value : "${var.fire_uptime_server_msg}" }
   }
 }
 
@@ -343,5 +347,7 @@ resource "render_background_worker" "potions_water_world" {
     "SUPABASE_URL"         = { value : "${"https://${supabase_project.potions.id}.supabase.co"}" },
     "SUPABASE_SERVICE_KEY" = { value : "${data.supabase_apikeys.dev.service_role_key}" },
     "AUTH_SERVER_SECRET"   = { value : "${random_password.auth_server_secret.result}" }
+    "SERVER_URL"           = { value : "${var.water_uptime_server_url}" }
+    "UPTIME_MSG"           = { value : "${var.water_uptime_server_msg}" }
   }
 }

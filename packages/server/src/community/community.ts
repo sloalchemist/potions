@@ -103,6 +103,38 @@ export class Community {
     }
     return favorNum.favor;
   }
+
+  static getAllFavorsForCommunity(communityId: string): Record<string, number> {
+    const results = DB.prepare(
+      `
+      SELECT community_1_id, community_2_id, favor
+      FROM favorability
+      WHERE community_1_id = :communityId OR community_2_id = :communityId
+    `
+    ).all({ communityId }) as {
+      community_1_id: string;
+      community_2_id: string;
+      favor: number;
+    }[];
+
+    const favorabilities: Record<string, number> = {};
+
+    for (const row of results) {
+      const otherCommunity =
+        row.community_1_id === communityId
+          ? row.community_2_id
+          : row.community_1_id;
+
+      if (favorabilities[otherCommunity] !== undefined) {
+        favorabilities[otherCommunity] += row.favor;
+      } else {
+        favorabilities[otherCommunity] = row.favor;
+      }
+    }
+
+    return favorabilities;
+  }
+
   /**
    * Creates a favorability relation between two communities, and initializes it by an amount
    *

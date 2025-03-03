@@ -20,7 +20,7 @@ export interface InteractionCondition {
 
 export interface InteractionPermission {
   community: boolean;
-  // player: boolean;
+  character: boolean;
   other: boolean;
 }
 

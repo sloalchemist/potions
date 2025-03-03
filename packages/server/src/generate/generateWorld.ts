@@ -96,7 +96,9 @@ export function loadDefaults(global: ServerWorldDescription) {
     itemGenerator.createItem({
       type: item.type,
       position: item.coord,
-      ownedBy: item.community ? communityMap[item.community] : undefined,
+      ownedByCommunity: item.community
+        ? communityMap[item.community]
+        : undefined,
       lock: item.lock,
       attributes: item.options
     });
@@ -118,7 +120,7 @@ export function loadDefaults(global: ServerWorldDescription) {
       itemGenerator.createItem({
         type: container.type,
         position: container.coord,
-        ownedBy: communityMap[container.community],
+        ownedByCommunity: communityMap[container.community],
         attributes: {
           templateType: container.itemType,
           items: container.count,

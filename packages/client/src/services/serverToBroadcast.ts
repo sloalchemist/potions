@@ -145,10 +145,9 @@ export function setupBroadcast(
 
         // once game focused, leave the world and display game over
         waitUntilFocused.then(() => {
-          scene.showGameOver();
           // in cases where player should stay in the same world, pass MAINTAIN_WORLD_OPTION
           leaveWorld(MAINTAIN_WORLD_OPTION);
-          scene.resetToLoadWorldScene();
+          scene.showGameOver();
         });
       }
     }
@@ -171,7 +170,7 @@ export function setupBroadcast(
 
   function handleSpeak(data: SpeakData) {
     const mob = world.mobs[data.id] as SpriteMob;
-    if (mob && mob.key !== publicCharacterId) {
+    if (mob) {
       mob.showSpeechBubble(data.message, false);
     }
   }
@@ -203,6 +202,11 @@ export function setupBroadcast(
     } else {
       throw new Error('Leaderboard scene not found');
     }
+  }
+
+  function handleReloadPage() {
+    sessionStorage.setItem('traveling_through_portal', 'true');
+    window.location.reload();
   }
 
   // Subscribe to broadcast and dispatch events using switch
@@ -272,6 +276,9 @@ export function setupBroadcast(
           break;
         case 'scoreboard':
           handleScoreboard(broadcastItem.data as ScoreboardData);
+          break;
+        case 'reload_page':
+          handleReloadPage();
           break;
         default:
           console.error(

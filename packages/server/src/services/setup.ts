@@ -13,7 +13,6 @@ import {
   uploadLocalData
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
-import { DataLogger } from '../grafana/dataLogger';
 import { getEnv } from '@rt-potion/common';
 
 let lastUpdateTime = Date.now();
@@ -40,10 +39,10 @@ async function initializeAsync() {
   }
 
   console.log(`loading world ${worldID}`);
-  // const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
-  const worldSpecificData = await import(
-    `../../../../world_assets/${worldID}/server/world_specific.json`
+  const worldDataResponse = await fetch(
+    `https://potions.gg/world_assets/${worldID}/server/world_specific.json`
   );
+  const worldSpecificData = await worldDataResponse.json();
 
   try {
     await downloadData(supabase, worldID);
@@ -57,8 +56,8 @@ async function initializeAsync() {
   }
 
   try {
-    initializeKnowledgeDB('data/knowledge-graph.db', false);
-    initializeServerDatabase('data/server-data.db');
+    initializeKnowledgeDB(`data/${worldID}-knowledge-graph.db`, false);
+    initializeServerDatabase(`data/${worldID}-server-data.db`);
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
@@ -81,8 +80,6 @@ async function initializeAsync() {
 }
 
 initializeAsync();
-
-DataLogger.startMetricsServer();
 
 // Used for update on developer cheat
 export function setLastUploadTime(time: number) {

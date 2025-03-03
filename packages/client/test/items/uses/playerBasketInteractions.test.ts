@@ -38,6 +38,7 @@ describe('Community ownership based interactions', () => {
       playerPos,
       {},
       {},
+      {},
       'alchemists'
     );
     world.mobs[publicCharacterId] = player;
@@ -61,6 +62,7 @@ describe('Community ownership based interactions', () => {
           while_carried: false,
           permissions: {
             community: true,
+            character: false,
             other: false
           },
           conditions: [
@@ -77,6 +79,7 @@ describe('Community ownership based interactions', () => {
           while_carried: false,
           permissions: {
             community: true,
+            character: false,
             other: false
           }
         }
@@ -138,6 +141,11 @@ describe('Community ownership based interactions', () => {
           action: 'build_wall',
           while_carried: true,
           requires_item: 'partial-wall'
+        },
+        {
+          description: 'Create Market',
+          action: 'create_market',
+          while_carried: true
         }
       ]
     };
@@ -151,7 +159,8 @@ describe('Community ownership based interactions', () => {
     const interactions = getPhysicalInteractions(
       basket,
       log,
-      player.community_id
+      player.community_id,
+      player.key
     );
 
     // Check that add_item is NOT an available interaction
@@ -161,12 +170,13 @@ describe('Community ownership based interactions', () => {
   });
 
   test('Should allow community members to add items to basket if affiliated', () => {
-    basket.ownedBy = 'alchemists';
+    basket.ownedByCommunity = 'alchemists';
     // Get interactions available for the basket (now owned by alchemists to match the player)
     const interactions = getPhysicalInteractions(
       basket,
       log,
-      player.community_id
+      player.community_id,
+      player.key
     );
 
     // Check that add_item IS an available interaction
@@ -176,7 +186,7 @@ describe('Community ownership based interactions', () => {
   });
 
   test('Should prevent community members from getting items from basket if not affiliated', () => {
-    basket.ownedBy = 'silverclaw';
+    basket.ownedByCommunity = 'silverclaw';
     // Get interactions available for the basket
     const interactions = getPhysicalInteractions(
       basket,
@@ -191,7 +201,7 @@ describe('Community ownership based interactions', () => {
   });
 
   test('Should allow community members to get items from the basket if affiliated', () => {
-    basket.ownedBy = 'alchemists';
+    basket.ownedByCommunity = 'alchemists';
     // Get interactions available for the basket (now owned by alchemists to match the player)
     const interactions = getPhysicalInteractions(
       basket,
