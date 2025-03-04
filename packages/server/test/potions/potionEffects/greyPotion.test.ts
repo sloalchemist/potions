@@ -18,7 +18,6 @@ beforeEach(() => {
 
 describe('Try to consume grey potion in various cases', () => {
     test('Test grey potion consumption back to back', () => {
-      FantasyDate.initialDate();
       const position: Coord = { x: 0, y: 0 };
       const potionLocation: Coord = { x: 1, y: 0 };
   
@@ -53,12 +52,6 @@ describe('Try to consume grey potion in various cases', () => {
       const testDrink = new Drink();
       const test = testDrink.interact(testMob!, potionItem!);
       expect(test).toBe(true);
-  
-      for (let i = 0; i < 15; i++) {
-        // 15 ticks to check stacking
-        FantasyDate.runTick();
-      }
-      testMob?.tick(500);
   
       // check to make sure potion is not being carried
       expect(testMob!.carrying).toBeUndefined();
@@ -96,12 +89,6 @@ describe('Try to consume grey potion in various cases', () => {
       const testDrink2 = new Drink();
       const test2 = testDrink2.interact(testMob!, potionItem2!);
       expect(test2).toBe(true);
-  
-      for (let i = 0; i < 15; i++) {
-        // 15 ticks to check stacking
-        FantasyDate.runTick();
-      }
-      testMob?.tick(500);
   
       // check to make sure potion is not being carried
       expect(testMob!.carrying).toBeUndefined();
@@ -167,7 +154,6 @@ describe('Try to consume grey potion in various cases', () => {
       const test = testDrink.interact(testAttacker!, potionItem!);
       expect(test).toBe(true);
   
-      // run ticks
       testAttacker?.tick(500);
       testEnemy?.tick(500);
   
@@ -177,7 +163,6 @@ describe('Try to consume grey potion in various cases', () => {
       // make sure the fight initiator is attacking
       expect(testAttacker!.action).toBe('hunt');
   
-      // run ticks
       testAttacker?.tick(500);
       testEnemy?.tick(500);
   

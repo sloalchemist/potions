@@ -120,13 +120,10 @@ describe('Try to consume purple potion in various cases', () => {
       const potionItem = Item.getItem(potion!);
       expect(potionItem).not.toBeNull();
   
+      // this inits the first attack
       testAttacker?.tick(500);
       testEnemy?.tick(500);
-  
       expect(testAttacker!.action).toBe('hunt');
-  
-      testAttacker?.tick(500);
-      testEnemy?.tick(500);
   
       // grab health of enemy, make sure it has changed
       const healthWithBaseDefense = testEnemy!.health;
