@@ -123,7 +123,6 @@ export class ServerWorld implements GameWorld {
   }
 
   private runMobTicks(deltaTime: number): void {
-    measureTime('Mob ticks', () => {
       const mob_ids = Mob.getAllMobIDs();
       debugLog(`[DEBUG] Processing ${mob_ids.length} mobs`);
 
@@ -136,7 +135,6 @@ export class ServerWorld implements GameWorld {
         }
       }
       debugLog(`[DEBUG] Successfully processed ${processedMobs} mobs`);
-    });
   }
 
   tick(deltaTime: number) {
