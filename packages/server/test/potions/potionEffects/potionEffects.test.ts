@@ -1153,6 +1153,7 @@ describe('Try to consume potion in various cases', () => {
     const positionPlayer2: Coord = {x: 1, y: 1};
     const potionLocation: Coord = {x :0, y: 0};
     const mobPosition: Coord = {x: 0, y: 1};
+    const blueberryPosition: Coord = {x: 1, y: 2};
 
     // create a player
     mobFactory.makeMob('player', positionPlayer1, 'TestID', 'TestPlayer');
@@ -1168,6 +1169,15 @@ describe('Try to consume potion in various cases', () => {
     mobFactory.makeMob('player', positionPlayer2, 'Player2TestID', 'TestPlayer2');
     const testPlayer2 = Mob.getMob('Player2TestID');
     expect(testPlayer2).not.toBeNull();
+
+    // create a blueberry
+    itemGenerator.createItem({
+      type: 'blueberry',
+      position: blueberryPosition
+    });
+    const testBlueberry = Item.getItemIDAt(blueberryPosition);
+    expect(testBlueberry).not.toBe(undefined);
+    expect(testBlueberry).not.toBeNull();
 
     // create a potion
     itemGenerator.createItem({
@@ -1200,6 +1210,10 @@ describe('Try to consume potion in various cases', () => {
     // check that the second player disappeared
     const disappearedPlayer = Mob.getMob("Player2TestID");
     expect(disappearedPlayer?.action).toBe('destroyed');
+
+    // check that the blueberry disappeared
+    const disappearedBlueberry = Item.getItemIDAt(blueberryPosition);
+    expect(disappearedBlueberry).toBe(undefined);
   })
 })
 
