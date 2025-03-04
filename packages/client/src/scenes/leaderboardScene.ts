@@ -48,8 +48,6 @@ export class LeaderboardScene extends Phaser.Scene {
 
     // Click Handler
     closeButton.on('pointerdown', () => {
-      console.log(`Now Showing Leaderboard`);
-
       // Stop showing full leaderboard
       this.scene.stop('LeaderboardScene');
 

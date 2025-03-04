@@ -53,8 +53,6 @@ export class MiniLeaderboardScene extends Phaser.Scene {
 
     // Click Handler
     openButton.on('pointerdown', () => {
-      console.log(`Now Showing Leaderboard`);
-
       // Stop showing mini leaderboard
       this.scene.stop('MiniLeaderboardScene');
 
