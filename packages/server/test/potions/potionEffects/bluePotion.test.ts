@@ -166,6 +166,52 @@ describe('Try to consume blue potion in various cases', () => {
   });
 });
 
+describe('Try to consume an unknown potion similar to a blue potion', () => {
+  test('Test unknown potion', () => {
+    FantasyDate.initialDate();
+    const position: Coord = { x: 0, y: 0 };
+    const potionLocation: Coord = { x: 1, y: 0 };
+
+    // create a player
+    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+    const testMob = Mob.getMob('TestID');
+    expect(testMob).not.toBeNull();
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: String(hexStringToNumber('#0055ff')),
+      position: potionLocation,
+      carriedBy: testMob
+    });
+    const potion = Item.getItemIDAt(potionLocation);
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
+
+    // ensure the player is carrying the potion
+    expect(testMob!.carrying).not.toBeNull();
+    expect(testMob!.carrying!.type).toBe('potion');
+    expect(testMob!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#0055ff'))
+    );
+
+    // set initial speed
+    const startSpeed = testMob!._speed;
+
+    // have the player drink the potion
+    const testDrink = new Drink();
+    const test = testDrink.interact(testMob!, potionItem!);
+    expect(test).toBe(true);
+
+    // check to make sure potion is not being carried
+    expect(testMob!.carrying).toBeUndefined();
+
+    // check attributes on player
+    expect(testMob!._speed).toBe(startSpeed + startSpeed * 0.5 * 0.3);
+  });
+});
+
 afterAll(() => {
   DB.close();
 });

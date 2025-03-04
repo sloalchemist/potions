@@ -148,7 +148,9 @@ describe('Try to consume purple potion in various cases', () => {
     // check attributes on enemy
     expect(healthWithBaseDefense).toBeLessThan(healthWithMoreDefense);
   });
+});
 
+describe('Try to consume undefined potions that are similar to purple potions', () => {
   test('Test weak purple potion effect', () => {
     FantasyDate.initialDate();
     const position: Coord = { x: 0, y: 0 };
