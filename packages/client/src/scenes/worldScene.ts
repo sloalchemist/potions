@@ -543,17 +543,15 @@ export class WorldScene extends Phaser.Scene {
         const heroY = Math.floor(y);
 
         // Calculate the width and height in tiles
-        const shipWidthTiles = 110/32;
-        const shipHeightTiles = 115/32;
+        const shipWidthTiles = 110 / 32;
+        const shipHeightTiles = 115 / 32;
 
         if (
           ship.itemType.type === 'shipwreck' &&
-          (
-            heroX > 27 - shipWidthTiles/2 - 1 &&
-            heroX <= 27 + shipWidthTiles/2 + 1 &&
-            heroY > 28 - shipHeightTiles/2 &&
-            heroY <= 28 + shipHeightTiles/2 
-          )
+          heroX > 27 - shipWidthTiles / 2 - 1 &&
+          heroX <= 27 + shipWidthTiles / 2 + 1 &&
+          heroY > 28 - shipHeightTiles / 2 &&
+          heroY <= 28 + shipHeightTiles / 2
         ) {
           ship.sprite.setAlpha(0.5);
         } else {
