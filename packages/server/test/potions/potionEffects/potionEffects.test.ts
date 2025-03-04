@@ -1149,12 +1149,13 @@ describe('Try to consume black potion in various cases', () => {
 describe('Try to consume potion in various cases', () => {
   test('Test potion with mobs in a 3 pixel radius', () => {
     FantasyDate.initialDate();
-    const position: Coord = {x: 1, y:0};
+    const positionPlayer1: Coord = {x: 1, y:0};
+    const positionPlayer2: Coord = {x: 1, y: 1};
     const potionLocation: Coord = {x :0, y: 0};
     const mobPosition: Coord = {x: 0, y: 1};
 
     // create a player
-    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+    mobFactory.makeMob('player', positionPlayer1, 'TestID', 'TestPlayer');
     const testPlayer = Mob.getMob('TestID');
     expect(testPlayer).not.toBeNull();
 
@@ -1162,6 +1163,11 @@ describe('Try to consume potion in various cases', () => {
     mobFactory.makeMob('blob', mobPosition, 'TestingID', 'TestAttacker');
     const testMob = Mob.getMob('TestingID');
     expect(testMob).not.toBeNull();
+
+    // create a second player
+    mobFactory.makeMob('player', positionPlayer2, 'Player2TestID', 'TestPlayer2');
+    const testPlayer2 = Mob.getMob('Player2TestID');
+    expect(testPlayer2).not.toBeNull();
 
     // create a potion
     itemGenerator.createItem({
@@ -1190,6 +1196,10 @@ describe('Try to consume potion in various cases', () => {
     // check that the mob disappeared
     const disappearedMob = Mob.getMob("TestingID");
     expect(disappearedMob?.action).toBe('destroyed');
+
+    // check that the second player disappeared
+    const disappearedPlayer = Mob.getMob("Player2TestID");
+    expect(disappearedPlayer?.action).toBe('destroyed');
   })
 })
 
