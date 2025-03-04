@@ -143,6 +143,8 @@ Your state may become out of sync for several reasons.
    ```
    to build a world named world-name.
 
+   note: to avoid 'ECONNREFUSED' error, ensure that auth-server is running with the 'pnpm dev' command.
+
 ### Run!
 
 1. In the **auth-server** package, execute:
