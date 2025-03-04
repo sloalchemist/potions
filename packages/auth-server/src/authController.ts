@@ -62,6 +62,7 @@ const authController = async (req: Request, res: Response) => {
       capabilities['world-' + world] = ['subscribe', 'presence'];
       capabilities[publicCharacterId + '-' + world] = ['publish', 'subscribe'];
       capabilities['communication-' + world] = ['publish', 'subscribe'];
+      capabilities['chat-' + world] = ['publish', 'subscribe'];
 
       tokenParams = {
         capability: capabilities,
