@@ -8,7 +8,6 @@ import { createTables, loadDefaults } from './generateWorld';
 import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
-import globalData from '../../global.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
@@ -39,6 +38,10 @@ async function main() {
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
+  const globalDataResponse = await fetch(
+    `https://potions.gg/world_assets/global/server/global.json`
+  );
+  const globalData = await globalDataResponse.json();
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
     worldSpecificData as Partial<ServerWorldDescription>;
