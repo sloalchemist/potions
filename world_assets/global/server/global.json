@@ -1146,11 +1146,11 @@
                 }
             ],
             "show_price_at": {
-              "x": 7,
-              "y": -10
+                "x": 7,
+                "y": -10
             },
             "description": "A stand that sells health potions."
-          },
+        },
         {
             "name": "Potion",
             "description": "A magical concotion",
@@ -1202,7 +1202,11 @@
                     "value": 1
                 }
             ],
-            "interactions": []
+            "interactions": [],
+            "show_price_at": {
+                "x": 7,
+                "y": -10
+            }
         },
         {
             "name": "Potion",
