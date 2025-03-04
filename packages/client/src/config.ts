@@ -7,6 +7,7 @@ import { FrameScene } from './scenes/frameScene';
 import { PauseScene } from './scenes/pauseScene';
 import { ChatOverlayScene } from './scenes/chatOverlayScene';
 import { BrewScene } from './scenes/brewScene';
+import { FightScene } from './scenes/fightScene';
 import { PortalMenuScene } from './scenes/portalMenuScene';
 import { LeaderboardScene } from './scenes/leaderboardScene';
 import { PortalLoadingScene } from './scenes/portalLoadingScene';
@@ -37,6 +38,7 @@ const config: Phaser.Types.Core.GameConfig = {
     FrameScene,
     ChatOverlayScene,
     BrewScene,
+    FightScene,
     PortalMenuScene,
     PortalLoadingScene,
     LeaderboardScene
