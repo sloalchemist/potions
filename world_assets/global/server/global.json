@@ -648,6 +648,13 @@
             ]
         },
         {
+            "name": "Shipwreck",
+            "type": "shipwreck",
+            "carryable": false,
+            "walkable": false,
+            "interactions": []
+        },
+        {
             "name": "Volcano",
             "type": "volcano",
             "description": "a volcano that will erupt",
