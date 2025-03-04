@@ -591,7 +591,8 @@ export class AblyService implements PubSub {
     console.log('Updating state info for', username);
     const player = Mob.getMob(username);
     if (!player) {
-      throw new Error('no player found ' + username);
+      console.error(`No player found, unable to persist player state: ${username}`);
+      return;
     }
     let health_for_update = player.health;
     let gold_for_update = player.gold;
