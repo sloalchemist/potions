@@ -17,7 +17,7 @@ import { DataLogger } from '../../grafana/dataLogger';
 import fs from 'fs';
 import path from 'path';
 
-const DEBUG_TO_CONSOLE = false;
+const DEBUG_TO_CONSOLE = true;
 const DEBUG_TO_FILE = false;
 const DEBUG_FILE_PATH = path.join(__dirname, 'debug.log');
 
