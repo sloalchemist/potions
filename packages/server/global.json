@@ -1373,7 +1373,7 @@
             "description": "The player",
             "name_style": "norse-english",
             "health": 100,
-            "speed": 200,
+            "speed": 2.5,
             "attack": 5,
             "defense": 50,
             "gold": 0,
