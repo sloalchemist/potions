@@ -796,9 +796,9 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "mushroom-1",
+            "type": "tar",
             "global_max": 10,
-            "local_max": 1,
+            "local_max": 3,
             "radius": 3,
             "rate": 0.1
           }
@@ -866,7 +866,7 @@
       ]
     },
     {
-      "name": "Rock-Chunk-2-1",
+      "name": "Rock Chunk 2 1",
       "type": "rock-chunk-2-1",
       "description": "Some Rock Chunks",
       "carryable": false,
@@ -876,9 +876,9 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "rock-chunk-2-1",
+            "type": "gun-powder",
             "global_max": 10,
-            "local_max": 1,
+            "local_max": 3,
             "radius": 3,
             "rate": 0.1
           }
