@@ -209,7 +209,7 @@
     },
     {
       "name": "Gun Powder",
-      "type": "gunpowder",
+      "type": "gun-powder",
       "attributes": [
         {
           "name": "brew_color",
@@ -786,25 +786,6 @@
       ]
     },
     {
-      "name": "Cloud",
-      "type": "cloud",
-      "carryable": false,
-      "walkable": false,
-      "interactions": [],
-      "on_tick": [
-          {
-              "action": "spawn_item",
-              "parameters": {
-                  "type": "lightning-bloom",
-                  "global_max": 10,
-                  "local_max": 2,
-                  "radius": 1,
-                  "rate": 0.1
-              }
-          }
-      ]
-  },
-    {
       "name": "Mushroom-1",
       "type": "mushroom-1",
       "description": "A mushroom",
@@ -855,9 +836,9 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "tar",
+            "type": "rock-columns",
             "global_max": 10,
-            "local_max": 3,
+            "local_max": 1,
             "radius": 3,
             "rate": 0.1
           }
@@ -885,9 +866,9 @@
       ]
     },
     {
-      "name": "Rock Chunk 2-1",
+      "name": "Rock-Chunk-2-1",
       "type": "rock-chunk-2-1",
-      "description": "A stone with a high content of gunpowder",
+      "description": "Some Rock Chunks",
       "carryable": false,
       "walkable": false,
       "interactions": [],
@@ -895,7 +876,7 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "gunpowder",
+            "type": "rock-chunk-2-1",
             "global_max": 10,
             "local_max": 1,
             "radius": 3,
