@@ -1144,6 +1144,55 @@ describe('Try to consume black potion in various cases', () => {
   });
 });
 
+// POTION TEST
+
+describe('Try to consume potion in various cases', () => {
+  test('Test potion with mobs in a 3 pixel radius', () => {
+    FantasyDate.initialDate();
+    const position: Coord = {x: 1, y:0};
+    const potionLocation: Coord = {x :0, y: 0};
+    const mobPosition: Coord = {x: 0, y: 1};
+
+    // create a player
+    mobFactory.makeMob('player', position, 'TestID', 'TestPlayer');
+    const testPlayer = Mob.getMob('TestID');
+    expect(testPlayer).not.toBeNull();
+
+    // create a mob
+    mobFactory.makeMob('blob', mobPosition, 'TestingID', 'TestAttacker');
+    const testMob = Mob.getMob('TestingID');
+    expect(testMob).not.toBeNull();
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: String(hexStringToNumber('#614f79')),
+      position: potionLocation,
+      carriedBy: testPlayer
+    });
+    const potion = Item.getItemIDAt(potionLocation);
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
+
+    // ensure the player is carrying the potion
+    expect(testPlayer!.carrying).not.toBeNull();
+    expect(testPlayer!.carrying!.type).toBe('potion');
+    expect(testPlayer!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#614f79'))
+    );
+
+    // have the player drink the potion
+    const testDrink = new Drink();
+    const test = testDrink.interact(testPlayer!, potionItem!);
+    expect(test).toBe(true);
+
+    // check that the mob disappeared
+    const disappearedMob = Mob.getMob("TestingID");
+    expect(disappearedMob?.action).toBe('destroyed');
+  })
+})
+
 afterAll(() => {
   DB.close();
 });
