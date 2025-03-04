@@ -22,6 +22,10 @@ describe('Check WorldScene resetToLoadWorldScene interactions', () => {
           .mockReturnValue([{ sys: { settings: { key: 'BrewScene' } } }])
       }
     } as any;
+
+    scene.sound = {
+      removeByKey: jest.fn()
+    } as any;
   });
 
   test('stop BrewScene if active when resetting to LoadWorldScene', () => {

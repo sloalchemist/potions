@@ -12,7 +12,8 @@ type CreateItemParams = {
   position?: Coord;
   subtype?: string;
   lock?: string;
-  ownedBy?: Community;
+  ownedByCommunity?: Community;
+  ownedByCharacter?: string;
   house?: House;
   attributes?: Record<string, string | number>;
   carriedBy?: Mob;
@@ -60,7 +61,8 @@ export class ItemGenerator {
     type,
     subtype,
     position,
-    ownedBy,
+    ownedByCommunity,
+    ownedByCharacter,
     house,
     attributes,
     carriedBy,
@@ -86,7 +88,8 @@ export class ItemGenerator {
       itemType,
       subtype,
       lock,
-      ownedBy,
+      ownedByCommunity,
+      ownedByCharacter,
       house,
       attributes: attributes || {},
       carriedBy

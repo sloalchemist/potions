@@ -17,6 +17,7 @@ import { Carryable } from '../items/carryable';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 import { Favorability } from '../favorability/favorability';
+import { mobFactory } from './mobFactory';
 
 export type MobData = {
   personalities: Personality;
@@ -183,6 +184,26 @@ export class Mob {
     ).get({ id: this.id }) as { health: number };
 
     return mob.health;
+  }
+
+  get poisoned(): number {
+    const mob = DB.prepare(
+      `
+      SELECT poisoned FROM mobView WHERE id = :id
+      `
+    ).get({ id: this.id }) as { poisoned: number };
+
+    return mob.poisoned;
+  }
+
+  get damageOverTime(): number {
+    const mob = DB.prepare(
+      `
+      SELECT damageOverTime FROM mobView WHERE id = :id
+      `
+    ).get({ id: this.id }) as { damageOverTime: number };
+
+    return mob.damageOverTime;
   }
 
   get _speed(): number {
@@ -534,6 +555,34 @@ export class Mob {
     pubSub.changePersonality(this.id, trait, amount);
   }
 
+  spawnMonster(duration: number): void {
+    // spawn blob with low favorability, then kill it off after some time
+    // get player position
+    const playerPosition = this.position;
+
+    // randomize monster position based off of player position
+    const monsterPosition = playerPosition;
+
+    // spawn a monster (blob)
+    mobFactory.makeMob('blob', monsterPosition, 'Monster', 'Monster');
+    const monster = Mob.getMob('Monster');
+
+    // make the blob fight everyone (set satiation super low, hunt)
+    DB.prepare(
+      `
+              UPDATE mobs
+              SET satiation = 0
+              WHERE id = :id
+          `
+    ).run({ id: monster!.id });
+
+    monster!.setAction('hunt');
+
+    // somehow make it time out/die after some time
+    // add row to change effect for monster
+    monster!.changeEffect(1, duration, 'monster');
+  }
+
   changeEffect(delta: number, duration: number, attribute: string): void {
     // only responsible for inserting rows and broadcasting changes
     const targetTick = this.current_tick + duration;
@@ -572,6 +621,10 @@ export class Mob {
       targetTick: targetTick
     });
 
+    if (attribute == 'monster') {
+      return;
+    }
+
     // grab updated value
     const value = DB.prepare(
       `
@@ -585,6 +638,18 @@ export class Mob {
 
     if (!current_delta) {
       pubSub.changeEffect(this.id, attribute, finalDelta, value[attribute]);
+    }
+  }
+
+  private checkPoison(): void {
+    if (!this.poisoned) {
+      return;
+    }
+
+    if (this.poisoned == 1) {
+      const deltaDamage = Math.floor(Math.random() * -10);
+
+      this.changeHealth(deltaDamage);
     }
   }
 
@@ -632,6 +697,12 @@ export class Mob {
     );
 
     for (const row of uniqueRes) {
+      // kill monster if attribute is monster
+      if (row.attribute == 'monster') {
+        this.destroy();
+        return;
+      }
+
       // get the new value for the attribute and broadcast it
       const value = DB.prepare(
         `
@@ -682,6 +753,22 @@ export class Mob {
     pubSub.changeGold(this.id, amount, this._gold);
   }
 
+  /**
+   * Randomly chooses the favorite item of a mob, NOT including the mobs' current favorite item
+   */
+  changeFavoriteItem() {
+    const item = Item.diffRandomItem(this.favorite_item);
+    DB.prepare(
+      `
+        UPDATE mobs
+        SET favorite_item = :favorite_item
+        WHERE id = :id
+      `
+    ).run({ favorite_item: item, id: this.id });
+    this.favorite_item = item;
+    pubSub.changeFavoriteItem(this.id, item);
+  }
+
   destroy() {
     if (this.gold > 0 && this.position) {
       const position = Item.findEmptyPosition(this.position);
@@ -713,6 +800,8 @@ export class Mob {
       Carryable.fromItem(carriedItem)!.dropAtFeet(this);
     }
     pubSub.kill(this.id);
+
+    this.setAction('destroyed');
   }
 
   private updatePosition(deltaTime: number) {
@@ -756,7 +845,6 @@ export class Mob {
   }
 
   fightRequest(mob: Mob): boolean {
-    console.log('fight request from ' + mob.name);
     // TODO: replace with FightTracker class
     pubSub.playerAttacks(mob.id, ['Test Attack']);
     // fightTracker.startFight(mob, this);
@@ -888,7 +976,7 @@ export class Mob {
             SELECT items.id
             FROM item_attributes
             JOIN items ON item_attributes.item_id = items.id
-            JOIN mobView ON mobView.community_id = items.owned_by
+            JOIN mobView ON mobView.community_id = items.owned_by_community
             WHERE mobView.id = :id and item_attributes.attribute = 'items'
         `
     ).all({ id: this.id }) as { id: string }[];
@@ -902,7 +990,7 @@ export class Mob {
             SELECT items.id
             FROM item_attributes
             JOIN items ON item_attributes.item_id = items.id
-            JOIN mobView ON mobView.community_id = items.owned_by
+            JOIN mobView ON mobView.community_id = items.owned_by_community
             WHERE item_attributes.attribute = 'items' AND mobView.id = :id
         `
     ).get({ type, id: this.id }) as { id: string };
@@ -934,6 +1022,7 @@ export class Mob {
     }
 
     this.checkTickReset();
+    this.checkPoison();
     this.needs.tick();
   }
 
@@ -947,6 +1036,8 @@ export class Mob {
             health INTEGER NOT NULL,
             maxHealth INTEGER NOT NULL,
             goldPotionsUsed INTEGER DEFAULT 0,
+            damageOverTime INTEGER DEFAULT 0,
+            poisoned INTEGER DEFAULT 0,
             slowEnemy INTEGER DEFAULT 0,
             attack INTEGER NOT NULL,
             defense INTEGER NOT NULL,
@@ -992,6 +1083,12 @@ export class Mob {
           m.health,
           m.maxHealth,
           m.goldPotionsUsed,
+          m.damageOverTime + COALESCE(
+            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'damageOverTime' ORDER BY e.targetTick DESC LIMIT 1)
+            , 0) AS damageOverTime,
+          m.poisoned + COALESCE(
+            (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'poisoned' ORDER BY e.targetTick DESC LIMIT 1)
+            , 0) AS poisoned,
           m.slowEnemy,
           m.defense + COALESCE(
             (SELECT delta FROM mobEffects AS e WHERE e.id = m.id AND attribute = 'defense' ORDER BY e.targetTick DESC LIMIT 1)
