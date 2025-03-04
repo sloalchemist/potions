@@ -1,4 +1,5 @@
 import { leaderboardData } from '../world/controller';
+import { miniButtonStyle } from './miniLeaderboardScene';
 
 const DEPTH_BASE = 100;
 const MAX_ROWS = 3;
@@ -31,6 +32,30 @@ export class LeaderboardScene extends Phaser.Scene {
       }
     );
     this.titleText.setDepth(DEPTH_BASE + 1);
+
+    // Create Button For Closing
+    const closeButton = this.add.text(
+      this.background.x + this.background.width - 35, 
+      this.background.y + 18, 
+      'Hide',
+      miniButtonStyle
+    );
+
+    // Set Button Interactivity
+    closeButton.setInteractive({ useHandCursor: true });
+    closeButton.setOrigin(0.5);
+    closeButton.setDepth(DEPTH_BASE + 2);
+
+    // Click Handler
+    closeButton.on('pointerdown', () => {
+        console.log(`Now Showing Leaderboard`);
+
+        // Stop showing full leaderboard
+        this.scene.stop('LeaderboardScene');
+
+        // Start showing mini leaderboard
+        this.scene.start('MiniLeaderboardScene');
+    });
 
     this.renderLeaderboard();
   }

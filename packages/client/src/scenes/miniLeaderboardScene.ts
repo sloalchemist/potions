@@ -1,14 +1,12 @@
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
-
 const DEPTH_BASE = 100;
 
 export const miniButtonStyle = {
-    fontSize: '24px',
+    fontSize: '12px',
     color: '#ffffff',
-    backgroundColor: '#28a745', // Green background
+    backgroundColor: '#808080', // Green background
     padding: {
-      x: 20,
-      y: 10
+      x: 7.5,
+      y: 2.5
     },
     align: 'center'
   };
@@ -23,7 +21,7 @@ export class MiniLeaderboardScene extends Phaser.Scene {
 
   create() {
     // Create a background for the leaderboard
-    this.background = this.add.rectangle(18, 15, 220, 70, 0x000000, 0.7);
+    this.background = this.add.rectangle(18, 15, 220, 35, 0x000000, 0.7);
     this.background.setOrigin(0, 0);
     this.background.setDepth(DEPTH_BASE);
 
@@ -40,24 +38,28 @@ export class MiniLeaderboardScene extends Phaser.Scene {
     );
     this.titleText.setDepth(DEPTH_BASE + 1);
 
-    const closeButton = this.add.text(
-          SCREEN_WIDTH / 2,
-          SCREEN_HEIGHT * 0.7,
-          'Open',
-          miniButtonStyle
-        );
+    // Create Button For Opening
+    const openButton = this.add.text(
+      this.background.x + this.background.width - 35, 
+      this.background.y + 18, 
+      'Show',
+      miniButtonStyle
+    );
+
+    // Set Button Interactivity
+    openButton.setInteractive({ useHandCursor: true });
+    openButton.setOrigin(0.5);
+    openButton.setDepth(DEPTH_BASE + 2);
 
     // Click Handler
-    closeButton.on('pointerdown', () => {
-
+    openButton.on('pointerdown', () => {
         console.log(`Now Showing Leaderboard`);
-        
+
         // Stop showing mini leaderboard
-        this.scene.stop('leaderboardMiniScene');
-        
+        this.scene.stop('MiniLeaderboardScene');
+
         // Start showing full leaderboard
-        this.scene.start('leaderboardScene');
-    
+        this.scene.start('LeaderboardScene');
     });
   }
 }
