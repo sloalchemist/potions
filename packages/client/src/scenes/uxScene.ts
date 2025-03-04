@@ -1196,7 +1196,6 @@ export class UxScene extends Phaser.Scene {
         }
       );
       this.interactButtons.push(toggleButton);
-      console.log(toggleButton);
       this.itemsContainer?.add(toggleButton);
     } else {
       this.scene.stop('BrewScene');

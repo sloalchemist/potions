@@ -147,7 +147,6 @@ export function mobRangeListener(mobs: Mob[]) {
     const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastChatCompanions)) {
-      console.log('filter: ', filteredMobs, 'last:', lastChatCompanions);
       chatCompanionCallback(filteredMobs);
       lastChatCompanions = filteredMobs;
     }
@@ -156,7 +155,6 @@ export function mobRangeListener(mobs: Mob[]) {
     const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastFightOpponents)) {
-      console.log('filter: ', filteredMobs, 'last:', lastFightOpponents);
       fightOpponentCallback(filteredMobs);
       lastFightOpponents = filteredMobs;
     }
