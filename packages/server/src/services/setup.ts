@@ -3,7 +3,6 @@ import { AblyService } from './clientCommunication/ablyService';
 import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
-import globalData from '../../global.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
@@ -19,6 +18,7 @@ let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
 let world: ServerWorld;
 export let worldID: string = '';
+export let globalData: ServerWorldDescription;
 
 export const supabase = initializeSupabase();
 
@@ -58,6 +58,10 @@ async function initializeAsync() {
   try {
     initializeKnowledgeDB(`data/${worldID}-knowledge-graph.db`, false);
     initializeServerDatabase(`data/${worldID}-server-data.db`);
+    const globalDataResponse = await fetch(
+      `https://potions.gg/world_assets/global/server/global.json`
+    );
+    globalData = await globalDataResponse.json();
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =

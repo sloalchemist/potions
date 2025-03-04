@@ -1,11 +1,13 @@
 import * as readline from 'readline';
 import { mobFactory } from '../src/mobs/mobFactory';
-import globalData from '../global.json';
+import { globalData } from '../src/services/setup';
 import { itemGenerator } from '../src/items/itemGenerator';
 import { Coord } from '@rt-potion/common';
 
-const itemTypes: Array<string> = globalData.item_types.map((item) => item.type);
-const mobTypes: Array<string> = globalData.mob_types.map((mob) => mob.type);
+const itemTypes = globalData
+  ? globalData.item_types.map((item) => item.type)
+  : [];
+const mobTypes = globalData ? globalData.mob_types.map((mob) => mob.type) : [];
 
 export const HELP_PROMPT = `Available commands:
 - spawn mob [type] x:[x-coord] y:[y-coord]
@@ -20,6 +22,10 @@ export let rl: readline.Interface;
  * @returns {void}
  */
 export function initializeCli() {
+  if (!globalData) {
+    console.log('Global data not loaded yet');
+    return;
+  }
   rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
