@@ -1,15 +1,15 @@
 const DEPTH_BASE = 100;
 
 export const miniButtonStyle = {
-    fontSize: '12px',
-    color: '#ffffff',
-    backgroundColor: '#808080', // Green background
-    padding: {
-      x: 7.5,
-      y: 2.5
-    },
-    align: 'center'
-  };
+  fontSize: '12px',
+  color: '#ffffff',
+  backgroundColor: '#808080', // Green background
+  padding: {
+    x: 7.5,
+    y: 2.5
+  },
+  align: 'center'
+};
 
 export class MiniLeaderboardScene extends Phaser.Scene {
   private background?: Phaser.GameObjects.Rectangle;
@@ -40,8 +40,8 @@ export class MiniLeaderboardScene extends Phaser.Scene {
 
     // Create Button For Opening
     const openButton = this.add.text(
-      this.background.x + this.background.width - 35, 
-      this.background.y + 18, 
+      this.background.x + this.background.width - 35,
+      this.background.y + 18,
       'Show',
       miniButtonStyle
     );
@@ -53,13 +53,13 @@ export class MiniLeaderboardScene extends Phaser.Scene {
 
     // Click Handler
     openButton.on('pointerdown', () => {
-        console.log(`Now Showing Leaderboard`);
+      console.log(`Now Showing Leaderboard`);
 
-        // Stop showing mini leaderboard
-        this.scene.stop('MiniLeaderboardScene');
+      // Stop showing mini leaderboard
+      this.scene.stop('MiniLeaderboardScene');
 
-        // Start showing full leaderboard
-        this.scene.start('LeaderboardScene');
+      // Start showing full leaderboard
+      this.scene.start('LeaderboardScene');
     });
   }
 }

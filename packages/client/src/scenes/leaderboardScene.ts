@@ -35,8 +35,8 @@ export class LeaderboardScene extends Phaser.Scene {
 
     // Create Button For Closing
     const closeButton = this.add.text(
-      this.background.x + this.background.width - 35, 
-      this.background.y + 18, 
+      this.background.x + this.background.width - 35,
+      this.background.y + 18,
       'Hide',
       miniButtonStyle
     );
@@ -48,13 +48,13 @@ export class LeaderboardScene extends Phaser.Scene {
 
     // Click Handler
     closeButton.on('pointerdown', () => {
-        console.log(`Now Showing Leaderboard`);
+      console.log(`Now Showing Leaderboard`);
 
-        // Stop showing full leaderboard
-        this.scene.stop('LeaderboardScene');
+      // Stop showing full leaderboard
+      this.scene.stop('LeaderboardScene');
 
-        // Start showing mini leaderboard
-        this.scene.start('MiniLeaderboardScene');
+      // Start showing mini leaderboard
+      this.scene.start('MiniLeaderboardScene');
     });
 
     this.renderLeaderboard();
