@@ -29,6 +29,7 @@ import {
 } from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { Item } from '../world/item';
+import { SpriteItem } from '../sprite/sprite_item';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -534,6 +535,27 @@ export class WorldScene extends Phaser.Scene {
       Object.values(world.houses).forEach((house) => {
         const spriteHouse = house as SpriteHouse;
         spriteHouse.animate(Math.floor(x), Math.floor(y));
+      });
+      Object.values(world.items).forEach((volcano) => {
+        const vol = volcano as SpriteItem;
+        const heroX = Math.floor(x);
+        const heroY = Math.floor(y);
+
+        // Calculate the width and height in tiles
+        const shipWidthTiles = 238 / TILE_SIZE;
+        const shipHeightTiles = 204 / TILE_SIZE;
+
+        if (
+          vol.itemType.type === 'volcano' &&
+          heroX > 16 - shipWidthTiles / 2 - 1 &&
+          heroX <= 16 + shipWidthTiles / 2 + 1 &&
+          heroY > 24 - shipHeightTiles / 2 &&
+          heroY <= 24 + shipHeightTiles / 2
+        ) {
+          vol.sprite.setAlpha(0.5);
+        } else {
+          vol.sprite.setAlpha(1);
+        }
       });
     }
 
