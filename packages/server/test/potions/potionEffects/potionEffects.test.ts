@@ -8,6 +8,7 @@ import { Drink } from '../../../src/items/uses/drink';
 import { FantasyDate } from '../../../src/date/fantasyDate';
 import { Coord } from '@rt-potion/common';
 import { hexStringToNumber } from '../../../src/util/colorUtil';
+import { MarketStand } from '../../../src/items/marketStand';
 
 beforeEach(() => {
   commonSetup();
@@ -1235,7 +1236,7 @@ describe('Try to consume potion in various cases', () => {
     expect(disappearedBasket).toBe(undefined);
   });
 
-  test('Test potion with mobs and items (stand) in a 3 pixel radius', () => {
+  test('Test potion with mobs and items (empty stand) in a 3 pixel radius', () => {
     FantasyDate.initialDate();
     const positionPlayer1: Coord = { x: 1, y: 0 };
     const potionLocation: Coord = { x: 0, y: 0 };
@@ -1305,6 +1306,112 @@ describe('Try to consume potion in various cases', () => {
     expect(disappearedBlueberry).toBe(undefined);
 
     // check that the basket disappeared
+    const disappearedStand = Item.getItemIDAt(standPosition);
+    expect(disappearedStand).toBe(undefined);
+  });
+
+  test('Test potion with mobs and items (stand with items) in a 3 pixel radius', () => {
+    FantasyDate.initialDate();
+    const positionPlayer1: Coord = { x: 1, y: 0 };
+    const potionLocation: Coord = { x: 0, y: 0 };
+    const mobPosition: Coord = { x: 0, y: 1 };
+    const blueberryPosition: Coord = { x: 1, y: 2 };
+    const standPosition: Coord = { x: 0, y: 2 };
+    // const standItemPosition: Coord = { x: 1, y: 1 };
+
+    // create a player
+    mobFactory.makeMob('player', positionPlayer1, 'TestID', 'TestPlayer');
+    const testPlayer = Mob.getMob('TestID');
+    expect(testPlayer).not.toBeNull();
+
+    // create a mob
+    mobFactory.makeMob('blob', mobPosition, 'TestingID', 'TestAttacker');
+    const testMob = Mob.getMob('TestingID');
+    expect(testMob).not.toBeNull();
+
+    // create a potion to be put into the stand
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: String(hexStringToNumber('#614f79')),
+      position: potionLocation,
+      carriedBy: testPlayer
+    });
+    const standPotion = Item.getItemIDAt(potionLocation);
+    expect(standPotion).not.toBeNull();
+    const standPotionItem = Item.getItem(standPotion!);
+    expect(standPotionItem).not.toBeNull();
+
+    // ensure the player is carrying the potion
+    expect(testPlayer!.carrying).not.toBeNull();
+    expect(testPlayer!.carrying!.type).toBe('potion');
+    expect(testPlayer!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#614f79'))
+    );
+
+    // create a market stand with an item added to it
+    itemGenerator.createItem({
+      type: 'potion-stand',
+      position: standPosition,
+      attributes: {
+        inventory: JSON.stringify({}),
+        prices: JSON.stringify({})
+      }
+    });
+    const testStand = Item.getItemIDAt(standPosition);
+    expect(testStand).not.toBe(undefined);
+    const testStandItem = Item.getItem(testStand!);
+    expect(testStandItem).not.toBeNull();
+
+    const marketStand = MarketStand.fromItem(testStandItem!);
+    expect(marketStand).not.toBe(undefined);
+    if (marketStand) {
+      // add the potion the player is carrying to the stand
+      const added = marketStand.addItem(testPlayer!);
+      expect(added).toBe(true);
+    }
+
+    // create a blueberry
+    itemGenerator.createItem({
+      type: 'blueberry',
+      position: blueberryPosition
+    });
+    const testBlueberry = Item.getItemIDAt(blueberryPosition);
+    expect(testBlueberry).not.toBe(undefined);
+    expect(testBlueberry).not.toBeNull();
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: String(hexStringToNumber('#614f79')),
+      position: potionLocation,
+      carriedBy: testPlayer
+    });
+    const potion = Item.getItemIDAt(potionLocation);
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
+
+    // ensure the player is carrying the potion
+    expect(testPlayer!.carrying).not.toBeNull();
+    expect(testPlayer!.carrying!.type).toBe('potion');
+    expect(testPlayer!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#614f79'))
+    );
+
+    // have the player drink the potion
+    const testDrink = new Drink();
+    const test = testDrink.interact(testPlayer!, potionItem!);
+    expect(test).toBe(true);
+
+    // check that the mob disappeared
+    const disappearedMob = Mob.getMob('TestingID');
+    expect(disappearedMob?.action).toBe('destroyed');
+
+    // check that the blueberry disappeared
+    const disappearedBlueberry = Item.getItemIDAt(blueberryPosition);
+    expect(disappearedBlueberry).toBe(undefined);
+
+    // check that the stand disappeared, along with the item in it
     const disappearedStand = Item.getItemIDAt(standPosition);
     expect(disappearedStand).toBe(undefined);
   });
