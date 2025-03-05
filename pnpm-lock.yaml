@@ -6207,6 +6207,8 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.26.0
 
+  date-format@4.0.14: {}
+
   debug@2.6.9:
     dependencies:
       ms: 2.0.0
