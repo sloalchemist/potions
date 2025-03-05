@@ -16,7 +16,6 @@
   "include": [
     "src/**/*.ts",
     "test/**/*.ts",
-    "global.json",
     "../../world_assets/test-world/server/world_specific.json",
     "../../world_assets/water-world/server/world_specific.json",
     "../../world_assets/fire-world/server/world_specific.json"

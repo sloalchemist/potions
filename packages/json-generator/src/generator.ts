@@ -193,7 +193,7 @@ process.argv.forEach(function (val: string) {
     const json_server = JSON.parse(rawJson);
     server_breakup(json_server);
     writeFileSync(
-      '../../world_assets/global/server/global.json',
+      '../server/world_assets/global.json',
       JSON.stringify(json_server, null, 4)
     );
     ran = true;
