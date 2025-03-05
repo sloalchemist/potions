@@ -1014,30 +1014,30 @@
       ],
       "on_tick": [
         {
-          "action": "spawn_mob",
-          "parameters": {
-            "type": "blob",
-            "max": 10,
-            "rate": 0.1
-          }
+            "action": "spawn_mob",
+            "parameters": {
+                "type": "blob",
+                "max": 3,
+                "rate": 0.01
+            }
         },
         {
-          "action": "spawn_mob",
-          "parameters": {
-            "type": "fighter",
-            "max": 10,
-            "rate": 0.1
-          }
+            "action": "spawn_mob",
+            "parameters": {
+                "type": "fighter",
+                "max": 3,
+                "rate": 0.05
+            }
         },
         {
-          "action": "spawn_mob",
-          "parameters": {
-            "type": "villager",
-            "max": 15,
-            "rate": 0.1
-          }
+            "action": "spawn_mob",
+            "parameters": {
+                "type": "villager",
+                "max": 7,
+                "rate": 0.07
+            }
         }
-      ],
+    ],
       "description": "A magical gateway that spawns mobs and allows travel between locations."
     },
     {

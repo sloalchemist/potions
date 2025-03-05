@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game World Metrics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .chart-container {
+            width: 90%;
+            height: 400px; /* Increased height from default */
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .refresh-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .refresh-button:hover {
+            background-color: #45a049;
+        }
+        .auto-refresh {
+            text-align: center;
+            margin: 10px 0;
+        }
+        /* Set explicit height for the canvas elements */
+        #tickTimeChart, #mobMetricsChart {
+            height: 350px !important;
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>Game World Metrics Dashboard</h1>
+    
+    <div class="auto-refresh">
+        <input type="checkbox" id="autoRefresh" checked>
+        <label for="autoRefresh">Auto refresh (5s)</label>
+    </div>
+    
+    <div class="chart-container">
+        <canvas id="tickTimeChart"></canvas>
+    </div>
+    
+    <div class="chart-container">
+        <canvas id="mobMetricsChart"></canvas>
+    </div>
+
+    <button class="refresh-button" onclick="loadData()">Refresh Data</button>
+
+    <script>
+        // Chart objects
+        let tickTimeChart;
+        let mobMetricsChart;
+        
+        // Initialize charts
+        function initCharts() {
+            // Tick Time Chart
+            const tickTimeCtx = document.getElementById('tickTimeChart').getContext('2d');
+            tickTimeChart = new Chart(tickTimeCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Total Tick Time (ms)',
+                        data: [],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Tick Number vs Total Tick Time'
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            // Mob Metrics Chart
+            const mobMetricsCtx = document.getElementById('mobMetricsChart').getContext('2d');
+            mobMetricsChart = new Chart(mobMetricsCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Mob Count',
+                        data: [],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderWidth: 2,
+                        tension: 0.1,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Mob Tick Time (ms)',
+                        data: [],
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderWidth: 2,
+                        tension: 0.1,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Mob Count'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Tick Time (ms)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Mob Metrics'
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        // Load data from CSV files
+        function loadData() {
+            // Load tick metrics
+            Papa.parse('tick_metrics.csv', {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    const data = results.data;
+                    // Filter out incomplete rows and sort by tick number
+                    const validData = data
+                        .filter(row => row.tick_number && row.total_tick_time_ms)
+                        .sort((a, b) => parseInt(a.tick_number) - parseInt(b.tick_number));
+                    
+                    // Limit to last 50 data points to avoid overcrowding
+                    const recentData = validData.slice(-50);
+                    
+                    // Update tick time chart
+                    tickTimeChart.data.labels = recentData.map(row => row.tick_number);
+                    tickTimeChart.data.datasets[0].data = recentData.map(row => parseFloat(row.total_tick_time_ms));
+                    tickTimeChart.update();
+                }
+            });
+            
+            // Load mob metrics
+            Papa.parse('mob_metrics.csv', {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    const data = results.data;
+                    // Filter out incomplete rows
+                    const validData = data
+                        .filter(row => row.timestamp && row.mob_count && row.mob_tick_duration_ms)
+                        .sort((a, b) => parseInt(a.timestamp) - parseInt(b.timestamp));
+                    
+                    // Limit to last 50 data points
+                    const recentData = validData.slice(-50);
+                    
+                    // Format timestamps for display
+                    const labels = recentData.map(row => {
+                        const date = new Date(parseInt(row.timestamp));
+                        return date.toLocaleTimeString();
+                    });
+                    
+                    // Update mob metrics chart
+                    mobMetricsChart.data.labels = labels;
+                    mobMetricsChart.data.datasets[0].data = recentData.map(row => parseInt(row.mob_count));
+                    mobMetricsChart.data.datasets[1].data = recentData.map(row => parseFloat(row.mob_tick_duration_ms));
+                    mobMetricsChart.update();
+                }
+            });
+        }
+        
+        // Initialize charts when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            loadData();
+            
+            // Set up auto-refresh
+            const autoRefreshCheckbox = document.getElementById('autoRefresh');
+            let refreshInterval;
+            
+            function startAutoRefresh() {
+                if (autoRefreshCheckbox.checked) {
+                    refreshInterval = setInterval(loadData, 5000);
+                } else {
+                    clearInterval(refreshInterval);
+                }
+            }
+            
+            autoRefreshCheckbox.addEventListener('change', startAutoRefresh);
+            startAutoRefresh();
+        });
+    </script>
+</body>
+</html>
