@@ -109,8 +109,7 @@ describe('AblyService stashing and unstashing broadcasts', () => {
             type: 'unstash_item',
             data: {
               item_key: 'item456',
-              mob_key: 'mob456',
-              position: { x: 5, y: 25 }
+              mob_key: 'mob456'
             }
           }
         ]
