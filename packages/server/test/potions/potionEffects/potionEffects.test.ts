@@ -1147,13 +1147,14 @@ describe('Try to consume black potion in various cases', () => {
 // POTION TEST
 
 describe('Try to consume potion in various cases', () => {
-  test('Test potion with mobs in a 3 pixel radius', () => {
+  test('Test potion with mobs and items (basket) in a 3 pixel radius', () => {
     FantasyDate.initialDate();
-    const positionPlayer1: Coord = {x: 1, y:0};
-    const positionPlayer2: Coord = {x: 1, y: 1};
-    const potionLocation: Coord = {x :0, y: 0};
-    const mobPosition: Coord = {x: 0, y: 1};
-    const blueberryPosition: Coord = {x: 1, y: 2};
+    const positionPlayer1: Coord = { x: 1, y: 0 };
+    const positionPlayer2: Coord = { x: 1, y: 1 };
+    const potionLocation: Coord = { x: 0, y: 0 };
+    const mobPosition: Coord = { x: 0, y: 1 };
+    const blueberryPosition: Coord = { x: 1, y: 2 };
+    const basketPosition: Coord = { x: 0, y: 2 };
 
     // create a player
     mobFactory.makeMob('player', positionPlayer1, 'TestID', 'TestPlayer');
@@ -1166,9 +1167,23 @@ describe('Try to consume potion in various cases', () => {
     expect(testMob).not.toBeNull();
 
     // create a second player
-    mobFactory.makeMob('player', positionPlayer2, 'Player2TestID', 'TestPlayer2');
+    mobFactory.makeMob(
+      'player',
+      positionPlayer2,
+      'Player2TestID',
+      'TestPlayer2'
+    );
     const testPlayer2 = Mob.getMob('Player2TestID');
     expect(testPlayer2).not.toBeNull();
+
+    // create a basket
+    itemGenerator.createItem({
+      type: 'basket',
+      position: basketPosition
+    });
+    const testBasket = Item.getItemIDAt(basketPosition);
+    expect(testBasket).not.toBe(undefined);
+    expect(testBasket).not.toBeNull();
 
     // create a blueberry
     itemGenerator.createItem({
@@ -1204,18 +1219,96 @@ describe('Try to consume potion in various cases', () => {
     expect(test).toBe(true);
 
     // check that the mob disappeared
-    const disappearedMob = Mob.getMob("TestingID");
+    const disappearedMob = Mob.getMob('TestingID');
     expect(disappearedMob?.action).toBe('destroyed');
 
     // check that the second player disappeared
-    const disappearedPlayer = Mob.getMob("Player2TestID");
+    const disappearedPlayer = Mob.getMob('Player2TestID');
     expect(disappearedPlayer?.action).toBe('destroyed');
 
     // check that the blueberry disappeared
     const disappearedBlueberry = Item.getItemIDAt(blueberryPosition);
     expect(disappearedBlueberry).toBe(undefined);
-  })
-})
+
+    // check that the basket disappeared
+    const disappearedBasket = Item.getItemIDAt(basketPosition);
+    expect(disappearedBasket).toBe(undefined);
+  });
+
+  test('Test potion with mobs and items (stand) in a 3 pixel radius', () => {
+    FantasyDate.initialDate();
+    const positionPlayer1: Coord = { x: 1, y: 0 };
+    const potionLocation: Coord = { x: 0, y: 0 };
+    const mobPosition: Coord = { x: 0, y: 1 };
+    const blueberryPosition: Coord = { x: 1, y: 2 };
+    const standPosition: Coord = { x: 0, y: 2 };
+    // const standItemPosition: Coord = { x: 1, y: 1 };
+
+    // create a player
+    mobFactory.makeMob('player', positionPlayer1, 'TestID', 'TestPlayer');
+    const testPlayer = Mob.getMob('TestID');
+    expect(testPlayer).not.toBeNull();
+
+    // create a mob
+    mobFactory.makeMob('blob', mobPosition, 'TestingID', 'TestAttacker');
+    const testMob = Mob.getMob('TestingID');
+    expect(testMob).not.toBeNull();
+
+    // create a stand
+    itemGenerator.createItem({
+      type: 'potion-stand',
+      position: standPosition
+    });
+    const testStand = Item.getItemIDAt(standPosition);
+    expect(testStand).not.toBe(undefined);
+    expect(testStand).not.toBeNull();
+
+    // create a blueberry
+    itemGenerator.createItem({
+      type: 'blueberry',
+      position: blueberryPosition
+    });
+    const testBlueberry = Item.getItemIDAt(blueberryPosition);
+    expect(testBlueberry).not.toBe(undefined);
+    expect(testBlueberry).not.toBeNull();
+
+    // create a potion
+    itemGenerator.createItem({
+      type: 'potion',
+      subtype: String(hexStringToNumber('#614f79')),
+      position: potionLocation,
+      carriedBy: testPlayer
+    });
+    const potion = Item.getItemIDAt(potionLocation);
+    expect(potion).not.toBeNull();
+    const potionItem = Item.getItem(potion!);
+    expect(potionItem).not.toBeNull();
+
+    // ensure the player is carrying the potion
+    expect(testPlayer!.carrying).not.toBeNull();
+    expect(testPlayer!.carrying!.type).toBe('potion');
+    expect(testPlayer!.carrying!.subtype).toBe(
+      String(hexStringToNumber('#614f79'))
+    );
+
+    // have the player drink the potion
+    const testDrink = new Drink();
+    const test = testDrink.interact(testPlayer!, potionItem!);
+    expect(test).toBe(true);
+
+    // check that the mob disappeared
+    const disappearedMob = Mob.getMob('TestingID');
+    expect(disappearedMob?.action).toBe('destroyed');
+
+    // check that the blueberry disappeared
+    const disappearedBlueberry = Item.getItemIDAt(blueberryPosition);
+    expect(disappearedBlueberry).toBe(undefined);
+
+    // check that the basket disappeared
+    const disappearedStand = Item.getItemIDAt(standPosition);
+    expect(disappearedStand).toBe(undefined);
+  });
+});
 
 afterAll(() => {
   DB.close();
