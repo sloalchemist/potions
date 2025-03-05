@@ -563,7 +563,7 @@ export class WorldScene extends Phaser.Scene {
         } else {
           ship.sprite.setAlpha(1);
         }
-      });  
+      });
     }
 
     if (fantasyDate) {
