@@ -25,7 +25,7 @@
     {
       "label": "Server",
       "type": "shell",
-      "command": "cd packages/server && pnpm run create test-world && pnpm dev test-world",
+      "command": "cd packages/server && pnpm run create ${input:worldType} && pnpm dev ${input:worldType}",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
@@ -46,7 +46,7 @@
       "dependsOn": "Auth Server"
     },
     {
-      "label": "Build and Start",
+      "label": "Start All",
       "type": "shell",
       "dependsOn": [
         "Build",
@@ -59,6 +59,15 @@
         "reveal": "always",
         "panel": "dedicated"
       }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "worldType",
+      "type": "pickString",
+      "description": "Select a world to build and start: ",
+      "options": ["fire-world", "water-world", "test-world"],
+      "default": "test-world"
     }
   ]
 }
