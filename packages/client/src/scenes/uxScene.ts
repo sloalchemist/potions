@@ -803,6 +803,11 @@ export class UxScene extends Phaser.Scene {
   }
 
   callFight(attack: string, i: number) {
+    if (this.scene.isActive('FightScene')) {
+      this.scene.stop('FightScene');
+    } else {
+      this.scene.launch('FightScene');
+    }
     fight(attack, i);
     this.setFightOptions([]);
   }
@@ -1191,7 +1196,6 @@ export class UxScene extends Phaser.Scene {
         }
       );
       this.interactButtons.push(toggleButton);
-      console.log(toggleButton);
       this.itemsContainer?.add(toggleButton);
     } else {
       this.scene.stop('BrewScene');

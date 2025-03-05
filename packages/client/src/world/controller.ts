@@ -147,7 +147,6 @@ export function mobRangeListener(mobs: Mob[]) {
     const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastChatCompanions)) {
-      console.log('filter: ', filteredMobs, 'last:', lastChatCompanions);
       chatCompanionCallback(filteredMobs);
       lastChatCompanions = filteredMobs;
     }
@@ -156,7 +155,6 @@ export function mobRangeListener(mobs: Mob[]) {
     const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastFightOpponents)) {
-      console.log('filter: ', filteredMobs, 'last:', lastFightOpponents);
       fightOpponentCallback(filteredMobs);
       lastFightOpponents = filteredMobs;
     }
@@ -341,15 +339,23 @@ export function getInteractablePhysicals(
 
   // nearby non-walkable items
   let nearbyObjects = physicals.filter(
-    (p) => !p.itemType.walkable && p.itemType.layout_type !== 'fence'
+    (p) =>
+      !p.itemType.walkable &&
+      p.itemType.layout_type !== 'fence' &&
+      p.itemType.layout_type !== 'wall'
   );
 
-  let fences = physicals.filter((p) => p.itemType.layout_type === 'fence');
+  let walls = physicals.filter(
+    (p) =>
+      p.itemType.layout_type === 'fence' ||
+      p.itemType.layout_type === 'wall' ||
+      p.itemType.type === 'partial-wall'
+  );
 
   let nearbyBaskets = physicals.filter((p) => p.itemType.type === 'basket');
 
-  if (fences.length > 1) {
-    fences = [getClosestPhysical(fences, playerPos)];
+  if (walls.length > 1) {
+    walls = [getClosestPhysical(walls, playerPos)];
   }
 
   // find distinct non-walkable objects next to player
@@ -364,7 +370,7 @@ export function getInteractablePhysicals(
     ...unique_nearbyObjects,
     ...nearbyOpenableObjects,
     ...nearbyBaskets,
-    ...fences
+    ...walls
   ];
   interactableObjects = interactableObjects.filter(
     (item, index, self) =>
