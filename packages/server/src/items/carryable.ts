@@ -151,7 +151,7 @@ export class Carryable {
       `
             UPDATE items
             SET stored_by = NULL
-            WHERE id = :item_id; AND stored_by = :mob_id:
+            WHERE id = :item_id AND stored_by = :mob_id;
             `
     ).run({ item_id: this.item.id, mob_id: mob.id });
 
