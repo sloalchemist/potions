@@ -142,6 +142,14 @@ const regionConfigSchema = z.object({
   concepts: z.array(z.string())
 });
 
+const portalSchema = z.string();
+
+const mobAggroBehaviorsSchema = z.object({
+  aggressive_mobs: z.array(z.string()),
+  hungry_mobs: z.array(z.string()),
+  passive_mobs: z.array(z.string())
+});
+
 export const globalJsonSchema = z.object({
   terrain_types: z.array(terrainTypeSchema),
   item_types: z.array(itemTypeSchema),
@@ -153,7 +161,8 @@ export const globalJsonSchema = z.object({
   houses: z.array(houseConfigSchema),
   items: z.array(itemConfigSchema),
   containers: z.array(containerConfigSchema),
-  portals: z.array(z.string()).optional()
+  portals: z.array(portalSchema),
+  mob_aggro_behaviors: mobAggroBehaviorsSchema
 });
 
 export type GlobalJson = z.infer<typeof globalJsonSchema>;

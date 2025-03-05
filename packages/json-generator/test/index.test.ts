@@ -13,19 +13,19 @@ describe('validate global json', () => {
       'utf8'
     );
 
-    expect(JSON.parse(expected)).toStrictEqual(JSON.parse(actual));
+    expect(JSON.parse(actual)).toStrictEqual(JSON.parse(expected));
   });
 
-  // it('validate server global json', () => {
-  //   executeWithArgs(['client', 'server']);
+  it('validate server global json', () => {
+    executeWithArgs(['client', 'server']);
 
-  //   const expected = readFileSync(__dirname + '/expectedServer.json', 'utf8');
+    const expected = readFileSync(__dirname + '/expectedServer.json', 'utf8');
 
-  //   const actual = readFileSync(
-  //     path.join(__dirname, '../../../world_assets/global/server/global.json'),
-  //     'utf8'
-  //   );
+    const actual = readFileSync(
+      path.join(__dirname, '../../../world_assets/global/server/global.json'),
+      'utf8'
+    );
 
-  //   expect(JSON.parse(expected)).toStrictEqual(JSON.parse(actual));
-  // });
+    expect(JSON.parse(actual)).toStrictEqual(JSON.parse(expected));
+  });
 });

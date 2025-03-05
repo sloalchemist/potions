@@ -158,9 +158,6 @@ const server_breakup = (json: GlobalJson) => {
   // console.log(json)
 };
 
-// Generate specific json file
-let ran = false;
-
 const rawJson = readFileSync('./global.json', 'utf8');
 const globalParsed: GlobalJson = globalJsonSchema.parse(JSON.parse(rawJson));
 
@@ -172,27 +169,32 @@ const args: GeneratorOption[] = process.argv.filter((arg) =>
 );
 
 export function executeWithArgs(args: GeneratorOption[]) {
+  if (args.length === 0) {
+    console.log('No recognized locations');
+    return;
+  }
+
   args.forEach(function (option: GeneratorOption) {
-    if (option == 'client') {
-      client_breakup(globalParsed);
-      writeFileSync(
-        '../../world_assets/global/client/global.json',
-        JSON.stringify(globalParsed, null, 4)
-      );
-      ran = true;
-    } else if (option === 'server') {
-      server_breakup(globalParsed);
-      writeFileSync(
-        '../../world_assets/global/server/global.json',
-        JSON.stringify(globalParsed, null, 4)
-      );
-      ran = true;
+    // Duplicate for each arg
+    const duplicateGlobalParsed = JSON.parse(JSON.stringify(globalParsed));
+
+    switch (option) {
+      case 'client':
+        client_breakup(duplicateGlobalParsed);
+        writeFileSync(
+          '../../world_assets/global/client/global.json',
+          JSON.stringify(duplicateGlobalParsed, null, 2)
+        );
+        break;
+      case 'server':
+        server_breakup(duplicateGlobalParsed);
+        writeFileSync(
+          '../../world_assets/global/server/global.json',
+          JSON.stringify(duplicateGlobalParsed, null, 2)
+        );
+        break;
     }
   });
 }
 
 executeWithArgs(args);
-
-if (ran === false) {
-  console.log('No recognized locations');
-}
