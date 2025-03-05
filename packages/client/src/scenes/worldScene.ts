@@ -53,7 +53,13 @@ export class WorldScene extends Phaser.Scene {
   terrainWidth: number = 0;
   terrainHeight: number = 0;
   nightOpacity: number = 0;
-  keys: { [key: string]: boolean } = { w: false, a: false, s: false, d: false, e: false };
+  keys: { [key: string]: boolean } = {
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+    e: false
+  };
   prevKeys: { [key: string]: boolean } = {
     w: false,
     a: false,
