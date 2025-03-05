@@ -8,7 +8,6 @@ import { createTables, loadDefaults } from './generateWorld';
 import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
-import globalData from '../../world_assets/global.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
@@ -18,6 +17,7 @@ import {
   uploadLocalData
 } from '../services/supabaseStorage';
 import { logger } from '../util/logger';
+import globalData from '../../world_assets/global.json';
 
 async function main() {
   // Build and save the knowledge graph
@@ -39,6 +39,7 @@ async function main() {
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
+
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
     worldSpecificData as Partial<ServerWorldDescription>;

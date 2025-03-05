@@ -3,7 +3,6 @@ import { AblyService } from './clientCommunication/ablyService';
 import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
-import globalData from '../../world_assets/global.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
@@ -15,6 +14,7 @@ import {
 import { shouldUploadDB } from '../util/dataUploadUtil';
 import { getEnv } from '@rt-potion/common';
 import { logger } from '../util/logger';
+import globalData from '../../world_assets/global.json';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
@@ -40,7 +40,6 @@ async function initializeAsync() {
   }
 
   logger.log(`loading world ${worldID}`);
-
   const worldSpecificData = await import(
     `../../world_assets/${worldID}/world_specific.json`
   );
