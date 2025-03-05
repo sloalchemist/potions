@@ -143,30 +143,22 @@ export class Carryable {
 
   // unstash stored items (drops at feet), swtiches carried item with stored item if carried exists
   unstash(mob: Mob): void {
-    if (mob.position) {
-      const position = Item.findEmptyPosition(mob.position);
-
-      DB.prepare(
-        `
-                UPDATE items
-                SET position_x = :position_x, position_y = :position_y, stored_by = NULL
-                WHERE id = :item_id;
-                `
-      ).run({
-        item_id: this.item.id,
-        position_x: position.x,
-        position_y: position.y
-      });
-
-      this.item.position = position;
-    } else {
-      throw new Error('Mob has no position');
+    if (mob.carrying){
+      const carriedItem = mob.carrying;
+      Carryable.fromItem(carriedItem)!.stash(mob);
     }
-    if (!this.item.position) {
-      throw new Error('Item has no position');
-    }
+    DB.prepare(
+      `
+            UPDATE items
+            SET stored_by = NULL
+            WHERE id = :item_id;
+            `
+    ).run({ item_id: this.item.id });
 
-    pubSub.unstashItem(this.item.id, mob.id, this.item.position);
+    mob.carrying = this.item;
+    this.item.position = undefined;
+
+    pubSub.pickupItem(this.item.id, mob.id);
   }
 
   static validateNoOrphanedItems(): void {
