@@ -109,32 +109,32 @@ export function drinkPotion(
       pubSub.bomb(mob.id);
   
       // destroy all nearby objects
-      nearbyObjects.forEach(id => {
-          const item = Item.getItem(id);
-          if (item) {
-              const smashable = Smashable.fromItem(item);
-              if (smashable) { // if smashable item, function that has extra side effects (drops loot)
-                  smashable.destroySmashable();
-              }
-              item.destroy(); // either way, remove from game world
-          } else {
-              console.log(`Invalid item ID: ${id}`);
+      nearbyObjects.forEach((id) => {
+        const item = Item.getItem(id);
+        if (item) {
+          const smashable = Smashable.fromItem(item);
+          if (smashable) {
+            // if smashable item, function that has extra side effects (drops loot)
+            smashable.destroySmashable();
           }
+          item.destroy(); // either way, remove from game world
+        } else {
+          console.log(`Invalid item ID: ${id}`);
+        }
       });
-  
+
       // destroy all nearby mobs
-      nearbyMobs.forEach(mobID => {
-          const mobToDestroy = Mob.getMob(mobID);
-          if (mobToDestroy) {
-              mobToDestroy.destroy();
-          } else {
-              console.log(`Invalid mob ID: ${mobID}`);
-          }
+      nearbyMobs.forEach((mobID) => {
+        const mobToDestroy = Mob.getMob(mobID);
+        if (mobToDestroy) {
+          mobToDestroy.destroy();
+        } else {
+          console.log(`Invalid mob ID: ${mobID}`);
+        }
       });
-  
+
       return true;
-  
-  
+
     default:
       // handle cases where potionStr doesn't match any known potion
 
