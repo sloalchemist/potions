@@ -12,6 +12,10 @@ export class Hunt implements Plan {
   execute(npc: Mob): boolean {
     if (!this.enemy || !this.enemy.position || !npc.position) return true;
 
+    if (this.enemy.isHidden()) {
+      return false;
+    }
+
     const success = npc.moveToOrExecute(this.enemy.position, 1, () => {
       // create damage values
       const enemyDamage = Math.floor(0.33 * -1 * npc._attack);
@@ -81,6 +85,11 @@ export class Hunt implements Plan {
     if (!closerEnemyID) return -Infinity;
 
     this.enemy = Mob.getMob(closerEnemyID)!;
+
+    // Don't consider hidden mobs as valid targets
+    if (this.enemy.isHidden()) {
+      return -Infinity;
+    }
 
     var utility =
       npc.personality.traits[PersonalityTraits.Aggression] *
