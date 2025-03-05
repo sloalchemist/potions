@@ -29,7 +29,7 @@ async function main() {
   if (!worldID) {
     throw new Error('No world ID provided, provide a world ID as an argument');
   }
-  await initializeServerDatabase(`data/${worldID}-server-data.db`, true);
+  await initializeServerDatabase(`../../data/${worldID}-server-data.db`, true);
 
   logger.log(`Loading world ${worldID}`);
 
