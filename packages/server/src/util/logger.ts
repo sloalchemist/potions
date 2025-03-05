@@ -1,7 +1,7 @@
 import log4js from 'log4js';
 import path from 'path';
 
-const logDir = path.resolve(__dirname, '../logs');
+const logDir = path.resolve(__dirname, '../../logs');
 
 log4js.configure({
   appenders: {
@@ -14,7 +14,7 @@ log4js.configure({
     }
   },
   categories: {
-    default: { appenders: ['console', 'file'], level: 'info' },
+    default: { appenders: ['console'], level: 'info' },
     fileOnly: { appenders: ['file'], level: 'trace' }
   }
 });
