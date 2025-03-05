@@ -12,6 +12,7 @@
         }
         .chart-container {
             width: 90%;
+            height: 400px; /* Increased height from default */
             margin: 20px auto;
             padding: 20px;
             background-color: white;
@@ -39,6 +40,11 @@
         .auto-refresh {
             text-align: center;
             margin: 10px 0;
+        }
+        /* Set explicit height for the canvas elements */
+        #tickTimeChart, #mobMetricsChart {
+            height: 350px !important;
+            width: 100% !important;
         }
     </style>
 </head>
