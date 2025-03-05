@@ -19,8 +19,8 @@ log4js.configure({
   }
 });
 
-const consoleLogger = log4js.getLogger(); // Logs to console and file
-const fileLogger = log4js.getLogger('fileOnly'); // Logs to file only
+const consoleLogger = log4js.getLogger();
+const fileLogger = log4js.getLogger('fileOnly');
 
 const logLevels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'] as const;
 type LogLevel = (typeof logLevels)[number];
