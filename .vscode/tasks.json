@@ -2,9 +2,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Auth Server",
+      "label": "Build",
       "type": "shell",
-      "command": "./start_game.sh",
+      "command": "pnpm install & pnpm build",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
@@ -12,11 +12,21 @@
       }
     },
     {
+      "label": "Auth Server",
+      "type": "shell",
+      "command": "./start_game.sh",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "dependsOn": "Build"
+    },
+    {
       "label": "Server",
       "type": "shell",
-      "command": "cd packages/server && pnpm dev test-world",
+      "command": "cd packages/server && pnpm run create ${input:worldType} && pnpm dev ${input:worldType}",
       "problemMatcher": [],
-      "isBackground": true,
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -39,6 +49,7 @@
       "label": "Start All",
       "type": "shell",
       "dependsOn": [
+        "Build",
         "Auth Server",
         "Server",
         "Client"
@@ -48,6 +59,15 @@
         "reveal": "always",
         "panel": "dedicated"
       }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "worldType",
+      "type": "pickString",
+      "description": "Select a world to build and start: ",
+      "options": ["fire-world", "water-world", "test-world"],
+      "default": "test-world"
     }
   ]
 }

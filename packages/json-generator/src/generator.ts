@@ -4,28 +4,10 @@
 // * mv generator.js generator.cjs
 
 import { writeFileSync, readFileSync } from 'fs';
-
-interface JsonData {
-  tiles: unknown[]; // Array of tiles
-  terrain_types: unknown[]; // Array of terrain types
-  item_types: unknown[]; // Array of item types
-  mob_types: unknown[]; // Array of mob types
-  portals: unknown[]; // Array of portals
-  communities: unknown[]; // Array of communities
-  alliances: unknown[]; // Array of alliances
-  houses: unknown[]; // Array of houses
-  items: unknown[]; // Array of items
-  containers: unknown[]; // Array of containers
-  regions: unknown[]; // Array of regions
-  mob_aggro_behaviors: {
-    passive_mobs: string[];
-    hungry_mobs: string[];
-    aggressive_mobs: string[];
-  };
-}
+import { GlobalJson, globalJsonSchema } from './schema';
 
 // Pull client data from global
-const client_breakup = (json: JsonData) => {
+const client_breakup = (json: GlobalJson) => {
   const tl_keys = Object.keys(json);
   const keys_to_delete = new Set([
     'communities',
@@ -84,7 +66,7 @@ const client_breakup = (json: JsonData) => {
       }
     }
     if (keys_to_delete.has(key)) {
-      delete json[key as keyof Partial<JsonData>];
+      delete json[key as keyof Partial<GlobalJson>];
     }
   });
 
@@ -93,7 +75,7 @@ const client_breakup = (json: JsonData) => {
 };
 
 // Pull server data from global
-const server_breakup = (json: JsonData) => {
+const server_breakup = (json: GlobalJson) => {
   // delete portal
 
   const tl_keys = Object.keys(json);
@@ -168,7 +150,7 @@ const server_breakup = (json: JsonData) => {
       }
     }
     if (keys_to_delete.has(key)) {
-      delete json[key as keyof Partial<JsonData>];
+      delete json[key as keyof Partial<GlobalJson>];
     }
   });
 
@@ -176,30 +158,43 @@ const server_breakup = (json: JsonData) => {
   // console.log(json)
 };
 
-// Generate specific json file
-let ran = false;
-process.argv.forEach(function (val: string) {
-  if (val == 'client') {
-    const rawJson = readFileSync('./global.json', 'utf8');
-    const json_client = JSON.parse(rawJson);
-    client_breakup(json_client);
-    writeFileSync(
-      '../../world_assets/global/client/global.json',
-      JSON.stringify(json_client, null, 4)
-    );
-    ran = true;
-  } else if (val === 'server') {
-    const rawJson = readFileSync('./global.json', 'utf8');
-    const json_server = JSON.parse(rawJson);
-    server_breakup(json_server);
-    writeFileSync(
-      '../../world_assets/global/server/global.json',
-      JSON.stringify(json_server, null, 4)
-    );
-    ran = true;
-  }
-});
+const rawJson = readFileSync('./global.json', 'utf8');
+const globalParsed: GlobalJson = globalJsonSchema.parse(JSON.parse(rawJson));
 
-if (ran === false) {
-  console.log('No recognized locations');
+const generatorOptions = ['client', 'server'];
+type GeneratorOption = (typeof generatorOptions)[number];
+
+const args: GeneratorOption[] = process.argv.filter((arg) =>
+  generatorOptions.includes(arg)
+);
+
+export function executeWithArgs(args: GeneratorOption[]) {
+  if (args.length === 0) {
+    console.log('No recognized locations');
+    return;
+  }
+
+  args.forEach(function (option: GeneratorOption) {
+    // Duplicate for each arg
+    const duplicateGlobalParsed = JSON.parse(JSON.stringify(globalParsed));
+
+    switch (option) {
+      case 'client':
+        client_breakup(duplicateGlobalParsed);
+        writeFileSync(
+          '../../world_assets/global/client/global.json',
+          JSON.stringify(duplicateGlobalParsed, null, 2)
+        );
+        break;
+      case 'server':
+        server_breakup(duplicateGlobalParsed);
+        writeFileSync(
+          '../../world_assets/global/server/global.json',
+          JSON.stringify(duplicateGlobalParsed, null, 2)
+        );
+        break;
+    }
+  });
 }
+
+executeWithArgs(args);
