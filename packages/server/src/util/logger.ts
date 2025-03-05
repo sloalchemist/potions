@@ -67,4 +67,3 @@ export const logger = {
     fileLogger.fatal(message, ...args);
   }
 };
-
