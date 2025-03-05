@@ -41,7 +41,9 @@ async function initializeAsync() {
 
   logger.log(`loading world ${worldID}`);
 
-  const worldSpecificData = await import(`../../world_assets/${worldID}/world_specific.json`);
+  const worldSpecificData = await import(
+    `../../world_assets/${worldID}/world_specific.json`
+  );
 
   try {
     await downloadData(supabase, worldID);
