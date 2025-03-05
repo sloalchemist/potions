@@ -18,7 +18,8 @@ import {
   SpeakData,
   ShowPortalMenuData,
   ScoreboardData,
-  HideMobData
+  HideMobData,
+  UnhideMobData
 } from '@rt-potion/common';
 import { Types } from 'ably';
 import { focused } from '../main';
@@ -161,6 +162,13 @@ export function setupBroadcast(
     }
   }
 
+  function handleUnhideMob(data: UnhideMobData) {
+    const mob = world.mobs[data.id];
+    if (mob) {
+      (mob as SpriteMob).unhide();
+    }
+  }
+
   function handlePortal(data: PortalData) {
     const mob = world.mobs[data.mob_key];
     if (mob?.key === publicCharacterId) {
@@ -266,6 +274,9 @@ export function setupBroadcast(
           break;
         case 'hide_mob':
           handleHideMob(broadcastItem.data as HideMobData);
+          break;
+        case 'unhide_mob':
+          handleUnhideMob(broadcastItem.data as UnhideMobData);
           break;
         case 'portal':
           handlePortal(broadcastItem.data as PortalData);

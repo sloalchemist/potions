@@ -146,6 +146,15 @@ export class Mob {
   }
 
   /**
+   * Unhides a previously hidden mob
+   * This is used when a player closes the portal menu without traveling
+   */
+  unhide() {
+    this._hidden = false;
+    pubSub.unhide(this.id);
+  }
+
+  /**
    * Checks if the mob is currently hidden
    */
   isHidden(): boolean {

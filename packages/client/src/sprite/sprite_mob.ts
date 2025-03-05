@@ -383,7 +383,7 @@ export class SpriteMob extends Mob {
 
   /**
    * Hides the mob without destroying it
-   * This is useful for temporarily hiding mobs (e.g., when entering a portal)
+   * This is used when a player is traveling through a portal
    */
   hide() {
     this.sprite.visible = false;
@@ -392,6 +392,17 @@ export class SpriteMob extends Mob {
     this.healthBar.visible = false;
     this.speechBubble?.destroy();
     this.speechText?.destroy();
+  }
+
+  /**
+   * Unhides a previously hidden mob
+   * This is used when a player closes the portal menu without traveling
+   */
+  unhide() {
+    this.sprite.visible = true;
+    this.nameText.visible = true;
+    this.doingText.visible = true;
+    this.healthBar.visible = true;
   }
 
   tick(world: World, deltaTime: number) {
