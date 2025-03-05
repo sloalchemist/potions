@@ -11,6 +11,7 @@ import {
 } from 'prom-client';
 import 'dotenv/config';
 import { getEnv } from '@rt-potion/common';
+import { logger } from '../util/logger';
 //import { worldID } from '../services/setup';
 
 export class DataLogger {
@@ -110,7 +111,7 @@ export function pushMetrics() {
   try {
     gatewayURL = getEnv('METRIC_URL');
   } catch {
-    console.log('ENV for pushgateway server not set disabling pushing metrics');
+    logger.log('ENV for pushgateway server not set disabling pushing metrics');
     return;
   }
 
@@ -125,13 +126,13 @@ export function pushMetrics() {
   gateway
     .pushAdd({ jobName: `Metrics` })
     .then()
-    .catch((e) => console.log(e));
+    .catch((e) => logger.warn(`Failed to pushAdd metrics:`, e));
 
   function pushData() {
     gateway
       .push({ jobName: `Metrics` })
       .then()
-      .catch((e) => console.log(e));
+      .catch((e) => logger.warn(`Failed to push metrics:`, e));
   }
 
   function pusherTimer() {

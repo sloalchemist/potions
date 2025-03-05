@@ -59,6 +59,7 @@ export class WorldScene extends Phaser.Scene {
     d: false
   };
   lastKeyUp = '';
+  lastPublishTime: number = 0;
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -439,12 +440,18 @@ export class WorldScene extends Phaser.Scene {
         // );
 
         // Prevent player movement if the brew scene is active
-        if (this.scene.isActive('BrewScene')) {
+        if (
+          this.scene.isActive('BrewScene') ||
+          this.scene.isActive('FightScene')
+        ) {
           return;
         }
 
         // Prevent player movement if the brew scene is active
-        if (this.scene.isActive('BrewScene')) {
+        if (
+          this.scene.isActive('BrewScene') ||
+          this.scene.isActive('FightScene')
+        ) {
           return;
         }
 
@@ -519,7 +526,6 @@ export class WorldScene extends Phaser.Scene {
     this.hero = sprite;
   }
 
-  count = 0;
   update() {
     if (gameState !== 'stateInitialized') {
       this.hideWorld();
@@ -567,24 +573,13 @@ export class WorldScene extends Phaser.Scene {
       );
     }
 
-    if (this.count > 50) {
-      this.count = 0;
-      this.handlePlayerMovement(true);
-    } else {
-      this.count++;
-      this.handlePlayerMovement(false);
+    const now = Date.now();
+    let publish = false;
+    if (now - this.lastPublishTime >= 400) {
+      publish = true;
+      this.lastPublishTime = now;
     }
-  }
-
-  keyChange() {
-    let different = false;
-    for (const key in this.keys) {
-      if (this.keys[key] !== this.prevKeys[key]) {
-        different = true;
-        break;
-      }
-    }
-    return different;
+    this.handlePlayerMovement(publish);
   }
 
   handlePlayerMovement(publish: boolean) {
@@ -596,7 +591,8 @@ export class WorldScene extends Phaser.Scene {
     // Prevent player movement if the chat overlay or brew scene is active
     if (
       this.scene.isActive('ChatOverlayScene') ||
-      this.scene.isActive('BrewScene')
+      this.scene.isActive('BrewScene') ||
+      this.scene.isActive('FightScene')
     ) {
       return;
     }
@@ -604,7 +600,6 @@ export class WorldScene extends Phaser.Scene {
     let moveX = player.position.x;
     let moveY = player.position.y;
 
-    let moved = false;
     let newX = moveX;
     let newY = moveY;
 
@@ -623,13 +618,12 @@ export class WorldScene extends Phaser.Scene {
 
     // Check if the next step is blocked
     const nextItem = world.getItemAt(newX, newY);
-    if (!!nextItem && !nextItem.isWalkable(player.unlocks)) {
+    if (nextItem && !nextItem.isWalkable(player.unlocks)) {
       return;
     }
 
-    // Check if your position has changed
-    moved = newX !== moveX || newY !== moveY;
-    if (!moved) return;
+    // If no movement, return
+    if (newX === moveX && newY === moveY) return;
 
     let roundedX;
     let roundedY;
@@ -647,7 +641,6 @@ export class WorldScene extends Phaser.Scene {
     // NOTE: the code in the 'else' block moves the player on the client side
     //       publishPlayerPosition() calls that code itself, so player will
     //       move on the client side for whichever case
-
     if (publish) {
       this.prevKeys = { ...this.keys };
       publishPlayerPosition(target);
@@ -656,9 +649,6 @@ export class WorldScene extends Phaser.Scene {
       const path = world.generatePath(player.unlocks, player.position!, target);
       player.path = path;
     }
-
-    const movementKeys = ['a', 'w', 's', 'd'];
-    movementKeys.forEach((k) => (this.keys[k] = false));
   }
 
   showGameOver() {

@@ -19,10 +19,14 @@ packages/server/data/*.db
 packages/server/data/*.db-shm
 packages/server/data/*.db-wal
 
+# Ignore world_assets as they are generated
+world_assets/global/server/global.json
+world_assets/global/client/global.json
+
 # Ignore global json build data
 # packages/server/data/global.json
 # packages/client/static/global.json
-packages/server/global.json
+# packages/server/global.json
 
 # Exclude native npm lock in favor of pnpm lock
 package-lock.json

@@ -18,6 +18,7 @@ import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 import { Favorability } from '../favorability/favorability';
 import { mobFactory } from './mobFactory';
+import { logger } from '../util/logger';
 
 export type MobData = {
   personalities: Personality;
@@ -40,6 +41,7 @@ export type MobData = {
   carrying_id: string;
   community_id: string;
   favorite_item: string;
+  favorabilities: Record<string, number>;
 };
 
 interface MobParams {
@@ -58,6 +60,7 @@ interface MobParams {
   subtype: string;
   currentAction?: string;
   carrying?: string;
+  favorabilities?: Record<string, number>;
   path: Coord[];
   target?: Coord;
 }
@@ -156,7 +159,7 @@ export class Mob {
   }
 
   sendMessage(message: string) {
-    console.log(`${this.name} reads: "${message}"`);
+    logger.log(`${this.name} reads: "${message}"`);
     pubSub.speak(this.id, message);
   }
 
@@ -194,9 +197,9 @@ export class Mob {
     ).get({ id: this.id }) as { poisoned: number } | undefined;
 
     if (!res) {
-      return 0;
+      logger.error(`Mob with id ${this.id} not found`);
+      return 0; // Return a default value or handle it differently
     }
-
     return res.poisoned;
   }
 
@@ -955,6 +958,7 @@ export class Mob {
       subtype: mob.subtype,
       currentAction: mob.current_action,
       carrying: mob.carrying_id,
+      favorabilities: mob.favorabilities,
       path: mob.path ? JSON.parse(mob.path) : [],
       target:
         mob.target_x && mob.target_y

@@ -3,6 +3,7 @@ import { Community } from '../community/community';
 import { pubSub } from '../services/clientCommunication/pubsub';
 import { DB } from '../services/database';
 import { Item } from './item';
+import { logger } from '../util/logger';
 
 export class Carryable {
   private item: Item;
@@ -111,7 +112,7 @@ export class Carryable {
     const position = Item.findEmptyPosition(mob.position);
     const carriedItem = mob.carrying;
 
-    console.log('stash hit');
+    logger.log('stash hit');
     // carriedItem must exist and === item.id
     if (!carriedItem || carriedItem.id !== this.item.id) {
       return false;

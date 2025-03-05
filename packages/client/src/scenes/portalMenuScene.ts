@@ -1,13 +1,26 @@
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { availableWorlds } from '../world/controller';
-import { updateWorld } from '../services/playerToServer';
 import { getWorldID } from '../worldMetadata';
+import { leaveWorld } from '../services/playerToServer';
+
 export class PortalMenuScene extends Phaser.Scene {
   constructor() {
     super({ key: 'PortalMenuScene' });
   }
 
+  world_map = new Map<string, number>([
+    ['fire-world', 3],
+    ['water-world', 4],
+    ['test-world', 5]
+  ]);
+
+  changeWorld(world_id: string) {
+    leaveWorld(world_id);
+    sessionStorage.setItem('traveling_through_portal', 'true');
+    sessionStorage.setItem('traveling_to', world_id);
+    window.location.reload();
+  }
   create() {
     // Add semi-transparent black background
     const overlay = this.add.rectangle(
@@ -50,38 +63,52 @@ export class PortalMenuScene extends Phaser.Scene {
     );
     title.setOrigin(0.5);
 
+    const worldName = getWorldID();
+    let count = 0;
     // Add world selection buttons
-    availableWorlds.forEach((world, index) => {
-      const button = this.add.text(
-        SCREEN_WIDTH / 2,
-        SCREEN_HEIGHT / 3 + index * 60,
-        world.name,
-        buttonStyle
-      );
-      button.setInteractive({ useHandCursor: true });
-      button.setOrigin(0.5);
+    availableWorlds.forEach((world) => {
+      if (worldName == world.name) {
+        return;
+      }
 
-      // Hover effects
-      button.on('pointerover', () => {
-        button.setStyle(nameButtonHoverStyle);
-      });
-      button.on('pointerout', () => {
-        button.setStyle(buttonStyle);
-      });
+      // If world uptime ID in world_map is incorrect, do not create button
+      const uptimeWorldID = this.world_map.get(world.name);
+      if (!uptimeWorldID) {
+        console.log(`${world.name} uptime ID does not match that in world_map`);
+        return;
+      }
 
-      // Click handler
-      button.on('pointerdown', () => {
-        // TODO: Implement world transition
-        console.log(`Selected world: ${world.name} with id ${world.id}`);
-
-        if (world.name === getWorldID()) {
-          // only switch if going to a new world
-          this.scene.stop('PortalMenuScene');
-        } else {
-          updateWorld(world.name);
-          this.scene.stop('PortalMenuScene');
-          this.scene.start('PortalLoadingScene');
+      // If world server is down, do not create button for the server
+      this.fetchData(uptimeWorldID).then((status) => {
+        if (status === 'Down') {
+          return;
         }
+
+        const button = this.add.text(
+          SCREEN_WIDTH / 2,
+          SCREEN_HEIGHT / 3 + count * 60,
+          world.name,
+          buttonStyle
+        );
+
+        count += 1;
+        button.setInteractive({ useHandCursor: true });
+        button.setOrigin(0.5);
+
+        // Hover effects
+        button.on('pointerover', () => {
+          button.setStyle(nameButtonHoverStyle);
+        });
+        button.on('pointerout', () => {
+          button.setStyle(buttonStyle);
+        });
+
+        // Click handler
+        button.on('pointerdown', () => {
+          console.log(`Selected world: ${world.name} with id ${world.id}`);
+          this.changeWorld(world.name);
+          this.scene.stop('PortalMenuScene');
+        });
       });
     });
 
@@ -107,5 +134,33 @@ export class PortalMenuScene extends Phaser.Scene {
     closeButton.on('pointerdown', () => {
       this.scene.stop('PortalMenuScene');
     });
+  }
+
+  // Uses uptime API to find out status of servers
+  async fetchData(uptimeID: number): Promise<string> {
+    const response = await fetch(
+      `https://status.vosburg.us/api/badge/${uptimeID}/status`
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error requesting uptime data ${response.status}`);
+    }
+
+    const svg = await response.text();
+
+    // Only xml available, must parse text for "Status Down" message
+    const parser = new DOMParser();
+    const svgDoc = parser.parseFromString(svg, 'image/svg+xml');
+    const textNodes = svgDoc.querySelectorAll('text');
+
+    for (const node of Array.from(textNodes)) {
+      const text = node.textContent?.trim();
+      if (text === 'Up' || text === 'Down') {
+        console.log(`Status found: ${text}`);
+        return text;
+      }
+    }
+
+    return 'Down';
   }
 }

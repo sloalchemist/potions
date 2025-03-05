@@ -38,6 +38,7 @@ describe('Community ownership based interactions', () => {
       playerPos,
       {},
       {},
+      {},
       'alchemists'
     );
     world.mobs[publicCharacterId] = player;
@@ -61,6 +62,7 @@ describe('Community ownership based interactions', () => {
           while_carried: false,
           permissions: {
             community: true,
+            character: false,
             other: false
           },
           conditions: [
@@ -77,6 +79,7 @@ describe('Community ownership based interactions', () => {
           while_carried: false,
           permissions: {
             community: true,
+            character: false,
             other: false
           }
         }
@@ -99,7 +102,7 @@ describe('Community ownership based interactions', () => {
     );
 
     // Manually assign basket template type
-    basket.attributes.templateType = 'Log';
+    basket.attributes.templateType = 'log';
     // Map attributes to dictionary to match correct config
     basket.attributes = {
       ...basket.attributes,
@@ -138,6 +141,11 @@ describe('Community ownership based interactions', () => {
           action: 'build_wall',
           while_carried: true,
           requires_item: 'partial-wall'
+        },
+        {
+          description: 'Create Market',
+          action: 'create_market',
+          while_carried: true
         }
       ]
     };
@@ -151,7 +159,8 @@ describe('Community ownership based interactions', () => {
     const interactions = getPhysicalInteractions(
       basket,
       log,
-      player.community_id
+      player.community_id,
+      player.key
     );
 
     // Check that add_item is NOT an available interaction
@@ -166,9 +175,9 @@ describe('Community ownership based interactions', () => {
     const interactions = getPhysicalInteractions(
       basket,
       log,
-      player.community_id
+      player.community_id,
+      player.key
     );
-
     // Check that add_item IS an available interaction
     expect(
       interactions.some((interaction) => interaction.action === 'add_item')
