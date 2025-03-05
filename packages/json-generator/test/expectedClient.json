@@ -1,6 +1,4 @@
 {
-  "tiles": [],
-  "terrain_types": [],
   "item_types": [
     {
       "name": "Heartbeet",
@@ -156,8 +154,7 @@
       ],
       "walkable": true,
       "smashable": true,
-      "interactions": [
-      ],
+      "interactions": [],
       "carryable": true,
       "on_tick": []
     },
@@ -541,7 +538,6 @@
           "action": "create_market",
           "while_carried": true
         }
-
       ]
     },
     {
@@ -724,7 +720,6 @@
         }
       ]
     },
-
     {
       "name": "Coral",
       "type": "coral",
@@ -792,18 +787,18 @@
       "walkable": false,
       "interactions": [],
       "on_tick": [
-          {
-              "action": "spawn_item",
-              "parameters": {
-                  "type": "lightning-bloom",
-                  "global_max": 10,
-                  "local_max": 2,
-                  "radius": 1,
-                  "rate": 0.1
-              }
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "lightning-bloom",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 1,
+            "rate": 0.1
           }
+        }
       ]
-  },
+    },
     {
       "name": "Mushroom-1",
       "type": "mushroom-1",
@@ -1369,98 +1364,23 @@
     {
       "name": "Blob",
       "type": "blob",
-      "speaker": false,
-      "name_style": "monstrous",
-      "description": "A slimy, aggressive creature known for its strong attacks.",
-      "health": 100,
-      "speed": 0.6,
-      "attack": 40,
-      "defense": 10,
-      "gold": 25,
-      "community": "blobs",
-      "stubbornness": 20,
-      "bravery": 60,
-      "aggression": 80,
-      "industriousness": 40,
-      "adventurousness": 20,
-      "gluttony": 10,
-      "sleepy": 10,
-      "extroversion": 50
+      "speaker": false
     },
     {
       "name": "Villager",
       "type": "villager",
-      "speaker": true,
-      "name_style": "norse-english",
-      "description": "A friendly inhabitant of the silverclaw community.",
-      "health": 10,
-      "speed": 0.5,
-      "attack": 5,
-      "defense": 20,
-      "gold": 0,
-      "community": "silverclaw",
-      "stubbornness": 20,
-      "bravery": 5,
-      "aggression": 5,
-      "industriousness": 40,
-      "adventurousness": 10,
-      "gluttony": 50,
-      "sleepy": 80,
-      "extroversion": 50
+      "speaker": true
     },
     {
       "name": "Player",
       "type": "player",
-      "speaker": true,
-      "description": "The player",
-      "name_style": "norse-english",
-      "health": 100,
-      "speed": 2.5,
-      "attack": 5,
-      "defense": 50,
-      "gold": 0,
-      "community": "alchemists",
-      "stubbornness": 20,
-      "bravery": 5,
-      "aggression": 5,
-      "industriousness": 40,
-      "adventurousness": 10,
-      "gluttony": 50,
-      "sleepy": 80,
-      "extroversion": 50
+      "speaker": true
     },
     {
       "name": "Fighter",
       "type": "fighter",
-      "speaker": true,
-      "name_style": "french-roman",
-      "description": "A brave combatant, loyal to the fighters guild.",
-      "health": 100,
-      "speed": 0.75,
-      "attack": 100,
-      "defense": 50,
-      "gold": 0,
-      "community": "fighters",
-      "stubbornness": 20,
-      "bravery": 60,
-      "aggression": 80,
-      "industriousness": 40,
-      "adventurousness": 20,
-      "gluttony": 10,
-      "sleepy": 10,
-      "extroversion": 50
+      "speaker": true
     }
   ],
-  "portals": [],
-  "communities": [],
-  "alliances": [],
-  "houses": [],
-  "items": [],
-  "containers": [],
-  "regions": [],
-  "mob_aggro_behaviors": {
-    "passive_mobs": ["villager"],
-    "hungry_mobs": ["blob"],
-    "aggressive_mobs": ["fighter"]
-  }
+  "portals": []
 }

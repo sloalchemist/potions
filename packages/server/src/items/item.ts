@@ -361,7 +361,7 @@ export class Item {
                 items;
                 `
     ).all() as { id: string }[];
-    //console.log('starting item ticks');
+    //logger.log('starting item ticks');
     return result.map((row) => row.id);
   }
 

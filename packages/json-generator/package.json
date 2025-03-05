@@ -5,13 +5,20 @@
   "type": "commonjs",
   "main": "src/generator.ts",
   "scripts": {
-    "generate": " tsc -p tsconfig.json && node dist/generator.js"
+    "generate": "tsc -p tsconfig.json && node dist/generator.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.13.4",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.6",
     "ts-node": "^10.0.0"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
   }
 }

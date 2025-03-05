@@ -156,8 +156,7 @@
       ],
       "walkable": true,
       "smashable": true,
-      "interactions": [
-      ],
+      "interactions": [],
       "carryable": true,
       "on_tick": []
     },
@@ -317,8 +316,6 @@
     {
       "name": "Wall",
       "type": "wall",
-      "item_group": "wall",
-      "layout_type": "wall",
       "carryable": false,
       "smashable": true,
       "attributes": [
@@ -355,8 +352,6 @@
     {
       "name": "Fence",
       "type": "fence",
-      "item_group": "fence",
-      "layout_type": "fence",
       "carryable": false,
       "walkable": false,
       "smashable": true,
@@ -373,8 +368,6 @@
     {
       "name": "Gate",
       "type": "gate",
-      "item_group": "fence",
-      "layout_type": "opens",
       "carryable": false,
       "walkable": true,
       "smashable": true,
@@ -391,8 +384,6 @@
     {
       "name": "Door",
       "type": "door",
-      "item_group": "wall",
-      "layout_type": "opens",
       "carryable": false,
       "smashable": true,
       "walkable": true,
@@ -541,7 +532,6 @@
           "action": "create_market",
           "while_carried": true
         }
-
       ]
     },
     {
@@ -724,7 +714,6 @@
         }
       ]
     },
-
     {
       "name": "Coral",
       "type": "coral",
@@ -792,18 +781,18 @@
       "walkable": false,
       "interactions": [],
       "on_tick": [
-          {
-              "action": "spawn_item",
-              "parameters": {
-                  "type": "lightning-bloom",
-                  "global_max": 10,
-                  "local_max": 2,
-                  "radius": 1,
-                  "rate": 0.1
-              }
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "lightning-bloom",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 1,
+            "rate": 0.1
           }
+        }
       ]
-  },
+    },
     {
       "name": "Mushroom-1",
       "type": "mushroom-1",
@@ -1369,7 +1358,6 @@
     {
       "name": "Blob",
       "type": "blob",
-      "speaker": false,
       "name_style": "monstrous",
       "description": "A slimy, aggressive creature known for its strong attacks.",
       "health": 100,
@@ -1390,7 +1378,6 @@
     {
       "name": "Villager",
       "type": "villager",
-      "speaker": true,
       "name_style": "norse-english",
       "description": "A friendly inhabitant of the silverclaw community.",
       "health": 10,
@@ -1411,7 +1398,6 @@
     {
       "name": "Player",
       "type": "player",
-      "speaker": true,
       "description": "The player",
       "name_style": "norse-english",
       "health": 100,
@@ -1451,7 +1437,6 @@
       "extroversion": 50
     }
   ],
-  "portals": [],
   "communities": [],
   "alliances": [],
   "houses": [],
