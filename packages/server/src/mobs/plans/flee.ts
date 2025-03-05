@@ -67,7 +67,14 @@ export class Flee implements Plan {
 
     this.enemy = Mob.getMob(closerEnemyID)!;
 
-    //console.log(`fleeing eval ${npc.name} ${npc.personality.traits[PersonalityTraits.Bravery]} ${npc.attributes['health']} ${this.enemy.attributes['health']}`)
+    if (!this) {
+      //console.error(`${this} is no longer valid or does not exist in the database.`);
+      return 0;  // Exit early
+    }
+    if (!npc || !Mob.getMob(npc.id)) {
+      //console.error(`${npc.name} is no longer valid or does not exist in the database.`);
+      return 0;  // Exit early
+    }
     const utility =
       (100 - npc.personality.traits[PersonalityTraits.Bravery]) *
       (this.enemy.health / npc.health);

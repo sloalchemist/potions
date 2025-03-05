@@ -146,6 +146,10 @@ function giveRandomEffect(mob: Mob) {
       return true;
     case 1:
       // Reduce Health by 20 or to 1
+      if (!mob || !Mob.getMob(mob.id)) {
+        //console.error(`${mob.name} is no longer valid or does not exist in the database.`);
+        return;  // Exit early
+      }
       if (mob.health > 20) {
         mob.changeHealth(-20);
       } else {

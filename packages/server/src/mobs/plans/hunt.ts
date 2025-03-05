@@ -32,8 +32,15 @@ export class Hunt implements Plan {
       }
 
       // attack/fight each other
+      //console.log(`changing ${this.enemy!.name} health in hunt execute by ${npc.name}`)
       this.enemy!.changeHealth(adjustedEnemyDamage);
       npc.changeHealth(adjustedNpcDamage);
+
+      // Check if the NPC is still alive after taking damage
+      if (!npc || !Mob.getMob(npc.id)) {
+        console.error(`${npc.name} has died after taking damage.`);
+        return false;  // Exit early
+      }
 
       // get slowEnemy debuff count
       try {
@@ -52,7 +59,7 @@ export class Hunt implements Plan {
           this.enemy!.changeEffect(speedDelta, speedDuration, 'speed');
         }
       } catch {
-        console.log('Could not get slowEnemy in hunt');
+        console.log(`Could not get slowEnemy in hunt: ${npc.name}`);
       }
 
       return false;
@@ -80,6 +87,11 @@ export class Hunt implements Plan {
     if (!closerEnemyID) return -Infinity;
 
     this.enemy = Mob.getMob(closerEnemyID)!;
+
+    if (!this.enemy) {
+      console.error(`Enemy with ID ${closerEnemyID} does not exist anymore.`);
+      return -Infinity; // Exit early if no enemy found
+    }
 
     var utility =
       npc.personality.traits[PersonalityTraits.Aggression] *
