@@ -143,7 +143,7 @@ export class Carryable {
 
   // unstash stored items (drops at feet), swtiches carried item with stored item if carried exists
   unstash(mob: Mob): void {
-    if (mob.carrying){
+    if (mob.carrying) {
       const carriedItem = mob.carrying;
       Carryable.fromItem(carriedItem)!.stash(mob);
     }

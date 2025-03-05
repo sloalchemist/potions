@@ -351,7 +351,7 @@ export class SpriteItem extends Item {
     // Call base unstash to update world state
     super.unstash(world, mob);
     // Reposition and make sprite visible
-    
+
     this.sprite.visible = true;
     this.animate();
   }
