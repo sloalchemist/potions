@@ -81,7 +81,7 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 100
     });
     
-    this.load.spritesheet('explosion', 'static/explosion.png', {
+    this.load.spritesheet('explosion', 'static/Explosion-scaled.png', {
       frameWidth: 288,
       frameHeight: 288
     });
@@ -115,7 +115,7 @@ export class WorldScene extends Phaser.Scene {
 
     this.anims.create({
       key: 'bomb-explosion',
-      frames: this.anims.generateFrameNumbers('explosion', { start: 1, end: 12 }),
+      frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 11 }),
       frameRate: 20,
       repeat: 0
     });

@@ -187,13 +187,17 @@ export class Mob {
   }
 
   get poisoned(): number {
-    const mob = DB.prepare(
+    const res = DB.prepare(
       `
       SELECT poisoned FROM mobView WHERE id = :id
       `
-    ).get({ id: this.id }) as { poisoned: number };
+    ).get({ id: this.id }) as { poisoned: number } | undefined;
 
-    return mob.poisoned;
+    if (!res) {
+      return 0;
+    }
+
+    return res.poisoned;
   }
 
   get damageOverTime(): number {
