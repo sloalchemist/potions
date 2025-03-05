@@ -18,6 +18,7 @@ import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 import { Favorability } from '../favorability/favorability';
 import { mobFactory } from './mobFactory';
+import { logger } from '../util/logger';
 
 export type MobData = {
   personalities: Personality;
@@ -158,7 +159,7 @@ export class Mob {
   }
 
   sendMessage(message: string) {
-    console.log(`${this.name} reads: "${message}"`);
+    logger.log(`${this.name} reads: "${message}"`);
     pubSub.speak(this.id, message);
   }
 
@@ -195,6 +196,10 @@ export class Mob {
       `
     ).get({ id: this.id }) as { poisoned: number };
 
+    if (!mob) {
+      console.error(`Mob with id ${this.id} not found`);
+      return 0; // Return a default value or handle it differently
+    }
     return mob.poisoned;
   }
 
