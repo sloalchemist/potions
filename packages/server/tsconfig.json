@@ -16,9 +16,9 @@
   "include": [
     "src/**/*.ts",
     "test/**/*.ts",
-    "../../world_assets/test-world/server/world_specific.json",
-    "../../world_assets/water-world/server/world_specific.json",
-    "../../world_assets/fire-world/server/world_specific.json"
+    "/world_assets/test-world/world_specific.json",
+    "/world_assets/water-world/world_specific.json",
+    "/world_assets/fire-world/world_specific.json"
   ],
   "exclude": ["node_modules"]
 }
