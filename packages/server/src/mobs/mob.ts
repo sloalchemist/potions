@@ -909,6 +909,11 @@ export class Mob {
   }
 
   fightRequest(mob: Mob): boolean {
+    // Don't allow fighting if either mob is hidden
+    if (this.isHidden() || mob.isHidden()) {
+      return false;
+    }
+
     // TODO: replace with FightTracker class
     pubSub.playerAttacks(mob.id, ['Test Attack']);
     // fightTracker.startFight(mob, this);
