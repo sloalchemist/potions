@@ -10,4 +10,5 @@ export type PlayerToServerMessageMap = {
   move: { target: Coord };
   update_state: { name: string };
   cheat: { action: string };
+  unhide: Record<string, never>;
 };

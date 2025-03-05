@@ -33,6 +33,7 @@ export type DoingData = { id: string; action: string };
 export type MoveData = { id: string; target: Coord; path: Coord[] };
 export type DestroyMobData = { id: string };
 export type HideMobData = { id: string };
+export type UnhideMobData = { id: string };
 export type PortalData = { mob_key: string; portalTo: string };
 export type MobChangeData = {
   id: string;
@@ -78,6 +79,7 @@ export type BroadcastData =
   | { type: 'move'; data: MoveData }
   | { type: 'destroy_mob'; data: DestroyMobData }
   | { type: 'hide_mob'; data: HideMobData }
+  | { type: 'unhide_mob'; data: UnhideMobData }
   | { type: 'portal'; data: PortalData }
   | {
       type: 'mob_change';

@@ -51,6 +51,7 @@ export interface PubSub {
   setDateTime(fantasyDate: FantasyDate): void;
   kill(key: string): void;
   hide(key: string): void;
+  unhide(key: string): void;
   dropItem(itemKey: string, mobKey: string, position: Coord): void;
   stashItem(itemKey: string, mobKey: string, position: Coord): void;
   unstashItem(itemKey: string, mobKey: string): void;

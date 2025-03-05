@@ -549,6 +549,10 @@ export class AblyService implements PubSub {
     this.addToBroadcast({ type: 'hide_mob', data: { id: key } });
   }
 
+  public unhide(key: string): void {
+    this.addToBroadcast({ type: 'unhide_mob', data: { id: key } });
+  }
+
   public dropItem(item_key: string, mob_key: string, position: Coord): void {
     this.addToBroadcast({
       type: 'drop_item',
@@ -700,6 +704,13 @@ export class AblyService implements PubSub {
           data.action,
           data.give_to ? Mob.getMob(data.give_to) : undefined
         );
+      }
+    });
+
+    subscribeToPlayerChannel('unhide', () => {
+      const player = Mob.getMob(username);
+      if (player) {
+        player.unhide();
       }
     });
 

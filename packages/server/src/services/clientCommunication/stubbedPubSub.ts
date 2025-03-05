@@ -78,6 +78,8 @@ export class StubbedPubSub implements PubSub {
 
   hide(_key: string): void {}
 
+  unhide(_key: string): void {}
+
   dropItem(_itemKey: string, _mobKey: string, _position: Coord): void {}
 
   pickupItem(_itemKey: string, _mobKey: string): void {}

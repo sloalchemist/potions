@@ -2,7 +2,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { availableWorlds } from '../world/controller';
 import { getWorldID } from '../worldMetadata';
-import { leaveWorld } from '../services/playerToServer';
+import { leaveWorld, publishPlayerMessage } from '../services/playerToServer';
 
 export class PortalMenuScene extends Phaser.Scene {
   constructor() {
@@ -132,6 +132,9 @@ export class PortalMenuScene extends Phaser.Scene {
 
     // Close button action
     closeButton.on('pointerdown', () => {
+      // Unhide the player when closing the portal menu
+      publishPlayerMessage('unhide', {});
+
       this.scene.stop('PortalMenuScene');
     });
   }
