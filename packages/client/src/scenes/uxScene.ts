@@ -134,10 +134,7 @@ export class UxScene extends Phaser.Scene {
 
     let worldID = getWorldID();
 
-    this.load.json(
-      'global_data',
-      '../../../world_assets/global.json'
-    );
+    this.load.json('global_data', '../../../world_assets/global.json');
     this.load.json(
       'world_specific_data',
       `../../../world_assets/${worldID}/world_specific.json`

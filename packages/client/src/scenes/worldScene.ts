@@ -82,10 +82,7 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 100
     });
 
-    this.load.json(
-      'global_data',
-      '../../../world_assets/global.json'
-    );
+    this.load.json('global_data', '../../../world_assets/global.json');
     this.load.json(
       'world_specific_data',
       `../../../world_assets/${worldID}/world_specific.json`

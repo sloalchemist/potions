@@ -225,7 +225,7 @@ export class LoadWorldScene extends Phaser.Scene {
           'global-atlas',
           `../../../world_assets/${worldID}/global.png`,
           `../../../world_assets/${worldID}/global-atlas.json`
-        ); 
+        );
 
         this.load.once('complete', () => {
           this.anims.create({
