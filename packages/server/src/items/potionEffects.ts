@@ -66,11 +66,11 @@ export function drinkPotion(
       mob.changeMaxHealth(healthIncrease, true);
       return true;
     case '#8b7f6e':
-      logger.log('Drinking grey potion');
+      logger.debug('Drinking grey potion');
       mob.changeSlowEnemy(1);
       return true;
     case '#ab00e7':
-      logger.log('Drinking purple potion');
+      logger.debug('Drinking purple potion');
       let defenseMultiplier = 0.5;
       let defenseDuration = 240;
       if (effectModifier) {
@@ -81,7 +81,7 @@ export function drinkPotion(
       mob.changeEffect(defenseDelta, defenseDuration, 'defense');
       return true;
     case '#00ff00':
-      console.log('Drinking green potion');
+      logger.debug('Drinking green potion');
       let dotDelta = 1;
       let dotDuration = 240;
       if (effectModifier) {
@@ -91,7 +91,7 @@ export function drinkPotion(
       mob.changeEffect(dotDelta, dotDuration, 'damageOverTime');
       return true;
     case '#166060':
-      console.log('Drinking black potion');
+      logger.debug('Drinking black potion');
       let monsterDuration = 120;
       if (effectModifier) {
         monsterDuration = monsterDuration * effectModifier;

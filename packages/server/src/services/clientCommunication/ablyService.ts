@@ -75,7 +75,7 @@ export class AblyService implements PubSub {
           ? this.worldID
           : presenceMsg.data.target_world_id;
 
-      console.log('Updating to ', target_world_id);
+      logger.log('Updating to ', target_world_id);
 
       // Await this, because the client needs to reload the page after the world is
       // updated in order for portals to work
@@ -592,7 +592,7 @@ export class AblyService implements PubSub {
     logger.log('Updating state info for', username);
     const player = Mob.getMob(username);
     if (!player) {
-      console.error(
+      logger.error(
         `No player found, unable to persist player state: ${username}`
       );
       return;
