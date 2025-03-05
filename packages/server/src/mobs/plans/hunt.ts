@@ -40,7 +40,7 @@ export class Hunt implements Plan {
       // Check if the NPC is still alive after taking damage
       if (!npc || !Mob.getMob(npc.id)) {
         console.error(`${npc.name} has died after taking damage.`);
-        return false;  // Exit early
+        return false; // Exit early
       }
 
       // get slowEnemy debuff count
@@ -60,7 +60,6 @@ export class Hunt implements Plan {
           this.enemy!.changeEffect(speedDelta, speedDuration, 'speed');
         }
       } catch {
-        
         logger.log('Could not get slowEnemy in hunt');
       }
 

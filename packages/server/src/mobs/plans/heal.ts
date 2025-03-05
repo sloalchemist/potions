@@ -21,7 +21,7 @@ export class Heal extends PlanMeans {
   benefit(npc: Mob): number {
     if (!npc || !Mob.getMob(npc.id)) {
       //console.error(`${npc.name} is no longer valid or does not exist in the database.`);
-      return -Infinity;  // Exit early
+      return -Infinity; // Exit early
     }
     if (npc.health >= 100) {
       // If health is full, no need to heal

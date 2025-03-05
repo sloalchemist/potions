@@ -186,7 +186,9 @@ export class Mob {
       `
     ).get({ id: this.id }) as { health: number };
     if (!mob) {
-      console.error(`Get Health: Mob with id ${this.id} and name ${this.name} not found`);
+      console.error(
+        `Get Health: Mob with id ${this.id} and name ${this.name} not found`
+      );
       return 0;
     }
     return mob.health;
@@ -200,10 +202,8 @@ export class Mob {
     ).get({ id: this.id }) as { poisoned: number };
 
     if (!mob) {
-
       logger.error(`Mob with id ${this.id} not found`);
       return 0; // Return a default value or handle it differently
-
     }
     return mob.poisoned;
   }
@@ -442,7 +442,7 @@ export class Mob {
   changeHealth(amount: number) {
     if (!this || !Mob.getMob(this.id)) {
       //console.error(`${this.name} is no longer valid or does not exist in the database.`);
-      return;  // Exit early
+      return; // Exit early
     }
     if (amount === 0 || this.health <= 0) return;
     let newHealth = this.health + amount;
@@ -1037,19 +1037,18 @@ export class Mob {
       // Check if mob exists and is valid
       if (!this || !Mob.getMob(this.id)) {
         //console.error(`${this.name} is no longer valid or does not exist in the database.`);
-        return;  // Exit early
+        return; // Exit early
       }
-    
+
       const action = selectAction(this);
       const finished = action.execute(this);
       this.setAction(action.type(), finished);
     }
-    
 
     this.checkTickReset();
     if (!this || !Mob.getMob(this.id)) {
       //console.error(`${this.name} is no longer valid or does not exist in the database.`);
-      return;  // Exit early
+      return; // Exit early
     }
     this.checkPoison();
     this.needs.tick();
