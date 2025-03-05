@@ -454,7 +454,6 @@ export class WorldScene extends Phaser.Scene {
     });
 
     const movementKeys = ['w', 'a', 's', 'd'];
-    const actionKeys = ['e']; 
 
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       if (!world.mobs[publicCharacterId]) {
