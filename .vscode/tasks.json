@@ -2,14 +2,25 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Auth Server",
+      "label": "Build",
       "type": "shell",
-      "command": "./start_game.sh",
+      "command": "pnpm install && pnpm build && cd packages/server && pnpm run create test-world",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
         "panel": "new"
       }
+    },
+    {
+      "label": "Auth Server",
+      "type": "shell",
+      "command": "cd packages/auth-server && pnpm dev",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "dependsOn": "Build"
     },
     {
       "label": "Server",
@@ -21,7 +32,7 @@
         "reveal": "always",
         "panel": "new"
       },
-      "dependsOn": "Auth Server"
+      "dependsOn": "Build"
     },
     {
       "label": "Client",
@@ -33,12 +44,13 @@
         "reveal": "always",
         "panel": "new"
       },
-      "dependsOn": "Auth Server"
+      "dependsOn": "Build"
     },
     {
       "label": "Start All",
       "type": "shell",
       "dependsOn": [
+        "Build",
         "Auth Server",
         "Server",
         "Client"
