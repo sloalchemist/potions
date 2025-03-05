@@ -276,7 +276,6 @@ export function getPhysicalInteractions(
       (!isOwnedByCharacter &&
         !isOwnedByCommunity &&
         interaction.permissions?.other); // Allowed only for non-owners
-
     if (
       hasPermission &&
       !interaction.while_carried &&
