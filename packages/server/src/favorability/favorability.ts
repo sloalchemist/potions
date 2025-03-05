@@ -93,6 +93,7 @@ export class Favorability {
         5 -
       player._attack;
     logger.log(
+      'Example modified logistic calculation:',
       this.modifiedLogistic(
         Community.getFavor('alchemists', 'silverclaw') / 100,
         200

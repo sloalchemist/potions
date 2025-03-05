@@ -3,7 +3,7 @@ import { mobFactory } from '../src/mobs/mobFactory';
 import globalData from '../global.json';
 import { itemGenerator } from '../src/items/itemGenerator';
 import { Coord } from '@rt-potion/common';
-import { logger } from '../src/util/logger';
+import { isValidLogLevel, logger } from '../src/util/logger';
 
 const itemTypes: Array<string> = globalData.item_types.map((item) => item.type);
 const mobTypes: Array<string> = globalData.mob_types.map((mob) => mob.type);
@@ -11,7 +11,7 @@ const mobTypes: Array<string> = globalData.mob_types.map((mob) => mob.type);
 export const HELP_PROMPT = `Available commands:
 - spawn mob [type] x:[x-coord] y:[y-coord]
 - spawn item [type] x:[x-coord] y:[y-coord]
-- logtoggle [on/off]
+- loglevel [trace | debug | info | warn | error]
 - exit: Quit CLI`;
 
 export let rl: readline.Interface;
@@ -90,13 +90,13 @@ export function handleCliCommand(input: string) {
   const [command, entityType, name, ...args] = input.trim().split(' ');
   const arg = entityType;
 
-  if (command === 'logtoggle') {
-    if (arg === 'on') {
-      logger.enableLogging();
-    } else if (arg === 'off') {
-      logger.disableLogging();
+  if (command === 'loglevel') {
+    if (isValidLogLevel(arg)) {
+      logger.setConsoleLogLevel(arg);
     } else {
-      logger.toggleLogging();
+      console.warn(
+        'Invalid log level. Use: trace, debug, info, warn, error, or fatal.'
+      );
     }
   } else if (command === 'spawn') {
     let attributes: Record<string, string | number>;

@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { getEnv } from '@rt-potion/common';
+import { logger } from '../util/logger';
 
 function requestServer(URL: string) {
   fetch(URL)
@@ -7,7 +8,7 @@ function requestServer(URL: string) {
       //counter++;
     })
     .catch((e) => {
-      console.log(e, 'Request Failed');
+      logger.log(e, 'Request Failed');
     });
 }
 
@@ -20,7 +21,7 @@ export function requestClock() {
     server_url = getEnv('SERVER_URL');
     uptime_msg = getEnv('UPTIME_MSG');
   } catch {
-    console.log('SERVER_ENV and UPTIME_MSG not set disabling request clock');
+    logger.log('SERVER_ENV and UPTIME_MSG not set disabling request clock');
     return;
   }
   const URL = `${server_url}${uptime_msg}`;
