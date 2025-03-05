@@ -9,7 +9,6 @@ describe('validate global json', () => {
 
   it('validate client global json', () => {
     const expected = readFileSync(__dirname + '/expectedClient.json', 'utf8');
-
     const actual = readFileSync(
       path.join(__dirname, '../../client/world_assets/global.json'),
       'utf8'
@@ -20,7 +19,6 @@ describe('validate global json', () => {
 
   it('validate server global json', () => {
     const expected = readFileSync(__dirname + '/expectedServer.json', 'utf8');
-
     const actual = readFileSync(
       path.join(__dirname, '../../server/world_assets/global.json'),
       'utf8'
