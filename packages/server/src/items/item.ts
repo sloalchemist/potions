@@ -255,7 +255,7 @@ export class Item {
     return itemsLocsInRadius.length;
   }
 
-  static findEmptyPosition(position: Coord, maxRadius: number = 50): Coord {
+  static findEmptyPosition(position: Coord, maxRadius: number = 10): Coord | undefined {
     const flooredCoord = floor(position);
 
     if (Item.getItemIDAt(flooredCoord) === undefined) {
@@ -291,7 +291,8 @@ export class Item {
       radius += 1;
     }
 
-    throw new Error(`No empty position found within radius ${maxRadius}`);
+    // If no valid position is found within maxRadius, return undefined
+    return undefined;
   }
 
   setAttribute<T extends string | number>(key: string, value: T): void {

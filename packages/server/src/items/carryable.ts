@@ -19,6 +19,12 @@ export class Carryable {
     return undefined;
   }
 
+  // Destroy carryable item on the server side
+  destroy(): void {
+    console.log(`Destroying carryable item ${this.item.id}`);
+    this.item.destroy(); 
+  }
+
   /**
    * Function implements the giving of an item from one mob to another.
    * Performs checks and updates favorability accordingly as well.
@@ -79,6 +85,12 @@ export class Carryable {
     if (mob.position) {
       const position = Item.findEmptyPosition(mob.position);
 
+      if (!position) {
+        console.log(`No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Destroying item.`);
+        this.item.destroy(); 
+        return; 
+      }
+
       DB.prepare(
         `
                 UPDATE items
@@ -109,6 +121,12 @@ export class Carryable {
       return false;
     }
     const position = Item.findEmptyPosition(mob.position);
+
+    if (!position) {
+      console.log(`No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Stash canceled.`);
+      return false; // Stop execution if no valid space is found
+    }
+
     const carriedItem = mob.carrying;
 
     console.log('stash hit');
@@ -145,6 +163,11 @@ export class Carryable {
   unstash(mob: Mob): void {
     if (mob.position) {
       const position = Item.findEmptyPosition(mob.position);
+
+      if (!position) {
+        console.log(`No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Unstash canceled`);
+        return; // Stop execution if no valid space is found
+      }
 
       DB.prepare(
         `
