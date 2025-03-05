@@ -276,6 +276,7 @@ export function getPhysicalInteractions(
       (!isOwnedByCharacter &&
         !isOwnedByCommunity &&
         interaction.permissions?.other); // Allowed only for non-owners
+
     if (
       hasPermission &&
       !interaction.while_carried &&
@@ -284,7 +285,7 @@ export function getPhysicalInteractions(
       if (
         (interaction.action == 'add_item' &&
           carried &&
-          carried.type.localeCompare(
+          carried.itemType.name.localeCompare(
             item.attributes.templateType.toString()
           ) === 0) ||
         interaction.action != 'add_item'

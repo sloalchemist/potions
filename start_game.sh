@@ -8,8 +8,12 @@ check_port_3000() {
     fi
 }
 
-# start dev in auth-server
-cd packages/auth-server
+# setup root, server, and auth server
+pnpm install && pnpm build
+cd packages/server
+pnpm run create test-world
+cd ../auth-server
+
 check_port_3000
 
 # finishing state
