@@ -92,6 +92,8 @@ export class Mob {
   private _health: number;
   private favorite_item: string;
 
+  private _hidden: boolean = false;
+
   private constructor({
     key,
     name,
@@ -132,6 +134,30 @@ export class Mob {
     this.personality = Personality.loadPersonality(this);
     this.community_id = community_id;
     this.unlocks.push(community_id);
+  }
+
+  /**
+   * Hides the mob without destroying it
+   * This is useful for temporarily hiding mobs (e.g., when entering a portal)
+   */
+  hide() {
+    this._hidden = true;
+    pubSub.hide(this.id);
+  }
+
+  /**
+   * Checks if the mob is currently hidden
+   */
+  isHidden(): boolean {
+    return this._hidden;
+  }
+
+  /**
+   * Checks if a mob is currently hidden
+   * @param mob The mob to check
+   */
+  static isHidden(mob: Mob): boolean {
+    return mob._hidden;
   }
 
   private setAction(action: string, finished: boolean = false) {
@@ -316,9 +342,13 @@ export class Mob {
       radiusSquared: radius * radius
     }) as { id: string }[];
 
-    return mobIDs.map((mobID) => {
-      return mobID.id;
-    });
+    // Filter out hidden mobs
+    return mobIDs
+      .map((row) => row.id)
+      .filter((id) => {
+        const mob = Mob.getMob(id);
+        return mob && !Mob.isHidden(mob);
+      });
   }
 
   findClosestEnemyID(
@@ -351,7 +381,16 @@ export class Mob {
     };
     const closestMob = DB.prepare(query).get(params) as { id: string };
 
-    return closestMob ? closestMob.id : undefined;
+    // If we found a mob, check if it's hidden
+    if (closestMob) {
+      const mob = Mob.getMob(closestMob.id);
+      if (mob && Mob.isHidden(mob)) {
+        return undefined; // Don't return hidden mobs
+      }
+      return closestMob.id;
+    }
+
+    return undefined;
   }
 
   findNClosestObjectIDs(

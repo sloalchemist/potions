@@ -8,7 +8,8 @@ import { logger } from '../../src/util/logger';
 jest.mock('../../src/services/authMarshalling');
 jest.mock('../../src/services/clientCommunication/pubsub', () => ({
   pubSub: {
-    showPortalMenu: jest.fn()
+    showPortalMenu: jest.fn(),
+    hide: jest.fn()
   }
 }));
 
@@ -33,8 +34,9 @@ describe('EnterPortal', () => {
 
     // Create mock mob
     mockMob = {
-      id: 'test-mob-id'
-    } as jest.Mocked<Mob>;
+      id: 'test-mob-id',
+      hide: jest.fn()
+    } as unknown as jest.Mocked<Mob>;
     Object.defineProperty(mockMob, 'position', {
       get: jest.fn(() => ({ x: 5, y: 5 })),
       configurable: true
@@ -85,6 +87,8 @@ describe('EnterPortal', () => {
       mockMob.id,
       enterPortal.worlds
     );
+    expect(pubSub.hide).toHaveBeenCalledWith(mockMob.id);
+    expect(mockMob.hide).toHaveBeenCalled();
   });
 
   test('should fail if mob is too far from portal', () => {
@@ -97,6 +101,8 @@ describe('EnterPortal', () => {
 
     expect(result).toBe(false);
     expect(pubSub.showPortalMenu).not.toHaveBeenCalled();
+    expect(pubSub.hide).not.toHaveBeenCalled();
+    expect(mockMob.hide).not.toHaveBeenCalled();
   });
 
   test('should fail if mob has no position', () => {
@@ -109,6 +115,8 @@ describe('EnterPortal', () => {
 
     expect(result).toBe(false);
     expect(pubSub.showPortalMenu).not.toHaveBeenCalled();
+    expect(pubSub.hide).not.toHaveBeenCalled();
+    expect(mockMob.hide).not.toHaveBeenCalled();
   });
 
   test('should fail if portal has no position', () => {
@@ -121,5 +129,7 @@ describe('EnterPortal', () => {
 
     expect(result).toBe(false);
     expect(pubSub.showPortalMenu).not.toHaveBeenCalled();
+    expect(pubSub.hide).not.toHaveBeenCalled();
+    expect(mockMob.hide).not.toHaveBeenCalled();
   });
 });
