@@ -143,6 +143,9 @@ importers:
         specifier: ^11.0.3
         version: 11.1.0
     devDependencies:
+      '@rt-potion/json-generator':
+        specifier: workspace:*
+        version: link:../json-generator
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
@@ -415,6 +418,9 @@ importers:
         specifier: ^11.0.3
         version: 11.1.0
     devDependencies:
+      '@rt-potion/json-generator':
+        specifier: workspace:*
+        version: link:../json-generator
       '@types/better-sqlite3':
         specifier: ^7.6.12
         version: 7.6.12
