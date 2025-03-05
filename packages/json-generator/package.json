@@ -5,7 +5,6 @@
   "type": "commonjs",
   "main": "src/generator.ts",
   "scripts": {
-    "build": "pnpm run generate",
     "generate": " tsc -p tsconfig.json && node dist/generator.js",
     "test": "jest"
   },
