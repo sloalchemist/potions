@@ -151,14 +151,14 @@ export class Carryable {
       `
             UPDATE items
             SET stored_by = NULL
-            WHERE id = :item_id;
+            WHERE id = :item_id; AND stored_by = :mob_id:
             `
-    ).run({ item_id: this.item.id });
+    ).run({ item_id: this.item.id, mob_id: mob.id });
 
     mob.carrying = this.item;
     this.item.position = undefined;
 
-    pubSub.pickupItem(this.item.id, mob.id);
+    pubSub.unstashItem(this.item.id, mob.id);
   }
 
   static validateNoOrphanedItems(): void {

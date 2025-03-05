@@ -347,15 +347,11 @@ export class SpriteItem extends Item {
     this.animate();
   }
 
-  unstash(world: World, mob: Mob, position: Coord): void {
+  unstash(world: World, mob: Mob): void {
     // Call base unstash to update world state
-    super.unstash(world, mob, position);
+    super.unstash(world, mob);
     // Reposition and make sprite visible
-    if (this.position) {
-      const [worldX, worldY] = this.scene.convertToWorldXY(this.position);
-      this.sprite.x = worldX;
-      this.sprite.y = worldY;
-    }
+    
     this.sprite.visible = true;
     this.animate();
   }
