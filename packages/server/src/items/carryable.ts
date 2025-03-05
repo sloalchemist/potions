@@ -22,7 +22,7 @@ export class Carryable {
   // Destroy carryable item on the server side
   destroy(): void {
     console.log(`Destroying carryable item ${this.item.id}`);
-    this.item.destroy(); 
+    this.item.destroy();
   }
 
   /**
@@ -86,9 +86,11 @@ export class Carryable {
       const position = Item.findEmptyPosition(mob.position);
 
       if (!position) {
-        console.log(`No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Destroying item.`);
-        this.item.destroy(); 
-        return; 
+        console.log(
+          `No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Destroying item.`
+        );
+        this.item.destroy();
+        return;
       }
 
       DB.prepare(
@@ -123,7 +125,9 @@ export class Carryable {
     const position = Item.findEmptyPosition(mob.position);
 
     if (!position) {
-      console.log(`No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Stash canceled.`);
+      console.log(
+        `No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Stash canceled.`
+      );
       return false; // Stop execution if no valid space is found
     }
 
@@ -165,7 +169,9 @@ export class Carryable {
       const position = Item.findEmptyPosition(mob.position);
 
       if (!position) {
-        console.log(`No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Unstash canceled`);
+        console.log(
+          `No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Unstash canceled`
+        );
         return; // Stop execution if no valid space is found
       }
 

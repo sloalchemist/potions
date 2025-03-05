@@ -255,7 +255,10 @@ export class Item {
     return itemsLocsInRadius.length;
   }
 
-  static findEmptyPosition(position: Coord, maxRadius: number = 10): Coord | undefined {
+  static findEmptyPosition(
+    position: Coord,
+    maxRadius: number = 10
+  ): Coord | undefined {
     const flooredCoord = floor(position);
 
     if (Item.getItemIDAt(flooredCoord) === undefined) {

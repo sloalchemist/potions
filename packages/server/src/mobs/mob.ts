@@ -777,56 +777,61 @@ export class Mob {
 
   destroy() {
     if (this.gold > 0 && this.position) {
-        const position = Item.findEmptyPosition(this.position, 10); // Search within 10 tiles
+      const position = Item.findEmptyPosition(this.position, 10); // Search within 10 tiles
 
-        if (this.type === 'player') {
-            // Always subtract half the gold, even if it can't be dropped
-            const halfGold = Math.floor(this.gold / 2);
-            this.changeGold(-halfGold);
+      if (this.type === 'player') {
+        // Always subtract half the gold, even if it can't be dropped
+        const halfGold = Math.floor(this.gold / 2);
+        this.changeGold(-halfGold);
 
-            if (position) {
-                // Drop half of the player's gold at the valid position
-                itemGenerator.createItem({
-                    type: 'gold',
-                    position,
-                    attributes: { amount: halfGold }
-                });
-            } else {
-                console.log(`No valid position to drop gold for player ${this.id}. Gold is lost.`);
-            }
+        if (position) {
+          // Drop half of the player's gold at the valid position
+          itemGenerator.createItem({
+            type: 'gold',
+            position,
+            attributes: { amount: halfGold }
+          });
         } else {
-            // For non-players, drop all gold (only if there's a valid position)
-            if (position) {
-                itemGenerator.createItem({
-                    type: 'gold',
-                    position,
-                    attributes: { amount: this.gold }
-                });
-            } else {
-                console.log(`No valid position to drop gold for mob ${this.id}. Gold is lost.`);
-            }
+          console.log(
+            `No valid position to drop gold for player ${this.id}. Gold is lost.`
+          );
         }
+      } else {
+        // For non-players, drop all gold (only if there's a valid position)
+        if (position) {
+          itemGenerator.createItem({
+            type: 'gold',
+            position,
+            attributes: { amount: this.gold }
+          });
+        } else {
+          console.log(
+            `No valid position to drop gold for mob ${this.id}. Gold is lost.`
+          );
+        }
+      }
     }
 
     const carriedItem = this.carrying;
     if (carriedItem) {
-        const carryableItem = Carryable.fromItem(carriedItem);
-        if (carryableItem) {
-            const dropPosition = Item.findEmptyPosition(this.position, 10); // Find a valid drop spot
+      const carryableItem = Carryable.fromItem(carriedItem);
+      if (carryableItem) {
+        const dropPosition = Item.findEmptyPosition(this.position, 10); // Find a valid drop spot
 
-            if (dropPosition) {
-                carryableItem.dropAtFeet(this); // Drop the item at the valid position
-            } else {
-                console.log(`No valid position to drop ${carriedItem.id} for mob ${this.id}. Item will be destroyed.`);
-                carryableItem.destroy(); // Destroy the item since it cannot be placed
-            }
+        if (dropPosition) {
+          carryableItem.dropAtFeet(this); // Drop the item at the valid position
+        } else {
+          console.log(
+            `No valid position to drop ${carriedItem.id} for mob ${this.id}. Item will be destroyed.`
+          );
+          carryableItem.destroy(); // Destroy the item since it cannot be placed
         }
+      }
     }
 
     pubSub.kill(this.id);
     this.setAction('destroyed');
   }
-
 
   private updatePosition(deltaTime: number) {
     if (this.path.length === 0) {
