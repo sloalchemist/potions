@@ -164,7 +164,7 @@ export class AblyService implements PubSub {
       const result = await updateCharacterData(id, data);
       logger.log(result.message); // "Player data upserted successfully."
     } catch (error) {
-      logger.error(error);
+      logger.error('Error sending update character data request:', error);
     }
   }
 

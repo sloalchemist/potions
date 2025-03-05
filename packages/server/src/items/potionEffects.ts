@@ -38,7 +38,7 @@ export function drinkPotion(
       return true;
     case '#0000ff':
       logger.log('Drinking blue potion');
-      logger.log(mob._speed);
+      logger.log('Mob Speed:', mob._speed);
       let speedMultiplier = 0.5;
       let speedDuration = 30;
       if (effectModifier) {

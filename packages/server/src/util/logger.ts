@@ -6,12 +6,17 @@ const logDir = path.resolve(__dirname, '../logs');
 log4js.configure({
   appenders: {
     console: { type: 'stdout' },
-    file: { type: 'file', filename: path.join(logDir, 'app.log'), maxLogSize: 10485760, backups: 3 },
+    file: {
+      type: 'file',
+      filename: path.join(logDir, 'app.log'),
+      maxLogSize: 10485760,
+      backups: 3
+    }
   },
   categories: {
     default: { appenders: ['console', 'file'], level: 'info' },
-    fileOnly: { appenders: ['file'], level: 'trace' },
-  },
+    fileOnly: { appenders: ['file'], level: 'trace' }
+  }
 });
 
 const consoleLogger = log4js.getLogger(); // Logs to console and file
@@ -24,56 +29,41 @@ export function isValidLogLevel(level: string): level is LogLevel {
   return logLevels.includes(level as LogLevel);
 }
 
-// Helper function to format log arguments so that any input to console.log can be logged
-function formatArgs(args: unknown[]): string | undefined {
-  if (args == undefined ){
-    return undefined
-  }
-  return args.map(arg => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg))).join(' ');
-}
-
 // Logger object that contains all logging functions
 export const logger = {
   setConsoleLogLevel: (level: LogLevel) => {
     consoleLogger.level = level;
   },
 
-  log: (...args: unknown[]) => logger.info(...args),
+  log: (message: string, ...args: unknown[]) => logger.info(message, ...args),
 
-  trace: (...args: unknown[]) => {
-    const message = formatArgs(args);
-    consoleLogger.trace(message);
-    fileLogger.trace(message);
+  trace: (message: string, ...args: unknown[]) => {
+    consoleLogger.trace(message, ...args);
+    fileLogger.trace(message, ...args);
   },
 
-  debug: (...args: unknown[]) => {
-    const message = formatArgs(args);
-    consoleLogger.debug(message);
-    fileLogger.debug(message);
+  debug: (message: string, ...args: unknown[]) => {
+    consoleLogger.debug(message, ...args);
+    fileLogger.debug(message, ...args);
   },
 
-  info: (...args: unknown[]) => {
-    const message = formatArgs(args);
-    consoleLogger.info(message);
-    fileLogger.info(message);
+  info: (message: string, ...args: unknown[]) => {
+    consoleLogger.info(message, ...args);
+    fileLogger.info(message, ...args);
   },
 
-  warn: (...args: unknown[]) => {
-    const message = formatArgs(args);
-    consoleLogger.warn(message);
+  warn: (message: string, ...args: unknown[]) => {
+    consoleLogger.warn(message, ...args);
     fileLogger.warn(message);
   },
 
-  error: (...args: unknown[]) => {
-    console.log("Args to error:", args);
-    const message = formatArgs(args);
-    consoleLogger.error(message);
-    fileLogger.error(message);
+  error: (message: string, ...args: unknown[]) => {
+    consoleLogger.error(message, ...args);
+    fileLogger.error(message, ...args);
   },
 
-  fatal: (...args: unknown[]) => {
-    const message = formatArgs(args);
-    consoleLogger.fatal(message);
-    fileLogger.fatal(message);
-  },
+  fatal: (message: string, ...args: unknown[]) => {
+    consoleLogger.fatal(message, ...args);
+    fileLogger.fatal(message, ...args);
+  }
 };

@@ -92,10 +92,11 @@ export function handleCliCommand(input: string) {
 
   if (command === 'loglevel') {
     if (isValidLogLevel(arg)) {
-      isValidLogLevel
       logger.setConsoleLogLevel(arg);
     } else {
-      console.warn('Invalid log level. Use: trace, debug, info, warn, error, or fatal.');
+      console.warn(
+        'Invalid log level. Use: trace, debug, info, warn, error, or fatal.'
+      );
     }
   } else if (command === 'spawn') {
     let attributes: Record<string, string | number>;

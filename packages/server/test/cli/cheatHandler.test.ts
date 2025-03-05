@@ -11,7 +11,6 @@ import {
   HELP_PROMPT
 } from '../../cli/cheatHandler';
 import { Community } from '../../src/community/community';
-import exp from 'constants';
 
 jest.mock('readline', () => ({
   createInterface: jest.fn(() => ({
@@ -57,7 +56,9 @@ describe('Cheat Handler Tests', () => {
 
     describe('loglevel CLI Command', () => {
       it('Should change logging level with "loglevel <valid level>" command', () => {
-        const logLevelSpy = jest.spyOn(logger, 'setConsoleLogLevel').mockImplementation();
+        const logLevelSpy = jest
+          .spyOn(logger, 'setConsoleLogLevel')
+          .mockImplementation();
 
         handleCliCommand('loglevel error');
         expect(logLevelSpy).toHaveBeenCalledWith('error');
@@ -65,7 +66,9 @@ describe('Cheat Handler Tests', () => {
 
       it('Should reject "loglevel <invalid level>" command', () => {
         const logSpy = jest.spyOn(console, 'warn').mockImplementation();
-        const logLevelSpy = jest.spyOn(logger, 'setConsoleLogLevel').mockImplementation();
+        const logLevelSpy = jest
+          .spyOn(logger, 'setConsoleLogLevel')
+          .mockImplementation();
 
         handleCliCommand('loglevel sillyLevel');
         expect(logSpy).toHaveBeenCalled();
