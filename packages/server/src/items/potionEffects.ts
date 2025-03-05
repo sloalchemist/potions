@@ -42,7 +42,7 @@ export function drinkPotion(
       console.log('Drinking blue potion');
       console.log(mob._speed);
       let speedMultiplier = 0.5;
-      let speedDuration = 30;
+      let speedDuration = 240;
       if (effectModifier) {
         speedMultiplier = speedMultiplier * effectModifier;
         speedDuration = speedDuration * effectModifier;

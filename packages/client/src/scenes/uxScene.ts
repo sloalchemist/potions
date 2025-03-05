@@ -131,7 +131,7 @@ export class UxScene extends Phaser.Scene {
 
     this.load.json(
       'global_data',
-      'https://potions.gg/world_assets/global.json'
+      'static/global.json'
     );
     this.load.json(
       'world_specific_data',
