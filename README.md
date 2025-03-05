@@ -143,6 +143,8 @@ Your state may become out of sync for several reasons.
    ```
    to build a world named world-name.
 
+   note: to avoid 'ECONNREFUSED' error, ensure that auth-server is running with the 'pnpm dev' command.
+
 ### Run!
 
 1. In the **auth-server** package, execute:
@@ -172,11 +174,13 @@ Run a script to automatically run build/run commands on VS Code.
 
 ```
 chmod +x start_game.sh
-Ctrl+Shift+P (Command Palette) > Tasks: Run Task > Start All (or the specific component you want to run)
+Ctrl+Shift+P (Command Palette) > Tasks: Run Task > Start All (or the specific component you want to run) > Choose from {test-world, water-world, fire-world} depending on what you have selected in your Supabase
 ```
 
+If the game is out of focus, make sure you have checked off the world you want to build and refresh the client page
+
 - For Windows Powershell:
-  (use wsl)
+  (Same as before but use wsl)
 
 ### Quick Build and Run
 

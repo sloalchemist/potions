@@ -37,7 +37,8 @@ const client_breakup = (json) => {
                 'open',
                 'flat',
                 'templated',
-                'show_template_at'
+                'show_template_at',
+                'show_price_at'
             ]);
             for (let i = 0; i < json['item_types'].length; i++) {
                 Object.keys(json['item_types'][i]).forEach((sub_item_type) => {
@@ -87,7 +88,8 @@ const server_breakup = (json) => {
                 'open',
                 'flat',
                 'templated',
-                'show_template_at'
+                'show_template_at',
+                'show_price_at'
             ]);
             for (let i = 0; i < json['item_types'].length; i++) {
                 Object.keys(json['item_types'][i]).forEach((sub_item_type) => {

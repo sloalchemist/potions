@@ -25,7 +25,7 @@ export class AskForItem implements Means {
 
     if (this.mobWithItem && this.mobWithItem.position && npc.position) {
       if (this.conversation && this.conversation.isFinished()) {
-        console.log('Conversation finished');
+        logger.log('Conversation finished');
 
         this.mobWithItem = null;
         this.conversation = null;
