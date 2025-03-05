@@ -11,6 +11,7 @@ import {
   HELP_PROMPT
 } from '../../cli/cheatHandler';
 import { Community } from '../../src/community/community';
+import exp from 'constants';
 
 jest.mock('readline', () => ({
   createInterface: jest.fn(() => ({
@@ -54,70 +55,21 @@ describe('Cheat Handler Tests', () => {
       expect(logSpy).toHaveBeenCalledWith(HELP_PROMPT);
     });
 
-    describe('logtoggle CLI Command', () => {
-      it('Should enable logging when "logtoggle on" is executed', () => {
-        const logSpy = jest.spyOn(console, 'log');
-        const enableLoggingSpy = jest.spyOn(logger, 'enableLogging');
+    describe('loglevel CLI Command', () => {
+      it('Should change logging level with "loglevel <valid level>" command', () => {
+        const logLevelSpy = jest.spyOn(logger, 'setConsoleLogLevel').mockImplementation();
 
-        handleCliCommand('logtoggle on');
-        expect(enableLoggingSpy).toHaveBeenCalled();
-        expect(logSpy).toHaveBeenCalledWith('Logging enabled');
-        logger.log('Test message after enabling logging');
-        expect(logSpy).toHaveBeenCalledWith(
-          'Test message after enabling logging'
-        );
+        handleCliCommand('loglevel error');
+        expect(logLevelSpy).toHaveBeenCalledWith('error');
       });
 
-      it('Should disable logging when "logtoggle off" is executed', () => {
-        const logSpy = jest.spyOn(console, 'log');
-        const disableLoggingSpy = jest.spyOn(logger, 'disableLogging');
+      it('Should reject "loglevel <invalid level>" command', () => {
+        const logSpy = jest.spyOn(console, 'warn').mockImplementation();
+        const logLevelSpy = jest.spyOn(logger, 'setConsoleLogLevel').mockImplementation();
 
-        handleCliCommand('logtoggle off');
-        expect(disableLoggingSpy).toHaveBeenCalled();
-        expect(logSpy).toHaveBeenCalledWith('Logging disabled');
-
-        logger.log('Test message after disabling logging');
-        expect(logSpy).not.toHaveBeenCalledWith(
-          'Test message after disabling logging'
-        );
-      });
-
-      it('Should still log errors when "logtoggle off" is executed', () => {
-        const logSpy = jest.spyOn(console, 'log');
-        const logErrorSpy = jest.spyOn(console, 'error');
-        const disableLoggingSpy = jest.spyOn(logger, 'disableLogging');
-
-        handleCliCommand('logtoggle off');
-        expect(disableLoggingSpy).toHaveBeenCalled();
-        expect(logSpy).toHaveBeenCalledWith('Logging disabled');
-
-        logger.error('Test error after disabling logging');
-        expect(logErrorSpy).toHaveBeenCalledWith(
-          'Test error after disabling logging'
-        );
-      });
-
-      it('Should toggle logging correctly', () => {
-        const logSpy = jest.spyOn(console, 'log');
-
-        handleCliCommand('logtoggle on');
-        logger.log('Test message after enabling logging');
-        expect(logSpy).toHaveBeenCalledWith(
-          'Test message after enabling logging'
-        );
-
-        handleCliCommand('logtoggle off');
-        logger.log('Test message after disabling logging');
-        expect(logSpy).not.toHaveBeenCalledWith(
-          'Test message after disabling logging'
-        );
-      });
-
-      it('Should toggle logging when no argument is provided', () => {
-        const toggleLoggingSpy = jest.spyOn(logger, 'toggleLogging');
-
-        handleCliCommand('logtoggle');
-        expect(toggleLoggingSpy).toHaveBeenCalled();
+        handleCliCommand('loglevel sillyLevel');
+        expect(logSpy).toHaveBeenCalled();
+        expect(logLevelSpy).not.toHaveBeenCalled();
       });
     });
 

@@ -3,6 +3,7 @@ import { Item } from '../../src/items/item';
 import { Mob } from '../../src/mobs/mob';
 import { getWorlds } from '../../src/services/authMarshalling';
 import { pubSub } from '../../src/services/clientCommunication/pubsub';
+import { logger } from '../../src/util/logger';
 
 jest.mock('../../src/services/authMarshalling');
 jest.mock('../../src/services/clientCommunication/pubsub', () => ({
@@ -64,7 +65,7 @@ describe('EnterPortal', () => {
   });
 
   test('should handle error when populating worlds', async () => {
-    const consoleError = jest.spyOn(console, 'error').mockImplementation();
+    const consoleError = jest.spyOn(logger, 'error').mockImplementation();
     (getWorlds as jest.Mock).mockRejectedValue(new Error('Test error'));
 
     const portal = new EnterPortal();
