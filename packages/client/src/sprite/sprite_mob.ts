@@ -398,6 +398,19 @@ export class SpriteMob extends Mob {
     this.speechText?.destroy();
   }
 
+  /**
+   * Hides the mob without destroying it
+   * This is useful for temporarily hiding mobs (e.g., when entering a portal)
+   */
+  hide() {
+    this.sprite.visible = false;
+    this.nameText.visible = false;
+    this.doingText.visible = false;
+    this.healthBar.visible = false;
+    this.speechBubble?.destroy();
+    this.speechText?.destroy();
+  }
+
   tick(world: World, deltaTime: number) {
     super.tick(world, deltaTime);
 

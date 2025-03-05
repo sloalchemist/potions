@@ -545,6 +545,10 @@ export class AblyService implements PubSub {
     }
   }
 
+  public hide(key: string): void {
+    this.addToBroadcast({ type: 'hide_mob', data: { id: key } });
+  }
+
   public dropItem(item_key: string, mob_key: string, position: Coord): void {
     this.addToBroadcast({
       type: 'drop_item',

@@ -50,6 +50,7 @@ export interface PubSub {
   speak(key: string, message: string): void;
   setDateTime(fantasyDate: FantasyDate): void;
   kill(key: string): void;
+  hide(key: string): void;
   dropItem(itemKey: string, mobKey: string, position: Coord): void;
   stashItem(itemKey: string, mobKey: string, position: Coord): void;
   unstashItem(itemKey: string, mobKey: string): void;

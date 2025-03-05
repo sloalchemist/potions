@@ -18,7 +18,8 @@ import {
   SpeakData,
   BombData,
   ShowPortalMenuData,
-  ScoreboardData
+  ScoreboardData,
+  HideMobData
 } from '@rt-potion/common';
 import { Types } from 'ably';
 import { focused } from '../main';
@@ -154,10 +155,17 @@ export function setupBroadcast(
     }
   }
 
+  function handleHideMob(data: HideMobData) {
+    const mob = world.mobs[data.id];
+    if (mob) {
+      (mob as SpriteMob).hide();
+    }
+  }
+
   function handlePortal(data: PortalData) {
     const mob = world.mobs[data.mob_key];
     if (mob?.key === publicCharacterId) {
-      mob.destroy(world);
+      (mob as SpriteMob).hide();
       scene.scene.stop('WorldScene');
     }
   }
@@ -263,6 +271,9 @@ export function setupBroadcast(
           break;
         case 'destroy_mob':
           handleDestroyMob(broadcastItem.data as DestroyMobData);
+          break;
+        case 'hide_mob':
+          handleHideMob(broadcastItem.data as HideMobData);
           break;
         case 'portal':
           handlePortal(broadcastItem.data as PortalData);
