@@ -16,7 +16,6 @@ const colordict: ColorDict = {
   '#0000ff': 'blue',
   '#e79600': 'orange',
   '#ef7d55': 'gold',
-  '#8b7f6e': 'grey',
   '#ab00e7': 'purple',
   '#00ff00': 'green',
   '#166060': 'black'
