@@ -1154,6 +1154,7 @@ describe('Try to consume potion in various cases', () => {
     const potionLocation: Coord = {x :0, y: 0};
     const mobPosition: Coord = {x: 0, y: 1};
     const blueberryPosition: Coord = {x: 1, y: 2};
+    const potionStandPosition: Coord = {x: 2, y: 1};
 
     // create a player
     mobFactory.makeMob('player', positionPlayer1, 'TestID', 'TestPlayer');
@@ -1178,6 +1179,22 @@ describe('Try to consume potion in various cases', () => {
     const testBlueberry = Item.getItemIDAt(blueberryPosition);
     expect(testBlueberry).not.toBe(undefined);
     expect(testBlueberry).not.toBeNull();
+
+    // create a potion stand
+    itemGenerator.createItem({
+      type: 'potion-stand',
+      subtype: '255',
+      position: potionStandPosition,
+      attributes: {
+        templateType: 'potion'
+      }
+    });
+
+    const potionstandID = Item.getItemIDAt(potionStandPosition);
+    expect(potionstandID).not.toBeNull();
+
+    const potionstandItem = Item.getItem(potionstandID!);
+    expect(potionstandItem).toBeDefined();
 
     // create a potion
     itemGenerator.createItem({
@@ -1214,6 +1231,10 @@ describe('Try to consume potion in various cases', () => {
     // check that the blueberry disappeared
     const disappearedBlueberry = Item.getItemIDAt(blueberryPosition);
     expect(disappearedBlueberry).toBe(undefined);
+
+    // check that the potion stand disappeared
+    const disappearedPotionStand = Item.getItemIDAt(potionStandPosition);
+    expect(disappearedPotionStand).not.toBeDefined();
   })
 })
 
