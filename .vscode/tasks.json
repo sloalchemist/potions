@@ -4,7 +4,7 @@
     {
       "label": "Build",
       "type": "shell",
-      "command": "pnpm install && pnpm build && cd packages/server && pnpm run create test-world",
+      "command": "pnpm install & pnpm build",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
@@ -14,7 +14,7 @@
     {
       "label": "Auth Server",
       "type": "shell",
-      "command": "cd packages/auth-server && pnpm dev",
+      "command": "./start_game.sh",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
@@ -25,14 +25,13 @@
     {
       "label": "Server",
       "type": "shell",
-      "command": "cd packages/server && pnpm dev test-world",
+      "command": "cd packages/server && pnpm run create test-world && pnpm dev test-world",
       "problemMatcher": [],
-      "isBackground": true,
       "presentation": {
         "reveal": "always",
         "panel": "new"
       },
-      "dependsOn": "Build"
+      "dependsOn": "Auth Server"
     },
     {
       "label": "Client",
@@ -44,10 +43,10 @@
         "reveal": "always",
         "panel": "new"
       },
-      "dependsOn": "Build"
+      "dependsOn": "Auth Server"
     },
     {
-      "label": "Start All",
+      "label": "Build and Start",
       "type": "shell",
       "dependsOn": [
         "Build",
