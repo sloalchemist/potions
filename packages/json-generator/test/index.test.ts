@@ -3,9 +3,11 @@ import { executeWithArgs } from '../src/generator';
 import path from 'node:path';
 
 describe('validate global json', () => {
-  it('validate client global json', () => {
-    executeWithArgs(['client', 'server']);
+  beforeAll(() => {
+    executeWithArgs(['server', 'client']);
+  });
 
+  it('validate client global json', () => {
     const expected = readFileSync(__dirname + '/expectedClient.json', 'utf8');
 
     const actual = readFileSync(
@@ -17,8 +19,6 @@ describe('validate global json', () => {
   });
 
   it('validate server global json', () => {
-    executeWithArgs(['client', 'server']);
-
     const expected = readFileSync(__dirname + '/expectedServer.json', 'utf8');
 
     const actual = readFileSync(
