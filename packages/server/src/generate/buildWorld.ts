@@ -8,7 +8,6 @@ import { createTables, loadDefaults } from './generateWorld';
 import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
-import globalData from '../../global.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
@@ -17,6 +16,7 @@ import {
   initializeBucket,
   uploadLocalData
 } from '../services/supabaseStorage';
+import { logger } from '../util/logger';
 
 async function main() {
   // Build and save the knowledge graph
@@ -30,7 +30,7 @@ async function main() {
   }
   await initializeServerDatabase(`data/${worldID}-server-data.db`, true);
 
-  console.log(`Loading world ${worldID}`);
+  logger.log(`Loading world ${worldID}`);
 
   const worldDataResponse = await fetch(
     `https://potions.gg/world_assets/${worldID}/server/world_specific.json`
@@ -39,6 +39,10 @@ async function main() {
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
+  const globalDataResponse = await fetch(
+    `https://potions.gg/world_assets/global/server/global.json`
+  );
+  const globalData = await globalDataResponse.json();
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
     worldSpecificData as Partial<ServerWorldDescription>;
@@ -64,16 +68,16 @@ async function main() {
 
   try {
     await initializeBucket(supabase);
-    console.log('Bucket creation handled successfully');
+    logger.log('Bucket creation handled successfully');
   } catch (err) {
-    console.error('Error during bucket initialization:', err);
+    logger.error('Error during bucket initialization:', err);
     throw err;
   }
 
   await uploadLocalData(supabase, worldID);
 
   // Exit
-  console.log('Script finished successfully');
+  logger.log('Script finished successfully');
   process.exit(0);
 }
 

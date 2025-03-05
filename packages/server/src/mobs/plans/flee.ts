@@ -37,7 +37,7 @@ export class Flee implements Plan {
     // Iterate through potential coordinates and find the first walkable one
     for (const coord of coordsToCheck) {
       if (npc.setMoveTarget(coord)) {
-        //console.log(`${npc.name} fled to ${coord.x}, ${coord.y} away from ${this.enemy.name}`);
+        //logger.log(`${npc.name} fled to ${coord.x}, ${coord.y} away from ${this.enemy.name}`);
         return false; // Movement successful, action not yet complete
       }
     }
@@ -66,15 +66,8 @@ export class Flee implements Plan {
     if (!closerEnemyID) return -Infinity;
 
     this.enemy = Mob.getMob(closerEnemyID)!;
+    //logger.log(`fleeing eval ${npc.name} ${npc.personality.traits[PersonalityTraits.Bravery]} ${npc.attributes['health']} ${this.enemy.attributes['health']}`)
 
-    if (!this) {
-      //console.error(`${this} is no longer valid or does not exist in the database.`);
-      return 0;  // Exit early
-    }
-    if (!npc || !Mob.getMob(npc.id)) {
-      //console.error(`${npc.name} is no longer valid or does not exist in the database.`);
-      return 0;  // Exit early
-    }
     const utility =
       (100 - npc.personality.traits[PersonalityTraits.Bravery]) *
       (this.enemy.health / npc.health);

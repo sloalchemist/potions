@@ -3,7 +3,6 @@ import { AblyService } from './clientCommunication/ablyService';
 import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
-import globalData from '../../global.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
@@ -14,6 +13,7 @@ import {
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
 import { getEnv } from '@rt-potion/common';
+import { logger } from '../util/logger';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
@@ -38,7 +38,7 @@ async function initializeAsync() {
     throw new Error('No world ID provided, provide a world ID as an argument');
   }
 
-  console.log(`loading world ${worldID}`);
+  logger.log(`loading world ${worldID}`);
   const worldDataResponse = await fetch(
     `https://potions.gg/world_assets/${worldID}/server/world_specific.json`
   );
@@ -46,9 +46,9 @@ async function initializeAsync() {
 
   try {
     await downloadData(supabase, worldID);
-    console.log('Server data successfully downloaded from Supabase');
+    logger.log('Server data successfully downloaded from Supabase');
   } catch (error) {
-    console.log(`
+    logger.log(`
       Could not download data for ${worldID}. Ensure it exists by creating it. 
       Otherwise, it could be a network error or something outside our control.
     `);
@@ -58,6 +58,10 @@ async function initializeAsync() {
   try {
     initializeKnowledgeDB(`data/${worldID}-knowledge-graph.db`, false);
     initializeServerDatabase(`data/${worldID}-server-data.db`);
+    const globalDataResponse = await fetch(
+      `https://potions.gg/world_assets/global/server/global.json`
+    );
+    const globalData = await globalDataResponse.json();
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
@@ -74,7 +78,7 @@ async function initializeAsync() {
 
     pubSub.startBroadcasting();
   } catch (error) {
-    console.error('Failed to initialize world:', error);
+    logger.error('Failed to initialize world:', error);
     throw error;
   }
 }

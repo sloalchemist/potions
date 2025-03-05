@@ -246,6 +246,11 @@ export class SpriteMob extends Mob {
     this.speechBubbleWidth = bubbleWidth;
     this.speechBubbleHeight = bubbleHeight;
 
+    //checks if chat bubble can be cutoff if on the left, and swaps to right if so
+    if (!right && this.scene.convertToWorldXY(this.position)[0] < bubbleWidth) {
+      right = true;
+    }
+
     // Speech bubble dimensions and position (slightly offset to the right)
     const bubbleOffsetX = right ? 30 : -(30 + bubbleWidth); // Shift the bubble more to the right of the character
     const bubbleOffsetY = -30; // Position slightly above the character
