@@ -144,7 +144,7 @@ export function areListsEqual(list1: Mob[], list2: Mob[]): boolean {
 
 export function mobRangeListener(mobs: Mob[]) {
   if (chatCompanionCallback && !chatting) {
-    const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
+    const filteredMobs = mobs.filter((mob) => (mob.type !== 'player') && (mob.type !== 'blob'));
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastChatCompanions)) {
       chatCompanionCallback(filteredMobs);
