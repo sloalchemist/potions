@@ -1,4 +1,5 @@
 import { Mob } from '../mobs/mob';
+import { pubSub } from '../services/clientCommunication/pubsub';
 import {
   numberToHexString,
   hexToRgb,
@@ -103,6 +104,9 @@ export function drinkPotion(
       console.log('Drinking bomb potion');
       let nearbyObjects = mob.findNClosestObjectIDs([], Infinity, 3) || [];
       let nearbyMobs = mob.findNearbyMobIDs(3) || [];
+
+      // broadcast bomb message for client side animation
+      pubSub.bomb('bomb');
   
       // destroy all nearby objects
       nearbyObjects.forEach(id => {

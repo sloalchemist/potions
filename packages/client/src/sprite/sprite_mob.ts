@@ -364,6 +364,23 @@ export class SpriteMob extends Mob {
     });
   }
 
+  createBombExplosion(size: number) {
+    const sprite = this.scene.add.sprite(
+      this.sprite.x,
+      this.sprite.y,
+      'bomb-explosion'
+    );
+
+    sprite.setDepth(1000);
+    sprite.setScale(size);
+    sprite.visible = true;
+    sprite.anims.play('bomb-explosion');
+
+    sprite.on('animationcomplete', () => {
+      sprite.destroy();
+    });
+  }
+
   destroy(world: World) {
     super.destroy(world);
     this.sprite.destroy();

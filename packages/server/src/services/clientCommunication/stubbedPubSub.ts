@@ -27,6 +27,8 @@ export class StubbedPubSub implements PubSub {
   showPortalMenu(_key: string): void {}
 
   destroy(_item: Item): void {}
+  
+  bomb(_key: string): void {}
 
   stashItem(_item: string, _mobKey: string, _position: Coord): void {}
 
