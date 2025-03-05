@@ -91,7 +91,7 @@ export class House {
     itemGenerator.createItem({
       type: 'door',
       position: doorPos,
-      ownedBy: village,
+      ownedByCommunity: village,
       house,
       lock: village.id
     });
@@ -100,13 +100,13 @@ export class House {
       itemGenerator.createItem({
         type: 'wall',
         position: { x: top_left.x, y },
-        ownedBy: village,
+        ownedByCommunity: village,
         house
       });
       itemGenerator.createItem({
         type: 'wall',
         position: { x: top_left.x + width, y },
-        ownedBy: village,
+        ownedByCommunity: village,
         house
       });
     }
@@ -117,7 +117,7 @@ export class House {
         itemGenerator.createItem({
           type: 'wall',
           position: coord1,
-          ownedBy: village,
+          ownedByCommunity: village,
           house
         });
       }
@@ -126,7 +126,7 @@ export class House {
         itemGenerator.createItem({
           type: 'wall',
           position: coord2,
-          ownedBy: village,
+          ownedByCommunity: village,
           house
         });
       }

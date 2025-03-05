@@ -3,7 +3,8 @@ import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { Community } from '../../community/community';
 import { DB } from '../../services/database';
-import globalData from '../../../data/global.json';
+import globalData from '../../../global.json';
+import { logger } from '../../util/logger';
 
 export class Hunt implements Plan {
   enemy: Mob | null = null;
@@ -13,8 +14,8 @@ export class Hunt implements Plan {
 
     const success = npc.moveToOrExecute(this.enemy.position, 1, () => {
       // create damage values
-      const enemyDamage = Math.floor(Math.random() * -1 * npc._attack);
-      const npcDamage = Math.floor(Math.random() * -1 * this.enemy!._attack);
+      const enemyDamage = Math.floor(0.33 * -1 * npc._attack);
+      const npcDamage = Math.floor(0.33 * -1 * this.enemy!._attack);
 
       // this formula means 100 armor gives ~30% damage reduction
       const adjustedEnemyDamage = Math.floor(
@@ -24,6 +25,12 @@ export class Hunt implements Plan {
       const adjustedNpcDamage = Math.floor(
         npcDamage * (0.3 + 0.7 * Math.exp(-npc._defense / 40))
       );
+
+      if (npc.damageOverTime == 1) {
+        const poisonDelta = 1;
+        const poisonDuration = 5;
+        this.enemy!.changeEffect(poisonDelta, poisonDuration, 'poisoned');
+      }
 
       // attack/fight each other
       this.enemy!.changeHealth(adjustedEnemyDamage);
@@ -40,13 +47,13 @@ export class Hunt implements Plan {
           // decrement slowEnemy count (1 usage)
           npc.changeSlowEnemy(-1);
           // decrease targeted enemy's speed
-          console.log(this.enemy!._speed);
+          logger.log(this.enemy!._speed);
           const speedDelta = this.enemy!._speed * -0.5;
           const speedDuration = 15;
           this.enemy!.changeEffect(speedDelta, speedDuration, 'speed');
         }
       } catch {
-        console.log('Could not get slowEnemy in hunt');
+        logger.log('Could not get slowEnemy in hunt');
       }
 
       return false;

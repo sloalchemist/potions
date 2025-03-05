@@ -5,7 +5,7 @@ import {
   initializePlayer,
   tick
 } from '../world/controller';
-import { bindAblyToWorldScene, setupAbly } from '../services/ablySetup';
+import { bindAblyToWorldScene } from '../services/ablySetup';
 import { TerrainType } from '@rt-potion/common';
 import { Coord } from '@rt-potion/common';
 import { publicCharacterId, getWorldID } from '../worldMetadata';
@@ -59,6 +59,7 @@ export class WorldScene extends Phaser.Scene {
     d: false
   };
   lastKeyUp = '';
+  lastPublishTime: number = 0;
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -66,12 +67,14 @@ export class WorldScene extends Phaser.Scene {
 
   preload() {
     const worldID = getWorldID();
-    this.load.image('background', `static/${worldID}_background.png`);
-
+    this.load.image(
+      'background',
+      `https://potions.gg/world_assets/${worldID}/client/background.png`
+    );
     this.load.atlas(
       'global_atlas',
-      `static/${worldID}_assets.png`,
-      `static/${worldID}_atlas.json`
+      `https://potions.gg/world_assets/${worldID}/client/global.png`,
+      `https://potions.gg/world_assets/${worldID}/client/global-atlas.json`
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -79,10 +82,18 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 100
     });
 
-    //this.load.json('world_data', currentWorld?.world_tile_map_url);
-    this.load.json('global_data', 'static/global.json');
-    this.load.json('world_specific_data', `static/${worldID}_specific.json`);
-
+    this.load.json(
+      'global_data',
+      'https://potions.gg/world_assets/global.json'
+    );
+    this.load.json(
+      'world_specific_data',
+      `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
+    );
+    this.load.audio('background_music_layer', [
+      `static/music/${worldID}_layer.mp3`
+    ]);
+    this.load.audio('background_music', ['static/music/cosmic_ambient.mp3']);
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
 
@@ -385,6 +396,15 @@ export class WorldScene extends Phaser.Scene {
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
     this.hideWorld();
 
+    if (!this.sound.isPlaying('background_music')) {
+      this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
+    }
+    if (!this.sound.isPlaying('background_music_layer')) {
+      this.sound
+        .add('background_music_layer', { loop: true, volume: 0.3 })
+        .play();
+    }
+
     bindAblyToWorldScene(this);
     initializePlayer();
 
@@ -408,12 +428,18 @@ export class WorldScene extends Phaser.Scene {
         // );
 
         // Prevent player movement if the brew scene is active
-        if (this.scene.isActive('BrewScene')) {
+        if (
+          this.scene.isActive('BrewScene') ||
+          this.scene.isActive('FightScene')
+        ) {
           return;
         }
 
         // Prevent player movement if the brew scene is active
-        if (this.scene.isActive('BrewScene')) {
+        if (
+          this.scene.isActive('BrewScene') ||
+          this.scene.isActive('FightScene')
+        ) {
           return;
         }
 
@@ -488,7 +514,6 @@ export class WorldScene extends Phaser.Scene {
     this.hero = sprite;
   }
 
-  count = 0;
   update() {
     if (gameState !== 'stateInitialized') {
       this.hideWorld();
@@ -531,29 +556,18 @@ export class WorldScene extends Phaser.Scene {
       this.nightOverlay.fillRect(
         0,
         0,
-        this.terrainWidth * TILE_SIZE,
-        this.terrainHeight * TILE_SIZE
+        this.terrainHeight * TILE_SIZE,
+        this.terrainWidth * TILE_SIZE
       );
     }
 
-    if (this.count > 50) {
-      this.count = 0;
-      this.handlePlayerMovement(true);
-    } else {
-      this.count++;
-      this.handlePlayerMovement(false);
+    const now = Date.now();
+    let publish = false;
+    if (now - this.lastPublishTime >= 400) {
+      publish = true;
+      this.lastPublishTime = now;
     }
-  }
-
-  keyChange() {
-    let different = false;
-    for (const key in this.keys) {
-      if (this.keys[key] !== this.prevKeys[key]) {
-        different = true;
-        break;
-      }
-    }
-    return different;
+    this.handlePlayerMovement(publish);
   }
 
   handlePlayerMovement(publish: boolean) {
@@ -565,7 +579,8 @@ export class WorldScene extends Phaser.Scene {
     // Prevent player movement if the chat overlay or brew scene is active
     if (
       this.scene.isActive('ChatOverlayScene') ||
-      this.scene.isActive('BrewScene')
+      this.scene.isActive('BrewScene') ||
+      this.scene.isActive('FightScene')
     ) {
       return;
     }
@@ -573,35 +588,40 @@ export class WorldScene extends Phaser.Scene {
     let moveX = player.position.x;
     let moveY = player.position.y;
 
-    let moved = false;
+    let newX = moveX;
+    let newY = moveY;
+
     if (this.keys['w']) {
-      moveY--;
-      moved = true;
+      newY--;
     }
     if (this.keys['s']) {
-      moveY++;
-      moved = true;
+      newY++;
     }
     if (this.keys['a']) {
-      moveX--;
-      moved = true;
+      newX--;
     }
     if (this.keys['d']) {
-      moveX++;
-      moved = true;
+      newX++;
     }
 
-    if (!moved) return;
+    // Check if the next step is blocked
+    const nextItem = world.getItemAt(newX, newY);
+    if (nextItem && !nextItem.isWalkable(player.unlocks)) {
+      return;
+    }
+
+    // If no movement, return
+    if (newX === moveX && newY === moveY) return;
 
     let roundedX;
     let roundedY;
     const negKeys = ['w', 'a'];
     if (negKeys.includes(this.lastKeyUp)) {
-      roundedX = Math.floor(moveX);
-      roundedY = Math.floor(moveY);
+      roundedX = Math.floor(newX);
+      roundedY = Math.floor(newY);
     } else {
-      roundedX = Math.ceil(moveX);
-      roundedY = Math.ceil(moveY);
+      roundedX = Math.ceil(newX);
+      roundedY = Math.ceil(newY);
     }
 
     const target = { x: roundedX, y: roundedY };
@@ -617,9 +637,6 @@ export class WorldScene extends Phaser.Scene {
       const path = world.generatePath(player.unlocks, player.position!, target);
       player.path = path;
     }
-
-    const movementKeys = ['a', 'w', 's', 'd'];
-    movementKeys.forEach((k) => (this.keys[k] = false));
   }
 
   showGameOver() {
@@ -681,29 +698,31 @@ export class WorldScene extends Phaser.Scene {
   /* Stop all scenes related to game play and go back to the LoadWordScene 
      for character custmization and game restart.*/
   resetToLoadWorldScene() {
-    setGameState('uninitialized');
-    this.scene.stop('BrewScene');
-    this.scene.stop('PauseScene');
-    this.scene.stop('WorldScene');
-    this.scene.stop('UxScene');
-    this.scene.stop('FrameScene');
-    this.scene.stop('ChatOverlayScene');
-    this.scene.start('LoadWorldScene');
+    this.sound.removeByKey('walk');
+    this.sound.removeByKey('background_music');
+    this.sound.removeByKey('background_music_layer');
+
+    this.stopScenes();
+    this.scene.start('LoadCharacterScene', { autoStart: false });
   }
 
-  /**
-   * Stop the world scene, re-connect to Ably after being disconnected by
-   * the server, then restart the world scene
-   */
+  /* Stop all scenes related to game play and automatically restart game.*/
   resetToRespawn() {
-    this.scene.stop('WorldScene');
+    this.sound.removeByKey('walk');
+    this.sound.removeByKey('background_music');
+    this.sound.removeByKey('background_music_layer');
 
-    setupAbly()
-      .then(() => {
-        this.scene.start('WorldScene');
-      })
-      .catch((_error) => {
-        console.error('Error setting up Ably');
-      });
+    this.stopScenes();
+    this.scene.start('LoadCharacterScene', { autoStart: true });
+  }
+
+  /* Stop all scenes related to game play */
+  stopScenes() {
+    setGameState('uninitialized');
+    const allScenes = this.scene.manager.getScenes();
+    allScenes.forEach((scene) => {
+      const key = scene.sys.settings.key;
+      this.scene.stop(key);
+    });
   }
 }

@@ -3,6 +3,7 @@ import { Community } from '../community/community';
 import { pubSub } from '../services/clientCommunication/pubsub';
 import { DB } from '../services/database';
 import { Item } from './item';
+import { logger } from '../util/logger';
 
 export class Carryable {
   private item: Item;
@@ -19,6 +20,14 @@ export class Carryable {
     return undefined;
   }
 
+  /**
+   * Function implements the giving of an item from one mob to another.
+   * Performs checks and updates favorability accordingly as well.
+
+   * @param from Giver of the item
+   * @param to Receiver of the item
+   * @returns Either 1) False in which the transfer fails, or 2) True in which the transfer succeeds
+   */
   giveItem(from: Mob, to: Mob): boolean {
     // Check if the recipient mob is already carrying an item
     if (to.carrying) {
@@ -33,6 +42,18 @@ export class Carryable {
     // Transfer the item from the sender to the recipient
     from.carrying = undefined;
     to.carrying = this.item;
+
+    // Perform favorite item check
+    if (this.item.type === to._favorite_item) {
+      var community_1 = from.community_id;
+      var community_2 = to.community_id;
+
+      // If the mob is given their favorite item, increase favorability by 25
+      Community.adjustFavor(community_1, community_2, 25);
+
+      // Randomize their next favorite item afterwards
+      to.changeFavoriteItem();
+    }
 
     // Publish the item transfer event
     pubSub.giveItem(this.item.id, from.id, to.id);
@@ -91,7 +112,7 @@ export class Carryable {
     const position = Item.findEmptyPosition(mob.position);
     const carriedItem = mob.carrying;
 
-    console.log('stash hit');
+    logger.log('stash hit');
     // carriedItem must exist and === item.id
     if (!carriedItem || carriedItem.id !== this.item.id) {
       return false;

@@ -3,7 +3,7 @@ import { AblyService } from './clientCommunication/ablyService';
 import 'dotenv/config';
 import { initializeServerDatabase } from './database';
 import { initializePubSub, pubSub } from './clientCommunication/pubsub';
-import globalData from '../../data/global.json';
+import globalData from '../../global.json';
 import { initializeGameWorld } from './gameWorld/gameWorld';
 import { ServerWorldDescription } from './gameWorld/worldMetadata';
 import { initializeKnowledgeDB } from '@rt-potion/converse';
@@ -13,8 +13,8 @@ import {
   uploadLocalData
 } from './supabaseStorage';
 import { shouldUploadDB } from '../util/dataUploadUtil';
-import { DataLogger } from '../grafana/dataLogger';
 import { getEnv } from '@rt-potion/common';
+import { logger } from '../util/logger';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
@@ -39,14 +39,17 @@ async function initializeAsync() {
     throw new Error('No world ID provided, provide a world ID as an argument');
   }
 
-  console.log(`loading world ${worldID}`);
-  const worldSpecificData = await import(`../../data/${worldID}_specific.json`);
+  logger.log(`loading world ${worldID}`);
+  const worldDataResponse = await fetch(
+    `https://potions.gg/world_assets/${worldID}/server/world_specific.json`
+  );
+  const worldSpecificData = await worldDataResponse.json();
 
   try {
     await downloadData(supabase, worldID);
-    console.log('Server data successfully downloaded from Supabase');
+    logger.log('Server data successfully downloaded from Supabase');
   } catch (error) {
-    console.log(`
+    logger.log(`
       Could not download data for ${worldID}. Ensure it exists by creating it. 
       Otherwise, it could be a network error or something outside our control.
     `);
@@ -54,8 +57,8 @@ async function initializeAsync() {
   }
 
   try {
-    initializeKnowledgeDB('data/knowledge-graph.db', false);
-    initializeServerDatabase('data/server-data.db');
+    initializeKnowledgeDB(`data/${worldID}-knowledge-graph.db`, false);
+    initializeServerDatabase(`data/${worldID}-server-data.db`);
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =
@@ -72,14 +75,12 @@ async function initializeAsync() {
 
     pubSub.startBroadcasting();
   } catch (error) {
-    console.error('Failed to initialize world:', error);
+    logger.error('Failed to initialize world:', error);
     throw error;
   }
 }
 
 initializeAsync();
-
-DataLogger.startMetricsServer();
 
 // Used for update on developer cheat
 export function setLastUploadTime(time: number) {

@@ -3,13 +3,20 @@ import { Mob } from '../world/mob';
 import { world } from '../scenes/worldScene';
 import { currentCharacter, publicCharacterId } from '../worldMetadata';
 import { SpriteMob } from '../sprite/sprite_mob';
-import { broadcastChannel, playerChannel } from './ablySetup';
+import { broadcastChannel, playerChannel, chatChannel } from './ablySetup';
 
 export function publishPlayerMessage<T extends keyof PlayerToServerMessageMap>(
   type: T,
   payload: PlayerToServerMessageMap[T]
 ) {
   playerChannel.publish(type, payload);
+}
+
+export function publishChatMessage(payload: {
+  mob_id: string;
+  message: string;
+}) {
+  chatChannel.publish('chat', payload);
 }
 
 export function requestChat(mob: Mob) {
@@ -38,6 +45,7 @@ export function speak(message: string, response: number) {
 // Function for players (only takes a message)
 export function chatPlayer(message: string) {
   showSpeech(message);
+  publishChatMessage({ mob_id: publicCharacterId, message });
 }
 
 export function fight(message: string, attack: number) {
@@ -72,6 +80,21 @@ export function startWorld() {
   });
 }
 
+// Triggers process to update the world associated with the player in supabase
+export function updateWorld(target_world_id: string) {
+  const updateData = {
+    publicCharacterId: publicCharacterId,
+    target_world_id: target_world_id
+  };
+  broadcastChannel.presence.update(updateData, (err) => {
+    if (err) {
+      console.error('Error updating world:', err);
+    } else {
+      console.log('Successfully updated world.');
+    }
+  });
+}
+
 /**
  * Broadcasts a leave event for the current world through the presence channel.
  * @param {string} target_world_id - The ID of the world to move to, from the worlds table in Supabase.
@@ -79,6 +102,11 @@ export function startWorld() {
  * @throws {Error} When there's an error leaving the presence channel
  */
 export function leaveWorld(target_world_id: string) {
+  // Do not both updating when you are not changing worlds
+  if (!target_world_id || 'MAINTAIN_WORLD_OPTION' === target_world_id) {
+    return;
+  }
+
   const leaveData = {
     publicCharacterId: publicCharacterId,
     target_world_id: target_world_id

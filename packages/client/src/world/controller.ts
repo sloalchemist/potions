@@ -43,10 +43,13 @@ let responseCallback: (responses: string[]) => void = () => {};
 let attackCallback: (attacks: string[]) => void = () => {};
 
 type GameState = 'uninitialized' | 'worldLoaded' | 'stateInitialized';
+type LeaderboardData = [string, number][];
 
 export let gameState: GameState = 'uninitialized';
 
 export let availableWorlds: WorldMetadata[] = [];
+
+export let leaderboardData: LeaderboardData = [];
 
 export function setAvailableWorlds(worlds: WorldMetadata[]) {
   availableWorlds = worlds;
@@ -55,6 +58,10 @@ export function setAvailableWorlds(worlds: WorldMetadata[]) {
 export function setGameState(state: GameState) {
   console.log('Setting game state to:', state);
   gameState = state;
+}
+
+export function setLeaderboardData(data: LeaderboardData) {
+  leaderboardData = data;
 }
 
 export function setChatting(chat: boolean) {
@@ -140,7 +147,6 @@ export function mobRangeListener(mobs: Mob[]) {
     const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastChatCompanions)) {
-      console.log('filter: ', filteredMobs, 'last:', lastChatCompanions);
       chatCompanionCallback(filteredMobs);
       lastChatCompanions = filteredMobs;
     }
@@ -149,7 +155,6 @@ export function mobRangeListener(mobs: Mob[]) {
     const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastFightOpponents)) {
-      console.log('filter: ', filteredMobs, 'last:', lastFightOpponents);
       fightOpponentCallback(filteredMobs);
       lastFightOpponents = filteredMobs;
     }
@@ -236,11 +241,13 @@ export function getCarriedItemInteractions(
 export function getPhysicalInteractions(
   physical: Physical,
   carried?: Item,
-  ownerId?: string
+  community_id?: string,
+  character_id?: string
 ): Interactions[] {
   const interactions: Interactions[] = [];
   const item = physical as Item;
-  const isOwner: boolean = ownerId ? item.isOwnedBy(ownerId) : true;
+  const isOwnedByCharacter = item.isOwnedByCharacter(character_id);
+  const isOwnedByCommunity = item.isOwnedByCommunity(community_id);
 
   // if the item can be picked up
   if (item.itemType.carryable) {
@@ -264,8 +271,11 @@ export function getPhysicalInteractions(
   item.itemType.interactions.forEach((interaction) => {
     const hasPermission =
       !interaction.permissions || // Allow interaction if no permissions entry in global.json
-      (isOwner && interaction.permissions?.community) ||
-      (!isOwner && interaction.permissions?.other);
+      (isOwnedByCommunity && interaction.permissions?.community) ||
+      (isOwnedByCharacter && interaction.permissions?.character) ||
+      (!isOwnedByCharacter &&
+        !isOwnedByCommunity &&
+        interaction.permissions?.other); // Allowed only for non-owners
 
     if (
       hasPermission &&
@@ -329,15 +339,23 @@ export function getInteractablePhysicals(
 
   // nearby non-walkable items
   let nearbyObjects = physicals.filter(
-    (p) => !p.itemType.walkable && p.itemType.layout_type !== 'fence'
+    (p) =>
+      !p.itemType.walkable &&
+      p.itemType.layout_type !== 'fence' &&
+      p.itemType.layout_type !== 'wall'
   );
 
-  let fences = physicals.filter((p) => p.itemType.layout_type === 'fence');
+  let walls = physicals.filter(
+    (p) =>
+      p.itemType.layout_type === 'fence' ||
+      p.itemType.layout_type === 'wall' ||
+      p.itemType.type === 'partial-wall'
+  );
 
   let nearbyBaskets = physicals.filter((p) => p.itemType.type === 'basket');
 
-  if (fences.length > 1) {
-    fences = [getClosestPhysical(fences, playerPos)];
+  if (walls.length > 1) {
+    walls = [getClosestPhysical(walls, playerPos)];
   }
 
   // find distinct non-walkable objects next to player
@@ -352,7 +370,7 @@ export function getInteractablePhysicals(
     ...unique_nearbyObjects,
     ...nearbyOpenableObjects,
     ...nearbyBaskets,
-    ...fences
+    ...walls
   ];
   interactableObjects = interactableObjects.filter(
     (item, index, self) =>
@@ -388,7 +406,12 @@ function collisionListener(physicals: Item[]) {
   interactableObjects.forEach((physical) => {
     interactions = [
       ...interactions,
-      ...getPhysicalInteractions(physical, carriedItem, player.community_id)
+      ...getPhysicalInteractions(
+        physical,
+        carriedItem,
+        player.community_id,
+        player.id
+      )
     ];
   });
   // updates client only if interactions changes

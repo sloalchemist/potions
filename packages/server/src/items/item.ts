@@ -27,7 +27,8 @@ export interface ItemData {
   house_id?: string;
   lock?: string;
   drops_item?: string; // i was here :3
-  owned_by?: string;
+  owned_by_community?: string;
+  owned_by_character?: string;
 }
 
 export interface ItemAttributeData {
@@ -43,7 +44,8 @@ interface ItemParams {
   itemType: ItemType;
   subtype?: string;
   lock?: string;
-  ownedBy?: Community;
+  ownedByCommunity?: Community;
+  ownedByCharacter?: string;
   house?: House;
   attributes: Record<string, string | number>;
   carriedBy?: Mob;
@@ -58,7 +60,8 @@ export class Item {
   public readonly drops_item;
   private attributes: ItemAttributes = {};
 
-  public readonly owned_by?: string;
+  public readonly owned_by_community?: string;
+  public readonly owned_by_character?: string;
 
   public readonly lock?: string;
   public readonly house?: string;
@@ -70,7 +73,8 @@ export class Item {
     itemType,
     subtype,
     lock,
-    ownedBy,
+    ownedByCommunity,
+    ownedByCharacter,
     house,
     attributes = {}
   }: ItemParams) {
@@ -81,7 +85,8 @@ export class Item {
     this.lock = lock;
     this.subtype = subtype;
     this.house = house?.id;
-    this.owned_by = ownedBy?.id;
+    this.owned_by_community = ownedByCommunity?.id;
+    this.owned_by_character = ownedByCharacter;
     this.drops_item = itemType.drops_item;
 
     for (const [key, value] of Object.entries(attributes)) {
@@ -106,9 +111,10 @@ export class Item {
       itemType: itemGenerator.getItemType(itemData.type),
       subtype: itemData.subtype,
       lock: itemData.lock,
-      ownedBy: itemData.owned_by
-        ? Community.getVillage(itemData.owned_by)
+      ownedByCommunity: itemData.owned_by_community
+        ? Community.getVillage(itemData.owned_by_community)
         : undefined,
+      ownedByCharacter: itemData.owned_by_character,
       attributes: attributes
     });
 
@@ -116,11 +122,10 @@ export class Item {
   }
 
   static insertIntoDB(item: ItemParams) {
-    // console.log(`Inserting ${item.id} into DB with ownership: ${item.ownedBy?.id}`);
     DB.prepare(
       `
-            INSERT INTO items (id, type, subtype, position_x, position_y, owned_by, house_id, lock)
-            VALUES (:id, :type, :subtype, :position_x, :position_y, :owned_by, :house_id, :lock);
+            INSERT INTO items (id, type, subtype, position_x, position_y, owned_by_community, owned_by_character, house_id, lock)
+            VALUES (:id, :type, :subtype, :position_x, :position_y, :owned_by_community, :owned_by_character, :house_id, :lock);
             `
     ).run({
       id: item.id,
@@ -128,7 +133,8 @@ export class Item {
       subtype: item.subtype,
       position_x: item.position ? item.position.x : null,
       position_y: item.position ? item.position.y : null,
-      owned_by: item.ownedBy?.id,
+      owned_by_community: item.ownedByCommunity?.id,
+      owned_by_character: item.ownedByCharacter,
       house_id: item.house?.id,
       lock: item.lock
     });
@@ -189,7 +195,8 @@ export class Item {
                 items.position_y,
                 mobs.id as carried_by,
                 items.lock,
-                items.owned_by
+                items.owned_by_community,
+                items.owned_by_character
             FROM items
             LEFT JOIN mobs ON mobs.carrying_id = items.id
             WHERE items.id = :id;
@@ -354,7 +361,7 @@ export class Item {
                 items;
                 `
     ).all() as { id: string }[];
-    //console.log('starting item ticks');
+    //logger.log('starting item ticks');
     return result.map((row) => row.id);
   }
 
@@ -369,6 +376,25 @@ export class Item {
     const carryable_items = [];
     for (const type in itemGenerator._itemTypes) {
       if (itemGenerator._itemTypes[type].carryable == true) {
+        carryable_items.push(type);
+      }
+    }
+    const item =
+      carryable_items[Math.floor(Math.random() * carryable_items.length)];
+    return item;
+  }
+
+  /**
+   * Function returns a random item not including the item passed in.
+   * @returns A single carryable item, NOT including the item passed in.
+   */
+  static diffRandomItem(item_type: string): string {
+    const carryable_items = [];
+    for (const type in itemGenerator._itemTypes) {
+      if (
+        itemGenerator._itemTypes[type].carryable == true &&
+        type != item_type
+      ) {
         carryable_items.push(type);
       }
     }
@@ -406,13 +432,23 @@ export class Item {
    * @returns True if the mob is authorized, false otherwise.
    */
   validateOwnership(mob: Mob, interaction: string): boolean {
-    // console.log(`${item.type} belongs to ${item.owned_by}`);
-    // if no one owns the item or if the mob owns it, return true
-    if (!this.owned_by || mob.community_id === this.owned_by) return true;
+    const isOwnedByCommunity = this.owned_by_community === mob.community_id;
+    const isOwnedByCharacter = this.owned_by_character === mob.id;
 
+    // No ownership -- anyone can interact
+    if (!this.owned_by_community && !this.owned_by_character) {
+      return true;
+    }
+
+    // Mob is either the item’s owner or part of the owning community
+    if (isOwnedByCommunity || isOwnedByCharacter) {
+      return true;
+    }
     console.warn(
       `Mob ${mob.name} (${mob.id}) from ${mob.community_id} community ` +
-        `is not authorized to ${interaction} from ${this.type} owned by ${this.owned_by}`
+        `is not authorized to ${interaction} with ${this.type} owned by ` +
+        `${this.owned_by_community ? `community ${this.owned_by_community}` : ''} ` +
+        `${this.owned_by_character ? `character ${this.owned_by_character}` : ''}`
     );
     return false;
   }
@@ -426,7 +462,8 @@ export class Item {
             position_y INTEGER, 
             lock TEXT,
             house_id TEXT REFERENCES houses (id) ON DELETE SET NULL,
-            owned_by TEXT REFERENCES community (id) ON DELETE SET NULL,
+            owned_by_community TEXT REFERENCES community (id) ON DELETE SET NULL,
+            owned_by_character TEXT REFERENCES mobs (id) ON DELETE SET NULL,
             stored_by TEXT REFERENCES mobs (id) ON DELETE SET NULL, 
             UNIQUE (position_x, position_y)
         );

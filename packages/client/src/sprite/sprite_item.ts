@@ -17,10 +17,17 @@ export class SpriteItem extends Item {
   hasPickedupFrame: boolean = false;
   healthBar?: Phaser.GameObjects.Graphics;
   maxHealth?: number;
-  ownedBy?: string;
+  ownedByCommunity?: string;
+  ownedByCharacter?: string;
 
   constructor(scene: WorldScene, item: ItemI) {
-    super(world, item.id, item.position, scene.itemTypes[item.type]);
+    const itemType = scene.itemTypes[item.type];
+    if (!itemType) {
+      throw new Error(
+        `Item type '${item.type}' does not exist in global item configuration.`
+      );
+    }
+    super(world, item.id, item.position, itemType);
     this.flat = this.itemType.flat == true;
     this.name = item.name;
     this.subtype = item.subtype;
@@ -28,7 +35,8 @@ export class SpriteItem extends Item {
     this.house = item.house;
     this.carried_by = item.carried_by;
     this.lock = item.lock;
-    this.ownedBy = item.ownedBy;
+    this.ownedByCommunity = item.ownedByCommunity;
+    this.ownedByCharacter = item.ownedByCharacter;
 
     // copy over all attributes
     for (const key in item.attributes) {

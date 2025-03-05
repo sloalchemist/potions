@@ -57,7 +57,9 @@ const client_breakup = (json: JsonData) => {
         'open',
         'flat',
         'templated',
-        'show_template_at'
+        'show_template_at',
+        'show_price_at',
+        'description'
       ]);
       for (let i = 0; i < json['item_types'].length; i++) {
         Object.keys(json['item_types'][i]!).forEach((sub_item_type) => {
@@ -114,7 +116,8 @@ const server_breakup = (json: JsonData) => {
         'open',
         'flat',
         'templated',
-        'show_template_at'
+        'show_template_at',
+        'show_price_at'
       ]);
       for (let i = 0; i < json['item_types'].length; i++) {
         Object.keys(json['item_types'][i]!).forEach((sub_item_type) => {
@@ -181,7 +184,7 @@ process.argv.forEach(function (val: string) {
     const json_client = JSON.parse(rawJson);
     client_breakup(json_client);
     writeFileSync(
-      '../client/static/global.json',
+      '../../world_assets/global/client/global.json',
       JSON.stringify(json_client, null, 4)
     );
     ran = true;
@@ -190,7 +193,7 @@ process.argv.forEach(function (val: string) {
     const json_server = JSON.parse(rawJson);
     server_breakup(json_server);
     writeFileSync(
-      '../server/data/global.json',
+      '../../world_assets/global/server/global.json',
       JSON.stringify(json_server, null, 4)
     );
     ran = true;

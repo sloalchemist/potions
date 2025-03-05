@@ -123,6 +123,20 @@ export class Character {
     return world.mobs[publicCharacterId].personalities['extroversion'];
   }
 
+  get favorabilities(): Record<string, number> {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return {};
+    }
+    return world.mobs[publicCharacterId].favorabilities;
+  }
+
+  get isCarrying(): string | undefined {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return undefined;
+    }
+    return world.mobs[publicCharacterId].carrying;
+  }
+
   subtype(): string {
     return `${this.eyeColor}-${this.bellyColor}-${this.furColor}`;
   }

@@ -12,14 +12,14 @@ name: 'Terraform Server Deploy'
 
 on:
   push:
-    branches: 
+    branches:
       - main
   pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
-  
+
 jobs:
   terraform:
     name: Terraform Deploy
@@ -27,8 +27,8 @@ jobs:
     environment: prod
 
     env:
-      TF_VAR_project_name: ${{ vars.SUPABASE_PROJECT_NAME }}  
-      TF_VAR_environment: ${{ vars.STAGE}}    
+      TF_VAR_project_name: ${{ vars.SUPABASE_PROJECT_NAME }}
+      TF_VAR_environment: ${{ vars.STAGE}}
       TF_VAR_ably_account_token: ${{ secrets.ABLY_ACCOUNT_TOKEN }}
       TF_VAR_supabase_access_token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       TF_VAR_supabase_db_pass: ${{ secrets.SUPABASE_DB_PASS }}
@@ -37,6 +37,13 @@ jobs:
       TF_VAR_render_api_key: ${{ secrets.RENDER_API_KEY }}
       TF_VAR_render_owner_id: ${{ secrets.RENDER_OWNER_ID }}
       TF_VAR_github_token: ${{ secrets.WRITE_GITHUB_ENV_VARS_TOKEN}}
+      TF_VAR_test_uptime_server_url: ${{vars.TEST_UPTIME_SERVER_URL}}
+      TF_VAR_test_uptime_server_msg: ${{vars.TEST_UPTIME_SERVER_MSG}}
+      TF_VAR_fire_uptime_server_url: ${{vars.FIRE_UPTIME_SERVER_URL}}
+      TF_VAR_fire_uptime_server_msg: ${{vars.FIRE_UPTIME_SERVER_MSG}}
+      TF_VAR_water_uptime_server_url: ${{vars.WATER_UPTIME_SERVER_URL}}
+      TF_VAR_water_uptime_server_msg: ${{vars.WATER_UPTIME_SERVER_MSG}}
+
 
     steps:
       # 1. Check out your repository code
@@ -61,7 +68,7 @@ jobs:
           terraform_version: '1.10.4'
           # This ensures Terraform CLI can authenticate with Terraform Cloud
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-  
+
       # 3. Terraform Init
       - name: Terraform Init
         working-directory: ./.terraform-prod
@@ -84,6 +91,6 @@ jobs:
 
       # 7. Terraform Apply (only applies on push to main, not on PR)
       - name: Terraform Apply
-      #if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        #if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         working-directory: ./.terraform-prod
         run: terraform apply -auto-approve -no-color
