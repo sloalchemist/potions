@@ -492,6 +492,11 @@ export class Mob {
   }
 
   changeHealth(amount: number) {
+    // Don't apply damage (negative health changes) if the mob is hidden
+    if (amount < 0 && this._hidden) {
+      return;
+    }
+
     if (amount === 0 || this.health <= 0) return;
     let newHealth = this.health + amount;
     newHealth = Math.min(newHealth, this.maxHealth);
