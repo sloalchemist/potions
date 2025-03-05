@@ -1156,7 +1156,7 @@ describe('Try to consume potion in various cases', () => {
     const mobPosition: Coord = { x: 0, y: 1 };
     const blueberryPosition: Coord = { x: 1, y: 2 };
     const basketPosition: Coord = { x: 0, y: 2 };
-    const potionStandPosition: Coord = {x: 2, y: 1};
+    const potionStandPosition: Coord = { x: 2, y: 1 };
 
     // create a player
     mobFactory.makeMob('player', positionPlayer1, 'TestID', 'TestPlayer');
@@ -1257,14 +1257,14 @@ describe('Try to consume potion in various cases', () => {
     expect(disappearedPotionStand).not.toBeDefined();
   });
 
-  test('Test potion with mobs and items (empty stand) in a 3 pixel radius', () => {
+  test('Test potion with mobs and items (empty stand) in a 3 pixel radius + effect of bomb on things outside the radius', () => {
     FantasyDate.initialDate();
     const positionPlayer1: Coord = { x: 1, y: 0 };
     const potionLocation: Coord = { x: 0, y: 0 };
     const mobPosition: Coord = { x: 0, y: 1 };
     const blueberryPosition: Coord = { x: 1, y: 2 };
     const standPosition: Coord = { x: 0, y: 2 };
-    // const standItemPosition: Coord = { x: 1, y: 1 };
+    const farBlueberryPosition: Coord = { x: 6, y: 6 };
 
     // create a player
     mobFactory.makeMob('player', positionPlayer1, 'TestID', 'TestPlayer');
@@ -1293,6 +1293,15 @@ describe('Try to consume potion in various cases', () => {
     const testBlueberry = Item.getItemIDAt(blueberryPosition);
     expect(testBlueberry).not.toBe(undefined);
     expect(testBlueberry).not.toBeNull();
+
+    // create a blueberry that shouldn't be blown up
+    itemGenerator.createItem({
+      type: 'blueberry',
+      position: farBlueberryPosition
+    });
+    const testFarBlueberry = Item.getItemIDAt(farBlueberryPosition);
+    expect(testFarBlueberry).not.toBe(undefined);
+    expect(testFarBlueberry).not.toBeNull();
 
     // create a potion
     itemGenerator.createItem({
@@ -1329,6 +1338,10 @@ describe('Try to consume potion in various cases', () => {
     // check that the basket disappeared
     const disappearedStand = Item.getItemIDAt(standPosition);
     expect(disappearedStand).toBe(undefined);
+
+    // check that the far away blueberry exists
+    const existingBlueberry = Item.getItemIDAt(farBlueberryPosition);
+    expect(existingBlueberry).not.toBe(undefined);
   });
 
   test('Test potion with mobs and items (stand with items) in a 3 pixel radius', () => {
@@ -1338,7 +1351,6 @@ describe('Try to consume potion in various cases', () => {
     const mobPosition: Coord = { x: 0, y: 1 };
     const blueberryPosition: Coord = { x: 1, y: 2 };
     const standPosition: Coord = { x: 0, y: 2 };
-    // const standItemPosition: Coord = { x: 1, y: 1 };
 
     // create a player
     mobFactory.makeMob('player', positionPlayer1, 'TestID', 'TestPlayer');
