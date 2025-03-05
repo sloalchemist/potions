@@ -107,7 +107,7 @@ export function drinkPotion(
 
       // broadcast bomb message for client side animation
       pubSub.bomb(mob.id);
-  
+
       // destroy all nearby objects
       nearbyObjects.forEach((id) => {
         const item = Item.getItem(id);

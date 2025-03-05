@@ -176,8 +176,7 @@ export function handleCliCommand(input: string) {
         const potion = Item.getItemIDAt(potionLocation);
         if (!potion) {
           console.log(`Unknown potion type: ${name}.`);
-        }
-        else {
+        } else {
           console.log(`Spawned potion: ${name} at (${x}, ${y})`);
         }
         break;

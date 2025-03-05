@@ -5,11 +5,10 @@ import { Community } from '../../../src/community/community';
 import { Item } from '../../../src/items/item';
 import { Mob } from '../../../src/mobs/mob';
 import { Drink } from '../../../src/items/uses/drink';
+import { AddItem } from '../../../src/items/uses/container/addItem';
 import { FantasyDate } from '../../../src/date/fantasyDate';
 import { Coord } from '@rt-potion/common';
 import { hexStringToNumber } from '../../../src/util/colorUtil';
-import { MarketStand } from '../../../src/items/marketStand';
-
 
 beforeEach(() => {
   commonSetup();
@@ -216,13 +215,14 @@ describe('Try to consume potion in various cases', () => {
     expect(existingBlueberry).not.toBe(undefined);
   });
 
-  test('Test potion with mobs and items (stand with items) in a 3 pixel radius', () => {
+  test('Test potion with mobs and items (basket with items) in a 3 pixel radius', () => {
     FantasyDate.initialDate();
     const positionPlayer1: Coord = { x: 1, y: 0 };
     const potionLocation: Coord = { x: 0, y: 0 };
+    const potion2Location: Coord = { x: 1, y: 1 };
     const mobPosition: Coord = { x: 0, y: 1 };
     const blueberryPosition: Coord = { x: 1, y: 2 };
-    const standPosition: Coord = { x: 0, y: 2 };
+    const basketPosition: Coord = { x: 0, y: 2 };
 
     // create a player
     mobFactory.makeMob('player', positionPlayer1, 'TestID', 'TestPlayer');
@@ -234,14 +234,14 @@ describe('Try to consume potion in various cases', () => {
     const testMob = Mob.getMob('TestingID');
     expect(testMob).not.toBeNull();
 
-    // create a potion to be put into the stand
+    // create a blue potion to be put into the basket
     itemGenerator.createItem({
       type: 'potion',
-      subtype: String(hexStringToNumber('#614f79')),
-      position: potionLocation,
+      subtype: String(hexStringToNumber('#0000ff')),
+      position: potion2Location,
       carriedBy: testPlayer
     });
-    const standPotion = Item.getItemIDAt(potionLocation);
+    const standPotion = Item.getItemIDAt(potion2Location);
     expect(standPotion).not.toBeNull();
     const standPotionItem = Item.getItem(standPotion!);
     expect(standPotionItem).not.toBeNull();
@@ -250,30 +250,22 @@ describe('Try to consume potion in various cases', () => {
     expect(testPlayer!.carrying).not.toBeNull();
     expect(testPlayer!.carrying!.type).toBe('potion');
     expect(testPlayer!.carrying!.subtype).toBe(
-      String(hexStringToNumber('#614f79'))
+      String(hexStringToNumber('#0000ff'))
     );
 
-    // create a market stand with an item added to it
+    // create a basket
     itemGenerator.createItem({
-      type: 'potion-stand',
-      position: standPosition,
-      attributes: {
-        inventory: JSON.stringify({}),
-        prices: JSON.stringify({})
-      }
+      type: 'basket',
+      position: basketPosition
     });
-    const testStand = Item.getItemIDAt(standPosition);
-    expect(testStand).not.toBe(undefined);
-    const testStandItem = Item.getItem(testStand!);
-    expect(testStandItem).not.toBeNull();
+    const testBasket = Item.getItemIDAt(basketPosition);
+    expect(testBasket).not.toBe(undefined);
+    const testBasketItem = Item.getItem(testBasket!);
+    expect(testBasket).not.toBeNull();
 
-    const marketStand = MarketStand.fromItem(testStandItem!);
-    expect(marketStand).not.toBe(undefined);
-    if (marketStand) {
-      // add the potion the player is carrying to the stand
-      const added = marketStand.addItem(testPlayer!);
-      expect(added).toBe(true);
-    }
+    // add the currently carried item (blue potion) to the basket
+    const testAddItem = new AddItem();
+    testAddItem.interact(testPlayer!, testBasketItem!);
 
     // create a blueberry
     itemGenerator.createItem({
@@ -317,8 +309,8 @@ describe('Try to consume potion in various cases', () => {
     expect(disappearedBlueberry).toBe(undefined);
 
     // check that the stand disappeared, along with the item in it
-    const disappearedStand = Item.getItemIDAt(standPosition);
-    expect(disappearedStand).toBe(undefined);
+    const disappearedBasket = Item.getItemIDAt(basketPosition);
+    expect(disappearedBasket).toBe(undefined);
   });
 });
 

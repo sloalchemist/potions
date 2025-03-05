@@ -370,8 +370,8 @@ export class Mob {
 
     // add filter for types only if inputted
     if (types.length > 0) {
-        const typesList = types.map((type) => `'${type}'`).join(', ');
-        query += ` AND type IN (${typesList})`;
+      const typesList = types.map((type) => `'${type}'`).join(', ');
+      query += ` AND type IN (${typesList})`;
     }
 
     // finish the query regardless of type filter
