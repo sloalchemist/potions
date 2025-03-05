@@ -4,6 +4,7 @@ import { getWorlds } from '../../services/authMarshalling';
 import { pubSub } from '../../services/clientCommunication/pubsub';
 import { Item } from '../item';
 import { Use } from './use';
+import { logger } from '../../util/logger';
 
 export class EnterPortal implements Use {
   key: string;
@@ -23,7 +24,7 @@ export class EnterPortal implements Use {
         name: world.world_id
       }));
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 

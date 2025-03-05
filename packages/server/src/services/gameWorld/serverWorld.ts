@@ -244,6 +244,14 @@ export class ServerWorld implements GameWorld {
     const fantasyDateTime = measureTime('Fantasy date', () => FantasyDate.runTick());
     const dataLoggingTime = measureTime('Data logging', () => DataLogger.logData());
 
+    conversationTracker.tick();
+    FantasyDate.runTick();
+
+    // log data for Prometheus
+    DataLogger.logData();
+
+    //const totalTime = Date.now() - startTime;
+    //logger.log('time to tick', totalTime);
     const totalTime = performance.now() - totalStart;
     
     // Log tick metrics to the dedicated CSV file

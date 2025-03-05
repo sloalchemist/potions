@@ -428,12 +428,18 @@ export class WorldScene extends Phaser.Scene {
         // );
 
         // Prevent player movement if the brew scene is active
-        if (this.scene.isActive('BrewScene')) {
+        if (
+          this.scene.isActive('BrewScene') ||
+          this.scene.isActive('FightScene')
+        ) {
           return;
         }
 
         // Prevent player movement if the brew scene is active
-        if (this.scene.isActive('BrewScene')) {
+        if (
+          this.scene.isActive('BrewScene') ||
+          this.scene.isActive('FightScene')
+        ) {
           return;
         }
 
@@ -573,7 +579,8 @@ export class WorldScene extends Phaser.Scene {
     // Prevent player movement if the chat overlay or brew scene is active
     if (
       this.scene.isActive('ChatOverlayScene') ||
-      this.scene.isActive('BrewScene')
+      this.scene.isActive('BrewScene') ||
+      this.scene.isActive('FightScene')
     ) {
       return;
     }

@@ -29,6 +29,7 @@ import {
   updateCharacterData
 } from '../authMarshalling';
 import { applyCheat } from '../developerCheats';
+import { logger } from '../../util/logger';
 
 //must match MAINTAIN_WORLD_OPTION in client/src/services/serverToBroadcast.ts
 const MAINTAIN_WORLD_OPTION = 'NO_CHANGE';
@@ -63,7 +64,7 @@ export class AblyService implements PubSub {
   private setupPresenceSubscriptions(): void {
     this.broadcastChannel.presence.subscribe('enter', (presenceMsg) => {
       this.checkConnectedClients();
-      console.log(
+      logger.log(
         `Client joined: ${presenceMsg.clientId}. Total connected: ${this.hasConnectedClients}`
       );
     });
@@ -96,20 +97,20 @@ export class AblyService implements PubSub {
         presenceMsg.data.target_world_id === MAINTAIN_WORLD_OPTION
           ? this.worldID
           : presenceMsg.data.target_world_id;
-      console.log('Target World Received:', presenceMsg.data.target_world_id);
-      console.log('Target World Being Sent:', target_world_id);
+      logger.log('Target World Received:', presenceMsg.data.target_world_id);
+      logger.log('Target World Being Sent:', target_world_id);
       this.sendPersistenceRequest(
         presenceMsg.clientId,
         this.userDict.get(presenceMsg.clientId),
         target_world_id
       );
       this.checkConnectedClients();
-      console.log(
+      logger.log(
         `Client left: ${presenceMsg.clientId}. Total connected: ${this.hasConnectedClients}`
       );
 
       const player = Mob.getMob(presenceMsg.clientId);
-      // console.log("player when leaving:", player);
+      // logger.log("player when leaving:", player);
       player?.removePlayer();
     });
 
@@ -123,9 +124,9 @@ export class AblyService implements PubSub {
       this.handleUserJoin.bind(this),
       (err) => {
         if (err) {
-          console.error('Error subscribing to user join:', err);
+          logger.error('Error subscribing to user join:', err);
         } else {
-          console.log('Subscribed to user join');
+          logger.log('Subscribed to user join');
         }
       }
     );
@@ -135,7 +136,7 @@ export class AblyService implements PubSub {
     this.userMembershipChannel.subscribe('serving', (message) => {
       const { world, start_time } = message.data;
       if (world === this.worldID && start_time > this.startTime) {
-        console.log(
+        logger.log(
           `Newer server detected for world ${world} with start_time ${start_time}. Shutting down...`
         );
         this.shutdownServer();
@@ -144,14 +145,14 @@ export class AblyService implements PubSub {
   }
 
   private shutdownServer(): void {
-    console.log('Performing graceful shutdown...');
+    logger.log('Performing graceful shutdown...');
     process.exit(0);
   }
 
   private async checkConnectedClients() {
     await this.broadcastChannel.presence.get((err, members) => {
       if (err) {
-        console.error('Error fetching presence members:', err);
+        logger.error('Error fetching presence members:', err);
         return;
       }
       this.hasConnectedClients = members!.length > 0;
@@ -161,9 +162,9 @@ export class AblyService implements PubSub {
   private async sendPlayerData(id: number, data: PlayerData) {
     try {
       const result = await updateCharacterData(id, data);
-      console.log(result.message); // "Player data upserted successfully."
+      logger.log(result.message); // "Player data upserted successfully."
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 
@@ -178,12 +179,12 @@ export class AblyService implements PubSub {
 
   //TODO: estrada - this is the function that handles the 'join' event from the auth-server
   private handleUserJoin(message: Types.Message): void {
-    console.log('User joined', message.data);
+    logger.log('User joined', message.data);
     if (message.data.world === this.worldID) {
-      console.log('data.name:', message.data.name);
-      console.log('data.health:', message.data.health);
-      console.log('data.gold:', message.data.gold);
-      console.log('data.attack:', message.data.attack);
+      logger.log('data.name:', message.data.name);
+      logger.log('data.health:', message.data.health);
+      logger.log('data.gold:', message.data.gold);
+      logger.log('data.attack:', message.data.attack);
       this.userMembershipChannel.publish('serving', {
         name: message.data.name,
         world: this.worldID,
@@ -514,7 +515,7 @@ export class AblyService implements PubSub {
   }
 
   public confirmChat(mob_key: string, target: string): void {
-    console.log('confirm chat', mob_key, target);
+    logger.log('confirm chat', mob_key, target);
 
     this.publishMessageToPlayer(target, 'chat_confirm', { target: mob_key });
   }
@@ -550,7 +551,7 @@ export class AblyService implements PubSub {
       data: { item_key, mob_key, position }
     });
 
-    console.log('stashing item', item_key, mob_key);
+    logger.log('stashing item', item_key, mob_key);
   }
 
   public unstashItem(item_key: string, mob_key: string, position: Coord): void {
@@ -579,7 +580,7 @@ export class AblyService implements PubSub {
   }
 
   public playerAttacks(mob_key: string, attacks: string[]) {
-    console.log('player attacks', mob_key, attacks);
+    logger.log('player attacks', mob_key, attacks);
     this.publishMessageToPlayer(mob_key, 'player_attacks', { attacks });
   }
 
@@ -588,10 +589,13 @@ export class AblyService implements PubSub {
     char_id: number,
     target_world_id: number
   ) {
-    console.log('Updating state info for', username);
+    logger.log('Updating state info for', username);
     const player = Mob.getMob(username);
     if (!player) {
-      throw new Error('no player found ' + username);
+      console.error(
+        `No player found, unable to persist player state: ${username}`
+      );
+      return;
     }
     let health_for_update = player.health;
     let gold_for_update = player.gold;
@@ -601,9 +605,9 @@ export class AblyService implements PubSub {
       health_for_update = mobFactory.getTemplate('player').health;
       attack_for_update = mobFactory.getTemplate('player').attack;
     }
-    console.log('\t Persist player health:', health_for_update);
-    console.log('\t Persist player gold:', gold_for_update);
-    console.log('\t Persist player attack:', attack_for_update);
+    logger.log('\t Persist player health:', health_for_update);
+    logger.log('\t Persist player gold:', gold_for_update);
+    logger.log('\t Persist player attack:', attack_for_update);
     // Update existing character data
     const playerData: PlayerData = {
       current_world_id: target_world_id,
@@ -640,12 +644,12 @@ export class AblyService implements PubSub {
       });
     }
 
-    console.log('Setting up channel for', username);
+    logger.log('Setting up channel for', username);
     subscribeToPlayerChannel('join', (data) => {
       this.userDict.set(username, char_id);
       const player = Mob.getMob(username);
       if (!player) {
-        console.log(`Making mob for the character that joined: ${username}
+        logger.log(`Making mob for the character that joined: ${username}
           \t health recieved: ${health}
           \t attack recieved: ${attack}
           \t gold recieved: ${gold} `);
@@ -667,7 +671,7 @@ export class AblyService implements PubSub {
       const items = getItemsAbly();
       const houses = getHousesAbly();
 
-      console.log('Sending state to', username);
+      logger.log('Sending state to', username);
       this.publishMessageToPlayer(username, 'state', {
         mobs: mobs,
         items: items,
@@ -689,7 +693,7 @@ export class AblyService implements PubSub {
     });
 
     subscribeToPlayerChannel('chat_request', (data) => {
-      console.log('chat request', data);
+      logger.log('chat request', data);
       const player = Mob.getMob(username);
       const chatTarget = Mob.getMob(data.mob_key);
       if (player && chatTarget) {
@@ -698,7 +702,7 @@ export class AblyService implements PubSub {
     });
 
     subscribeToPlayerChannel('fight_request', (data) => {
-      console.log('fight request', data);
+      logger.log('fight request', data);
       const player = Mob.getMob(username);
       const fightTarget = Mob.getMob(data.mob_key);
       if (player && fightTarget) {
@@ -717,7 +721,7 @@ export class AblyService implements PubSub {
       const player = Mob.getMob(username);
       if (player) {
         // TODO: replace following two lines when FightTracker class is implemented
-        console.log('test fight', data);
+        logger.log('test fight', data);
         this.closeFight(player.id, player.id);
         // fightTracker.addTurnFromOptions(player, data.attack);
       }
