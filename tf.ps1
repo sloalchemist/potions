@@ -64,6 +64,9 @@ if ($exitCode -ne 0) {
     if ($output -match "The following organization members have reached their maximum limits") {
          Write-Host " You have more than 1 active Supabase project in your organization." -ForegroundColor Red
     }
+    elseif($output -match "Ably API token cannot be an empty string.") {
+         Write-Host "Make sure you have followed the README instructions to create your tf.tfvars file."
+    }
     elseif ($output -match "CRLF line endings detected") {
          Write-Host " The files listed above have CRLF line endings. Please change the line endings to LF." -ForegroundColor Red
     }
@@ -83,7 +86,7 @@ if ($exitCode -ne 0) {
          Write-Host "If you had to time out the run of apply, check to make sure your supabase db password is correct."
     }
     else {
-         Write-Host "We haven't handle this case yet: An unknown error occurred. Please review the output above. In most cases, this is due to out of sync terraform state. Please refer to the section of the README called SYNCING TERRAFORM STATE." -ForegroundColor Red
+         Write-Host "We haven't handle this case yet: An unknown error occurred. Check to make sure Docker Desktop is running, and if that doesn't work, please review the output above. In most cases, this is due to out of sync terraform state. Please refer to the section of the README called SYNCING TERRAFORM STATE." -ForegroundColor Red
     }
     Write-Host "========================================" -ForegroundColor Red
     exit $exitCode
