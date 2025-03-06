@@ -17,6 +17,7 @@ import {
   uploadLocalData
 } from '../services/supabaseStorage';
 import { logger } from '../util/logger';
+import globalData from '../../world_assets/global.json';
 
 async function main() {
   // Build and save the knowledge graph
@@ -29,20 +30,17 @@ async function main() {
     throw new Error('No world ID provided, provide a world ID as an argument');
   }
   await initializeServerDatabase(`data/${worldID}-server-data.db`, true);
+  console.log(`data/${worldID}-server-data.db`);
 
   logger.log(`Loading world ${worldID}`);
 
-  const worldDataResponse = await fetch(
-    `https://potions.gg/world_assets/${worldID}/server/world_specific.json`
+  const worldSpecificData = await import(
+    `../../world_assets/${worldID}/world_specific.json`
   );
-  const worldSpecificData = await worldDataResponse.json();
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
-  const globalDataResponse = await fetch(
-    `https://potions.gg/world_assets/global/server/global.json`
-  );
-  const globalData = await globalDataResponse.json();
+
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
     worldSpecificData as Partial<ServerWorldDescription>;

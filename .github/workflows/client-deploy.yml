@@ -11,7 +11,7 @@ jobs:
     name: Build Client
     runs-on: ubuntu-latest
     permissions:
-        contents: write
+      contents: write
     environment: github-pages
 
     steps:
@@ -46,18 +46,17 @@ jobs:
       - name: Build Client
         run: |
           pnpm build
-          
+
       # Step 7: Copy Static Files for index.html
       - name: Copy Static Files
         run: |
           cp -r ./packages/client/static ./packages/client/dist/static
           cp -r ./packages/client/githubPages/index.html ./packages/client/dist
-          cp -r ./world_assets ./packages/client/dist
 
       # Step 8: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: ./packages/client/dist
-            cname: potions.gg
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./packages/client/dist
+          cname: potions.gg
