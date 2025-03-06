@@ -278,7 +278,7 @@ export class SpriteItem extends Item {
         this.sprite.setFrame(`${this.type}-top-right`);
       } else if (below && right) {
         this.sprite.setFrame(`${this.type}-top-left`);
-      } else if (above) {
+      } else if (above || below) {
         if (house) {
           if (house.top_left.x == this.position!.x) {
             //console.log('house left');
