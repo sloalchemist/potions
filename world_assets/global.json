@@ -1032,7 +1032,8 @@
                 "action": "add_item",
                 "while_carried": false,
                 "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
                 }
               },
@@ -1048,7 +1049,8 @@
                   }
                 ],
                 "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
                 }
               },
@@ -1064,7 +1066,8 @@
                   }
                 ],
                 "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
                 }
               },
@@ -1080,7 +1083,8 @@
                   }
                 ],
                 "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
                 }
               },
@@ -1096,7 +1100,8 @@
                   }
                 ],
                 "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
                 }
               },
@@ -1110,7 +1115,12 @@
                     "value": 0,
                     "comparison": "greater_than"
                   }
-                ]
+                ],
+                "permissions": {
+                  "community": false,
+                  "character": false,
+                  "other": true
+                }
               },
               {
                 "description": "Destroy stand",
