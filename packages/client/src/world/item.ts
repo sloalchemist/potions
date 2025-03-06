@@ -121,10 +121,12 @@ export class Item extends Physical {
     if (!mob.position) {
       throw new Error('Mob has no position');
     }
-    this.carried_by = undefined;
-    this.position = position;
-    world.addItemToGrid(this);
     world.removeStoredItem(this); // Remove from stored items
+    if (mob.carrying) {
+      world.items[mob.carrying].stash(world, mob, position);
+    }
+    mob.carrying = this.key;
+    this.carried_by = mob.key;
   }
 
   tick(world: World, deltaTime: number) {
