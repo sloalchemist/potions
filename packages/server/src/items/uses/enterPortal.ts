@@ -24,7 +24,7 @@ export class EnterPortal implements Use {
         name: world.world_id
       }));
     } catch (error) {
-      logger.error(error);
+      logger.error('Error populating worlds:', error);
     }
   }
 

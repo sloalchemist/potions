@@ -47,7 +47,7 @@ export class Hunt implements Plan {
           // decrement slowEnemy count (1 usage)
           npc.changeSlowEnemy(-1);
           // decrease targeted enemy's speed
-          logger.log(this.enemy!._speed);
+          logger.log('Enemy speed:', this.enemy!._speed);
           const speedDelta = this.enemy!._speed * -0.5;
           const speedDuration = 15;
           this.enemy!.changeEffect(speedDelta, speedDuration, 'speed');

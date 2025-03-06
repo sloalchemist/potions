@@ -16,7 +16,6 @@ const colordict: ColorDict = {
   '#0000ff': 'blue',
   '#e79600': 'orange',
   '#ef7d55': 'gold',
-  '#8b7f6e': 'grey',
   '#ab00e7': 'purple',
   '#00ff00': 'green',
   '#166060': 'black'
@@ -38,7 +37,7 @@ export function drinkPotion(
       return true;
     case '#0000ff':
       logger.log('Drinking blue potion');
-      logger.log(mob._speed);
+      logger.log('Mob Speed:', mob._speed);
       let speedMultiplier = 0.5;
       let speedDuration = 30;
       if (effectModifier) {
@@ -66,11 +65,11 @@ export function drinkPotion(
       mob.changeMaxHealth(healthIncrease, true);
       return true;
     case '#8b7f6e':
-      logger.log('Drinking grey potion');
+      logger.debug('Drinking grey potion');
       mob.changeSlowEnemy(1);
       return true;
     case '#ab00e7':
-      logger.log('Drinking purple potion');
+      logger.debug('Drinking purple potion');
       let defenseMultiplier = 0.5;
       let defenseDuration = 240;
       if (effectModifier) {
@@ -81,7 +80,7 @@ export function drinkPotion(
       mob.changeEffect(defenseDelta, defenseDuration, 'defense');
       return true;
     case '#00ff00':
-      console.log('Drinking green potion');
+      logger.debug('Drinking green potion');
       let dotDelta = 1;
       let dotDuration = 240;
       if (effectModifier) {
@@ -91,7 +90,7 @@ export function drinkPotion(
       mob.changeEffect(dotDelta, dotDuration, 'damageOverTime');
       return true;
     case '#166060':
-      console.log('Drinking black potion');
+      logger.debug('Drinking black potion');
       let monsterDuration = 120;
       if (effectModifier) {
         monsterDuration = monsterDuration * effectModifier;

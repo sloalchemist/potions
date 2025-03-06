@@ -68,7 +68,7 @@ async function downloadFile(
     .from(bucketName)
     .download(supabase_file_name);
 
-  logger.log(data);
+  logger.log('Blob:', data);
 
   if (error) {
     throw error;
