@@ -164,6 +164,3 @@ export class PortalMenuScene extends Phaser.Scene {
     return 'Down';
   }
 }
-
-
-// test
