@@ -1039,7 +1039,8 @@
           "description": "Add $item_name",
           "action": "add_item",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false
@@ -1048,7 +1049,8 @@
           "description": "Get $item_name",
           "action": "get_item",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1064,7 +1066,8 @@
           "description": "Raise price",
           "action": "raise_price",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1080,7 +1083,8 @@
           "description": "Lower price",
           "action": "lower_price",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1096,7 +1100,8 @@
           "description": "Collect gold",
           "action": "collect_gold",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1111,6 +1116,11 @@
         {
           "description": "Purchase potion",
           "action": "purchase",
+          "permissions": {
+            "community": false,
+            "character": false,
+            "other": true
+          },
           "while_carried": false,
           "conditions": [
             {
