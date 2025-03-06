@@ -213,7 +213,7 @@ export function setupBroadcast(
   function handleBomb(data: BombData) {
     const mob = world.mobs[data.id] as SpriteMob;
     if (mob) {
-      mob.createBombExplosion(1);;
+      mob.createBombExplosion(1);
     }
   }
 

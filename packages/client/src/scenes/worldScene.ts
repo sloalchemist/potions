@@ -81,16 +81,13 @@ export class WorldScene extends Phaser.Scene {
       frameWidth: 100,
       frameHeight: 100
     });
-    
+
     this.load.spritesheet('explosion', 'static/Explosion-scaled.png', {
       frameWidth: 288,
       frameHeight: 288
     });
 
-    this.load.json(
-      'global_data',
-      'static/global.json'
-    );
+    this.load.json('global_data', 'static/global.json');
     this.load.json(
       'world_specific_data',
       `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
@@ -116,7 +113,10 @@ export class WorldScene extends Phaser.Scene {
 
     this.anims.create({
       key: 'bomb-explosion',
-      frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 11 }),
+      frames: this.anims.generateFrameNumbers('explosion', {
+        start: 0,
+        end: 11
+      }),
       frameRate: 20,
       repeat: 0
     });
