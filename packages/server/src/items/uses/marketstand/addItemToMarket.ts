@@ -18,6 +18,15 @@ export class AddItemToMarket implements Use {
     const marketStand = MarketStand.fromItem(item);
     if (!marketStand) return false;
 
+    // Prevent adding items if the stand already has a set item type
+    const existingItemType = marketStand.getItemType();
+    const carriedItem = mob.carrying;
+
+    if (existingItemType && carriedItem?.type !== existingItemType) {
+      console.log('Market stand already has a different item type.');
+      return false;
+    }
+
     return marketStand.addItem(mob);
   }
 }
