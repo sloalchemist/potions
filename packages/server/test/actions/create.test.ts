@@ -75,4 +75,24 @@ describe('Create', () => {
       capacity: 20
     });
   });
+
+  test('should not create item with log', () => {
+    const type = 'new-item-type';
+    const logType = {
+      type: 'log',
+      subtype: 'log',
+      destroy: jest.fn()
+    } as unknown as jest.Mocked<Item>;
+    Create.createItemFrom(logType, mockMob, type);
+
+    const createItemCall = (
+      itemGeneratorModule.itemGenerator.createItem as jest.Mock
+    ).mock.calls[0][0];
+
+    expect(createItemCall.attributes).toEqual({
+      templateType: logType.type,
+      items: 0,
+      capacity: 20
+    });
+  });
 });
