@@ -126,7 +126,6 @@
               { "type": "anemone", "coord": { "x": 42, "y": 33 } },
               { "type": "coral", "coord": { "x": 29, "y": 25 } },
               { "type": "coral", "coord": { "x": 22, "y": 30 } },
-              { "type": "coral", "coord": { "x": 27, "y": 28 } },
               { "type": "slime-blob", "coord": {"x": 14, "y": 38}},
               { "type": "seaweed", "coord": { "x": 4, "y": 35 } },
               { "type": "pearl", "coord": {"x": 13, "y": 38}},
