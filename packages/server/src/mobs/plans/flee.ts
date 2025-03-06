@@ -66,8 +66,8 @@ export class Flee implements Plan {
     if (!closerEnemyID) return -Infinity;
 
     this.enemy = Mob.getMob(closerEnemyID)!;
-
     //logger.log(`fleeing eval ${npc.name} ${npc.personality.traits[PersonalityTraits.Bravery]} ${npc.attributes['health']} ${this.enemy.attributes['health']}`)
+
     const utility =
       (100 - npc.personality.traits[PersonalityTraits.Bravery]) *
       (this.enemy.health / npc.health);
