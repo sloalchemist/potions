@@ -67,6 +67,12 @@ if ($exitCode -ne 0) {
     elseif($output -match "Ably API token cannot be an empty string.") {
          Write-Host "Make sure you have followed the README instructions to create your tf.tfvars file."
     }
+     elseif($output -match "Could not create resource, unexpected error") {
+          Write-Host "You need to delete any ably app that uses the same ably access token."
+     }
+     elseif($output -match "Unable to create project") {
+          Write-Host "You need to delete any supabase projects with the same name as the one you are creating."
+     }
     elseif ($output -match "CRLF line endings detected") {
          Write-Host " The files listed above have CRLF line endings. Please change the line endings to LF." -ForegroundColor Red
     }
