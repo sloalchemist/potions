@@ -2,6 +2,7 @@ import { Mob } from '../../mobs/mob';
 import { Carryable } from '../carryable';
 import { Item } from '../item';
 import { Use } from './use';
+import { pubSub } from '../../services/clientCommunication/pubsub';
 
 export class Pickup implements Use {
   key: string;
@@ -21,6 +22,7 @@ export class Pickup implements Use {
     if (item.type === 'gold') {
       mob.changeGold(item.getAttribute('amount'));
       item.destroy();
+      pubSub.destroy(item);
 
       return true;
     }
