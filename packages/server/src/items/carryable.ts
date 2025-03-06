@@ -142,24 +142,39 @@ export class Carryable {
     return true;
   }
 
-  // unstash stored items (drops at feet), swtiches carried item with stored item if carried exists
-  unstash(mob: Mob): void {
+  // unstash stored items (item is now carried), swtiches carried item with stored item if carried exists
+  unstash(mob: Mob): boolean {
     if (mob.position) {
       const position = Item.findEmptyPosition(mob.position);
+      const carriedItem = mob.carrying;
+
+      if (carriedItem) {
+        Carryable.fromItem(carriedItem)!.stash(mob);
+      }
 
       DB.prepare(
         `
-                UPDATE items
-                SET position_x = :position_x, position_y = :position_y, stored_by = NULL
-                WHERE id = :item_id;
-                `
+          UPDATE items 
+          SET stored_by = NULL
+          WHERE id = :item_id
+      `
+      ).run({
+        item_id: this.item.id
+      });
+
+      DB.prepare(
+        `
+          UPDATE mobs
+          SET carrying_id = :item_id
+          WHERE id = :mob_id
+      `
       ).run({
         item_id: this.item.id,
-        position_x: position.x,
-        position_y: position.y
+        mob_id: mob.id
       });
 
       this.item.position = position;
+      mob.carrying = this.item;
     } else {
       throw new Error('Mob has no position');
     }
@@ -168,6 +183,7 @@ export class Carryable {
     }
 
     pubSub.unstashItem(this.item.id, mob.id, this.item.position);
+    return true;
   }
 
   static validateNoOrphanedItems(): void {

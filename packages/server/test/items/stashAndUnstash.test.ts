@@ -67,10 +67,9 @@ describe('Stash and Unstash Item', () => {
     const stashResult = carryablePotion!.stash(testMob!);
     expect(stashResult).toBe(true);
     expect(testMob!.carrying).toBeUndefined();
-    carryablePotion!.unstash(testMob!);
+    const unstashResult = carryablePotion!.unstash(testMob!);
+    expect(unstashResult).toBe(true);
+    expect(testMob!.carrying).toBeDefined();
     expect(carryablePotion).toBeDefined();
-    expect(potion!.position).toBeDefined();
-    expect(typeof potion!.position!.x).toBe('number');
-    expect(typeof potion!.position!.y).toBe('number');
   });
 });
