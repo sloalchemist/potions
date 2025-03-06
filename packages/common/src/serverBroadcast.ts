@@ -27,7 +27,6 @@ export type StashItemData = {
 export type UnstashItemData = {
   item_key: string;
   mob_key: string;
-  position: Coord;
 };
 
 export type DoingData = { id: string; action: string };

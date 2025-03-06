@@ -35,8 +35,9 @@ const interactionTypeSchema = z.object({
   action: z.string(),
   permissions: z
     .object({
-      community: z.boolean(),
-      other: z.boolean()
+      community: z.boolean().optional(),
+      character: z.boolean().optional(),
+      other: z.boolean().optional()
     })
     .optional(),
   while_carried: z.boolean(),

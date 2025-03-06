@@ -29,6 +29,7 @@ import {
 } from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { Item } from '../world/item';
+import { SpriteItem } from '../sprite/sprite_item';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -537,6 +538,28 @@ export class WorldScene extends Phaser.Scene {
       Object.values(world.houses).forEach((house) => {
         const spriteHouse = house as SpriteHouse;
         spriteHouse.animate(Math.floor(x), Math.floor(y));
+      });
+
+      Object.values(world.items).forEach((shipwreck) => {
+        const ship = shipwreck as SpriteItem;
+        const heroX = Math.floor(x);
+        const heroY = Math.floor(y);
+
+        // Calculate the width and height in tiles
+        const shipWidthTiles = 110 / TILE_SIZE;
+        const shipHeightTiles = 115 / TILE_SIZE;
+
+        if (
+          ship.itemType.type === 'shipwreck' &&
+          heroX > 27 - shipWidthTiles / 2 - 1 &&
+          heroX < 27 + shipWidthTiles / 2 &&
+          heroY > 28 - shipHeightTiles / 2 &&
+          heroY < 28 + shipHeightTiles / 2 - 1
+        ) {
+          ship.sprite.setAlpha(0.5);
+        } else {
+          ship.sprite.setAlpha(1);
+        }
       });
     }
 
