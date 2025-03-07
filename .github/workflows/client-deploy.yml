@@ -51,6 +51,7 @@ jobs:
       - name: Copy Static Files
         run: |
           cp -r ./packages/client/static ./packages/client/dist/static
+          cp -r ./packages/client/world_assets ./packages/client/dist/world_assets
           cp -r ./packages/client/githubPages/index.html ./packages/client/dist
 
       # Step 8: Deploy to GitHub Pages
