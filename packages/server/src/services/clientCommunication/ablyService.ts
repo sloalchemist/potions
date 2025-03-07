@@ -80,7 +80,12 @@ export class AblyService implements PubSub {
       const playerData: PlayerData = {
         current_world_id: target_world_id
       };
-
+      console.log(
+        'charID from userDict:',
+        this.userDict.get(presenceMsg.clientId),
+        playerData
+      );
+      console.log(this.userDict);
       this.sendPlayerData(this.userDict.get(presenceMsg.clientId), playerData);
 
       this.broadcastReloadPageTrigger();
@@ -97,6 +102,7 @@ export class AblyService implements PubSub {
           : presenceMsg.data.target_world_id;
       logger.log('Target World Received:', presenceMsg.data.target_world_id);
       logger.log('Target World Being Sent:', target_world_id);
+      logger.log('id is: ', this.userDict.get(presenceMsg.clientId));
       await this.sendPersistenceRequest(
         presenceMsg.clientId,
         this.userDict.get(presenceMsg.clientId),
@@ -160,6 +166,7 @@ export class AblyService implements PubSub {
     try {
       const result = await updateCharacterData(id, data);
       logger.log(result.message); // "Player data upserted successfully."
+      logger.log('id is: ', id);
     } catch (error) {
       logger.error('Error sending update character data request:', error);
     }
@@ -594,6 +601,7 @@ export class AblyService implements PubSub {
     target_world_id: number
   ) {
     logger.log('Updating state info for', username);
+    logger.log('char id is:', char_id);
     const player = Mob.getMob(username);
     if (!player) {
       throw Error(

@@ -86,6 +86,7 @@ export function updateWorld(target_world_id: string) {
     publicCharacterId: publicCharacterId,
     target_world_id: target_world_id
   };
+  console.log('updating world data');
   broadcastChannel.presence.update(updateData, (err) => {
     if (err) {
       console.error('Error updating world:', err);

@@ -14,8 +14,7 @@ const characterData = async (req: Request, res: Response) => {
   if (!isValidAuthHeader(req.headers)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
-
-  const id = req.params.id; // Ensure the key matches the request
+  const id = req.params.Id;
   const { current_world_id, health, name, gold } = req.body;
 
   if (!id) {
