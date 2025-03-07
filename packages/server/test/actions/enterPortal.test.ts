@@ -34,7 +34,9 @@ describe('EnterPortal', () => {
     // Create mock mob
     mockMob = {
       id: 'test-mob-id',
-      hide: jest.fn()
+      hide: jest.fn(),
+      position: { x: 0, y: 0 },
+      setInPortalMenu: jest.fn()
     } as unknown as jest.Mocked<Mob>;
     Object.defineProperty(mockMob, 'position', {
       get: jest.fn(() => ({ x: 5, y: 5 })),
@@ -61,8 +63,8 @@ describe('EnterPortal', () => {
       mockMob.id,
       enterPortal.worlds
     );
-    expect(pubSub.hide).toHaveBeenCalledWith(mockMob.id);
     expect(mockMob.hide).toHaveBeenCalled();
+    expect(mockMob.setInPortalMenu).toHaveBeenCalledWith(true);
   });
 
   test('should fail if mob is too far from portal', () => {
@@ -75,8 +77,8 @@ describe('EnterPortal', () => {
 
     expect(result).toBe(false);
     expect(pubSub.showPortalMenu).not.toHaveBeenCalled();
-    expect(pubSub.hide).not.toHaveBeenCalled();
     expect(mockMob.hide).not.toHaveBeenCalled();
+    expect(mockMob.setInPortalMenu).not.toHaveBeenCalled();
   });
 
   test('should fail if mob has no position', () => {
@@ -89,8 +91,8 @@ describe('EnterPortal', () => {
 
     expect(result).toBe(false);
     expect(pubSub.showPortalMenu).not.toHaveBeenCalled();
-    expect(pubSub.hide).not.toHaveBeenCalled();
     expect(mockMob.hide).not.toHaveBeenCalled();
+    expect(mockMob.setInPortalMenu).not.toHaveBeenCalled();
   });
 
   test('should fail if portal has no position', () => {
@@ -103,7 +105,7 @@ describe('EnterPortal', () => {
 
     expect(result).toBe(false);
     expect(pubSub.showPortalMenu).not.toHaveBeenCalled();
-    expect(pubSub.hide).not.toHaveBeenCalled();
     expect(mockMob.hide).not.toHaveBeenCalled();
+    expect(mockMob.setInPortalMenu).not.toHaveBeenCalled();
   });
 });

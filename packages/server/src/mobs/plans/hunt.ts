@@ -13,7 +13,8 @@ export class Hunt implements Plan {
     if (!this.enemy || !this.enemy.position || !npc.position) return true;
 
     if (this.enemy.isHidden()) {
-      return false;
+      this.enemy = null;
+      return true; // Give up hunting this enemy
     }
 
     const success = npc.moveToOrExecute(this.enemy.position, 1, () => {
@@ -88,6 +89,7 @@ export class Hunt implements Plan {
 
     // Don't consider hidden mobs as valid targets
     if (this.enemy.isHidden()) {
+      this.enemy = null; // Clear the enemy reference
       return -Infinity;
     }
 

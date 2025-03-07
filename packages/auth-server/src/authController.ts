@@ -34,7 +34,8 @@ const authController = async (req: Request, res: Response) => {
     if (data && data.length > 0) {
       // const id = data[0].id;
       const ablyApiKey = data[0].ably_api_key;
-      const world = data[0].world_id;
+      // Use test-world as default if no world_id is found
+      const world = data[0].world_id || 'test-world';
       const health = data[0].health;
       const name = data[0].pname;
       const appearance = data[0].appearance;

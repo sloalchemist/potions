@@ -93,6 +93,7 @@ export class Mob {
   private favorite_item: string;
 
   private _hidden: boolean = false;
+  private _inPortalMenu: boolean = false;
 
   private constructor({
     key,
@@ -152,6 +153,29 @@ export class Mob {
   unhide() {
     this._hidden = false;
     pubSub.unhide(this.id);
+  }
+
+  /**
+   * Sets whether the mob is currently in a portal menu
+   * This is a simpler alternative to hide/unhide for portal interactions
+   * @param inPortal Whether the mob is in a portal menu
+   */
+  setInPortalMenu(inPortal: boolean) {
+    this._inPortalMenu = inPortal;
+
+    // Still use the hide/unhide functionality for visibility
+    if (inPortal) {
+      this.hide();
+    } else {
+      this.unhide();
+    }
+  }
+
+  /**
+   * Checks if the mob is currently in a portal menu
+   */
+  isInPortalMenu(): boolean {
+    return this._inPortalMenu;
   }
 
   /**
@@ -711,7 +735,8 @@ export class Mob {
   }
 
   private checkPoison(): void {
-    if (!this.poisoned) {
+    // Don't apply poison damage if the mob is hidden
+    if (!this.poisoned || this._hidden) {
       return;
     }
 

@@ -46,10 +46,11 @@ export class EnterPortal implements Use {
     if (this.isNearPortal(mob, item)) {
       // Send message to client to show world selection
       pubSub.showPortalMenu(mob.id, this.worlds);
-      
-      // Hide the mob on both client and server
-      mob.hide();
-      
+
+      // Set the mob as in portal menu
+      // This is a simpler approach than hiding/unhiding
+      mob.setInPortalMenu(true);
+
       return true;
     }
     return false;

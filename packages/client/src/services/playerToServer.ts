@@ -66,16 +66,26 @@ export function interact(
   });
 }
 
-export function startWorld() {
+export function startWorld(world_id?: string) {
   broadcastChannel.presence.enter(publicCharacterId, (err) => {
     if (err) {
       console.error('Error entering presence:', err);
     } else {
       console.log('Successfully entered presence.');
-      publishPlayerMessage('join', {
-        name: currentCharacter!.name,
-        subtype: currentCharacter!.subtype()
-      });
+
+      // Create the join payload
+      const joinPayload: { name: string; subtype: string; world_id?: string } =
+        {
+          name: currentCharacter!.name,
+          subtype: currentCharacter!.subtype()
+        };
+
+      // Only add world_id to the payload if it's provided
+      if (world_id) {
+        joinPayload.world_id = world_id;
+      }
+
+      publishPlayerMessage('join', joinPayload);
     }
   });
 }

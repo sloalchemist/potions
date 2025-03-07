@@ -18,8 +18,9 @@ describe('EnterPortal', () => {
     enterPortal = new EnterPortal();
     testMob = {
       id: '123',
-      position: { x: 0, y: 0 }
-    } as Mob;
+      position: { x: 0, y: 0 },
+      setInPortalMenu: jest.fn()
+    } as unknown as Mob;
     testItem = {
       position: { x: 0, y: 0 }
     } as Item;
@@ -34,5 +35,6 @@ describe('EnterPortal', () => {
       testMob.id,
       enterPortal.worlds
     );
+    expect(testMob.setInPortalMenu).toHaveBeenCalledWith(true);
   });
 });

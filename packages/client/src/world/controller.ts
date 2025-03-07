@@ -98,11 +98,18 @@ export function setAttacks(attacks: string[]) {
   attackCallback(attacks);
 }
 
-export function initializePlayer() {
+export function initializePlayer(worldid?: string) {
   if (currentCharacter) {
     console.log('joining', currentCharacter, currentCharacter.name);
 
-    startWorld();
+    // Only pass the world_id if it's specified (not undefined or empty string)
+    if (worldid) {
+      console.log('Joining specific world:', worldid);
+      startWorld(worldid);
+    } else {
+      console.log('Joining default world determined by server');
+      startWorld();
+    }
   }
 }
 

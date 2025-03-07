@@ -428,7 +428,18 @@ export class WorldScene extends Phaser.Scene {
     }
 
     bindAblyToWorldScene(this);
-    initializePlayer();
+
+    // Check if we're traveling to a specific world
+    const travelingTo = sessionStorage.getItem('traveling_to');
+    if (travelingTo) {
+      // Clear the traveling_to value after using it
+      sessionStorage.removeItem('traveling_to');
+
+      initializePlayer(travelingTo);
+    } else {
+      // Let the server determine the appropriate world
+      initializePlayer();
+    }
 
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       if (!world.mobs[publicCharacterId]) {

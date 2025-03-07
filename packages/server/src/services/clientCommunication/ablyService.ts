@@ -662,6 +662,48 @@ export class AblyService implements PubSub {
     logger.log('Setting up channel for', username);
     subscribeToPlayerChannel('join', (data) => {
       this.userDict.set(username, char_id);
+
+      // Using type assertion to handle the optional world_id property
+      const joinData = data as {
+        name: string;
+        subtype: string;
+        world_id?: string;
+      };
+
+      // Only process world_id if it's provided and not empty
+      if (joinData.world_id && joinData.world_id.trim() !== '') {
+        logger.log(
+          `Player ${username} requested to join world: ${joinData.world_id}`
+        );
+
+        // Convert world_id string to number or use a default world ID if conversion fails
+        let worldIdNumber: number;
+        try {
+          worldIdNumber = parseInt(joinData.world_id, 10);
+          if (isNaN(worldIdNumber)) {
+            throw new Error('Invalid world ID');
+          }
+        } catch (error) {
+          logger.error(
+            `Invalid world ID format: ${joinData.world_id}, using default world: ${error}`
+          );
+          // Use a default world ID (e.g., test-world)
+          worldIdNumber = 5; // Default to test-world ID (as defined in portalMenuScene.ts)
+        }
+
+        this.sendPersistenceRequest(username, char_id, worldIdNumber)
+          .then(() => {
+            // Trigger a page reload to load the new world
+            this.broadcastReloadPageTrigger();
+            return; // Don't continue with normal join process
+          })
+          .catch((err) => {
+            logger.error(`Error changing world for ${username}: ${err}`);
+            // Continue with normal join process in current world
+          });
+        return; // Don't continue with normal join process while changing worlds
+      }
+
       const player = Mob.getMob(username);
       if (!player) {
         logger.log(`Making mob for the character that joined: ${username}
@@ -672,14 +714,17 @@ export class AblyService implements PubSub {
           'player',
           gameWorld.getPortalLocation(),
           username,
-          data.name,
-          data.subtype,
+          joinData.name,
+          joinData.subtype,
           health,
           gold,
           attack
         );
-      } else if (player.subtype !== data.subtype || player.name !== data.name) {
-        player.updatePlayer(data.name, data.subtype);
+      } else if (
+        player.subtype !== joinData.subtype ||
+        player.name !== joinData.name
+      ) {
+        player.updatePlayer(joinData.name, joinData.subtype);
       }
 
       const mobs = getMobsAbly();
@@ -710,7 +755,7 @@ export class AblyService implements PubSub {
     subscribeToPlayerChannel('unhide', () => {
       const player = Mob.getMob(username);
       if (player) {
-        player.unhide();
+        player.setInPortalMenu(false);
       }
     });
 
