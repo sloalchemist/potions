@@ -77,13 +77,11 @@ export class AblyService implements PubSub {
 
       logger.log('Updating to ', target_world_id);
 
-      // Await this, because the client needs to reload the page after the world is
-      // updated in order for portals to work
-      await this.sendPersistenceRequest(
-        presenceMsg.clientId,
-        this.userDict.get(presenceMsg.clientId),
-        target_world_id
-      );
+      const playerData: PlayerData = {
+        current_world_id: target_world_id
+      };
+
+      this.sendPlayerData(this.userDict.get(presenceMsg.clientId), playerData);
 
       this.broadcastReloadPageTrigger();
     });
