@@ -100,7 +100,7 @@ export function setupBroadcast(
   function handleUnstashItem(data: UnstashItemData) {
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
-    item.unstash(world, mob, data.position);
+    item.unstash(world, mob);
     world.removeStoredItem(item);
     updateInventory();
   }

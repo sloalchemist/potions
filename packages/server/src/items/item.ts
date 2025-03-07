@@ -422,6 +422,9 @@ export class Item {
     giveTo: Mob | undefined = undefined
   ): void {
     const use = UsesRegistry.instance.getUse(action);
+    if (action === 'pickup' && this.itemType.type === 'gold') {
+      pubSub.destroy(this);
+    }
     use.interact(mob, this, giveTo);
   }
 

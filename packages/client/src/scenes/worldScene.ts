@@ -29,6 +29,7 @@ import {
 } from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { Item } from '../world/item';
+import { SpriteItem } from '../sprite/sprite_item';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -69,12 +70,12 @@ export class WorldScene extends Phaser.Scene {
     const worldID = getWorldID();
     this.load.image(
       'background',
-      `https://potions.gg/world_assets/${worldID}/client/background.png`
+      `../../../world_assets/${worldID}/background.png`
     );
     this.load.atlas(
       'global_atlas',
-      `https://potions.gg/world_assets/${worldID}/client/global.png`,
-      `https://potions.gg/world_assets/${worldID}/client/global-atlas.json`
+      `../../../world_assets/${worldID}/global.png`,
+      `../../../world_assets/${worldID}/global-atlas.json`
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -87,10 +88,10 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 288
     });
 
-    this.load.json('global_data', 'static/global.json');
+    this.load.json('global_data', '../../../world_assets/global.json');
     this.load.json(
       'world_specific_data',
-      `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
+      `../../../world_assets/${worldID}/world_specific.json`
     );
     this.load.audio('background_music_layer', [
       `static/music/${worldID}_layer.mp3`
@@ -552,6 +553,28 @@ export class WorldScene extends Phaser.Scene {
       Object.values(world.houses).forEach((house) => {
         const spriteHouse = house as SpriteHouse;
         spriteHouse.animate(Math.floor(x), Math.floor(y));
+      });
+
+      Object.values(world.items).forEach((shipwreck) => {
+        const ship = shipwreck as SpriteItem;
+        const heroX = Math.floor(x);
+        const heroY = Math.floor(y);
+
+        // Calculate the width and height in tiles
+        const shipWidthTiles = 110 / TILE_SIZE;
+        const shipHeightTiles = 115 / TILE_SIZE;
+
+        if (
+          ship.itemType.type === 'shipwreck' &&
+          heroX > 27 - shipWidthTiles / 2 - 1 &&
+          heroX < 27 + shipWidthTiles / 2 &&
+          heroY > 28 - shipHeightTiles / 2 &&
+          heroY < 28 + shipHeightTiles / 2 - 1
+        ) {
+          ship.sprite.setAlpha(0.5);
+        } else {
+          ship.sprite.setAlpha(1);
+        }
       });
     }
 
