@@ -441,7 +441,7 @@ export class Mob {
 
   changeHealth(amount: number) {
     if (!this || !Mob.getMob(this.id)) {
-      //console.error(`${this.name} is no longer valid or does not exist in the database.`);
+      console.error(`${this.name} is no longer valid or does not exist in the database.`);
       return; // Exit early
     }
     if (amount === 0 || this.health <= 0) return;
@@ -665,7 +665,7 @@ export class Mob {
 
     if (this.poisoned == 1) {
       const deltaDamage = Math.floor(Math.random() * -10);
-      //console.log(`changing ${this.name} health`)
+      console.log(`changing ${this.name} health`)
       this.changeHealth(deltaDamage);
     }
   }
@@ -1036,7 +1036,7 @@ export class Mob {
     if (this.type !== 'player') {
       // Check if mob exists and is valid
       if (!this || !Mob.getMob(this.id)) {
-        //console.error(`${this.name} is no longer valid or does not exist in the database.`);
+        console.error(`${this.name} is no longer valid or does not exist in the database.`);
         return; // Exit early
       }
 
