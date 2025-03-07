@@ -133,7 +133,7 @@ export class UxScene extends Phaser.Scene {
     this.load.audio('pickupGold', ['static/sounds/jingle.mp3']);
 
     let worldID = getWorldID();
-    
+
     this.load.json('global_data', '../../../world_assets/global.json');
     this.load.json(
       'world_specific_data',
