@@ -15,11 +15,13 @@ import { World } from '../world/world';
 import { GRAY } from './pauseScene';
 import { publishPlayerPosition } from '../services/playerToServer';
 import { getNightSkyOpacity } from '../utils/nightOverlayHandler';
+import { interact } from '../services/playerToServer';
 import {
   ItemType,
   parseWorldFromJson,
   WorldDescription
 } from '../worldDescription';
+
 import { UxScene } from './uxScene';
 import { setGameState, setInventoryCallback } from '../world/controller';
 import {
@@ -52,12 +54,19 @@ export class WorldScene extends Phaser.Scene {
   terrainWidth: number = 0;
   terrainHeight: number = 0;
   nightOpacity: number = 0;
-  keys: { [key: string]: boolean } = { w: false, a: false, s: false, d: false };
+  keys: { [key: string]: boolean } = {
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+    e: false
+  };
   prevKeys: { [key: string]: boolean } = {
     w: false,
     a: false,
     s: false,
-    d: false
+    d: false,
+    e: false
   };
   lastKeyUp = '';
   lastPublishTime: number = 0;
@@ -83,6 +92,11 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 100
     });
 
+    this.load.spritesheet('explosion', 'static/Explosion-scaled.png', {
+      frameWidth: 288,
+      frameHeight: 288
+    });
+
     this.load.json('global_data', '../../../world_assets/global.json');
     this.load.json(
       'world_specific_data',
@@ -103,6 +117,16 @@ export class WorldScene extends Phaser.Scene {
     this.anims.create({
       key: 'blood-splat',
       frames: this.anims.generateFrameNumbers('blood', { start: 1, end: 17 }),
+      frameRate: 20,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'bomb-explosion',
+      frames: this.anims.generateFrameNumbers('explosion', {
+        start: 0,
+        end: 11
+      }),
       frameRate: 20,
       repeat: 0
     });
@@ -461,6 +485,26 @@ export class WorldScene extends Phaser.Scene {
         this.lastKeyUp = curKey;
       }
 
+      if (curKey === 'e') {
+        const player = world.mobs[publicCharacterId];
+        if (player && player.position) {
+          if (player.carrying) {
+            const carriedItem = world.items[player.carrying];
+            if (carriedItem) {
+              interact(carriedItem.key, 'drop', null);
+            }
+          } else {
+            const pickupItem = world.getItemAt(
+              Math.floor(player.position.x),
+              Math.floor(player.position.y)
+            );
+            if (pickupItem) {
+              interact(pickupItem.key, 'pickup', null);
+            }
+          }
+        }
+      }
+
       if (event.shiftKey && event.code === 'KeyF') {
         speedUpCharacter();
       }
@@ -559,6 +603,27 @@ export class WorldScene extends Phaser.Scene {
           ship.sprite.setAlpha(0.5);
         } else {
           ship.sprite.setAlpha(1);
+        }
+      });
+      Object.values(world.items).forEach((volcano) => {
+        const vol = volcano as SpriteItem;
+        const heroX = Math.floor(x);
+        const heroY = Math.floor(y);
+
+        // Calculate the width and height in tiles
+        const volWidthTiles = 238 / TILE_SIZE;
+        const volHeightTiles = 204 / TILE_SIZE;
+
+        if (
+          vol.itemType.type === 'volcano' &&
+          heroX > 16 - volWidthTiles / 2 - 1 &&
+          heroX <= 16 + volWidthTiles / 2 + 1 &&
+          heroY > 24 - volHeightTiles / 2 &&
+          heroY <= 24 + volHeightTiles / 2
+        ) {
+          vol.sprite.setAlpha(0.5);
+        } else {
+          vol.sprite.setAlpha(1);
         }
       });
     }
