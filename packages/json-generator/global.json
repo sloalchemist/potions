@@ -493,6 +493,25 @@
       ]
     },
     {
+      "name": "Large Bone",
+      "type": "large-bone",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "bones",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
       "name": "Sun",
       "type": "sun",
       "carryable": false,
