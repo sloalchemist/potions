@@ -653,8 +653,8 @@ export class Mob {
       return;
     }
 
-    if (this.poisoned == 1) {
-      const deltaDamage = Math.floor(Math.random() * -10);
+    if (this.poisoned > 0) {
+      const deltaDamage = Math.floor(Math.random() * -10 * this.poisoned);
 
       this.changeHealth(deltaDamage);
     }
