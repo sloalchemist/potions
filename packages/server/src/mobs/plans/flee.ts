@@ -7,6 +7,7 @@ import { Mob } from '../mob';
 import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { gameWorld } from '../../services/gameWorld/gameWorld';
+import { logger } from '../../util/logger';
 
 export class Flee implements Plan {
   enemy: Mob | undefined = undefined;
@@ -66,7 +67,7 @@ export class Flee implements Plan {
     if (!closerEnemyID) return -Infinity;
 
     this.enemy = Mob.getMob(closerEnemyID)!;
-    //logger.log(`fleeing eval ${npc.name} ${npc.personality.traits[PersonalityTraits.Bravery]} ${npc.attributes['health']} ${this.enemy.attributes['health']}`)
+    logger.log(`fleeing eval ${npc.name}`);
 
     const utility =
       (100 - npc.personality.traits[PersonalityTraits.Bravery]) *

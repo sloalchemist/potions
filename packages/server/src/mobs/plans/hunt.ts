@@ -33,13 +33,15 @@ export class Hunt implements Plan {
       }
 
       // attack/fight each other
-      //console.log(`changing ${this.enemy!.name} health in hunt execute by ${npc.name}`)
+      logger.log(
+        `changing ${this.enemy!.name} health in hunt execute by ${npc.name}`
+      );
       this.enemy!.changeHealth(adjustedEnemyDamage);
       npc.changeHealth(adjustedNpcDamage);
 
       // Check if the NPC is still alive after taking damage
       if (!npc || !Mob.getMob(npc.id)) {
-        console.error(`${npc.name} has died after taking damage.`);
+        logger.error(`${npc.name} has died after taking damage.`);
         return false; // Exit early
       }
 
@@ -90,7 +92,7 @@ export class Hunt implements Plan {
     this.enemy = Mob.getMob(closerEnemyID)!;
 
     if (!this.enemy) {
-      console.error(`Enemy with ID ${closerEnemyID} does not exist anymore.`);
+      logger.error(`Enemy with ID ${closerEnemyID} does not exist anymore.`);
       return -Infinity; // Exit early if no enemy found
     }
 

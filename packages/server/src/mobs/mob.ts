@@ -186,7 +186,7 @@ export class Mob {
       `
     ).get({ id: this.id }) as { health: number };
     if (!mob) {
-      console.error(
+      logger.error(
         `Get Health: Mob with id ${this.id} and name ${this.name} not found`
       );
       return 0;
@@ -464,7 +464,6 @@ export class Mob {
     if (this.health <= 0 && this.type == 'player') {
       this.destroy();
     } else if (this.health <= 0) {
-      //console.log(`Mob ${this.name} is being removed from the database.`);
       DB.prepare(
         `
                 DELETE FROM mobs
@@ -1053,7 +1052,9 @@ export class Mob {
 
     this.checkTickReset();
     if (!this || !Mob.getMob(this.id)) {
-      //console.error(`${this.name} is no longer valid or does not exist in the database.`);
+      logger.error(
+        `${this.name} is no longer valid or does not exist in the database.`
+      );
       return; // Exit early
     }
     this.checkPoison();
