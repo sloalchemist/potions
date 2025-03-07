@@ -282,6 +282,13 @@ export class AblyService implements PubSub {
     }
   }
 
+  public bomb(key: string): void {
+    this.addToBroadcast({
+      type: 'bomb',
+      data: { id: key }
+    });
+  }
+
   public changeHealth(key: string, health: number, newValue: number): void {
     if (newValue == undefined || key == undefined || health == undefined) {
       throw new Error(

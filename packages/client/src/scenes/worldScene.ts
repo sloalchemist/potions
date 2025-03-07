@@ -83,6 +83,11 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 100
     });
 
+    this.load.spritesheet('explosion', 'static/Explosion-scaled.png', {
+      frameWidth: 288,
+      frameHeight: 288
+    });
+
     this.load.json('global_data', '../../../world_assets/global.json');
     this.load.json(
       'world_specific_data',
@@ -103,6 +108,16 @@ export class WorldScene extends Phaser.Scene {
     this.anims.create({
       key: 'blood-splat',
       frames: this.anims.generateFrameNumbers('blood', { start: 1, end: 17 }),
+      frameRate: 20,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'bomb-explosion',
+      frames: this.anims.generateFrameNumbers('explosion', {
+        start: 0,
+        end: 11
+      }),
       frameRate: 20,
       repeat: 0
     });
