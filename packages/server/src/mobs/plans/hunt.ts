@@ -3,7 +3,7 @@ import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { Community } from '../../community/community';
 import { DB } from '../../services/database';
-import globalData from '../../../global.json';
+import globalData from '../../../world_assets/global.json';
 import { logger } from '../../util/logger';
 
 export class Hunt implements Plan {
