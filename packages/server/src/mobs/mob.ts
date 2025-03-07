@@ -441,7 +441,9 @@ export class Mob {
 
   changeHealth(amount: number) {
     if (!this || !Mob.getMob(this.id)) {
-      logger.error(`${this.name} is no longer valid or does not exist in the database.`);
+      logger.error(
+        `${this.name} is no longer valid or does not exist in the database.`
+      );
       return; // Exit early
     }
     if (amount === 0 || this.health <= 0) return;
@@ -1037,7 +1039,9 @@ export class Mob {
       if (this.type !== 'player') {
         // Check if mob exists and is valid
         if (!this || !Mob.getMob(this.id)) {
-          logger.error(`${this.name} is no longer valid or does not exist in the database.`);
+          logger.error(
+            `${this.name} is no longer valid or does not exist in the database.`
+          );
           return; // Exit early
         }
       }
