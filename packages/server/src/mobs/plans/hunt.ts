@@ -3,7 +3,7 @@ import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { Community } from '../../community/community';
 import { DB } from '../../services/database';
-import globalData from '../../../global.json';
+import globalData from '../../../world_assets/global.json';
 import { logger } from '../../util/logger';
 
 export class Hunt implements Plan {
@@ -47,7 +47,7 @@ export class Hunt implements Plan {
           // decrement slowEnemy count (1 usage)
           npc.changeSlowEnemy(-1);
           // decrease targeted enemy's speed
-          logger.log(this.enemy!._speed);
+          logger.log('Enemy speed:', this.enemy!._speed);
           const speedDelta = this.enemy!._speed * -0.5;
           const speedDuration = 15;
           this.enemy!.changeEffect(speedDelta, speedDuration, 'speed');

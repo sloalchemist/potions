@@ -16,6 +16,7 @@ import {
   PortalData,
   SetDatetimeData,
   SpeakData,
+  BombData,
   ShowPortalMenuData,
   ScoreboardData
 } from '@rt-potion/common';
@@ -99,7 +100,7 @@ export function setupBroadcast(
   function handleUnstashItem(data: UnstashItemData) {
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
-    item.unstash(world, mob, data.position);
+    item.unstash(world, mob);
     world.removeStoredItem(item);
     updateInventory();
   }
@@ -209,6 +210,13 @@ export function setupBroadcast(
     window.location.reload();
   }
 
+  function handleBomb(data: BombData) {
+    const mob = world.mobs[data.id] as SpriteMob;
+    if (mob) {
+      mob.createBombExplosion(1);
+    }
+  }
+
   // Subscribe to broadcast and dispatch events using switch
   broadcast_channel.subscribe('tick', (message: Types.Message) => {
     if (gameState !== 'stateInitialized') return;
@@ -279,6 +287,9 @@ export function setupBroadcast(
           break;
         case 'reload_page':
           handleReloadPage();
+          break;
+        case 'bomb':
+          handleBomb(broadcastItem.data as BombData);
           break;
         default:
           console.error(

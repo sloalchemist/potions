@@ -14,6 +14,7 @@ import {
 import { shouldUploadDB } from '../util/dataUploadUtil';
 import { getEnv } from '@rt-potion/common';
 import { logger } from '../util/logger';
+import globalData from '../../world_assets/global.json';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
@@ -39,10 +40,9 @@ async function initializeAsync() {
   }
 
   logger.log(`loading world ${worldID}`);
-  const worldDataResponse = await fetch(
-    `https://potions.gg/world_assets/${worldID}/server/world_specific.json`
+  const worldSpecificData = await import(
+    `../../world_assets/${worldID}/world_specific.json`
   );
-  const worldSpecificData = await worldDataResponse.json();
 
   try {
     await downloadData(supabase, worldID);
@@ -58,10 +58,6 @@ async function initializeAsync() {
   try {
     initializeKnowledgeDB(`data/${worldID}-knowledge-graph.db`, false);
     initializeServerDatabase(`data/${worldID}-server-data.db`);
-    const globalDataResponse = await fetch(
-      `https://potions.gg/world_assets/global/server/global.json`
-    );
-    const globalData = await globalDataResponse.json();
 
     const globalDescription = globalData as ServerWorldDescription;
     const specificDescription =

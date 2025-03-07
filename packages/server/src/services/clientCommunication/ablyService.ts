@@ -75,7 +75,7 @@ export class AblyService implements PubSub {
           ? this.worldID
           : presenceMsg.data.target_world_id;
 
-      console.log('Updating to ', target_world_id);
+      logger.log('Updating to ', target_world_id);
 
       // Await this, because the client needs to reload the page after the world is
       // updated in order for portals to work
@@ -164,7 +164,7 @@ export class AblyService implements PubSub {
       const result = await updateCharacterData(id, data);
       logger.log(result.message); // "Player data upserted successfully."
     } catch (error) {
-      logger.error(error);
+      logger.error('Error sending update character data request:', error);
     }
   }
 
@@ -280,6 +280,13 @@ export class AblyService implements PubSub {
         data: { object_key: item.id }
       });
     }
+  }
+
+  public bomb(key: string): void {
+    this.addToBroadcast({
+      type: 'bomb',
+      data: { id: key }
+    });
   }
 
   public changeHealth(key: string, health: number, newValue: number): void {
@@ -554,10 +561,10 @@ export class AblyService implements PubSub {
     logger.log('stashing item', item_key, mob_key);
   }
 
-  public unstashItem(item_key: string, mob_key: string, position: Coord): void {
+  public unstashItem(item_key: string, mob_key: string): void {
     this.addToBroadcast({
       type: 'unstash_item',
-      data: { item_key, mob_key, position }
+      data: { item_key, mob_key }
     });
   }
 
@@ -592,7 +599,7 @@ export class AblyService implements PubSub {
     logger.log('Updating state info for', username);
     const player = Mob.getMob(username);
     if (!player) {
-      console.error(
+      logger.error(
         `No player found, unable to persist player state: ${username}`
       );
       return;

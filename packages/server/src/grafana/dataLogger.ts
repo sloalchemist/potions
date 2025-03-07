@@ -126,13 +126,13 @@ export function pushMetrics() {
   gateway
     .pushAdd({ jobName: `Metrics` })
     .then()
-    .catch((e) => logger.warn(e));
+    .catch((e) => logger.warn(`Failed to pushAdd metrics:`, e));
 
   function pushData() {
     gateway
       .push({ jobName: `Metrics` })
       .then()
-      .catch((e) => logger.warn(e));
+      .catch((e) => logger.warn(`Failed to push metrics:`, e));
   }
 
   function pusherTimer() {
