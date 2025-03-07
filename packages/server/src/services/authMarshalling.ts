@@ -3,11 +3,11 @@ import 'dotenv/config';
 
 export interface PlayerData {
   current_world_id: number;
-  health: number;
-  name: string;
-  gold: number;
-  attack: number;
-  appearance: string;
+  health?: number;
+  name?: string;
+  gold?: number;
+  attack?: number;
+  appearance?: string;
 }
 
 export interface ApiResponse {

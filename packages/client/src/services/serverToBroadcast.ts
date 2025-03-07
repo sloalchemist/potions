@@ -192,6 +192,7 @@ export function setupBroadcast(
     if (data.mob_key === publicCharacterId) {
       setAvailableWorlds(data.worlds);
       scene.scene.launch('PortalMenuScene');
+      leaveWorld(MAINTAIN_WORLD_OPTION);
     }
   }
 
