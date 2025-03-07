@@ -15,11 +15,13 @@ import { World } from '../world/world';
 import { GRAY } from './pauseScene';
 import { publishPlayerPosition } from '../services/playerToServer';
 import { getNightSkyOpacity } from '../utils/nightOverlayHandler';
+import { interact } from '../services/playerToServer';
 import {
   ItemType,
   parseWorldFromJson,
   WorldDescription
 } from '../worldDescription';
+
 import { UxScene } from './uxScene';
 import { setGameState, setInventoryCallback } from '../world/controller';
 import {
@@ -52,12 +54,19 @@ export class WorldScene extends Phaser.Scene {
   terrainWidth: number = 0;
   terrainHeight: number = 0;
   nightOpacity: number = 0;
-  keys: { [key: string]: boolean } = { w: false, a: false, s: false, d: false };
+  keys: { [key: string]: boolean } = {
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+    e: false
+  };
   prevKeys: { [key: string]: boolean } = {
     w: false,
     a: false,
     s: false,
-    d: false
+    d: false,
+    e: false
   };
   lastKeyUp = '';
   lastPublishTime: number = 0;
@@ -474,6 +483,26 @@ export class WorldScene extends Phaser.Scene {
       if (movementKeys.includes(curKey)) {
         this.keys[curKey] = true;
         this.lastKeyUp = curKey;
+      }
+
+      if (curKey === 'e') {
+        const player = world.mobs[publicCharacterId];
+        if (player && player.position) {
+          if (player.carrying) {
+            const carriedItem = world.items[player.carrying];
+            if (carriedItem) {
+              interact(carriedItem.key, 'drop', null);
+            }
+          } else {
+            const pickupItem = world.getItemAt(
+              Math.floor(player.position.x),
+              Math.floor(player.position.y)
+            );
+            if (pickupItem) {
+              interact(pickupItem.key, 'pickup', null);
+            }
+          }
+        }
       }
 
       if (event.shiftKey && event.code === 'KeyF') {
