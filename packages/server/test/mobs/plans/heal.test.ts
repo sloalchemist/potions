@@ -7,6 +7,16 @@ jest.mock('../../../src/util/mathUtil', () => ({
   logistic: jest.fn()
 }));
 
+jest.mock(' ../../../src/services/database', () => ({
+  DB: {
+    prepare: jest.fn(() => ({
+      get: jest.fn(() => ({ health: 50, attack: 10, defense: 5 })),
+      run: jest.fn(),
+      all: jest.fn(() => [])
+    }))
+  }
+}));
+
 describe('Heal Plan', () => {
   let heal: Heal;
   let mockNpc: Mob;

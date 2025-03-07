@@ -185,7 +185,12 @@ export class Mob {
       SELECT health FROM mobView WHERE id = :id
       `
     ).get({ id: this.id }) as { health: number };
-
+    if (!mob) {
+      logger.error(
+        `Get Health: Mob with id ${this.id} and name ${this.name} not found`
+      );
+      return 0;
+    }
     return mob.health;
   }
 
@@ -444,6 +449,12 @@ export class Mob {
   }
 
   changeHealth(amount: number) {
+    if (!this || !Mob.getMob(this.id)) {
+      logger.error(
+        `${this.name} is no longer valid or does not exist in the database.`
+      );
+      return; // Exit early
+    }
     if (amount === 0 || this.health <= 0) return;
     let newHealth = this.health + amount;
     newHealth = Math.min(newHealth, this.maxHealth);
@@ -664,7 +675,7 @@ export class Mob {
 
     if (this.poisoned > 0) {
       const deltaDamage = Math.floor(Math.random() * -10 * this.poisoned);
-
+      logger.info(`changing ${this.name} health`);
       this.changeHealth(deltaDamage);
     }
   }
@@ -1033,12 +1044,28 @@ export class Mob {
     this.updatePosition(deltaTime);
 
     if (this.type !== 'player') {
+      if (this.type !== 'player') {
+        // Check if mob exists and is valid
+        if (!this || !Mob.getMob(this.id)) {
+          logger.error(
+            `${this.name} is no longer valid or does not exist in the database.`
+          );
+          return; // Exit early
+        }
+      }
+
       const action = selectAction(this);
       const finished = action.execute(this);
       this.setAction(action.type(), finished);
     }
 
     this.checkTickReset();
+    if (!this || !Mob.getMob(this.id)) {
+      logger.error(
+        `${this.name} is no longer valid or does not exist in the database.`
+      );
+      return; // Exit early
+    }
     this.checkPoison();
     this.needs.tick();
   }
