@@ -1065,7 +1065,8 @@
           "description": "Add $item_name",
           "action": "add_item",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false
@@ -1074,7 +1075,8 @@
           "description": "Get $item_name",
           "action": "get_item",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1090,7 +1092,8 @@
           "description": "Raise price",
           "action": "raise_price",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1106,7 +1109,8 @@
           "description": "Lower price",
           "action": "lower_price",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1122,7 +1126,8 @@
           "description": "Collect gold",
           "action": "collect_gold",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1137,6 +1142,11 @@
         {
           "description": "Purchase potion",
           "action": "purchase",
+          "permissions": {
+            "community": false,
+            "character": false,
+            "other": true
+          },
           "while_carried": false,
           "conditions": [
             {
@@ -1215,7 +1225,81 @@
       "type": "market-stand",
       "carryable": false,
       "walkable": false,
-      "interactions": [],
+      "interactions": [
+        {
+          "description": "Add $item_name",
+          "action": "add_to_market",
+          "permissions": {
+            "community": true,
+            "other": false
+          },
+          "while_carried": false
+        },
+        {
+          "description": "Get $item_name",
+          "action": "purchase_market_item",
+          "permissions": {
+            "community": true,
+            "other": false
+          },
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "items",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
+        },
+        {
+          "description": "Raise price",
+          "action": "raise_market_price",
+          "permissions": {
+            "community": true,
+            "other": false
+          },
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "price",
+              "value": 99,
+              "comparison": "less_than"
+            }
+          ]
+        },
+        {
+          "description": "Lower price",
+          "action": "lower_market_price",
+          "permissions": {
+            "community": true,
+            "other": false
+          },
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "price",
+              "value": 1,
+              "comparison": "greater_than"
+            }
+          ]
+        },
+        {
+          "description": "Collect gold",
+          "action": "collect_gold",
+          "permissions": {
+            "community": true,
+            "other": false
+          },
+          "while_carried": false,
+          "conditions": [
+            {
+              "attribute_name": "gold",
+              "value": 0,
+              "comparison": "greater_than"
+            }
+          ]
+        }
+      ],
       "attributes": [
         {
           "name": "items",
