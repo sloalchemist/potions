@@ -662,8 +662,8 @@ export class Mob {
       return;
     }
 
-    if (this.poisoned == 1) {
-      const deltaDamage = Math.floor(Math.random() * -10);
+    if (this.poisoned > 0) {
+      const deltaDamage = Math.floor(Math.random() * -10 * this.poisoned);
 
       this.changeHealth(deltaDamage);
     }
@@ -1053,8 +1053,8 @@ export class Mob {
             health INTEGER NOT NULL,
             maxHealth INTEGER NOT NULL,
             goldPotionsUsed INTEGER DEFAULT 0,
-            damageOverTime INTEGER DEFAULT 0,
-            poisoned INTEGER DEFAULT 0,
+            damageOverTime REAL DEFAULT 0,
+            poisoned REAL DEFAULT 0,
             slowEnemy INTEGER DEFAULT 0,
             attack INTEGER NOT NULL,
             defense INTEGER NOT NULL,
