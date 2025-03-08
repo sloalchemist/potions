@@ -100,7 +100,6 @@ function parseCoordinates(
 export function handleCliCommand(input: string) {
   const [command, entityType, name, ...args] = input.trim().split(' ');
   const arg = entityType;
-
   const world = getWorld();
 
   if (command === 'loglevel') {
