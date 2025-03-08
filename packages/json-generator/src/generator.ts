@@ -182,14 +182,14 @@ export function executeWithArgs(args: GeneratorOption[]) {
       case 'client':
         client_breakup(duplicateGlobalParsed);
         writeFileSync(
-          '../../world_assets/global/client/global.json',
+          '../client/world_assets/global.json',
           JSON.stringify(duplicateGlobalParsed, null, 2)
         );
         break;
       case 'server':
         server_breakup(duplicateGlobalParsed);
         writeFileSync(
-          '../../world_assets/global/server/global.json',
+          '../server/world_assets/global.json',
           JSON.stringify(duplicateGlobalParsed, null, 2)
         );
         break;

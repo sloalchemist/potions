@@ -1,57 +1,69 @@
-/**
- * Logger is a singleton class responsible for handling sever logging to the console.
- * It is designed to be used for all non-CLI logging.
- *
- * This class allows for logging to be toggled on and off within the dev environment.
- */
-class Logger {
-  private static instance: Logger;
-  private loggingEnabled: boolean = true;
+import log4js from 'log4js';
+import path from 'path';
 
-  private constructor() {}
+const logDir = path.resolve(__dirname, '../../logs');
 
-  /**
-   * Returns the singleton instance of Logger.
-   * If an instance doesn't exist yet, it creates one.
-   * @returns {Logger} The Logger instance.
-   */
-  public static getInstance(): Logger {
-    if (!Logger.instance) {
-      Logger.instance = new Logger();
+log4js.configure({
+  appenders: {
+    console: { type: 'stdout' },
+    file: {
+      type: 'file',
+      filename: path.join(logDir, 'app.log'),
+      maxLogSize: 10485760,
+      backups: 3
     }
-    return Logger.instance;
+  },
+  categories: {
+    default: { appenders: ['console'], level: 'info' },
+    fileOnly: { appenders: ['file'], level: 'trace' }
   }
+});
 
-  public enableLogging(): void {
-    this.loggingEnabled = true;
-    console.log(`Logging enabled`);
-  }
+const consoleLogger = log4js.getLogger();
+const fileLogger = log4js.getLogger('fileOnly');
 
-  public disableLogging(): void {
-    this.loggingEnabled = false;
-    console.log(`Logging disabled`);
-  }
+const logLevels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'] as const;
+type LogLevel = (typeof logLevels)[number];
 
-  toggleLogging() {
-    this.loggingEnabled = !this.loggingEnabled;
-    console.log(`Logging ${this.loggingEnabled ? 'enabled' : 'disabled'}`);
-  }
-
-  log(...args: unknown[]) {
-    if (this.loggingEnabled) {
-      console.log(...args);
-    }
-  }
-
-  warn(...args: unknown[]) {
-    if (this.loggingEnabled) {
-      console.warn(...args);
-    }
-  }
-
-  error(...args: unknown[]) {
-    console.error(...args);
-  }
+export function isValidLogLevel(level: string): level is LogLevel {
+  return logLevels.includes(level as LogLevel);
 }
 
-export const logger = Logger.getInstance();
+// Logger object that contains all logging functions
+export const logger = {
+  setConsoleLogLevel: (level: LogLevel) => {
+    consoleLogger.level = level;
+  },
+
+  log: (message: string, ...args: unknown[]) => logger.info(message, ...args),
+
+  trace: (message: string, ...args: unknown[]) => {
+    consoleLogger.trace(message, ...args);
+    fileLogger.trace(message, ...args);
+  },
+
+  debug: (message: string, ...args: unknown[]) => {
+    consoleLogger.debug(message, ...args);
+    fileLogger.debug(message, ...args);
+  },
+
+  info: (message: string, ...args: unknown[]) => {
+    consoleLogger.info(message, ...args);
+    fileLogger.info(message, ...args);
+  },
+
+  warn: (message: string, ...args: unknown[]) => {
+    consoleLogger.warn(message, ...args);
+    fileLogger.warn(message);
+  },
+
+  error: (message: string, ...args: unknown[]) => {
+    consoleLogger.error(message, ...args);
+    fileLogger.error(message, ...args);
+  },
+
+  fatal: (message: string, ...args: unknown[]) => {
+    consoleLogger.fatal(message, ...args);
+    fileLogger.fatal(message, ...args);
+  }
+};

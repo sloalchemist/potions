@@ -24,6 +24,7 @@ export interface PubSub {
   // Messaging and state update methods
   move(key: string, target: Coord | undefined, path: Coord[]): void;
   destroy(item: Item): void;
+  bomb(key: string): void;
   showPortalMenu(key: string, worlds: WorldMetadata[]): void;
   changeHealth(key: string, health: number, newValue: number): void;
   changeEffect(
@@ -51,7 +52,7 @@ export interface PubSub {
   kill(key: string): void;
   dropItem(itemKey: string, mobKey: string, position: Coord): void;
   stashItem(itemKey: string, mobKey: string, position: Coord): void;
-  unstashItem(itemKey: string, mobKey: string, position: Coord): void;
+  unstashItem(itemKey: string, mobKey: string): void;
   pickupItem(itemKey: string, mobKey: string): void;
   giveItem(itemKey: string, fromKey: string, toKey: string): void;
   doing(key: string, action: string): void;

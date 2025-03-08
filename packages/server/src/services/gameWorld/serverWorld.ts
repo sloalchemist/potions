@@ -14,8 +14,7 @@ import { UsesRegistry } from '../../items/uses/usesRegistry';
 import { OnTickRegistry } from '../../items/on_ticks/onTickRegistry';
 import { DB } from '../database';
 import { DataLogger } from '../../grafana/dataLogger';
-import fs from 'fs';
-import path from 'path';
+import { logger } from '../../util/logger';
 
 const DEBUG_TO_CONSOLE = false;
 const DEBUG_TO_FILE = false;
