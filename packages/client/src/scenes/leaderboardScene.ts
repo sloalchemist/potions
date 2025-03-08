@@ -9,6 +9,15 @@ export class LeaderboardScene extends Phaser.Scene {
   private leaderboardTexts: Phaser.GameObjects.Text[] = [];
   private background?: Phaser.GameObjects.Rectangle;
   private titleText?: Phaser.GameObjects.Text;
+  private formatGoldAmount(amount: number): string {
+    // const testAmount = amount + 100_100_000;
+    if (amount >= 1_000_000) {
+      return (amount / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+    } else if (amount >= 1_000) {
+      return (amount / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+    }
+    return amount.toString();
+  }
 
   constructor() {
     super({ key: 'LeaderboardScene' });
@@ -118,10 +127,12 @@ export class LeaderboardScene extends Phaser.Scene {
       text.setDepth(DEPTH_BASE + 1);
 
       // Create the amount text (right-aligned)
+      const formattedAmount = this.formatGoldAmount(amount);
+
       const amountText = this.add.text(
         background.x + background.width - 10,
         startY + index * lineHeight,
-        `${amount} gold`,
+        `${formattedAmount} gold`,
         {
           fontSize: '14px',
           color: '#efbf04'
