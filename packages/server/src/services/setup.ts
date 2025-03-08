@@ -102,3 +102,7 @@ export function worldTimer() {
 
   lastUpdateTime = now;
 }
+
+export function getWorld(): ServerWorld {
+  return world;
+}

@@ -6,6 +6,7 @@ import { Coord } from '@rt-potion/common';
 import { hexStringToNumber } from '../src/util/colorUtil';
 import { Item } from '../src/items/item';
 import { isValidLogLevel, logger } from '../src/util/logger';
+import { getWorld } from '../src/services/setup';
 
 const itemTypes: Array<string> = globalData.item_types.map((item) => item.type);
 const mobTypes: Array<string> = globalData.mob_types.map((mob) => mob.type);
@@ -100,6 +101,8 @@ export function handleCliCommand(input: string) {
   const [command, entityType, name, ...args] = input.trim().split(' ');
   const arg = entityType;
 
+  const world = getWorld();
+
   if (command === 'loglevel') {
     if (isValidLogLevel(arg)) {
       logger.setConsoleLogLevel(arg);
@@ -120,6 +123,14 @@ export function handleCliCommand(input: string) {
       return;
     }
     const { x, y } = attributes;
+
+    if (!world.isWalkable({ x: x as number, y: y as number })) {
+      console.log(
+        `Error: Cannot spawn at (${x}, ${y}). The tile is not walkable.`
+      );
+      rl.prompt();
+      return;
+    }
 
     switch (entityType) {
       case 'mob':
