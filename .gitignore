@@ -49,4 +49,4 @@ coverage.json
 
 # ignore log file
 *.log
-logs/*
+packages/server/logs/*
