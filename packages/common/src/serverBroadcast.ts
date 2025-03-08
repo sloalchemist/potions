@@ -27,7 +27,6 @@ export type StashItemData = {
 export type UnstashItemData = {
   item_key: string;
   mob_key: string;
-  position: Coord;
 };
 
 export type DoingData = { id: string; action: string };
@@ -46,6 +45,7 @@ export type MobChangeFavoriteData = {
   new_value: string;
 };
 export type SpeakData = { id: string; message: string };
+export type BombData = { id: string };
 export type ItemChangeData = { id: string; property: string; value: number };
 export type SetDatetimeData = { date: FantasyDateI };
 export type WorldMetadata = {
@@ -83,6 +83,7 @@ export type BroadcastData =
     }
   | { type: 'mob_change_fav_item'; data: MobChangeFavoriteData }
   | { type: 'speak'; data: SpeakData }
+  | { type: 'bomb'; data: BombData }
   | {
       type: 'item_change';
       data: ItemChangeData;

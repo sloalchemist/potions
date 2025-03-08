@@ -1,10 +1,13 @@
 import { Mob } from '../mobs/mob';
+import { pubSub } from '../services/clientCommunication/pubsub';
 import {
   numberToHexString,
   hexToRgb,
   perceptualColorDistance,
   hexStringToNumber
 } from '../util/colorUtil';
+import { Item } from './item';
+import { Smashable } from './smashable';
 import { logger } from '../util/logger';
 
 interface ColorDict {
@@ -39,7 +42,7 @@ export function drinkPotion(
       logger.log('Drinking blue potion');
       logger.log('Mob Speed:', mob._speed);
       let speedMultiplier = 0.5;
-      let speedDuration = 30;
+      let speedDuration = 240;
       if (effectModifier) {
         speedMultiplier = speedMultiplier * effectModifier;
         speedDuration = speedDuration * effectModifier;
@@ -97,6 +100,41 @@ export function drinkPotion(
       }
       mob.spawnMonster(monsterDuration);
       return true;
+    case '#614f79':
+      console.log('Drinking bomb potion');
+      let nearbyObjects = mob.findNClosestObjectIDs([], Infinity, 3) || [];
+      let nearbyMobs = mob.findNearbyMobIDs(3) || [];
+
+      // broadcast bomb message for client side animation
+      pubSub.bomb(mob.id);
+
+      // destroy all nearby objects
+      nearbyObjects.forEach((id) => {
+        const item = Item.getItem(id);
+        if (item) {
+          const smashable = Smashable.fromItem(item);
+          if (smashable) {
+            // if smashable item, function that has extra side effects (drops loot)
+            smashable.destroySmashable();
+          }
+          item.destroy(); // either way, remove from game world
+        } else {
+          console.log(`Invalid item ID: ${id}`);
+        }
+      });
+
+      // destroy all nearby mobs
+      nearbyMobs.forEach((mobID) => {
+        const mobToDestroy = Mob.getMob(mobID);
+        if (mobToDestroy) {
+          mobToDestroy.destroy();
+        } else {
+          console.log(`Invalid mob ID: ${mobID}`);
+        }
+      });
+
+      return true;
+
     default:
       // handle cases where potionStr doesn't match any known potion
 

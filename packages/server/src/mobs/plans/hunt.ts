@@ -3,7 +3,7 @@ import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { Community } from '../../community/community';
 import { DB } from '../../services/database';
-import globalData from '../../../global.json';
+import globalData from '../../../world_assets/global.json';
 import { logger } from '../../util/logger';
 
 export class Hunt implements Plan {
@@ -26,9 +26,9 @@ export class Hunt implements Plan {
         npcDamage * (0.3 + 0.7 * Math.exp(-npc._defense / 40))
       );
 
-      if (npc.damageOverTime == 1) {
-        const poisonDelta = 1;
-        const poisonDuration = 5;
+      if (npc.damageOverTime > 0) {
+        const poisonDelta = 1 * npc.damageOverTime;
+        const poisonDuration = 5 * npc.damageOverTime;
         this.enemy!.changeEffect(poisonDelta, poisonDuration, 'poisoned');
       }
 
