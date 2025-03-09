@@ -24,9 +24,10 @@ describe('Try to consume potion in various cases', () => {
     const positionPlayer2: Coord = { x: 1, y: 1 };
     const potionLocation: Coord = { x: 0, y: 0 };
     const mobPosition: Coord = { x: 0, y: 1 };
-    const blueberryPosition: Coord = { x: 1, y: 2 };
+    const blueberryPosition: Coord = { x: 2, y: 2 };
     const basketPosition: Coord = { x: 0, y: 2 };
     const potionStandPosition: Coord = { x: 2, y: 1 };
+    const cauldronPosition: Coord = { x: 1, y: 2 };
 
     // create a player
     mobFactory.makeMob('player', positionPlayer1, 'TestID', 'TestPlayer');
@@ -82,6 +83,15 @@ describe('Try to consume potion in various cases', () => {
     const potionstandItem = Item.getItem(potionstandID!);
     expect(potionstandItem).toBeDefined();
 
+    // create a cauldron
+    itemGenerator.createItem({
+      type: 'cauldron',
+      position: cauldronPosition
+    });
+    const testCauldron = Item.getItemIDAt(cauldronPosition);
+    expect(testCauldron).not.toBe(undefined);
+    expect(testCauldron).not.toBeNull();
+
     // create a potion
     itemGenerator.createItem({
       type: 'potion',
@@ -125,6 +135,10 @@ describe('Try to consume potion in various cases', () => {
     // check that the potion stand disappeared
     const disappearedPotionStand = Item.getItemIDAt(potionStandPosition);
     expect(disappearedPotionStand).not.toBeDefined();
+
+    // check that the potion stand DID NOT disappear
+    const notDisappearedCauldron = Item.getItemIDAt(cauldronPosition);
+    expect(notDisappearedCauldron).toBeDefined();
   });
 
   test(`Test potion with mobs and items (empty stand) in a 3 pixel radius 
