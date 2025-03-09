@@ -17,6 +17,11 @@ export class CreateMarket implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
+    // Find if Fence Gates Are Near Mob In Radius of 1, If Yes Stop Player From Placing Fence To Prevent Pathing Errors
+    if (Item.countTypeOfItemInRadius('gate', mob.position, 1) > 0) {
+      return false;
+    }
+
     return Create.createItemFrom(item, mob, this.type);
   }
 }
