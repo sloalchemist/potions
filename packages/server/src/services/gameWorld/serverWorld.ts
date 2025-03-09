@@ -15,10 +15,16 @@ import { OnTickRegistry } from '../../items/on_ticks/onTickRegistry';
 import { DB } from '../database';
 import { DataLogger } from '../../grafana/dataLogger';
 import { logger } from '../../util/logger';
+import { performance } from 'perf_hooks';
+import fs from 'fs';
+import path from 'path';
 
-const DEBUG_TO_CONSOLE = false;
-const DEBUG_TO_FILE = false;
-const DEBUG_MAKE_GRAPHS = false;
+// Configuration flags for different types of logging
+const LOG_TICK_PERF_TO_CONSOLE = false;
+const LOG_TICK_PERF_TO_FILE = false;
+const GENERATE_TICK_PERF_GRAPHS = false;
+
+// File paths for logging and metrics
 const DEBUG_FILE_PATH = path.join(__dirname, 'debug.log');
 const MOB_METRICS_FILE_PATH = path.join(__dirname, 'graphs', 'mob_metrics.csv');
 const TICK_METRICS_FILE_PATH = path.join(
@@ -27,15 +33,18 @@ const TICK_METRICS_FILE_PATH = path.join(
   'tick_metrics.csv'
 );
 
-// Track the tick count
+// Initialize a tick counter for the current server session
 let tickCounter = 0;
 
 // Ensure the graph directory exists and create the metrics files with headers if they don't exist
 function initMetricsFiles() {
+  if (!GENERATE_TICK_PERF_GRAPHS) {
+    return;
+  }
   try {
     fs.mkdirSync(path.join(__dirname, 'graphs'), { recursive: true });
 
-    // Initialize mob metrics file
+    // Initialize mob metrics file with headers if it doesn't exist
     if (!fs.existsSync(MOB_METRICS_FILE_PATH)) {
       fs.writeFileSync(
         MOB_METRICS_FILE_PATH,
@@ -43,7 +52,7 @@ function initMetricsFiles() {
       );
     }
 
-    // Initialize tick metrics file
+    // Initialize tick metrics file with headers if it doesn't exist
     if (!fs.existsSync(TICK_METRICS_FILE_PATH)) {
       fs.writeFileSync(
         TICK_METRICS_FILE_PATH,
@@ -51,16 +60,16 @@ function initMetricsFiles() {
       );
     }
   } catch (error) {
-    console.error('Error initializing metrics files:', error);
+    logger.error('Error initializing metrics files:', error);
   }
 }
 
 // Initialize the metrics files
 initMetricsFiles();
 
-// Function to log mob metrics to the dedicated CSV file
+// Function to log mob metrics to a CSV file
 function logMobMetrics(mobCount: number, mobTickDuration: number) {
-  if (!DEBUG_MAKE_GRAPHS) {
+  if (!GENERATE_TICK_PERF_GRAPHS) {
     return;
   }
   try {
@@ -68,13 +77,13 @@ function logMobMetrics(mobCount: number, mobTickDuration: number) {
     const line = `${timestamp},${mobCount},${mobTickDuration.toFixed(2)}\n`;
     fs.appendFileSync(MOB_METRICS_FILE_PATH, line);
   } catch (error) {
-    console.error('Error logging mob metrics:', error);
+    logger.error('Error logging mob metrics:', error);
   }
 }
 
-// Function to log tick metrics to the dedicated CSV file
+// Function to log tick metrics to a CSV file
 function logTickMetrics(tickNumber: number, totalTickTime: number) {
-  if (!DEBUG_MAKE_GRAPHS) {
+  if (!GENERATE_TICK_PERF_GRAPHS) {
     return;
   }
   try {
@@ -82,11 +91,11 @@ function logTickMetrics(tickNumber: number, totalTickTime: number) {
     const line = `${tickNumber},${timestamp},${totalTickTime.toFixed(2)}\n`;
     fs.appendFileSync(TICK_METRICS_FILE_PATH, line);
   } catch (error) {
-    console.error('Error logging tick metrics:', error);
+    logger.error('Error logging tick metrics:', error);
   }
 }
 
-// Define log entry types for structured logging
+// Define a type for log entries to ensure structured logging
 type LogEntry = {
   timestamp: number;
   type: string;
@@ -94,6 +103,7 @@ type LogEntry = {
   data?: Record<string, unknown>;
 };
 
+// Custom debug log function that logs to console and file based on configuration
 function debugLog(message: string, data?: Record<string, unknown>) {
   const logEntry: LogEntry = {
     timestamp: Date.now(),
@@ -106,25 +116,25 @@ function debugLog(message: string, data?: Record<string, unknown>) {
     ? `${message} ${JSON.stringify(data)}`
     : message;
 
-  if (DEBUG_TO_CONSOLE) {
-    console.log(formattedMessage);
+  if (LOG_TICK_PERF_TO_CONSOLE) {
+    logger.debug(formattedMessage);
   }
 
-  if (DEBUG_TO_FILE) {
+  if (LOG_TICK_PERF_TO_FILE) {
     try {
       fs.mkdirSync(path.dirname(DEBUG_FILE_PATH), { recursive: true });
       fs.appendFileSync(DEBUG_FILE_PATH, JSON.stringify(logEntry) + '\n');
     } catch (error) {
-      console.error('Error writing to debug file:', error);
+      logger.error('Error writing to debug file:', error);
     }
   }
 }
 
-// Performance logging helper
+// Helper function to measure and log the execution time of a function
 function measureTime(label: string, fn: () => void): number {
-  if (!DEBUG_TO_CONSOLE && !DEBUG_TO_FILE) {
+  if (!LOG_TICK_PERF_TO_CONSOLE && !LOG_TICK_PERF_TO_FILE) {
     fn();
-    return 0;
+    return 0; // Return early if no logging is enabled
   }
 
   const start = performance.now();
@@ -265,14 +275,12 @@ export class ServerWorld implements GameWorld {
     // log data for Prometheus
     DataLogger.logData();
 
-    //const totalTime = Date.now() - startTime;
-    //logger.log('time to tick', totalTime);
     const totalTime = performance.now() - totalStart;
 
     // Log tick metrics to the dedicated CSV file
     logTickMetrics(tickCounter, totalTime);
 
-    debugLog(`[TICK] Total tick cycle time`, {
+    logger.debug(`[TICK] Total tick cycle time (ms):`, {
       tickNumber: tickCounter,
       totalTimeMs: parseFloat(totalTime.toFixed(2)),
       itemTickTimeMs: parseFloat(itemTickTime.toFixed(2)),
@@ -282,7 +290,7 @@ export class ServerWorld implements GameWorld {
       dataLoggingTimeMs: parseFloat(dataLoggingTime.toFixed(2))
     });
 
-    debugLog('[TICK] End tick cycle ================================');
+    logger.debug('[TICK] End tick cycle');
   }
 
   getPortalLocation(): Coord {
