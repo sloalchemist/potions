@@ -607,26 +607,6 @@
             "radius": 3,
             "rate": 0.1
           }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sun-drop",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sunflower",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
         }
       ]
     },
