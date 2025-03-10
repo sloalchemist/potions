@@ -112,14 +112,15 @@ export function drinkPotion(
       nearbyObjects.forEach((id) => {
         const item = Item.getItem(id);
         if (item) {
+          if (item.type === 'cauldron') {
+            return; // dont destroy cauldrons!
+          }
           const smashable = Smashable.fromItem(item);
           if (smashable) {
-            // if smashable item, function that has extra side effects (drops loot)
+            // If smashable item, function that has extra side effects (drops loot)
             smashable.destroySmashable();
           }
-          item.destroy(); // either way, remove from game world
-        } else {
-          console.log(`Invalid item ID: ${id}`);
+          item.destroy(); // Actually removes from game world
         }
       });
 

@@ -91,7 +91,7 @@ export class AblyService implements PubSub {
       this.broadcastReloadPageTrigger();
     });
 
-    this.broadcastChannel.presence.subscribe('leave', async (presenceMsg) => {
+    this.broadcastChannel.presence.subscribe('leave', (presenceMsg) => {
       // if MAINTAIN_WORLD_OPTION is passed from client, do not change world;
       // undefined will be recieved if the client unexpectedly disconnects (ex: refreshing page)
       // we should also stay in the same world in this case
@@ -103,7 +103,7 @@ export class AblyService implements PubSub {
       logger.log('Target World Received:', presenceMsg.data.target_world_id);
       logger.log('Target World Being Sent:', target_world_id);
       logger.log('id is: ', this.userDict.get(presenceMsg.clientId));
-      await this.sendPersistenceRequest(
+      this.sendPersistenceRequest(
         presenceMsg.clientId,
         this.userDict.get(presenceMsg.clientId),
         target_world_id
@@ -114,6 +114,7 @@ export class AblyService implements PubSub {
       );
 
       const player = Mob.getMob(presenceMsg.clientId);
+      // logger.log("player when leaving:", player);
       player?.removePlayer();
     });
 
@@ -604,9 +605,10 @@ export class AblyService implements PubSub {
     logger.log('char id is:', char_id);
     const player = Mob.getMob(username);
     if (!player) {
-      throw Error(
+      logger.error(
         `No player found, unable to persist player state: ${username}`
       );
+      return;
     }
     let health_for_update = player.health;
     let gold_for_update = player.gold;
