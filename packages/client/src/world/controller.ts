@@ -26,6 +26,8 @@ export type Interactions = {
   give_to?: string;
 };
 
+const MAX_STASH: number = 12;
+
 let interactionCallback: (interactions: Interactions[]) => void;
 let chatCompanionCallback: (companions: Mob[]) => void;
 let fightOpponentCallback: (opponents: Mob[]) => void;
@@ -197,11 +199,13 @@ export function getCarriedItemInteractions(
     label: `Drop ${item.itemType.name}`
   });
 
-  interactions.push({
-    action: 'stash',
-    item: item as Item,
-    label: `Stash ${item.itemType.name}`
-  });
+  if (world.getStoredItems().length < MAX_STASH) {
+    interactions.push({
+      action: 'stash',
+      item: item as Item,
+      label: `Stash ${item.itemType.name}`
+    });
+  }
 
   // give to nearby mobs
   nearbyMobs.forEach((mob) => {
