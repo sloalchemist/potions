@@ -55,8 +55,15 @@ describe('Try to consume black potion in various cases', () => {
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
 
+    // get monster name
+    const unique_monster = DB.prepare(
+      `
+              SELECT id, name FROM mobs WHERE name LIKE 'Monster %'
+          `
+    ).get() as { id: string; name: string };
+
     // check that monster exists
-    const monster = Mob.getMob('Monster');
+    const monster = Mob.getMob(unique_monster.id);
     expect(monster).not.toBeNull();
 
     //wait to make the monster time out
@@ -67,7 +74,7 @@ describe('Try to consume black potion in various cases', () => {
     monster?.tick(500);
 
     // check to make sure monster is dead
-    const deadMonster = Mob.getMob('Monster');
+    const deadMonster = Mob.getMob(unique_monster.id);
     expect(deadMonster?.action).toBe('destroyed');
   });
 });
@@ -111,8 +118,15 @@ describe('Try to consume an unknown potion that is similar to black potion in va
     // check to make sure potion is not being carried
     expect(testMob!.carrying).toBeUndefined();
 
+    // get monster name
+    const unique_monster = DB.prepare(
+      `
+              SELECT id, name FROM mobs WHERE name LIKE 'Monster %'
+          `
+    ).get() as { id: string; name: string };
+
     // check that monster exists
-    const monster = Mob.getMob('Monster');
+    const monster = Mob.getMob(unique_monster.id);
     expect(monster).not.toBeNull();
 
     // wait to make the monster time out
@@ -123,7 +137,7 @@ describe('Try to consume an unknown potion that is similar to black potion in va
     monster?.tick(500);
 
     // check to make sure monster is dead
-    const deadMonster = Mob.getMob('Monster');
+    const deadMonster = Mob.getMob(unique_monster.id);
     expect(deadMonster?.action).toBe('destroyed');
   });
 });
