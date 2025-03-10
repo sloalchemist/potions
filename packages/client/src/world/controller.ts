@@ -199,7 +199,7 @@ export function getCarriedItemInteractions(
     label: `Drop ${item.itemType.name}`
   });
 
-  if (world.getStoredItems().length < MAX_STASH) {
+  if (world?.getStoredItems().length < MAX_STASH) {
     interactions.push({
       action: 'stash',
       item: item as Item,
