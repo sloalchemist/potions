@@ -380,6 +380,7 @@ export class SpriteMob extends Mob {
     sprite.setDepth(1000);
     sprite.setScale(size);
     sprite.visible = true;
+    this.scene.sound.play('explode');
     sprite.anims.play('bomb-explosion');
 
     sprite.on('animationcomplete', () => {
