@@ -32,17 +32,6 @@ export class EnterPortal implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
-    if (this.worlds.length === 0) {
-      this.populateWorlds().then(() => {
-        if (this.isNearPortal(mob, item)) {
-          // Send message to client to show world selection
-          pubSub.showPortalMenu(mob.id, this.worlds);
-
-          return true;
-        }
-        return false;
-      });
-    }
     if (this.isNearPortal(mob, item)) {
       // Send message to client to show world selection
       pubSub.showPortalMenu(mob.id, this.worlds);
