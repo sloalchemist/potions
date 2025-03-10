@@ -20,6 +20,7 @@ import { Favorability } from '../favorability/favorability';
 import { mobFactory } from './mobFactory';
 import { MonstrousNames } from './names/monstrousNames';
 import { logger } from '../util/logger';
+import { v4 as uuidv4 } from 'uuid';
 
 export type MobData = {
   personalities: Personality;
@@ -582,9 +583,10 @@ export class Mob {
     const monsterNameGenerator = new MonstrousNames();
     const monsterName = 'Monster ' + monsterNameGenerator.generateName();
 
+    const monsterId = uuidv4();
     // spawn a monster (blob)
-    mobFactory.makeMob('blob', monsterPosition, monsterName, monsterName);
-    const monster = Mob.getMob(monsterName);
+    mobFactory.makeMob('blob', monsterPosition, monsterId, monsterName);
+    const monster = Mob.getMob(monsterId);
 
     // make the blob fight everyone (set satiation super low, hunt)
     DB.prepare(
