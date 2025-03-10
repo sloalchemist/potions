@@ -18,7 +18,9 @@ import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 import { Favorability } from '../favorability/favorability';
 import { mobFactory } from './mobFactory';
+import { MonstrousNames } from './names/monstrousNames';
 import { logger } from '../util/logger';
+import { v4 as uuidv4 } from 'uuid';
 
 export type MobData = {
   personalities: Personality;
@@ -578,10 +580,13 @@ export class Mob {
 
     // randomize monster position based off of player position
     const monsterPosition = playerPosition;
+    const monsterNameGenerator = new MonstrousNames();
+    const monsterName = 'Monster ' + monsterNameGenerator.generateName();
 
+    const monsterId = uuidv4();
     // spawn a monster (blob)
-    mobFactory.makeMob('blob', monsterPosition, 'Monster', 'Monster');
-    const monster = Mob.getMob('Monster');
+    mobFactory.makeMob('blob', monsterPosition, monsterId, monsterName);
+    const monster = Mob.getMob(monsterId);
 
     // make the blob fight everyone (set satiation super low, hunt)
     DB.prepare(
