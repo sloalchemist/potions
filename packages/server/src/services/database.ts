@@ -19,7 +19,6 @@ export function initializeServerDatabase(
   rebuild: boolean = false
 ) {
   const absolutePath = path.resolve(dbPath);
-  logger.log('DATABASE PATH: ', absolutePath);
 
   if (rebuild) {
     if (fs.existsSync(absolutePath)) {

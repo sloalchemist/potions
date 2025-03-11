@@ -18,6 +18,7 @@ import {
 } from '../services/supabaseStorage';
 import { logger } from '../util/logger';
 import globalData from '../../world_assets/global.json';
+import path from 'path';
 
 async function main() {
   // Build and save the knowledge graph
@@ -29,14 +30,22 @@ async function main() {
   if (!worldID) {
     throw new Error('No world ID provided, provide a world ID as an argument');
   }
-  await initializeServerDatabase(`data/${worldID}-server-data.db`, true);
-  console.log(`data/${worldID}-server-data.db`);
+  const dbPath = path.join(process.cwd(), `data/${worldID}-server-data.db`);
+  const worldSpecificPath = path.join(
+    process.cwd(),
+    `world_assets/${worldID}/world_specific.json`
+  );
+  const knowledgeGraphPath = path.join(
+    process.cwd(),
+    `data/${worldID}-knowledge-graph.db`
+  );
+  logger.log(`Database path: ${dbPath}, World specific path: ${worldSpecificPath}, 
+    Knowledge graph path: ${knowledgeGraphPath}`);
+  await initializeServerDatabase(dbPath, true);
 
   logger.log(`Loading world ${worldID}`);
 
-  const worldSpecificData = await import(
-    `../../world_assets/${worldID}/world_specific.json`
-  );
+  const worldSpecificData = await import(worldSpecificPath);
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
@@ -54,7 +63,7 @@ async function main() {
 
   const socialWorld = buildGraphFromWorld(worldDescription);
   const graph = constructGraph(socialWorld);
-  initializeKnowledgeDB(`data/${worldID}-knowledge-graph.db`, true);
+  initializeKnowledgeDB(knowledgeGraphPath, true);
   await buildGraph(graph);
 
   // Create tables and load defaults
