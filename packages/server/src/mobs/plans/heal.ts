@@ -7,6 +7,7 @@ import { Drink } from '../../items/uses/drink';
 import { AskForItem } from './means/askForItem';
 import { PurchaseItem } from './means/purchaseItem';
 import { logistic } from '../../util/mathUtil';
+import { logger } from '../../util/logger';
 
 export class Heal extends PlanMeans {
   constructor() {
@@ -19,6 +20,12 @@ export class Heal extends PlanMeans {
   }
 
   benefit(npc: Mob): number {
+    if (!npc || !Mob.getMob(npc.id)) {
+      logger.error(
+        `${npc.name} is no longer valid or does not exist in the database.`
+      );
+      return -Infinity; // Exit early
+    }
     if (npc.health >= 100) {
       // If health is full, no need to heal
       return -Infinity;
