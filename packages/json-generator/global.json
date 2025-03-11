@@ -248,7 +248,7 @@
           "value": "blobs"
         }
       ],
-      "walkable": true,
+      "walkable": false,
       "smashable": true,
       "interactions": [
         {
