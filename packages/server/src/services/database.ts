@@ -26,6 +26,11 @@ export function initializeServerDatabase(
       fs.unlinkSync(absolutePath);
       //logger.log(`Deleted existing database file: ${absolutePath}`);
     }
+    const directoryPath = path.dirname(dbPath);
+    if (!fs.existsSync(directoryPath)) {
+      logger.log(`Creating directory: ${directoryPath}`);
+      fs.mkdirSync(directoryPath, { recursive: true });
+    }
   }
 
   // Initialize the database
