@@ -208,7 +208,7 @@
         },
         {
             "name": "Gun Powder",
-            "type": "gun-powder",
+            "type": "gunpowder",
             "attributes": [
                 {
                     "name": "brew_color",
@@ -526,6 +526,11 @@
                     "action": "build_wall",
                     "while_carried": true,
                     "requires_item": "partial-wall"
+                },
+                {
+                    "description": "Create Market",
+                    "action": "create_market",
+                    "while_carried": true
                 }
             ]
         },
@@ -763,6 +768,25 @@
             ]
         },
         {
+            "name": "Cloud",
+            "type": "cloud",
+            "carryable": false,
+            "walkable": false,
+            "interactions": [],
+            "on_tick": [
+                {
+                    "action": "spawn_item",
+                    "parameters": {
+                        "type": "lightning-bloom",
+                        "global_max": 10,
+                        "local_max": 2,
+                        "radius": 1,
+                        "rate": 0.1
+                    }
+                }
+            ]
+        },
+        {
             "name": "Mushroom-1",
             "type": "mushroom-1",
             "description": "A mushroom",
@@ -813,9 +837,9 @@
                 {
                     "action": "spawn_item",
                     "parameters": {
-                        "type": "rock-columns",
+                        "type": "tar",
                         "global_max": 10,
-                        "local_max": 1,
+                        "local_max": 3,
                         "radius": 3,
                         "rate": 0.1
                     }
@@ -843,9 +867,9 @@
             ]
         },
         {
-            "name": "Rock-Chunk-2-1",
+            "name": "Rock Chunk 2-1",
             "type": "rock-chunk-2-1",
-            "description": "Some Rock Chunks",
+            "description": "A stone with a high content of gunpowder",
             "carryable": false,
             "walkable": false,
             "interactions": [],
@@ -853,7 +877,7 @@
                 {
                     "action": "spawn_item",
                     "parameters": {
-                        "type": "rock-chunk-2-1",
+                        "type": "gunpowder",
                         "global_max": 10,
                         "local_max": 1,
                         "radius": 3,

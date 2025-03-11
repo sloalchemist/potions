@@ -143,14 +143,14 @@ process.argv.forEach(function (val) {
         const rawJson = (0, fs_1.readFileSync)('./global.json', 'utf8');
         const json_client = JSON.parse(rawJson);
         client_breakup(json_client);
-        (0, fs_1.writeFileSync)('../../world_assets/global.json', JSON.stringify(json_client, null, 4));
+        (0, fs_1.writeFileSync)('../../world_assets/global/client/global.json', JSON.stringify(json_client, null, 4));
         ran = true;
     }
     else if (val === 'server') {
         const rawJson = (0, fs_1.readFileSync)('./global.json', 'utf8');
         const json_server = JSON.parse(rawJson);
         server_breakup(json_server);
-        (0, fs_1.writeFileSync)('../server/global.json', JSON.stringify(json_server, null, 4));
+        (0, fs_1.writeFileSync)('../../world_assets/global/server/global.json', JSON.stringify(json_server, null, 4));
         ran = true;
     }
 });

@@ -6,6 +6,7 @@ provider "registry.terraform.io/ably/ably" {
   hashes = [
     "h1:CiJ6Lq1fuFdQiqL5Cg3CCoEPaFxknQeZsaYG2vLGdew=",
     "h1:DJBOV91AkfBGt6nRNu29B5NiOjrQJ2hdtLXvkFv1cvg=",
+    "h1:auEwFb5H7LbyckKx2j/a82uQelIdTYx5FiFQv4pmfYs=",
     "h1:r3wptrbYht0AiS7/q+lXeMHrUDJzipf/NsqcT13gfog=",
     "zh:0312f2b0477f4484233254bc0d5ad3354a06d9c83d70b842232f98b8d6d6cd97",
     "zh:29f7c408af10d3c7be03c00c61af7045de43a129a6b5430df4bed10d18b07410",
@@ -72,6 +73,7 @@ provider "registry.terraform.io/hashicorp/null" {
 provider "registry.terraform.io/hashicorp/random" {
   version = "3.6.3"
   hashes = [
+    "h1:+UItZOLue/moJfnI3tqZBQbXUYR4ZnqPYfJDJPgLZy0=",
     "h1:Fnaec9vA8sZ8BXVlN3Xn9Jz3zghSETIKg7ch8oXhxno=",
     "h1:In4XBRMdhY89yUoTUyar3wDF28RJlDpQzdjahp59FAk=",
     "h1:zG9uFP8l9u+yGZZvi5Te7PV62j50azpgwPunq2vTm1E=",
