@@ -71,4 +71,68 @@ describe('Stash and Unstash Item', () => {
     expect(carryablePotion).toBeDefined();
     expect(potion!.position).not.toBeDefined();
   });
+  test('should return false when the mob has no position', () => {
+    const testMob = Mob.getMob('mob3');
+
+    // Mock position to undefined
+    Object.defineProperty(testMob, 'position', {
+      value: undefined,
+      writable: true // Make sure it's writable for the test
+    });
+
+    // Create an item
+    const potionPosition = { x: 1, y: 1 };
+    itemGenerator.createItem({
+      type: 'potion',
+      position: potionPosition,
+      attributes: {}
+    });
+    const potionID = Item.getItemIDAt(potionPosition);
+    expect(potionID).toBeDefined();
+    const potion = Item.getItem(potionID!);
+    const carryablePotion = Carryable.fromItem(potion!);
+
+    // Call stash and expect it to return false because the mob has no position
+    const result = carryablePotion!.stash(testMob!);
+    expect(result).toBe(false);
+  });
+
+  test('should return false when the mob is not carrying the item', () => {
+    const testMob = Mob.getMob('mob4');
+
+    // Ensure testMob is defined
+    if (!testMob) {
+      throw new Error('Test mob was not created or found');
+    }
+
+    // Create an item that the mob is not carrying
+    const potionPosition = { x: 1, y: 1 };
+    itemGenerator.createItem({
+      type: 'potion',
+      position: potionPosition,
+      attributes: {}
+    });
+    const potionID = Item.getItemIDAt(potionPosition);
+    expect(potionID).toBeDefined();
+    const potion = Item.getItem(potionID!);
+    const carryablePotion = Carryable.fromItem(potion!);
+
+    // simulate a different item
+    const newPosition = { x: 2, y: 2 };
+    itemGenerator.createItem({
+      type: 'potion',
+      position: newPosition,
+      attributes: {}
+    });
+    const newPotionID = Item.getItemIDAt(newPosition);
+    expect(potionID).toBeDefined();
+    const newPotion = Item.getItem(newPotionID!);
+
+    // Set the mob's carrying item to this mock item
+    testMob.carrying = newPotion; // Mob is carrying a different item
+
+    // Call stash and expect it to return false because the mob is not carrying the item
+    const result = carryablePotion!.stash(testMob!);
+    expect(result).toBe(false);
+  });
 });
