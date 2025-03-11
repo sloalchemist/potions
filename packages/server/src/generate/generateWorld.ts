@@ -8,6 +8,7 @@ import { Item } from '../items/item';
 import { Personality } from '../mobs/traits/personality';
 import { Mob } from '../mobs/mob';
 import { logger } from '../util/logger';
+import { isItemPlacementValid } from '../util/itemSpawnValidation';
 
 import {
   ItemConfig,
@@ -91,18 +92,22 @@ export function loadDefaults(global: ServerWorldDescription) {
     }
   );
 
-  // Create items
+  // Create items - em
   items.forEach((item: ItemConfig) => {
     logger.log(`Creating item ${item.type} at ${JSON.stringify(item.coord)}`);
-    itemGenerator.createItem({
-      type: item.type,
-      position: item.coord,
-      ownedByCommunity: item.community
-        ? communityMap[item.community]
-        : undefined,
-      lock: item.lock,
-      attributes: item.options
-    });
+    if (isItemPlacementValid(item.coord)) {
+      itemGenerator.createItem({
+        type: item.type,
+        position: item.coord,
+        ownedByCommunity: item.community
+          ? communityMap[item.community]
+          : undefined,
+        lock: item.lock,
+        attributes: item.options
+      });
+    } else {
+      logger.error('Invalid item placement');
+    }
   });
 
   // Create containers

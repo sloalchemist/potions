@@ -142,6 +142,7 @@ export class WorldScene extends Phaser.Scene {
       frameRate: 6,
       repeat: -1
     });
+
     metadata.item_types.forEach((itemType) => {
       //console.log('Adding item', itemType.type);
       this.itemSource[itemType.type] = atlasName;
@@ -549,6 +550,31 @@ export class WorldScene extends Phaser.Scene {
       pos.y * TILE_SIZE + TILE_SIZE * 0.5
     ];
   }
+
+  // validate any items coordinates - em
+  // public isItemPlacementValid(coord: Coord): boolean {
+  //   const validTerrain = ['grass', 'dirt'];
+
+  //   // negative var check
+  //   if (
+  //     coord.y < 0 ||
+  //     coord.y >= this.terrainHeight ||
+  //     coord.x < 0 ||
+  //     coord.x >= this.terrainWidth
+  //   ) {
+  //     return false;
+  //   }
+
+  //   const terrainId = world.tiles[coord.y][coord.x]; // get terrain type
+  //   const terrainType = world.terrainTypes.get(terrainId);
+
+  //   // check terrain
+  //   if (terrainType) {
+  //     return validTerrain.includes(terrainType.name);
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   public follow(sprite: Phaser.GameObjects.Sprite) {
     this.cameraDolly = new Phaser.Geom.Point(sprite.x, sprite.y);
