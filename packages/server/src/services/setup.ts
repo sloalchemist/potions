@@ -15,6 +15,7 @@ import { shouldUploadDB } from '../util/dataUploadUtil';
 import { getEnv } from '@rt-potion/common';
 import { logger } from '../util/logger';
 import globalData from '../../world_assets/global.json';
+import path from 'path';
 
 let lastUpdateTime = Date.now();
 let lastUploadTime = Date.now();
@@ -39,9 +40,9 @@ async function initializeAsync() {
     throw new Error('No world ID provided, provide a world ID as an argument');
   }
 
-  logger.log(`loading world ${worldID}`);
+  logger.log(`loading world ${worldID}: ${__dirname}`);
   const worldSpecificData = await import(
-    `../../world_assets/${worldID}/world_specific.json`
+    path.join(process.cwd(), `world_assets/${worldID}/world_specific.json`)
   );
 
   try {
