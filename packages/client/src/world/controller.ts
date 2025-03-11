@@ -337,39 +337,40 @@ export function getInteractablePhysicals(
   }
 
   // nearby non-walkable items
-  let nearbyObjects = physicals.filter(
-    (p) =>
-      !p.itemType.walkable &&
-      p.itemType.layout_type !== 'fence' &&
-      p.itemType.layout_type !== 'wall'
-  );
-
-  let walls = physicals.filter(
-    (p) =>
-      p.itemType.layout_type === 'fence' ||
-      p.itemType.layout_type === 'wall' ||
-      p.itemType.type === 'partial-wall'
-  );
+  let nearbyObjects = physicals.filter((p) => !p.itemType.walkable);
 
   let nearbyBaskets = physicals.filter((p) => p.itemType.type === 'basket');
 
-  if (walls.length > 1) {
-    walls = [getClosestPhysical(walls, playerPos)];
-  }
+  let objectsWithDistance = nearbyObjects.map((object) => {
+    if (!object.position)
+      return {
+        object: object,
+        distance: 5
+        // because this will never be the closest.
+      };
+    return {
+      object: object,
+      distance: calculateDistance(object.position, playerPos)
+    };
+  });
+
+  objectsWithDistance.sort((a, b) => a.distance - b.distance);
 
   // find distinct non-walkable objects next to player
-  let unique_nearbyObjects = nearbyObjects.filter(
+  let unique_nearbyObjects = objectsWithDistance.filter(
     (item, index, self) =>
-      index === self.findIndex((i) => i.itemType === item.itemType)
+      index ===
+      self.findIndex((i) => i.object.itemType === item.object.itemType)
   );
+
+  let nearestUniqueObjects = unique_nearbyObjects.map((obj) => obj.object);
 
   // enforce unique items
   let interactableObjects = [
     ...onTopObjects,
-    ...unique_nearbyObjects,
+    ...nearestUniqueObjects,
     ...nearbyOpenableObjects,
-    ...nearbyBaskets,
-    ...walls
+    ...nearbyBaskets
   ];
   interactableObjects = interactableObjects.filter(
     (item, index, self) =>
