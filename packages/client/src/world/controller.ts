@@ -342,12 +342,14 @@ export function getInteractablePhysicals(
   let nearbyBaskets = physicals.filter((p) => p.itemType.type === 'basket');
 
   let objectsWithDistance = nearbyObjects.map((object) => {
+    // Because this is a list of all of the objects in cardinal directions,
+    // to get nearbyObjects, these objects needed to have had a valid position.
+    // Thus, in the case that the object doesn't have a position, an error
+    // should be thrown.
     if (!object.position)
-      return {
-        object: object,
-        distance: 5
-        // because this will never be the closest.
-      };
+      throw new TypeError(
+        `Expected 'object.position' to be 'Coord', but received NULL`
+      );
     return {
       object: object,
       distance: calculateDistance(object.position, playerPos)
