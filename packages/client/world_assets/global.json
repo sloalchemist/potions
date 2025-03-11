@@ -677,7 +677,19 @@
       "type": "shipwreck",
       "carryable": false,
       "walkable": false,
-      "interactions": []
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "gold",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
     },
     {
       "name": "Volcano",
