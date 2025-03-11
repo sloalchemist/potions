@@ -361,9 +361,9 @@ export class UxScene extends Phaser.Scene {
       this.infoContainer.add(this.keybindManualText);
 
       // Color pickers
-      const colors = ['Eye Color', 'Belly Color', 'Fur Color'];
+      const colors = ['Eye Color: ', 'Belly Color: ', 'Fur Color: '];
       const colorKeys = ['eyeColor', 'bellyColor', 'furColor'];
-      let yOffset = 90;
+      let yOffset = 40;
 
       colors.forEach((colorLabel, index) => {
         const label = this.add.text(
@@ -371,14 +371,14 @@ export class UxScene extends Phaser.Scene {
           yOffset,
           colorLabel,
           {
-            fontSize: '14px',
+            fontSize: '16px',
             color: '#ffffff'
           }
         );
         this.infoContainer?.add(label);
 
         const colorPicker = this.add.dom(
-          SCREEN_WIDTH / 2 + 250,
+          SCREEN_WIDTH / 2 + 240,
           yOffset,
           'input'
         );
