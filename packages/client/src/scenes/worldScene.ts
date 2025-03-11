@@ -551,31 +551,6 @@ export class WorldScene extends Phaser.Scene {
     ];
   }
 
-  // validate any items coordinates - em
-  // public isItemPlacementValid(coord: Coord): boolean {
-  //   const validTerrain = ['grass', 'dirt'];
-
-  //   // negative var check
-  //   if (
-  //     coord.y < 0 ||
-  //     coord.y >= this.terrainHeight ||
-  //     coord.x < 0 ||
-  //     coord.x >= this.terrainWidth
-  //   ) {
-  //     return false;
-  //   }
-
-  //   const terrainId = world.tiles[coord.y][coord.x]; // get terrain type
-  //   const terrainType = world.terrainTypes.get(terrainId);
-
-  //   // check terrain
-  //   if (terrainType) {
-  //     return validTerrain.includes(terrainType.name);
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
   public follow(sprite: Phaser.GameObjects.Sprite) {
     this.cameraDolly = new Phaser.Geom.Point(sprite.x, sprite.y);
     this.cameras.main.startFollow(this.cameraDolly);
