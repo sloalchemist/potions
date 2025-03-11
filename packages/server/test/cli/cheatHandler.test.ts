@@ -1,4 +1,4 @@
-import { commonSetup, world } from '../testSetup';
+import { commonSetup, world as testWorld } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
 import { logger } from '../../src/util/logger';
 import { itemGenerator } from '../../src/items/itemGenerator';
@@ -20,13 +20,17 @@ jest.mock('readline', () => ({
   }))
 }));
 
+jest.mock('../../src/services/setup', () => ({
+  getWorld: jest.fn(() => testWorld)
+}));
+
 beforeEach(() => {
   commonSetup();
   Community.makeVillage('alchemists', 'Alchemists guild');
   Community.makeVillage('blobs', 'Blobby Town');
   Community.makeVillage('fighters', 'Fighters guild');
   Community.makeVillage('silverclaw', 'Village of Silverclaw');
-  mobFactory.loadTemplates(world.mobTypes);
+  mobFactory.loadTemplates(testWorld.mobTypes);
   initializeCli();
 });
 
@@ -154,6 +158,14 @@ describe('Cheat Handler Tests', () => {
         handleCliCommand('spawn mob blob x:zero y:0');
         expect(logSpy).toHaveBeenCalledWith(
           'Invalid value for x: zero. Expected a number.'
+        );
+      });
+
+      it('should error on invalid coordinates', () => {
+        const logSpy = jest.spyOn(console, 'log');
+        handleCliCommand('spawn item tar x:200 y:200');
+        expect(logSpy).toHaveBeenCalledWith(
+          'Error: Cannot spawn at (200, 200). The tile is not walkable.'
         );
       });
     });

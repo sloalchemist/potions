@@ -86,7 +86,7 @@ export class Hunt implements Plan {
       npc.personality.traits[PersonalityTraits.Aggression] *
       (npc._attack / this.enemy._attack);
 
-    if (hungry_mobs.includes(npc.type) && npc.needs.getNeed('satiation') < 10) {
+    if (hungry_mobs.includes(npc.type) && npc.needs.getNeed('satiation') < 50) {
       utility = 100;
       return utility;
     }
