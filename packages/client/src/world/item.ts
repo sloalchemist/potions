@@ -117,13 +117,12 @@ export class Item extends Physical {
     world.addStoredItem(this); // Add to stored items
   }
 
-  unstash(world: World, mob: Mob, position: Coord) {
+  unstash(world: World, mob: Mob) {
     if (!mob.position) {
       throw new Error('Mob has no position');
     }
-    this.carried_by = undefined;
-    this.position = position;
-    world.addItemToGrid(this);
+    this.carried_by = mob.key;
+    mob.carrying = this.key;
     world.removeStoredItem(this); // Remove from stored items
   }
 

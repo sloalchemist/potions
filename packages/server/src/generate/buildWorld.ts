@@ -8,7 +8,6 @@ import { createTables, loadDefaults } from './generateWorld';
 import { StubbedPubSub } from '../services/clientCommunication/stubbedPubSub';
 import { initializePubSub } from '../services/clientCommunication/pubsub';
 import { buildGraphFromWorld } from './socialWorld';
-import globalData from '../../global.json';
 import { ServerWorldDescription } from '../services/gameWorld/worldMetadata';
 import { initializeGameWorld } from '../services/gameWorld/gameWorld';
 import { ServerWorld } from '../services/gameWorld/serverWorld';
@@ -17,6 +16,8 @@ import {
   initializeBucket,
   uploadLocalData
 } from '../services/supabaseStorage';
+import { logger } from '../util/logger';
+import globalData from '../../world_assets/global.json';
 
 async function main() {
   // Build and save the knowledge graph
@@ -29,16 +30,17 @@ async function main() {
     throw new Error('No world ID provided, provide a world ID as an argument');
   }
   await initializeServerDatabase(`data/${worldID}-server-data.db`, true);
+  console.log(`data/${worldID}-server-data.db`);
 
-  console.log(`Loading world ${worldID}`);
+  logger.log(`Loading world ${worldID}`);
 
-  const worldDataResponse = await fetch(
-    `https://potions.gg/world_assets/${worldID}/server/world_specific.json`
+  const worldSpecificData = await import(
+    `../../world_assets/${worldID}/world_specific.json`
   );
-  const worldSpecificData = await worldDataResponse.json();
 
   initializePubSub(new StubbedPubSub());
   // Load global data and parse
+
   const globalDescription = globalData as ServerWorldDescription;
   const specificDescription =
     worldSpecificData as Partial<ServerWorldDescription>;
@@ -64,16 +66,16 @@ async function main() {
 
   try {
     await initializeBucket(supabase);
-    console.log('Bucket creation handled successfully');
+    logger.log('Bucket creation handled successfully');
   } catch (err) {
-    console.error('Error during bucket initialization:', err);
+    logger.error('Error during bucket initialization:', err);
     throw err;
   }
 
   await uploadLocalData(supabase, worldID);
 
   // Exit
-  console.log('Script finished successfully');
+  logger.log('Script finished successfully');
   process.exit(0);
 }
 

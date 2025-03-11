@@ -3,7 +3,8 @@ import { PersonalityTraits } from '../traits/personality';
 import { Plan } from './plan';
 import { Community } from '../../community/community';
 import { DB } from '../../services/database';
-import globalData from '../../../global.json';
+import globalData from '../../../world_assets/global.json';
+import { logger } from '../../util/logger';
 
 export class Hunt implements Plan {
   enemy: Mob | null = null;
@@ -25,9 +26,9 @@ export class Hunt implements Plan {
         npcDamage * (0.3 + 0.7 * Math.exp(-npc._defense / 40))
       );
 
-      if (npc.damageOverTime == 1) {
-        const poisonDelta = 1;
-        const poisonDuration = 5;
+      if (npc.damageOverTime > 0) {
+        const poisonDelta = 1 * npc.damageOverTime;
+        const poisonDuration = 5 * npc.damageOverTime;
         this.enemy!.changeEffect(poisonDelta, poisonDuration, 'poisoned');
       }
 
@@ -46,13 +47,13 @@ export class Hunt implements Plan {
           // decrement slowEnemy count (1 usage)
           npc.changeSlowEnemy(-1);
           // decrease targeted enemy's speed
-          console.log(this.enemy!._speed);
+          logger.log('Enemy speed:', this.enemy!._speed);
           const speedDelta = this.enemy!._speed * -0.5;
           const speedDuration = 15;
           this.enemy!.changeEffect(speedDelta, speedDuration, 'speed');
         }
       } catch {
-        console.log('Could not get slowEnemy in hunt');
+        logger.log('Could not get slowEnemy in hunt');
       }
 
       return false;
@@ -85,7 +86,7 @@ export class Hunt implements Plan {
       npc.personality.traits[PersonalityTraits.Aggression] *
       (npc._attack / this.enemy._attack);
 
-    if (hungry_mobs.includes(npc.type) && npc.needs.getNeed('satiation') < 10) {
+    if (hungry_mobs.includes(npc.type) && npc.needs.getNeed('satiation') < 50) {
       utility = 100;
       return utility;
     }

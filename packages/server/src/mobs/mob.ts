@@ -18,6 +18,9 @@ import { gameWorld } from '../services/gameWorld/gameWorld';
 import { selectAction } from './plans/actionRunner';
 import { Favorability } from '../favorability/favorability';
 import { mobFactory } from './mobFactory';
+import { MonstrousNames } from './names/monstrousNames';
+import { logger } from '../util/logger';
+import { v4 as uuidv4 } from 'uuid';
 
 export type MobData = {
   personalities: Personality;
@@ -158,7 +161,7 @@ export class Mob {
   }
 
   sendMessage(message: string) {
-    console.log(`${this.name} reads: "${message}"`);
+    logger.log(`${this.name} reads: "${message}"`);
     pubSub.speak(this.id, message);
   }
 
@@ -189,17 +192,17 @@ export class Mob {
   }
 
   get poisoned(): number {
-    const mob = DB.prepare(
+    const res = DB.prepare(
       `
       SELECT poisoned FROM mobView WHERE id = :id
       `
-    ).get({ id: this.id }) as { poisoned: number };
+    ).get({ id: this.id }) as { poisoned: number } | undefined;
 
-    if (!mob) {
-      console.error(`Mob with id ${this.id} not found`);
+    if (!res) {
+      logger.error(`Mob with id ${this.id} not found`);
       return 0; // Return a default value or handle it differently
     }
-    return mob.poisoned;
+    return res.poisoned;
   }
 
   get damageOverTime(): number {
@@ -359,16 +362,25 @@ export class Mob {
     maxDistance: number = Infinity
   ): string[] | undefined {
     const maxDistanceSquared = maxDistance * maxDistance;
-    const typesList = types.map((type) => `'${type}'`).join(', ');
-    const query = `
-            SELECT 
-                id
-            FROM items
-            WHERE type IN (${typesList})
-            AND ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :maxDistanceSquared
-            ORDER BY ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) ASC
-            LIMIT :maxNum
-        `;
+
+    // base query
+    let query = `
+        SELECT id
+        FROM items
+        WHERE ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) <= :maxDistanceSquared
+    `;
+
+    // add filter for types only if inputted
+    if (types.length > 0) {
+      const typesList = types.map((type) => `'${type}'`).join(', ');
+      query += ` AND type IN (${typesList})`;
+    }
+
+    // finish the query regardless of type filter
+    query += ` ORDER BY ((position_x - :x) * (position_x - :x) + (position_y - :y) * (position_y - :y)) ASC
+               LIMIT :maxNum`;
+
+    // execute the query
     const result = DB.prepare(query).all({
       x: this.position.x,
       y: this.position.y,
@@ -568,10 +580,13 @@ export class Mob {
 
     // randomize monster position based off of player position
     const monsterPosition = playerPosition;
+    const monsterNameGenerator = new MonstrousNames();
+    const monsterName = 'Monster ' + monsterNameGenerator.generateName();
 
+    const monsterId = uuidv4();
     // spawn a monster (blob)
-    mobFactory.makeMob('blob', monsterPosition, 'Monster', 'Monster');
-    const monster = Mob.getMob('Monster');
+    mobFactory.makeMob('blob', monsterPosition, monsterId, monsterName);
+    const monster = Mob.getMob(monsterId);
 
     // make the blob fight everyone (set satiation super low, hunt)
     DB.prepare(
@@ -652,8 +667,8 @@ export class Mob {
       return;
     }
 
-    if (this.poisoned == 1) {
-      const deltaDamage = Math.floor(Math.random() * -10);
+    if (this.poisoned > 0) {
+      const deltaDamage = Math.floor(Math.random() * -10 * this.poisoned);
 
       this.changeHealth(deltaDamage);
     }
@@ -1043,8 +1058,8 @@ export class Mob {
             health INTEGER NOT NULL,
             maxHealth INTEGER NOT NULL,
             goldPotionsUsed INTEGER DEFAULT 0,
-            damageOverTime INTEGER DEFAULT 0,
-            poisoned INTEGER DEFAULT 0,
+            damageOverTime REAL DEFAULT 0,
+            poisoned REAL DEFAULT 0,
             slowEnemy INTEGER DEFAULT 0,
             attack INTEGER NOT NULL,
             defense INTEGER NOT NULL,

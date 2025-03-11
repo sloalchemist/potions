@@ -1,10 +1,14 @@
 import { Mob } from '../mobs/mob';
+import { pubSub } from '../services/clientCommunication/pubsub';
 import {
   numberToHexString,
   hexToRgb,
   perceptualColorDistance,
   hexStringToNumber
 } from '../util/colorUtil';
+import { Item } from './item';
+import { Smashable } from './smashable';
+import { logger } from '../util/logger';
 
 interface ColorDict {
   [key: string]: string;
@@ -15,7 +19,6 @@ const colordict: ColorDict = {
   '#0000ff': 'blue',
   '#e79600': 'orange',
   '#ef7d55': 'gold',
-  '#8b7f6e': 'grey',
   '#ab00e7': 'purple',
   '#00ff00': 'green',
   '#166060': 'black'
@@ -30,16 +33,16 @@ export function drinkPotion(
 
   switch (potionStr) {
     case '#ff0000':
-      console.log('Drinking red potion');
+      logger.log('Drinking red potion');
       let healthValue = 50;
       if (effectModifier) healthValue = healthValue * effectModifier;
       mob.changeHealth(healthValue);
       return true;
     case '#0000ff':
-      console.log('Drinking blue potion');
-      console.log(mob._speed);
+      logger.log('Drinking blue potion');
+      logger.log('Mob Speed:', mob._speed);
       let speedMultiplier = 0.5;
-      let speedDuration = 30;
+      let speedDuration = 240;
       if (effectModifier) {
         speedMultiplier = speedMultiplier * effectModifier;
         speedDuration = speedDuration * effectModifier;
@@ -48,7 +51,7 @@ export function drinkPotion(
       mob.changeEffect(speedDelta, speedDuration, 'speed');
       return true;
     case '#e79600':
-      console.log('Drinking orange potion');
+      logger.log('Drinking orange potion');
       let attackMultiplier = 0.5;
       let attackDuration = 240;
       if (effectModifier) {
@@ -59,17 +62,17 @@ export function drinkPotion(
       mob.changeEffect(attackDelta, attackDuration, 'attack');
       return true;
     case '#ef7d55':
-      console.log('Drinking gold potion');
+      logger.log('Drinking gold potion');
       let healthIncrease = 20;
       if (effectModifier) healthIncrease = healthIncrease * effectModifier;
       mob.changeMaxHealth(healthIncrease, true);
       return true;
     case '#8b7f6e':
-      console.log('Drinking grey potion');
+      logger.debug('Drinking grey potion');
       mob.changeSlowEnemy(1);
       return true;
     case '#ab00e7':
-      console.log('Drinking purple potion');
+      logger.debug('Drinking purple potion');
       let defenseMultiplier = 0.5;
       let defenseDuration = 240;
       if (effectModifier) {
@@ -80,7 +83,7 @@ export function drinkPotion(
       mob.changeEffect(defenseDelta, defenseDuration, 'defense');
       return true;
     case '#00ff00':
-      console.log('Drinking green potion');
+      logger.debug('Drinking green potion');
       let dotDelta = 1;
       let dotDuration = 240;
       if (effectModifier) {
@@ -90,13 +93,49 @@ export function drinkPotion(
       mob.changeEffect(dotDelta, dotDuration, 'damageOverTime');
       return true;
     case '#166060':
-      console.log('Drinking black potion');
+      logger.debug('Drinking black potion');
       let monsterDuration = 120;
       if (effectModifier) {
         monsterDuration = monsterDuration * effectModifier;
       }
       mob.spawnMonster(monsterDuration);
       return true;
+    case '#614f79':
+      console.log('Drinking bomb potion');
+      let nearbyObjects = mob.findNClosestObjectIDs([], Infinity, 3) || [];
+      let nearbyMobs = mob.findNearbyMobIDs(3) || [];
+
+      // broadcast bomb message for client side animation
+      pubSub.bomb(mob.id);
+
+      // destroy all nearby objects
+      nearbyObjects.forEach((id) => {
+        const item = Item.getItem(id);
+        if (item) {
+          if (item.type === 'cauldron') {
+            return; // dont destroy cauldrons!
+          }
+          const smashable = Smashable.fromItem(item);
+          if (smashable) {
+            // If smashable item, function that has extra side effects (drops loot)
+            smashable.destroySmashable();
+          }
+          item.destroy(); // Actually removes from game world
+        }
+      });
+
+      // destroy all nearby mobs
+      nearbyMobs.forEach((mobID) => {
+        const mobToDestroy = Mob.getMob(mobID);
+        if (mobToDestroy) {
+          mobToDestroy.destroy();
+        } else {
+          console.log(`Invalid mob ID: ${mobID}`);
+        }
+      });
+
+      return true;
+
     default:
       // handle cases where potionStr doesn't match any known potion
 

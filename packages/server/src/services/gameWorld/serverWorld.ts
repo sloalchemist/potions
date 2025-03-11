@@ -14,30 +14,15 @@ import { UsesRegistry } from '../../items/uses/usesRegistry';
 import { OnTickRegistry } from '../../items/on_ticks/onTickRegistry';
 import { DB } from '../database';
 import { DataLogger } from '../../grafana/dataLogger';
-import fs from 'fs';
-import path from 'path';
+import { logger } from '../../util/logger';
 
-const DEBUG_TO_CONSOLE = true;
-const DEBUG_TO_FILE = false;
-const DEBUG_FILE_PATH = path.join(__dirname, 'debug.log');
+const DEBUG_TIME = false;
 
-function debugLog(message: string) {
-  if (DEBUG_TO_CONSOLE) {
-    console.log(message);
-  }
-  if (DEBUG_TO_FILE) {
-    try {
-      fs.mkdirSync(path.dirname(DEBUG_FILE_PATH), { recursive: true });
-      fs.appendFileSync(DEBUG_FILE_PATH, message + '\n');
-    } catch (error) {
-      console.error('Error writing to debug file:', error);
-    }
-  }
-}
+//NOTE: Removed debugLog func for logger, replaced debug constants
 
 // Performance logging helper
 function measureTime(label: string, fn: () => void): number {
-  if (!DEBUG_TO_CONSOLE && !DEBUG_FILE_PATH) {
+  if (!DEBUG_TIME) {
     fn();
     return 0;
   }
@@ -45,7 +30,7 @@ function measureTime(label: string, fn: () => void): number {
   fn();
   const end = performance.now();
   const duration = end - start;
-  debugLog(`[PERF] ${label}: ${duration.toFixed(2)}ms`);
+  logger.debug(`[PERF] ${label}: ${duration.toFixed(2)}ms`);
   return duration;
 }
 
@@ -89,7 +74,7 @@ export class ServerWorld implements GameWorld {
   private runItemTicks(): void {
     measureTime('Getting all item IDs', () => {
       const ids = Item.getAllItemIDs();
-      debugLog(`[DEBUG] Processing ${ids.length} items`);
+      logger.debug(`[DEBUG] Processing ${ids.length} items`);
 
       measureTime('Clearing blocking items', () => {
         this.pathFinder.clearBlockingItems();
@@ -114,7 +99,7 @@ export class ServerWorld implements GameWorld {
           item.tick();
         }
       });
-      debugLog(`[DEBUG] Processed ${blockingItems} blocking items`);
+      logger.debug(`[DEBUG] Processed ${blockingItems} blocking items`);
     });
 
     measureTime('Validating items', () => {
@@ -125,7 +110,7 @@ export class ServerWorld implements GameWorld {
   private runMobTicks(deltaTime: number): void {
     measureTime('Mob ticks', () => {
       const mob_ids = Mob.getAllMobIDs();
-      debugLog(`[DEBUG] Processing ${mob_ids.length} mobs`);
+      logger.debug(`[DEBUG] Processing ${mob_ids.length} mobs`);
 
       let processedMobs = 0;
       for (const mob_id of mob_ids) {
@@ -135,22 +120,30 @@ export class ServerWorld implements GameWorld {
           mob.tick(deltaTime);
         }
       }
-      debugLog(`[DEBUG] Successfully processed ${processedMobs} mobs`);
+      logger.debug(`[DEBUG] Successfully processed ${processedMobs} mobs`);
     });
   }
 
   tick(deltaTime: number) {
     const totalStart = performance.now();
-    debugLog('\n[TICK] Starting new tick cycle ========================');
+    logger.debug('\n[TICK] Starting new tick cycle ========================');
     measureTime('Item ticks', () => this.runItemTicks());
     measureTime('Mob ticks', () => this.runMobTicks(deltaTime));
     measureTime('Conversation tracker', () => conversationTracker.tick());
     measureTime('Fantasy date', () => FantasyDate.runTick());
     measureTime('Data logging', () => DataLogger.logData());
 
+    conversationTracker.tick();
+    FantasyDate.runTick();
+
+    // log data for Prometheus
+    DataLogger.logData();
+
+    //const totalTime = Date.now() - startTime;
+    //logger.log('time to tick', totalTime);
     const totalTime = performance.now() - totalStart;
-    debugLog(`[TICK] Total tick cycle time: ${totalTime.toFixed(2)}ms`);
-    debugLog('[TICK] End tick cycle ================================\n');
+    logger.debug(`[TICK] Total tick cycle time: ${totalTime.toFixed(2)}ms`);
+    logger.debug('[TICK] End tick cycle ================================\n');
   }
 
   getPortalLocation(): Coord {

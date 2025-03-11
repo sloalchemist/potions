@@ -3,6 +3,7 @@ import DatabaseConstructor from 'better-sqlite3';
 import * as dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
+import { logger } from '../util/logger';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -18,11 +19,12 @@ export function initializeServerDatabase(
   rebuild: boolean = false
 ) {
   const absolutePath = path.resolve(dbPath);
+  logger.log('DATABASE PATH: ', absolutePath);
 
   if (rebuild) {
     if (fs.existsSync(absolutePath)) {
       fs.unlinkSync(absolutePath);
-      //console.log(`Deleted existing database file: ${absolutePath}`);
+      //logger.log(`Deleted existing database file: ${absolutePath}`);
     }
   }
 
@@ -33,7 +35,7 @@ export function initializeServerDatabase(
   // Close the database on process exit or termination signals
   const closeDatabase = () => {
     if (DB) {
-      console.log('Closing database...');
+      logger.log('Closing database...');
       DB.close();
     }
   };
