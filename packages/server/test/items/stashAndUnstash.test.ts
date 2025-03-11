@@ -72,6 +72,7 @@ describe('Stash and Unstash Item', () => {
     expect(potion!.position).not.toBeDefined();
   });
   test('should return false when the mob has no position', () => {
+    mobFactory.makeMob('player', { x: 0, y: 0 }, 'mob3', 'TestPlayer3');
     const testMob = Mob.getMob('mob3');
 
     // Mock position to undefined
@@ -98,6 +99,7 @@ describe('Stash and Unstash Item', () => {
   });
 
   test('should return false when the mob is not carrying the item', () => {
+    mobFactory.makeMob('player', { x: 0, y: 0 }, 'mob4', 'TestPlayer4');
     const testMob = Mob.getMob('mob4');
 
     // Ensure testMob is defined
