@@ -28,9 +28,11 @@ export class StubbedPubSub implements PubSub {
 
   destroy(_item: Item): void {}
 
+  bomb(_key: string): void {}
+
   stashItem(_item: string, _mobKey: string, _position: Coord): void {}
 
-  unstashItem(_itemKey: string, _mobKey: string, _position: Coord): void {}
+  unstashItem(_itemKey: string, _mobKey: string): void {}
 
   changeHealth(_key: string, _health: number, _newValue: number): void {}
 

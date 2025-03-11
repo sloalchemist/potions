@@ -73,9 +73,9 @@ try {
   };
 
   const result = await updateCharacterData("player123", playerData);
-  console.log(result.message);  // "Player data upserted successfully."
-  console.log(result.data);     // Updated player data array
+  logger.log(result.message);  // "Player data upserted successfully."
+  logger.log(result.data);     // Updated player data array
 } catch (error) {
-  console.error(error);
+  logger.error(error);
 }
 */

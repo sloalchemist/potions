@@ -14,6 +14,10 @@ import { CreateStand } from './stand/createStand';
 import { CreateMarket } from './marketstand/createMarket';
 import { RaisePrice } from './stand/raisePrice';
 import { LowerPrice } from './stand/lowerPrice';
+import { RaiseMarketPrice } from './marketstand/RaiseMarketPrice';
+import { LowerMarketPrice } from './marketstand/LowerMarketPrice';
+import { PurchaseFromMarket } from './marketstand/purchaseFromMarket';
+import { AddItemToMarket } from './marketstand/addItemToMarket';
 import { BuildWall } from './building/buildWall';
 import { StartWall } from './building/startWall';
 import { AddItem } from './container/addItem';
@@ -40,6 +44,10 @@ const uses = [
   CreateMarket,
   RaisePrice,
   LowerPrice,
+  RaiseMarketPrice,
+  LowerMarketPrice,
+  PurchaseFromMarket,
+  AddItemToMarket,
   BuildWall,
   StartWall,
   AddItem,

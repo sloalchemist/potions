@@ -1,18 +1,19 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES6", // Specify ECMAScript target version
-    "module": "commonjs", // Specify module code generation
-    "strict": true, // Enable all strict type-checking options
-    "esModuleInterop": true, // Enable interoperability between CommonJS and ES Modules
-    "skipLibCheck": true, // Skip type checking of declaration files
-    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names
-    "outDir": "./dist", // Redirect output structure to the dist directory
-    "rootDir": "./src", // Specify the root directory of input files
-    "types": ["node"],
-    "allowJs": true
+    "module": "CommonJS",
+    "target": "ESNext",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "strict": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "lib": ["dom", "es2016", "esnext"],
+    "types": ["node", "jest"]
   },
 
-  "include": ["src/*.ts", "src/generator.ts"],
-  "exclude": ["node_modules"] // Exclude node_modules and jest
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "test"]
 }

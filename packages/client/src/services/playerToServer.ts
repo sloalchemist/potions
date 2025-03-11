@@ -3,13 +3,20 @@ import { Mob } from '../world/mob';
 import { world } from '../scenes/worldScene';
 import { currentCharacter, publicCharacterId } from '../worldMetadata';
 import { SpriteMob } from '../sprite/sprite_mob';
-import { broadcastChannel, playerChannel } from './ablySetup';
+import { broadcastChannel, playerChannel, chatChannel } from './ablySetup';
 
 export function publishPlayerMessage<T extends keyof PlayerToServerMessageMap>(
   type: T,
   payload: PlayerToServerMessageMap[T]
 ) {
   playerChannel.publish(type, payload);
+}
+
+export function publishChatMessage(payload: {
+  mob_id: string;
+  message: string;
+}) {
+  chatChannel.publish('chat', payload);
 }
 
 export function requestChat(mob: Mob) {
@@ -38,6 +45,7 @@ export function speak(message: string, response: number) {
 // Function for players (only takes a message)
 export function chatPlayer(message: string) {
   showSpeech(message);
+  publishChatMessage({ mob_id: publicCharacterId, message });
 }
 
 export function fight(message: string, attack: number) {

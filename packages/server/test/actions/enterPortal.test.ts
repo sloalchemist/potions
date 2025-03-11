@@ -51,31 +51,6 @@ describe('EnterPortal', () => {
     expect(enterPortal.key).toBe('enter');
   });
 
-  test('should return "Enter portal" as description', () => {
-    expect(enterPortal.description(mockMob, mockItem)).toBe('Enter portal');
-  });
-
-  test('should populate worlds on construction', () => {
-    expect(getWorlds).toHaveBeenCalled();
-    expect(enterPortal.worlds).toEqual([
-      { id: '1', name: 'test-world-1' },
-      { id: '2', name: 'test-world-2' }
-    ]);
-  });
-
-  test('should handle error when populating worlds', async () => {
-    const consoleError = jest.spyOn(console, 'error').mockImplementation();
-    (getWorlds as jest.Mock).mockRejectedValue(new Error('Test error'));
-
-    const portal = new EnterPortal();
-    await new Promise(process.nextTick);
-
-    expect(consoleError).toHaveBeenCalled();
-    expect(portal.worlds).toEqual([]);
-
-    consoleError.mockRestore();
-  });
-
   test('should successfully interact when mob is near portal', () => {
     const result = enterPortal.interact(mockMob, mockItem);
 

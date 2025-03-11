@@ -1,8 +1,12 @@
 import * as readline from 'readline';
 import { mobFactory } from '../src/mobs/mobFactory';
-import globalData from '../global.json';
+import globalData from '../world_assets/global.json';
 import { itemGenerator } from '../src/items/itemGenerator';
 import { Coord } from '@rt-potion/common';
+import { hexStringToNumber } from '../src/util/colorUtil';
+import { Item } from '../src/items/item';
+import { isValidLogLevel, logger } from '../src/util/logger';
+import { getWorld } from '../src/services/setup';
 
 const itemTypes: Array<string> = globalData.item_types.map((item) => item.type);
 const mobTypes: Array<string> = globalData.mob_types.map((mob) => mob.type);
@@ -10,6 +14,15 @@ const mobTypes: Array<string> = globalData.mob_types.map((mob) => mob.type);
 export const HELP_PROMPT = `Available commands:
 - spawn mob [type] x:[x-coord] y:[y-coord]
 - spawn item [type] x:[x-coord] y:[y-coord]
+- spawn potion [hex-code] x:[x-coord] y:[y-coord]
+  potion types:
+  - Orange = #E79600
+  - Purple = #AB00E7
+  - Black = #166060
+  - Gold = #EF7D55
+  - Grey = #8B7F6E
+  - Bomb = #614F79
+- loglevel [trace | debug | info | warn | error]
 - exit: Quit CLI`;
 
 export let rl: readline.Interface;
@@ -86,8 +99,18 @@ function parseCoordinates(
  */
 export function handleCliCommand(input: string) {
   const [command, entityType, name, ...args] = input.trim().split(' ');
+  const arg = entityType;
+  const world = getWorld();
 
-  if (command === 'spawn') {
+  if (command === 'loglevel') {
+    if (isValidLogLevel(arg)) {
+      logger.setConsoleLogLevel(arg);
+    } else {
+      console.warn(
+        'Invalid log level. Use: trace, debug, info, warn, error, or fatal.'
+      );
+    }
+  } else if (command === 'spawn') {
     let attributes: Record<string, string | number>;
     try {
       attributes = parseCoordinates(args);
@@ -99,6 +122,14 @@ export function handleCliCommand(input: string) {
       return;
     }
     const { x, y } = attributes;
+
+    if (!world.isWalkable({ x: x as number, y: y as number })) {
+      console.log(
+        `Error: Cannot spawn at (${x}, ${y}). The tile is not walkable.`
+      );
+      rl.prompt();
+      return;
+    }
 
     switch (entityType) {
       case 'mob':
@@ -140,6 +171,23 @@ export function handleCliCommand(input: string) {
             Your database likely saved an item from a version your code currently doesn't support.
             Try emptying your supabase bucket`
           );
+        }
+        break;
+      case 'potion':
+        const potionLocation: Coord = { x: x as number, y: y as number };
+
+        // create a potion
+        itemGenerator.createItem({
+          type: 'potion',
+          subtype: String(hexStringToNumber(name)),
+          position: potionLocation
+        });
+
+        const potion = Item.getItemIDAt(potionLocation);
+        if (!potion) {
+          console.log(`Unknown potion type: ${name}.`);
+        } else {
+          console.log(`Spawned potion: ${name} at (${x}, ${y})`);
         }
         break;
       default:
