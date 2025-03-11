@@ -1303,6 +1303,9 @@ export class UxScene extends Phaser.Scene {
 
     this.inventoryButtons?.clearButtonOptions();
 
+    // Sort inventory alphabetically
+    inventory.sort((a, b) => a.itemType.name.localeCompare(b.itemType.name));
+
     inventory.forEach((item, i) => {
       const y = 60 + (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
       const x = 85 + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
