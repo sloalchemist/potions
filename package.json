@@ -9,7 +9,8 @@
     "test": "pnpm -r run test",
     "test:silent": "pnpm -- test --silent",
     "coverage": "pnpm -- test:silent --coverage --coverageDirectory=build/logs",
-    "clean": "pnpm -r run clean"
+    "clean": "pnpm -r run clean",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -19,7 +20,9 @@
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
+    "husky": "^9.1.7",
     "jest-environment-jsdom": "^29.7.0",
+    "lint-staged": "^15.4.3",
     "rimraf": "^6.0.1",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.3"

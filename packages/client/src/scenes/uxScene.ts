@@ -134,13 +134,10 @@ export class UxScene extends Phaser.Scene {
 
     let worldID = getWorldID();
 
-    this.load.json(
-      'global_data',
-      'https://potions.gg/world_assets/global.json'
-    );
+    this.load.json('global_data', '../../../world_assets/global.json');
     this.load.json(
       'world_specific_data',
-      `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
+      `../../../world_assets/${worldID}/world_specific.json`
     );
     this.load.once('complete', () => {
       // Parse and use the data
@@ -803,6 +800,11 @@ export class UxScene extends Phaser.Scene {
   }
 
   callFight(attack: string, i: number) {
+    if (this.scene.isActive('FightScene')) {
+      this.scene.stop('FightScene');
+    } else {
+      this.scene.launch('FightScene');
+    }
     fight(attack, i);
     this.setFightOptions([]);
   }
@@ -1191,7 +1193,6 @@ export class UxScene extends Phaser.Scene {
         }
       );
       this.interactButtons.push(toggleButton);
-      console.log(toggleButton);
       this.itemsContainer?.add(toggleButton);
     } else {
       this.scene.stop('BrewScene');

@@ -3,6 +3,7 @@ import { Community } from '../community/community';
 import { pubSub } from '../services/clientCommunication/pubsub';
 import { DB } from '../services/database';
 import { Item } from './item';
+import { logger } from '../util/logger';
 
 export class Carryable {
   private item: Item;
@@ -111,7 +112,7 @@ export class Carryable {
     const position = Item.findEmptyPosition(mob.position);
     const carriedItem = mob.carrying;
 
-    console.log('stash hit');
+    logger.log('stash hit');
     // carriedItem must exist and === item.id
     if (!carriedItem || carriedItem.id !== this.item.id) {
       return false;
@@ -143,30 +144,22 @@ export class Carryable {
 
   // unstash stored items (drops at feet), swtiches carried item with stored item if carried exists
   unstash(mob: Mob): void {
-    if (mob.position) {
-      const position = Item.findEmptyPosition(mob.position);
-
-      DB.prepare(
-        `
-                UPDATE items
-                SET position_x = :position_x, position_y = :position_y, stored_by = NULL
-                WHERE id = :item_id;
-                `
-      ).run({
-        item_id: this.item.id,
-        position_x: position.x,
-        position_y: position.y
-      });
-
-      this.item.position = position;
-    } else {
-      throw new Error('Mob has no position');
+    if (mob.carrying) {
+      const carriedItem = mob.carrying;
+      Carryable.fromItem(carriedItem)!.stash(mob);
     }
-    if (!this.item.position) {
-      throw new Error('Item has no position');
-    }
+    DB.prepare(
+      `
+            UPDATE items
+            SET stored_by = NULL
+            WHERE id = :item_id AND stored_by = :mob_id;
+            `
+    ).run({ item_id: this.item.id, mob_id: mob.id });
 
-    pubSub.unstashItem(this.item.id, mob.id, this.item.position);
+    mob.carrying = this.item;
+    this.item.position = undefined;
+
+    pubSub.unstashItem(this.item.id, mob.id);
   }
 
   static validateNoOrphanedItems(): void {

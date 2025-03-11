@@ -223,8 +223,8 @@ export class LoadWorldScene extends Phaser.Scene {
 
         this.load.atlas(
           'global-atlas',
-          `https://potions.gg/world_assets/${worldID}/client/global.png`,
-          `https://potions.gg/world_assets/${worldID}/client/global-atlas.json`
+          `../../../world_assets/${worldID}/global.png`,
+          `../../../world_assets/${worldID}/global-atlas.json`
         );
 
         this.load.once('complete', () => {
@@ -264,7 +264,7 @@ export class LoadWorldScene extends Phaser.Scene {
           this.scene.start('WorldScene');
           this.scene.start('UxScene');
           this.scene.start('FrameScene');
-          this.scene.start('LeaderboardScene');
+          this.scene.start('MiniLeaderboardScene');
           setGameState('worldLoaded');
         }
 
@@ -310,7 +310,7 @@ export class LoadWorldScene extends Phaser.Scene {
     this.scene.start('WorldScene');
     this.scene.start('UxScene');
     this.scene.start('FrameScene');
-    this.scene.start('LeaderboardScene');
+    this.scene.start('MiniLeaderboardScene');
     setGameState('worldLoaded');
   }
 

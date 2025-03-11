@@ -102,7 +102,7 @@ describe('Community ownership based interactions', () => {
     );
 
     // Manually assign basket template type
-    basket.attributes.templateType = 'Log';
+    basket.attributes.templateType = 'log';
     // Map attributes to dictionary to match correct config
     basket.attributes = {
       ...basket.attributes,
@@ -178,7 +178,6 @@ describe('Community ownership based interactions', () => {
       player.community_id,
       player.key
     );
-
     // Check that add_item IS an available interaction
     expect(
       interactions.some((interaction) => interaction.action === 'add_item')

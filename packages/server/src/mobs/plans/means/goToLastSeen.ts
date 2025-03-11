@@ -41,7 +41,7 @@ export class GoToLastSeen implements Means {
     }
 
     if (this.target) {
-      //console.log(`going to last seen ${npc.name} targetting ${this.target}`);
+      //logger.log(`going to last seen ${npc.name} targetting ${this.target}`);
       return calculateDistance(npc.position, this.target) + 1;
     } else {
       return Infinity;
