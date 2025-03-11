@@ -4,6 +4,7 @@ import { Community } from '../../src/community/community';
 import { DB } from '../../src/services/database';
 import { Coord } from '@rt-potion/common';
 import { Mob } from '../../src/mobs/mob';
+import { Affiliation } from '../../src/affiliation/affiliation';
 
 beforeEach(() => {
   commonSetup();
@@ -87,7 +88,8 @@ describe('Alchemist Mob Affiliation and Stats Tests', () => {
     expect(testMob).not.toBeUndefined();
     expect(testMob?.community_id).toBe('silverclaw');
 
-    testMob?.updateStatsBasedOnAffiliation();
+    const affiliation = new Affiliation();
+    affiliation.updateStatsBasedOnAffiliation(testMob!);
 
     expect(testMob?._maxHealth).toBe(200);
   });
@@ -100,7 +102,8 @@ describe('Alchemist Mob Affiliation and Stats Tests', () => {
     expect(testMob).not.toBeUndefined();
     expect(testMob?.community_id).toBe('blobs');
 
-    testMob?.updateStatsBasedOnAffiliation();
+    const affiliation = new Affiliation();
+    affiliation.updateStatsBasedOnAffiliation(testMob!);
 
     expect(testMob?._attack).toBe(7.5);
   });
@@ -119,7 +122,8 @@ describe('Alchemist Mob Affiliation and Stats Tests', () => {
     expect(testMob).not.toBeUndefined();
     expect(testMob?.community_id).toBe('fighters');
 
-    testMob?.updateStatsBasedOnAffiliation();
+    const affiliation = new Affiliation();
+    affiliation.updateStatsBasedOnAffiliation(testMob!);
 
     expect(testMob?._speed).toBe(3.75);
   });
