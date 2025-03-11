@@ -13,6 +13,7 @@ export class EnterPortal implements Use {
   constructor() {
     this.key = 'enter';
     this.worlds = [];
+    this.populateWorlds();
   }
 
   private async populateWorlds() {
@@ -22,6 +23,9 @@ export class EnterPortal implements Use {
         id: world.id,
         name: world.world_id
       }));
+      this.worlds.forEach((world) => {
+        logger.log(`World ID: ${world.id}, World Name: ${world.name}`);
+      });
     } catch (error) {
       logger.error('Error populating worlds:', error);
     }

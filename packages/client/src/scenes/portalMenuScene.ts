@@ -79,10 +79,11 @@ export class PortalMenuScene extends Phaser.Scene {
         console.log(`${world.name} uptime ID does not match that in world_map`);
         return;
       }
-
+      console.log(uptimeWorldID, 'is uptimeworldid');
+      console.log(world.name, 'is world name');
       // If world server is down, do not create button for the server
       this.fetchData(uptimeWorldID).then((status) => {
-        if (status === 'Down') {
+        if (status === 'Downer') {
           return;
         }
 

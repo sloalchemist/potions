@@ -190,6 +190,9 @@ export function setupBroadcast(
 
   function handleShowPortalMenu(data: ShowPortalMenuData) {
     if (data.mob_key === publicCharacterId) {
+      for (const world of data.worlds) {
+        console.log(world);
+      }
       setAvailableWorlds(data.worlds);
       scene.scene.launch('PortalMenuScene');
       leaveWorld(MAINTAIN_WORLD_OPTION);
