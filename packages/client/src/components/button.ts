@@ -1,6 +1,6 @@
 export const BUTTON_WIDTH = 120;
 export const BUTTON_HEIGHT = 40;
-export const BUTTON_SPACING = 10;
+export const BUTTON_SPACING = 25;
 export const SUBHEADING_OFFSET = 25;
 import Phaser from 'phaser';
 
