@@ -762,7 +762,7 @@ export class WorldScene extends Phaser.Scene {
       const menu = this.add.text(290, 200, 'MENU', buttonStyle);
       menu.setOrigin(0, 0);
       menu.setScrollFactor(0);
-      menu.setDepth(100);
+      menu.setDepth(1001);
       menu.setInteractive({ useHandCursor: true });
 
       // Hover effects
