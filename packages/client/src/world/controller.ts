@@ -346,10 +346,13 @@ export function getInteractablePhysicals(
     // to get nearbyObjects, these objects needed to have had a valid position.
     // Thus, in the case that the object doesn't have a position, an error
     // should be thrown.
-    let pos = <Coord>object.position;
+    if (!object.position)
+      throw new TypeError(
+        `Expected 'object.position' to be 'Coord', but received NULL`
+      );
     return {
       object: object,
-      distance: calculateDistance(pos, playerPos)
+      distance: calculateDistance(object.position, playerPos)
     };
   });
 
