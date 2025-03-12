@@ -166,49 +166,51 @@ export class Carryable {
 
   // unstash stored items (drops at feet), swtiches carried item with stored item if carried exists
   unstash(mob: Mob): void {
-    if (mob.position) {
-      const position = Item.findEmptyPosition(mob.position);
-
-      if (!position) {
-        console.log(
-          `No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Unstash canceled`
-        );
-        return; // Stop execution if no valid space is found
-      }
-
-      DB.prepare(
-        `
-                UPDATE items
-                SET position_x = :position_x, position_y = :position_y, stored_by = NULL
-                WHERE id = :item_id;
-                `
-      ).run({
-        item_id: this.item.id,
-        position_x: position.x,
-        position_y: position.y
-      });
-
-      this.item.position = position;
-    } else {
+    if (!mob.position) {
       throw new Error('Mob has no position');
     }
-    if (!this.item.position) {
-      throw new Error('Item has no position');
-      
+
+    const position = Item.findEmptyPosition(mob.position);
+    if (!position) {
+      console.log(
+        `No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Unstash canceled`
+      );
+      return;
+    }
+
     if (mob.carrying) {
       const carriedItem = mob.carrying;
-      Carryable.fromItem(carriedItem)!.stash(mob);
+      const carryableItem = Carryable.fromItem(carriedItem);
+      if (carryableItem) {
+        carryableItem.stash(mob);
+      } else {
+        console.warn(`Failed to retrieve carryable item for mob ${mob.id}`);
+      }
     }
+
     DB.prepare(
       `
-            UPDATE items
-            SET stored_by = NULL
-            WHERE id = :item_id AND stored_by = :mob_id;
-            `
+      UPDATE items
+      SET position_x = :position_x, position_y = :position_y, stored_by = NULL
+      WHERE id = :item_id;
+      `
+    ).run({
+      item_id: this.item.id,
+      position_x: position.x,
+      position_y: position.y
+    });
+
+    this.item.position = position;
+
+    DB.prepare(
+      `
+      UPDATE items
+      SET stored_by = NULL
+      WHERE id = :item_id AND stored_by = :mob_id;
+      `
     ).run({ item_id: this.item.id, mob_id: mob.id });
 
     mob.carrying = this.item;
-    this.item.position = undefined;
 
     pubSub.unstashItem(this.item.id, mob.id);
   }
