@@ -13,6 +13,9 @@ export class Button extends Phaser.GameObjects.Container {
   fixedWidth: number;
   fixedHeight: number;
   interactionSound?: string;
+  defaultColor: number;
+  hoverColor: number;
+  pressedColor: number;
 
   constructor(
     scene: Phaser.Scene,
@@ -33,6 +36,10 @@ export class Button extends Phaser.GameObjects.Container {
     this.fixedWidth = buttonWidth;
     this.fixedHeight = buttonHeight;
 
+    this.defaultColor = 0x8ca0b3;
+    this.hoverColor = 0xc0d9e8;
+    this.pressedColor = 0x5e7485;
+
     if (interactionSound) {
       this.interactionSound = interactionSound;
     }
@@ -45,7 +52,7 @@ export class Button extends Phaser.GameObjects.Container {
         0,
         this.fixedWidth,
         this.fixedHeight,
-        0x8ca0b3 // Background color
+        this.defaultColor // Background color
       ).setOrigin(0.5);
 
       // Create the text object
@@ -79,12 +86,6 @@ export class Button extends Phaser.GameObjects.Container {
 
     // Set the size of the container and make it interactive
     this.setInteractive();
-    /*this.setInteractive(new Phaser.Geom.Rectangle(
-            -this.fixedWidth / 2,
-            -this.fixedHeight / 2,
-            this.fixedWidth,
-            this.fixedHeight
-        ), Phaser.Geom.Rectangle.Contains);*/
 
     // Prevent the button from moving with the camera
     this.setScrollFactor(0);
@@ -97,13 +98,13 @@ export class Button extends Phaser.GameObjects.Container {
     this.on('pointerover', () => {
       this.buttonSprite.setScale(1.1);
       this.buttonBackground?.setScale(1.05);
-      this.buttonBackground?.setFillStyle(0xc0d9e8); // Hover color
+      this.buttonBackground?.setFillStyle(this.hoverColor); // Hover color
     });
 
     this.on('pointerout', () => {
       this.buttonSprite.setScale(1.0);
       this.buttonBackground?.setScale(1.0);
-      this.buttonBackground?.setFillStyle(0x8ca0b3); // Default color
+      this.buttonBackground?.setFillStyle(this.defaultColor); // Default color
     });
 
     this.on(
@@ -115,20 +116,25 @@ export class Button extends Phaser.GameObjects.Container {
         event: Phaser.Types.Input.EventData
       ) => {
         event.stopPropagation();
-        this.scene.sound.play('buttonClick');
+        if (this.scene.registry.get('soundEffects') === true) {
+          this.scene.sound.play('buttonClick');
+        }
         this.buttonSprite.setScale(0.9);
         this.buttonBackground?.setScale(0.95);
-        this.buttonBackground?.setFillStyle(0x5e7485); // Pressed color
+        this.buttonBackground?.setFillStyle(this.pressedColor); // Pressed color
       }
     );
 
     this.on('pointerup', () => {
       this.buttonSprite.setScale(1.1);
       this.buttonBackground?.setScale(1.05);
-      this.buttonBackground?.setFillStyle(0xc0d9e8); // Hover color
+      this.buttonBackground?.setFillStyle(this.hoverColor); // Hover color
       this.callback();
       // play interaction sound
-      if (this.interactionSound) {
+      if (
+        this.scene.registry.get('soundEffects') === true &&
+        this.interactionSound
+      ) {
         this.scene.sound.play(this.interactionSound);
       }
     });
@@ -162,13 +168,29 @@ export class Button extends Phaser.GameObjects.Container {
   /**
    * Implement the setStyle method to dynamically change button styles
    */
-  setStyle(style: { backgroundColor?: string; color?: string }) {
+  setStyle(style: {
+    backgroundColor?: {
+      default: string;
+      hover: string;
+      pressed: string;
+    };
+    color?: string;
+  }) {
     if (style.backgroundColor !== undefined && this.buttonBackground) {
-      // Convert the color string to a Phaser color number
-      const colorNumber = Phaser.Display.Color.HexStringToColor(
-        style.backgroundColor
+      // Convert the color strings to Phaser color numbers
+      const defaultColorNumber = Phaser.Display.Color.HexStringToColor(
+        style.backgroundColor.default
       ).color;
-      this.buttonBackground.setFillStyle(colorNumber);
+      this.buttonBackground.setFillStyle(defaultColorNumber);
+      this.defaultColor = defaultColorNumber;
+
+      this.hoverColor = Phaser.Display.Color.HexStringToColor(
+        style.backgroundColor.hover
+      ).color;
+
+      this.pressedColor = Phaser.Display.Color.HexStringToColor(
+        style.backgroundColor.pressed
+      ).color;
     }
 
     if (

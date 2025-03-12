@@ -38,7 +38,6 @@ export class Flee implements Plan {
     // Iterate through potential coordinates and find the first walkable one
     for (const coord of coordsToCheck) {
       if (npc.setMoveTarget(coord)) {
-        //logger.log(`${npc.name} fled to ${coord.x}, ${coord.y} away from ${this.enemy.name}`);
         return false; // Movement successful, action not yet complete
       }
     }
@@ -74,10 +73,6 @@ export class Flee implements Plan {
       (this.enemy.health / npc.health);
     return utility;
   }
-
-  /*desire(npc: NPC, world: ServerWorld): Desire[] {
-        return [];
-    }*/
 
   description(): string {
     return `Running away from ${this.enemy?.name}, a ${this.enemy?.type}`;

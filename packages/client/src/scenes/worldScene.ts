@@ -198,19 +198,17 @@ export class WorldScene extends Phaser.Scene {
         start: 1,
         end: 8,
         prefix: `foam-`
-        //suffix: '.png'
       }),
       frameRate: 6,
       repeat: -1
     });
+
     metadata.item_types.forEach((itemType) => {
-      //console.log('Adding item', itemType.type);
       this.itemSource[itemType.type] = atlasName;
       this.itemTypes[itemType.type] = itemType;
     });
 
     metadata.mob_types.forEach((mobType) => {
-      //console.log('Adding mob', mobType.type);
       this.mobSource[mobType.type] = atlasName;
       this.anims.create({
         key: `${mobType.type}-walk`,
@@ -218,7 +216,6 @@ export class WorldScene extends Phaser.Scene {
           start: 1,
           end: 6,
           prefix: `${mobType.type}-walk-`
-          //suffix: '.png'
         }),
         frameRate: 5,
         repeat: -1
@@ -230,7 +227,6 @@ export class WorldScene extends Phaser.Scene {
           start: 1,
           end: 4,
           prefix: `${mobType.type}-idle-`
-          //suffix: '.png'
         }),
         frameRate: 5,
         repeat: -1
@@ -382,7 +378,7 @@ export class WorldScene extends Phaser.Scene {
     for (const terrainType of worldData.terrain_types) {
       terrainMap[terrainType.id] = terrainType;
     }
-    // console.log('waterTypes', waterTypes, 'landTypes', landTypes);
+
     // Draw water layer
     this.drawTerrainLayer(
       worldData.tiles,
@@ -417,7 +413,6 @@ export class WorldScene extends Phaser.Scene {
         const frameIndex = tileMapping[configuration];
 
         // Create the sprite
-        //this.add.sprite(posY, posX, 'world_atlas', `sand-2-2`).setOrigin(0, 0).setDepth(-0.5);
         this.add
           .sprite(posX, posY, 'global_atlas', `stone-${frameIndex}`)
           .setOrigin(0, 0)
@@ -437,7 +432,6 @@ export class WorldScene extends Phaser.Scene {
         const frameIndex = tileMapping[configuration];
 
         // Create the sprite
-        //this.add.sprite(posY, posX, 'world_atlas', `sand-2-2`).setOrigin(0, 0).setDepth(-0.5);
         this.add
           .sprite(posX, posY, 'global_atlas', `${terrain}-${frameIndex}`)
           .setOrigin(0, 0)
@@ -479,13 +473,15 @@ export class WorldScene extends Phaser.Scene {
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
     this.hideWorld();
 
-    if (!this.sound.isPlaying('background_music')) {
-      this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
-    }
-    if (!this.sound.isPlaying('background_music_layer')) {
-      this.sound
-        .add('background_music_layer', { loop: true, volume: 0.3 })
-        .play();
+    if (this.registry.get('music') === true) {
+      if (!this.sound.isPlaying('background_music')) {
+        this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
+      }
+      if (!this.sound.isPlaying('background_music_layer')) {
+        this.sound
+          .add('background_music_layer', { loop: true, volume: 0.3 })
+          .play();
+      }
     }
 
     bindAblyToWorldScene(this);
@@ -504,12 +500,6 @@ export class WorldScene extends Phaser.Scene {
         pointer.y >= cameraViewportY &&
         pointer.y <= cameraViewportY + cameraViewportHeight
       ) {
-        // console.log(
-        //   'click',
-        //   pointer.worldX / TILE_SIZE,
-        //   pointer.worldY / TILE_SIZE
-        // );
-
         // Prevent player movement if the brew scene is active
         if (
           this.scene.isActive('BrewScene') ||
@@ -628,7 +618,10 @@ export class WorldScene extends Phaser.Scene {
       const roundedY = Math.floor(this.hero.y);
 
       if (roundedX !== this.cameraDolly.x || roundedY !== this.cameraDolly.y) {
-        if (!this.sound.isPlaying('walk')) {
+        if (
+          this.registry.get('soundEffects') === true &&
+          !this.sound.isPlaying('walk')
+        ) {
           this.sound.add('walk', { loop: true, volume: 0.6 }).play();
         }
       } else {
