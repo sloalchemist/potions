@@ -322,18 +322,12 @@ export class WorldScene extends Phaser.Scene {
   }
 
   hideWorld() {
-    if (!this.nightOverlay) {
-      this.nightOverlay = this.add.graphics();
-      this.nightOverlay.setDepth(500); // Below loading indicator
-      this.nightOverlay.setScrollFactor(0);
-    }
-    this.nightOverlay.clear();
-    this.nightOverlay.fillStyle(GRAY, 1);
+    this.nightOverlay.fillStyle(GRAY, 1); // Dark blue with 50% opacity
     this.nightOverlay.fillRect(
       0,
       0,
-      this.game.scale.width,
-      this.game.scale.height
+      this.terrainWidth * TILE_SIZE,
+      this.terrainHeight * TILE_SIZE
     );
   }
 
@@ -476,6 +470,17 @@ export class WorldScene extends Phaser.Scene {
     background.setScrollFactor(0); // Make it stay static
     background.setDisplaySize(this.game.scale.width, this.game.scale.width);
     background.setDepth(-10);
+
+    // Create a night overlay with lower depth
+    this.nightOverlay = this.add.graphics();
+    this.nightOverlay.fillRect(
+      0,
+      0,
+      this.terrainHeight * TILE_SIZE,
+      this.terrainWidth * TILE_SIZE
+    );
+    this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
+    this.hideWorld();
 
     if (!this.sound.isPlaying('background_music')) {
       this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
@@ -700,8 +705,8 @@ export class WorldScene extends Phaser.Scene {
       this.nightOverlay.fillRect(
         0,
         0,
-        this.game.scale.width,
-        this.game.scale.height
+        this.terrainHeight * TILE_SIZE,
+        this.terrainWidth * TILE_SIZE
       );
     }
 
