@@ -467,6 +467,10 @@ export class UxScene extends Phaser.Scene {
       this.keybindGuideContainer.add(
         this.add.text(200, 170, 'F: Favorability Stats')
       );
+      this.keybindGuideContainer.add(this.add.text(200, 195, 'E: Pickup/Drop'));
+      this.keybindGuideContainer.add(
+        this.add.text(135, 270, 'Press "k" to dismiss')
+      );
 
       // recipe text
       this.recipeText = this.add.text(160, 35, 'POTION RECIPES');
@@ -692,7 +696,7 @@ export class UxScene extends Phaser.Scene {
           }))
         );
       });
-      //addRefreshCallback(() => this.refreshInventoryStats());
+
       setAttackCallback((attacks: string[]) => {
         console.log('attack setting', attacks);
         this.setFightOptions(
@@ -713,11 +717,6 @@ export class UxScene extends Phaser.Scene {
         this.setFightOpponents(opponents)
       );
       setInventoryCallback((items: Item[]) => this.setInventory(items));
-      /*this.setChatOptions([
-                { label: 'Hello there chief, I am the lord of the world.', callback: () => speak('Hello there chief, I am the lord of the world.') },
-                { label: 'Goodbye little man hahahhahahah', callback: () => speak('Goodbye little man hahahhahahah') },
-                { label: 'Thank you mighty sir.', callback: () => speak('Thank you mighty sir.') }
-            ]);*/
     }
 
     const menuKeys = ['1', '2', '3', '4', 'r', 'f', 'k', '@'];
@@ -769,7 +768,11 @@ export class UxScene extends Phaser.Scene {
               console.log('Pressed F');
               break;
             case 'k':
-              this.showKeyBindGuideTab();
+              if (!this.keybindGuideContainer?.visible) {
+                this.showKeyBindGuideTab();
+              } else {
+                this.showInfoTab();
+              }
               console.log('Pressed K');
               break;
             default:
@@ -1295,6 +1298,9 @@ export class UxScene extends Phaser.Scene {
     this.refreshInventoryStats();
 
     this.inventoryButtons?.clearButtonOptions();
+
+    // Sort inventory alphabetically
+    inventory.sort((a, b) => a.itemType.name.localeCompare(b.itemType.name));
 
     inventory.forEach((item, i) => {
       const y = 60 + (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);

@@ -94,7 +94,6 @@ export function setupBroadcast(
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
     item.stash(world, mob, data.position);
-    world.addStoredItem(item);
     updateInventory();
   }
 
@@ -200,7 +199,11 @@ export function setupBroadcast(
     setLeaderboardData(data.scores);
     const leaderboardScene = scene.scene.get('LeaderboardScene');
     if (leaderboardScene instanceof LeaderboardScene) {
-      leaderboardScene.renderLeaderboard();
+      if (scene.scene.isActive('LeaderboardScene')) {
+        leaderboardScene.renderLeaderboard();
+      } else if (scene.scene.get('LeaderboardScene')) {
+        console.debug('LeaderboardScene is initialized but not active.');
+      }
     } else {
       throw new Error('Leaderboard scene not found');
     }

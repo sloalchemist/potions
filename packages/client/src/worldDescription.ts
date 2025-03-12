@@ -72,11 +72,6 @@ export interface WorldDescription {
   mob_types: MobType[];
 }
 
-// export function parseWorldFromJson(json: string): WorldDescription {
-//   const worldDescripton: WorldDescription = JSON.parse(JSON.stringify(json));
-//   return worldDescripton;
-// }
-
 export function parseWorldFromJson(
   globaljson: string,
   specificjson: string

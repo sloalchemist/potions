@@ -140,6 +140,59 @@ describe('Chat UI updates based on chatting state', () => {
     expect(mockChatCallback).not.toHaveBeenCalled();
   });
 
+  test('should not trigger callback if the blob added', () => {
+    const player1 = new Mob(
+      world!,
+      'mob1',
+      'Player1',
+      'player',
+      100,
+      { x: 1, y: 1 },
+      {},
+      {},
+      {}
+    );
+    const npc = new Mob(
+      world!,
+      'mob2',
+      'NPC1',
+      'npc',
+      100,
+      { x: 2, y: 2 },
+      {},
+      {},
+      {}
+    );
+    const mobs = [player1, npc];
+
+    setChatting(false);
+
+    mobRangeListener(mobs);
+
+    const expectedFilteredMobs = [npc];
+    expect(mockChatCallback).toHaveBeenCalledWith(expectedFilteredMobs);
+
+    mockChatCallback.mockClear();
+
+    const blob = new Mob(
+      world!,
+      'mob3',
+      'BLOB1',
+      'blob',
+      100,
+      { x: 2, y: 2 },
+      {},
+      {},
+      {}
+    );
+
+    const new_mobs = [player1, npc, blob];
+
+    mobRangeListener(new_mobs);
+
+    expect(mockChatCallback).not.toHaveBeenCalled();
+  });
+
   test('should update chat companions when a second mob enters range', () => {
     const player1 = new Mob(
       world!,

@@ -498,6 +498,7 @@ export class SpriteMob extends Mob {
         throw new Error(`Item not found ${this.key} carrying ${this.carrying}`);
       }
       spriteItem.sprite.setPosition(this.sprite.x, this.sprite.y - 24);
+      spriteItem.sprite.setDepth(1000);
     }
 
     if (this.position) {
