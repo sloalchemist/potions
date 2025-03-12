@@ -683,7 +683,7 @@ export class AblyService implements PubSub {
           try {
             // Set player as invincible with a duration from globalData
             const playerMobType = globalData.mob_types.find(
-              (mobType) => mobType.type === 'player'
+              (mobType) => mobType.type === 'Player'
             );
 
             if (!playerMobType) {
