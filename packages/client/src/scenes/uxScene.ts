@@ -850,8 +850,10 @@ export class UxScene extends Phaser.Scene {
 
   callSpeak(response: string, i: number) {
     // randomly select a chat sound
-    const chatSound = Phaser.Math.RND.pick(this.chatSounds);
-    chatSound.play();
+    if (this.registry.get('soundEffects') === true) {
+      const chatSound = Phaser.Math.RND.pick(this.chatSounds);
+      chatSound.play();
+    }
     speak(response, i);
     this.setChatOptions([]);
   }

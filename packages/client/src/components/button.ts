@@ -122,7 +122,9 @@ export class Button extends Phaser.GameObjects.Container {
         event: Phaser.Types.Input.EventData
       ) => {
         event.stopPropagation();
-        this.scene.sound.play('buttonClick');
+        if (this.scene.registry.get('soundEffects') === true) {
+          this.scene.sound.play('buttonClick');
+        }
         this.buttonSprite.setScale(0.9);
         this.buttonBackground?.setScale(0.95);
         this.buttonBackground?.setFillStyle(this.pressedColor); // Pressed color
@@ -135,7 +137,10 @@ export class Button extends Phaser.GameObjects.Container {
       this.buttonBackground?.setFillStyle(this.hoverColor); // Hover color
       this.callback();
       // play interaction sound
-      if (this.interactionSound) {
+      if (
+        this.scene.registry.get('soundEffects') === true &&
+        this.interactionSound
+      ) {
         this.scene.sound.play(this.interactionSound);
       }
     });

@@ -135,7 +135,9 @@ export class TabButton extends Phaser.GameObjects.Container {
     });
 
     this.on('pointerdown', () => {
-      this.scene.sound.play('tabClick');
+      if (this.scene.registry.get('soundEffects') === true) {
+        this.scene.sound.play('tabClick');
+      }
       this.callback();
     });
   }
