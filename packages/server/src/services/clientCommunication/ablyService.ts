@@ -680,9 +680,9 @@ export class AblyService implements PubSub {
 
         if (newPlayer) {
           try {
-            // Set player as invincible with a 10-second duration (20 ticks at 0.5s per tick)
+            // Set player as invincible with a 10-second duration
             logger.log(`DEBUG: About to set ${data.name} invincible`);
-            newPlayer.setInvincible(true, 20);
+            newPlayer.setInvincible(true, 10000);
             logger.log(`DEBUG: After setting ${data.name} invincible`);
 
             // Check if invincibility was set properly

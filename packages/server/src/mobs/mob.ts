@@ -1184,7 +1184,7 @@ export class Mob {
               `INVINCIBLE: ${this.name}'s invincibility timed out after ${duration} ticks!`
             );
           }
-        }, 10000); // 500ms per tick
+        }, duration); // 500ms per tick
       }
     } catch (error) {
       logger.error(

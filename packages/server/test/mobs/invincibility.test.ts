@@ -27,10 +27,10 @@ describe('Player Invincibility Tests', () => {
       const player = Mob.getMob(playerId);
 
       // Set player as invincible (simulating spawn protection)
-      player?.setInvincible(true, 20);
+      player?.setInvincible(true, 3000); // 3 seconds
 
       // Wait for DB update
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 110));
 
       // Verify invincibility is set
       expect(player?.invincible).toBe(true);
@@ -41,6 +41,10 @@ describe('Player Invincibility Tests', () => {
 
       // Verify health hasn't changed due to invincibility
       expect(player?.health).toBe(initialHealth);
+
+      await new Promise((resolve) => setTimeout(resolve, 4000));
+
+      expect(player?.invincible).toBe(false);
     });
 
     test('Player loses invincibility when moving', async () => {
@@ -107,8 +111,8 @@ describe('Player Invincibility Tests', () => {
       mobFactory.makeMob('player', position, playerId, 'testPlayer');
       const player = Mob.getMob(playerId);
 
-      // Set short invincibility duration (2 ticks = 1 second)
-      player?.setInvincible(true, 2);
+      // Set short invincibility duration 3 seconds
+      player?.setInvincible(true, 2000);
 
       // Wait for DB update
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -117,7 +121,7 @@ describe('Player Invincibility Tests', () => {
       expect(player?.invincible).toBe(true);
 
       // Wait for invincibility to expire plus a small buffer
-      await new Promise((resolve) => setTimeout(resolve, 1100));
+      await new Promise((resolve) => setTimeout(resolve, 2100));
 
       // Get fresh instance of player
       const updatedPlayer = Mob.getMob(playerId);
