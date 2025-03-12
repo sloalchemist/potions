@@ -64,6 +64,9 @@ if ($exitCode -ne 0) {
     if ($output -match "The following organization members have reached their maximum limits") {
          Write-Host " You have more than 1 active Supabase project in your organization." -ForegroundColor Red
     }
+    elseif($output -match "The installed provider plugins are not consistent with") {
+         Write-Host "Run terraform init or ./tf.ps1 init or ./tf.sh init."
+    }
     elseif($output -match "Ably API token cannot be an empty string.") {
          Write-Host "Make sure you have followed the README instructions to create your tf.tfvars file."
     }

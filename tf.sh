@@ -64,6 +64,8 @@ if [ $exitCode -ne 0 ]; then
          echo -e "\033[31mYou need to delete any supabase projects with the same name as the one you are creating.\033[0m"
      elif echo "$output" | grep -q "Could not create resource, unexpected error"; then
          echo -e "\033[31mYou need to delete any ably app that uses the same ably access token.\033[0m"
+     elif echo "$output" | grep -q "The installed provider plugins are not consistent with"; then
+         echo -e "\033[31mRun terraform init or ./tf.ps1 init or ./tf.sh init.\033[0m"
     else
          echo -e "\033[31mWe haven't handle this case yet: An unknown error occurred. Check to make sure Docker Desktop is running, and if that doesn't work, please review the output above. In most cases, this is due to out of sync terraform state. Please refer to the section of the README called SYNCING TERRAFORM STATE.\033[0m"
     fi
