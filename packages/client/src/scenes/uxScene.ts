@@ -64,6 +64,7 @@ export class UxScene extends Phaser.Scene {
   attackText: Phaser.GameObjects.Text | null = null;
   defenseText: Phaser.GameObjects.Text | null = null;
   speedText: Phaser.GameObjects.Text | null = null;
+  invincibleText: Phaser.GameObjects.Text | null = null;
   affiliationText: Phaser.GameObjects.Text | null = null;
   favorabilitiesText: Phaser.GameObjects.Text | null = null;
   keybindGuideText: Phaser.GameObjects.Text | null = null;
@@ -339,16 +340,23 @@ export class UxScene extends Phaser.Scene {
       );
       this.infoContainer.add(this.speedText);
 
-      this.affiliationText = this.add.text(
+      this.invincibleText = this.add.text(
         15,
         190,
+        'Status: ' + (currentCharacter.invincible ? '🛡️ INVINCIBLE' : 'Normal')
+      );
+      this.infoContainer.add(this.invincibleText);
+
+      this.affiliationText = this.add.text(
+        15,
+        215,
         'Affiliation: ' + currentCharacter.community_id
       );
       this.infoContainer.add(this.affiliationText);
 
       this.dateText = this.add.text(
         15,
-        215,
+        240,
         'Date: reading position of sun and stars'
       );
       this.infoContainer.add(this.dateText);
@@ -823,6 +831,9 @@ export class UxScene extends Phaser.Scene {
       this.attackText?.setText('Attack: ' + currentCharacter.attack);
       this.defenseText?.setText('Defense: ' + currentCharacter.defense);
       this.speedText?.setText('Speed: ' + currentCharacter.speed);
+      this.invincibleText?.setText(
+        'Status: ' + (currentCharacter.invincible ? '🛡️ INVINCIBLE' : 'Normal')
+      );
       this.affiliationText?.setText(
         'Affiliation: ' + currentCharacter.community_id
       );

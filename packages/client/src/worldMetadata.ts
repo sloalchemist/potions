@@ -67,6 +67,13 @@ export class Character {
     return world.mobs[publicCharacterId].attributes['speed'];
   }
 
+  get invincible(): boolean {
+    if (!world || !world.mobs[publicCharacterId]) {
+      return false;
+    }
+    return world.mobs[publicCharacterId].attributes['invincible'] > 0;
+  }
+
   get stubbornness(): number {
     if (!world || !world.mobs[publicCharacterId]) {
       return 0;
