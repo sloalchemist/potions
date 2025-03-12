@@ -1,58 +1,42 @@
 import * as Phaser from 'phaser';
 
-export interface LoadingIndicator {
+export type LoadingIndicator = {
   container: Phaser.GameObjects.Rectangle;
   bar: Phaser.GameObjects.Rectangle;
   text: Phaser.GameObjects.Text;
   fileText: Phaser.GameObjects.Text;
-}
+};
 
-export interface LoadingProgressBarConfig {
-  width?: number;
-  height?: number;
-  padding?: number;
-  barColor?: number;
-  containerColor?: number;
-  verticalOffset?: number;
-  depth?: number;
-  textConfig?: {
-    fontSize?: string;
-    fontStyle?: string;
-    color?: string;
-    backgroundColor?: string;
-    padding?: { x: number; y: number };
+export type LoadingProgressBarConfig = {
+  width: number;
+  height: number;
+  padding: number;
+  barColor: number;
+  containerColor: number;
+  verticalOffset: number;
+  depth: number;
+  textConfig: {
+    fontSize: string;
+    fontStyle: string;
+    color: string;
+    backgroundColor: string;
+    padding: { x: number; y: number };
   };
-  loadingText?: string;
-}
+  loadingText: string;
+};
 
 export class LoadingProgressBar {
   private indicator?: LoadingIndicator;
   private progress: number = 0;
   private scene: Phaser.Scene;
   private targetProgress: number = 0;
-  private smoothSpeed: number = 0.3; // Even faster response
-  private config: Required<LoadingProgressBarConfig>;
+  private smoothSpeed: number = 0.3;
+  private config: LoadingProgressBarConfig;
   private currentFile: string = '';
 
-  constructor(scene: Phaser.Scene, config: LoadingProgressBarConfig = {}) {
+  constructor(scene: Phaser.Scene, config: LoadingProgressBarConfig) {
     this.scene = scene;
-    this.config = {
-      width: config.width ?? 400,
-      height: config.height ?? 40,
-      padding: config.padding ?? 4,
-      barColor: config.barColor ?? 0x4caf50,
-      containerColor: config.containerColor ?? 0x333333,
-      verticalOffset: config.verticalOffset ?? -100,
-      depth: config.depth ?? 1000,
-      textConfig: {
-        fontSize: config.textConfig?.fontSize ?? '24px',
-        fontStyle: config.textConfig?.fontStyle ?? 'bold',
-        color: config.textConfig?.color ?? '#ffffff',
-        backgroundColor: config.textConfig?.backgroundColor ?? '#000000',
-        padding: config.textConfig?.padding ?? { x: 20, y: 10 }
-      },
-      loadingText: config.loadingText ?? 'Loading World'
-    };
+    this.config = config;
   }
 
   create(): void {
@@ -175,7 +159,6 @@ export class LoadingProgressBar {
 
   destroy(): void {
     if (!this.indicator) return;
-    console.log('Destroying loading bar'); // Debug log
     this.indicator.container.destroy();
     this.indicator.bar.destroy();
     this.indicator.text.destroy();

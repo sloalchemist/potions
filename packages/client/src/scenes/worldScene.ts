@@ -78,12 +78,14 @@ export class WorldScene extends Phaser.Scene {
     this.loadingBar = new LoadingProgressBar(this, {
       width: 400,
       height: 40,
+      padding: 4,
       barColor: 0x4caf50,
       containerColor: 0x333333,
       verticalOffset: -100,
       depth: 1000,
       textConfig: {
         fontSize: '24px',
+        fontStyle: 'bold',
         color: '#ffffff',
         backgroundColor: '#000000',
         padding: { x: 20, y: 10 }
@@ -95,7 +97,7 @@ export class WorldScene extends Phaser.Scene {
   init() {
     // Initialize graphics before any scene content
     this.nightOverlay = this.add.graphics();
-    this.nightOverlay.setDepth(500); // Below loading indicator as per memory
+    this.nightOverlay.setDepth(500);
     this.nightOverlay.setScrollFactor(0);
   }
 
@@ -118,7 +120,6 @@ export class WorldScene extends Phaser.Scene {
     this.scene.systems.updateList.update();
 
     this.load.on('filecomplete', (key: string) => {
-      // console.log(`File complete: ${key}`);
       this.loadingBar.setCurrentFile(`Loaded: ${key}`);
     });
 
@@ -332,9 +333,6 @@ export class WorldScene extends Phaser.Scene {
   }
 
   create() {
-    // Get the world data from the cache
-    // Wait for 1 second before proceeding
-    // this.time.delayedCall(1000, () => {
     const worldData = parseWorldFromJson(
       this.cache.json.get('global_data'),
       this.cache.json.get('world_specific_data')
