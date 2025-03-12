@@ -691,7 +691,7 @@ export class AblyService implements PubSub {
       const player = Mob.getMob(username);
       let options: Mob | Item | undefined = undefined;
       if (item && player) {
-        if ((data.action = 'add_ingredient')) {
+        if (data.action == 'add_ingredient') {
           options = data.options ? Item.getItem(data.options) : undefined;
         } else {
           options = data.options ? Mob.getMob(data.options) : undefined;
