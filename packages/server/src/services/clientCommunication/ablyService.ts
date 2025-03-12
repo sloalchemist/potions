@@ -30,6 +30,7 @@ import {
 } from '../authMarshalling';
 import { applyCheat } from '../developerCheats';
 import { logger } from '../../util/logger';
+import globalData from '../../../world_assets/global.json';
 
 //must match MAINTAIN_WORLD_OPTION in client/src/services/serverToBroadcast.ts
 const MAINTAIN_WORLD_OPTION = 'NO_CHANGE';
@@ -680,27 +681,28 @@ export class AblyService implements PubSub {
 
         if (newPlayer) {
           try {
-            // Set player as invincible with a 10-second duration
-            logger.log(`DEBUG: About to set ${data.name} invincible`);
-            newPlayer.setInvincible(true, 10000);
+            // Set player as invincible with a duration from globalData
+            const playerMobType = globalData.mob_types.find(
+              (mobType) => mobType.type === 'player'
+            );
+
+            if (!playerMobType) {
+              logger.error(`Could not find player mob type in globalData`);
+              return;
+            }
+
+            const invincibilitySpawnLength =
+              playerMobType.invincibility_spawn_length_ms;
+
+            logger.log(
+              `DEBUG: About to set ${data.name} invincible for ${invincibilitySpawnLength} ms`
+            );
+
+            newPlayer.setInvincible(true, invincibilitySpawnLength);
             logger.log(`DEBUG: After setting ${data.name} invincible`);
 
-            // Check if invincibility was set properly
-            setTimeout(() => {
-              const checkPlayer = Mob.getMob(username);
-              if (checkPlayer) {
-                logger.log(
-                  `DEBUG: Invincibility check for ${data.name}: ${checkPlayer.invincible}`
-                );
-              } else {
-                logger.log(
-                  `DEBUG: Could not find player ${data.name} for invincibility check`
-                );
-              }
-            }, 1000);
-
             logger.info(
-              `INVINCIBLE: ${data.name} has spawn protection! They are invincible for 10 seconds or until movement.`
+              `INVINCIBLE: ${data.name} has spawn protection! They are invincible for ${invincibilitySpawnLength} ticks or until movement.`
             );
           } catch (error) {
             logger.error(
