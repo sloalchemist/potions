@@ -177,7 +177,6 @@ export function drinkPotion(
 
 function giveRandomEffect(mob: Mob) {
   const randomNum = Math.floor(Math.random() * 8); // amount of current effects
-  console.log(`This is the number of the effect you got: ${randomNum}`);
   switch (randomNum) {
     case 0:
       // Random Effect: Reduce Speed
