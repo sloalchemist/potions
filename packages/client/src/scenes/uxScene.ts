@@ -422,6 +422,66 @@ export class UxScene extends Phaser.Scene {
         yOffset += 30;
       });
 
+      // Sound/music controls
+      this.registry.set('soundEffects', true);
+      this.registry.set('music', true);
+
+      const onStyles = {
+        default: '#8CA0B3',
+        hover: '#C0D9E8',
+        pressed: '#5E7485'
+      };
+      const offStyles = {
+        default: '#C43B3D',
+        hover: '#E5AAAB',
+        pressed: '#A33133'
+      };
+      const soundEffectsToggle = new Button(
+        this,
+        SCREEN_WIDTH / 2 + 100,
+        265,
+        true,
+        'Sound',
+        () => {
+          this.registry.set('soundEffects', !this.registry.get('soundEffects'));
+          soundEffectsToggle.setStyle({
+            backgroundColor: this.registry.get('soundEffects')
+              ? onStyles
+              : offStyles
+          });
+        },
+        60,
+        30
+      );
+      const musicToggle = new Button(
+        this,
+        SCREEN_WIDTH / 2 + 160,
+        265,
+        true,
+        'Music',
+        () => {
+          this.registry.set('music', !this.registry.get('music'));
+          musicToggle.setStyle({
+            backgroundColor: this.registry.get('music') ? onStyles : offStyles
+          });
+          const worldScene = this.scene.get('WorldScene');
+          if (worldScene) {
+            if (this.registry.get('music') === true) {
+              worldScene.sound.get('background_music').resume();
+              worldScene.sound.get('background_music_layer').resume();
+            } else {
+              worldScene.sound.get('background_music').pause();
+              worldScene.sound.get('background_music_layer').pause();
+            }
+          }
+        },
+        60,
+        30
+      );
+
+      this.infoContainer?.add(soundEffectsToggle);
+      this.infoContainer?.add(musicToggle);
+
       // action tab texts
       this.itemsText = this.add.text(160, 35, 'ITEMS / Fight');
       this.itemsContainer.add(this.itemsText);
@@ -796,8 +856,10 @@ export class UxScene extends Phaser.Scene {
 
   callSpeak(response: string, i: number) {
     // randomly select a chat sound
-    const chatSound = Phaser.Math.RND.pick(this.chatSounds);
-    chatSound.play();
+    if (this.registry.get('soundEffects') === true) {
+      const chatSound = Phaser.Math.RND.pick(this.chatSounds);
+      chatSound.play();
+    }
     speak(response, i);
     this.setChatOptions([]);
   }

@@ -412,13 +412,15 @@ export class WorldScene extends Phaser.Scene {
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
     this.hideWorld();
 
-    if (!this.sound.isPlaying('background_music')) {
-      this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
-    }
-    if (!this.sound.isPlaying('background_music_layer')) {
-      this.sound
-        .add('background_music_layer', { loop: true, volume: 0.3 })
-        .play();
+    if (this.registry.get('music') === true) {
+      if (!this.sound.isPlaying('background_music')) {
+        this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
+      }
+      if (!this.sound.isPlaying('background_music_layer')) {
+        this.sound
+          .add('background_music_layer', { loop: true, volume: 0.3 })
+          .play();
+      }
     }
 
     bindAblyToWorldScene(this);
@@ -555,7 +557,10 @@ export class WorldScene extends Phaser.Scene {
       const roundedY = Math.floor(this.hero.y);
 
       if (roundedX !== this.cameraDolly.x || roundedY !== this.cameraDolly.y) {
-        if (!this.sound.isPlaying('walk')) {
+        if (
+          this.registry.get('soundEffects') === true &&
+          !this.sound.isPlaying('walk')
+        ) {
           this.sound.add('walk', { loop: true, volume: 0.6 }).play();
         }
       } else {
