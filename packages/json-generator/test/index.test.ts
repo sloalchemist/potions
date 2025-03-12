@@ -50,4 +50,33 @@ describe('generator processes global.json', () => {
 
     writeFileSyncMock.mockClear();
   });
+
+  it('server global.json passes validation', () => {
+    // Get the mocked writeFileSync function
+    const writeFileSyncMock = fs.writeFileSync as jest.Mock;
+
+    executeWithArgs(['server']);
+
+    expect(writeFileSyncMock).toHaveBeenCalled();
+
+    const serverGlobalJsonString = writeFileSyncMock.mock.calls[0][1] as string;
+    const serverGlobalJsonObject = JSON.parse(serverGlobalJsonString);
+
+    // Expect there to be exactly 11 keys in the server global.json
+    expect(Object.keys(serverGlobalJsonObject).sort()).toEqual([
+      'alliances',
+      'communities',
+      'containers',
+      'houses',
+      'item_types',
+      'items',
+      'mob_aggro_behaviors',
+      'mob_types',
+      'regions',
+      'terrain_types',
+      'tiles'
+    ]);
+
+    writeFileSyncMock.mockClear();
+  });
 });
