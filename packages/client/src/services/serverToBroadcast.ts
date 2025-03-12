@@ -17,6 +17,7 @@ import {
   SetDatetimeData,
   SpeakData,
   BombData,
+  PoisonData,
   ShowPortalMenuData,
   ScoreboardData
 } from '@rt-potion/common';
@@ -217,6 +218,13 @@ export function setupBroadcast(
     }
   }
 
+  function handlePoison(data: PoisonData) {
+    const mob = world.mobs[data.id] as SpriteMob;
+    if (mob) {
+      mob.createPoisonEffect(1);
+    }
+  }
+
   // Subscribe to broadcast and dispatch events using switch
   broadcast_channel.subscribe('tick', (message: Types.Message) => {
     if (gameState !== 'stateInitialized') return;
@@ -290,6 +298,9 @@ export function setupBroadcast(
           break;
         case 'bomb':
           handleBomb(broadcastItem.data as BombData);
+          break;
+        case 'poison':
+          handlePoison(broadcastItem.data as PoisonData);
           break;
         default:
           console.error(

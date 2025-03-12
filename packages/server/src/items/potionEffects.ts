@@ -91,6 +91,7 @@ export function drinkPotion(
         dotDuration = dotDuration * effectModifier;
       }
       mob.changeEffect(dotDelta, dotDuration, 'damageOverTime');
+      pubSub.poison(mob.id);
       return true;
     case '#166060':
       logger.debug('Drinking black potion');

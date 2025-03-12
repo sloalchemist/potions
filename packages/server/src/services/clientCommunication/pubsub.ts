@@ -25,6 +25,7 @@ export interface PubSub {
   move(key: string, target: Coord | undefined, path: Coord[]): void;
   destroy(item: Item): void;
   bomb(key: string): void;
+  poison(key: string): void;
   showPortalMenu(key: string, worlds: WorldMetadata[]): void;
   changeHealth(key: string, health: number, newValue: number): void;
   changeEffect(
