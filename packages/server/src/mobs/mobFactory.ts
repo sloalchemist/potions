@@ -58,7 +58,7 @@ class MobFactory {
     }
     const mobType = this.getTemplate(type);
     //if the value wasn't retrieved from the database, use mobType defaults
-    const gold = gold_from_auth ?? mobType.gold; // mobType.gold;
+    const gold = gold_from_auth ?? mobType.gold;
 
     if (name == undefined) {
       name = nameGeneratorFactory.generateName(mobType.name_style);
@@ -68,7 +68,7 @@ class MobFactory {
     const defense = mobType.defense;
     const favorite_item = Item.getRandomItem();
     const community_id = mobType.community;
-    const health = health_from_auth ?? mobType.health; // mobType.health;
+    const health = health_from_auth ?? mobType.health;
 
     const house_id = House.findLeastPopulatedHouse(community_id);
 

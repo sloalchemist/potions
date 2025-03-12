@@ -12,7 +12,6 @@ import {
 import 'dotenv/config';
 import { getEnv } from '@rt-potion/common';
 import { logger } from '../util/logger';
-//import { worldID } from '../services/setup';
 
 export class DataLogger {
   private static register = new Registry();
@@ -115,6 +114,9 @@ export function pushMetrics() {
     return;
   }
 
+  // Get world id to seperate worlds
+  const worldID = process.argv.slice(2)[0];
+
   const gateway = new Pushgateway(gatewayURL, {
     timeout: 5000, //Set the request timeout to 5000ms
     agent: new Agent({
@@ -124,13 +126,13 @@ export function pushMetrics() {
 
   // Load metrics under World Name 'Metric'
   gateway
-    .pushAdd({ jobName: `Metrics` })
+    .pushAdd({ jobName: `${worldID} Metrics` })
     .then()
     .catch((e) => logger.warn(`Failed to pushAdd metrics:`, e));
 
   function pushData() {
     gateway
-      .push({ jobName: `Metrics` })
+      .push({ jobName: `${worldID} Metrics` })
       .then()
       .catch((e) => logger.warn(`Failed to push metrics:`, e));
   }

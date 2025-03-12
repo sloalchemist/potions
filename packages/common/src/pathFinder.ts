@@ -11,9 +11,6 @@ export class PathFinder {
   constructor(tiles: number[][], terrain_types: TerrainType[]) {
     this.worldWidth = tiles.length;
     this.worldHeight = tiles[0].length;
-    //console.log('world size', this.worldWidth, this.worldHeight);
-
-    //this.generateWalkable(mapData);
 
     const terrainTypes = new Map();
     for (const td of terrain_types) {
@@ -456,7 +453,6 @@ export class PathFinder {
     if (simplifiedPath.length > 0) {
       simplifiedPath.shift(); // Remove the first point since it's the current position
     }
-    //console.log(`Path from ${JSON.stringify(start)} to ${JSON.stringify(end)} is ${JSON.stringify(simplifiedPath)} steps, full ${JSON.stringify(path)}`);
     return simplifiedPath;
   }
 }
