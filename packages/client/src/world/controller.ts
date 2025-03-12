@@ -23,7 +23,7 @@ export type Interactions = {
   item: Item;
   action: string;
   label: string;
-  give_to?: string;
+  options?: string;
 };
 
 const MAX_STASH: number = 12;
@@ -215,7 +215,7 @@ export function getCarriedItemInteractions(
       interactions.push({
         action: 'give',
         item: item as Item,
-        give_to: mob.key,
+        options: mob.key,
         label: `Give ${item.itemType.name} to ${mob.name}`
       });
     }
