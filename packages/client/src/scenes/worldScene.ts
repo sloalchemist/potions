@@ -32,6 +32,7 @@ import {
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { Item } from '../world/item';
 import { SpriteItem } from '../sprite/sprite_item';
+import { LoadingProgressBar } from '../components/loadingIndicator';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -70,12 +71,72 @@ export class WorldScene extends Phaser.Scene {
   };
   lastKeyUp = '';
   lastPublishTime: number = 0;
+  private loadingBar: LoadingProgressBar;
 
   constructor() {
     super({ key: 'WorldScene' });
+    this.loadingBar = new LoadingProgressBar(this, {
+      width: 400,
+      height: 40,
+      barColor: 0x4caf50,
+      containerColor: 0x333333,
+      verticalOffset: -100,
+      depth: 1000,
+      textConfig: {
+        fontSize: '24px',
+        color: '#ffffff',
+        backgroundColor: '#000000',
+        padding: { x: 20, y: 10 }
+      },
+      loadingText: 'Loading World'
+    });
+  }
+
+  init() {
+    // Initialize graphics before any scene content
+    this.nightOverlay = this.add.graphics();
+    this.nightOverlay.setDepth(500); // Below loading indicator as per memory
+    this.nightOverlay.setScrollFactor(0);
   }
 
   preload() {
+    // Initialize loading bar first
+    console.log('Preload started');
+    this.loadingBar.create();
+
+    // Register loading bar with scene's update list
+    this.events.on('update', () => {
+      this.loadingBar.update();
+    });
+
+    // Hide world immediately
+    this.hideWorld();
+
+    // Set initial progress to show something is happening
+    this.loadingBar.setProgress(0.1);
+    this.loadingBar.setCurrentFile('Initializing...');
+    this.scene.systems.updateList.update();
+
+    this.load.on('filecomplete', (key: string) => {
+      // console.log(`File complete: ${key}`);
+      this.loadingBar.setCurrentFile(`Loaded: ${key}`);
+    });
+
+    // Clean up loading bar when done
+    this.load.on('complete', () => {
+      // console.log('Loading complete');
+      this.loadingBar.setProgress(1);
+      this.loadingBar.setCurrentFile('Ready!');
+
+      // Wait a moment to show 100% before destroying
+      setTimeout(() => {
+        // Remove update listener
+        this.events.off('update');
+        this.loadingBar.destroy();
+      }, 700);
+    });
+
+    // Start loading assets
     const worldID = getWorldID();
     this.load.image(
       'background',
@@ -103,9 +164,9 @@ export class WorldScene extends Phaser.Scene {
       `../../../world_assets/${worldID}/world_specific.json`
     );
     this.load.audio('background_music_layer', [
-      `static/music/${worldID}_layer.mp3`
+      `static/music/${worldID}_layer.ogg`
     ]);
-    this.load.audio('background_music', ['static/music/cosmic_ambient.mp3']);
+    this.load.audio('background_music', ['static/music/cosmic_ambient.ogg']);
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
 
@@ -261,23 +322,32 @@ export class WorldScene extends Phaser.Scene {
   }
 
   hideWorld() {
-    this.nightOverlay.fillStyle(GRAY, 1); // Dark blue with 50% opacity
+    if (!this.nightOverlay) {
+      this.nightOverlay = this.add.graphics();
+      this.nightOverlay.setDepth(500); // Below loading indicator
+      this.nightOverlay.setScrollFactor(0);
+    }
+    this.nightOverlay.clear();
+    this.nightOverlay.fillStyle(GRAY, 1);
     this.nightOverlay.fillRect(
       0,
       0,
-      this.terrainWidth * TILE_SIZE,
-      this.terrainHeight * TILE_SIZE
+      this.game.scale.width,
+      this.game.scale.height
     );
   }
 
   create() {
-    const globalData = parseWorldFromJson(
+    // Get the world data from the cache
+    // Wait for 1 second before proceeding
+    // this.time.delayedCall(1000, () => {
+    const worldData = parseWorldFromJson(
       this.cache.json.get('global_data'),
       this.cache.json.get('world_specific_data')
     );
 
     world = new World();
-    world.load(globalData);
+    world.load(worldData);
 
     setInventoryCallback((items: Item[]) => {
       console.log('Inventory callback called with items:', items);
@@ -287,7 +357,7 @@ export class WorldScene extends Phaser.Scene {
 
     // Load globals
     if (needsAnimationsLoaded) {
-      this.loadAnimations('global_sprites', 'global_atlas', globalData);
+      this.loadAnimations('global_sprites', 'global_atlas', worldData);
     }
 
     // Tile mapping as defined earlier
@@ -310,21 +380,21 @@ export class WorldScene extends Phaser.Scene {
       '4-4' // Configuration 15
     ] as const satisfies readonly string[];
 
-    const waterTypes = globalData.terrain_types
+    const waterTypes = worldData.terrain_types
       .filter((type) => !type.walkable)
       .map((type) => type.id);
-    const landTypes = globalData.terrain_types
+    const landTypes = worldData.terrain_types
       .filter((type) => type.walkable)
       .map((type) => type.id);
 
     const terrainMap: Record<number, TerrainType> = {};
-    for (const terrainType of globalData.terrain_types) {
+    for (const terrainType of worldData.terrain_types) {
       terrainMap[terrainType.id] = terrainType;
     }
     // console.log('waterTypes', waterTypes, 'landTypes', landTypes);
     // Draw water layer
     this.drawTerrainLayer(
-      globalData.tiles,
+      worldData.tiles,
       waterTypes,
       true,
       (posX, posY, type, up, _down, _left, _right) => {
@@ -345,7 +415,7 @@ export class WorldScene extends Phaser.Scene {
 
     // Draw land layer with stone
     this.drawTerrainLayer(
-      globalData.tiles,
+      worldData.tiles,
       landTypes,
       true,
       (posX, posY, type, up, down, left, right) => {
@@ -365,7 +435,7 @@ export class WorldScene extends Phaser.Scene {
     );
 
     this.drawTerrainLayer(
-      globalData.tiles,
+      worldData.tiles,
       landTypes,
       false,
       (posX, posY, type, up, down, left, right) => {
@@ -398,25 +468,14 @@ export class WorldScene extends Phaser.Scene {
       cameraViewportHeight
     );
 
-    this.terrainWidth = globalData.tiles[0].length;
-    this.terrainHeight = globalData.tiles.length;
+    this.terrainWidth = worldData.tiles[0].length;
+    this.terrainHeight = worldData.tiles.length;
 
     const background = this.add.image(0, 0, 'background');
     background.setOrigin(0, 0);
     background.setScrollFactor(0); // Make it stay static
     background.setDisplaySize(this.game.scale.width, this.game.scale.width);
     background.setDepth(-10);
-
-    // Create a night overlay with lower depth
-    this.nightOverlay = this.add.graphics();
-    this.nightOverlay.fillRect(
-      0,
-      0,
-      this.terrainHeight * TILE_SIZE,
-      this.terrainWidth * TILE_SIZE
-    );
-    this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
-    this.hideWorld();
 
     if (!this.sound.isPlaying('background_music')) {
       this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
@@ -641,8 +700,8 @@ export class WorldScene extends Phaser.Scene {
       this.nightOverlay.fillRect(
         0,
         0,
-        this.terrainHeight * TILE_SIZE,
-        this.terrainWidth * TILE_SIZE
+        this.game.scale.width,
+        this.game.scale.height
       );
     }
 
