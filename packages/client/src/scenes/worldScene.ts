@@ -32,6 +32,7 @@ import {
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { Item } from '../world/item';
 import { SpriteItem } from '../sprite/sprite_item';
+import { LoadingProgressBar } from '../components/loadingIndicator';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -70,12 +71,72 @@ export class WorldScene extends Phaser.Scene {
   };
   lastKeyUp = '';
   lastPublishTime: number = 0;
+  private loadingBar: LoadingProgressBar;
 
   constructor() {
     super({ key: 'WorldScene' });
+    this.loadingBar = new LoadingProgressBar(this, {
+      width: 400,
+      height: 40,
+      padding: 4,
+      barColor: 0x4caf50,
+      containerColor: 0x333333,
+      verticalOffset: -100,
+      depth: 1000,
+      textConfig: {
+        fontSize: '24px',
+        fontStyle: 'bold',
+        color: '#ffffff',
+        backgroundColor: '#000000',
+        padding: { x: 20, y: 10 }
+      },
+      loadingText: 'Loading World'
+    });
+  }
+
+  init() {
+    // Initialize graphics before any scene content
+    this.nightOverlay = this.add.graphics();
+    this.nightOverlay.setDepth(500);
+    this.nightOverlay.setScrollFactor(0);
   }
 
   preload() {
+    // Initialize loading bar first
+    console.log('Preload started');
+    this.loadingBar.create();
+
+    // Register loading bar with scene's update list
+    this.events.on('update', () => {
+      this.loadingBar.update();
+    });
+
+    // Hide world immediately
+    this.hideWorld();
+
+    // Set initial progress to show something is happening
+    this.loadingBar.setProgress(0.1);
+    this.loadingBar.setCurrentFile('Initializing...');
+    this.scene.systems.updateList.update();
+
+    this.load.on('filecomplete', (key: string) => {
+      this.loadingBar.setCurrentFile(`Loaded: ${key}`);
+    });
+
+    // Clean up loading bar when done
+    this.load.on('complete', () => {
+      this.loadingBar.setProgress(1);
+      this.loadingBar.setCurrentFile('Ready!');
+
+      // Wait 500ms to show 100% before destroying
+      setTimeout(() => {
+        // Remove update listener
+        this.events.off('update');
+        this.loadingBar.destroy();
+      }, 500);
+    });
+
+    // Start loading assets
     const worldID = getWorldID();
     this.load.image(
       'background',
@@ -267,13 +328,13 @@ export class WorldScene extends Phaser.Scene {
   }
 
   create() {
-    const globalData = parseWorldFromJson(
+    const worldData = parseWorldFromJson(
       this.cache.json.get('global_data'),
       this.cache.json.get('world_specific_data')
     );
 
     world = new World();
-    world.load(globalData);
+    world.load(worldData);
 
     setInventoryCallback((items: Item[]) => {
       console.log('Inventory callback called with items:', items);
@@ -283,7 +344,7 @@ export class WorldScene extends Phaser.Scene {
 
     // Load globals
     if (needsAnimationsLoaded) {
-      this.loadAnimations('global_sprites', 'global_atlas', globalData);
+      this.loadAnimations('global_sprites', 'global_atlas', worldData);
     }
 
     // Tile mapping as defined earlier
@@ -306,21 +367,21 @@ export class WorldScene extends Phaser.Scene {
       '4-4' // Configuration 15
     ] as const satisfies readonly string[];
 
-    const waterTypes = globalData.terrain_types
+    const waterTypes = worldData.terrain_types
       .filter((type) => !type.walkable)
       .map((type) => type.id);
-    const landTypes = globalData.terrain_types
+    const landTypes = worldData.terrain_types
       .filter((type) => type.walkable)
       .map((type) => type.id);
 
     const terrainMap: Record<number, TerrainType> = {};
-    for (const terrainType of globalData.terrain_types) {
+    for (const terrainType of worldData.terrain_types) {
       terrainMap[terrainType.id] = terrainType;
     }
 
     // Draw water layer
     this.drawTerrainLayer(
-      globalData.tiles,
+      worldData.tiles,
       waterTypes,
       true,
       (posX, posY, type, up, _down, _left, _right) => {
@@ -341,7 +402,7 @@ export class WorldScene extends Phaser.Scene {
 
     // Draw land layer with stone
     this.drawTerrainLayer(
-      globalData.tiles,
+      worldData.tiles,
       landTypes,
       true,
       (posX, posY, type, up, down, left, right) => {
@@ -360,7 +421,7 @@ export class WorldScene extends Phaser.Scene {
     );
 
     this.drawTerrainLayer(
-      globalData.tiles,
+      worldData.tiles,
       landTypes,
       false,
       (posX, posY, type, up, down, left, right) => {
@@ -392,8 +453,8 @@ export class WorldScene extends Phaser.Scene {
       cameraViewportHeight
     );
 
-    this.terrainWidth = globalData.tiles[0].length;
-    this.terrainHeight = globalData.tiles.length;
+    this.terrainWidth = worldData.tiles[0].length;
+    this.terrainHeight = worldData.tiles.length;
 
     const background = this.add.image(0, 0, 'background');
     background.setOrigin(0, 0);
