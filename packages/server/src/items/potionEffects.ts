@@ -177,7 +177,7 @@ export function drinkPotion(
 
 function giveRandomEffect(mob: Mob) {
   const randomNum = Math.floor(Math.random() * 8); // amount of current effects
-
+  console.log(`This is the number of the effect you got: ${randomNum}`);
   switch (randomNum) {
     case 0:
       // Random Effect: Reduce Speed
@@ -245,7 +245,11 @@ function closeToBlack(potionStr: string, mob: Mob): boolean {
     potionRgb.g < thresholdBlack &&
     potionRgb.b < thresholdBlack
   ) {
-    // Potion is black, mob dies
+    const carriedItem = mob.carrying;
+    // delete the potion they just drank from the world
+    if (carriedItem) {
+      carriedItem.destroy();
+    }
     mob.changeHealth(-mob.health);
     return true;
   }
