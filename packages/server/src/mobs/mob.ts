@@ -266,6 +266,22 @@ export class Mob {
     return gameWorld.currentDate().global_tick;
   }
 
+  get invincible(): boolean {
+    const mob = DB.prepare(
+      `
+      SELECT invincible FROM mobView WHERE id = :id
+      `
+    ).get({ id: this.id }) as { invincible: number } | undefined;
+
+    if (!mob) {
+      logger.error(
+        `Mob with id ${this.id} not found when checking invincibility`
+      );
+      return false;
+    }
+    return mob.invincible === 1;
+  }
+
   set carrying(item: Item | undefined) {
     if (this.carrying !== undefined && item !== undefined) {
       Carryable.fromItem(this.carrying)!.dropAtFeet(this);
@@ -429,6 +445,12 @@ export class Mob {
       throw new Error('Path must have at least one point');
     }
 
+    // Disable invincibility when player starts moving
+    if (this.invincible && this.type === 'player') {
+      this.setInvincible(false);
+      logger.log(`${this.name} lost invincibility by moving!`);
+    }
+
     this.target = target;
     this.path = path;
     DB.prepare(
@@ -457,10 +479,27 @@ export class Mob {
       );
       return; // Exit early
     }
+
+    // Skip damage if invincible AND it's a player AND amount is negative (damage)
+    if (amount < 0 && this.invincible && this.type === 'player') {
+      logger.info(
+        `INVINCIBLE: ${this.name} is invincible! Ignoring ${amount} damage.`
+      );
+      return;
+    }
+
     if (amount === 0 || this.health <= 0) return;
     let newHealth = this.health + amount;
     newHealth = Math.min(newHealth, this.maxHealth);
     newHealth = Math.max(newHealth, 0);
+
+    // Log health changes for debugging
+    if (amount < 0) {
+      logger.info(
+        `HEALTH: ${this.name} taking ${amount} damage. Invincible state: ${this.invincible}`
+      );
+    }
+
     DB.prepare(
       `
             UPDATE mobs
@@ -1075,6 +1114,85 @@ export class Mob {
     this.needs.tick();
   }
 
+  setInvincible(value: boolean, duration: number = 0) {
+    try {
+      // Update the database with the new invincibility state
+      DB.prepare(
+        `
+        UPDATE mobs
+        SET invincible = :invincible
+        WHERE id = :id
+        `
+      ).run({ invincible: value ? 1 : 0, id: this.id });
+
+      // Log when invincibility is set or removed
+      logger.info(
+        `INVINCIBLE: ${this.name} invincibility ${value ? 'enabled' : 'disabled'}${duration > 0 ? ` for ${duration} ticks` : ''}`
+      );
+
+      // Visual effect: make the player flash or change appearance when invincible
+      if (value && this.type === 'player') {
+        // Create a more noticeable visual effect for invincibility
+        // Apply multiple effects to make it very clear the player is invincible
+
+        // 1. Speed boost for visual indication (temporary speedup effect)
+        pubSub.changeEffect(this.id, 'speed', 0.2, this._speed + 0.2);
+
+        // 2. Apply a visual "glow" effect (using defense as a visual indicator)
+        pubSub.changeEffect(this.id, 'defense', 20, this._defense + 20);
+
+        // 3. Send a speak message to visually show the invincibility
+        pubSub.speak(this.id, '🛡️ INVINCIBLE! 🛡️');
+
+        // 4. Create a pulsing effect with repeated visual changes
+        let pulseCount = 0;
+        const maxPulses = 5;
+        const pulseInterval = setInterval(() => {
+          const mob = Mob.getMob(this.id);
+          if (!mob || !mob.invincible || pulseCount >= maxPulses) {
+            clearInterval(pulseInterval);
+            return;
+          }
+
+          // Toggle between visual states for pulsing effect
+          if (pulseCount % 2 === 0) {
+            pubSub.changeEffect(this.id, 'attack', 5, mob._attack + 5);
+          } else {
+            pubSub.changeEffect(this.id, 'attack', -5, mob._attack);
+          }
+
+          pulseCount++;
+        }, 500);
+
+        logger.info(
+          `INVINCIBLE EFFECT: Applied enhanced visual effects to ${this.name}`
+        );
+      }
+
+      if (!value && this.type === 'player') {
+        // When disabling invincibility, show a message
+        pubSub.speak(this.id, 'Invincibility ended');
+      }
+
+      if (value && duration > 0) {
+        // Set a timeout to disable invincibility after the given duration
+        setTimeout(() => {
+          const mob = Mob.getMob(this.id);
+          if (mob && mob.invincible) {
+            mob.setInvincible(false);
+            logger.info(
+              `INVINCIBLE: ${this.name}'s invincibility timed out after ${duration} ticks!`
+            );
+          }
+        }, duration * 500); // 500ms per tick
+      }
+    } catch (error) {
+      logger.error(
+        `ERROR: Failed to set invincibility for ${this.name}: ${error}`
+      );
+    }
+  }
+
   static SQL = `
         CREATE TABLE mobs (
             id TEXT PRIMARY KEY,
@@ -1105,6 +1223,7 @@ export class Mob {
             social INTEGER NOT NULL DEFAULT 100,
             community_id TEXT,
             house_id TEXT,
+            invincible INTEGER NOT NULL DEFAULT 0,
             FOREIGN KEY (carrying_id) REFERENCES items (id) ON DELETE SET NULL,
             FOREIGN KEY (community_id) REFERENCES community (id) ON DELETE SET NULL,
             FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE SET NULL
@@ -1161,7 +1280,8 @@ export class Mob {
           m.energy,
           m.social,
           m.community_id,
-          m.house_id
+          m.house_id,
+          m.invincible
         FROM mobs AS m
       ;
     `;

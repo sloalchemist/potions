@@ -660,6 +660,7 @@ export class AblyService implements PubSub {
           \t health recieved: ${health}
           \t attack recieved: ${attack}
           \t gold recieved: ${gold} `);
+        // Create the player character
         mobFactory.makeMob(
           'player',
           gameWorld.getPortalLocation(),
@@ -670,6 +671,47 @@ export class AblyService implements PubSub {
           gold,
           attack
         );
+
+        // Get the newly created player and apply invincibility
+        const newPlayer = Mob.getMob(username);
+        logger.log(
+          `DEBUG: Newly created player: ${username}, found: ${!!newPlayer}`
+        );
+
+        if (newPlayer) {
+          try {
+            // Set player as invincible with a 10-second duration (20 ticks at 0.5s per tick)
+            logger.log(`DEBUG: About to set ${data.name} invincible`);
+            newPlayer.setInvincible(true, 20);
+            logger.log(`DEBUG: After setting ${data.name} invincible`);
+
+            // Check if invincibility was set properly
+            setTimeout(() => {
+              const checkPlayer = Mob.getMob(username);
+              if (checkPlayer) {
+                logger.log(
+                  `DEBUG: Invincibility check for ${data.name}: ${checkPlayer.invincible}`
+                );
+              } else {
+                logger.log(
+                  `DEBUG: Could not find player ${data.name} for invincibility check`
+                );
+              }
+            }, 1000);
+
+            logger.info(
+              `INVINCIBLE: ${data.name} has spawn protection! They are invincible for 10 seconds or until movement.`
+            );
+          } catch (error) {
+            logger.error(
+              `ERROR setting invincibility for ${data.name}: ${error}`
+            );
+          }
+        } else {
+          logger.error(
+            `ERROR: Could not find newly created player: ${username} to set invincibility`
+          );
+        }
       } else if (player.subtype !== data.subtype || player.name !== data.name) {
         player.updatePlayer(data.name, data.subtype);
       }
