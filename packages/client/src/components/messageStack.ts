@@ -99,29 +99,3 @@ export class MessageStack {
     });
   }
 }
-
-// // Example usage in a scene
-// class MyScene extends Phaser.Scene {
-//     private messageStack: MessageStack;
-
-//     constructor() {
-//         super({ key: 'MyScene' });
-//     }
-
-//     public create(): void {
-//         this.messageStack = new MessageStack(this);
-
-//         // Add a sample message
-//         this.messageStack.addMessage("Task completed!", 120); // 2 minutes
-//         this.messageStack.addMessage("Starting soon...", 30); // 30 seconds
-//     }
-// }
-
-// const config: Phaser.Types.Core.GameConfig = {
-//     type: Phaser.AUTO,
-//     width: 800,
-//     height: 600,
-//     scene: MyScene,
-// };
-
-// const game = new Phaser.Game(config);

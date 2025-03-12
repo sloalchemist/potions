@@ -12,7 +12,6 @@ import {
 import 'dotenv/config';
 import { getEnv } from '@rt-potion/common';
 import { logger } from '../util/logger';
-//import { worldID } from '../services/setup';
 
 export class DataLogger {
   private static register = new Registry();
