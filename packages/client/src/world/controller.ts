@@ -255,7 +255,7 @@ export function getPhysicalInteractions(
     item.itemType.carryable &&
     item.itemType.attributes?.find(
       (attr) => attr.name === 'specialized_resource'
-    )?.value == ownerId
+    )?.value == community_id
   ) {
     interactions.push({
       action: 'pickup',
@@ -263,9 +263,6 @@ export function getPhysicalInteractions(
       label: `Pick up ${item.itemType.name}`
     });
   }
-
-  console.log(item.attributes['specialized_resource']);
-  console.log(ownerId);
 
   // if the item can be smashed
   if (item.itemType.smashable) {
