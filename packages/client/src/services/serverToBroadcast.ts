@@ -16,6 +16,7 @@ import {
   PortalData,
   SetDatetimeData,
   SpeakData,
+  BombData,
   ShowPortalMenuData,
   ScoreboardData
 } from '@rt-potion/common';
@@ -92,14 +93,13 @@ export function setupBroadcast(
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
     item.stash(world, mob, data.position);
-    world.addStoredItem(item);
     updateInventory();
   }
 
   function handleUnstashItem(data: UnstashItemData) {
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
-    item.unstash(world, mob, data.position);
+    item.unstash(world, mob);
     world.removeStoredItem(item);
     updateInventory();
   }
@@ -198,7 +198,11 @@ export function setupBroadcast(
     setLeaderboardData(data.scores);
     const leaderboardScene = scene.scene.get('LeaderboardScene');
     if (leaderboardScene instanceof LeaderboardScene) {
-      leaderboardScene.renderLeaderboard();
+      if (scene.scene.isActive('LeaderboardScene')) {
+        leaderboardScene.renderLeaderboard();
+      } else if (scene.scene.get('LeaderboardScene')) {
+        console.debug('LeaderboardScene is initialized but not active.');
+      }
     } else {
       throw new Error('Leaderboard scene not found');
     }
@@ -207,6 +211,13 @@ export function setupBroadcast(
   function handleReloadPage() {
     sessionStorage.setItem('traveling_through_portal', 'true');
     window.location.reload();
+  }
+
+  function handleBomb(data: BombData) {
+    const mob = world.mobs[data.id] as SpriteMob;
+    if (mob) {
+      mob.createBombExplosion(1);
+    }
   }
 
   // Subscribe to broadcast and dispatch events using switch
@@ -279,6 +290,9 @@ export function setupBroadcast(
           break;
         case 'reload_page':
           handleReloadPage();
+          break;
+        case 'bomb':
+          handleBomb(broadcastItem.data as BombData);
           break;
         default:
           console.error(

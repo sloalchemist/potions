@@ -4,6 +4,7 @@ import { getWorlds } from '../../services/authMarshalling';
 import { pubSub } from '../../services/clientCommunication/pubsub';
 import { Item } from '../item';
 import { Use } from './use';
+import { logger } from '../../util/logger';
 
 export class EnterPortal implements Use {
   key: string;
@@ -12,7 +13,6 @@ export class EnterPortal implements Use {
   constructor() {
     this.key = 'enter';
     this.worlds = [];
-    this.populateWorlds();
   }
 
   private async populateWorlds() {
@@ -23,7 +23,7 @@ export class EnterPortal implements Use {
         name: world.world_id
       }));
     } catch (error) {
-      console.error(error);
+      logger.error('Error populating worlds:', error);
     }
   }
 
@@ -32,6 +32,17 @@ export class EnterPortal implements Use {
   }
 
   interact(mob: Mob, item: Item): boolean {
+    if (this.worlds.length === 0) {
+      this.populateWorlds().then(() => {
+        if (this.isNearPortal(mob, item)) {
+          // Send message to client to show world selection
+          pubSub.showPortalMenu(mob.id, this.worlds);
+
+          return true;
+        }
+        return false;
+      });
+    }
     if (this.isNearPortal(mob, item)) {
       // Send message to client to show world selection
       pubSub.showPortalMenu(mob.id, this.worlds);

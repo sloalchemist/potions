@@ -246,6 +246,11 @@ export class SpriteMob extends Mob {
     this.speechBubbleWidth = bubbleWidth;
     this.speechBubbleHeight = bubbleHeight;
 
+    //checks if chat bubble can be cutoff if on the left, and swaps to right if so
+    if (!right && this.scene.convertToWorldXY(this.position)[0] < bubbleWidth) {
+      right = true;
+    }
+
     // Speech bubble dimensions and position (slightly offset to the right)
     const bubbleOffsetX = right ? 30 : -(30 + bubbleWidth); // Shift the bubble more to the right of the character
     const bubbleOffsetY = -30; // Position slightly above the character
@@ -365,6 +370,24 @@ export class SpriteMob extends Mob {
     });
   }
 
+  createBombExplosion(size: number) {
+    const sprite = this.scene.add.sprite(
+      this.sprite.x,
+      this.sprite.y,
+      'bomb-explosion'
+    );
+
+    sprite.setDepth(1000);
+    sprite.setScale(size);
+    sprite.visible = true;
+    this.scene.sound.play('explode');
+    sprite.anims.play('bomb-explosion');
+
+    sprite.on('animationcomplete', () => {
+      sprite.destroy();
+    });
+  }
+
   destroy(world: World) {
     super.destroy(world);
     this.sprite.destroy();
@@ -459,6 +482,7 @@ export class SpriteMob extends Mob {
         throw new Error(`Item not found ${this.key} carrying ${this.carrying}`);
       }
       spriteItem.sprite.setPosition(this.sprite.x, this.sprite.y - 24);
+      spriteItem.sprite.setDepth(1000);
     }
 
     if (this.position) {

@@ -1,16 +1,21 @@
 import { Realtime, Types } from 'ably';
-import { WorldScene } from '../scenes/worldScene';
+import { WorldScene, world } from '../scenes/worldScene';
 import { publicCharacterId, characterId } from '../worldMetadata';
 import { setupPlayerSubscriptions } from './serverToPlayer';
 import { setupBroadcast } from './serverToBroadcast';
+import { SpriteMob } from '../sprite/sprite_mob';
 
 export let broadcastChannel: Types.RealtimeChannelCallbacks;
 export let playerChannel: Types.RealtimeChannelCallbacks;
+export let chatChannel: Types.RealtimeChannelCallbacks;
+
+let isNewName: boolean;
 
 const SERVER_URL = process.env.SERVER_URL; //Cannot use getEnv in the client package https://webpack.js.org/guides/environment-variables/
 let channelsBoundToWorld: boolean = false;
 
-export function setupAbly(): Promise<string> {
+export function setupAbly(changedName: boolean = false): Promise<string> {
+  isNewName = changedName;
   let authorizer =
     SERVER_URL.slice(-1) == '/' ? 'auth?username=' : '/auth?username=';
   let worldID: string;
@@ -35,7 +40,11 @@ export function setupAbly(): Promise<string> {
       console.log('Connected to Ably');
 
       broadcastChannel = ably.channels.get(`world-${worldID}`);
+      if (isNewName && playerChannel) {
+        playerChannel.unsubscribe();
+      }
       playerChannel = ably.channels.get(`${publicCharacterId}-${worldID}`);
+      chatChannel = ably.channels.get(`chat-${worldID}`);
 
       resolve(worldID);
       console.log('Ably client initialized successfully.', worldID);
@@ -45,6 +54,9 @@ export function setupAbly(): Promise<string> {
 
 export function bindAblyToWorldScene(scene: WorldScene) {
   if (channelsBoundToWorld) {
+    if (isNewName) {
+      setupPlayerSubscriptions(playerChannel, scene);
+    }
     return;
   }
 
@@ -52,4 +64,14 @@ export function bindAblyToWorldScene(scene: WorldScene) {
 
   setupBroadcast(broadcastChannel, scene);
   setupPlayerSubscriptions(playerChannel, scene);
+
+  chatChannel.subscribe('chat', (payload: Types.Message) => {
+    const mob_id = payload.data.mob_id;
+    if (publicCharacterId === mob_id) return;
+
+    const mob = world.mobs[mob_id];
+    if (mob) {
+      (mob as SpriteMob).showSpeechBubble(payload.data.message, true);
+    }
+  });
 }

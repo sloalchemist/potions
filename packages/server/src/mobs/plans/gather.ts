@@ -40,13 +40,8 @@ export class Gather extends PlanMeans {
       percentFullAdjustment *
       this.bonus *
       npc.personality.traits[PersonalityTraits.Industriousness];
-    //console.log('gather benefit', utilityLevel, percentFull, percentFullAdjustment, this.bonus, npc.personality.traits[PersonalityTraits.Industriousness]);
     return utilityLevel;
   }
-  /*
-    desire(npc: NPC, world: ServerWorld): Desire[] {
-        return [];
-    }*/
 
   description(): string {
     return `gathering a ${this.item_type}`;

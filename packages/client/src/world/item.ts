@@ -4,8 +4,6 @@ import { Physical } from './physical';
 import { World } from './world';
 import { InteractionType, ItemType } from '../worldDescription';
 
-const MAX_STASH: number = 12;
-
 export class Item extends Physical {
   name?: string;
   carried_by?: string;
@@ -73,7 +71,6 @@ export class Item extends Physical {
       throw new Error('Item is not being carried by mob');
     }
 
-    //console.log('giving item', this.key, mob);
     from.carrying = undefined;
     to.carrying = this.key;
     this.carried_by = to.key;
@@ -105,9 +102,6 @@ export class Item extends Physical {
     if (!this.carried_by) {
       throw new Error('Must carry item being stashed.');
     }
-    if (world.getStoredItems().length >= MAX_STASH) {
-      throw new Error('Cannot stash more than 12 items.');
-    }
     console.log('stashing item', this.key, this.carried_by);
     mob.carrying = undefined;
     this.position = position;
@@ -117,13 +111,12 @@ export class Item extends Physical {
     world.addStoredItem(this); // Add to stored items
   }
 
-  unstash(world: World, mob: Mob, position: Coord) {
+  unstash(world: World, mob: Mob) {
     if (!mob.position) {
       throw new Error('Mob has no position');
     }
-    this.carried_by = undefined;
-    this.position = position;
-    world.addItemToGrid(this);
+    this.carried_by = mob.key;
+    mob.carrying = this.key;
     world.removeStoredItem(this); // Remove from stored items
   }
 

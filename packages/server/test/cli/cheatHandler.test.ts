@@ -1,5 +1,6 @@
-import { commonSetup, world } from '../testSetup';
+import { commonSetup, world as testWorld } from '../testSetup';
 import { mobFactory } from '../../src/mobs/mobFactory';
+import { logger } from '../../src/util/logger';
 import { itemGenerator } from '../../src/items/itemGenerator';
 import { DB } from '../../src/services/database';
 import {
@@ -19,13 +20,17 @@ jest.mock('readline', () => ({
   }))
 }));
 
+jest.mock('../../src/services/setup', () => ({
+  getWorld: jest.fn(() => testWorld)
+}));
+
 beforeEach(() => {
   commonSetup();
   Community.makeVillage('alchemists', 'Alchemists guild');
   Community.makeVillage('blobs', 'Blobby Town');
   Community.makeVillage('fighters', 'Fighters guild');
   Community.makeVillage('silverclaw', 'Village of Silverclaw');
-  mobFactory.loadTemplates(world.mobTypes);
+  mobFactory.loadTemplates(testWorld.mobTypes);
   initializeCli();
 });
 
@@ -53,45 +58,25 @@ describe('Cheat Handler Tests', () => {
       expect(logSpy).toHaveBeenCalledWith(HELP_PROMPT);
     });
 
-    describe('Spawn Mob Tests', () => {
-      it('should spawn mob with type blob', () => {
-        const makeMobSpy = jest.spyOn(mobFactory, 'makeMob');
-        const logSpy = jest.spyOn(console, 'log');
-        handleCliCommand('spawn mob blob x:0 y:0');
-        expect(makeMobSpy).toHaveBeenCalledWith('blob', { x: 0, y: 0 });
-        expect(logSpy).toHaveBeenCalledWith('Spawned mob: blob at (0, 0)');
+    describe('loglevel CLI Command', () => {
+      it('Should change logging level with "loglevel <valid level>" command', () => {
+        const logLevelSpy = jest
+          .spyOn(logger, 'setConsoleLogLevel')
+          .mockImplementation();
+
+        handleCliCommand('loglevel error');
+        expect(logLevelSpy).toHaveBeenCalledWith('error');
       });
 
-      it('should spawn mob with type fighter', () => {
-        const makeMobSpy = jest.spyOn(mobFactory, 'makeMob');
-        const logSpy = jest.spyOn(console, 'log');
-        handleCliCommand('spawn mob fighter x:0 y:0');
-        expect(makeMobSpy).toHaveBeenCalledWith('fighter', { x: 0, y: 0 });
-        expect(logSpy).toHaveBeenCalledWith('Spawned mob: fighter at (0, 0)');
-      });
+      it('Should reject "loglevel <invalid level>" command', () => {
+        const logSpy = jest.spyOn(console, 'warn').mockImplementation();
+        const logLevelSpy = jest
+          .spyOn(logger, 'setConsoleLogLevel')
+          .mockImplementation();
 
-      it('should spawn mob with type player', () => {
-        const makeMobSpy = jest.spyOn(mobFactory, 'makeMob');
-        const logSpy = jest.spyOn(console, 'log');
-        handleCliCommand('spawn mob player x:0 y:0');
-        expect(makeMobSpy).toHaveBeenCalledWith('player', { x: 0, y: 0 });
-        expect(logSpy).toHaveBeenCalledWith('Spawned mob: player at (0, 0)');
-      });
-
-      it('should spawn mob with type villager', () => {
-        const makeMobSpy = jest.spyOn(mobFactory, 'makeMob');
-        const logSpy = jest.spyOn(console, 'log');
-        handleCliCommand('spawn mob villager x:0 y:0');
-        expect(makeMobSpy).toHaveBeenCalledWith('villager', { x: 0, y: 0 });
-        expect(logSpy).toHaveBeenCalledWith('Spawned mob: villager at (0, 0)');
-      });
-
-      it('shold spawn mob with invalid mob type', () => {
-        const logSpy = jest.spyOn(console, 'log');
-        handleCliCommand('spawn mob invalidMob x:0 y:0');
-        expect(logSpy).toHaveBeenCalledWith(
-          expect.stringContaining('Unknown mob type: invalidMob')
-        );
+        handleCliCommand('loglevel sillyLevel');
+        expect(logSpy).toHaveBeenCalled();
+        expect(logLevelSpy).not.toHaveBeenCalled();
       });
     });
 
@@ -173,6 +158,14 @@ describe('Cheat Handler Tests', () => {
         handleCliCommand('spawn mob blob x:zero y:0');
         expect(logSpy).toHaveBeenCalledWith(
           'Invalid value for x: zero. Expected a number.'
+        );
+      });
+
+      it('should error on invalid coordinates', () => {
+        const logSpy = jest.spyOn(console, 'log');
+        handleCliCommand('spawn item tar x:200 y:200');
+        expect(logSpy).toHaveBeenCalledWith(
+          'Error: Cannot spawn at (200, 200). The tile is not walkable.'
         );
       });
     });

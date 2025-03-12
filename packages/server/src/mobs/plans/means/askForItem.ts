@@ -15,44 +15,6 @@ export class AskForItem implements Means {
   }
 
   execute(_npc: Mob): boolean {
-    /* if (
-      !npc.position ||
-      !this.mobWithItem ||
-      !this.mobWithItem.position ||
-      !this.carriedItemType
-    )
-      return true;
-
-    if (this.mobWithItem && this.mobWithItem.position && npc.position) {
-      if (this.conversation && this.conversation.isFinished()) {
-        console.log('Conversation finished');
-
-        this.mobWithItem = null;
-        this.conversation = null;
-        return true;
-      }
-
-      const newCoord = new Coord(
-        ...this.mobWithItem.position
-          .addVectorAndMagnitude(
-            Coord.normalizedSubtraction(
-              npc.position,
-              this.mobWithItem.position
-            ),
-            3
-          )
-          .floor()
-      );
-      
-            if (newCoord.x >= 0 && 
-                newCoord.y >= 0 && 
-                newCoord.x < world.worldWidth && 
-                newCoord.y < world.worldHeight && 
-                world.isWalkable(npc, newCoord.x, newCoord.y)) {
-                npc.move(world, newCoord);
-            }
-    }*/
-
     return false;
   }
 

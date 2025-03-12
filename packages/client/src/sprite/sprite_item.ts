@@ -184,15 +184,25 @@ export class SpriteItem extends Item {
 
   destroy(world: World) {
     super.destroy(world);
-    //console.log('Destroying item', this.key);
     this.healthBar?.destroy();
     this.sprite.destroy();
-    if (this.priceText) {
-      this.priceText.destroy();
-    }
-    if (this.outText) {
-      this.outText.destroy();
-    }
+    this.priceText?.destroy();
+    this.outText?.destroy();
+
+    // Notify adjacent fences to re-evaluate their sprite states
+    const adjacentPositions = [
+      { x: this.position!.x, y: this.position!.y - 1 }, // above
+      { x: this.position!.x, y: this.position!.y + 1 }, // below
+      { x: this.position!.x - 1, y: this.position!.y }, // left
+      { x: this.position!.x + 1, y: this.position!.y } // right
+    ];
+
+    adjacentPositions.forEach(({ x, y }) => {
+      const adjacentItem = world.getItemAt(x, y);
+      if (adjacentItem && this.sameItemGroup(adjacentItem as Item)) {
+        (adjacentItem as SpriteItem).animate(); // Recalculate fence sprite
+      }
+    });
   }
 
   sameItemGroup(item: Item | undefined): boolean {
@@ -213,9 +223,7 @@ export class SpriteItem extends Item {
     if (this.itemType.layout_type === 'opens') {
       if (this.position) {
         const nearbyMobs = world.getMobsAt(this.position.x, this.position.y, 2);
-        //console.log('Animating gate', this.position, nearbyMobs, this.lock);
         if (nearbyMobs.some((mob) => mob.unlocks.includes(this.lock!))) {
-          //console.log('Gate open');
           this.sprite.setFrame(`${this.type}-open`);
         } else {
           this.sprite.setFrame(`${this.type}-closed`);
@@ -267,10 +275,7 @@ export class SpriteItem extends Item {
         world.getItemAt(this.position!.x + 1, this.position!.y)
       );
 
-      //console.log('Animating wall', this.house, house, this.position, above, below, left, right);
-
       if (above && left) {
-        //console.log("above and left");
         this.sprite.setFrame(`${this.type}-bottom-right`);
       } else if (above && right) {
         this.sprite.setFrame(`${this.type}-bottom-left`);
@@ -278,13 +283,11 @@ export class SpriteItem extends Item {
         this.sprite.setFrame(`${this.type}-top-right`);
       } else if (below && right) {
         this.sprite.setFrame(`${this.type}-top-left`);
-      } else if (above) {
+      } else if (above || below) {
         if (house) {
           if (house.top_left.x == this.position!.x) {
-            //console.log('house left');
             this.sprite.setFrame(`${this.type}-left`);
           } else {
-            //console.log('house right');
             this.sprite.setFrame(`${this.type}-right`);
           }
         } else {
@@ -309,7 +312,6 @@ export class SpriteItem extends Item {
       this.sprite.setFrame(animation_key);
     }
 
-    //console.log('Playing animation', animation_key);
     if (this.priceText && this.attributes['price']) {
       this.priceText.setText(this.attributes['price'].toString());
     }
@@ -347,15 +349,11 @@ export class SpriteItem extends Item {
     this.animate();
   }
 
-  unstash(world: World, mob: Mob, position: Coord): void {
+  unstash(world: World, mob: Mob): void {
     // Call base unstash to update world state
-    super.unstash(world, mob, position);
+    super.unstash(world, mob);
     // Reposition and make sprite visible
-    if (this.position) {
-      const [worldX, worldY] = this.scene.convertToWorldXY(this.position);
-      this.sprite.x = worldX;
-      this.sprite.y = worldY;
-    }
+
     this.sprite.visible = true;
     this.animate();
   }

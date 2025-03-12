@@ -9,6 +9,7 @@ import { House } from '../community/house';
 import { pubSub } from '../services/clientCommunication/pubsub';
 import { gameWorld } from '../services/gameWorld/gameWorld';
 import { ItemType } from '../services/gameWorld/worldMetadata';
+import { logger } from '../util/logger';
 
 function shuffleArray(array: Coord[]): Coord[] {
   for (let i = array.length - 1; i > 0; i--) {
@@ -365,7 +366,7 @@ export class Item {
                 items;
                 `
     ).all() as { id: string }[];
-    //console.log('starting item ticks');
+    //logger.log('starting item ticks');
     return result.map((row) => row.id);
   }
 
@@ -425,6 +426,9 @@ export class Item {
     giveTo: Mob | undefined = undefined
   ): void {
     const use = UsesRegistry.instance.getUse(action);
+    if (action === 'pickup' && this.itemType.type === 'gold') {
+      pubSub.destroy(this);
+    }
     use.interact(mob, this, giveTo);
   }
 
@@ -448,7 +452,7 @@ export class Item {
     if (isOwnedByCommunity || isOwnedByCharacter) {
       return true;
     }
-    console.warn(
+    logger.warn(
       `Mob ${mob.name} (${mob.id}) from ${mob.community_id} community ` +
         `is not authorized to ${interaction} with ${this.type} owned by ` +
         `${this.owned_by_community ? `community ${this.owned_by_community}` : ''} ` +

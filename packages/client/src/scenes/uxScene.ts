@@ -131,16 +131,14 @@ export class UxScene extends Phaser.Scene {
     this.load.audio('give', ['static/sounds/drop.mp3']);
     // item interaction sounds
     this.load.audio('pickupGold', ['static/sounds/jingle.mp3']);
+    this.load.audio('explode', ['static/sounds/explosion.mp3']);
 
     let worldID = getWorldID();
 
-    this.load.json(
-      'global_data',
-      'https://potions.gg/world_assets/global.json'
-    );
+    this.load.json('global_data', '../../../world_assets/global.json');
     this.load.json(
       'world_specific_data',
-      `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
+      `../../../world_assets/${worldID}/world_specific.json`
     );
     this.load.once('complete', () => {
       // Parse and use the data
@@ -364,9 +362,9 @@ export class UxScene extends Phaser.Scene {
       this.infoContainer.add(this.keybindManualText);
 
       // Color pickers
-      const colors = ['Eye Color', 'Belly Color', 'Fur Color'];
+      const colors = ['Eye Color: ', 'Belly Color: ', 'Fur Color: '];
       const colorKeys = ['eyeColor', 'bellyColor', 'furColor'];
-      let yOffset = 90;
+      let yOffset = 40;
 
       colors.forEach((colorLabel, index) => {
         const label = this.add.text(
@@ -374,14 +372,14 @@ export class UxScene extends Phaser.Scene {
           yOffset,
           colorLabel,
           {
-            fontSize: '14px',
+            fontSize: '16px',
             color: '#ffffff'
           }
         );
         this.infoContainer?.add(label);
 
         const colorPicker = this.add.dom(
-          SCREEN_WIDTH / 2 + 250,
+          SCREEN_WIDTH / 2 + 240,
           yOffset,
           'input'
         );
@@ -424,6 +422,66 @@ export class UxScene extends Phaser.Scene {
         this.infoContainer?.add(colorPicker);
         yOffset += 30;
       });
+
+      // Sound/music controls
+      this.registry.set('soundEffects', true);
+      this.registry.set('music', true);
+
+      const onStyles = {
+        default: '#8CA0B3',
+        hover: '#C0D9E8',
+        pressed: '#5E7485'
+      };
+      const offStyles = {
+        default: '#C43B3D',
+        hover: '#E5AAAB',
+        pressed: '#A33133'
+      };
+      const soundEffectsToggle = new Button(
+        this,
+        SCREEN_WIDTH / 2 + 100,
+        265,
+        true,
+        'Sound',
+        () => {
+          this.registry.set('soundEffects', !this.registry.get('soundEffects'));
+          soundEffectsToggle.setStyle({
+            backgroundColor: this.registry.get('soundEffects')
+              ? onStyles
+              : offStyles
+          });
+        },
+        60,
+        30
+      );
+      const musicToggle = new Button(
+        this,
+        SCREEN_WIDTH / 2 + 160,
+        265,
+        true,
+        'Music',
+        () => {
+          this.registry.set('music', !this.registry.get('music'));
+          musicToggle.setStyle({
+            backgroundColor: this.registry.get('music') ? onStyles : offStyles
+          });
+          const worldScene = this.scene.get('WorldScene');
+          if (worldScene) {
+            if (this.registry.get('music') === true) {
+              worldScene.sound.get('background_music').resume();
+              worldScene.sound.get('background_music_layer').resume();
+            } else {
+              worldScene.sound.get('background_music').pause();
+              worldScene.sound.get('background_music_layer').pause();
+            }
+          }
+        },
+        60,
+        30
+      );
+
+      this.infoContainer?.add(soundEffectsToggle);
+      this.infoContainer?.add(musicToggle);
 
       // action tab texts
       this.itemsText = this.add.text(160, 35, 'ITEMS / Fight');
@@ -469,6 +527,10 @@ export class UxScene extends Phaser.Scene {
       );
       this.keybindGuideContainer.add(
         this.add.text(200, 170, 'F: Favorability Stats')
+      );
+      this.keybindGuideContainer.add(this.add.text(200, 195, 'E: Pickup/Drop'));
+      this.keybindGuideContainer.add(
+        this.add.text(135, 270, 'Press "k" to dismiss')
       );
 
       // recipe text
@@ -695,7 +757,7 @@ export class UxScene extends Phaser.Scene {
           }))
         );
       });
-      //addRefreshCallback(() => this.refreshInventoryStats());
+
       setAttackCallback((attacks: string[]) => {
         console.log('attack setting', attacks);
         this.setFightOptions(
@@ -716,11 +778,6 @@ export class UxScene extends Phaser.Scene {
         this.setFightOpponents(opponents)
       );
       setInventoryCallback((items: Item[]) => this.setInventory(items));
-      /*this.setChatOptions([
-                { label: 'Hello there chief, I am the lord of the world.', callback: () => speak('Hello there chief, I am the lord of the world.') },
-                { label: 'Goodbye little man hahahhahahah', callback: () => speak('Goodbye little man hahahhahahah') },
-                { label: 'Thank you mighty sir.', callback: () => speak('Thank you mighty sir.') }
-            ]);*/
     }
 
     const menuKeys = ['1', '2', '3', '4', 'r', 'f', 'k', '@'];
@@ -772,7 +829,11 @@ export class UxScene extends Phaser.Scene {
               console.log('Pressed F');
               break;
             case 'k':
-              this.showKeyBindGuideTab();
+              if (!this.keybindGuideContainer?.visible) {
+                this.showKeyBindGuideTab();
+              } else {
+                this.showInfoTab();
+              }
               console.log('Pressed K');
               break;
             default:
@@ -796,8 +857,10 @@ export class UxScene extends Phaser.Scene {
 
   callSpeak(response: string, i: number) {
     // randomly select a chat sound
-    const chatSound = Phaser.Math.RND.pick(this.chatSounds);
-    chatSound.play();
+    if (this.registry.get('soundEffects') === true) {
+      const chatSound = Phaser.Math.RND.pick(this.chatSounds);
+      chatSound.play();
+    }
     speak(response, i);
     this.setChatOptions([]);
   }
@@ -1196,7 +1259,6 @@ export class UxScene extends Phaser.Scene {
         }
       );
       this.interactButtons.push(toggleButton);
-      console.log(toggleButton);
       this.itemsContainer?.add(toggleButton);
     } else {
       this.scene.stop('BrewScene');
@@ -1299,6 +1361,9 @@ export class UxScene extends Phaser.Scene {
     this.refreshInventoryStats();
 
     this.inventoryButtons?.clearButtonOptions();
+
+    // Sort inventory alphabetically
+    inventory.sort((a, b) => a.itemType.name.localeCompare(b.itemType.name));
 
     inventory.forEach((item, i) => {
       const y = 60 + (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);

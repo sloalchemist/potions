@@ -15,11 +15,13 @@ import { World } from '../world/world';
 import { GRAY } from './pauseScene';
 import { publishPlayerPosition } from '../services/playerToServer';
 import { getNightSkyOpacity } from '../utils/nightOverlayHandler';
+import { interact } from '../services/playerToServer';
 import {
   ItemType,
   parseWorldFromJson,
   WorldDescription
 } from '../worldDescription';
+
 import { UxScene } from './uxScene';
 import { setGameState, setInventoryCallback } from '../world/controller';
 import {
@@ -29,6 +31,8 @@ import {
 } from '../utils/developerCheats';
 import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { Item } from '../world/item';
+import { SpriteItem } from '../sprite/sprite_item';
+import { LoadingProgressBar } from '../components/loadingIndicator';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
@@ -51,30 +55,97 @@ export class WorldScene extends Phaser.Scene {
   terrainWidth: number = 0;
   terrainHeight: number = 0;
   nightOpacity: number = 0;
-  keys: { [key: string]: boolean } = { w: false, a: false, s: false, d: false };
+  keys: { [key: string]: boolean } = {
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+    e: false
+  };
   prevKeys: { [key: string]: boolean } = {
     w: false,
     a: false,
     s: false,
-    d: false
+    d: false,
+    e: false
   };
   lastKeyUp = '';
   lastPublishTime: number = 0;
+  private loadingBar: LoadingProgressBar;
 
   constructor() {
     super({ key: 'WorldScene' });
+    this.loadingBar = new LoadingProgressBar(this, {
+      width: 400,
+      height: 40,
+      padding: 4,
+      barColor: 0x4caf50,
+      containerColor: 0x333333,
+      verticalOffset: -100,
+      depth: 1000,
+      textConfig: {
+        fontSize: '24px',
+        fontStyle: 'bold',
+        color: '#ffffff',
+        backgroundColor: '#000000',
+        padding: { x: 20, y: 10 }
+      },
+      loadingText: 'Loading World'
+    });
+  }
+
+  init() {
+    // Initialize graphics before any scene content
+    this.nightOverlay = this.add.graphics();
+    this.nightOverlay.setDepth(500);
+    this.nightOverlay.setScrollFactor(0);
   }
 
   preload() {
+    // Initialize loading bar first
+    console.log('Preload started');
+    this.loadingBar.create();
+
+    // Register loading bar with scene's update list
+    this.events.on('update', () => {
+      this.loadingBar.update();
+    });
+
+    // Hide world immediately
+    this.hideWorld();
+
+    // Set initial progress to show something is happening
+    this.loadingBar.setProgress(0.1);
+    this.loadingBar.setCurrentFile('Initializing...');
+    this.scene.systems.updateList.update();
+
+    this.load.on('filecomplete', (key: string) => {
+      this.loadingBar.setCurrentFile(`Loaded: ${key}`);
+    });
+
+    // Clean up loading bar when done
+    this.load.on('complete', () => {
+      this.loadingBar.setProgress(1);
+      this.loadingBar.setCurrentFile('Ready!');
+
+      // Wait 500ms to show 100% before destroying
+      setTimeout(() => {
+        // Remove update listener
+        this.events.off('update');
+        this.loadingBar.destroy();
+      }, 500);
+    });
+
+    // Start loading assets
     const worldID = getWorldID();
     this.load.image(
       'background',
-      `https://potions.gg/world_assets/${worldID}/client/background.png`
+      `../../../world_assets/${worldID}/background.png`
     );
     this.load.atlas(
       'global_atlas',
-      `https://potions.gg/world_assets/${worldID}/client/global.png`,
-      `https://potions.gg/world_assets/${worldID}/client/global-atlas.json`
+      `../../../world_assets/${worldID}/global.png`,
+      `../../../world_assets/${worldID}/global-atlas.json`
     );
 
     this.load.spritesheet('blood', 'static/blood.png', {
@@ -82,13 +153,15 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 100
     });
 
-    this.load.json(
-      'global_data',
-      'https://potions.gg/world_assets/global.json'
-    );
+    this.load.spritesheet('explosion', 'static/Explosion-scaled.png', {
+      frameWidth: 288,
+      frameHeight: 288
+    });
+
+    this.load.json('global_data', '../../../world_assets/global.json');
     this.load.json(
       'world_specific_data',
-      `https://potions.gg/world_assets/${worldID}/client/world_specific.json`
+      `../../../world_assets/${worldID}/world_specific.json`
     );
     this.load.audio('background_music_layer', [
       `static/music/${worldID}_layer.mp3`
@@ -110,24 +183,32 @@ export class WorldScene extends Phaser.Scene {
     });
 
     this.anims.create({
+      key: 'bomb-explosion',
+      frames: this.anims.generateFrameNumbers('explosion', {
+        start: 0,
+        end: 11
+      }),
+      frameRate: 20,
+      repeat: 0
+    });
+
+    this.anims.create({
       key: `foam`,
       frames: this.anims.generateFrameNames('global_atlas', {
         start: 1,
         end: 8,
         prefix: `foam-`
-        //suffix: '.png'
       }),
       frameRate: 6,
       repeat: -1
     });
+
     metadata.item_types.forEach((itemType) => {
-      //console.log('Adding item', itemType.type);
       this.itemSource[itemType.type] = atlasName;
       this.itemTypes[itemType.type] = itemType;
     });
 
     metadata.mob_types.forEach((mobType) => {
-      //console.log('Adding mob', mobType.type);
       this.mobSource[mobType.type] = atlasName;
       this.anims.create({
         key: `${mobType.type}-walk`,
@@ -135,7 +216,6 @@ export class WorldScene extends Phaser.Scene {
           start: 1,
           end: 6,
           prefix: `${mobType.type}-walk-`
-          //suffix: '.png'
         }),
         frameRate: 5,
         repeat: -1
@@ -147,7 +227,6 @@ export class WorldScene extends Phaser.Scene {
           start: 1,
           end: 4,
           prefix: `${mobType.type}-idle-`
-          //suffix: '.png'
         }),
         frameRate: 5,
         repeat: -1
@@ -249,13 +328,13 @@ export class WorldScene extends Phaser.Scene {
   }
 
   create() {
-    const globalData = parseWorldFromJson(
+    const worldData = parseWorldFromJson(
       this.cache.json.get('global_data'),
       this.cache.json.get('world_specific_data')
     );
 
     world = new World();
-    world.load(globalData);
+    world.load(worldData);
 
     setInventoryCallback((items: Item[]) => {
       console.log('Inventory callback called with items:', items);
@@ -265,7 +344,7 @@ export class WorldScene extends Phaser.Scene {
 
     // Load globals
     if (needsAnimationsLoaded) {
-      this.loadAnimations('global_sprites', 'global_atlas', globalData);
+      this.loadAnimations('global_sprites', 'global_atlas', worldData);
     }
 
     // Tile mapping as defined earlier
@@ -288,21 +367,21 @@ export class WorldScene extends Phaser.Scene {
       '4-4' // Configuration 15
     ] as const satisfies readonly string[];
 
-    const waterTypes = globalData.terrain_types
+    const waterTypes = worldData.terrain_types
       .filter((type) => !type.walkable)
       .map((type) => type.id);
-    const landTypes = globalData.terrain_types
+    const landTypes = worldData.terrain_types
       .filter((type) => type.walkable)
       .map((type) => type.id);
 
     const terrainMap: Record<number, TerrainType> = {};
-    for (const terrainType of globalData.terrain_types) {
+    for (const terrainType of worldData.terrain_types) {
       terrainMap[terrainType.id] = terrainType;
     }
-    // console.log('waterTypes', waterTypes, 'landTypes', landTypes);
+
     // Draw water layer
     this.drawTerrainLayer(
-      globalData.tiles,
+      worldData.tiles,
       waterTypes,
       true,
       (posX, posY, type, up, _down, _left, _right) => {
@@ -323,7 +402,7 @@ export class WorldScene extends Phaser.Scene {
 
     // Draw land layer with stone
     this.drawTerrainLayer(
-      globalData.tiles,
+      worldData.tiles,
       landTypes,
       true,
       (posX, posY, type, up, down, left, right) => {
@@ -334,7 +413,6 @@ export class WorldScene extends Phaser.Scene {
         const frameIndex = tileMapping[configuration];
 
         // Create the sprite
-        //this.add.sprite(posY, posX, 'world_atlas', `sand-2-2`).setOrigin(0, 0).setDepth(-0.5);
         this.add
           .sprite(posX, posY, 'global_atlas', `stone-${frameIndex}`)
           .setOrigin(0, 0)
@@ -343,7 +421,7 @@ export class WorldScene extends Phaser.Scene {
     );
 
     this.drawTerrainLayer(
-      globalData.tiles,
+      worldData.tiles,
       landTypes,
       false,
       (posX, posY, type, up, down, left, right) => {
@@ -354,7 +432,6 @@ export class WorldScene extends Phaser.Scene {
         const frameIndex = tileMapping[configuration];
 
         // Create the sprite
-        //this.add.sprite(posY, posX, 'world_atlas', `sand-2-2`).setOrigin(0, 0).setDepth(-0.5);
         this.add
           .sprite(posX, posY, 'global_atlas', `${terrain}-${frameIndex}`)
           .setOrigin(0, 0)
@@ -376,8 +453,8 @@ export class WorldScene extends Phaser.Scene {
       cameraViewportHeight
     );
 
-    this.terrainWidth = globalData.tiles[0].length;
-    this.terrainHeight = globalData.tiles.length;
+    this.terrainWidth = worldData.tiles[0].length;
+    this.terrainHeight = worldData.tiles.length;
 
     const background = this.add.image(0, 0, 'background');
     background.setOrigin(0, 0);
@@ -396,13 +473,15 @@ export class WorldScene extends Phaser.Scene {
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
     this.hideWorld();
 
-    if (!this.sound.isPlaying('background_music')) {
-      this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
-    }
-    if (!this.sound.isPlaying('background_music_layer')) {
-      this.sound
-        .add('background_music_layer', { loop: true, volume: 0.3 })
-        .play();
+    if (this.registry.get('music') === true) {
+      if (!this.sound.isPlaying('background_music')) {
+        this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
+      }
+      if (!this.sound.isPlaying('background_music_layer')) {
+        this.sound
+          .add('background_music_layer', { loop: true, volume: 0.3 })
+          .play();
+      }
     }
 
     bindAblyToWorldScene(this);
@@ -421,12 +500,6 @@ export class WorldScene extends Phaser.Scene {
         pointer.y >= cameraViewportY &&
         pointer.y <= cameraViewportY + cameraViewportHeight
       ) {
-        // console.log(
-        //   'click',
-        //   pointer.worldX / TILE_SIZE,
-        //   pointer.worldY / TILE_SIZE
-        // );
-
         // Prevent player movement if the brew scene is active
         if (
           this.scene.isActive('BrewScene') ||
@@ -461,6 +534,26 @@ export class WorldScene extends Phaser.Scene {
       if (movementKeys.includes(curKey)) {
         this.keys[curKey] = true;
         this.lastKeyUp = curKey;
+      }
+
+      if (curKey === 'e') {
+        const player = world.mobs[publicCharacterId];
+        if (player && player.position) {
+          if (player.carrying) {
+            const carriedItem = world.items[player.carrying];
+            if (carriedItem) {
+              interact(carriedItem.key, 'drop', null);
+            }
+          } else {
+            const pickupItem = world.getItemAt(
+              Math.floor(player.position.x),
+              Math.floor(player.position.y)
+            );
+            if (pickupItem) {
+              interact(pickupItem.key, 'pickup', null);
+            }
+          }
+        }
       }
 
       if (event.shiftKey && event.code === 'KeyF') {
@@ -525,7 +618,10 @@ export class WorldScene extends Phaser.Scene {
       const roundedY = Math.floor(this.hero.y);
 
       if (roundedX !== this.cameraDolly.x || roundedY !== this.cameraDolly.y) {
-        if (!this.sound.isPlaying('walk')) {
+        if (
+          this.registry.get('soundEffects') === true &&
+          !this.sound.isPlaying('walk')
+        ) {
           this.sound.add('walk', { loop: true, volume: 0.6 }).play();
         }
       } else {
@@ -540,6 +636,49 @@ export class WorldScene extends Phaser.Scene {
       Object.values(world.houses).forEach((house) => {
         const spriteHouse = house as SpriteHouse;
         spriteHouse.animate(Math.floor(x), Math.floor(y));
+      });
+
+      Object.values(world.items).forEach((shipwreck) => {
+        const ship = shipwreck as SpriteItem;
+        const heroX = Math.floor(x);
+        const heroY = Math.floor(y);
+
+        // Calculate the width and height in tiles
+        const shipWidthTiles = 110 / TILE_SIZE;
+        const shipHeightTiles = 115 / TILE_SIZE;
+
+        if (
+          ship.itemType.type === 'shipwreck' &&
+          heroX > 27 - shipWidthTiles / 2 - 1 &&
+          heroX < 27 + shipWidthTiles / 2 &&
+          heroY > 28 - shipHeightTiles / 2 &&
+          heroY < 28 + shipHeightTiles / 2 - 1
+        ) {
+          ship.sprite.setAlpha(0.5);
+        } else {
+          ship.sprite.setAlpha(1);
+        }
+      });
+      Object.values(world.items).forEach((volcano) => {
+        const vol = volcano as SpriteItem;
+        const heroX = Math.floor(x);
+        const heroY = Math.floor(y);
+
+        // Calculate the width and height in tiles
+        const volWidthTiles = 238 / TILE_SIZE;
+        const volHeightTiles = 204 / TILE_SIZE;
+
+        if (
+          vol.itemType.type === 'volcano' &&
+          heroX > 16 - volWidthTiles / 2 - 1 &&
+          heroX <= 16 + volWidthTiles / 2 + 1 &&
+          heroY > 24 - volHeightTiles / 2 &&
+          heroY <= 24 + volHeightTiles / 2
+        ) {
+          vol.sprite.setAlpha(0.5);
+        } else {
+          vol.sprite.setAlpha(1);
+        }
       });
     }
 
@@ -677,7 +816,7 @@ export class WorldScene extends Phaser.Scene {
       const menu = this.add.text(290, 200, 'MENU', buttonStyle);
       menu.setOrigin(0, 0);
       menu.setScrollFactor(0);
-      menu.setDepth(100);
+      menu.setDepth(1001);
       menu.setInteractive({ useHandCursor: true });
 
       // Hover effects

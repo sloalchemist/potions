@@ -9,12 +9,10 @@ export class Chat implements Plan {
   execute(npc: Mob): boolean {
     if (this.startConversationWith !== undefined) {
       conversationTracker.startConversation(npc, this.startConversationWith);
-      //console.log(`${npc.name} Chat execute, starting conversation with ${this.startConversationWith.name}`);
     }
     npc.needs.changeNeed('energy', 5);
     npc.needs.changeNeed('social', 20);
     npc.setMoveTarget(npc.position);
-    //console.log(`${npc.name} Chat execute`);
     if (npc.needs.getNeed('social') >= 100) {
       return true;
     }
@@ -36,7 +34,6 @@ export class Chat implements Plan {
         const mob = Mob.getMob(mobID)!;
         if (!conversationTracker.hasConversation(mob)) {
           this.startConversationWith = mob;
-          //conversationTracker.startConversation(npc, mob);
           break;
         }
       }
@@ -47,7 +44,6 @@ export class Chat implements Plan {
         npc.personality.traits[PersonalityTraits.Extroversion] +
       bonusForInConversation;
 
-    //console.log(`${npc.name} Chat utility, utility ${utilityLevel}, mobs ${this.startConversationWith !== undefined} bonus conv: ${bonusForInConversation}`);
     if (inConversation || this.startConversationWith !== undefined) {
       return utilityLevel;
     } else {

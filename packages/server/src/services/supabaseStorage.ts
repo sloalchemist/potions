@@ -2,8 +2,9 @@ import fs from 'fs';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
 import path from 'path';
-import Database from 'better-sqlite3';
 import { getEnv } from '@rt-potion/common';
+import { logger } from '../util/logger';
+import { performDatabaseOperations } from './dbOperations';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -26,7 +27,7 @@ export async function initializeBucket(supabase: SupabaseClient) {
 
   // Throw error if applicable
   if (fetchError) {
-    console.log('Error fetching buckets:', fetchError);
+    logger.log('Error fetching buckets:', fetchError);
     throw fetchError;
   }
 
@@ -35,7 +36,7 @@ export async function initializeBucket(supabase: SupabaseClient) {
 
   // If the bucket does not exist, create it
   if (!bucketExists) {
-    console.log(`Bucket '${bucketName}' does not exist, creating it.`);
+    logger.log(`Bucket '${bucketName}' does not exist, creating it.`);
     const { error: createError } = await supabase.storage.createBucket(
       bucketName,
       {
@@ -46,13 +47,13 @@ export async function initializeBucket(supabase: SupabaseClient) {
 
     // Throw error if applicable
     if (createError) {
-      console.log('Error creating bucket:', createError);
+      logger.log('Error creating bucket:', createError);
       throw createError;
     }
 
-    console.log(`Bucket '${bucketName}' created successfully.`);
+    logger.log(`Bucket '${bucketName}' created successfully.`);
   } else {
-    console.log(`Bucket '${bucketName}' already exists.`);
+    logger.log(`Bucket '${bucketName}' already exists.`);
   }
 }
 
@@ -67,7 +68,7 @@ async function downloadFile(
     .from(bucketName)
     .download(supabase_file_name);
 
-  console.log(data);
+  logger.log('Blob:', data);
 
   if (error) {
     throw error;
@@ -87,7 +88,7 @@ async function downloadFile(
 
   fs.writeFile(destPath, buffer, (err) => {
     if (err) {
-      console.error('Error writing file:', err);
+      logger.error('Error writing file:', err);
     }
   });
 }
@@ -107,52 +108,14 @@ async function downloadData(supabase: SupabaseClient, worldID: string) {
   ]);
 }
 
-function createDbSnapshot(originalDbPath: string, snapshotDbPath: string) {
+export async function uploadLocalFile(path: string, supabase: SupabaseClient) {
   try {
-    console.log(
-      `Creating a snapshot of ${originalDbPath} at ${snapshotDbPath}...`
-    );
+    const buffer = await fs.promises.readFile('data/' + path);
+    const file = new File([buffer], path, {
+      type: 'application/octet-stream',
+      lastModified: new Date().getTime()
+    });
 
-    // Copy the database and its WAL file (if it exists)
-    fs.copyFileSync(originalDbPath, snapshotDbPath);
-    if (fs.existsSync(`${originalDbPath}-wal`)) {
-      fs.copyFileSync(`${originalDbPath}-wal`, `${snapshotDbPath}-wal`);
-    }
-
-    console.log(`Snapshot created at ${snapshotDbPath}`);
-  } catch (error) {
-    console.error(`Error creating snapshot:`, error);
-    throw error;
-  }
-}
-
-function mergeWalIntoDb(dbPath: string) {
-  try {
-    console.log(`Merging WAL into ${dbPath} snapshot...`);
-
-    const db = new Database(dbPath);
-
-    // Merge WAL into the main database and switch back to DELETE mode
-    db.pragma('journal_mode = DELETE');
-    // Compact the database file
-    db.exec('VACUUM');
-    db.close();
-
-    console.log(`Successfully merged WAL into ${dbPath}`);
-  } catch (error) {
-    console.error(`Error merging WAL into ${dbPath}:`, error);
-    throw error;
-  }
-}
-
-async function uploadLocalFile(path: string, supabase: SupabaseClient) {
-  const buffer = await fs.promises.readFile('data/' + path);
-  const file = new File([buffer], path, {
-    type: 'application/octet-stream',
-    lastModified: new Date().getTime()
-  });
-
-  try {
     const { error } = await supabase.storage
       .from(bucketName)
       .upload(file.name, file, {
@@ -161,17 +124,22 @@ async function uploadLocalFile(path: string, supabase: SupabaseClient) {
       });
 
     if (error) {
-      console.log('Error uploading to Supabase: ', error);
-      throw error;
+      logger.error('Error uploading to Supabase: ', error);
+      return false;
     }
+    return true;
   } catch (error) {
-    console.log('Error uploading ', file.name);
-    throw error;
+    logger.error('Error uploading file', path, ':', error);
+    return false;
   }
 }
 
 // Merges WAL into a snapshot, then uploads database files in supabase
-async function uploadLocalData(supabase: SupabaseClient, worldID: string) {
+async function uploadLocalData(
+  supabase: SupabaseClient,
+  worldID: string,
+  skipWalMerge = false
+) {
   try {
     // Take snapshot of current state, so upload can not interrupt the next tick
     const serverDb = `data/${worldID}-server-data.db`;
@@ -180,19 +148,26 @@ async function uploadLocalData(supabase: SupabaseClient, worldID: string) {
     const knowledgeDb = `data/${worldID}-knowledge-graph.db`;
     const knowledgeSnapshot = `data/${worldID}-knowledge-graph-snapshot.db`;
 
-    createDbSnapshot(serverDb, serverSnapshot);
-    createDbSnapshot(knowledgeDb, knowledgeSnapshot);
+    performDatabaseOperations(
+      serverDb,
+      serverSnapshot,
+      knowledgeDb,
+      knowledgeSnapshot,
+      skipWalMerge
+    );
 
-    mergeWalIntoDb(serverSnapshot);
-    mergeWalIntoDb(knowledgeSnapshot);
-
-    await Promise.all([
+    const [serverUploadSuccess, knowledgeUploadSuccess] = await Promise.all([
       uploadLocalFile(`${worldID}-server-data-snapshot.db`, supabase),
       uploadLocalFile(`${worldID}-knowledge-graph-snapshot.db`, supabase)
     ]);
-    console.log('Successfully uploaded local data to Supabase');
+
+    if (!serverUploadSuccess || !knowledgeUploadSuccess) {
+      logger.error('One or more files failed to upload to Supabase');
+    } else {
+      logger.log('Successfully uploaded local data to Supabase');
+    }
   } catch (error) {
-    throw error;
+    logger.error('Error during data upload process:', error);
   }
 }
 

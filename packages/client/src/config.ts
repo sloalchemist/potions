@@ -10,6 +10,7 @@ import { BrewScene } from './scenes/brewScene';
 import { FightScene } from './scenes/fightScene';
 import { PortalMenuScene } from './scenes/portalMenuScene';
 import { LeaderboardScene } from './scenes/leaderboardScene';
+import { MiniLeaderboardScene } from './scenes/miniLeaderboardScene';
 import { PortalLoadingScene } from './scenes/portalLoadingScene';
 
 export const SCREEN_WIDTH = 480;
@@ -41,7 +42,8 @@ const config: Phaser.Types.Core.GameConfig = {
     FightScene,
     PortalMenuScene,
     PortalLoadingScene,
-    LeaderboardScene
+    LeaderboardScene,
+    MiniLeaderboardScene
   ]
 };
 

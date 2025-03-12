@@ -493,6 +493,25 @@
       ]
     },
     {
+      "name": "Large Bone",
+      "type": "large-bone",
+      "carryable": false,
+      "walkable": false,
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "bones",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 4,
+            "rate": 0.1
+          }
+        }
+      ]
+    },
+    {
       "name": "Sun",
       "type": "sun",
       "carryable": false,
@@ -588,26 +607,6 @@
             "radius": 3,
             "rate": 0.1
           }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sun-drop",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sunflower",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 4,
-            "rate": 0.1
-          }
         }
       ]
     },
@@ -662,7 +661,19 @@
       "type": "shipwreck",
       "carryable": false,
       "walkable": false,
-      "interactions": []
+      "interactions": [],
+      "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "gold",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 3,
+            "rate": 0.1
+          }
+        }
+      ]
     },
     {
       "name": "Volcano",
@@ -1070,7 +1081,8 @@
           "action": "add_item",
           "while_carried": false,
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           }
         },
@@ -1086,7 +1098,8 @@
             }
           ],
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           }
         },
@@ -1102,7 +1115,8 @@
             }
           ],
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           }
         },
@@ -1118,7 +1132,8 @@
             }
           ],
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           }
         },
@@ -1134,7 +1149,8 @@
             }
           ],
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           }
         },
@@ -1148,145 +1164,12 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ]
-        },
-        {
-          "description": "Add $item_name",
-          "action": "add_item",
-          "while_carried": false,
-          "permissions": {
-            "community": true,
-            "other": false
-          }
-        },
-        {
-          "description": "Get $item_name",
-          "action": "get_item",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "items",
-              "value": 0,
-              "comparison": "greater_than"
-            }
           ],
           "permissions": {
-            "community": true,
-            "other": false
+            "community": false,
+            "character": false,
+            "other": true
           }
-        },
-        {
-          "description": "Raise price",
-          "action": "raise_price",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "price",
-              "value": 99,
-              "comparison": "less_than"
-            }
-          ],
-          "permissions": {
-            "community": true,
-            "other": false
-          }
-        },
-        {
-          "description": "Lower price",
-          "action": "lower_price",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "price",
-              "value": 1,
-              "comparison": "greater_than"
-            }
-          ],
-          "permissions": {
-            "community": true,
-            "other": false
-          }
-        },
-        {
-          "description": "Collect gold",
-          "action": "collect_gold",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "gold",
-              "value": 0,
-              "comparison": "greater_than"
-            }
-          ],
-          "permissions": {
-            "community": true,
-            "other": false
-          }
-        },
-        {
-          "description": "Purchase potion",
-          "action": "purchase",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "items",
-              "value": 0,
-              "comparison": "greater_than"
-            }
-          ]
-        },
-        {
-          "description": "Add $item_name",
-          "action": "add_item",
-          "while_carried": false
-        },
-        {
-          "description": "Raise price",
-          "action": "raise_price",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "price",
-              "value": 99,
-              "comparison": "less_than"
-            }
-          ]
-        },
-        {
-          "description": "Lower price",
-          "action": "lower_price",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "price",
-              "value": 1,
-              "comparison": "greater_than"
-            }
-          ]
-        },
-        {
-          "description": "Collect gold",
-          "action": "collect_gold",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "gold",
-              "value": 0,
-              "comparison": "greater_than"
-            }
-          ]
-        },
-        {
-          "description": "Destroy stand",
-          "action": "destroy_stand",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "items",
-              "value": 0,
-              "comparison": "equals"
-            }
-          ]
         }
       ],
       "show_price_at": {
@@ -1329,29 +1212,103 @@
       "smashable": true,
       "walkable": false,
       "attributes": [
-        {
-          "name": "items",
-          "value": 0
-        },
-        {
-          "name": "price",
-          "value": 10
-        },
-        {
-          "name": "gold",
-          "value": 0
-        },
-        {
-          "name": "health",
-          "value": 1
-        }
+          {
+              "name": "items",
+              "value": 0
+          },
+          {
+              "name": "price",
+              "value": 10
+          },
+          {
+              "name": "gold",
+              "value": 0
+          },
+          {
+              "name": "health",
+              "value": 1
+          }
       ],
-      "interactions": [],
+      "interactions": [
+          {
+              "description": "Add $item_name",
+              "action": "add_to_market",
+              "while_carried": false,
+              "permissions": {
+                  "community": true,
+                  "other": false
+              }
+          },
+          {
+              "description": "Get $item_name",
+              "action": "purchase_market_item",
+              "while_carried": false,
+              "conditions": [
+                  {
+                      "attribute_name": "items",
+                      "value": 0,
+                      "comparison": "greater_than"
+                  }
+              ],
+              "permissions": {
+                  "community": true,
+                  "other": false
+              }
+          },
+          {
+              "description": "Raise price",
+              "action": "raise_market_price",
+              "while_carried": false,
+              "conditions": [
+                  {
+                      "attribute_name": "price",
+                      "value": 99,
+                      "comparison": "less_than"
+                  }
+              ],
+              "permissions": {
+                  "community": true,
+                  "other": false
+              }
+          },
+          {
+              "description": "Lower price",
+              "action": "lower_market_price",
+              "while_carried": false,
+              "conditions": [
+                  {
+                      "attribute_name": "price",
+                      "value": 1,
+                      "comparison": "greater_than"
+                  }
+              ],
+              "permissions": {
+                  "community": true,
+                  "other": false
+              }
+          },
+          {
+              "description": "Collect gold",
+              "action": "collect_gold",
+              "while_carried": false,
+              "conditions": [
+                  {
+                      "attribute_name": "gold",
+                      "value": 0,
+                      "comparison": "greater_than"
+                  }
+              ],
+              "permissions": {
+                  "community": true,
+                  "other": false
+              }
+          }
+      ],
       "show_price_at": {
-        "x": 7,
-        "y": -10
+          "x": 7,
+          "y": -10
       }
-    },
+  },
     {
       "name": "Potion",
       "type": "potion",

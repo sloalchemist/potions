@@ -11,7 +11,7 @@ import {
 } from 'prom-client';
 import 'dotenv/config';
 import { getEnv } from '@rt-potion/common';
-//import { worldID } from '../services/setup';
+import { logger } from '../util/logger';
 
 export class DataLogger {
   private static register = new Registry();
@@ -110,9 +110,12 @@ export function pushMetrics() {
   try {
     gatewayURL = getEnv('METRIC_URL');
   } catch {
-    console.log('ENV for pushgateway server not set disabling pushing metrics');
+    logger.log('ENV for pushgateway server not set disabling pushing metrics');
     return;
   }
+
+  // Get world id to seperate worlds
+  const worldID = process.argv.slice(2)[0];
 
   const gateway = new Pushgateway(gatewayURL, {
     timeout: 5000, //Set the request timeout to 5000ms
@@ -123,15 +126,15 @@ export function pushMetrics() {
 
   // Load metrics under World Name 'Metric'
   gateway
-    .pushAdd({ jobName: `Metrics` })
+    .pushAdd({ jobName: `${worldID} Metrics` })
     .then()
-    .catch((e) => console.log(e));
+    .catch((e) => logger.warn(`Failed to pushAdd metrics:`, e));
 
   function pushData() {
     gateway
-      .push({ jobName: `Metrics` })
+      .push({ jobName: `${worldID} Metrics` })
       .then()
-      .catch((e) => console.log(e));
+      .catch((e) => logger.warn(`Failed to push metrics:`, e));
   }
 
   function pusherTimer() {

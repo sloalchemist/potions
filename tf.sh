@@ -58,8 +58,14 @@ if [ $exitCode -ne 0 ]; then
          echo -e "\033[31mCheck to make sure you correctly copied your supabase organization id.\033[0m"
     elif echo "$output" | grep -q "Project status did not reach ACTIVE_HEALTHY within."; then
          echo -e "\033[31mIf you had to time out the run of apply, check to make sure your supabase db password is correct.\033[0m"
+    elif echo "$output" | grep -q "Ably API token cannot be an empty string."; then
+         echo -e "\033[31mMake sure you have followed the README instructions to create your tf.tfvars file.\033[0m"
+     elif echo "$output" | grep -q "Unable to create project"; then
+         echo -e "\033[31mYou need to delete any supabase projects with the same name as the one you are creating.\033[0m"
+     elif echo "$output" | grep -q "Could not create resource, unexpected error"; then
+         echo -e "\033[31mYou need to delete any ably app that uses the same ably access token.\033[0m"
     else
-         echo -e "\033[31mWe haven't handle this case yet: An unknown error occurred. Please review the output above. In most cases, this is due to out of sync terraform state. Please refer to the section of the README called SYNCING TERRAFORM STATE.\033[0m"
+         echo -e "\033[31mWe haven't handle this case yet: An unknown error occurred. Check to make sure Docker Desktop is running, and if that doesn't work, please review the output above. In most cases, this is due to out of sync terraform state. Please refer to the section of the README called SYNCING TERRAFORM STATE.\033[0m"
     fi
     exit $exitCode
 fi
