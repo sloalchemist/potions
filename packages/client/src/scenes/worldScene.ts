@@ -165,9 +165,9 @@ export class WorldScene extends Phaser.Scene {
       `../../../world_assets/${worldID}/world_specific.json`
     );
     this.load.audio('background_music_layer', [
-      `static/music/${worldID}_layer.ogg`
+      `static/music/${worldID}_layer.mp3`
     ]);
-    this.load.audio('background_music', ['static/music/cosmic_ambient.ogg']);
+    this.load.audio('background_music', ['static/music/cosmic_ambient.mp3']);
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
 
