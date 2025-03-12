@@ -53,7 +53,9 @@ describe('"Give" action item interaction tests', () => {
       'player'
     );
 
-    expect(interactions.some((interaction) => interaction.action === 'give'));
+    expect(
+      interactions.some((interaction) => interaction.action === 'give')
+    ).toBe(true);
   });
 
   test('Give action is absent when receiver is carrying item', () => {

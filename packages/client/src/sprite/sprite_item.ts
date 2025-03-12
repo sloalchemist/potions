@@ -184,15 +184,25 @@ export class SpriteItem extends Item {
 
   destroy(world: World) {
     super.destroy(world);
-    //console.log('Destroying item', this.key);
     this.healthBar?.destroy();
     this.sprite.destroy();
-    if (this.priceText) {
-      this.priceText.destroy();
-    }
-    if (this.outText) {
-      this.outText.destroy();
-    }
+    this.priceText?.destroy();
+    this.outText?.destroy();
+
+    // Notify adjacent fences to re-evaluate their sprite states
+    const adjacentPositions = [
+      { x: this.position!.x, y: this.position!.y - 1 }, // above
+      { x: this.position!.x, y: this.position!.y + 1 }, // below
+      { x: this.position!.x - 1, y: this.position!.y }, // left
+      { x: this.position!.x + 1, y: this.position!.y } // right
+    ];
+
+    adjacentPositions.forEach(({ x, y }) => {
+      const adjacentItem = world.getItemAt(x, y);
+      if (adjacentItem && this.sameItemGroup(adjacentItem as Item)) {
+        (adjacentItem as SpriteItem).animate(); // Recalculate fence sprite
+      }
+    });
   }
 
   sameItemGroup(item: Item | undefined): boolean {
@@ -278,7 +288,7 @@ export class SpriteItem extends Item {
         this.sprite.setFrame(`${this.type}-top-right`);
       } else if (below && right) {
         this.sprite.setFrame(`${this.type}-top-left`);
-      } else if (above) {
+      } else if (above || below) {
         if (house) {
           if (house.top_left.x == this.position!.x) {
             //console.log('house left');
