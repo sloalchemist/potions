@@ -137,19 +137,16 @@ export class WorldScene extends Phaser.Scene {
         start: 1,
         end: 8,
         prefix: `foam-`
-        //suffix: '.png'
       }),
       frameRate: 6,
       repeat: -1
     });
     metadata.item_types.forEach((itemType) => {
-      //console.log('Adding item', itemType.type);
       this.itemSource[itemType.type] = atlasName;
       this.itemTypes[itemType.type] = itemType;
     });
 
     metadata.mob_types.forEach((mobType) => {
-      //console.log('Adding mob', mobType.type);
       this.mobSource[mobType.type] = atlasName;
       this.anims.create({
         key: `${mobType.type}-walk`,
@@ -157,7 +154,6 @@ export class WorldScene extends Phaser.Scene {
           start: 1,
           end: 6,
           prefix: `${mobType.type}-walk-`
-          //suffix: '.png'
         }),
         frameRate: 5,
         repeat: -1
@@ -169,7 +165,6 @@ export class WorldScene extends Phaser.Scene {
           start: 1,
           end: 4,
           prefix: `${mobType.type}-idle-`
-          //suffix: '.png'
         }),
         frameRate: 5,
         repeat: -1
@@ -356,7 +351,6 @@ export class WorldScene extends Phaser.Scene {
         const frameIndex = tileMapping[configuration];
 
         // Create the sprite
-        //this.add.sprite(posY, posX, 'world_atlas', `sand-2-2`).setOrigin(0, 0).setDepth(-0.5);
         this.add
           .sprite(posX, posY, 'global_atlas', `stone-${frameIndex}`)
           .setOrigin(0, 0)
@@ -376,7 +370,6 @@ export class WorldScene extends Phaser.Scene {
         const frameIndex = tileMapping[configuration];
 
         // Create the sprite
-        //this.add.sprite(posY, posX, 'world_atlas', `sand-2-2`).setOrigin(0, 0).setDepth(-0.5);
         this.add
           .sprite(posX, posY, 'global_atlas', `${terrain}-${frameIndex}`)
           .setOrigin(0, 0)
