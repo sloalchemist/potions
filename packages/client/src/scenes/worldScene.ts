@@ -614,13 +614,14 @@ export class WorldScene extends Phaser.Scene {
         const volWidthTiles = 238 / TILE_SIZE;
         const volHeightTiles = 204 / TILE_SIZE;
 
-        if (
+        const insideVolcano = 
           vol.itemType.type === 'volcano' &&
           heroX > 16 - volWidthTiles / 2 - 1 &&
           heroX <= 16 + volWidthTiles / 2 + 1 &&
           heroY > 24 - volHeightTiles / 2 &&
           heroY <= 24 + volHeightTiles / 2
-        ) {
+
+        if (insideVolcano) {
           vol.sprite.setAlpha(0.5);
         } else {
           vol.sprite.setAlpha(1);
