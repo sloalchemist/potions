@@ -130,7 +130,9 @@ const server_breakup = (json: GlobalJson) => {
         'adventurousness',
         'gluttony',
         'sleepy',
-        'extroversion'
+        'extroversion',
+        'invincible',
+        'invincibility_spawn_length_ms'
       ]);
       for (let i = 0; i < json['mob_types'].length; i++) {
         Object.keys(json['mob_types'][i]!).forEach((sub_item_type) => {

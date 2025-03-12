@@ -1467,7 +1467,8 @@
       "adventurousness": 20,
       "gluttony": 10,
       "sleepy": 10,
-      "extroversion": 50
+      "extroversion": 50,
+      "invincibility_spawn_length_ms": 0
     },
     {
       "name": "Villager",
@@ -1487,7 +1488,8 @@
       "adventurousness": 10,
       "gluttony": 50,
       "sleepy": 80,
-      "extroversion": 50
+      "extroversion": 50,
+      "invincibility_spawn_length_ms": 0
     },
     {
       "name": "Player",
@@ -1529,7 +1531,8 @@
       "adventurousness": 20,
       "gluttony": 10,
       "sleepy": 10,
-      "extroversion": 50
+      "extroversion": 50,
+      "invincibility_spawn_length_ms": 0
     }
   ],
   "regions": [],
