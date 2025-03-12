@@ -422,6 +422,56 @@ export class UxScene extends Phaser.Scene {
         yOffset += 30;
       });
 
+      // Sound/music controls
+      this.registry.set('soundEffects', true);
+      this.registry.set('music', true);
+
+      const onStyles = {
+        default: '#8CA0B3',
+        hover: '#C0D9E8',
+        pressed: '#5E7485'
+      };
+      const offStyles = {
+        default: '#C43B3D',
+        hover: '#E5AAAB',
+        pressed: '#A33133'
+      };
+      const soundEffectsToggle = new Button(
+        this,
+        SCREEN_WIDTH / 2 + 100,
+        265,
+        true,
+        'Sound',
+        () => {
+          this.registry.set('soundEffects', !this.registry.get('soundEffects'));
+          soundEffectsToggle.setStyle({
+            backgroundColor: this.registry.get('soundEffects')
+              ? onStyles
+              : offStyles
+          });
+        },
+        60,
+        30
+      );
+      const musicToggle = new Button(
+        this,
+        SCREEN_WIDTH / 2 + 160,
+        265,
+        true,
+        'Music',
+        () => {
+          this.registry.set('music', !this.registry.get('music'));
+          musicToggle.setStyle({
+            backgroundColor: this.registry.get('music') ? onStyles : offStyles
+          });
+        },
+        60,
+        30
+      );
+
+      this.infoContainer?.add(soundEffectsToggle);
+      this.infoContainer?.add(musicToggle);
+
       // action tab texts
       this.itemsText = this.add.text(160, 35, 'ITEMS / Fight');
       this.itemsContainer.add(this.itemsText);
