@@ -689,12 +689,14 @@ export class AblyService implements PubSub {
     subscribeToPlayerChannel('interact', (data) => {
       const item = Item.getItem(data.item_key);
       const player = Mob.getMob(username);
+      let options: Mob | Item | undefined = undefined;
       if (item && player) {
-        item.interact(
-          player,
-          data.action,
-          data.give_to ? Mob.getMob(data.give_to) : undefined
-        );
+        if ((data.action = 'add_ingredient')) {
+          options = data.options ? Item.getItem(data.options) : undefined;
+        } else {
+          options = data.options ? Mob.getMob(data.options) : undefined;
+        }
+        item.interact(player, data.action, options);
       }
     });
 
