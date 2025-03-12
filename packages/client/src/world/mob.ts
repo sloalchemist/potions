@@ -2,6 +2,9 @@ import { Coord, followPath } from '@rt-potion/common';
 import { Physical } from './physical';
 import { World } from './world';
 
+// If any new mobs are added that you do not want to chat, add it to the list below.
+const notChattableTypes = ['player', 'blob'];
+
 export class Mob extends Physical {
   _target?: Coord;
   path: Coord[] = [];
@@ -15,6 +18,7 @@ export class Mob extends Physical {
   unlocks: string[] = [];
   doing: string = '';
   community_id?: string;
+  chattable: boolean = true;
 
   constructor(
     world: World,
@@ -31,6 +35,11 @@ export class Mob extends Physical {
     super(world, key, type, position);
     this.name = name;
     this.maxHealth = maxHealth;
+
+    if (notChattableTypes.includes(type)) {
+      this.chattable = false;
+    }
+
     if (position) {
       world.addMobToGrid(this);
     }
