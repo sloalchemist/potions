@@ -20,7 +20,7 @@ describe('Alchemist Mob Affiliation and Stats Tests', () => {
     // Initialize the player's position
     const playerPos: Coord = { x: 1, y: 0 };
 
-    // Create a player mob using mobFactory's method (e.g., makeMob)
+    // Create a player mob using mobFactory's method (e.g. makeMob)
     mobFactory.makeMob(
       'player',
       playerPos,
