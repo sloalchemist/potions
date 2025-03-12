@@ -2,9 +2,9 @@ import fs from 'fs';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
 import path from 'path';
-import Database from 'better-sqlite3';
 import { getEnv } from '@rt-potion/common';
 import { logger } from '../util/logger';
+import { performDatabaseOperations } from './dbOperations';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -108,44 +108,6 @@ async function downloadData(supabase: SupabaseClient, worldID: string) {
   ]);
 }
 
-function createDbSnapshot(originalDbPath: string, snapshotDbPath: string) {
-  try {
-    logger.log(
-      `Creating a snapshot of ${originalDbPath} at ${snapshotDbPath}...`
-    );
-
-    // Copy the database and its WAL file (if it exists)
-    fs.copyFileSync(originalDbPath, snapshotDbPath);
-    if (fs.existsSync(`${originalDbPath}-wal`)) {
-      fs.copyFileSync(`${originalDbPath}-wal`, `${snapshotDbPath}-wal`);
-    }
-
-    logger.log(`Snapshot created at ${snapshotDbPath}`);
-  } catch (error) {
-    logger.error(`Error creating snapshot:`, error);
-    throw error;
-  }
-}
-
-function mergeWalIntoDb(dbPath: string) {
-  try {
-    logger.log(`Merging WAL into ${dbPath} snapshot...`);
-
-    const db = new Database(dbPath);
-
-    // Merge WAL into the main database and switch back to DELETE mode
-    db.pragma('journal_mode = DELETE');
-    // Compact the database file
-    db.exec('VACUUM');
-    db.close();
-
-    logger.log(`Successfully merged WAL into ${dbPath}`);
-  } catch (error) {
-    logger.error(`Error merging WAL into ${dbPath}:`, error);
-    throw error;
-  }
-}
-
 export async function uploadLocalFile(path: string, supabase: SupabaseClient) {
   try {
     const buffer = await fs.promises.readFile('data/' + path);
@@ -173,7 +135,11 @@ export async function uploadLocalFile(path: string, supabase: SupabaseClient) {
 }
 
 // Merges WAL into a snapshot, then uploads database files in supabase
-async function uploadLocalData(supabase: SupabaseClient, worldID: string) {
+async function uploadLocalData(
+  supabase: SupabaseClient,
+  worldID: string,
+  skipWalMerge = false
+) {
   try {
     // Take snapshot of current state, so upload can not interrupt the next tick
     const serverDb = `data/${worldID}-server-data.db`;
@@ -182,11 +148,13 @@ async function uploadLocalData(supabase: SupabaseClient, worldID: string) {
     const knowledgeDb = `data/${worldID}-knowledge-graph.db`;
     const knowledgeSnapshot = `data/${worldID}-knowledge-graph-snapshot.db`;
 
-    createDbSnapshot(serverDb, serverSnapshot);
-    createDbSnapshot(knowledgeDb, knowledgeSnapshot);
-
-    mergeWalIntoDb(serverSnapshot);
-    mergeWalIntoDb(knowledgeSnapshot);
+    performDatabaseOperations(
+      serverDb,
+      serverSnapshot,
+      knowledgeDb,
+      knowledgeSnapshot,
+      skipWalMerge
+    );
 
     const [serverUploadSuccess, knowledgeUploadSuccess] = await Promise.all([
       uploadLocalFile(`${worldID}-server-data-snapshot.db`, supabase),

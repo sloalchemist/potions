@@ -7,19 +7,21 @@ import {
 } from '../../src/services/supabaseStorage';
 import { logger } from '../../src/util/logger';
 
+// Mock performDatabaseOperations at the module level
+jest.mock('../../src/services/dbOperations', () => ({
+  performDatabaseOperations: jest.fn()
+}));
+
 type StorageError = {
   message: string;
   statusCode?: string;
 };
 
 // Mock the modules
-jest.mock('@supabase/supabase-js');
 jest.mock('fs', () => ({
   promises: {
     readFile: jest.fn()
-  },
-  copyFileSync: jest.fn(),
-  existsSync: jest.fn().mockReturnValue(false)
+  }
 }));
 jest.mock('../../src/util/logger', () => ({
   logger: {
@@ -27,13 +29,6 @@ jest.mock('../../src/util/logger', () => ({
     error: jest.fn()
   }
 }));
-jest.mock('better-sqlite3', () => {
-  return jest.fn().mockImplementation(() => ({
-    pragma: jest.fn(),
-    exec: jest.fn(),
-    close: jest.fn()
-  }));
-});
 
 describe('Upload and Download Supabase Bucket', () => {
   test('Test upload frequency to Supabase', () => {
@@ -112,7 +107,7 @@ describe('Upload and Download Supabase Bucket', () => {
           .upload as jest.Mock;
         uploadFn.mockResolvedValue({ data: {}, error: null });
 
-        await uploadLocalData(mockSupabase, 'world1');
+        await uploadLocalData(mockSupabase, 'world1', true);
 
         expect(logger.log).toHaveBeenCalledWith(
           'Successfully uploaded local data to Supabase'
@@ -130,7 +125,7 @@ describe('Upload and Download Supabase Bucket', () => {
             error: { message: 'Upload failed' } as StorageError
           });
 
-        await uploadLocalData(mockSupabase, 'world1');
+        await uploadLocalData(mockSupabase, 'world1', true);
 
         expect(logger.error).toHaveBeenCalledWith(
           'One or more files failed to upload to Supabase'
@@ -143,7 +138,7 @@ describe('Upload and Download Supabase Bucket', () => {
           .upload as jest.Mock;
         uploadFn.mockRejectedValue(error);
 
-        await uploadLocalData(mockSupabase, 'world1');
+        await uploadLocalData(mockSupabase, 'world1', true);
 
         expect(logger.error).toHaveBeenCalledWith(
           'Error uploading file',
