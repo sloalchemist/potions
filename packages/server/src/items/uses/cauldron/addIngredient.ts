@@ -13,7 +13,7 @@ export class AddIngredient implements Use {
     return 'Add ingredient to cauldron';
   }
 
-  interact(mob: Mob, item: Item, options: Item | Mob | undefined): boolean {
+  interact(mob: Mob, item: Item, options?: Item | Mob | undefined): boolean {
     let ingredient: Item | undefined;
     if (!(options instanceof Item)) {
       if (!mob.carrying) {
