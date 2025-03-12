@@ -9,6 +9,12 @@ jest.mock('../../../src/items/uses/create', () => ({
   }
 }));
 
+jest.mock('../../../src/items/item', () => ({
+  Item: {
+    countTypeOfItemInRadius: jest.fn()
+  }
+}));
+
 describe('CreateMarket', () => {
   let createMarket: CreateMarket;
   let mockMob: jest.Mocked<Mob>;
@@ -59,5 +65,25 @@ describe('CreateMarket', () => {
       mockMob,
       'market-stand'
     );
+  });
+
+  test('should not create market if a gate is within the radius of the mob', () => {
+    // return 1, indicating a gate is nearby
+    (Item.countTypeOfItemInRadius as jest.Mock).mockReturnValue(1);
+
+    const result = createMarket.interact(mockMob, mockItem);
+
+    // The market should not be created, result being false
+    expect(result).toBe(false);
+
+    // Ensure method was called with the correct arguments
+    expect(Item.countTypeOfItemInRadius).toHaveBeenCalledWith(
+      'gate',
+      mockMob.position,
+      1
+    );
+
+    // Ensure that createItemFrom was not called since the gate is nearby
+    expect(Create.createItemFrom).not.toHaveBeenCalled();
   });
 });

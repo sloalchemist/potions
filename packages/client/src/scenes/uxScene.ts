@@ -470,6 +470,9 @@ export class UxScene extends Phaser.Scene {
       this.keybindGuideContainer.add(
         this.add.text(200, 170, 'F: Favorability Stats')
       );
+      this.keybindGuideContainer.add(
+        this.add.text(135, 270, 'Press "k" to dismiss')
+      );
 
       // recipe text
       this.recipeText = this.add.text(160, 35, 'POTION RECIPES');
@@ -772,7 +775,11 @@ export class UxScene extends Phaser.Scene {
               console.log('Pressed F');
               break;
             case 'k':
-              this.showKeyBindGuideTab();
+              if (!this.keybindGuideContainer?.visible) {
+                this.showKeyBindGuideTab();
+              } else {
+                this.showInfoTab();
+              }
               console.log('Pressed K');
               break;
             default:
