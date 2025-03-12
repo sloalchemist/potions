@@ -453,9 +453,6 @@ export class UxScene extends Phaser.Scene {
         this.add.text(30, 245, '4: Inventory Tab')
       );
       this.keybindGuideContainer.add(
-        this.add.text(30, 245, 'E: Quick Pickup/Drop')
-      );
-      this.keybindGuideContainer.add(
         this.add.text(200, 70, 'Shift + 2: Fight Tab')
       );
       this.keybindGuideContainer.add(
@@ -470,6 +467,7 @@ export class UxScene extends Phaser.Scene {
       this.keybindGuideContainer.add(
         this.add.text(200, 170, 'F: Favorability Stats')
       );
+      this.keybindGuideContainer.add(this.add.text(200, 195, 'E: Pickup/Drop'));
       this.keybindGuideContainer.add(
         this.add.text(135, 270, 'Press "k" to dismiss')
       );
