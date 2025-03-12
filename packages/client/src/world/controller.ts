@@ -478,7 +478,7 @@ export function addNewMob(scene: WorldScene, mob: MobI) {
         refresh();
       }
     });
-    //scene.cameras.main.startFollow(newMob.sprite);
+
     // This is the new "Setup camera section"
     scene.follow(newMob.sprite);
 

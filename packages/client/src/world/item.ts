@@ -73,7 +73,6 @@ export class Item extends Physical {
       throw new Error('Item is not being carried by mob');
     }
 
-    //console.log('giving item', this.key, mob);
     from.carrying = undefined;
     to.carrying = this.key;
     this.carried_by = to.key;

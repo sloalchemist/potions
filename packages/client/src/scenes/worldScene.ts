@@ -443,12 +443,6 @@ export class WorldScene extends Phaser.Scene {
         pointer.y >= cameraViewportY &&
         pointer.y <= cameraViewportY + cameraViewportHeight
       ) {
-        // console.log(
-        //   'click',
-        //   pointer.worldX / TILE_SIZE,
-        //   pointer.worldY / TILE_SIZE
-        // );
-
         // Prevent player movement if the brew scene is active
         if (
           this.scene.isActive('BrewScene') ||
