@@ -33,6 +33,9 @@ import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { Item } from '../world/item';
 import { SpriteItem } from '../sprite/sprite_item';
 
+import { gameWorld } from '../../../../server/src/services/gameWorld/gameWorld';
+import {Mob } from '../../../../server/src/mobs/mob';
+
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
 
@@ -621,8 +624,16 @@ export class WorldScene extends Phaser.Scene {
           heroY > 24 - volHeightTiles / 2 &&
           heroY <= 24 + volHeightTiles / 2
 
+        const player = world.mobs[publicCharacterId] as Mob;
+
         if (insideVolcano) {
           vol.sprite.setAlpha(0.5);
+
+          // reduce mob player health while inside volcano
+          if (gameWorld.currentDate().global_tick % 48 == 0) {
+            player.changeHealth(-10);
+          }
+
         } else {
           vol.sprite.setAlpha(1);
         }
