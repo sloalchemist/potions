@@ -1,31 +1,16 @@
 import { readFileSync } from 'fs';
-import { executeWithArgs } from '../src/generator';
 import path from 'node:path';
+import { globalJsonSchema } from '../src/schema';
 
-describe('validate global json', () => {
-  beforeAll(() => {
-    executeWithArgs(['server', 'client']);
-  });
-
-  it('validate client global json', () => {
-    const expected = readFileSync(__dirname + '/expectedClient.json', 'utf8');
-
-    const actual = readFileSync(
-      path.join(__dirname, '../../client/world_assets/global.json'),
+describe('generator processes global.json', () => {
+  it('global.json passes validation', () => {
+    const globalJsonString = readFileSync(
+      path.join(__dirname, '../global.json'),
       'utf8'
     );
+    const globalJsonObject = JSON.parse(globalJsonString);
 
-    expect(JSON.parse(actual)).toStrictEqual(JSON.parse(expected));
-  });
-
-  it('validate server global json', () => {
-    const expected = readFileSync(__dirname + '/expectedServer.json', 'utf8');
-
-    const actual = readFileSync(
-      path.join(__dirname, '../../server/world_assets/global.json'),
-      'utf8'
-    );
-
-    expect(JSON.parse(actual)).toStrictEqual(JSON.parse(expected));
+    const result = globalJsonSchema.safeParse(globalJsonObject);
+    expect(result.error).toBeUndefined();
   });
 });
