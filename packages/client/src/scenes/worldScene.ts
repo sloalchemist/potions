@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import { leaveWorld } from '../services/playerToServer';
 import {
   gameState,
   fantasyDate,
@@ -537,6 +538,33 @@ export class WorldScene extends Phaser.Scene {
     });
 
     needsAnimationsLoaded = false;
+
+    const uiX = cameraViewportX + 100;
+    const uiY = cameraViewportY + 10;
+
+    console.log('Creating Main Menu button at:', uiX, uiY);
+    const mainMenuButton = this.add
+      .text(uiX, uiY, 'Main Menu', {
+        font: '20px Arial',
+        backgroundColor: '#ff0000', // Red background for visibility
+        padding: { x: 10, y: 50 },
+        color: '#ffffff'
+      })
+      .setInteractive({ useHandCursor: true })
+      .setScrollFactor(0);
+
+    console.log('Main Menu button created:', mainMenuButton);
+    mainMenuButton.on('pointerover', () => {
+      mainMenuButton.setStyle({ fill: '#ff0' });
+    });
+    mainMenuButton.on('pointerout', () => {
+      mainMenuButton.setStyle({ fill: '#ffffff' });
+    });
+    mainMenuButton.on('pointerdown', () => {
+      console.log('Main Menu button clicked');
+      leaveWorld('MAIN_MENU');
+      this.resetToLoadWorldScene();
+    });
   }
 
   public convertToTileXY(pos: Coord): [number, number] {
