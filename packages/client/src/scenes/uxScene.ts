@@ -1214,7 +1214,7 @@ export class UxScene extends Phaser.Scene {
             x,
             y,
             true,
-            `Add ${item.name}`,
+            `Add ${item.itemType.name}`,
             () => {
               interact(cauldronKey, 'add_ingredient', item.key);
               // Refresh the buttons in case the interaction state has changed
