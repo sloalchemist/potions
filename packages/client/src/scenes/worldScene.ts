@@ -125,16 +125,15 @@ export class WorldScene extends Phaser.Scene {
 
     // Clean up loading bar when done
     this.load.on('complete', () => {
-      // console.log('Loading complete');
       this.loadingBar.setProgress(1);
       this.loadingBar.setCurrentFile('Ready!');
 
-      // Wait a moment to show 100% before destroying
+      // Wait 500ms to show 100% before destroying
       setTimeout(() => {
         // Remove update listener
         this.events.off('update');
         this.loadingBar.destroy();
-      }, 700);
+      }, 500);
     });
 
     // Start loading assets
