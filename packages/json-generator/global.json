@@ -1178,18 +1178,6 @@
             "character": false,
             "other": true
           }
-        },
-        {
-          "description": "Destroy stand",
-          "action": "destroy_stand",
-          "while_carried": false,
-          "conditions": [
-            {
-              "attribute_name": "items",
-              "value": 0,
-              "comparison": "equals"
-            }
-          ]
         }
       ],
       "show_price_at": {
