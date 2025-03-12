@@ -142,6 +142,7 @@ export class WorldScene extends Phaser.Scene {
       frameRate: 6,
       repeat: -1
     });
+
     metadata.item_types.forEach((itemType) => {
       //console.log('Adding item', itemType.type);
       this.itemSource[itemType.type] = atlasName;
