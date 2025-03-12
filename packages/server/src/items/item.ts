@@ -419,13 +419,13 @@ export class Item {
   interact(
     mob: Mob,
     action: string,
-    giveTo: Mob | undefined = undefined
+    options: Item | Mob | undefined = undefined
   ): void {
     const use = UsesRegistry.instance.getUse(action);
     if (action === 'pickup' && this.itemType.type === 'gold') {
       pubSub.destroy(this);
     }
-    use.interact(mob, this, giveTo);
+    use.interact(mob, this, options);
   }
 
   /**
