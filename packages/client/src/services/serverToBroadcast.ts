@@ -107,6 +107,9 @@ export function setupBroadcast(
 
   function handleDoing(data: DoingData) {
     const mob = world.mobs[data.id] as SpriteMob;
+    if (mob == undefined) {
+      console.warn(`Mob with id ${data.id} is undefined.`);
+    }
     mob.doing = data.action;
   }
 
