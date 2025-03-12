@@ -24,7 +24,6 @@ export function initializeServerDatabase(
   if (rebuild) {
     if (fs.existsSync(absolutePath)) {
       fs.unlinkSync(absolutePath);
-      //logger.log(`Deleted existing database file: ${absolutePath}`);
     }
     const directoryPath = path.dirname(dbPath);
     if (!fs.existsSync(directoryPath)) {

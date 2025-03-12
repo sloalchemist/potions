@@ -133,8 +133,6 @@ export class ServerWorld implements GameWorld {
     measureTime('Fantasy date', () => FantasyDate.runTick());
     measureTime('Data logging', () => DataLogger.logTick());
 
-    //const totalTime = Date.now() - startTime;
-    //logger.log('time to tick', totalTime);
     const totalTime = performance.now() - totalStart;
     logger.debug(`[TICK] Total tick cycle time: ${totalTime.toFixed(2)}ms`);
     logger.debug('[TICK] End tick cycle ================================\n');

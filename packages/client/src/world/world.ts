@@ -55,12 +55,10 @@ export class World {
     this.worldHeight = worldDescription.tiles[0].length;
     console.log('world size', this.worldWidth, this.worldHeight);
     this.tiles = worldDescription.tiles;
-    //this.generateWalkable(mapData);
 
     this.mobGrid = new Map();
     for (let x = 0; x < this.worldWidth; x++) {
       for (let y = 0; y < this.worldHeight; y++) {
-        //console.log('grid', x, y, isWalkable(this.tiles[x][y]));
         this.mobGrid.set(`${x},${y}`, []);
       }
     }

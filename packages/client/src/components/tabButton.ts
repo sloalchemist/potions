@@ -52,10 +52,6 @@ export class TabButton extends Phaser.GameObjects.Container {
       Phaser.Geom.Rectangle.Contains
     );
 
-    /*        const rectBorder = scene.add.rectangle(x, y, this.width, this.height, 0xFF0000);
-        console.log('borders', -this.width / 2, -this.height / 2, this.width, this.height);
-        rectBorder.setDepth(1001);*/
-
     this.setupInteractive();
   }
   private drawTabShape(

@@ -234,7 +234,6 @@ export class LoadWorldScene extends Phaser.Scene {
               start: 1,
               end: 4,
               prefix: `player-idle-`
-              //suffix: '.png'
             }),
             frameRate: 5,
             repeat: -1

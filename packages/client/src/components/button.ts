@@ -79,12 +79,6 @@ export class Button extends Phaser.GameObjects.Container {
 
     // Set the size of the container and make it interactive
     this.setInteractive();
-    /*this.setInteractive(new Phaser.Geom.Rectangle(
-            -this.fixedWidth / 2,
-            -this.fixedHeight / 2,
-            this.fixedWidth,
-            this.fixedHeight
-        ), Phaser.Geom.Rectangle.Contains);*/
 
     // Prevent the button from moving with the camera
     this.setScrollFactor(0);

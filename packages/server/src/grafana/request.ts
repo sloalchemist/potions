@@ -17,7 +17,6 @@ export function requestClock() {
   let uptime_msg: string;
 
   try {
-    //counter = 0;
     server_url = getEnv('SERVER_URL');
     uptime_msg = getEnv('UPTIME_MSG');
   } catch {

@@ -696,7 +696,7 @@ export class UxScene extends Phaser.Scene {
           }))
         );
       });
-      //addRefreshCallback(() => this.refreshInventoryStats());
+
       setAttackCallback((attacks: string[]) => {
         console.log('attack setting', attacks);
         this.setFightOptions(
@@ -717,11 +717,6 @@ export class UxScene extends Phaser.Scene {
         this.setFightOpponents(opponents)
       );
       setInventoryCallback((items: Item[]) => this.setInventory(items));
-      /*this.setChatOptions([
-                { label: 'Hello there chief, I am the lord of the world.', callback: () => speak('Hello there chief, I am the lord of the world.') },
-                { label: 'Goodbye little man hahahhahahah', callback: () => speak('Goodbye little man hahahhahahah') },
-                { label: 'Thank you mighty sir.', callback: () => speak('Thank you mighty sir.') }
-            ]);*/
     }
 
     const menuKeys = ['1', '2', '3', '4', 'r', 'f', 'k', '@'];

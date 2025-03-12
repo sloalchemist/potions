@@ -60,7 +60,6 @@ export class Mob extends Physical {
 
   destroy(world: World) {
     this.dead = true;
-    //console.log('Destroying physical', this.key, this.position);
     if (this.position) {
       world.removeMobFromGrid(this);
     }
@@ -68,7 +67,6 @@ export class Mob extends Physical {
   }
 
   changePosition(world: World, newPosition: Coord) {
-    //console.log('changePosition', this.position, newPosition);
     world.moveMob(this, newPosition);
     this.position = newPosition;
   }
