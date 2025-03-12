@@ -316,7 +316,7 @@ export class WorldScene extends Phaser.Scene {
     for (const terrainType of globalData.terrain_types) {
       terrainMap[terrainType.id] = terrainType;
     }
-    // console.log('waterTypes', waterTypes, 'landTypes', landTypes);
+
     // Draw water layer
     this.drawTerrainLayer(
       globalData.tiles,
