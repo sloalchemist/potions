@@ -539,32 +539,87 @@ export class WorldScene extends Phaser.Scene {
 
     needsAnimationsLoaded = false;
 
-    const uiX = cameraViewportX + 100;
+    // Calculate position using your camera viewport variables:
+    const uiX = cameraViewportX + cameraViewportWidth - 100; // smaller offset for a smaller button
     const uiY = cameraViewportY + 10;
 
-    console.log('Creating Main Menu button at:', uiX, uiY);
-    const mainMenuButton = this.add
-      .text(uiX, uiY, 'Main Menu', {
-        font: '20px Arial',
-        backgroundColor: '#ff0000', // Red background for visibility
-        padding: { x: 10, y: 50 },
+    console.log('Creating End Game button at:', uiX, uiY);
+    const endGameButton = this.add
+      .text(uiX, uiY, 'End', {
+        font: '16px Arial', // Smaller font size
+        backgroundColor: '#ffffff', // Red background for visibility
+        padding: { x: 5, y: 5 }, // Reduced padding
         color: '#ffffff'
       })
       .setInteractive({ useHandCursor: true })
       .setScrollFactor(0);
 
-    console.log('Main Menu button created:', mainMenuButton);
-    mainMenuButton.on('pointerover', () => {
-      mainMenuButton.setStyle({ fill: '#ff0' });
+    console.log('End Game button created:', endGameButton);
+    endGameButton.on('pointerover', () => {
+      endGameButton.setStyle({ fill: '#ff0' });
     });
-    mainMenuButton.on('pointerout', () => {
-      mainMenuButton.setStyle({ fill: '#ffffff' });
+    endGameButton.on('pointerout', () => {
+      endGameButton.setStyle({ fill: '#ffffff' });
     });
-    mainMenuButton.on('pointerdown', () => {
-      console.log('Main Menu button clicked');
+    endGameButton.on('pointerdown', () => {
+      console.log('End Game button clicked');
+      this.showRespawnOrMenuOptions();
+    });
+  }
+  showRespawnOrMenuOptions(): void {
+    // Optionally clear any existing UI buttons from UxScene
+    const uxscene = this.scene.get('UxScene') as UxScene;
+    uxscene.chatButtons?.clearButtonOptions();
+
+    // Create a container to group confirmation elements (optional)
+    const confirmContainer = this.add.container(0, 0);
+
+    // Display confirmation text
+    const confirmText = this.add.text(45, 100, 'LEAVE GAME?', {
+      color: '#FFFFFF',
+      fontSize: '60px',
+      fontStyle: 'bold'
+    });
+    confirmText.setOrigin(0, 0);
+    confirmText.setScrollFactor(0);
+    confirmText.setDepth(100);
+    confirmContainer.add(confirmText);
+
+    // Add main menu button
+    const menu = this.add.text(290, 200, 'Yes (Back to Main)', buttonStyle);
+    menu.setOrigin(0, 0);
+    menu.setScrollFactor(0);
+    menu.setDepth(100);
+    menu.setInteractive({ useHandCursor: true });
+    menu.on('pointerover', () => {
+      menu.setStyle(nameButtonHoverStyle);
+    });
+    menu.on('pointerout', () => {
+      menu.setStyle(buttonStyle);
+    });
+    menu.on('pointerdown', () => {
       leaveWorld('MAIN_MENU');
       this.resetToLoadWorldScene();
     });
+    confirmContainer.add(menu);
+
+    const noButton = this.add.text(90, 200, 'No (Resume Game)', buttonStyle);
+    noButton.setOrigin(0, 0);
+    noButton.setScrollFactor(0);
+    noButton.setDepth(100);
+    noButton.setInteractive({ useHandCursor: true });
+    noButton.on('pointerover', () => {
+      noButton.setStyle(nameButtonHoverStyle);
+    });
+
+    noButton.on('pointerout', () => {
+      noButton.setStyle(buttonStyle);
+    });
+    noButton.on('pointerdown', () => {
+      // Simply destroy the confirmation container to resume the game
+      confirmContainer.destroy();
+    });
+    confirmContainer.add(noButton);
   }
 
   public convertToTileXY(pos: Coord): [number, number] {
