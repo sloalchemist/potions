@@ -202,5 +202,3 @@ export class MemoryFormation {
 
 // Why a specific potion is good
 // Influence gossip.
-
-//
