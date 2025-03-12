@@ -146,14 +146,14 @@ function mergeWalIntoDb(dbPath: string) {
   }
 }
 
-async function uploadLocalFile(path: string, supabase: SupabaseClient) {
-  const buffer = await fs.promises.readFile('data/' + path);
-  const file = new File([buffer], path, {
-    type: 'application/octet-stream',
-    lastModified: new Date().getTime()
-  });
-
+export async function uploadLocalFile(path: string, supabase: SupabaseClient) {
   try {
+    const buffer = await fs.promises.readFile('data/' + path);
+    const file = new File([buffer], path, {
+      type: 'application/octet-stream',
+      lastModified: new Date().getTime()
+    });
+
     const { error } = await supabase.storage
       .from(bucketName)
       .upload(file.name, file, {
@@ -162,12 +162,13 @@ async function uploadLocalFile(path: string, supabase: SupabaseClient) {
       });
 
     if (error) {
-      logger.log('Error uploading to Supabase: ', error);
-      throw error;
+      logger.error('Error uploading to Supabase: ', error);
+      return false;
     }
+    return true;
   } catch (error) {
-    logger.log('Error uploading ', file.name);
-    throw error;
+    logger.error('Error uploading file', path, ':', error);
+    return false;
   }
 }
 
@@ -187,13 +188,18 @@ async function uploadLocalData(supabase: SupabaseClient, worldID: string) {
     mergeWalIntoDb(serverSnapshot);
     mergeWalIntoDb(knowledgeSnapshot);
 
-    await Promise.all([
+    const [serverUploadSuccess, knowledgeUploadSuccess] = await Promise.all([
       uploadLocalFile(`${worldID}-server-data-snapshot.db`, supabase),
       uploadLocalFile(`${worldID}-knowledge-graph-snapshot.db`, supabase)
     ]);
-    logger.log('Successfully uploaded local data to Supabase');
+
+    if (!serverUploadSuccess || !knowledgeUploadSuccess) {
+      logger.error('One or more files failed to upload to Supabase');
+    } else {
+      logger.log('Successfully uploaded local data to Supabase');
+    }
   } catch (error) {
-    throw error;
+    logger.error('Error during data upload process:', error);
   }
 }
 
