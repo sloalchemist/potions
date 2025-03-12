@@ -93,7 +93,6 @@ export function setupBroadcast(
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
     item.stash(world, mob, data.position);
-    world.addStoredItem(item);
     updateInventory();
   }
 
