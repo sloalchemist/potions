@@ -803,36 +803,59 @@ export class Mob {
 
   destroy() {
     if (this.gold > 0 && this.position) {
-      const position = Item.findEmptyPosition(this.position);
+      const position = Item.findEmptyPosition(this.position, 10); // Search within 10 tiles
 
       if (this.type === 'player') {
-        // If the player dies, drop half their gold
+        // Always subtract half the gold, even if it can't be dropped
         const halfGold = Math.floor(this.gold / 2);
-        itemGenerator.createItem({
-          type: 'gold',
-          position,
-          attributes: { amount: halfGold }
-        });
-        // NOTE: The team working on the persistence feature (which
-        // is currently incomplete on mainline) will update the changeGold
-        // method to persist to supabase in addition to the local DB
         this.changeGold(-halfGold);
+
+        if (position) {
+          // Drop half of the player's gold at the valid position
+          itemGenerator.createItem({
+            type: 'gold',
+            position,
+            attributes: { amount: halfGold }
+          });
+        } else {
+          console.log(
+            `No valid position to drop gold for player ${this.id}. Gold is lost.`
+          );
+        }
       } else {
-        // Otherwise drop all of the mob's gold
-        itemGenerator.createItem({
-          type: 'gold',
-          position,
-          attributes: { amount: this.gold }
-        });
+        // For non-players, drop all gold (only if there's a valid position)
+        if (position) {
+          itemGenerator.createItem({
+            type: 'gold',
+            position,
+            attributes: { amount: this.gold }
+          });
+        } else {
+          console.log(
+            `No valid position to drop gold for mob ${this.id}. Gold is lost.`
+          );
+        }
       }
     }
 
     const carriedItem = this.carrying;
     if (carriedItem) {
-      Carryable.fromItem(carriedItem)!.dropAtFeet(this);
-    }
-    pubSub.kill(this.id);
+      const carryableItem = Carryable.fromItem(carriedItem);
+      if (carryableItem) {
+        const dropPosition = Item.findEmptyPosition(this.position, 10); // Find a valid drop spot
 
+        if (dropPosition) {
+          carryableItem.dropAtFeet(this); // Drop the item at the valid position
+        } else {
+          console.log(
+            `No valid position to drop ${carriedItem.id} for mob ${this.id}. Item will be destroyed.`
+          );
+          carryableItem.destroy(); // Destroy the item since it cannot be placed
+        }
+      }
+    }
+
+    pubSub.kill(this.id);
     this.setAction('destroyed');
   }
 
