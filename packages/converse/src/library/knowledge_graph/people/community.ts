@@ -95,23 +95,4 @@ export class Community implements Graphable {
       }
     ];
   }
-  /*
-    export interface Belief {
-    subject: Noun,
-    related_to: Noun,
-    concept: Concept,
-    name: string,
-    description: string,
-    trust: number
-}*/
-  /*
-    build(): KnowledgeGraph {
-
-
-        for (const lore of this.lore) {
-            connections.push({ "source": `community_${this.id}`, "target": lore });
-        }
-
-        return { "facts": facts, "connections": connections };
-    }*/
 }

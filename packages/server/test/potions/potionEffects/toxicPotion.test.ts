@@ -49,6 +49,9 @@ describe('Test consumption of toxic potions', () => {
     const test = testDrink.interact(testMob!, potionItem!);
     expect(test).toBe(true);
 
+    // ensure the player is no longer carrying the potion after drinking it
+    expect(testMob!.carrying).toBeUndefined();
+
     // Player should be dead
     expect(testMob!.health).toBe(0);
   });

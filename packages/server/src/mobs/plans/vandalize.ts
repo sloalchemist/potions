@@ -28,10 +28,6 @@ export class Vandalize implements Plan {
 
     return false;
   }
-  /*
-    desire(npc: NPC, world: ServerWorld): Desire[] {
-        return [];
-    }*/
 
   utility(npc: Mob): number {
     const smashTargetID = npc.findNClosestObjectIDs(this.target, 1, 5);

@@ -40,25 +40,6 @@ export class Heal extends PlanMeans {
     return benefit;
   }
 
-  //desire(npc: NPC, world: ServerWorld): Desire[] {
-  // Define different speech acts based on context
-
-  // What are they requesting & offering?
-  // What is the effect of it on the person?
-  // Method of request. Polite, urgent, etc.
-  // How does the NPC respond to the request?
-  /*
-        const value = this.benefit(npc, world);
-        if (value < 0) {
-            return [];
-        }
-        return [{item_type: 'potion', 
-                benefit: this.benefit(npc, world), 
-                quantity: 1,
-                description: `${npc.name} is looking for a potion to heal themselves.`,
-                type: 'request'}];
-    }
-*/
   description(): string {
     return `I'm looking for a potion to heal myself`;
   }
