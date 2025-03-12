@@ -131,13 +131,7 @@ export class ServerWorld implements GameWorld {
     measureTime('Mob ticks', () => this.runMobTicks(deltaTime));
     measureTime('Conversation tracker', () => conversationTracker.tick());
     measureTime('Fantasy date', () => FantasyDate.runTick());
-    measureTime('Data logging', () => DataLogger.logData());
-
-    conversationTracker.tick();
-    FantasyDate.runTick();
-
-    // log data for Prometheus
-    DataLogger.logData();
+    measureTime('Data logging', () => DataLogger.logTick());
 
     //const totalTime = Date.now() - startTime;
     //logger.log('time to tick', totalTime);
