@@ -1113,6 +1113,31 @@ export class UxScene extends Phaser.Scene {
     }
   }
 
+  // Method to handle interaction steps when selecting ingredient to brew from inventory
+  selectIngredient(ingredient: string, interaction: Interactions) {
+    // Let's call the ingredient we want to add 'target ingredient' for these comments
+
+    // 1. Save the id of the item in hand.
+    let prevCarriedID: string | undefined;
+    if (currentCharacter?.isCarrying) {
+      prevCarriedID = currentCharacter?.isCarrying;
+      // console.log(`prevCarried: ${prevCarriedID}`);
+    }
+
+    // 2. Swap the target ingredient from our inventory with the item in our hand.
+    interact(ingredient, 'unstash', null);
+
+    // 3. Add the target ingredient to the cauldron.
+    interact(
+      interaction.item.key,
+      'add_ingredient',
+      interaction.give_to ? interaction.give_to : null
+    );
+
+    // 4. Place the previously carried item back into your hand
+    if (prevCarriedID) interact(prevCarriedID, 'unstash', null);
+  }
+
   // Method to set item interactions
   setInteractions(interactions: Interactions[]) {
     this.interactButtons?.clearButtonOptions();
