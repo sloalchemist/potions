@@ -465,13 +465,11 @@ export class UxScene extends Phaser.Scene {
             backgroundColor: this.registry.get('music') ? onStyles : offStyles
           });
           const worldScene = this.scene.get('WorldScene');
-          if (this.registry.get('music') === true) {
-            if (worldScene) {
-              worldScene.sound.get('background_music').play();
-              worldScene.sound.get('background_music_layer').play();
-            }
-          } else {
-            if (worldScene) {
+          if (worldScene) {
+            if (this.registry.get('music') === true) {
+              worldScene.sound.get('background_music').resume();
+              worldScene.sound.get('background_music_layer').resume();
+            } else {
               worldScene.sound.get('background_music').pause();
               worldScene.sound.get('background_music_layer').pause();
             }
