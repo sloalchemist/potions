@@ -1,5 +1,4 @@
 import * as Phaser from 'phaser';
-import { leaveWorld } from '../services/playerToServer';
 import {
   gameState,
   fantasyDate,
@@ -580,11 +579,7 @@ export class WorldScene extends Phaser.Scene {
         if (this.scene.isActive('ChatOverlayScene')) {
           this.scene.stop('ChatOverlayScene');
         } else {
-          if (this.scene.isActive('PauseMenuScene')) {
-            this.scene.stop('PauseMenuScene');
-          } else {
-            this.scene.launch('PauseMenuScene');
-          }
+          this.pauseMenuScene();
         }
       }
     });
@@ -626,60 +621,16 @@ export class WorldScene extends Phaser.Scene {
     //   this.pauseMenu();
     // });
   }
-  pauseMenu(): void {
-    // Optionally clear any existing UI buttons from UxScene
-    const uxscene = this.scene.get('UxScene') as UxScene;
+
+  pauseMenuScene() {
+    let uxscene = this.scene.get('UxScene') as UxScene;
     uxscene.chatButtons?.clearButtonOptions();
 
-    // Create a container to group confirmation elements (optional)
-    const confirmContainer = this.add.container(0, 0);
-
-    // Display confirmation text
-    const confirmText = this.add.text(45, 100, 'LEAVE GAME?', {
-      color: '#FFFFFF',
-      fontSize: '60px',
-      fontStyle: 'bold'
-    });
-    confirmText.setOrigin(0, 0);
-    confirmText.setScrollFactor(0);
-    confirmText.setDepth(100);
-    confirmContainer.add(confirmText);
-
-    // Add main menu button
-    const menu = this.add.text(290, 200, 'Yes (Back to Main)', buttonStyle);
-    menu.setOrigin(0, 0);
-    menu.setScrollFactor(0);
-    menu.setDepth(100);
-    menu.setInteractive({ useHandCursor: true });
-    menu.on('pointerover', () => {
-      menu.setStyle(nameButtonHoverStyle);
-    });
-    menu.on('pointerout', () => {
-      menu.setStyle(buttonStyle);
-    });
-    menu.on('pointerdown', () => {
-      leaveWorld('MAIN_MENU');
-      this.resetToLoadWorldScene();
-    });
-    confirmContainer.add(menu);
-
-    const noButton = this.add.text(90, 200, 'No (Resume Game)', buttonStyle);
-    noButton.setOrigin(0, 0);
-    noButton.setScrollFactor(0);
-    noButton.setDepth(100);
-    noButton.setInteractive({ useHandCursor: true });
-    noButton.on('pointerover', () => {
-      noButton.setStyle(nameButtonHoverStyle);
-    });
-
-    noButton.on('pointerout', () => {
-      noButton.setStyle(buttonStyle);
-    });
-    noButton.on('pointerdown', () => {
-      // Simply destroy the confirmation container to resume the game
-      confirmContainer.destroy();
-    });
-    confirmContainer.add(noButton);
+    if (this.scene.isActive('PauseMenuScene')) {
+      this.scene.stop('PauseMenuScene');
+    } else {
+      this.scene.launch('PauseMenuScene');
+    }
   }
 
   public convertToTileXY(pos: Coord): [number, number] {

@@ -1,3 +1,5 @@
+import { setGameState } from '../world/controller';
+
 export const GRAY = 0x2f4f4f;
 
 export class PauseMenuScene extends Phaser.Scene {
@@ -8,6 +10,7 @@ export class PauseMenuScene extends Phaser.Scene {
   preload() {}
 
   create() {
+    this.scene.stop('MiniLeaderboardScene');
     const graphics = this.add.graphics();
     graphics.fillStyle(GRAY, 1);
     graphics.fillRect(
@@ -27,6 +30,7 @@ export class PauseMenuScene extends Phaser.Scene {
     resumeButton.setInteractive();
     resumeButton.on('pointerdown', () => {
       this.scene.resume('WorldScene');
+      this.scene.resume('MiniLeaderboardScene');
       this.scene.stop('PauseMenuScene');
     });
 
@@ -39,9 +43,17 @@ export class PauseMenuScene extends Phaser.Scene {
     mainMenuButton.setOrigin(0.5);
     mainMenuButton.setInteractive();
     mainMenuButton.on('pointerdown', () => {
-      this.scene.stop('WorldScene');
-      this.scene.start('LoadCharacterScene', { autoStart: false });
-      this.scene.stop('PauseMenuScene');
+      this.sound.removeByKey('walk');
+      this.sound.removeByKey('background_music');
+      this.sound.removeByKey('background_music_layer');
+
+      setGameState('uninitialized');
+      const allScenes = this.scene.manager.getScenes();
+      allScenes.forEach((scene) => {
+        const key = scene.sys.settings.key;
+        this.scene.stop(key);
+      });
+      this.scene.start('LoadCharacterScene', { autoStart: true });
     });
   }
 }
