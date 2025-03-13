@@ -20,7 +20,8 @@ export class Create {
       typeAttribute = {
         ...typeAttribute,
         items: 0,
-        inventory: JSON.stringify({})
+        inventory: JSON.stringify({}),
+        prices: JSON.stringify({})
       };
     }
 
