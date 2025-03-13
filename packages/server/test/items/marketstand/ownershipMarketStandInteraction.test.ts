@@ -3,8 +3,8 @@ import { DB } from '../../../src/services/database';
 import { mobFactory } from '../../../src/mobs/mobFactory';
 import { Community } from '../../../src/community/community';
 import { Item } from '../../../src/items/item';
-import { CollectGold } from '../../../src/items/uses/stand/collectGold';
-import { DestroyStand } from '../../../src/items/uses/stand/destroyStand';
+import { CollectGold } from '../../../src/items/uses/marketstand/collectGold';
+import { DestroyMarketStand } from '../../../src/items/uses/marketstand/destroyMarketStand';
 import { Mob } from '../../../src/mobs/mob';
 import { Coord } from '@rt-potion/common';
 
@@ -32,7 +32,7 @@ describe('Market Stand Character Ownership Tests', () => {
     expect(nonOwner).toBeDefined();
     expect(nonOwner!.gold).toBe(0);
 
-    // Create potion stand owned by owner
+    // Create market stand owned by owner
     itemGenerator.createItem({
       type: 'market-stand',
       subtype: '255',
@@ -42,33 +42,34 @@ describe('Market Stand Character Ownership Tests', () => {
         templateType: 'log',
         items: 0,
         gold: 50,
-        capacity: 20
+        price: 10,
+        health: 1
       }
     });
     const standID = Item.getItemIDAt(standPosition);
     expect(standID).not.toBeNull();
-    const potionStand = Item.getItem(standID!);
-    expect(potionStand).toBeDefined();
+    const marketStand = Item.getItem(standID!);
+    expect(marketStand).toBeDefined();
 
     // Attempt gold collection by non-owner
     const collectGold = new CollectGold();
-    const nonOwnerResult = collectGold.interact(nonOwner!, potionStand!);
+    const nonOwnerResult = collectGold.interact(nonOwner!, marketStand!);
     expect(nonOwnerResult).toBe(false);
     expect(nonOwner!.gold).toBe(0);
 
     // Attempt gold collection by owner
-    const ownerResult = collectGold.interact(owner!, potionStand!);
+    const ownerResult = collectGold.interact(owner!, marketStand!);
     expect(ownerResult).toBe(true);
     expect(owner!.gold).toBe(50);
 
     // Attempt destroy stand by non-owner
-    const destroyStand = new DestroyStand();
-    const nonOwnerDestroy = destroyStand.interact(nonOwner!, potionStand!);
+    const destroyStand = new DestroyMarketStand();
+    const nonOwnerDestroy = destroyStand.interact(nonOwner!, marketStand!);
     expect(nonOwnerDestroy).toBe(false);
 
     // Attempt destroy stand by owner
-    const OwnerDestroy = destroyStand.interact(owner!, potionStand!);
-    expect(OwnerDestroy).toBe(true);
+    const ownerDestroy = destroyStand.interact(owner!, marketStand!);
+    expect(ownerDestroy).toBe(true);
   });
 });
 
