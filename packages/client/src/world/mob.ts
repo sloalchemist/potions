@@ -15,6 +15,7 @@ export class Mob extends Physical {
   unlocks: string[] = [];
   doing: string = '';
   community_id?: string;
+  invincible: boolean = false;
 
   constructor(
     world: World,
