@@ -10,7 +10,7 @@ export class Create {
     const creatorCommunity = Community.getVillage(creator.community_id);
     let typeAttribute: ItemAttributes = {
       templateType: createItem.type,
-      items: 1,
+      items: createItem.type === 'log' ? 0 : 1,
       capacity: 20
     };
 
