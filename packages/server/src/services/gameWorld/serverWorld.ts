@@ -25,7 +25,6 @@ const LOG_TICK_PERF_TO_FILE = false;
 const GENERATE_TICK_PERF_GRAPHS = false;
 
 // File paths for logging and metrics
-const DEBUG_FILE_PATH = path.join(__dirname, 'debug.log');
 const MOB_METRICS_FILE_PATH = path.join(__dirname, 'graphs', 'mob_metrics.csv');
 const TICK_METRICS_FILE_PATH = path.join(
   __dirname,
@@ -95,41 +94,6 @@ function logTickMetrics(tickNumber: number, totalTickTime: number) {
   }
 }
 
-// Define a type for log entries to ensure structured logging
-type LogEntry = {
-  timestamp: number;
-  type: string;
-  message: string;
-  data?: Record<string, unknown>;
-};
-
-// Custom debug log function that logs to console and file based on configuration
-function debugLog(message: string, data?: Record<string, unknown>) {
-  const logEntry: LogEntry = {
-    timestamp: Date.now(),
-    type: 'debug',
-    message,
-    data
-  };
-
-  const formattedMessage = data
-    ? `${message} ${JSON.stringify(data)}`
-    : message;
-
-  if (LOG_TICK_PERF_TO_CONSOLE) {
-    logger.debug(formattedMessage);
-  }
-
-  if (LOG_TICK_PERF_TO_FILE) {
-    try {
-      fs.mkdirSync(path.dirname(DEBUG_FILE_PATH), { recursive: true });
-      fs.appendFileSync(DEBUG_FILE_PATH, JSON.stringify(logEntry) + '\n');
-    } catch (error) {
-      logger.error('Error writing to debug file:', error);
-    }
-  }
-}
-
 // Helper function to measure and log the execution time of a function
 function measureTime(label: string, fn: () => void): number {
   if (!LOG_TICK_PERF_TO_CONSOLE && !LOG_TICK_PERF_TO_FILE) {
@@ -142,10 +106,12 @@ function measureTime(label: string, fn: () => void): number {
   const end = performance.now();
   const duration = end - start;
 
-  debugLog(`[PERF] ${label}`, {
-    label,
-    durationMs: parseFloat(duration.toFixed(2))
-  });
+  if (LOG_TICK_PERF_TO_CONSOLE || LOG_TICK_PERF_TO_FILE) {
+    logger.debug(`[PERF] ${label}`, {
+      label,
+      durationMs: parseFloat(duration.toFixed(2))
+    });
+  }
 
   return duration;
 }
@@ -190,7 +156,7 @@ export class ServerWorld implements GameWorld {
   private runItemTicks(): void {
     measureTime('Getting all item IDs', () => {
       const ids = Item.getAllItemIDs();
-      debugLog(`[DEBUG] Processing items`, { count: ids.length });
+      logger.debug(`[DEBUG] Processing items`, { count: ids.length });
 
       measureTime('Clearing blocking items', () => {
         this.pathFinder.clearBlockingItems();
@@ -215,7 +181,9 @@ export class ServerWorld implements GameWorld {
           item.tick();
         }
       });
-      debugLog(`[DEBUG] Processed blocking items`, { count: blockingItems });
+      logger.debug(`[DEBUG] Processed blocking items`, {
+        count: blockingItems
+      });
     });
 
     measureTime('Validating items', () => {
@@ -226,7 +194,7 @@ export class ServerWorld implements GameWorld {
   private runMobTicks(deltaTime: number): number {
     const mob_ids = Mob.getAllMobIDs();
     const mobCount = mob_ids.length;
-    debugLog(`[DEBUG] Processing mobs`, { count: mobCount });
+    logger.debug(`[DEBUG] Processing mobs`, { count: mobCount });
 
     let processedMobs = 0;
     for (const mob_id of mob_ids) {
@@ -236,7 +204,9 @@ export class ServerWorld implements GameWorld {
         mob.tick(deltaTime);
       }
     }
-    debugLog(`[DEBUG] Successfully processed mobs`, { count: processedMobs });
+    logger.debug(`[DEBUG] Successfully processed mobs`, {
+      count: processedMobs
+    });
 
     // Return the processed mob count for metrics tracking
     return processedMobs;
@@ -247,7 +217,7 @@ export class ServerWorld implements GameWorld {
     tickCounter++;
 
     const totalStart = performance.now();
-    debugLog('[TICK] Starting new tick cycle ========================');
+    logger.debug('[TICK] Starting new tick cycle ========================');
 
     const itemTickTime = measureTime('Item ticks', () => this.runItemTicks());
 
