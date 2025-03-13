@@ -593,33 +593,6 @@ export class WorldScene extends Phaser.Scene {
     });
 
     needsAnimationsLoaded = false;
-
-    // Calculate position using your camera viewport variables:
-    const uiX = cameraViewportX + cameraViewportWidth - 100; // smaller offset for a smaller button
-    const uiY = cameraViewportY + 10;
-
-    console.log('Creating End Game button at:', uiX, uiY);
-    const endGameButton = this.add
-      .text(uiX, uiY, 'End', {
-        font: '16px Arial', // Smaller font size
-        backgroundColor: '#ffffff', // Red background for visibility
-        padding: { x: 5, y: 5 }, // Reduced padding
-        color: '#ffffff'
-      })
-      .setInteractive({ useHandCursor: true })
-      .setScrollFactor(0);
-
-    console.log('End Game button created:', endGameButton);
-    endGameButton.on('pointerover', () => {
-      endGameButton.setStyle({ fill: '#ff0' });
-    });
-    endGameButton.on('pointerout', () => {
-      endGameButton.setStyle({ fill: '#ffffff' });
-    });
-    // endGameButton.on('pointerdown', () => {
-    //   console.log('End Game button clicked');
-    //   this.pauseMenu();
-    // });
   }
 
   pauseMenuScene() {
