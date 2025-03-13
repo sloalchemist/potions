@@ -12,7 +12,7 @@ describe('Read', () => {
 
     // Create mock mob
     mockMob = {
-      sendMessage: jest.fn(),
+      sendMessage: jest.fn()
     } as unknown as jest.Mocked<Mob>;
 
     // Reset mocks
@@ -29,7 +29,7 @@ describe('Read', () => {
 
   test('should fail if item type is not "message-in-bottle"', () => {
     mockItem = {
-      type: 'potion',
+      type: 'potion'
     } as unknown as jest.Mocked<Item>;
 
     const result = read.interact(mockMob, mockItem);
@@ -40,7 +40,7 @@ describe('Read', () => {
 
   test('should send message and return true when reading "message-in-bottle"', () => {
     mockItem = {
-      type: 'message-in-bottle',
+      type: 'message-in-bottle'
     } as unknown as jest.Mocked<Item>;
 
     const result = read.interact(mockMob, mockItem);
