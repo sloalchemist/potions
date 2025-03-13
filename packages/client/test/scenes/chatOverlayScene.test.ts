@@ -9,7 +9,7 @@ jest.mock('../../src/services/playerToServer', () => ({
 describe('ChatOverlayScene', () => {
   let chatOverlayScene: ChatOverlayScene;
   let mockInputElement: HTMLInputElement;
-  let mockDomElement: any;
+  let mockDomElement: Partial<Phaser.GameObjects.DOMElement>;
 
   beforeEach(() => {
     chatOverlayScene = new ChatOverlayScene();
@@ -23,7 +23,7 @@ describe('ChatOverlayScene', () => {
     };
 
     chatOverlayScene.add = {
-      dom: jest.fn(() => mockDomElement)
+      dom: jest.fn(() => mockDomElement as Phaser.GameObjects.DOMElement)
     } as unknown as Phaser.GameObjects.GameObjectFactory;
 
     chatOverlayScene.cameras = {
@@ -49,7 +49,7 @@ describe('ChatOverlayScene', () => {
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
 
     // Simulate keydown event
-    mockDomElement.on.mock.calls.forEach(([eventName, handler]: any) => {
+    (mockDomElement.on as jest.Mock).mock.calls.forEach(([eventName, handler]: any) => {
       if (eventName === 'keydown') handler(event);
     });
 
@@ -64,11 +64,13 @@ describe('ChatOverlayScene', () => {
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
 
     // Simulate keydown event
-    mockDomElement.on.mock.calls.forEach(([eventName, handler]: any) => {
+    (mockDomElement.on as jest.Mock).mock.calls.forEach(([eventName, handler]: any) => {
       if (eventName === 'keydown') handler(event);
     });
 
-    expect(mockInputElement.value).toBe('Error: No word should exceed 10 characters!');
+    expect(mockInputElement.value).toBe(
+      'Error: No word should exceed 10 characters!'
+    );
     expect(mockInputElement.style.color).toBe('red');
     expect(mockInputElement.disabled).toBe(true);
   });
