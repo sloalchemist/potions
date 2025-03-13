@@ -283,11 +283,15 @@ export function getPhysicalInteractions(
   item.itemType.interactions.forEach((interaction) => {
     const hasPermission =
       !interaction.permissions || // Allow interaction if no permissions entry in global.json
-      (isOwnedByCommunity && interaction.permissions?.community) ||
-      (isOwnedByCharacter && interaction.permissions?.character) ||
+      // Individual ownership will take priority over community
+      (isOwnedByCharacter && interaction.permissions?.character === true) ||
+      (!isOwnedByCharacter &&
+        isOwnedByCommunity &&
+        interaction.permissions?.community === true) ||
+      // Allowed only for non-owners
       (!isOwnedByCharacter &&
         !isOwnedByCommunity &&
-        interaction.permissions?.other); // Allowed only for non-owners
+        interaction.permissions?.other === true);
     if (
       hasPermission &&
       !interaction.while_carried &&

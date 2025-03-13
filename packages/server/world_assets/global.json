@@ -1128,7 +1128,7 @@
           "description": "Purchase potion",
           "action": "purchase",
           "permissions": {
-            "community": false,
+            "community": true,
             "character": false,
             "other": true
           },
