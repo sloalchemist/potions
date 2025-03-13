@@ -255,10 +255,6 @@ export function getPhysicalInteractions(
   const isOwnedByCharacter = item.isOwnedByCharacter(character_id);
   const isOwnedByCommunity = item.isOwnedByCommunity(community_id);
 
-  console.log(
-    `isOwnedByCharacter: ${isOwnedByCharacter}; isOwnedByCommunity ${isOwnedByCommunity}`
-  );
-  console.log(`character_id: ${character_id}`);
   // if the item can be picked up
   if (item.itemType.carryable) {
     interactions.push({

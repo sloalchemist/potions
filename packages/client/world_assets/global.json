@@ -1347,7 +1347,7 @@
           "action": "get_item",
           "permissions": {
             "community": true,
-            "other": true
+            "other": false
           },
           "while_carried": false,
           "conditions": [
@@ -1363,7 +1363,7 @@
           "action": "add_item",
           "permissions": {
             "community": true,
-            "other": true
+            "other": false
           },
           "while_carried": false
         }
