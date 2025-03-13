@@ -1456,7 +1456,8 @@
       "gluttony": 10,
       "sleepy": 10,
       "extroversion": 50,
-      "invincibility_spawn_length_ms": 0
+      "invincibility_spawn_length_ms": 0,
+      "invincible":false
     },
     {
       "name": "Villager",
@@ -1477,7 +1478,8 @@
       "gluttony": 50,
       "sleepy": 80,
       "extroversion": 50,
-      "invincibility_spawn_length_ms": 0
+      "invincibility_spawn_length_ms": 0,
+      "invincible":false
     },
     {
       "name": "Player",
@@ -1498,7 +1500,8 @@
       "gluttony": 50,
       "sleepy": 80,
       "extroversion": 50,
-      "invincibility_spawn_length_ms": 10000
+      "invincibility_spawn_length_ms": 10000,
+      "invincible":false
     },
     {
       "name": "Fighter",
@@ -1520,7 +1523,8 @@
       "gluttony": 10,
       "sleepy": 10,
       "extroversion": 50,
-      "invincibility_spawn_length_ms": 0
+      "invincibility_spawn_length_ms": 0,
+      "invincible":false
     }
   ],
   "regions": [],
