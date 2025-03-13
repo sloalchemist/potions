@@ -1289,6 +1289,17 @@
               "comparison": "greater_than"
             }
           ]
+        },
+        {
+          "description": "Destroy stand",
+          "action": "destroy_stand",
+          "permissions": {
+            "community": false,
+            "character": true,
+            "other": false
+          },
+          "while_carried": false,
+          "conditions": []
         }
       ],
       "attributes": [

@@ -15,6 +15,7 @@ import { CreateMarket } from './marketstand/createMarket';
 import { RaisePrice } from './stand/raisePrice';
 import { LowerPrice } from './stand/lowerPrice';
 import { DestroyStand } from './stand/destroyStand';
+import { DestroyMarketStand } from './marketstand/destroyMarketStand';
 import { RaiseMarketPrice } from './marketstand/RaiseMarketPrice';
 import { LowerMarketPrice } from './marketstand/LowerMarketPrice';
 import { PurchaseFromMarket } from './marketstand/purchaseFromMarket';
@@ -43,6 +44,7 @@ const uses = [
   CollectGold,
   CreateStand,
   DestroyStand,
+  DestroyMarketStand,
   CreateMarket,
   RaisePrice,
   LowerPrice,
