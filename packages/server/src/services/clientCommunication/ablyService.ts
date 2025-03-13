@@ -674,7 +674,7 @@ export class AblyService implements PubSub {
 
         // Get the newly created player and apply invincibility
         const newPlayer = Mob.getMob(username);
-        logger.log(
+        logger.debug(
           `DEBUG: Newly created player: ${username}, found: ${!!newPlayer}`
         );
 
@@ -693,12 +693,12 @@ export class AblyService implements PubSub {
             const invincibilitySpawnLength =
               playerMobType.invincibility_spawn_length_ms;
 
-            logger.log(
+            logger.debug(
               `DEBUG: About to set ${data.name} invincible for ${invincibilitySpawnLength} ms`
             );
 
             newPlayer.setInvincible(true, invincibilitySpawnLength);
-            logger.log(`DEBUG: After setting ${data.name} invincible`);
+            logger.debug(`DEBUG: After setting ${data.name} invincible`);
 
             logger.info(
               `INVINCIBLE: ${data.name} has spawn protection! They are invincible for ${invincibilitySpawnLength} ticks or until movement.`
