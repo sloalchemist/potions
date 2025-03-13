@@ -1,3 +1,4 @@
+import { WorldScene } from './worldScene';
 export const GRAY = 0x2f4f4f;
 
 export class PauseMenuScene extends Phaser.Scene {
@@ -40,10 +41,10 @@ export class PauseMenuScene extends Phaser.Scene {
     );
     mainMenuButton.setOrigin(0.5);
     mainMenuButton.setInteractive();
-    // mainMenuButton.on('pointerdown', () => {
-    //   const worldScene = this.scene.get('WorldScene') as WorldScene;
-    //   worldScene.resetToLoadWorldScene();
-    // });
+    mainMenuButton.on('pointerdown', () => {
+      const worldScene = this.scene.get('WorldScene') as WorldScene;
+      worldScene.resetToLoadWorldScene();
+    });
   }
 }
 
