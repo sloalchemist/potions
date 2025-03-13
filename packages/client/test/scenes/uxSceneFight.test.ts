@@ -69,19 +69,19 @@ describe('Fight UI updates based on fighting state', () => {
       {},
       {}
     );
-    const npc1 = new Mob(
+    const blob1 = new Mob(
       world!,
       'mob2',
-      'NPC1',
-      'npc',
+      'Blob1',
+      'blob',
       100,
       { x: 2, y: 2 },
       {},
       {},
       {}
     );
-    const mobs = [player1, npc1];
-    const expectedFilteredMobs = [npc1];
+    const mobs = [player1, blob1];
+    const expectedFilteredMobs = [blob1];
 
     mobRangeListener(mobs);
 
@@ -113,24 +113,24 @@ describe('Fight UI updates based on fighting state', () => {
       {},
       {}
     );
-    const npc = new Mob(
+    const blob1 = new Mob(
       world!,
       'mob2',
-      'NPC1',
-      'npc',
+      'Blob1',
+      'blob',
       100,
       { x: 2, y: 2 },
       {},
       {},
       {}
     );
-    const mobs = [player1, npc];
+    const mobs = [player1, blob1];
 
     setFighting(false);
 
     mobRangeListener(mobs);
 
-    const expectedFilteredMobs = [npc];
+    const expectedFilteredMobs = [blob1];
     expect(mockFightCallback).toHaveBeenCalledWith(expectedFilteredMobs);
 
     mockFightCallback.mockClear();
@@ -151,43 +151,83 @@ describe('Fight UI updates based on fighting state', () => {
       {},
       {}
     );
-    const npc1 = new Mob(
+    const blob1 = new Mob(
       world!,
       'mob2',
-      'NPC1',
-      'npc',
+      'Blob1',
+      'blob',
       100,
       { x: 2, y: 2 },
       {},
       {},
       {}
     );
-    let mobs = [player1, npc1];
+    let mobs = [player1, blob1];
 
     setFighting(false);
     mobRangeListener(mobs);
 
-    const expectedFilteredMobs = [npc1];
+    const expectedFilteredMobs = [blob1];
     expect(mockFightCallback).toHaveBeenCalledWith(expectedFilteredMobs);
 
     mockFightCallback.mockClear();
 
     // Add second mob
-    const npc2 = new Mob(
+    const blob2 = new Mob(
       world!,
       'mob3',
-      'NPC2',
-      'npc',
+      'Blob2',
+      'blob',
       100,
-      { x: 3, y: 3 },
+      { x: 2, y: 2 },
       {},
       {},
       {}
     );
-    mobs = [player1, npc1, npc2];
+    mobs = [player1, blob1, blob2];
     mobRangeListener(mobs);
 
-    const updatedFilteredMobs = [npc1, npc2];
+    const updatedFilteredMobs = [blob1, blob2];
+    expect(mockFightCallback).toHaveBeenCalledWith(updatedFilteredMobs);
+  });
+
+  test('Fightable attribute affects mobRangeListener ', () => {
+    const player1 = new Mob(
+      world!,
+      'mob1',
+      'Player1',
+      'player',
+      100,
+      { x: 1, y: 1 },
+      {},
+      {},
+      {}
+    );
+    const blob1 = new Mob(
+      world!,
+      'mob2',
+      'Blob1',
+      'blob',
+      100,
+      { x: 2, y: 2 },
+      {},
+      {},
+      {}
+    );
+    let mobs = [player1, blob1];
+
+    setFighting(false);
+    mobRangeListener(mobs);
+
+    const expectedFilteredMobs = [blob1];
+    expect(mockFightCallback).toHaveBeenCalledWith(expectedFilteredMobs);
+
+    mockFightCallback.mockClear();
+
+    player1.fightable = true;
+    mobRangeListener(mobs);
+
+    const updatedFilteredMobs = [player1, blob1];
     expect(mockFightCallback).toHaveBeenCalledWith(updatedFilteredMobs);
   });
 });
