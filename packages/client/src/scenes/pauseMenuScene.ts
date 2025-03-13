@@ -1,4 +1,4 @@
-import { setGameState } from '../world/controller';
+import { WorldScene } from './worldScene';
 
 export const GRAY = 0x2f4f4f;
 
@@ -43,17 +43,8 @@ export class PauseMenuScene extends Phaser.Scene {
     mainMenuButton.setOrigin(0.5);
     mainMenuButton.setInteractive();
     mainMenuButton.on('pointerdown', () => {
-      this.sound.removeByKey('walk');
-      this.sound.removeByKey('background_music');
-      this.sound.removeByKey('background_music_layer');
-
-      setGameState('uninitialized');
-      const allScenes = this.scene.manager.getScenes();
-      allScenes.forEach((scene) => {
-        const key = scene.sys.settings.key;
-        this.scene.stop(key);
-      });
-      this.scene.start('LoadCharacterScene', { autoStart: false });
+      const worldScene = this.scene.get('WorldScene') as WorldScene;
+      worldScene.resetToLoadWorldScene();
     });
   }
 }
