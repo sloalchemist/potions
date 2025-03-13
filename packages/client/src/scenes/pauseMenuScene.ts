@@ -53,7 +53,7 @@ export class PauseMenuScene extends Phaser.Scene {
         const key = scene.sys.settings.key;
         this.scene.stop(key);
       });
-      this.scene.start('LoadCharacterScene', { autoStart: true });
+      this.scene.start('LoadCharacterScene', { autoStart: false });
     });
   }
 }
