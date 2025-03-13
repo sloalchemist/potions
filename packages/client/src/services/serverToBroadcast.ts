@@ -106,7 +106,11 @@ export function setupBroadcast(
 
   function handleDoing(data: DoingData) {
     const mob = world.mobs[data.id] as SpriteMob;
-    if (mob) {
+    if (mob == undefined) {
+      console.warn(
+        `client/src/services/serverToBroadcast.ts: Ably attempting to assign 'doing' to undefined mob with id ${data.id}`
+      );
+    } else {
       mob.doing = data.action;
     }
   }
