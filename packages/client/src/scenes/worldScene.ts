@@ -102,6 +102,7 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
+    /* COMMENTING OUT FOR NOW SINCE IT BREAKS THE GAME
     // Initialize loading bar first
     console.log('Preload started');
     this.loadingBar.create();
@@ -135,7 +136,7 @@ export class WorldScene extends Phaser.Scene {
         this.loadingBar.destroy();
       }, 500);
     });
-
+*/
     // Start loading assets
     const worldID = getWorldID();
     this.load.image(
