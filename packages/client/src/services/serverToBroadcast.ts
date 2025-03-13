@@ -106,7 +106,9 @@ export function setupBroadcast(
 
   function handleDoing(data: DoingData) {
     const mob = world.mobs[data.id] as SpriteMob;
-    mob.doing = data.action;
+    if (mob) {
+      mob.doing = data.action;
+    }
   }
 
   function handleMove(data: MoveData) {
@@ -258,6 +260,7 @@ export function setupBroadcast(
             'BROADCAST UNSTASH ITEM'
           );
           handleUnstashItem(broadcastItem.data as UnstashItemData);
+          break;
         case 'doing':
           handleDoing(broadcastItem.data as DoingData);
           break;
