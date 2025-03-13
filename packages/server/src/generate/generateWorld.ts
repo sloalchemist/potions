@@ -8,6 +8,7 @@ import { Item } from '../items/item';
 import { Personality } from '../mobs/traits/personality';
 import { Mob } from '../mobs/mob';
 import { logger } from '../util/logger';
+import { PathFinder } from '@rt-potion/common';
 
 import {
   ItemConfig,
@@ -29,7 +30,18 @@ const schema = `
 `;
 
 export function loadDefaults(global: ServerWorldDescription) {
-  const { communities, alliances, houses, items, containers } = global;
+  const {
+    communities,
+    alliances,
+    houses,
+    items,
+    containers,
+    tiles,
+    terrain_types
+  } = global;
+
+  // pathFineder gives access to is walkable
+  const pathFinder = new PathFinder(tiles, terrain_types);
 
   const itemTypes = [...global.item_types];
   ItemGenerator.initialize(itemTypes);
@@ -94,15 +106,24 @@ export function loadDefaults(global: ServerWorldDescription) {
   // Create items
   items.forEach((item: ItemConfig) => {
     logger.log(`Creating item ${item.type} at ${JSON.stringify(item.coord)}`);
-    itemGenerator.createItem({
-      type: item.type,
-      position: item.coord,
-      ownedByCommunity: item.community
-        ? communityMap[item.community]
-        : undefined,
-      lock: item.lock,
-      attributes: item.options
-    });
+    if (pathFinder.isWalkable([], item.coord.x, item.coord.y)) {
+      itemGenerator.createItem({
+        type: item.type,
+        position: item.coord,
+        ownedByCommunity: item.community
+          ? communityMap[item.community]
+          : undefined,
+        lock: item.lock,
+        attributes: item.options
+      });
+    } else {
+      logger.error(
+        `${item.type} at ${item.coord.x}, ${item.coord.y} is placed out of walkable terrain, please move it!`
+      );
+      throw new Error(
+        `Invalid ${item.type} placement at (${item.coord.x}, ${item.coord.y}), please move it!`
+      );
+    }
   });
 
   // Create containers

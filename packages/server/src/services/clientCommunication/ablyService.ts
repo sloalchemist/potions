@@ -111,7 +111,6 @@ export class AblyService implements PubSub {
       );
 
       const player = Mob.getMob(presenceMsg.clientId);
-      // logger.log("player when leaving:", player);
       player?.removePlayer();
     });
 
@@ -774,7 +773,6 @@ export class AblyService implements PubSub {
         // TODO: replace following two lines when FightTracker class is implemented
         logger.log('test fight', data);
         this.closeFight(player.id, player.id);
-        // fightTracker.addTurnFromOptions(player, data.attack);
       }
     });
 

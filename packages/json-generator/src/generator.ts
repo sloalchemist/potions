@@ -20,8 +20,7 @@ const client_breakup = (json: GlobalJson) => {
     'tiles',
     'terrain_types'
   ]);
-  // console.log(tl_keys)
-  // console.log(json["item_types"])
+
   tl_keys.forEach((key) => {
     if (key == 'item_types') {
       const toKeep = new Set([
@@ -69,9 +68,6 @@ const client_breakup = (json: GlobalJson) => {
       delete json[key as keyof Partial<GlobalJson>];
     }
   });
-
-  // console.log('e')
-  // console.log(json)
 };
 
 // Pull server data from global
@@ -80,8 +76,6 @@ const server_breakup = (json: GlobalJson) => {
 
   const tl_keys = Object.keys(json);
   const keys_to_delete = new Set(['portals']);
-  // console.log(tl_keys)
-  // console.log(json["item_types"])
   tl_keys.forEach((key) => {
     if (key == 'item_types') {
       const toKeep = new Set([
@@ -155,9 +149,6 @@ const server_breakup = (json: GlobalJson) => {
       delete json[key as keyof Partial<GlobalJson>];
     }
   });
-
-  // console.log('e')
-  // console.log(json)
 };
 
 const rawJson = readFileSync('./global.json', 'utf8');

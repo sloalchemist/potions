@@ -91,7 +91,6 @@ export class AskAbout implements SpeechStart {
       askAboutMob.setTone(tone);
 
       speechActs.push(askAboutMob);
-      //}
     }
 
     return speechActs;

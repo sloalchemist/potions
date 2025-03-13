@@ -165,7 +165,7 @@ export async function changeName(name: string) {
     characterId = uuidv4();
     publicCharacterId = characterId.substr(0, 8);
     localStorage.setItem('characterId', characterId);
-    setupAbly();
+    setupAbly(true);
   }
   localStorage.setItem('name', name);
   currentCharacter!.name = name;
