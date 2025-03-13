@@ -281,17 +281,10 @@ export class AblyService implements PubSub {
     }
   }
 
-  public bomb(key: string): void {
+  public potionEffect(key: string, potion_type: string): void {
     this.addToBroadcast({
-      type: 'bomb',
-      data: { id: key }
-    });
-  }
-
-  public poison(key: string): void {
-    this.addToBroadcast({
-      type: 'poison',
-      data: { id: key }
+      type: 'potion_effect',
+      data: { id: key, type: potion_type }
     });
   }
 
