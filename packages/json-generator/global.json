@@ -1166,7 +1166,7 @@
             }
           ],
           "permissions": {
-            "community": false,
+            "community": true,
             "character": false,
             "other": true
           }
@@ -1365,7 +1365,7 @@
           ],
           "permissions": {
             "community": true,
-            "other": false
+            "other": true
           }
         },
         {
@@ -1374,7 +1374,7 @@
           "while_carried": false,
           "permissions": {
             "community": true,
-            "other": false
+            "other": true
           }
         }
       ],

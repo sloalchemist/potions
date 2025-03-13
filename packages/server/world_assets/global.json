@@ -1128,7 +1128,7 @@
           "description": "Purchase potion",
           "action": "purchase",
           "permissions": {
-            "community": false,
+            "community": true,
             "character": false,
             "other": true
           },
@@ -1340,7 +1340,7 @@
           "action": "get_item",
           "permissions": {
             "community": true,
-            "other": false
+            "other": true
           },
           "while_carried": false,
           "conditions": [
@@ -1356,7 +1356,7 @@
           "action": "add_item",
           "permissions": {
             "community": true,
-            "other": false
+            "other": true
           },
           "while_carried": false
         }
