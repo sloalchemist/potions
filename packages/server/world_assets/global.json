@@ -1044,7 +1044,7 @@
       "description": "A stand that sells health potions.",
       "type": "potion-stand",
       "carryable": false,
-      "walkable": false,
+      "walkable": true,
       "interactions": [
         {
           "description": "Add $item_name",
@@ -1197,7 +1197,7 @@
       "description": "A stand that sells THINGS.",
       "type": "market-stand",
       "carryable": false,
-      "walkable": false,
+      "walkable": true,
       "interactions": [
         {
           "description": "Add $item_name",

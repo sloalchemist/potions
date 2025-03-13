@@ -1056,7 +1056,7 @@
       "type": "potion-stand",
       "carryable": false,
       "smashable": true,
-      "walkable": false,
+      "walkable": true,
       "attributes": [
         {
           "name": "items",
@@ -1210,7 +1210,7 @@
       "type": "market-stand",
       "carryable": false,
       "smashable": true,
-      "walkable": false,
+      "walkable": true,
       "attributes": [
           {
               "name": "items",
