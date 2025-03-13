@@ -1203,7 +1203,8 @@
           "description": "Add $item_name",
           "action": "add_to_market",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false
@@ -1212,7 +1213,8 @@
           "description": "Get $item_name",
           "action": "purchase_market_item",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1228,7 +1230,8 @@
           "description": "Raise price",
           "action": "raise_market_price",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1244,7 +1247,8 @@
           "description": "Lower price",
           "action": "lower_market_price",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1260,7 +1264,8 @@
           "description": "Collect gold",
           "action": "collect_gold",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,

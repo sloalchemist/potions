@@ -1235,7 +1235,8 @@
               "action": "add_to_market",
               "while_carried": false,
               "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
               }
           },
@@ -1251,7 +1252,8 @@
                   }
               ],
               "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
               }
           },
@@ -1267,7 +1269,8 @@
                   }
               ],
               "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
               }
           },
@@ -1283,7 +1286,8 @@
                   }
               ],
               "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
               }
           },
@@ -1299,7 +1303,8 @@
                   }
               ],
               "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
               }
           }
