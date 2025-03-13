@@ -27,8 +27,8 @@ describe('ChatOverlayScene', () => {
     } as unknown as Phaser.GameObjects.GameObjectFactory;
 
     chatOverlayScene.cameras = {
-      main: { centerX: 400, centerY: 300 }
-    } as any;
+      main: new Phaser.Cameras.Scene2D.Camera(0, 0, 800, 600)
+    } as unknown as Phaser.Cameras.Scene2D.CameraManager;
   });
 
   test('should create an input field with placeholder', () => {
@@ -48,10 +48,11 @@ describe('ChatOverlayScene', () => {
     mockInputElement.value = 'Hello world';
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
 
-    // Simulate keydown event
-    (mockDomElement.on as jest.Mock).mock.calls.forEach(([eventName, handler]: any) => {
-      if (eventName === 'keydown') handler(event);
-    });
+    (mockDomElement.on as jest.Mock).mock.calls.forEach(
+      ([eventName, handler]: [string, (event: KeyboardEvent) => void]) => {
+        if (eventName === 'keydown') handler(event);
+      }
+    );
 
     expect(chatPlayer).toHaveBeenCalledWith('Hello world');
     expect(mockInputElement.value).toBe('');
@@ -63,10 +64,11 @@ describe('ChatOverlayScene', () => {
     mockInputElement.value = 'Supercalifragilistic';
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
 
-    // Simulate keydown event
-    (mockDomElement.on as jest.Mock).mock.calls.forEach(([eventName, handler]: any) => {
-      if (eventName === 'keydown') handler(event);
-    });
+    (mockDomElement.on as jest.Mock).mock.calls.forEach(
+      ([eventName, handler]: [string, (event: KeyboardEvent) => void]) => {
+        if (eventName === 'keydown') handler(event);
+      }
+    );
 
     expect(mockInputElement.value).toBe(
       'Error: No word should exceed 10 characters!'
