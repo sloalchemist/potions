@@ -33,8 +33,8 @@ import { buttonStyle, nameButtonHoverStyle } from './loadWorldScene';
 import { Item } from '../world/item';
 import { SpriteItem } from '../sprite/sprite_item';
 
-import { gameWorld } from '../../../../server/src/services/gameWorld/gameWorld';
-import {Mob } from '../../../../server/src/mobs/mob';
+import { gameWorld } from "../../server/src/services/gameWorld/gameWorld";
+import { Mob } from '../../src/world/mob';
 
 export let world: World;
 let needsAnimationsLoaded: boolean = true;
