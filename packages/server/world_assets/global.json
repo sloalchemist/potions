@@ -1479,7 +1479,7 @@
       "sleepy": 80,
       "extroversion": 50,
       "invincibility_spawn_length_ms": 0,
-      "invincible":false
+      "invincible": false
     },
     {
       "name": "Player",
@@ -1501,7 +1501,7 @@
       "sleepy": 80,
       "extroversion": 50,
       "invincibility_spawn_length_ms": 10000,
-      "invincible":false
+      "invincible": false
     },
     {
       "name": "Fighter",
@@ -1524,7 +1524,7 @@
       "sleepy": 10,
       "extroversion": 50,
       "invincibility_spawn_length_ms": 0,
-      "invincible":false
+      "invincible": false
     }
   ],
   "regions": [],
