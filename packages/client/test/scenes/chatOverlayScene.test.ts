@@ -1,6 +1,5 @@
 // Silence ESLint errors due to global Phaser
-/* eslint-disable @typescript-eslint/no-explicit-any,
- */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 jest.mock('phaser', () => {
   class MockScene {
@@ -78,12 +77,24 @@ describe('ChatOverlayScene', () => {
   test('should create an input field with placeholder', () => {
     chatOverlayScene.create();
 
-    expect(chatOverlayScene.add.dom).toHaveBeenCalledWith(
-      expect.any(Number),
-      expect.any(Number),
-      'input',
-      expect.stringContaining('Type Message...')
-    );
+    expect(chatOverlayScene.add.dom).toHaveBeenCalledTimes(1);
+
+    const [x, y, tagName, styles] = (chatOverlayScene.add.dom as jest.Mock).mock
+      .calls[0];
+
+    // Validate position
+    expect(x).toEqual(expect.any(Number));
+    expect(y).toEqual(expect.any(Number));
+
+    // Validate the input element tag
+    expect(tagName).toBe('input');
+
+    // Ensure placeholder is correctly set
+    expect(mockInputElement.placeholder).toBe('Type Message...');
+
+    // Validate styles contain relevant CSS
+    expect(styles).toContain('width: 280px');
+    expect(styles).toContain('border: 2px solid white');
   });
 
   test('should send valid message on enter key', () => {
