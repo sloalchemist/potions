@@ -195,6 +195,20 @@ export class Carryable {
     if (!this.item.position) {
       throw new Error('Item has no position');
     }
+    if (mob.carrying) {
+      const carriedItem = mob.carrying;
+      Carryable.fromItem(carriedItem)!.stash(mob);
+    }
+    DB.prepare(
+      `
+            UPDATE items
+            SET stored_by = NULL
+            WHERE id = :item_id AND stored_by = :mob_id;
+            `
+    ).run({ item_id: this.item.id, mob_id: mob.id });
+
+    mob.carrying = this.item;
+    this.item.position = undefined;
 
     pubSub.unstashItem(this.item.id, mob.id);
   }
