@@ -411,6 +411,42 @@ export class Mob {
     return result ? result.map((res) => res.id) : undefined;
   }
 
+  public setSpeed(speed: number): void {
+    this.speed = speed;
+    DB.prepare(
+      `
+      UPDATE mobs
+      SET speed = :speed
+      WHERE id = :id
+    `
+    ).run({ speed: this.speed, id: this.id });
+  }
+
+  public setAttack(attack: number): void {
+    this.attack = attack;
+    if (this.attack <= 0) {
+      this.attack = 0;
+    }
+    DB.prepare(
+      `
+      UPDATE mobs
+      SET attack = :attack
+      WHERE id = :id
+      `
+    ).run({ attack: this.attack, id: this.id });
+  }
+
+  public setMaxHealth(maxHealth: number): void {
+    this.maxHealth = maxHealth;
+    DB.prepare(
+      `
+      UPDATE mobs
+      SET maxHealth = :maxHealth
+      WHERE id = :id
+      `
+    ).run({ maxHealth: this.maxHealth, id: this.id });
+  }
+
   setMoveTarget(target: Coord, fuzzy: boolean = false): boolean {
     const start = this.position;
     const end = floor(target);

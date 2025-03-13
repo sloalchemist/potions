@@ -745,6 +745,10 @@ export class UxScene extends Phaser.Scene {
         })
       );
 
+      // add inventory text initially
+      this.inventoryText = this.add.text(140, 35, 'ITEM COUNT: 0/12');
+      this.inventoryContainer.add(this.inventoryText);
+
       this.time.addEvent({
         delay: 1000,
         callback: () => {
@@ -920,14 +924,13 @@ export class UxScene extends Phaser.Scene {
             .map(([community, value]) => `${community}: ${value}`)
             .join('\n')
       );
-      this.refreshInventoryStats();
+      // this.refreshInventoryStats();
     }
   }
 
-  refreshInventoryStats() {
-    this.inventoryText?.setText(
-      'ITEM COUNT: ' + world.getStoredItems().length + '/12'
-    );
+  refreshInventoryStats(itemCount: number = 0) {
+    console.log('its supposed to print the item count', itemCount);
+    this.inventoryText?.setText(`ITEM COUNT: ${itemCount}/12`);
   }
 
   showInfoTab() {
@@ -1369,7 +1372,7 @@ export class UxScene extends Phaser.Scene {
 
   // Method to set inventory
   setInventory(inventory: Item[]) {
-    this.refreshInventoryStats();
+    this.refreshInventoryStats(inventory.length);
 
     this.inventoryButtons?.clearButtonOptions();
 
@@ -1377,7 +1380,10 @@ export class UxScene extends Phaser.Scene {
     inventory.sort((a, b) => a.itemType.name.localeCompare(b.itemType.name));
 
     inventory.forEach((item, i) => {
-      const y = 60 + (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
+      const y =
+        SUBHEADING_OFFSET +
+        60 +
+        (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
       const x = 85 + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
 
       const button = new Button(this, x, y, true, `${item.itemType.name}`, () =>
