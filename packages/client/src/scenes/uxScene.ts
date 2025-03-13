@@ -1146,22 +1146,20 @@ export class UxScene extends Phaser.Scene {
               toggleY +
               Math.floor(i / 3) * (BUTTON_HEIGHT + BUTTON_SPACING);
 
-            const button = new Button(
-              this,
-              x,
-              y,
-              true,
-              interaction.label,
-              () => {
-                interact(
-                  interaction.item.key,
-                  interaction.action,
-                  interaction.options ? interaction.options : null
-                );
-                // Refresh the buttons in case the interaction state has changed
-                this.setInteractions(interactions);
-              }
-            );
+            var label = interaction.label;
+            if (label === 'Add Ingredient') {
+              label = 'Add From Hand';
+            }
+
+            const button = new Button(this, x, y, true, label, () => {
+              interact(
+                interaction.item.key,
+                interaction.action,
+                interaction.options ? interaction.options : null
+              );
+              // Refresh the buttons in case the interaction state has changed
+              this.setInteractions(interactions);
+            });
 
             this.interactButtons.push(button);
             this.itemsContainer?.add(button);
