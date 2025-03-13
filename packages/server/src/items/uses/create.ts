@@ -3,18 +3,25 @@ import { Item } from '../item';
 import { itemGenerator } from '../itemGenerator';
 import { Community } from '../../community/community';
 
+type ItemAttributes = Record<string, string | number>;
+
 export class Create {
   static createItemFrom(createItem: Item, creator: Mob, type: string): boolean {
     const creatorCommunity = Community.getVillage(creator.community_id);
-    let typeAttribute = {
+    let typeAttribute: ItemAttributes = {
       templateType: createItem.type,
       items: 1,
       capacity: 20
     };
 
-    // There should be no potion count for no potions
-    if (createItem.type === 'log') {
-      typeAttribute.items = 0;
+    // Initialize market stand specific attributes
+    // Markets start with 0 items while potions start with 1
+    if (type === 'market-stand') {
+      typeAttribute = {
+        ...typeAttribute,
+        items: 0,
+        inventory: JSON.stringify({})
+      };
     }
 
     itemGenerator.createItem({
