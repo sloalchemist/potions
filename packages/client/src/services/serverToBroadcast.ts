@@ -264,6 +264,7 @@ export function setupBroadcast(
             'BROADCAST UNSTASH ITEM'
           );
           handleUnstashItem(broadcastItem.data as UnstashItemData);
+          break;
         case 'doing':
           handleDoing(broadcastItem.data as DoingData);
           break;
