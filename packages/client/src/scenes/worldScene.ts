@@ -762,7 +762,8 @@ export class WorldScene extends Phaser.Scene {
     if (
       this.scene.isActive('ChatOverlayScene') ||
       this.scene.isActive('BrewScene') ||
-      this.scene.isActive('FightScene')
+      this.scene.isActive('FightScene') ||
+      this.scene.isActive('PauseMenuScene')
     ) {
       return;
     }
