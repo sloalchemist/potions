@@ -1457,7 +1457,7 @@
       "sleepy": 10,
       "extroversion": 50,
       "invincibility_spawn_length_ms": 0,
-      "invincible":false
+      "invincible": false
     },
     {
       "name": "Villager",
