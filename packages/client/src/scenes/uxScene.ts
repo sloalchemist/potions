@@ -131,6 +131,7 @@ export class UxScene extends Phaser.Scene {
     this.load.audio('give', ['static/sounds/drop.mp3']);
     // item interaction sounds
     this.load.audio('pickupGold', ['static/sounds/jingle.mp3']);
+    this.load.audio('explode', ['static/sounds/explosion.mp3']);
 
     let worldID = getWorldID();
 
