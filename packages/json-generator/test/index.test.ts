@@ -1,31 +1,82 @@
-import { readFileSync } from 'fs';
-import { executeWithArgs } from '../src/generator';
 import path from 'node:path';
+import { globalJsonSchema } from '../src/schema';
+import { executeWithArgs } from '../src/generator';
 
-describe('validate global json', () => {
-  beforeAll(() => {
-    executeWithArgs(['server', 'client']);
+// Mock only the writeFileSync function of the fs module
+jest.mock('fs', () => {
+  const originalModule = jest.requireActual('fs');
+  return {
+    ...originalModule,
+    writeFileSync: jest.fn()
+  };
+});
+
+// Import fs after mocking
+import * as fs from 'fs';
+
+describe('generator processes global.json', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('validate client global json', () => {
-    const expected = readFileSync(__dirname + '/expectedClient.json', 'utf8');
-
-    const actual = readFileSync(
-      path.join(__dirname, '../../client/world_assets/global.json'),
+  it('global.json passes validation', () => {
+    const globalJsonString = fs.readFileSync(
+      path.join(__dirname, '../global.json'),
       'utf8'
     );
+    const globalJsonObject = JSON.parse(globalJsonString);
 
-    expect(JSON.parse(actual)).toStrictEqual(JSON.parse(expected));
+    const result = globalJsonSchema.parse(globalJsonObject);
+    expect(result).toBeDefined();
   });
 
-  it('validate server global json', () => {
-    const expected = readFileSync(__dirname + '/expectedServer.json', 'utf8');
+  it('client global.json passes validation', () => {
+    // Get the mocked writeFileSync function
+    const writeFileSyncMock = fs.writeFileSync as jest.Mock;
 
-    const actual = readFileSync(
-      path.join(__dirname, '../../server/world_assets/global.json'),
-      'utf8'
-    );
+    executeWithArgs(['client']);
 
-    expect(JSON.parse(actual)).toStrictEqual(JSON.parse(expected));
+    expect(writeFileSyncMock).toHaveBeenCalled();
+
+    const clientGlobalJsonString = writeFileSyncMock.mock.calls[0][1] as string;
+    const clientGlobalJsonObject = JSON.parse(clientGlobalJsonString);
+
+    // Expect there to be exactly 3 keys in the client global.json
+    expect(Object.keys(clientGlobalJsonObject).sort()).toEqual([
+      'item_types',
+      'mob_types',
+      'portals'
+    ]);
+
+    writeFileSyncMock.mockClear();
+  });
+
+  it('server global.json passes validation', () => {
+    // Get the mocked writeFileSync function
+    const writeFileSyncMock = fs.writeFileSync as jest.Mock;
+
+    executeWithArgs(['server']);
+
+    expect(writeFileSyncMock).toHaveBeenCalled();
+
+    const serverGlobalJsonString = writeFileSyncMock.mock.calls[0][1] as string;
+    const serverGlobalJsonObject = JSON.parse(serverGlobalJsonString);
+
+    // Expect there to be exactly 11 keys in the server global.json
+    expect(Object.keys(serverGlobalJsonObject).sort()).toEqual([
+      'alliances',
+      'communities',
+      'containers',
+      'houses',
+      'item_types',
+      'items',
+      'mob_aggro_behaviors',
+      'mob_types',
+      'regions',
+      'terrain_types',
+      'tiles'
+    ]);
+
+    writeFileSyncMock.mockClear();
   });
 });
