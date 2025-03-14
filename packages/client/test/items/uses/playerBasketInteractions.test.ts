@@ -190,7 +190,8 @@ describe('Community ownership based interactions', () => {
     const interactions = getPhysicalInteractions(
       basket,
       log,
-      player.community_id
+      player.community_id,
+      player.key
     );
 
     // Check that add_item is NOT an available interaction
@@ -205,7 +206,8 @@ describe('Community ownership based interactions', () => {
     const interactions = getPhysicalInteractions(
       basket,
       log,
-      player.community_id
+      player.community_id,
+      player.key
     );
 
     // Check that add_item IS an available interaction

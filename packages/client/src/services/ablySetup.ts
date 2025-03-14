@@ -9,10 +9,13 @@ export let broadcastChannel: Types.RealtimeChannelCallbacks;
 export let playerChannel: Types.RealtimeChannelCallbacks;
 export let chatChannel: Types.RealtimeChannelCallbacks;
 
+let isNewName: boolean;
+
 const SERVER_URL = process.env.SERVER_URL; //Cannot use getEnv in the client package https://webpack.js.org/guides/environment-variables/
 let channelsBoundToWorld: boolean = false;
 
-export function setupAbly(): Promise<string> {
+export function setupAbly(changedName: boolean = false): Promise<string> {
+  isNewName = changedName;
   let authorizer =
     SERVER_URL.slice(-1) == '/' ? 'auth?username=' : '/auth?username=';
   let worldID: string;
@@ -37,6 +40,9 @@ export function setupAbly(): Promise<string> {
       console.log('Connected to Ably');
 
       broadcastChannel = ably.channels.get(`world-${worldID}`);
+      if (isNewName && playerChannel) {
+        playerChannel.unsubscribe();
+      }
       playerChannel = ably.channels.get(`${publicCharacterId}-${worldID}`);
       chatChannel = ably.channels.get(`chat-${worldID}`);
 
@@ -48,6 +54,9 @@ export function setupAbly(): Promise<string> {
 
 export function bindAblyToWorldScene(scene: WorldScene) {
   if (channelsBoundToWorld) {
+    if (isNewName) {
+      setupPlayerSubscriptions(playerChannel, scene);
+    }
     return;
   }
 

@@ -110,7 +110,6 @@ export class AblyService implements PubSub {
       );
 
       const player = Mob.getMob(presenceMsg.clientId);
-      // logger.log("player when leaving:", player);
       player?.removePlayer();
     });
 
@@ -282,10 +281,10 @@ export class AblyService implements PubSub {
     }
   }
 
-  public bomb(key: string): void {
+  public potionEffect(key: string, potion_type: string): void {
     this.addToBroadcast({
-      type: 'bomb',
-      data: { id: key }
+      type: 'potion_effect',
+      data: { id: key, type: potion_type }
     });
   }
 
@@ -730,7 +729,6 @@ export class AblyService implements PubSub {
         // TODO: replace following two lines when FightTracker class is implemented
         logger.log('test fight', data);
         this.closeFight(player.id, player.id);
-        // fightTracker.addTurnFromOptions(player, data.attack);
       }
     });
 

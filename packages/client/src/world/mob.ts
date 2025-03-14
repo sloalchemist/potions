@@ -2,6 +2,8 @@ import { Coord, followPath } from '@rt-potion/common';
 import { Physical } from './physical';
 import { World } from './world';
 
+const fightableMobList = ['blob'];
+
 export class Mob extends Physical {
   _target?: Coord;
   path: Coord[] = [];
@@ -15,6 +17,7 @@ export class Mob extends Physical {
   unlocks: string[] = [];
   doing: string = '';
   community_id?: string;
+  fightable?: boolean = false;
 
   constructor(
     world: World,
@@ -31,6 +34,11 @@ export class Mob extends Physical {
     super(world, key, type, position);
     this.name = name;
     this.maxHealth = maxHealth;
+
+    if (fightableMobList.includes(type)) {
+      this.fightable = true;
+    }
+
     if (position) {
       world.addMobToGrid(this);
     }
@@ -60,7 +68,6 @@ export class Mob extends Physical {
 
   destroy(world: World) {
     this.dead = true;
-    //console.log('Destroying physical', this.key, this.position);
     if (this.position) {
       world.removeMobFromGrid(this);
     }
@@ -68,7 +75,6 @@ export class Mob extends Physical {
   }
 
   changePosition(world: World, newPosition: Coord) {
-    //console.log('changePosition', this.position, newPosition);
     world.moveMob(this, newPosition);
     this.position = newPosition;
   }

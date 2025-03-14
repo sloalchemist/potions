@@ -16,7 +16,7 @@ import {
   PortalData,
   SetDatetimeData,
   SpeakData,
-  BombData,
+  PotionEffectData,
   ShowPortalMenuData,
   ScoreboardData
 } from '@rt-potion/common';
@@ -93,7 +93,6 @@ export function setupBroadcast(
     const item = world.items[data.item_key];
     const mob = world.mobs[data.mob_key];
     item.stash(world, mob, data.position);
-    world.addStoredItem(item);
     updateInventory();
   }
 
@@ -107,7 +106,13 @@ export function setupBroadcast(
 
   function handleDoing(data: DoingData) {
     const mob = world.mobs[data.id] as SpriteMob;
-    mob.doing = data.action;
+    if (mob == undefined) {
+      console.warn(
+        `client/src/services/serverToBroadcast.ts: Ably attempting to assign 'doing' to undefined mob with id ${data.id}`
+      );
+    } else {
+      mob.doing = data.action;
+    }
   }
 
   function handleMove(data: MoveData) {
@@ -199,7 +204,11 @@ export function setupBroadcast(
     setLeaderboardData(data.scores);
     const leaderboardScene = scene.scene.get('LeaderboardScene');
     if (leaderboardScene instanceof LeaderboardScene) {
-      leaderboardScene.renderLeaderboard();
+      if (scene.scene.isActive('LeaderboardScene')) {
+        leaderboardScene.renderLeaderboard();
+      } else if (scene.scene.get('LeaderboardScene')) {
+        console.debug('LeaderboardScene is initialized but not active.');
+      }
     } else {
       throw new Error('Leaderboard scene not found');
     }
@@ -210,10 +219,18 @@ export function setupBroadcast(
     window.location.reload();
   }
 
-  function handleBomb(data: BombData) {
+  function handlePotionEffect(data: PotionEffectData) {
     const mob = world.mobs[data.id] as SpriteMob;
     if (mob) {
-      mob.createBombExplosion(1);
+      switch (data.type) {
+        case 'bomb':
+          console.log(data.type);
+          mob.createBombExplosion(1);
+          return;
+        case 'poison':
+          mob.createPoisonEffect(1);
+          return;
+      }
     }
   }
 
@@ -255,6 +272,7 @@ export function setupBroadcast(
             'BROADCAST UNSTASH ITEM'
           );
           handleUnstashItem(broadcastItem.data as UnstashItemData);
+          break;
         case 'doing':
           handleDoing(broadcastItem.data as DoingData);
           break;
@@ -288,8 +306,8 @@ export function setupBroadcast(
         case 'reload_page':
           handleReloadPage();
           break;
-        case 'bomb':
-          handleBomb(broadcastItem.data as BombData);
+        case 'potion_effect':
+          handlePotionEffect(broadcastItem.data as PotionEffectData);
           break;
         default:
           console.error(

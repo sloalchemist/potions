@@ -59,10 +59,15 @@ export class LoadWorldScene extends Phaser.Scene {
   }
 
   create() {
-    this.sound.add('menu_music', { loop: true, volume: 0.2 }).play();
+    if (!this.registry.has('music')) {
+      this.registry.set('music', true);
+    }
 
     // Play menu music
-    if (!this.sound.isPlaying('menu_music')) {
+    if (
+      this.registry.get('music') === true &&
+      !this.sound.isPlaying('menu_music')
+    ) {
       // fairy music
       this.sound.add('menu_music', { loop: true, volume: 0.2 }).play();
     }
@@ -234,7 +239,6 @@ export class LoadWorldScene extends Phaser.Scene {
               start: 1,
               end: 4,
               prefix: `player-idle-`
-              //suffix: '.png'
             }),
             frameRate: 5,
             repeat: -1

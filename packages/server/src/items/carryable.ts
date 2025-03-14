@@ -20,6 +20,12 @@ export class Carryable {
     return undefined;
   }
 
+  // Destroy carryable item on the server side
+  destroy(): void {
+    console.log(`Destroying carryable item ${this.item.id}`);
+    this.item.destroy();
+  }
+
   /**
    * Function implements the giving of an item from one mob to another.
    * Performs checks and updates favorability accordingly as well.
@@ -80,6 +86,14 @@ export class Carryable {
     if (mob.position) {
       const position = Item.findEmptyPosition(mob.position);
 
+      if (!position) {
+        console.log(
+          `No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Destroying item.`
+        );
+        this.item.destroy();
+        return;
+      }
+
       DB.prepare(
         `
                 UPDATE items
@@ -110,6 +124,14 @@ export class Carryable {
       return false;
     }
     const position = Item.findEmptyPosition(mob.position);
+
+    if (!position) {
+      console.log(
+        `No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Stash canceled.`
+      );
+      return false; // Stop execution if no valid space is found
+    }
+
     const carriedItem = mob.carrying;
 
     logger.log('stash hit');
@@ -144,6 +166,35 @@ export class Carryable {
 
   // unstash stored items (drops at feet), swtiches carried item with stored item if carried exists
   unstash(mob: Mob): void {
+    if (mob.position) {
+      const position = Item.findEmptyPosition(mob.position);
+
+      if (!position) {
+        console.log(
+          `No valid position nearby to drop item ${this.item.id} for mob ${mob.id}. Unstash canceled`
+        );
+        return; // Stop execution if no valid space is found
+      }
+
+      DB.prepare(
+        `
+                UPDATE items
+                SET position_x = :position_x, position_y = :position_y, stored_by = NULL
+                WHERE id = :item_id;
+                `
+      ).run({
+        item_id: this.item.id,
+        position_x: position.x,
+        position_y: position.y
+      });
+
+      this.item.position = position;
+    } else {
+      throw new Error('Mob has no position');
+    }
+    if (!this.item.position) {
+      throw new Error('Item has no position');
+    }
     if (mob.carrying) {
       const carriedItem = mob.carrying;
       Carryable.fromItem(carriedItem)!.stash(mob);

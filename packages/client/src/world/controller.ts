@@ -26,6 +26,8 @@ export type Interactions = {
   give_to?: string;
 };
 
+const MAX_STASH: number = 12;
+
 let interactionCallback: (interactions: Interactions[]) => void;
 let chatCompanionCallback: (companions: Mob[]) => void;
 let fightOpponentCallback: (opponents: Mob[]) => void;
@@ -154,7 +156,7 @@ export function mobRangeListener(mobs: Mob[]) {
     }
   }
   if (fightOpponentCallback && !fighting) {
-    const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
+    const filteredMobs = mobs.filter((mob) => mob.fightable);
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastFightOpponents)) {
       fightOpponentCallback(filteredMobs);
@@ -199,11 +201,13 @@ export function getCarriedItemInteractions(
     label: `Drop ${item.itemType.name}`
   });
 
-  interactions.push({
-    action: 'stash',
-    item: item as Item,
-    label: `Stash ${item.itemType.name}`
-  });
+  if (world?.getStoredItems().length < MAX_STASH) {
+    interactions.push({
+      action: 'stash',
+      item: item as Item,
+      label: `Stash ${item.itemType.name}`
+    });
+  }
 
   // give to nearby mobs
   nearbyMobs.forEach((mob) => {
@@ -251,8 +255,14 @@ export function getPhysicalInteractions(
   const isOwnedByCharacter = item.isOwnedByCharacter(character_id);
   const isOwnedByCommunity = item.isOwnedByCommunity(community_id);
 
-  // if the item can be picked up
-  if (item.itemType.carryable) {
+  // if the item can be picked up and the owner's affiliation is the same as the item's affiliation
+
+  if (
+    item.itemType.carryable &&
+    item.itemType.attributes?.find(
+      (attr) => attr.name === 'specialized_resource'
+    )?.value == community_id
+  ) {
     interactions.push({
       action: 'pickup',
       item: item,
@@ -273,11 +283,15 @@ export function getPhysicalInteractions(
   item.itemType.interactions.forEach((interaction) => {
     const hasPermission =
       !interaction.permissions || // Allow interaction if no permissions entry in global.json
-      (isOwnedByCommunity && interaction.permissions?.community) ||
-      (isOwnedByCharacter && interaction.permissions?.character) ||
+      // Individual ownership will take priority over community
+      (isOwnedByCharacter && interaction.permissions?.character === true) ||
+      (!isOwnedByCharacter &&
+        isOwnedByCommunity &&
+        interaction.permissions?.community === true) ||
+      // Allowed only for non-owners
       (!isOwnedByCharacter &&
         !isOwnedByCommunity &&
-        interaction.permissions?.other); // Allowed only for non-owners
+        interaction.permissions?.other === true);
     if (
       hasPermission &&
       !interaction.while_carried &&
@@ -339,39 +353,42 @@ export function getInteractablePhysicals(
   }
 
   // nearby non-walkable items
-  let nearbyObjects = physicals.filter(
-    (p) =>
-      !p.itemType.walkable &&
-      p.itemType.layout_type !== 'fence' &&
-      p.itemType.layout_type !== 'wall'
-  );
-
-  let walls = physicals.filter(
-    (p) =>
-      p.itemType.layout_type === 'fence' ||
-      p.itemType.layout_type === 'wall' ||
-      p.itemType.type === 'partial-wall'
-  );
+  let nearbyObjects = physicals.filter((p) => !p.itemType.walkable);
 
   let nearbyBaskets = physicals.filter((p) => p.itemType.type === 'basket');
 
-  if (walls.length > 1) {
-    walls = [getClosestPhysical(walls, playerPos)];
-  }
+  let objectsWithDistance = nearbyObjects.map((object) => {
+    // Because this is a list of all of the objects in cardinal directions,
+    // to get nearbyObjects, these objects needed to have had a valid position.
+    // Thus, in the case that the object doesn't have a position, an error
+    // should be thrown.
+    if (!object.position)
+      throw new TypeError(
+        `Expected 'object.position' to be 'Coord', but received NULL`
+      );
+    return {
+      object: object,
+      distance: calculateDistance(object.position, playerPos)
+    };
+  });
+
+  objectsWithDistance.sort((a, b) => a.distance - b.distance);
 
   // find distinct non-walkable objects next to player
-  let unique_nearbyObjects = nearbyObjects.filter(
+  let unique_nearbyObjects = objectsWithDistance.filter(
     (item, index, self) =>
-      index === self.findIndex((i) => i.itemType === item.itemType)
+      index ===
+      self.findIndex((i) => i.object.itemType === item.object.itemType)
   );
+
+  let nearestUniqueObjects = unique_nearbyObjects.map((obj) => obj.object);
 
   // enforce unique items
   let interactableObjects = [
     ...onTopObjects,
-    ...unique_nearbyObjects,
+    ...nearestUniqueObjects,
     ...nearbyOpenableObjects,
-    ...nearbyBaskets,
-    ...walls
+    ...nearbyBaskets
   ];
   interactableObjects = interactableObjects.filter(
     (item, index, self) =>
@@ -478,7 +495,7 @@ export function addNewMob(scene: WorldScene, mob: MobI) {
         refresh();
       }
     });
-    //scene.cameras.main.startFollow(newMob.sprite);
+
     // This is the new "Setup camera section"
     scene.follow(newMob.sprite);
 
