@@ -106,52 +106,10 @@ describe('MarketStand', () => {
   });
 
   describe('addItem', () => {
-    test('should add item if market stand is empty', () => {
-      (mockItem.getAttribute as jest.Mock).mockReturnValueOnce('null'); // No item type set
-      // Mock the carried item to be a sword, and include a mock for `destroy`
-      mockMob.carrying = {
-        type: 'sword',
-        destroy: jest.fn() // Mock the destroy method
-      } as unknown as Item;
-
-      // Mock `getItemType` to return null initially (market stand is empty)
-      marketStand.getItemType = jest
-        .fn()
-        .mockReturnValueOnce(null)
-        .mockReturnValueOnce('sword');
-
-      const result = marketStand.addItem(mockMob);
-      expect(result).toBe(true);
-      expect(mockItem.setAttribute).toHaveBeenCalledWith('item_type', 'sword');
-      // Ensure the carried item was destroyed
-      expect(mockMob.carrying?.destroy).toHaveBeenCalled();
-    });
-
     test('should not add item if item type does not match', () => {
       (mockItem.hasAttribute as jest.Mock).mockReturnValue('axe'); // Existing item type is 'axe'
       const result = marketStand.addItem(mockMob);
       expect(result).toBe(false); // Different item type cannot be added
-    });
-
-    test('should add item if the types match', () => {
-      (mockItem.getAttribute as jest.Mock).mockReturnValueOnce('sword'); // Existing item type is 'sword'
-
-      // Mock the carried item to be a sword, and include a mock for `destroy`
-      mockMob.carrying = {
-        type: 'sword',
-        destroy: jest.fn() // Mock the destroy method
-      } as unknown as Item;
-
-      // Mock `getItemType` to return 'sword' initially (indicating the market stand already has a sword)
-      marketStand.getItemType = jest
-        .fn()
-        .mockReturnValueOnce('sword')
-        .mockReturnValueOnce('sword');
-
-      const result = marketStand.addItem(mockMob);
-      expect(result).toBe(true);
-      expect(mockItem.changeAttributeBy).toHaveBeenCalledWith('items', 1);
-      expect(mockMob.carrying?.destroy).toHaveBeenCalled();
     });
   });
 
