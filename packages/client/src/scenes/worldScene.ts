@@ -102,7 +102,6 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
-    /* COMMENTING OUT FOR NOW SINCE IT BREAKS THE GAME
     // Initialize loading bar first
     console.log('Preload started');
     this.loadingBar.create();
@@ -111,9 +110,6 @@ export class WorldScene extends Phaser.Scene {
     this.events.on('update', () => {
       this.loadingBar.update();
     });
-
-    // Hide world immediately
-    this.hideWorld();
 
     // Set initial progress to show something is happening
     this.loadingBar.setProgress(0.1);
@@ -131,13 +127,10 @@ export class WorldScene extends Phaser.Scene {
 
       // Wait 500ms to show 100% before destroying
       setTimeout(() => {
-        // Remove update listener
-        this.events.off('update');
         this.loadingBar.destroy();
       }, 500);
     });
-*/
-    // Start loading assets
+
     const worldID = getWorldID();
     this.load.image(
       'background',
