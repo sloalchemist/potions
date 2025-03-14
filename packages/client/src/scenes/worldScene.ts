@@ -52,6 +52,7 @@ export class WorldScene extends Phaser.Scene {
   paletteSwapper: PaletteSwapper = PaletteSwapper.getInstance();
   mobShadows: Phaser.GameObjects.Rectangle[] = [];
   nightOverlay!: Phaser.GameObjects.Graphics;
+  worldHider!: Phaser.GameObjects.Graphics;
   terrainWidth: number = 0;
   terrainHeight: number = 0;
   nightOpacity: number = 0;
@@ -72,6 +73,7 @@ export class WorldScene extends Phaser.Scene {
   lastKeyUp = '';
   lastPublishTime: number = 0;
   private loadingBar: LoadingProgressBar;
+  private readyForCreate: boolean = false;
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -95,25 +97,22 @@ export class WorldScene extends Phaser.Scene {
   }
 
   init() {
-    // Initialize graphics before any scene content
     this.nightOverlay = this.add.graphics();
     this.nightOverlay.setDepth(500);
     this.nightOverlay.setScrollFactor(0);
+
+    // Initialize world hider with depth lower than loading bar (1000) but higher than night overlay (500)
+    this.worldHider = this.add.graphics();
+    this.worldHider.setDepth(750);
+    this.worldHider.setScrollFactor(0);
   }
 
   preload() {
-    console.log('Preload started');
-
-    // Check if any loading is needed by registering a one-time start event
-    let loadingNeeded = false;
+    this.readyForCreate = false;
 
     const onLoadStart = () => {
-      loadingNeeded = true;
-
-      // Initialize loading bar
       this.loadingBar.create();
 
-      // Register loading bar with scene's update list
       this.events.on('update', () => {
         this.loadingBar.update();
       });
@@ -125,27 +124,26 @@ export class WorldScene extends Phaser.Scene {
 
       // Update progress on each file load
       this.load.on('filecomplete', (key: string) => {
+        console.log('WorldScene preload filecomplete', key);
         this.loadingBar.setCurrentFile(`Loaded: ${key}`);
       });
     };
 
-    // Clean up loading bar when done
     this.load.on('complete', () => {
-      if (loadingNeeded) {
-        this.loadingBar.setProgress(1);
-        this.loadingBar.setCurrentFile('Ready!');
+      console.log('WorldScene preload complete');
+      this.loadingBar.setProgress(1);
+      this.loadingBar.setCurrentFile('Ready!');
 
-        // Wait 500ms to show 100% before destroying
-        setTimeout(() => {
-          this.loadingBar.destroy();
-        }, 500);
-      }
+      // Wait 500ms before allowing create to run, to ensure the user can see that it reached 100% without the background rendering
+      this.time.delayedCall(500, () => {
+        console.log('destroying loadingbar');
+        this.loadingBar.destroy();
+        this.readyForCreate = true;
+      });
     });
 
-    // Register the start event before adding any files to the loader
     this.load.once('start', onLoadStart);
 
-    // Add all assets to the loader
     const worldID = getWorldID();
     this.load.image(
       'background',
@@ -288,6 +286,7 @@ export class WorldScene extends Phaser.Scene {
       right: number
     ) => void
   ) {
+    console.log('Drawing terrain layer');
     const terrainHeight = terrainData[0].length;
     const terrainWidth = terrainData.length;
 
@@ -342,16 +341,48 @@ export class WorldScene extends Phaser.Scene {
   }
 
   hideWorld() {
-    this.nightOverlay.fillStyle(GRAY, 1); // Dark blue with 50% opacity
-    this.nightOverlay.fillRect(
-      0,
-      0,
-      this.terrainWidth * TILE_SIZE,
-      this.terrainHeight * TILE_SIZE
-    );
+    if (this.terrainWidth > 0 && this.terrainHeight > 0) {
+      this.worldHider.clear();
+      this.worldHider.fillStyle(GRAY, 1);
+      this.worldHider.fillRect(
+        0,
+        0,
+        this.game.scale.width,
+        this.game.scale.height
+      );
+    }
+  }
+
+  showWorld() {
+    this.worldHider.clear();
   }
 
   create() {
+    // makes sure that loading bar doesn't show over world
+    if (!this.readyForCreate) {
+      // reatedly call create until we're ready to create
+      this.time.addEvent({
+        delay: 100,
+        callback: () => {
+          this.create();
+        },
+        callbackScope: this,
+        loop: false
+      });
+      return;
+    }
+
+    // Initialize the world once loading bar has set readyForCreate to true
+    this.initializeWorld();
+
+    // remove an overlay if there is one
+    if (gameState === 'stateInitialized') {
+      this.showWorld();
+    }
+  }
+
+  private initializeWorld() {
+    console.log('Initializing world with gameState:', gameState);
     const worldData = parseWorldFromJson(
       this.cache.json.get('global_data'),
       this.cache.json.get('world_specific_data')
@@ -495,7 +526,6 @@ export class WorldScene extends Phaser.Scene {
       this.terrainWidth * TILE_SIZE
     );
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
-    this.hideWorld();
 
     if (this.registry.get('music') === true) {
       if (!this.sound.isPlaying('background_music')) {
@@ -648,10 +678,13 @@ export class WorldScene extends Phaser.Scene {
   }
 
   update() {
-    if (gameState !== 'stateInitialized') {
+    if (gameState === 'stateInitialized') {
+      this.showWorld();
+    } else {
       this.hideWorld();
       return;
     }
+
     tick(this);
     if (this.cameraDolly && this.hero) {
       const roundedX = Math.floor(this.hero.x);
