@@ -74,6 +74,8 @@ export class WorldScene extends Phaser.Scene {
   lastPublishTime: number = 0;
   private loadingBar: LoadingProgressBar;
   private readyForCreate: boolean = false;
+  private backgroundMusicLoaded: boolean = false;
+  private backgroundLayerLoaded: boolean = false;
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -122,26 +124,36 @@ export class WorldScene extends Phaser.Scene {
       this.loadingBar.setCurrentFile('Initializing...');
       this.scene.systems.updateList.update();
 
-      // Update progress on each file load
-      this.load.on('filecomplete', (key: string) => {
+      // Track progress on each file load with debug logging
+      const fileCompleteHandler = (key: string) => {
         console.log('WorldScene preload filecomplete', key);
         this.loadingBar.setCurrentFile(`Loaded: ${key}`);
-      });
+      };
+      this.load.on('filecomplete', fileCompleteHandler);
+
+      // Clean up handlers when loading is complete
+      const completeHandler = () => {
+        console.log('WorldScene preload complete');
+        this.loadingBar.setProgress(1);
+        this.loadingBar.setCurrentFile('Ready!');
+
+        // Wait 500ms before cleanup to ensure loading bar shows 100%
+        this.time.delayedCall(500, () => {
+          console.log('destroying loadingbar');
+          // Remove all event handlers in reverse order of registration
+          this.load.off('filecomplete', fileCompleteHandler);
+          this.load.off('complete', completeHandler);
+          this.load.off('start', onLoadStart);
+          // Clean up loading bar through its interface
+          this.loadingBar.destroy();
+          this.readyForCreate = true;
+        });
+      };
+
+      this.load.on('complete', completeHandler);
     };
 
-    this.load.on('complete', () => {
-      console.log('WorldScene preload complete');
-      this.loadingBar.setProgress(1);
-      this.loadingBar.setCurrentFile('Ready!');
-
-      // Wait 500ms before allowing create to run, to ensure the user can see that it reached 100% without the background rendering
-      this.time.delayedCall(500, () => {
-        console.log('destroying loadingbar');
-        this.loadingBar.destroy();
-        this.readyForCreate = true;
-      });
-    });
-
+    // Register start event before adding files
     this.load.once('start', onLoadStart);
 
     const worldID = getWorldID();
@@ -175,10 +187,8 @@ export class WorldScene extends Phaser.Scene {
       'world_specific_data',
       `../../../world_assets/${worldID}/world_specific.json`
     );
-    this.load.audio('background_music_layer', [
-      `static/music/${worldID}_layer.mp3`
-    ]);
-    this.load.audio('background_music', ['static/music/cosmic_ambient.mp3']);
+
+    // Keep walk sound in preload since it's needed immediately
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
 
@@ -360,7 +370,7 @@ export class WorldScene extends Phaser.Scene {
   create() {
     // makes sure that loading bar doesn't show over world
     if (!this.readyForCreate) {
-      // reatedly call create until we're ready to create
+      // repeatedly call create until we're ready to create
       this.time.addEvent({
         delay: 100,
         callback: () => {
@@ -378,6 +388,67 @@ export class WorldScene extends Phaser.Scene {
     // remove an overlay if there is one
     if (gameState === 'stateInitialized') {
       this.showWorld();
+    }
+
+    // Start loading music in the background
+    this.loadBackgroundMusic();
+  }
+
+  private loadBackgroundMusic() {
+    // Only start loading if music is enabled
+    console.log('attempting to load background music');
+    if (this.registry.get('music') !== true) {
+      console.log('Music is disabled, skipping loading');
+      return;
+    }
+
+    const musicLoader = new Phaser.Loader.LoaderPlugin(this);
+
+    musicLoader.audio('background_music', ['static/music/cosmic_ambient.mp3']);
+    musicLoader.audio('background_music_layer', [
+      `static/music/${getWorldID()}_layer.mp3`
+    ]);
+
+    const audioLoadHandler = (key: string) => {
+      console.log('Audio loaded:', key);
+      if (key === 'background_music') {
+        this.backgroundMusicLoaded = true;
+      } else if (key === 'background_music_layer') {
+        this.backgroundLayerLoaded = true;
+      }
+      this.playMusicIfReady();
+    };
+
+    const completeHandler = () => {
+      console.log('Music loading complete');
+      musicLoader.off('filecomplete', audioLoadHandler);
+      musicLoader.off('complete', completeHandler);
+      musicLoader.destroy();
+    };
+
+    musicLoader.on('filecomplete', audioLoadHandler);
+    musicLoader.on('complete', completeHandler);
+
+    musicLoader.start();
+  }
+
+  private playMusicIfReady() {
+    if (!this.registry.get('music')) return;
+
+    if (
+      this.backgroundMusicLoaded &&
+      !this.sound.isPlaying('background_music')
+    ) {
+      this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
+    }
+
+    if (
+      this.backgroundLayerLoaded &&
+      !this.sound.isPlaying('background_music_layer')
+    ) {
+      this.sound
+        .add('background_music_layer', { loop: true, volume: 0.3 })
+        .play();
     }
   }
 
@@ -526,17 +597,6 @@ export class WorldScene extends Phaser.Scene {
       this.terrainWidth * TILE_SIZE
     );
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
-
-    if (this.registry.get('music') === true) {
-      if (!this.sound.isPlaying('background_music')) {
-        this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
-      }
-      if (!this.sound.isPlaying('background_music_layer')) {
-        this.sound
-          .add('background_music_layer', { loop: true, volume: 0.3 })
-          .play();
-      }
-    }
 
     bindAblyToWorldScene(this);
     initializePlayer();
