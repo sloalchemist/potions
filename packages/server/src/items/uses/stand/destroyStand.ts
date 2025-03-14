@@ -5,7 +5,7 @@ import { Smashable } from '../../smashable';
 
 export class DestroyStand implements Use {
   key: string;
-  type: 'potion-stand';
+  type: string;
 
   constructor() {
     this.key = 'destroy_stand';

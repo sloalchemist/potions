@@ -102,6 +102,7 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
+    /* COMMENTING OUT FOR NOW SINCE IT BREAKS THE GAME
     // Initialize loading bar first
     console.log('Preload started');
     this.loadingBar.create();
@@ -135,7 +136,7 @@ export class WorldScene extends Phaser.Scene {
         this.loadingBar.destroy();
       }, 500);
     });
-
+*/
     // Start loading assets
     const worldID = getWorldID();
     this.load.image(
@@ -156,6 +157,11 @@ export class WorldScene extends Phaser.Scene {
     this.load.spritesheet('explosion', 'static/Explosion-scaled.png', {
       frameWidth: 288,
       frameHeight: 288
+    });
+
+    this.load.spritesheet('poison', 'static/green_potion.png', {
+      frameWidth: 100,
+      frameHeight: 100
     });
 
     this.load.json('global_data', '../../../world_assets/global.json');
@@ -189,6 +195,16 @@ export class WorldScene extends Phaser.Scene {
         end: 11
       }),
       frameRate: 20,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'poison',
+      frames: this.anims.generateFrameNumbers('poison', {
+        start: 0,
+        end: 60
+      }),
+      frameRate: 30,
       repeat: 0
     });
 

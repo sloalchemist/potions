@@ -444,16 +444,6 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "sands-of-time",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
             "type": "lightning-bloom",
             "global_max": 10,
             "local_max": 2,
@@ -470,16 +460,6 @@
       "walkable": false,
       "interactions": [],
       "on_tick": [
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "tar",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
         {
           "action": "spawn_item",
           "parameters": {
@@ -525,6 +505,16 @@
             "global_max": 10,
             "local_max": 2,
             "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sands-of-time",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 7,
             "rate": 0.1
           }
         }
@@ -1056,7 +1046,7 @@
       "type": "potion-stand",
       "carryable": false,
       "smashable": false,
-      "walkable": false,
+      "walkable": true,
       "attributes": [
         {
           "name": "items",
@@ -1166,7 +1156,7 @@
             }
           ],
           "permissions": {
-            "community": false,
+            "community": true,
             "character": false,
             "other": true
           }
@@ -1221,8 +1211,8 @@
       "description": "A stand that sells THINGS.",
       "type": "market-stand",
       "carryable": false,
-      "smashable": false,
-      "walkable": false,
+      "smashable": false
+      "walkable": true,
       "attributes": [
           {
               "name": "items",
@@ -1247,7 +1237,8 @@
               "action": "add_to_market",
               "while_carried": false,
               "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
               }
           },
@@ -1263,7 +1254,8 @@
                   }
               ],
               "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
               }
           },
@@ -1279,7 +1271,8 @@
                   }
               ],
               "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
               }
           },
@@ -1295,7 +1288,8 @@
                   }
               ],
               "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
               }
           },
@@ -1311,7 +1305,8 @@
                   }
               ],
               "permissions": {
-                  "community": true,
+                  "community": false,
+                  "character": true,
                   "other": false
               }
           },
