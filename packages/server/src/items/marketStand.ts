@@ -48,7 +48,7 @@ export class MarketStand {
     const currentItemType = this.getItemType();
 
     // If market stand is empty, set the new item type
-    if (!currentItemType) {
+    if (!currentItemType || currentItemType === null) {
       this.item.setAttribute('item_type', carriedItem.type);
     }
 
