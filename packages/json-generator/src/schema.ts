@@ -100,7 +100,9 @@ const mobTypeSchema = z.object({
   adventurousness: z.number(),
   gluttony: z.number(),
   sleepy: z.number(),
-  extroversion: z.number()
+  extroversion: z.number(),
+  invincibility_spawn_length_ms: z.number(),
+  invincible: z.boolean()
 });
 
 const communityConfigSchema = z.object({

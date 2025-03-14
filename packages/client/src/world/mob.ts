@@ -18,6 +18,7 @@ export class Mob extends Physical {
   doing: string = '';
   community_id?: string;
   fightable?: boolean = false;
+  invincible: boolean = false;
 
   constructor(
     world: World,
