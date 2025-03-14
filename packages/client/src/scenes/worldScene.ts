@@ -102,35 +102,50 @@ export class WorldScene extends Phaser.Scene {
   }
 
   preload() {
-    // Initialize loading bar first
     console.log('Preload started');
-    this.loadingBar.create();
 
-    // Register loading bar with scene's update list
-    this.events.on('update', () => {
-      this.loadingBar.update();
-    });
+    // Check if any loading is needed by registering a one-time start event
+    let loadingNeeded = false;
 
-    // Set initial progress to show something is happening
-    this.loadingBar.setProgress(0.1);
-    this.loadingBar.setCurrentFile('Initializing...');
-    this.scene.systems.updateList.update();
+    const onLoadStart = () => {
+      loadingNeeded = true;
 
-    this.load.on('filecomplete', (key: string) => {
-      this.loadingBar.setCurrentFile(`Loaded: ${key}`);
-    });
+      // Initialize loading bar
+      this.loadingBar.create();
+
+      // Register loading bar with scene's update list
+      this.events.on('update', () => {
+        this.loadingBar.update();
+      });
+
+      // Set initial progress to show something is happening
+      this.loadingBar.setProgress(0.1);
+      this.loadingBar.setCurrentFile('Initializing...');
+      this.scene.systems.updateList.update();
+
+      // Update progress on each file load
+      this.load.on('filecomplete', (key: string) => {
+        this.loadingBar.setCurrentFile(`Loaded: ${key}`);
+      });
+    };
 
     // Clean up loading bar when done
     this.load.on('complete', () => {
-      this.loadingBar.setProgress(1);
-      this.loadingBar.setCurrentFile('Ready!');
+      if (loadingNeeded) {
+        this.loadingBar.setProgress(1);
+        this.loadingBar.setCurrentFile('Ready!');
 
-      // Wait 500ms to show 100% before destroying
-      setTimeout(() => {
-        this.loadingBar.destroy();
-      }, 500);
+        // Wait 500ms to show 100% before destroying
+        setTimeout(() => {
+          this.loadingBar.destroy();
+        }, 500);
+      }
     });
 
+    // Register the start event before adding any files to the loader
+    this.load.once('start', onLoadStart);
+
+    // Add all assets to the loader
     const worldID = getWorldID();
     this.load.image(
       'background',
