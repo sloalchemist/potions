@@ -2,6 +2,8 @@ import { Coord, followPath } from '@rt-potion/common';
 import { Physical } from './physical';
 import { World } from './world';
 
+const fightableMobList = ['blob'];
+
 export class Mob extends Physical {
   _target?: Coord;
   path: Coord[] = [];
@@ -15,6 +17,7 @@ export class Mob extends Physical {
   unlocks: string[] = [];
   doing: string = '';
   community_id?: string;
+  fightable?: boolean = false;
   invincible: boolean = false;
 
   constructor(
@@ -32,6 +35,11 @@ export class Mob extends Physical {
     super(world, key, type, position);
     this.name = name;
     this.maxHealth = maxHealth;
+
+    if (fightableMobList.includes(type)) {
+      this.fightable = true;
+    }
+
     if (position) {
       world.addMobToGrid(this);
     }

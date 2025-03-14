@@ -1045,7 +1045,7 @@
       "name": "Potion stand",
       "type": "potion-stand",
       "carryable": false,
-      "smashable": true,
+      "smashable": false,
       "walkable": true,
       "attributes": [
         {
@@ -1159,6 +1159,18 @@
             "community": true,
             "character": false,
             "other": true
+          }
+        },
+        {
+          "description": "Destroy stand",
+          "action": "destroy_stand",
+          "while_carried": false,
+          "conditions": [
+          ],
+          "permissions": {
+            "community": false,
+            "character": true,
+            "other": false
           }
         }
       ],

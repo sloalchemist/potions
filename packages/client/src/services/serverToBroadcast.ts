@@ -16,7 +16,7 @@ import {
   PortalData,
   SetDatetimeData,
   SpeakData,
-  BombData,
+  PotionEffectData,
   ShowPortalMenuData,
   ScoreboardData
 } from '@rt-potion/common';
@@ -219,10 +219,18 @@ export function setupBroadcast(
     window.location.reload();
   }
 
-  function handleBomb(data: BombData) {
+  function handlePotionEffect(data: PotionEffectData) {
     const mob = world.mobs[data.id] as SpriteMob;
     if (mob) {
-      mob.createBombExplosion(1);
+      switch (data.type) {
+        case 'bomb':
+          console.log(data.type);
+          mob.createBombExplosion(1);
+          return;
+        case 'poison':
+          mob.createPoisonEffect(1);
+          return;
+      }
     }
   }
 
@@ -298,8 +306,8 @@ export function setupBroadcast(
         case 'reload_page':
           handleReloadPage();
           break;
-        case 'bomb':
-          handleBomb(broadcastItem.data as BombData);
+        case 'potion_effect':
+          handlePotionEffect(broadcastItem.data as PotionEffectData);
           break;
         default:
           console.error(

@@ -156,7 +156,7 @@ export function mobRangeListener(mobs: Mob[]) {
     }
   }
   if (fightOpponentCallback && !fighting) {
-    const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
+    const filteredMobs = mobs.filter((mob) => mob.fightable);
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastFightOpponents)) {
       fightOpponentCallback(filteredMobs);
