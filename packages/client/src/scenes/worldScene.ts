@@ -519,7 +519,8 @@ export class WorldScene extends Phaser.Scene {
         // Prevent player movement if the brew scene is active
         if (
           this.scene.isActive('BrewScene') ||
-          this.scene.isActive('FightScene')
+          this.scene.isActive('FightScene') ||
+          this.scene.isActive('PauseMenuScene')
         ) {
           return;
         }
@@ -527,7 +528,8 @@ export class WorldScene extends Phaser.Scene {
         // Prevent player movement if the brew scene is active
         if (
           this.scene.isActive('BrewScene') ||
-          this.scene.isActive('FightScene')
+          this.scene.isActive('FightScene') ||
+          this.scene.isActive('PauseMenuScene')
         ) {
           return;
         }
@@ -589,8 +591,11 @@ export class WorldScene extends Phaser.Scene {
       }
       // Ends chat box for user
       if (event.code === 'Escape') {
+        // console.log('Escape pressed in worldscene');
         if (this.scene.isActive('ChatOverlayScene')) {
           this.scene.stop('ChatOverlayScene');
+        } else {
+          this.pauseMenuScene();
         }
       }
     });
@@ -604,6 +609,17 @@ export class WorldScene extends Phaser.Scene {
     });
 
     needsAnimationsLoaded = false;
+  }
+
+  pauseMenuScene() {
+    let uxscene = this.scene.get('UxScene') as UxScene;
+    uxscene.chatButtons?.clearButtonOptions();
+
+    if (this.scene.isActive('PauseMenuScene')) {
+      this.scene.stop('PauseMenuScene');
+    } else {
+      this.scene.launch('PauseMenuScene');
+    }
   }
 
   public convertToTileXY(pos: Coord): [number, number] {
@@ -735,7 +751,8 @@ export class WorldScene extends Phaser.Scene {
     if (
       this.scene.isActive('ChatOverlayScene') ||
       this.scene.isActive('BrewScene') ||
-      this.scene.isActive('FightScene')
+      this.scene.isActive('FightScene') ||
+      this.scene.isActive('PauseMenuScene')
     ) {
       return;
     }

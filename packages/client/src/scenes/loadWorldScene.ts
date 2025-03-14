@@ -313,8 +313,8 @@ export class LoadWorldScene extends Phaser.Scene {
     this.scene.start('PauseScene');
     this.scene.start('WorldScene');
     this.scene.start('UxScene');
-    this.scene.start('FrameScene');
     this.scene.start('MiniLeaderboardScene');
+    this.scene.start('FrameScene');
     setGameState('worldLoaded');
   }
 
