@@ -1297,7 +1297,7 @@
           "value": 1
         }
       ],
-      "smashable": false,
+      "smashable": true,
       "show_price_at": {
         "x": 7,
         "y": -10
