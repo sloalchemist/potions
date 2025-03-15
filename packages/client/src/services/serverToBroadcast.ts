@@ -63,7 +63,9 @@ export function setupBroadcast(
   function handleDestroyItem(data: DestroyItemData) {
     const item = world.items[data.object_key];
     if (item) {
+      world.removeStoredItem(item);
       item.destroy(world);
+      updateInventory();
     }
     if (data.mob_key && world.mobs[data.mob_key]) {
       world.mobs[data.mob_key].carrying = undefined;

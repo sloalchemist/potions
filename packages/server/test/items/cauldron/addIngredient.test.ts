@@ -55,7 +55,7 @@ describe('AddIngredient', () => {
 
     expect(result).toBe(true);
     expect(Cauldron.fromItem).toHaveBeenCalledWith(mockItem);
-    expect(mockCauldron.AddIngredient).toHaveBeenCalledWith(mockMob);
+    expect(mockCauldron.AddIngredient).toHaveBeenCalledWith(mockCarriedItem);
   });
 
   test('should fail if mob is not carrying anything', () => {
@@ -84,6 +84,6 @@ describe('AddIngredient', () => {
 
     expect(result).toBe(false);
     expect(Cauldron.fromItem).toHaveBeenCalledWith(mockItem);
-    expect(mockCauldron.AddIngredient).toHaveBeenCalledWith(mockMob);
+    expect(mockCauldron.AddIngredient).toHaveBeenCalledWith(mockCarriedItem);
   });
 });
