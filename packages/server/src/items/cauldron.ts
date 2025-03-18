@@ -44,26 +44,23 @@ export class Cauldron {
     return true;
   }
 
-  AddIngredient(mob: Mob): boolean {
-    const carriedItem = mob.carrying;
-
+  AddIngredient(ingredient: Item): boolean {
     if (
-      carriedItem &&
-      (carriedItem.hasAttribute('brew_color') ||
-        carriedItem.type == 'potion') &&
+      ingredient &&
+      (ingredient.hasAttribute('brew_color') || ingredient.type == 'potion') &&
       this.getNumItems() < 3
     ) {
       // get ingredient color from carried item
       var ingredientColor: string;
-      if (carriedItem.type == 'potion') {
-        ingredientColor = numberToHexString(Number(carriedItem.subtype));
+      if (ingredient.type == 'potion') {
+        ingredientColor = numberToHexString(Number(ingredient.subtype));
       } else {
-        ingredientColor = carriedItem.getAttribute('brew_color');
+        ingredientColor = ingredient.getAttribute('brew_color');
       }
 
       //calculate weight for added ingredient
       let ingredientWeight = 1;
-      if (carriedItem.type == 'potion') {
+      if (ingredient.type == 'potion') {
         ingredientWeight = 0.5; //change depending on how much you want potions to affect color
       }
 
@@ -74,7 +71,7 @@ export class Cauldron {
           hexStringToNumber(ingredientColor)
         );
         this.item.changeAttributeBy('ingredients', 1);
-        carriedItem.destroy();
+        ingredient.destroy();
         this.item.setAttribute('color_weight', ingredientWeight);
         return true;
       }
@@ -98,7 +95,7 @@ export class Cauldron {
       }
 
       // destroy carried item
-      carriedItem.destroy();
+      ingredient.destroy();
 
       this.item.changeAttributeBy('ingredients', 1);
       this.item.setAttribute('potion_subtype', hexStringToNumber(newColor));
