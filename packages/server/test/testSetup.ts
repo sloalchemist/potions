@@ -296,6 +296,8 @@ export const commonSetup = (worldSize: number = 2) => {
         gluttony: 50,
         sleepy: 80,
         extroversion: 50,
+        invincibility_spawn_length_ms: 10000,
+        invincible: false,
         speaker: true
       },
       {

@@ -434,16 +434,6 @@
         {
           "action": "spawn_item",
           "parameters": {
-            "type": "sands-of-time",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
             "type": "lightning-bloom",
             "global_max": 10,
             "local_max": 2,
@@ -460,16 +450,6 @@
       "walkable": false,
       "interactions": [],
       "on_tick": [
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "tar",
-            "global_max": 10,
-            "local_max": 1,
-            "radius": 4,
-            "rate": 0.1
-          }
-        },
         {
           "action": "spawn_item",
           "parameters": {
@@ -515,6 +495,16 @@
             "global_max": 10,
             "local_max": 2,
             "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "sands-of-time",
+            "global_max": 10,
+            "local_max": 2,
+            "radius": 7,
             "rate": 0.1
           }
         }
@@ -1016,24 +1006,24 @@
           "action": "spawn_mob",
           "parameters": {
             "type": "blob",
-            "max": 10,
-            "rate": 0.1
+            "max": 3,
+            "rate": 0.01
           }
         },
         {
           "action": "spawn_mob",
           "parameters": {
             "type": "fighter",
-            "max": 10,
-            "rate": 0.1
+            "max": 3,
+            "rate": 0.05
           }
         },
         {
           "action": "spawn_mob",
           "parameters": {
             "type": "villager",
-            "max": 15,
-            "rate": 0.1
+            "max": 7,
+            "rate": 0.07
           }
         }
       ],
@@ -1044,7 +1034,7 @@
       "description": "A stand that sells health potions.",
       "type": "potion-stand",
       "carryable": false,
-      "walkable": false,
+      "walkable": true,
       "interactions": [
         {
           "description": "Add $item_name",
@@ -1128,7 +1118,7 @@
           "description": "Purchase potion",
           "action": "purchase",
           "permissions": {
-            "community": false,
+            "community": true,
             "character": false,
             "other": true
           },
@@ -1140,6 +1130,17 @@
               "comparison": "greater_than"
             }
           ]
+        },
+        {
+          "description": "Destroy stand",
+          "action": "destroy_stand",
+          "permissions": {
+            "community": false,
+            "character": true,
+            "other": false
+          },
+          "while_carried": false,
+          "conditions": []
         }
       ],
       "attributes": [
@@ -1160,7 +1161,7 @@
           "value": 1
         }
       ],
-      "smashable": true,
+      "smashable": false,
       "show_price_at": {
         "x": 7,
         "y": -10
@@ -1197,13 +1198,14 @@
       "description": "A stand that sells THINGS.",
       "type": "market-stand",
       "carryable": false,
-      "walkable": false,
+      "walkable": true,
       "interactions": [
         {
           "description": "Add $item_name",
           "action": "add_to_market",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false
@@ -1212,7 +1214,8 @@
           "description": "Get $item_name",
           "action": "purchase_market_item",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1228,7 +1231,8 @@
           "description": "Raise price",
           "action": "raise_market_price",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1244,7 +1248,8 @@
           "description": "Lower price",
           "action": "lower_market_price",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1260,7 +1265,8 @@
           "description": "Collect gold",
           "action": "collect_gold",
           "permissions": {
-            "community": true,
+            "community": false,
+            "character": true,
             "other": false
           },
           "while_carried": false,
@@ -1455,7 +1461,9 @@
       "adventurousness": 20,
       "gluttony": 10,
       "sleepy": 10,
-      "extroversion": 50
+      "extroversion": 50,
+      "invincibility_spawn_length_ms": 0,
+      "invincible": false
     },
     {
       "name": "Villager",
@@ -1475,7 +1483,9 @@
       "adventurousness": 10,
       "gluttony": 50,
       "sleepy": 80,
-      "extroversion": 50
+      "extroversion": 50,
+      "invincibility_spawn_length_ms": 0,
+      "invincible": false
     },
     {
       "name": "Player",
@@ -1495,7 +1505,9 @@
       "adventurousness": 10,
       "gluttony": 50,
       "sleepy": 80,
-      "extroversion": 50
+      "extroversion": 50,
+      "invincibility_spawn_length_ms": 10000,
+      "invincible": false
     },
     {
       "name": "Fighter",
@@ -1516,7 +1528,9 @@
       "adventurousness": 20,
       "gluttony": 10,
       "sleepy": 10,
-      "extroversion": 50
+      "extroversion": 50,
+      "invincibility_spawn_length_ms": 0,
+      "invincible": false
     }
   ],
   "regions": [],

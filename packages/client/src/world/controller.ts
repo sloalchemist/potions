@@ -23,7 +23,7 @@ export type Interactions = {
   item: Item;
   action: string;
   label: string;
-  give_to?: string;
+  options?: string;
 };
 
 const MAX_STASH: number = 12;
@@ -154,7 +154,7 @@ export function mobRangeListener(mobs: Mob[]) {
     }
   }
   if (fightOpponentCallback && !fighting) {
-    const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
+    const filteredMobs = mobs.filter((mob) => mob.fightable);
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastFightOpponents)) {
       fightOpponentCallback(filteredMobs);
@@ -213,7 +213,7 @@ export function getCarriedItemInteractions(
       interactions.push({
         action: 'give',
         item: item as Item,
-        give_to: mob.key,
+        options: mob.key,
         label: `Give ${item.itemType.name} to ${mob.name}`
       });
     }
@@ -253,8 +253,14 @@ export function getPhysicalInteractions(
   const isOwnedByCharacter = item.isOwnedByCharacter(character_id);
   const isOwnedByCommunity = item.isOwnedByCommunity(community_id);
 
-  // if the item can be picked up
-  if (item.itemType.carryable) {
+  // if the item can be picked up and the owner's affiliation is the same as the item's affiliation
+
+  if (
+    item.itemType.carryable &&
+    item.itemType.attributes?.find(
+      (attr) => attr.name === 'specialized_resource'
+    )?.value == community_id
+  ) {
     interactions.push({
       action: 'pickup',
       item: item,
@@ -275,11 +281,15 @@ export function getPhysicalInteractions(
   item.itemType.interactions.forEach((interaction) => {
     const hasPermission =
       !interaction.permissions || // Allow interaction if no permissions entry in global.json
-      (isOwnedByCommunity && interaction.permissions?.community) ||
-      (isOwnedByCharacter && interaction.permissions?.character) ||
+      // Individual ownership will take priority over community
+      (isOwnedByCharacter && interaction.permissions?.character === true) ||
+      (!isOwnedByCharacter &&
+        isOwnedByCommunity &&
+        interaction.permissions?.community === true) ||
+      // Allowed only for non-owners
       (!isOwnedByCharacter &&
         !isOwnedByCommunity &&
-        interaction.permissions?.other); // Allowed only for non-owners
+        interaction.permissions?.other === true);
     if (
       hasPermission &&
       !interaction.while_carried &&

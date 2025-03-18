@@ -2,8 +2,12 @@ import { Coord, followPath } from '@rt-potion/common';
 import { Physical } from './physical';
 import { World } from './world';
 
+
 // If any new mobs are added that you do not want to chat, add it to the list below.
 const notChattableTypes = ['player', 'blob'];
+
+const fightableMobList = ['blob'];
+
 
 export class Mob extends Physical {
   _target?: Coord;
@@ -18,7 +22,12 @@ export class Mob extends Physical {
   unlocks: string[] = [];
   doing: string = '';
   community_id?: string;
+
   chattable: boolean = true;
+
+  fightable?: boolean = false;
+  invincible: boolean = false;
+
 
   constructor(
     world: World,
@@ -38,6 +47,10 @@ export class Mob extends Physical {
 
     if (notChattableTypes.includes(type)) {
       this.chattable = false;
+
+    if (fightableMobList.includes(type)) {
+      this.fightable = true;
+
     }
 
     if (position) {

@@ -64,6 +64,7 @@ export class UxScene extends Phaser.Scene {
   attackText: Phaser.GameObjects.Text | null = null;
   defenseText: Phaser.GameObjects.Text | null = null;
   speedText: Phaser.GameObjects.Text | null = null;
+  invincibleText: Phaser.GameObjects.Text | null = null;
   affiliationText: Phaser.GameObjects.Text | null = null;
   favorabilitiesText: Phaser.GameObjects.Text | null = null;
   keybindGuideText: Phaser.GameObjects.Text | null = null;
@@ -86,6 +87,9 @@ export class UxScene extends Phaser.Scene {
   chatRequested: boolean = false;
   fightButtons: ButtonManager = new ButtonManager([]);
   fightRequested: boolean = false;
+
+  // Variables that should be removed but cant
+  inventoryItems: Item[] = [];
 
   // Variables for tab buttons and containers
   actionsTabButton: TabButton | null = null;
@@ -340,16 +344,23 @@ export class UxScene extends Phaser.Scene {
       );
       this.infoContainer.add(this.speedText);
 
-      this.affiliationText = this.add.text(
+      this.invincibleText = this.add.text(
         15,
         190,
+        'Status: ' + (currentCharacter.invincible ? '🛡️ INVINCIBLE' : 'Normal')
+      );
+      this.infoContainer.add(this.invincibleText);
+
+      this.affiliationText = this.add.text(
+        15,
+        215,
         'Affiliation: ' + currentCharacter.community_id
       );
       this.infoContainer.add(this.affiliationText);
 
       this.dateText = this.add.text(
         15,
-        215,
+        240,
         'Date: reading position of sun and stars'
       );
       this.infoContainer.add(this.dateText);
@@ -737,6 +748,10 @@ export class UxScene extends Phaser.Scene {
         })
       );
 
+      // add inventory text initially
+      this.inventoryText = this.add.text(140, 35, 'ITEM COUNT: 0/12');
+      this.inventoryContainer.add(this.inventoryText);
+
       this.time.addEvent({
         delay: 1000,
         callback: () => {
@@ -882,6 +897,9 @@ export class UxScene extends Phaser.Scene {
       this.attackText?.setText('Attack: ' + currentCharacter.attack);
       this.defenseText?.setText('Defense: ' + currentCharacter.defense);
       this.speedText?.setText('Speed: ' + currentCharacter.speed);
+      this.invincibleText?.setText(
+        'Status: ' + (currentCharacter.invincible ? '🛡️ INVINCIBLE' : 'Normal')
+      );
       this.affiliationText?.setText(
         'Affiliation: ' + currentCharacter.community_id
       );
@@ -909,14 +927,13 @@ export class UxScene extends Phaser.Scene {
             .map(([community, value]) => `${community}: ${value}`)
             .join('\n')
       );
-      this.refreshInventoryStats();
+      // this.refreshInventoryStats();
     }
   }
 
-  refreshInventoryStats() {
-    this.inventoryText?.setText(
-      'ITEM COUNT: ' + world.getStoredItems().length + '/12'
-    );
+  refreshInventoryStats(itemCount: number = 0) {
+    console.log('its supposed to print the item count', itemCount);
+    this.inventoryText?.setText(`ITEM COUNT: ${itemCount}/12`);
   }
 
   showInfoTab() {
@@ -1129,8 +1146,10 @@ export class UxScene extends Phaser.Scene {
       i = 1; // Set i to 1 if there are cauldron interactions (button spacing)
     }
     if (this.scene.isActive('BrewScene')) {
+      let cauldronKey: string = '';
       interactions.forEach((interaction) => {
         if (interaction.item.type === 'cauldron') {
+          cauldronKey = interaction.item.key;
           if (
             (interaction.label === 'Add Ingredient' &&
               currentCharacter?.isCarrying) ||
@@ -1142,22 +1161,20 @@ export class UxScene extends Phaser.Scene {
               toggleY +
               Math.floor(i / 3) * (BUTTON_HEIGHT + BUTTON_SPACING);
 
-            const button = new Button(
-              this,
-              x,
-              y,
-              true,
-              interaction.label,
-              () => {
-                interact(
-                  interaction.item.key,
-                  interaction.action,
-                  interaction.give_to ? interaction.give_to : null
-                );
-                // Refresh the buttons in case the interaction state has changed
-                this.setInteractions(interactions);
-              }
-            );
+            var label = interaction.label;
+            if (label === 'Add Ingredient') {
+              label = 'Add From Hand';
+            }
+
+            const button = new Button(this, x, y, true, label, () => {
+              interact(
+                interaction.item.key,
+                interaction.action,
+                interaction.options ? interaction.options : null
+              );
+              // Refresh the buttons in case the interaction state has changed
+              this.setInteractions(interactions);
+            });
 
             this.interactButtons.push(button);
             this.itemsContainer?.add(button);
@@ -1194,6 +1211,35 @@ export class UxScene extends Phaser.Scene {
           );
         }
       });
+      this.inventoryItems.forEach((item) => {
+        if (
+          (item.hasAttribute('brew_color') || item.type == 'potion') &&
+          cauldronKey != ''
+        ) {
+          const x = toggleX + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
+          const y =
+            SUBHEADING_OFFSET +
+            toggleY +
+            Math.floor(i / 3) * (BUTTON_HEIGHT + BUTTON_SPACING);
+
+          const button = new Button(
+            this,
+            x,
+            y,
+            true,
+            `Add ${item.itemType.name}`,
+            () => {
+              interact(cauldronKey, 'add_ingredient', item.key);
+              // Refresh the buttons in case the interaction state has changed
+              this.setInteractions(interactions);
+            }
+          );
+
+          this.interactButtons.push(button);
+          this.itemsContainer?.add(button);
+          i++;
+        }
+      });
     } else {
       interactions.forEach((interaction) => {
         if (interaction.item.type != 'cauldron') {
@@ -1217,7 +1263,7 @@ export class UxScene extends Phaser.Scene {
               interact(
                 interaction.item.key,
                 interaction.action,
-                interaction.give_to ? interaction.give_to : null
+                interaction.options ? interaction.options : null
               ),
             undefined,
             undefined,
@@ -1358,15 +1404,18 @@ export class UxScene extends Phaser.Scene {
 
   // Method to set inventory
   setInventory(inventory: Item[]) {
-    this.refreshInventoryStats();
+    this.refreshInventoryStats(inventory.length);
 
     this.inventoryButtons?.clearButtonOptions();
 
     // Sort inventory alphabetically
     inventory.sort((a, b) => a.itemType.name.localeCompare(b.itemType.name));
-
+    this.inventoryItems = inventory;
     inventory.forEach((item, i) => {
-      const y = 60 + (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
+      const y =
+        SUBHEADING_OFFSET +
+        60 +
+        (BUTTON_HEIGHT + BUTTON_SPACING) * Math.floor(i / 3);
       const x = 85 + (i % 3) * (BUTTON_WIDTH + BUTTON_SPACING);
 
       const button = new Button(this, x, y, true, `${item.itemType.name}`, () =>

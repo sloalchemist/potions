@@ -13,13 +13,16 @@ export class Give implements Use {
     return 'Give';
   }
 
-  interact(mob: Mob, item: Item, giveTo: Mob | undefined): boolean {
+  interact(mob: Mob, item: Item, options: Item | Mob | undefined): boolean {
+    if (!(options instanceof Mob)) {
+      return false;
+    }
     const carriedItem = mob.carrying;
 
-    if (!carriedItem || carriedItem.id !== item.id || !giveTo) {
+    if (!carriedItem || carriedItem.id !== item.id) {
       return false;
     }
 
-    return Carryable.fromItem(item)!.giveItem(mob, giveTo);
+    return Carryable.fromItem(item)!.giveItem(mob, options);
   }
 }

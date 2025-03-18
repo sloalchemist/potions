@@ -16,7 +16,7 @@ import {
   PortalData,
   SetDatetimeData,
   SpeakData,
-  BombData,
+  PotionEffectData,
   ShowPortalMenuData,
   ScoreboardData
 } from '@rt-potion/common';
@@ -63,7 +63,9 @@ export function setupBroadcast(
   function handleDestroyItem(data: DestroyItemData) {
     const item = world.items[data.object_key];
     if (item) {
+      world.removeStoredItem(item);
       item.destroy(world);
+      updateInventory();
     }
     if (data.mob_key && world.mobs[data.mob_key]) {
       world.mobs[data.mob_key].carrying = undefined;
@@ -106,7 +108,13 @@ export function setupBroadcast(
 
   function handleDoing(data: DoingData) {
     const mob = world.mobs[data.id] as SpriteMob;
-    mob.doing = data.action;
+    if (mob == undefined) {
+      console.warn(
+        `client/src/services/serverToBroadcast.ts: Ably attempting to assign 'doing' to undefined mob with id ${data.id}`
+      );
+    } else {
+      mob.doing = data.action;
+    }
   }
 
   function handleMove(data: MoveData) {
@@ -213,10 +221,18 @@ export function setupBroadcast(
     window.location.reload();
   }
 
-  function handleBomb(data: BombData) {
+  function handlePotionEffect(data: PotionEffectData) {
     const mob = world.mobs[data.id] as SpriteMob;
     if (mob) {
-      mob.createBombExplosion(1);
+      switch (data.type) {
+        case 'bomb':
+          console.log(data.type);
+          mob.createBombExplosion(1);
+          return;
+        case 'poison':
+          mob.createPoisonEffect(1);
+          return;
+      }
     }
   }
 
@@ -258,6 +274,7 @@ export function setupBroadcast(
             'BROADCAST UNSTASH ITEM'
           );
           handleUnstashItem(broadcastItem.data as UnstashItemData);
+          break;
         case 'doing':
           handleDoing(broadcastItem.data as DoingData);
           break;
@@ -291,8 +308,8 @@ export function setupBroadcast(
         case 'reload_page':
           handleReloadPage();
           break;
-        case 'bomb':
-          handleBomb(broadcastItem.data as BombData);
+        case 'potion_effect':
+          handlePotionEffect(broadcastItem.data as PotionEffectData);
           break;
         default:
           console.error(

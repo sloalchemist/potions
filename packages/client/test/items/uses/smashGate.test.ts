@@ -65,7 +65,6 @@ describe('Openable, smashable items have prompts to smash', () => {
     );
 
     expect(gateExists).toBe(true);
-    console.log('Interactable items in proximity: ', interactablePhysicals);
 
     // Acquire all of the possible interactions with the gate object
     const interactions = getPhysicalInteractions(gate);
@@ -75,7 +74,6 @@ describe('Openable, smashable items have prompts to smash', () => {
       (interaction) => interaction.action === 'smash'
     );
     expect(hasSmashInteraction).toBe(true);
-    console.log('Interactions available: ', interactions);
   });
 
   test('Proximity to door results in "smash door" prompt', () => {
@@ -118,7 +116,6 @@ describe('Openable, smashable items have prompts to smash', () => {
     );
 
     expect(doorExists).toBe(true);
-    console.log('Interactable items in proximity: ', interactablePhysicals);
 
     // Acquire all of the possible interactions with the door object
     const interactions = getPhysicalInteractions(door);
@@ -128,7 +125,6 @@ describe('Openable, smashable items have prompts to smash', () => {
       (interaction) => interaction.action === 'smash'
     );
     expect(hasSmashInteraction).toBe(true);
-    console.log('Interactions available: ', interactions);
   });
 
   afterAll(() => {

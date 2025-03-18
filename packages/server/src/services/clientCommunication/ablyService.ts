@@ -30,6 +30,7 @@ import {
 } from '../authMarshalling';
 import { applyCheat } from '../developerCheats';
 import { logger } from '../../util/logger';
+import globalData from '../../../world_assets/global.json';
 
 //must match MAINTAIN_WORLD_OPTION in client/src/services/serverToBroadcast.ts
 const MAINTAIN_WORLD_OPTION = 'NO_CHANGE';
@@ -281,10 +282,10 @@ export class AblyService implements PubSub {
     }
   }
 
-  public bomb(key: string): void {
+  public potionEffect(key: string, potion_type: string): void {
     this.addToBroadcast({
-      type: 'bomb',
-      data: { id: key }
+      type: 'potion_effect',
+      data: { id: key, type: potion_type }
     });
   }
 
@@ -659,6 +660,7 @@ export class AblyService implements PubSub {
           \t health recieved: ${health}
           \t attack recieved: ${attack}
           \t gold recieved: ${gold} `);
+        // Create the player character
         mobFactory.makeMob(
           'player',
           gameWorld.getPortalLocation(),
@@ -669,6 +671,48 @@ export class AblyService implements PubSub {
           gold,
           attack
         );
+
+        // Get the newly created player and apply invincibility
+        const newPlayer = Mob.getMob(username);
+        logger.debug(
+          `DEBUG: Newly created player: ${username}, found: ${!!newPlayer}`
+        );
+
+        if (newPlayer) {
+          try {
+            // Set player as invincible with a duration from globalData
+            const playerMobType = globalData.mob_types.find(
+              (mobType) => mobType.type === 'player'
+            );
+
+            if (!playerMobType) {
+              logger.error(`Could not find player mob type in globalData`);
+              return;
+            }
+
+            const invincibilitySpawnLength =
+              playerMobType.invincibility_spawn_length_ms;
+
+            logger.debug(
+              `DEBUG: About to set ${data.name} invincible for ${invincibilitySpawnLength} ms`
+            );
+
+            newPlayer.setInvincible(true, invincibilitySpawnLength);
+            logger.debug(`DEBUG: After setting ${data.name} invincible`);
+
+            logger.info(
+              `INVINCIBLE: ${data.name} has spawn protection! They are invincible for ${invincibilitySpawnLength} ticks or until movement.`
+            );
+          } catch (error) {
+            logger.error(
+              `ERROR setting invincibility for ${data.name}: ${error}`
+            );
+          }
+        } else {
+          logger.error(
+            `ERROR: Could not find newly created player: ${username} to set invincibility`
+          );
+        }
       } else if (player.subtype !== data.subtype || player.name !== data.name) {
         player.updatePlayer(data.name, data.subtype);
       }
@@ -689,12 +733,14 @@ export class AblyService implements PubSub {
     subscribeToPlayerChannel('interact', (data) => {
       const item = Item.getItem(data.item_key);
       const player = Mob.getMob(username);
+      let options: Mob | Item | undefined = undefined;
       if (item && player) {
-        item.interact(
-          player,
-          data.action,
-          data.give_to ? Mob.getMob(data.give_to) : undefined
-        );
+        if (data.action == 'add_ingredient') {
+          options = data.options ? Item.getItem(data.options) : undefined;
+        } else {
+          options = data.options ? Mob.getMob(data.options) : undefined;
+        }
+        item.interact(player, data.action, options);
       }
     });
 

@@ -48,16 +48,23 @@ export class MarketStand {
     const currentItemType = this.getItemType();
 
     // If market stand is empty, set the new item type
-    if (!currentItemType) {
+    if (!currentItemType || currentItemType === null) {
       this.item.setAttribute('item_type', carriedItem.type);
     }
 
     // Ensure that only the same item type can be added
     if (this.getItemType() !== carriedItem.type) return false;
 
+    // Update both the items count and inventory
     this.item.changeAttributeBy('items', 1);
-    carriedItem.destroy();
 
+    // Update inventory
+    const inventory = this.getInventory();
+    const itemType = carriedItem.type;
+    inventory[itemType] = (inventory[itemType] || 0) + 1;
+    this.item.setAttribute('inventory', JSON.stringify(inventory));
+
+    carriedItem.destroy();
     return true;
   }
 
@@ -74,8 +81,8 @@ export class MarketStand {
   }
 
   purchaseItem(mob: Mob, itemType: string): boolean {
-    const inventory = this.getInventory(); // Retrieves parsed object
-    const prices = this.getPrices(); // Retrieves parsed object
+    const inventory = this.getInventory();
+    const prices = this.getPrices();
 
     if (!inventory[itemType] || inventory[itemType] <= 0) return false;
     if (!prices[itemType]) return false;
@@ -84,9 +91,13 @@ export class MarketStand {
     // Deduct gold, reduce inventory, and give item
     mob.changeGold(-prices[itemType]);
     inventory[itemType] -= 1;
+    this.item.changeAttributeBy('items', -1);
 
-    // 🔥 Store inventory as a JSON string
+    // Update inventory
     this.item.setAttribute('inventory', JSON.stringify(inventory));
+
+    // Add gold to the stand
+    this.item.changeAttributeBy('gold', prices[itemType]);
 
     itemGenerator.createItem({
       type: itemType,

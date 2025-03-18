@@ -96,6 +96,14 @@ export class Hunt implements Plan {
       return -Infinity; // Exit early if no enemy found
     }
 
+    // Don't attack players who are invincible (spawn protection)
+    if (this.enemy.type === 'player' && this.enemy.invincible) {
+      logger.log(
+        `${npc.name} won't attack invincible player ${this.enemy.name}`
+      );
+      return -Infinity;
+    }
+
     var utility =
       npc.personality.traits[PersonalityTraits.Aggression] *
       (npc._attack / this.enemy._attack);
