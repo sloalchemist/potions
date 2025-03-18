@@ -1211,7 +1211,7 @@
       "description": "A stand that sells THINGS.",
       "type": "market-stand",
       "carryable": false,
-      "smashable": false
+      "smashable": false,
       "walkable": true,
       "attributes": [
           {
