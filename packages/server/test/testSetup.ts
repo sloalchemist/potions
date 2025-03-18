@@ -274,6 +274,31 @@ export const commonSetup = (worldSize: number = 2) => {
         ],
         interactions: [],
         drops_item: 'log'
+      },
+      {
+        name: 'Market stand',
+        description: 'A stand that sells things',
+        type: 'market-stand',
+        carryable: false,
+        walkable: false,
+        smashable: true,
+        attributes: [
+          {
+            name: 'health',
+            value: 1
+          }
+        ],
+        interactions: [
+          {
+            description: 'Add item',
+            action: 'add_to_market',
+            permissions: {
+              community: true,
+              other: false
+            },
+            while_carried: false
+          }
+        ]
       }
     ],
     mob_types: [
