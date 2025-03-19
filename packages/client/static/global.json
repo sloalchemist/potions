@@ -1024,24 +1024,24 @@
           "action": "spawn_mob",
           "parameters": {
             "type": "blob",
-            "max": 3,
-            "rate": 0.01
+            "max": 10,
+            "rate": 0.1
           }
         },
         {
           "action": "spawn_mob",
           "parameters": {
             "type": "fighter",
-            "max": 3,
-            "rate": 0.05
+            "max": 10,
+            "rate": 0.1
           }
         },
         {
           "action": "spawn_mob",
           "parameters": {
             "type": "villager",
-            "max": 7,
-            "rate": 0.07
+            "max": 15,
+            "rate": 0.1
           }
         }
       ],
@@ -1051,7 +1051,7 @@
       "name": "Potion stand",
       "type": "potion-stand",
       "carryable": false,
-      "smashable": false,
+      "smashable": true,
       "walkable": false,
       "attributes": [
         {
@@ -1305,17 +1305,6 @@
               "value": 0,
               "comparison": "greater_than"
             }
-          ],
-          "permissions": {
-            "community": true,
-            "other": false
-          }
-        },
-        {
-          "description": "Destroy stand",
-          "action": "destroy_stand",
-          "while_carried": false,
-          "conditions": [
           ],
           "permissions": {
             "community": true,

@@ -35,10 +35,6 @@ export class Item extends Physical {
     }
   }
 
-  hasAttribute(key: string): boolean {
-    return this.attributes[key] !== undefined;
-  }
-
   isWalkable(unlocks: string[]): boolean {
     if (this.lock) {
       return unlocks.includes(this.lock);

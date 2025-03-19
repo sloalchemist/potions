@@ -107,8 +107,7 @@ describe('Community ownership based interactions', () => {
     const interactions = getPhysicalInteractions(
       potionStand,
       undefined,
-      player.community_id,
-      player.key
+      player.community_id
     );
     // console.log('Interactions available: ', interactions);
 
@@ -124,8 +123,7 @@ describe('Community ownership based interactions', () => {
     const interactions = getPhysicalInteractions(
       potionStand,
       undefined,
-      player.community_id,
-      player.key
+      player.community_id
     );
 
     // Check that purchase is NOT an available interaction

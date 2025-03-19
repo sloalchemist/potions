@@ -91,7 +91,6 @@ export function drinkPotion(
         dotDuration = dotDuration * effectModifier;
       }
       mob.changeEffect(dotDelta, dotDuration, 'damageOverTime');
-      pubSub.potionEffect(mob.id, 'poison');
       return true;
     case '#166060':
       logger.debug('Drinking black potion');
@@ -107,7 +106,7 @@ export function drinkPotion(
       let nearbyMobs = mob.findNearbyMobIDs(3) || [];
 
       // broadcast bomb message for client side animation
-      pubSub.potionEffect(mob.id, 'bomb');
+      pubSub.bomb(mob.id);
 
       // destroy all nearby objects
       nearbyObjects.forEach((id) => {

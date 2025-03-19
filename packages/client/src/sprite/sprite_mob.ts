@@ -388,23 +388,6 @@ export class SpriteMob extends Mob {
     });
   }
 
-  createPoisonEffect(size: number) {
-    const sprite = this.scene.add.sprite(
-      this.sprite.x,
-      this.sprite.y,
-      'poison'
-    );
-
-    sprite.setDepth(1000);
-    sprite.setScale(size);
-    sprite.visible = true;
-    sprite.anims.play('poison');
-
-    sprite.on('animationcomplete', () => {
-      sprite.destroy();
-    });
-  }
-
   destroy(world: World) {
     super.destroy(world);
     this.sprite.destroy();

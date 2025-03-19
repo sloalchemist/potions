@@ -12,7 +12,6 @@ import { PortalMenuScene } from './scenes/portalMenuScene';
 import { LeaderboardScene } from './scenes/leaderboardScene';
 import { MiniLeaderboardScene } from './scenes/miniLeaderboardScene';
 import { PortalLoadingScene } from './scenes/portalLoadingScene';
-import { PauseMenuScene } from './scenes/pauseMenuScene';
 
 export const SCREEN_WIDTH = 480;
 export const SCREEN_HEIGHT = 720;
@@ -44,8 +43,7 @@ const config: Phaser.Types.Core.GameConfig = {
     PortalMenuScene,
     PortalLoadingScene,
     LeaderboardScene,
-    MiniLeaderboardScene,
-    PauseMenuScene
+    MiniLeaderboardScene
   ]
 };
 

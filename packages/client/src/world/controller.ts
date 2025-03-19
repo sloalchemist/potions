@@ -23,7 +23,7 @@ export type Interactions = {
   item: Item;
   action: string;
   label: string;
-  options?: string;
+  give_to?: string;
 };
 
 const MAX_STASH: number = 12;
@@ -146,9 +146,7 @@ export function areListsEqual(list1: Mob[], list2: Mob[]): boolean {
 
 export function mobRangeListener(mobs: Mob[]) {
   if (chatCompanionCallback && !chatting) {
-    const filteredMobs = mobs.filter(
-      (mob) => mob.type !== 'player' && mob.type !== 'blob'
-    );
+    const filteredMobs = mobs.filter((mob) => mob.chattable);
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastChatCompanions)) {
       chatCompanionCallback(filteredMobs);
@@ -156,7 +154,7 @@ export function mobRangeListener(mobs: Mob[]) {
     }
   }
   if (fightOpponentCallback && !fighting) {
-    const filteredMobs = mobs.filter((mob) => mob.fightable);
+    const filteredMobs = mobs.filter((mob) => mob.type !== 'player');
     filteredMobs.sort((a, b) => a.key.localeCompare(b.key));
     if (!areListsEqual(filteredMobs, lastFightOpponents)) {
       fightOpponentCallback(filteredMobs);
@@ -215,7 +213,7 @@ export function getCarriedItemInteractions(
       interactions.push({
         action: 'give',
         item: item as Item,
-        options: mob.key,
+        give_to: mob.key,
         label: `Give ${item.itemType.name} to ${mob.name}`
       });
     }
@@ -255,14 +253,8 @@ export function getPhysicalInteractions(
   const isOwnedByCharacter = item.isOwnedByCharacter(character_id);
   const isOwnedByCommunity = item.isOwnedByCommunity(community_id);
 
-  // if the item can be picked up and the owner's affiliation is the same as the item's affiliation
-
-  if (
-    item.itemType.carryable &&
-    item.itemType.attributes?.find(
-      (attr) => attr.name === 'specialized_resource'
-    )?.value == community_id
-  ) {
+  // if the item can be picked up
+  if (item.itemType.carryable) {
     interactions.push({
       action: 'pickup',
       item: item,
@@ -283,15 +275,11 @@ export function getPhysicalInteractions(
   item.itemType.interactions.forEach((interaction) => {
     const hasPermission =
       !interaction.permissions || // Allow interaction if no permissions entry in global.json
-      // Individual ownership will take priority over community
-      (isOwnedByCharacter && interaction.permissions?.character === true) ||
-      (!isOwnedByCharacter &&
-        isOwnedByCommunity &&
-        interaction.permissions?.community === true) ||
-      // Allowed only for non-owners
+      (isOwnedByCommunity && interaction.permissions?.community) ||
+      (isOwnedByCharacter && interaction.permissions?.character) ||
       (!isOwnedByCharacter &&
         !isOwnedByCommunity &&
-        interaction.permissions?.other === true);
+        interaction.permissions?.other); // Allowed only for non-owners
     if (
       hasPermission &&
       !interaction.while_carried &&

@@ -109,7 +109,7 @@
               { "type": "fence", "coord": { "x": 32, "y": 18 } },
               { "type": "fence", "coord": { "x": 33, "y": 18 } },
               { "type": "portal", "coord": { "x": 15, "y": 38 } },
-              { "type": "message-in-bottle", "coord": {"x": 12, "y": 27 }},
+              { "type": "message-in-bottle", "coord": {"x": 12, "y": 28 }},
               { "type": "cauldron", "coord": { "x": 20, "y": 15 } },
               { "type": "fence", "coord": { "x": 25, "y": 6 } },
               { "type": "fence", "coord": { "x": 26, "y": 6 } },

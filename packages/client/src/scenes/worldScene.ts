@@ -52,7 +52,6 @@ export class WorldScene extends Phaser.Scene {
   paletteSwapper: PaletteSwapper = PaletteSwapper.getInstance();
   mobShadows: Phaser.GameObjects.Rectangle[] = [];
   nightOverlay!: Phaser.GameObjects.Graphics;
-  worldHider!: Phaser.GameObjects.Graphics;
   terrainWidth: number = 0;
   terrainHeight: number = 0;
   nightOpacity: number = 0;
@@ -73,9 +72,6 @@ export class WorldScene extends Phaser.Scene {
   lastKeyUp = '';
   lastPublishTime: number = 0;
   private loadingBar: LoadingProgressBar;
-  private readyForCreate: boolean = false;
-  private backgroundMusicLoaded: boolean = false;
-  private backgroundLayerLoaded: boolean = false;
 
   constructor() {
     super({ key: 'WorldScene' });
@@ -99,63 +95,48 @@ export class WorldScene extends Phaser.Scene {
   }
 
   init() {
+    // Initialize graphics before any scene content
     this.nightOverlay = this.add.graphics();
     this.nightOverlay.setDepth(500);
     this.nightOverlay.setScrollFactor(0);
-
-    // Initialize world hider with depth lower than loading bar (1000) but higher than night overlay (500)
-    this.worldHider = this.add.graphics();
-    this.worldHider.setDepth(750);
-    this.worldHider.setScrollFactor(0);
   }
 
   preload() {
-    this.readyForCreate = false;
+    // Initialize loading bar first
+    console.log('Preload started');
+    this.loadingBar.create();
 
-    const onLoadStart = () => {
-      this.loadingBar.create();
+    // Register loading bar with scene's update list
+    this.events.on('update', () => {
+      this.loadingBar.update();
+    });
 
-      this.events.on('update', () => {
-        this.loadingBar.update();
-      });
+    // Hide world immediately
+    this.hideWorld();
 
-      // Set initial progress to show something is happening
-      this.loadingBar.setProgress(0.1);
-      this.loadingBar.setCurrentFile('Initializing...');
-      this.scene.systems.updateList.update();
+    // Set initial progress to show something is happening
+    this.loadingBar.setProgress(0.1);
+    this.loadingBar.setCurrentFile('Initializing...');
+    this.scene.systems.updateList.update();
 
-      // Track progress on each file load with debug logging
-      const fileCompleteHandler = (key: string) => {
-        console.log('WorldScene preload filecomplete', key);
-        this.loadingBar.setCurrentFile(`Loaded: ${key}`);
-      };
-      this.load.on('filecomplete', fileCompleteHandler);
+    this.load.on('filecomplete', (key: string) => {
+      this.loadingBar.setCurrentFile(`Loaded: ${key}`);
+    });
 
-      // Clean up handlers when loading is complete
-      const completeHandler = () => {
-        console.log('WorldScene preload complete');
-        this.loadingBar.setProgress(1);
-        this.loadingBar.setCurrentFile('Ready!');
+    // Clean up loading bar when done
+    this.load.on('complete', () => {
+      this.loadingBar.setProgress(1);
+      this.loadingBar.setCurrentFile('Ready!');
 
-        // Wait 500ms before cleanup to ensure loading bar shows 100%
-        this.time.delayedCall(500, () => {
-          console.log('destroying loadingbar');
-          // Remove all event handlers in reverse order of registration
-          this.load.off('filecomplete', fileCompleteHandler);
-          this.load.off('complete', completeHandler);
-          this.load.off('start', onLoadStart);
-          // Clean up loading bar through its interface
-          this.loadingBar.destroy();
-          this.readyForCreate = true;
-        });
-      };
+      // Wait 500ms to show 100% before destroying
+      setTimeout(() => {
+        // Remove update listener
+        this.events.off('update');
+        this.loadingBar.destroy();
+      }, 500);
+    });
 
-      this.load.on('complete', completeHandler);
-    };
-
-    // Register start event before adding files
-    this.load.once('start', onLoadStart);
-
+    // Start loading assets
     const worldID = getWorldID();
     this.load.image(
       'background',
@@ -177,18 +158,15 @@ export class WorldScene extends Phaser.Scene {
       frameHeight: 288
     });
 
-    this.load.spritesheet('poison', 'static/green_potion.png', {
-      frameWidth: 100,
-      frameHeight: 100
-    });
-
     this.load.json('global_data', '../../../world_assets/global.json');
     this.load.json(
       'world_specific_data',
       `../../../world_assets/${worldID}/world_specific.json`
     );
-
-    // Keep walk sound in preload since it's needed immediately
+    this.load.audio('background_music_layer', [
+      `static/music/${worldID}_layer.mp3`
+    ]);
+    this.load.audio('background_music', ['static/music/cosmic_ambient.mp3']);
     this.load.audio('walk', ['static/sounds/walk.mp3']);
   }
 
@@ -211,16 +189,6 @@ export class WorldScene extends Phaser.Scene {
         end: 11
       }),
       frameRate: 20,
-      repeat: 0
-    });
-
-    this.anims.create({
-      key: 'poison',
-      frames: this.anims.generateFrameNumbers('poison', {
-        start: 0,
-        end: 60
-      }),
-      frameRate: 30,
       repeat: 0
     });
 
@@ -296,7 +264,6 @@ export class WorldScene extends Phaser.Scene {
       right: number
     ) => void
   ) {
-    console.log('Drawing terrain layer');
     const terrainHeight = terrainData[0].length;
     const terrainWidth = terrainData.length;
 
@@ -351,109 +318,16 @@ export class WorldScene extends Phaser.Scene {
   }
 
   hideWorld() {
-    if (this.terrainWidth > 0 && this.terrainHeight > 0) {
-      this.worldHider.clear();
-      this.worldHider.fillStyle(GRAY, 1);
-      this.worldHider.fillRect(
-        0,
-        0,
-        this.game.scale.width,
-        this.game.scale.height
-      );
-    }
-  }
-
-  showWorld() {
-    this.worldHider.clear();
+    this.nightOverlay.fillStyle(GRAY, 1); // Dark blue with 50% opacity
+    this.nightOverlay.fillRect(
+      0,
+      0,
+      this.terrainWidth * TILE_SIZE,
+      this.terrainHeight * TILE_SIZE
+    );
   }
 
   create() {
-    // makes sure that loading bar doesn't show over world
-    if (!this.readyForCreate) {
-      // repeatedly call create until we're ready to create
-      this.time.addEvent({
-        delay: 100,
-        callback: () => {
-          this.create();
-        },
-        callbackScope: this,
-        loop: false
-      });
-      return;
-    }
-
-    // Initialize the world once loading bar has set readyForCreate to true
-    this.initializeWorld();
-
-    // remove an overlay if there is one
-    if (gameState === 'stateInitialized') {
-      this.showWorld();
-    }
-
-    // Start loading music in the background
-    this.loadBackgroundMusic();
-  }
-
-  private loadBackgroundMusic() {
-    // Only start loading if music is enabled
-    console.log('attempting to load background music');
-    if (this.registry.get('music') !== true) {
-      console.log('Music is disabled, skipping loading');
-      return;
-    }
-
-    const musicLoader = new Phaser.Loader.LoaderPlugin(this);
-
-    musicLoader.audio('background_music', ['static/music/cosmic_ambient.mp3']);
-    musicLoader.audio('background_music_layer', [
-      `static/music/${getWorldID()}_layer.mp3`
-    ]);
-
-    const audioLoadHandler = (key: string) => {
-      console.log('Audio loaded:', key);
-      if (key === 'background_music') {
-        this.backgroundMusicLoaded = true;
-      } else if (key === 'background_music_layer') {
-        this.backgroundLayerLoaded = true;
-      }
-      this.playMusicIfReady();
-    };
-
-    const completeHandler = () => {
-      console.log('Music loading complete');
-      musicLoader.off('filecomplete', audioLoadHandler);
-      musicLoader.off('complete', completeHandler);
-      musicLoader.destroy();
-    };
-
-    musicLoader.on('filecomplete', audioLoadHandler);
-    musicLoader.on('complete', completeHandler);
-
-    musicLoader.start();
-  }
-
-  private playMusicIfReady() {
-    if (!this.registry.get('music')) return;
-
-    if (
-      this.backgroundMusicLoaded &&
-      !this.sound.isPlaying('background_music')
-    ) {
-      this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
-    }
-
-    if (
-      this.backgroundLayerLoaded &&
-      !this.sound.isPlaying('background_music_layer')
-    ) {
-      this.sound
-        .add('background_music_layer', { loop: true, volume: 0.3 })
-        .play();
-    }
-  }
-
-  private initializeWorld() {
-    console.log('Initializing world with gameState:', gameState);
     const worldData = parseWorldFromJson(
       this.cache.json.get('global_data'),
       this.cache.json.get('world_specific_data')
@@ -597,6 +471,18 @@ export class WorldScene extends Phaser.Scene {
       this.terrainWidth * TILE_SIZE
     );
     this.nightOverlay.setDepth(1000); // Set a low depth, so it's below the speech bubbles
+    this.hideWorld();
+
+    if (this.registry.get('music') === true) {
+      if (!this.sound.isPlaying('background_music')) {
+        this.sound.add('background_music', { loop: true, volume: 0.8 }).play();
+      }
+      if (!this.sound.isPlaying('background_music_layer')) {
+        this.sound
+          .add('background_music_layer', { loop: true, volume: 0.3 })
+          .play();
+      }
+    }
 
     bindAblyToWorldScene(this);
     initializePlayer();
@@ -617,8 +503,7 @@ export class WorldScene extends Phaser.Scene {
         // Prevent player movement if the brew scene is active
         if (
           this.scene.isActive('BrewScene') ||
-          this.scene.isActive('FightScene') ||
-          this.scene.isActive('PauseMenuScene')
+          this.scene.isActive('FightScene')
         ) {
           return;
         }
@@ -626,8 +511,7 @@ export class WorldScene extends Phaser.Scene {
         // Prevent player movement if the brew scene is active
         if (
           this.scene.isActive('BrewScene') ||
-          this.scene.isActive('FightScene') ||
-          this.scene.isActive('PauseMenuScene')
+          this.scene.isActive('FightScene')
         ) {
           return;
         }
@@ -689,11 +573,8 @@ export class WorldScene extends Phaser.Scene {
       }
       // Ends chat box for user
       if (event.code === 'Escape') {
-        // console.log('Escape pressed in worldscene');
         if (this.scene.isActive('ChatOverlayScene')) {
           this.scene.stop('ChatOverlayScene');
-        } else {
-          this.pauseMenuScene();
         }
       }
     });
@@ -707,17 +588,6 @@ export class WorldScene extends Phaser.Scene {
     });
 
     needsAnimationsLoaded = false;
-  }
-
-  pauseMenuScene() {
-    let uxscene = this.scene.get('UxScene') as UxScene;
-    uxscene.chatButtons?.clearButtonOptions();
-
-    if (this.scene.isActive('PauseMenuScene')) {
-      this.scene.stop('PauseMenuScene');
-    } else {
-      this.scene.launch('PauseMenuScene');
-    }
   }
 
   public convertToTileXY(pos: Coord): [number, number] {
@@ -738,13 +608,10 @@ export class WorldScene extends Phaser.Scene {
   }
 
   update() {
-    if (gameState === 'stateInitialized') {
-      this.showWorld();
-    } else {
+    if (gameState !== 'stateInitialized') {
       this.hideWorld();
       return;
     }
-
     tick(this);
     if (this.cameraDolly && this.hero) {
       const roundedX = Math.floor(this.hero.x);
@@ -852,8 +719,7 @@ export class WorldScene extends Phaser.Scene {
     if (
       this.scene.isActive('ChatOverlayScene') ||
       this.scene.isActive('BrewScene') ||
-      this.scene.isActive('FightScene') ||
-      this.scene.isActive('PauseMenuScene')
+      this.scene.isActive('FightScene')
     ) {
       return;
     }

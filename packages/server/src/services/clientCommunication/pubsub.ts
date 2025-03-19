@@ -24,7 +24,7 @@ export interface PubSub {
   // Messaging and state update methods
   move(key: string, target: Coord | undefined, path: Coord[]): void;
   destroy(item: Item): void;
-  potionEffect(key: string, potion_type: string): void;
+  bomb(key: string): void;
   showPortalMenu(key: string, worlds: WorldMetadata[]): void;
   changeHealth(key: string, health: number, newValue: number): void;
   changeEffect(

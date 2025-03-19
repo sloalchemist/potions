@@ -444,6 +444,16 @@
         {
           "action": "spawn_item",
           "parameters": {
+            "type": "sands-of-time",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
+        {
+          "action": "spawn_item",
+          "parameters": {
             "type": "lightning-bloom",
             "global_max": 10,
             "local_max": 2,
@@ -460,6 +470,16 @@
       "walkable": false,
       "interactions": [],
       "on_tick": [
+        {
+          "action": "spawn_item",
+          "parameters": {
+            "type": "tar",
+            "global_max": 10,
+            "local_max": 1,
+            "radius": 4,
+            "rate": 0.1
+          }
+        },
         {
           "action": "spawn_item",
           "parameters": {
@@ -505,16 +525,6 @@
             "global_max": 10,
             "local_max": 2,
             "radius": 4,
-            "rate": 0.1
-          }
-        },
-        {
-          "action": "spawn_item",
-          "parameters": {
-            "type": "sands-of-time",
-            "global_max": 10,
-            "local_max": 2,
-            "radius": 7,
             "rate": 0.1
           }
         }
@@ -1015,38 +1025,38 @@
       ],
       "on_tick": [
         {
-            "action": "spawn_mob",
-            "parameters": {
-                "type": "blob",
-                "max": 3,
-                "rate": 0.01
-            }
+          "action": "spawn_mob",
+          "parameters": {
+            "type": "blob",
+            "max": 10,
+            "rate": 0.1
+          }
         },
         {
-            "action": "spawn_mob",
-            "parameters": {
-                "type": "fighter",
-                "max": 3,
-                "rate": 0.05
-            }
+          "action": "spawn_mob",
+          "parameters": {
+            "type": "fighter",
+            "max": 10,
+            "rate": 0.1
+          }
         },
         {
-            "action": "spawn_mob",
-            "parameters": {
-                "type": "villager",
-                "max": 7,
-                "rate": 0.07
-            }
+          "action": "spawn_mob",
+          "parameters": {
+            "type": "villager",
+            "max": 15,
+            "rate": 0.1
+          }
         }
-    ],
+      ],
       "description": "A magical gateway that spawns mobs and allows travel between locations."
     },
     {
       "name": "Potion stand",
       "type": "potion-stand",
       "carryable": false,
-      "smashable": false,
-      "walkable": true,
+      "smashable": true,
+      "walkable": false,
       "attributes": [
         {
           "name": "items",
@@ -1156,21 +1166,9 @@
             }
           ],
           "permissions": {
-            "community": true,
+            "community": false,
             "character": false,
             "other": true
-          }
-        },
-        {
-          "description": "Destroy stand",
-          "action": "destroy_stand",
-          "while_carried": false,
-          "conditions": [
-          ],
-          "permissions": {
-            "community": false,
-            "character": true,
-            "other": false
           }
         }
       ],
@@ -1212,7 +1210,7 @@
       "type": "market-stand",
       "carryable": false,
       "smashable": true,
-      "walkable": true,
+      "walkable": false,
       "attributes": [
           {
               "name": "items",
@@ -1237,8 +1235,7 @@
               "action": "add_to_market",
               "while_carried": false,
               "permissions": {
-                  "community": false,
-                  "character": true,
+                  "community": true,
                   "other": false
               }
           },
@@ -1254,8 +1251,7 @@
                   }
               ],
               "permissions": {
-                  "community": false,
-                  "character": true,
+                  "community": true,
                   "other": false
               }
           },
@@ -1271,8 +1267,7 @@
                   }
               ],
               "permissions": {
-                  "community": false,
-                  "character": true,
+                  "community": true,
                   "other": false
               }
           },
@@ -1288,8 +1283,7 @@
                   }
               ],
               "permissions": {
-                  "community": false,
-                  "character": true,
+                  "community": true,
                   "other": false
               }
           },
@@ -1305,8 +1299,7 @@
                   }
               ],
               "permissions": {
-                  "community": false,
-                  "character": true,
+                  "community": true,
                   "other": false
               }
           }
@@ -1475,9 +1468,7 @@
       "adventurousness": 20,
       "gluttony": 10,
       "sleepy": 10,
-      "extroversion": 50,
-      "invincible": false,
-      "invincibility_spawn_length_ms": 0
+      "extroversion": 50
     },
     {
       "name": "Villager",
@@ -1498,9 +1489,7 @@
       "adventurousness": 10,
       "gluttony": 50,
       "sleepy": 80,
-      "extroversion": 50,
-      "invincible": false,
-      "invincibility_spawn_length_ms": 0
+      "extroversion": 50
     },
     {
       "name": "Player",
@@ -1521,9 +1510,7 @@
       "adventurousness": 10,
       "gluttony": 50,
       "sleepy": 80,
-      "extroversion": 50,
-      "invincible": false,
-      "invincibility_spawn_length_ms": 10000
+      "extroversion": 50
     },
     {
       "name": "Fighter",
@@ -1544,9 +1531,7 @@
       "adventurousness": 20,
       "gluttony": 10,
       "sleepy": 10,
-      "extroversion": 50,
-      "invincible": false,
-      "invincibility_spawn_length_ms": 0
+      "extroversion": 50
     }
   ],
   "portals": [],

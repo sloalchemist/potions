@@ -28,7 +28,7 @@ export class StubbedPubSub implements PubSub {
 
   destroy(_item: Item): void {}
 
-  potionEffect(_key: string, _type: string): void {}
+  bomb(_key: string): void {}
 
   stashItem(_item: string, _mobKey: string, _position: Coord): void {}
 

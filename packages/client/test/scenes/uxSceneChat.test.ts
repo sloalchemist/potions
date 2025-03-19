@@ -245,6 +245,45 @@ describe('Chat UI updates based on chatting state', () => {
     expect(mockChatCallback).toHaveBeenCalledWith(updatedFilteredMobs);
   });
 
+  test('Chattable attribute affects chat options', () => {
+    const player1 = new Mob(
+      world!,
+      'mob1',
+      'Player1',
+      'player',
+      100,
+      { x: 1, y: 1 },
+      {},
+      {},
+      {}
+    );
+    const npc1 = new Mob(
+      world!,
+      'mob2',
+      'NPC1',
+      'npc',
+      100,
+      { x: 2, y: 2 },
+      {},
+      {},
+      {}
+    );
+    let mobs = [player1, npc1];
+
+    setChatting(false);
+    mobRangeListener(mobs);
+
+    const expectedFilteredMobs = [npc1];
+    expect(mockChatCallback).toHaveBeenCalledWith(expectedFilteredMobs);
+
+    player1.chattable = true;
+
+    mockChatCallback.mockClear();
+    setChatting(false);
+    mobRangeListener(mobs);
+    expect(mockChatCallback).toHaveBeenCalledWith(mobs);
+  });
+
   afterAll(() => {
     world = null;
   });

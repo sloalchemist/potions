@@ -57,12 +57,12 @@ export function fight(message: string, attack: number) {
 export function interact(
   item_key: string,
   action: string,
-  options: string | null
+  give_to: string | null
 ) {
   publishPlayerMessage('interact', {
     item_key: item_key,
     action: action,
-    options: options
+    give_to: give_to
   });
 }
 

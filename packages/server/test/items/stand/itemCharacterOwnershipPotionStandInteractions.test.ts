@@ -4,7 +4,6 @@ import { mobFactory } from '../../../src/mobs/mobFactory';
 import { Community } from '../../../src/community/community';
 import { Item } from '../../../src/items/item';
 import { CollectGold } from '../../../src/items/uses/stand/collectGold';
-import { DestroyStand } from '../../../src/items/uses/stand/destroyStand';
 import { Mob } from '../../../src/mobs/mob';
 import { Coord } from '@rt-potion/common';
 
@@ -60,15 +59,6 @@ describe('Potion Stand Character Ownership Tests', () => {
     const ownerResult = collectGold.interact(owner!, potionStand!);
     expect(ownerResult).toBe(true);
     expect(owner!.gold).toBe(50);
-
-    // Attempt destroy stand by non-owner
-    const destroyStand = new DestroyStand();
-    const nonOwnerDestroy = destroyStand.interact(nonOwner!, potionStand!);
-    expect(nonOwnerDestroy).toBe(false);
-
-    // Attempt destroy stand by owner
-    const OwnerDestroy = destroyStand.interact(owner!, potionStand!);
-    expect(OwnerDestroy).toBe(true);
   });
 });
 

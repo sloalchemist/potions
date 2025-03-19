@@ -13,18 +13,8 @@ export class AddIngredient implements Use {
     return 'Add ingredient to cauldron';
   }
 
-  interact(mob: Mob, item: Item, options?: Item | Mob | undefined): boolean {
-    let ingredient: Item | undefined;
-    if (!(options instanceof Item)) {
-      if (!mob.carrying) {
-        return false;
-      }
-      ingredient = mob.carrying;
-    } else {
-      ingredient = options;
-    }
-
-    if (!ingredient) {
+  interact(mob: Mob, item: Item): boolean {
+    if (!mob.carrying) {
       return false;
     }
 
@@ -34,6 +24,6 @@ export class AddIngredient implements Use {
       return false;
     }
 
-    return cauldron.AddIngredient(ingredient);
+    return cauldron.AddIngredient(mob);
   }
 }
